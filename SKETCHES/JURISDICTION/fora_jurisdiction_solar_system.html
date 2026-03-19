@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Solar System · Jurisdiction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sol:#f5c842;--sol-lt:#ffe066;--sol-dk:#c8960a;--sol-glow:rgba(245,200,66,0.18);
+  --space:#06080f;--space-mid:#0d1220;--space-edge:#1a2040;
+  --gilt:#b8860b;--gilt-lt:#d4a832;
+  --red:#8b1a1a;--red-p:rgba(139,26,26,0.08);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.08);
+  --green:#155c2d;--green-lt:#e5f0e8;
+  --blue-sci:#3a7ab8;--blue-sci-p:rgba(58,122,184,0.1);
+  --purple:#4a2a7a;
+  --ink:#0e1a2e;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f2f4f8;--white:#fff;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+  /* planet palette */
+  --mercury:#a0968a;--venus:#e8c87a;--earth:#4a8fc4;--mars:#c0421a;
+  --jupiter:#c4916a;--saturn:#d4b86a;--uranus:#7ac4c0;--neptune:#4a6ab8;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+.nav{background:var(--space);border-bottom:3px solid var(--sol);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-logo span{color:var(--sol-lt);}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;}
+.nav-link:hover,.nav-link.active{color:white;}
+.nav-follow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.3);border-radius:100px;color:var(--sol-lt);cursor:pointer;white-space:nowrap;}
+.nav-follow:hover{background:rgba(245,200,66,0.2);}
+
+/* TICKER */
+.ticker-bar{height:30px;background:#050810;border-bottom:1px solid rgba(245,200,66,0.12);display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 14px;display:flex;align-items:center;gap:7px;background:rgba(245,200,66,0.08);border-right:1px solid rgba(245,200,66,0.15);}
+.ticker-pulse{width:7px;height:7px;border-radius:50%;background:var(--sol-lt);animation:pulse 2.2s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--sol-lt);white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;white-space:nowrap;animation:ts 60s linear infinite;}
+@keyframes ts{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ti{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.04);}
+.tk{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.tv{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.tv-y{color:var(--sol-lt);}.tv-w{color:rgba(255,255,255,0.82);}.tv-a{color:#FAC775;}.tv-g{color:#7fcf95;}.tv-b{color:#7ab8f0;}.tv-r{color:#f09090;}
+
+/* HERO */
+.hero{background:radial-gradient(ellipse at 50% 0%,#1a1e40 0%,#0d1228 35%,#06080f 70%,#030508 100%);padding:36px 40px 0;position:relative;overflow:hidden;min-height:320px;}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:
+  radial-gradient(1px 1px at 4% 12%,rgba(255,255,255,0.7) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 9% 55%,rgba(255,255,255,0.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 14% 28%,rgba(200,220,255,0.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 19% 78%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(2px 2px at 25% 18%,rgba(255,240,200,0.65) 0%,transparent 100%),
+  radial-gradient(1px 1px at 31% 62%,rgba(255,255,255,0.35) 0%,transparent 100%),
+  radial-gradient(1px 1px at 37% 42%,rgba(200,220,255,0.45) 0%,transparent 100%),
+  radial-gradient(1px 1px at 43% 88%,rgba(255,255,255,0.3) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 51% 22%,rgba(255,255,255,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 57% 72%,rgba(255,240,200,0.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 63% 35%,rgba(255,255,255,0.5) 0%,transparent 100%),
+  radial-gradient(2px 2px at 68% 58%,rgba(200,220,255,0.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 74% 14%,rgba(255,255,255,0.45) 0%,transparent 100%),
+  radial-gradient(1px 1px at 79% 82%,rgba(255,255,255,0.35) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 85% 44%,rgba(255,240,200,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 91% 25%,rgba(255,255,255,0.45) 0%,transparent 100%),
+  radial-gradient(1px 1px at 96% 68%,rgba(200,220,255,0.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 33% 5%,rgba(255,255,255,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 71% 95%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 88% 8%,rgba(255,255,255,0.5) 0%,transparent 100%);}
+.hero-inner{display:flex;align-items:flex-start;gap:32px;position:relative;z-index:2;}
+.hero-bc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;position:relative;z-index:2;}
+.bc-c{color:rgba(255,255,255,0.1);font-size:6.5px;}
+.bc-sep{opacity:0.15;}
+.bc-h{color:rgba(245,200,66,0.7);}
+
+/* Orrery diagram */
+.orrery{width:160px;height:160px;flex-shrink:0;margin-top:4px;position:relative;}
+@keyframes spinOrbit{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes orbit1{0%{transform:rotate(0deg) translateX(22px) rotate(0deg);}100%{transform:rotate(360deg) translateX(22px) rotate(-360deg);}}
+@keyframes orbit2{0%{transform:rotate(45deg) translateX(33px) rotate(-45deg);}100%{transform:rotate(405deg) translateX(33px) rotate(-405deg);}}
+@keyframes orbit3{0%{transform:rotate(72deg) translateX(44px) rotate(-72deg);}100%{transform:rotate(432deg) translateX(44px) rotate(-432deg);}}
+@keyframes orbit4{0%{transform:rotate(140deg) translateX(56px) rotate(-140deg);}100%{transform:rotate(500deg) translateX(56px) rotate(-500deg);}}
+@keyframes orbit5{0%{transform:rotate(210deg) translateX(68px) rotate(-210deg);}100%{transform:rotate(570deg) translateX(68px) rotate(-570deg);}}
+@keyframes orbit6{0%{transform:rotate(300deg) translateX(78px) rotate(-300deg);}100%{transform:rotate(660deg) translateX(78px) rotate(-660deg);}}
+
+.juris-name{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:var(--sol-lt);line-height:0.9;letter-spacing:-0.01em;}
+.juris-name-sub{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(245,200,66,0.4);margin-top:5px;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,200,66,0.25);margin-top:6px;}
+.juris-lead{font-size:13.5px;color:rgba(245,220,160,0.5);line-height:1.7;max-width:540px;margin-top:12px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;display:inline-block;margin:3px 3px 0 0;}
+
+/* Hero stats */
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(245,200,66,0.1);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.02);padding:10px 12px;cursor:pointer;transition:background 0.15s;}
+.hs:hover{background:rgba(245,200,66,0.08);}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,200,66,0.3);margin-bottom:4px;}
+.hs-val{font-size:14px;font-weight:800;color:var(--sol-lt);}
+.hs-unit{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(245,200,66,0.3);margin-top:2px;}
+
+/* HERO RIGHT */
+.hero-right{min-width:280px;max-width:310px;display:flex;flex-direction:column;gap:8px;}
+.hstat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(245,200,66,0.1);border-radius:10px;padding:12px 14px;}
+.hsc-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,200,66,0.3);margin-bottom:5px;}
+.hsc-val{font-size:18px;font-weight:800;color:var(--sol-lt);line-height:1;}
+.hsc-sub{font-size:11px;color:rgba(245,200,66,0.35);margin-top:3px;}
+
+/* TABS */
+.org-tabs{background:var(--space);border-bottom:1px solid rgba(245,200,66,0.1);padding:0 40px;position:sticky;top:60px;z-index:100;overflow-x:auto;}
+.tabs-inner{display:flex;gap:0;min-width:max-content;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 16px;color:rgba(255,255,255,0.35);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;}
+.tab:hover{color:rgba(255,255,255,0.65);}
+.tab.active{color:var(--sol-lt);border-bottom-color:var(--sol);}
+
+/* PAGE BODY */
+.page-body{max-width:1100px;margin:0 auto;padding:28px 40px 60px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.four-col{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;margin-bottom:16px;}
+.card-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:7px;}
+.card-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.2;}
+.card-body{font-size:13px;color:var(--ink-soft);line-height:1.75;}
+.card-body p{margin-bottom:10px;}
+.card-body p:last-child{margin-bottom:0;}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(5,8,16,0.8);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#0d1228;border:1px solid rgba(245,200,66,0.2);border-radius:16px;padding:28px 32px;max-width:640px;width:90%;max-height:80vh;overflow-y:auto;position:relative;}
+.modal h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--sol-lt);margin-bottom:14px;}
+.modal p{font-size:13px;color:rgba(245,220,160,0.6);line-height:1.75;margin-bottom:10px;}
+.modal-close{position:absolute;top:14px;right:16px;font-size:20px;color:rgba(245,200,66,0.4);cursor:pointer;background:none;border:none;}
+.modal-close:hover{color:var(--sol-lt);}
+.modal h3{font-size:12px;font-weight:700;color:var(--sol-lt);margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.08em;}
+
+/* PLANET GRID */
+.planet-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px;}
+.planet-card{border-radius:10px;overflow:hidden;border:1px solid var(--rule);background:var(--white);cursor:pointer;transition:box-shadow 0.15s;}
+.planet-card:hover{box-shadow:0 4px 20px rgba(27,58,107,0.12);}
+.planet-icon{height:80px;display:flex;align-items:center;justify-content:center;position:relative;}
+.planet-info{padding:10px 12px 12px;}
+.planet-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:2px;}
+.planet-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);letter-spacing:0.06em;}
+.planet-facts{font-size:11px;color:var(--ink-soft);margin-top:6px;line-height:1.5;}
+
+/* CSS planets */
+.p-sphere{border-radius:50%;position:relative;}
+
+/* Mission tracker */
+.mission-row{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:8px;margin-bottom:6px;border:1px solid var(--rule-lt);}
+.mission-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.mission-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.mission-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);letter-spacing:0.06em;margin-bottom:4px;}
+.mission-desc{font-size:12px;color:var(--ink-soft);line-height:1.55;}
+.mission-arrow{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);white-space:nowrap;margin-left:auto;padding-left:8px;flex-shrink:0;}
+
+/* Voyager card */
+.voyager-card{background:linear-gradient(140deg,#06080f,#0d1228);border:1px solid rgba(245,200,66,0.12);border-radius:12px;padding:16px 18px;margin-bottom:10px;}
+.voyager-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--sol-lt);margin-bottom:4px;}
+.voyager-stat{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(245,200,66,0.4);margin-bottom:8px;}
+.voyager-body{font-size:12px;color:rgba(245,220,160,0.5);line-height:1.6;}
+
+/* Timeline */
+.timeline-item{display:flex;gap:14px;margin-bottom:14px;}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--sol);flex-shrink:0;margin-top:4px;}
+.tl-year{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);width:36px;flex-shrink:0;margin-top:3px;}
+.tl-body{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+.tl-title{font-weight:700;color:var(--ink);margin-bottom:2px;}
+
+/* law gap card */
+.gap-card{padding:12px;border-radius:8px;border-left:3px solid;margin-bottom:8px;}
+
+/* discourse */
+.deliberation-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin-bottom:10px;}
+.vote-bar-outer{height:5px;background:var(--rule);border-radius:100px;margin:6px 0;}
+.vote-bar-inner{height:5px;border-radius:100px;background:var(--sol);transition:width 0.3s;}
+.vote-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid var(--rule);background:none;cursor:pointer;color:var(--ink-soft);}
+.vote-btn:hover,.vote-btn.voted{background:rgba(245,200,66,0.1);border-color:rgba(245,200,66,0.3);color:var(--sol-dk);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">FOR<span>A</span></div>
+  <div class="nav-links">
+    <div class="nav-link active">The Universe</div>
+    <div class="nav-link">Earth</div>
+    <div class="nav-follow">☀ FOLLOW THE SUN</div>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge">
+    <div class="ticker-pulse"></div>
+    <div class="ticker-badge-text">SOLARNEWS:</div>
+  </div>
+  <div class="ticker-scroll-wrap">
+    <div class="ticker-track" id="ticker">
+      <div class="ti"><span class="tk">BepiColombo</span><span class="tv tv-y">Mercury orbit insertion Nov 6 2026 — ESA/JAXA · 8-year journey complete</span></div>
+      <div class="ti"><span class="tk">Voyager 1</span><span class="tv tv-w">172 AU from Sun · On track for 1 light-day milestone Nov 2026</span></div>
+      <div class="ti"><span class="tk">JUICE</span><span class="tv tv-b">En route to Jupiter · Earth flyby Sep 2026 · Arrives 2031</span></div>
+      <div class="ti"><span class="tk">Hera</span><span class="tv tv-a">Arriving Didymos asteroid Nov 2026 · Post-DART crater analysis</span></div>
+      <div class="ti"><span class="tk">Hayabusa2</span><span class="tv tv-g">Torifune asteroid flyby Jul 2026 · First close-up of near-Earth asteroid</span></div>
+      <div class="ti"><span class="tk">Parker Solar Probe</span><span class="tv tv-y">Inside solar corona · Closest approach 6.1M km · Still operating</span></div>
+      <div class="ti"><span class="tk">Perseverance</span><span class="tv tv-w">Mars · 1,800+ sols · Cheyava Falls biosignature sample secured</span></div>
+      <div class="ti"><span class="tk">Europa Clipper</span><span class="tv tv-b">En route to Jupiter · Mars flyby completed · Europa arrival 2030</span></div>
+      <div class="ti"><span class="tk">New Horizons</span><span class="tv tv-w">57 AU · Kuiper Belt · Science phase extended</span></div>
+      <div class="ti"><span class="tk">Tianwen-2</span><span class="tv tv-g">Kamoʻoalewa asteroid orbit insertion Jun 2026 · Humanity's first near-Earth asteroid orbiter</span></div>
+      <div class="ti"><span class="tk">Solar Orbiter</span><span class="tv tv-y">Venus flyby Dec 24 2026 · Orbit inclined to 24° · Photographing solar poles</span></div>
+      <div class="ti"><span class="tk">Outer Space Treaty</span><span class="tv tv-r">Signed 1967 · 118 parties · No sovereignty over any solar body · Zero enforcement</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="ti"><span class="tk">BepiColombo</span><span class="tv tv-y">Mercury orbit insertion Nov 6 2026 — ESA/JAXA · 8-year journey complete</span></div>
+      <div class="ti"><span class="tk">Voyager 1</span><span class="tv tv-w">172 AU from Sun · On track for 1 light-day milestone Nov 2026</span></div>
+      <div class="ti"><span class="tk">JUICE</span><span class="tv tv-b">En route to Jupiter · Earth flyby Sep 2026 · Arrives 2031</span></div>
+      <div class="ti"><span class="tk">Hera</span><span class="tv tv-a">Arriving Didymos asteroid Nov 2026 · Post-DART crater analysis</span></div>
+      <div class="ti"><span class="tk">Hayabusa2</span><span class="tv tv-g">Torifune asteroid flyby Jul 2026 · First close-up of near-Earth asteroid</span></div>
+      <div class="ti"><span class="tk">Parker Solar Probe</span><span class="tv tv-y">Inside solar corona · Closest approach 6.1M km · Still operating</span></div>
+      <div class="ti"><span class="tk">Perseverance</span><span class="tv tv-w">Mars · 1,800+ sols · Cheyava Falls biosignature sample secured</span></div>
+      <div class="ti"><span class="tk">Europa Clipper</span><span class="tv tv-b">En route to Jupiter · Mars flyby completed · Europa arrival 2030</span></div>
+      <div class="ti"><span class="tk">New Horizons</span><span class="tv tv-w">57 AU · Kuiper Belt · Science phase extended</span></div>
+      <div class="ti"><span class="tk">Tianwen-2</span><span class="tv tv-g">Kamoʻoalewa asteroid orbit insertion Jun 2026 · Humanity's first near-Earth asteroid orbiter</span></div>
+      <div class="ti"><span class="tk">Solar Orbiter</span><span class="tv tv-y">Venus flyby Dec 24 2026 · Orbit inclined to 24° · Photographing solar poles</span></div>
+      <div class="ti"><span class="tk">Outer Space Treaty</span><span class="tv tv-r">Signed 1967 · 118 parties · No sovereignty over any solar body · Zero enforcement</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bc">
+    <span class="bc-c">The Universe / Laniakea Supercluster / Virgo Supercluster / Local Group / Milky Way / Orion Arm /</span>
+    <span class="bc-sep">/</span>
+    <span class="bc-h">Solar System</span>
+  </div>
+  <div class="hero-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <svg class="orrery" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer glow -->
+        <defs>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffe880" stop-opacity="0.9"/>
+            <stop offset="40%" stop-color="#f5c018" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#f5c018" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <!-- corona glow -->
+        <circle cx="80" cy="80" r="16" fill="url(#sunGlow)" opacity="0.4"/>
+        <!-- orbital rings — ellipses for slight perspective -->
+        <ellipse cx="80" cy="80" rx="22" ry="6.5"  fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.7"/>
+        <ellipse cx="80" cy="80" rx="33" ry="10"   fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="0.7"/>
+        <ellipse cx="80" cy="80" rx="44" ry="13"   fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="0.7"/>
+        <ellipse cx="80" cy="80" rx="56" ry="17"   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+        <ellipse cx="80" cy="80" rx="68" ry="21"   fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+        <ellipse cx="80" cy="80" rx="78" ry="24"   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+        <!-- asteroid belt hint -->
+        <ellipse cx="80" cy="80" rx="50" ry="15.5" fill="none" stroke="rgba(180,150,100,0.18)" stroke-width="2.5" stroke-dasharray="1.2,2.8"/>
+        <!-- Sun -->
+        <circle cx="80" cy="80" r="9" fill="#ffe055" filter="url(#glow)" opacity="0.95"/>
+        <circle cx="80" cy="80" r="7" fill="#f5c018"/>
+        <!-- Mercury — ring 1, fast -->
+        <g style="transform-origin:80px 80px;animation:spinOrbit 4s linear infinite;">
+          <ellipse cx="80" cy="80" rx="22" ry="6.5" fill="none" stroke="none"/>
+          <circle cx="102" cy="80" r="2" fill="#a09080"/>
+        </g>
+        <!-- Venus — ring 2 -->
+        <g style="transform-origin:80px 80px;animation:spinOrbit 6.5s linear infinite;animation-delay:-2s;">
+          <circle cx="113" cy="80" r="2.5" fill="#e8c870"/>
+        </g>
+        <!-- Earth — ring 3, with dot for Moon -->
+        <g style="transform-origin:80px 80px;animation:spinOrbit 10s linear infinite;animation-delay:-4s;">
+          <circle cx="124" cy="80" r="2.8" fill="#4a8fc4"/>
+          <circle cx="128" cy="78" r="1" fill="rgba(200,210,230,0.7)"/>
+        </g>
+        <!-- Mars — ring 4 -->
+        <g style="transform-origin:80px 80px;animation:spinOrbit 19s linear infinite;animation-delay:-7s;">
+          <circle cx="136" cy="80" r="2.2" fill="#c0421a"/>
+        </g>
+        <!-- Jupiter — ring 5 (beyond belt) -->
+        <g style="transform-origin:80px 80px;animation:spinOrbit 48s linear infinite;animation-delay:-15s;">
+          <circle cx="148" cy="80" r="4.5" fill="#c4916a"/>
+          <!-- Jupiter band hint -->
+          <rect x="143.5" y="79" width="9" height="1" fill="rgba(140,60,20,0.35)" rx="0.5"/>
+        </g>
+        <!-- Saturn — ring 6 (outermost shown) -->
+        <g style="transform-origin:80px 80px;animation:spinOrbit 118s linear infinite;animation-delay:-40s;">
+          <circle cx="158" cy="80" r="3.8" fill="#d4b86a"/>
+          <!-- Saturn ring -->
+          <ellipse cx="158" cy="80" rx="6.5" ry="2" fill="none" stroke="rgba(212,184,106,0.55)" stroke-width="1.2"/>
+        </g>
+        <!-- planet labels — tiny ticks -->
+        <line x1="80" y1="58" x2="80" y2="54" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <text x="80" y="52" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="4" fill="rgba(245,200,66,0.25)" letter-spacing="0.04em">SOLAR SYSTEM</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
+        <span class="jtag" style="color:rgba(245,200,66,0.75);border-color:rgba(245,200,66,0.2);background:rgba(245,200,66,0.07);">Stellar System</span>
+        <span class="jtag" style="color:rgba(250,199,117,0.8);border-color:rgba(196,127,0,0.22);background:rgba(196,127,0,0.07);">No Sovereignty · OST Art. II</span>
+        <span class="jtag" style="color:rgba(127,207,149,0.8);border-color:rgba(21,92,45,0.22);background:rgba(21,92,45,0.08);">8 Planets · 900k+ Bodies</span>
+        <span class="jtag" style="color:rgba(122,180,240,0.8);border-color:rgba(58,122,184,0.2);background:rgba(58,122,184,0.07);">30+ Active Spacecraft</span>
+      </div>
+    </div>
+    <div style="flex:1;">
+      <div class="juris-name">Solar System</div>
+      <div class="juris-name-sub">Sol · The Sun and its worlds</div>
+      <div class="juris-sub">G2V Yellow Dwarf · Orion Arm · 26,000 ly from Galactic Center · Age 4.6 Gyr</div>
+      <div class="juris-lead">One star. Eight planets. Hundreds of moons. Millions of asteroids. Five known dwarf planets. One species with spacecraft at every planet but two — and counting. The Solar System is the largest jurisdiction humans have ever attempted to govern, the most active theater of exploration in human history, and the only place where "space law" has been tested in practice. It has no sovereign, no constitution, and no court. It has one treaty, written in 1967, that nobody has violated yet — because nobody can.</div>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:4px;">
+        <span class="jtag" style="color:rgba(245,200,66,0.5);border-color:rgba(245,200,66,0.12);background:rgba(245,200,66,0.05);">Age 4.603 billion years</span>
+        <span class="jtag" style="color:rgba(245,200,66,0.5);border-color:rgba(245,200,66,0.12);background:rgba(245,200,66,0.05);">Diameter ~2 light-years (Oort Cloud)</span>
+        <span class="jtag" style="color:rgba(245,200,66,0.5);border-color:rgba(245,200,66,0.12);background:rgba(245,200,66,0.05);">Known moons: 290+</span>
+        <span class="jtag" style="color:rgba(245,200,66,0.5);border-color:rgba(245,200,66,0.12);background:rgba(245,200,66,0.05);">Governing law: OST 1967</span>
+      </div>
+
+      <!-- Hero stats row -->
+      <div class="hero-stats" style="margin-top:16px;">
+        <div class="hs" onclick="openModal('modal-sun')"><div class="hs-label">The Sun</div><div class="hs-val">G2V</div><div class="hs-unit">99.86% of system mass</div></div>
+        <div class="hs" onclick="openModal('modal-planets')"><div class="hs-label">Planets</div><div class="hs-val">8</div><div class="hs-unit">4 rocky · 4 giant</div></div>
+        <div class="hs" onclick="openModal('modal-missions')"><div class="hs-label">Active probes</div><div class="hs-val">30+</div><div class="hs-unit">As of Mar 2026</div></div>
+        <div class="hs" onclick="openModal('modal-voyager')"><div class="hs-label">Voyager 1</div><div class="hs-val">172 AU</div><div class="hs-unit">Most distant human object</div></div>
+        <div class="hs" onclick="openModal('modal-ost')"><div class="hs-label">Space law</div><div class="hs-val">1</div><div class="hs-unit">Outer Space Treaty · 118 parties</div></div>
+        <div class="hs" onclick="openModal('modal-scale')"><div class="hs-label">Light travel</div><div class="hs-val">5.5 hrs</div><div class="hs-unit">Sun → Neptune</div></div>
+      </div>
+    </div>
+
+    <!-- Hero right: 2026 events -->
+    <div class="hero-right">
+      <div class="hstat-card">
+        <div class="hsc-label">Arriving this year · 2026</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+          <div style="padding:8px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:2px solid var(--sol);">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(245,200,66,0.5);letter-spacing:0.08em;margin-bottom:2px;">NOV 6 2026</div>
+            <div style="font-size:12px;font-weight:700;color:rgba(245,220,160,0.8);">☿ BepiColombo → Mercury</div>
+            <div style="font-size:11px;color:rgba(245,200,66,0.35);margin-top:1px;">ESA/JAXA · 8-year journey ends</div>
+          </div>
+          <div style="padding:8px;background:rgba(122,180,240,0.06);border-radius:7px;border-left:2px solid #7ab8f0;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(122,180,240,0.4);letter-spacing:0.08em;margin-bottom:2px;">NOV 2026</div>
+            <div style="font-size:12px;font-weight:700;color:rgba(200,225,255,0.8);">🪨 Hera → Didymos asteroid</div>
+            <div style="font-size:11px;color:rgba(122,180,240,0.35);margin-top:1px;">ESA · Post-DART impact survey</div>
+          </div>
+          <div style="padding:8px;background:rgba(127,207,149,0.06);border-radius:7px;border-left:2px solid #7fcf95;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(127,207,149,0.4);letter-spacing:0.08em;margin-bottom:2px;">JUN–JUL 2026</div>
+            <div style="font-size:12px;font-weight:700;color:rgba(200,245,220,0.8);">🪨 Tianwen-2 · Hayabusa2 → Asteroids</div>
+            <div style="font-size:11px;color:rgba(127,207,149,0.35);margin-top:1px;">First asteroid orbiters + flybys</div>
+          </div>
+        </div>
+      </div>
+      <div class="hstat-card">
+        <div class="hsc-label">Boundary milestone</div>
+        <div style="font-size:13px;font-weight:700;color:rgba(245,220,160,0.75);margin:4px 0 2px;">Voyager 1 · Nov 2026</div>
+        <div style="font-size:11px;color:rgba(245,200,66,0.35);">First human object to reach <strong style="color:rgba(245,200,66,0.55);">1 light-day</strong> from Earth. Signal travel time: 24 hrs each way.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" onclick="showTab('overview',this)">Overview</div>
+    <div class="tab" onclick="showTab('planets',this)">The Planets</div>
+    <div class="tab" onclick="showTab('sun',this)">The Sun</div>
+    <div class="tab" onclick="showTab('missions',this)">Active Missions</div>
+    <div class="tab" onclick="showTab('beyond',this)">Beyond Neptune</div>
+    <div class="tab" onclick="showTab('law',this)">Space Law</div>
+    <div class="tab" onclick="showTab('life',this)">The Life Question</div>
+    <div class="tab" onclick="showTab('culture',this)">Culture & Mythology</div>
+    <div class="tab" onclick="showTab('discourse',this)">Discourse</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+<!-- ══ OVERVIEW ══════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">What this jurisdiction is</div>
+        <div class="card-title">The Solar System at the moment of arrival</div>
+        <div class="card-body">
+          <p>The Solar System extends from the Sun's corona to the outer edge of the Oort Cloud — roughly two light-years in radius, or about 126,000 AU. Most of that volume is empty. But what is not empty is extraordinarily varied: rocky inner planets baked by the Sun, a vast asteroid belt, four enormous outer worlds with ring systems and dozens of moons, a second belt of icy objects beyond Neptune, and a vast cloud of cometary nuclei that defines the system's gravitational boundary.</p>
+          <p>Humanity has been visiting this system in earnest since 1959. As of March 2026, we have spacecraft actively operating at or en route to Mercury, Venus, Earth's Moon, Mars, the asteroid belt, Jupiter, Saturn, and interstellar space. We have landed on the Moon, Mars, an asteroid, and a comet nucleus. We have returned samples from the Moon, a comet, two asteroids, and (pending) Mars.</p>
+          <p>The Solar System is also the first and only jurisdiction where space law has been operationally tested. The Outer Space Treaty of 1967 remains the governing framework — unamended, untested in any court, and increasingly strained by the speed of human return to deep space.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">The numbers</div>
+        <div class="card-title">Scale</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+          <div style="padding:10px;background:var(--bg);border-radius:8px;"><div style="font-weight:700;color:var(--ink);margin-bottom:3px;">8 planets</div><div style="color:var(--ink-soft);">Mercury through Neptune. Pluto reclassified 2006 as dwarf planet.</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;"><div style="font-weight:700;color:var(--ink);margin-bottom:3px;">290+ moons</div><div style="color:var(--ink-soft);">Saturn has 146 confirmed. Jupiter 95. Mars 2. Earth 1.</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;"><div style="font-weight:700;color:var(--ink);margin-bottom:3px;">1.1M+ asteroids</div><div style="color:var(--ink-soft);">Numbered and catalogued. Estimated total: several million.</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;"><div style="font-weight:700;color:var(--ink);margin-bottom:3px;">5 dwarf planets</div><div style="color:var(--ink-soft);">Pluto, Eris, Haumea, Makemake, Ceres. Likely hundreds more uncatalogued.</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;"><div style="font-weight:700;color:var(--ink);margin-bottom:3px;">4.6 billion years old</div><div style="color:var(--ink-soft);">Formed from the same molecular cloud as the Sun.</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;"><div style="font-weight:700;color:var(--ink);margin-bottom:3px;">~2 light-years across</div><div style="color:var(--ink-soft);">To the outer Oort Cloud. Voyager 1 will reach it in ~300 years.</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">2026 — The year of arrivals</div>
+        <div class="card-title">What happens this year changes our map of the Solar System</div>
+        <div class="card-body">
+          <p><strong>BepiColombo reaches Mercury (Nov 6).</strong> ESA and JAXA's joint orbiter pair ends an 8-year, 9-billion-km journey. Mercury is the least-explored planet in the Solar System — visited only by Mariner 10 (1974–75) and MESSENGER (2011–15). BepiColombo will produce the most comprehensive map of Mercury ever made, study its anomalously large iron core, and test general relativity close to the Sun's gravity well.</p>
+          <p><strong>Hera arrives at Didymos (Nov).</strong> ESA's mission will survey the crater left by NASA's DART impact in 2022 — the first time humanity deliberately changed the orbit of a celestial body. Hera completes the experiment: we now learn exactly how effective kinetic deflection is, and how to calibrate future planetary defense missions.</p>
+          <p><strong>Hayabusa2 flies by Torifune (Jul).</strong> Japan's veteran asteroid probe — which already returned a sample from Ryugu in 2020 — gets humanity's first close-up look at the near-Earth asteroid Torifune. China's Tianwen-2 enters orbit around Kamoʻoalewa in June, humanity's first dedicated near-Earth asteroid orbiter.</p>
+          <p><strong>Voyager 1 milestone (Nov).</strong> The most distant human-made object will become the first to reach one light-day from Earth — ~25.9 billion km. A radio signal to Voyager 1 now takes 24 hours to arrive. The reply takes another 24 hours. We are operating, in real time, in interstellar space.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Where we stand · March 2026</div>
+        <div class="card-title">Active civic issues</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px 12px;background:var(--red-p);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-weight:700;font-size:12px;color:var(--red);margin-bottom:3px;">Space law is fracturing under commercial pressure</div>
+            <div style="font-size:12px;color:var(--ink-soft);">The OST prohibits national sovereignty but not resource extraction. The US (2015), Luxembourg (2017), and UAE (2020) have passed domestic laws authorizing their citizens to own extracted space resources. Russia and China have not recognized these laws. The Artemis Accords (43 signatories) create a competing legal framework. No international body can adjudicate disputes.</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--amber-p);border-radius:8px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;font-size:12px;color:var(--amber);margin-bottom:3px;">Planetary protection is in crisis</div>
+            <div style="font-size:12px;color:var(--ink-soft);">SpaceX's Starship program plans to carry hundreds of humans to Mars. Current planetary protection protocols were designed for robotic missions. No international agreement governs the biological contamination of other worlds by humans. Once contaminated, there is no going back — the scientific record of Mars is permanent. The window to get this right may already be closing.</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--blue-sci-p);border-radius:8px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;font-size:12px;color:var(--blue-sci);margin-bottom:3px;">Who governs a permanent Lunar/Martian base?</div>
+            <div style="font-size:12px;color:var(--ink-soft);">The OST assigns liability to the "launching state" and requires states to supervise their nationals. But signal delay makes Earth governance structurally impossible beyond 3 light-seconds. Any permanent off-Earth habitat will need local governance — but there is no legal framework for creating one.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PLANETS ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-planets">
+  <div class="card">
+    <div class="card-ey">The eight worlds</div>
+    <div class="card-title">From the innermost furnace to the outermost giant</div>
+    <div class="planet-grid">
+
+      <!-- Mercury -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#1a1510,#2a2018);">
+          <div class="p-sphere" style="width:48px;height:48px;background:radial-gradient(circle at 38% 35%,#c8b8a0,#a09080,#6a5a50,#3a2e28);box-shadow:inset -8px -5px 16px rgba(10,6,4,0.6),0 0 12px rgba(200,180,150,0.1);"></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--mercury);">Mercury</div>
+          <div class="planet-meta">0.39 AU · No Moon · No Atmosphere</div>
+          <div class="planet-facts">Smallest planet. Largest iron core proportionally. Surface temperature swings 600°C. <strong>BepiColombo arrives Nov 2026</strong> — the most ambitious Mercury mission ever. Has water ice in permanently shadowed polar craters despite being closest to the Sun.</div>
+        </div>
+      </div>
+
+      <!-- Venus -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#1a1408,#2a2010);">
+          <div class="p-sphere" style="width:72px;height:72px;background:radial-gradient(circle at 40% 38%,#fff0c0,#e8c870,#c8a040,#8a6010,#3a2800);box-shadow:inset -10px -6px 20px rgba(40,20,0,0.5),0 0 20px rgba(232,200,100,0.15);"></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--venus);">Venus</div>
+          <div class="planet-meta">0.72 AU · No Moon · Dense CO₂ Atmosphere</div>
+          <div class="planet-facts">Hottest planet (465°C surface) despite not being closest to Sun. Spins backward. Day longer than year. Was it once habitable? Phosphine detection controversy (2020) raised questions about aerial life. No active surface missions since Soviet Venera program ended in 1985. <strong>Rocket Lab Venus Life Finder</strong> targeting 2026 launch.</div>
+        </div>
+      </div>
+
+      <!-- Earth -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#081828,#0c2040);">
+          <div class="p-sphere" style="width:74px;height:74px;background:radial-gradient(circle at 38% 35%,#7ab8f0,#4a8fc4,#1a5a90,#0a3060,#041830);box-shadow:inset -10px -6px 20px rgba(4,18,48,0.5),0 0 24px rgba(74,143,196,0.2);">
+            <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 35% 30%,rgba(100,180,80,0.45) 0%,transparent 25%),radial-gradient(ellipse at 60% 55%,rgba(100,180,80,0.35) 0%,transparent 20%),radial-gradient(ellipse at 25% 70%,rgba(100,140,80,0.3) 0%,transparent 15%);">
+            </div>
+          </div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--earth);">Earth</div>
+          <div class="planet-meta">1.00 AU · 1 Moon · N₂/O₂ Atmosphere</div>
+          <div class="planet-facts">The only confirmed inhabited world in the Solar System, and in the observable universe. Unique in its liquid-water-covered surface, plate tectonics, and oxygen atmosphere — all likely products of life itself. 8 billion humans. The origin point of every spacecraft in the Solar System.</div>
+        </div>
+      </div>
+
+      <!-- Mars -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#180a04,#280e06);">
+          <div class="p-sphere" style="width:54px;height:54px;background:radial-gradient(circle at 36% 34%,#e8826a,#c0421a,#8a2e10,#4a1804,#200a02);box-shadow:inset -8px -5px 16px rgba(20,8,4,0.6),0 0 14px rgba(192,66,26,0.15);"></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--mars);">Mars</div>
+          <div class="planet-meta">1.52 AU · 2 Moons · Thin CO₂ Atmosphere</div>
+          <div class="planet-facts">2 active rovers (Perseverance, Curiosity). Potential biosignature at Cheyava Falls. Ancient beaches confirmed in Jezero. Subsurface liquid water. Human missions planned 2030s. The most politically contested celestial body in the Solar System after the Moon.</div>
+        </div>
+      </div>
+
+      <!-- Asteroid Belt label -->
+      <div style="grid-column:1/-1;padding:8px 12px;background:var(--bg);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);">⬥ Asteroid Belt · 2.2–3.2 AU · 1.1M+ catalogued objects · Ceres (dwarf planet) · Vesta · Pallas</div>
+
+      <!-- Jupiter -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#180e08,#281808);">
+          <div class="p-sphere" style="width:96px;height:96px;background:radial-gradient(circle at 38% 35%,#e8c0a0,#c4916a,#a06840,#7a4820,#4a2810);box-shadow:inset -14px -8px 28px rgba(30,14,8,0.5),0 0 30px rgba(196,145,106,0.12);">
+            <div style="position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(to bottom,transparent,transparent 14%,rgba(140,70,30,0.22) 14%,rgba(140,70,30,0.22) 17%,transparent 17%,transparent 30%,rgba(160,80,30,0.18) 30%,rgba(160,80,30,0.18) 33%,transparent 33%,transparent 48%,rgba(120,60,20,0.2) 48%,rgba(120,60,20,0.2) 52%,transparent 52%,transparent 66%,rgba(140,70,30,0.18) 66%,rgba(140,70,30,0.18) 69%,transparent 69%);border-radius:50%;overflow:hidden;"></div>
+            <div style="position:absolute;bottom:28%;right:18%;width:14px;height:10px;background:rgba(180,100,60,0.4);border-radius:50%;border:1px solid rgba(160,80,40,0.3);"></div>
+          </div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--jupiter);">Jupiter</div>
+          <div class="planet-meta">5.2 AU · 95 Moons · H₂/He Atmosphere</div>
+          <div class="planet-facts">Largest planet — 11× Earth's diameter, 318× its mass. The Great Red Spot is a storm older than 400 years. Europa, Ganymede, Callisto: ocean worlds with more liquid water than Earth. <strong>Europa Clipper</strong> (NASA) arrives 2030. <strong>JUICE</strong> (ESA) arrives 2031. Juno still orbiting now.</div>
+        </div>
+      </div>
+
+      <!-- Saturn -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#181408,#282008);">
+          <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;width:110px;height:20px;background:linear-gradient(to right,transparent,rgba(212,184,106,0.15) 20%,rgba(212,184,106,0.3) 45%,rgba(212,184,106,0.3) 55%,rgba(212,184,106,0.15) 80%,transparent);border-radius:50%;transform:rotate(-12deg);"></div>
+            <div class="p-sphere" style="width:68px;height:68px;background:radial-gradient(circle at 38% 35%,#ffe0a0,#d4b86a,#b08840,#806020,#503a10);box-shadow:inset -10px -6px 20px rgba(30,20,8,0.5),0 0 20px rgba(212,184,106,0.12);z-index:1;"></div>
+          </div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--saturn);">Saturn</div>
+          <div class="planet-meta">9.5 AU · 146 Moons · Ring System · H₂/He</div>
+          <div class="planet-facts">146 confirmed moons — most in the Solar System. Titan has a thick nitrogen atmosphere and liquid methane lakes — the only other body with stable surface liquids. Enceladus has a geothermal ocean venting water vapor into space. Cassini mission (1997–2017) remains the greatest planetary science mission ever. <strong>Dragonfly</strong> (NASA) launches 2028, arrives Titan 2034.</div>
+        </div>
+      </div>
+
+      <!-- Uranus -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#081818,#0c2828);">
+          <div class="p-sphere" style="width:64px;height:64px;background:radial-gradient(circle at 38% 35%,#c0f0f0,#7ac4c0,#4a9494,#2a6060,#103030);box-shadow:inset -10px -6px 20px rgba(8,30,30,0.5),0 0 20px rgba(122,196,192,0.1);"></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--uranus);">Uranus</div>
+          <div class="planet-meta">19.2 AU · 28 Moons · Ice Giant · Tilted 98°</div>
+          <div class="planet-facts">The only planet that rotates on its side — likely from an ancient massive impact. Ice giant (water, ammonia, methane ices beneath hydrogen atmosphere). Visited only once by Voyager 2 in 1986. A Uranus orbiter was the top priority of the 2023 NASA Planetary Science Decadal Survey — not yet approved for launch. JWST mapped its auroras in 3D (Feb 2026).</div>
+        </div>
+      </div>
+
+      <!-- Neptune -->
+      <div class="planet-card">
+        <div class="planet-icon" style="background:linear-gradient(160deg,#080818,#0c0c28);">
+          <div class="p-sphere" style="width:62px;height:62px;background:radial-gradient(circle at 38% 35%,#8090e0,#4a6ab8,#2a4090,#101860,#060820);box-shadow:inset -10px -6px 20px rgba(6,8,32,0.5),0 0 20px rgba(74,106,184,0.12);"></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-name" style="color:var(--neptune);">Neptune</div>
+          <div class="planet-meta">30.1 AU · 16 Moons · Ice Giant · Fastest Winds</div>
+          <div class="planet-facts">Fastest winds in the Solar System: up to 2,100 km/h. Triton — its largest moon — orbits backward and is almost certainly a captured Kuiper Belt Object. Also visited only once, by Voyager 2 in 1989. No approved mission to return. The most remote planet from the Sun, 30 AU away, takes light 4 hours to reach from Earth.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ THE SUN ═════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-sun">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The Sun</div>
+        <div class="card-title">The star that makes everything possible, and impossible</div>
+        <div class="card-body">
+          <p>The Sun is a G-type main-sequence star (G2V) — 4.603 billion years old, roughly halfway through its hydrogen-burning life. It contains 99.86% of the total mass of the Solar System. Everything else — all eight planets, all their moons, all the asteroids, all the comets, all the spacecraft — is made from the remaining 0.14%.</p>
+          <p>The Sun's diameter is 1.39 million km — 109 Earths side by side. Its surface temperature is 5,778 K. Its corona (outer atmosphere) reaches temperatures of 1–3 million K — hotter than its surface, and a mystery that has puzzled solar physicists for decades. Parker Solar Probe has been flying through the corona since 2021, and its findings are beginning to explain this paradox through the role of magnetic switchbacks and Alfvén waves.</p>
+          <p>The Sun's influence extends outward as the solar wind — a stream of charged particles that creates the heliosphere, a vast magnetic bubble that extends ~120 AU in all directions. This bubble shields the inner Solar System from galactic cosmic rays. When the solar wind strips Mars's thin upper atmosphere, or energizes Jupiter's auroras, or disrupts GPS satellites at Earth, that is the Sun's governance of its system — not by law, but by physics.</p>
+          <p>The Sun will remain on the main sequence for approximately another 5 billion years, then expand into a red giant, engulfing Mercury, Venus, and possibly Earth. Mars and the outer planets will survive, transformed. In perhaps 7 billion years, the Sun will shed its outer layers into a planetary nebula and leave behind a white dwarf — a cooling stellar remnant roughly the size of Earth.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Solar activity</div>
+        <div class="card-title">Solar Cycle 25 · 2025–2026 solar maximum</div>
+        <div class="card-body">
+          <p>The Sun operates on an approximately 11-year cycle of magnetic activity, moving from solar minimum (few sunspots, quiet) to solar maximum (many sunspots, frequent coronal mass ejections) and back. Solar Cycle 25 began in December 2019. Its peak — the solar maximum — is occurring now, in 2025–2026.</p>
+          <p>Solar maximum brings heightened risk of geomagnetic storms. A Carrington-level event (1859) today would disable global satellite infrastructure, GPS, power grids, and communications networks — estimated cost: $1–2 trillion in the first year, with recovery taking years. The probability of a Carrington-level event in any given decade is approximately 12%.</p>
+          <p>ESA's Solar Orbiter is now photographing the Sun's poles for the first time in history, having tilted its orbit to 17° above the ecliptic (rising to 24° after the Dec 2026 Venus flyby). NASA's SunRISE mission — six CubeSats studying solar radio bursts — launches mid-2026.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="background:linear-gradient(160deg,#0e0c04,#1a1608);border-color:rgba(245,200,66,0.12);color:white;">
+        <div class="card-ey" style="color:rgba(245,200,66,0.35);">Solar facts</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+          <div style="padding:9px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:3px solid var(--sol);">
+            <div style="font-weight:700;color:var(--sol-lt);margin-bottom:3px;">Type: G2V yellow dwarf</div>
+            <div style="color:rgba(245,220,160,0.5);">The G denotes temperature class, the 2 its position within that class, and V means it is a main-sequence (hydrogen-burning) star. About 10% of all stars in the Milky Way are G-type. Most stars are smaller and dimmer — M-type red dwarfs constitute ~75% of all stars.</div>
+          </div>
+          <div style="padding:9px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:3px solid var(--sol);">
+            <div style="font-weight:700;color:var(--sol-lt);margin-bottom:3px;">Mass: 1.989 × 10³⁰ kg</div>
+            <div style="color:rgba(245,220,160,0.5);">333,000× Earth's mass. The Sun's gravitational influence extends to the Oort Cloud, ~100,000 AU — roughly 1.6 light-years. Alpha Centauri is 4.37 light-years away.</div>
+          </div>
+          <div style="padding:9px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:3px solid var(--sol);">
+            <div style="font-weight:700;color:var(--sol-lt);margin-bottom:3px;">Luminosity: 3.83 × 10²⁶ watts</div>
+            <div style="color:rgba(245,220,160,0.5);">Earth intercepts 1 part in 2.2 billion of total solar output. That fraction — the solar constant, ~1,361 W/m² — drives all weather, all photosynthesis, and most of human civilization's energy economy.</div>
+          </div>
+          <div style="padding:9px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:3px solid var(--sol);">
+            <div style="font-weight:700;color:var(--sol-lt);margin-bottom:3px;">Core temperature: 15 million K</div>
+            <div style="color:rgba(245,220,160,0.5);">Hot enough for hydrogen fusion via the proton-proton chain. The energy generated in the core takes ~100,000 years to reach the surface by radiation and convection — then 8 minutes to reach Earth.</div>
+          </div>
+          <div style="padding:9px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:3px solid var(--sol);">
+            <div style="font-weight:700;color:var(--sol-lt);margin-bottom:3px;">Rotation: 25 days (equator) · 35 days (poles)</div>
+            <div style="color:rgba(245,220,160,0.5);">The Sun is a plasma, not a solid — different latitudes rotate at different speeds. This differential rotation twists its magnetic field lines over 11 years, storing energy until it erupts in sunspots, flares, and coronal mass ejections.</div>
+          </div>
+          <div style="padding:9px;background:rgba(245,200,66,0.06);border-radius:7px;border-left:3px solid var(--sol);">
+            <div style="font-weight:700;color:var(--sol-lt);margin-bottom:3px;">Remaining life: ~5 billion years</div>
+            <div style="color:rgba(245,220,160,0.5);">The Sun has converted approximately half its hydrogen core into helium. When hydrogen runs out, it will expand 200× into a red giant, incinerate the inner planets, then collapse into a white dwarf about the size of Earth.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Spacecraft studying the Sun now</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Parker Solar Probe (NASA)</strong> — Launched 2018. Flies through the solar corona, closer to the Sun than any spacecraft. Closest approach 6.1M km (8.86 solar radii). Has passed through the corona itself — in the atmosphere of a star. Currently active.</div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Solar Orbiter (ESA/NASA)</strong> — Photographing Sun's poles for first time. Will reach 24° inclination after Dec 2026 Venus flyby. Discovered ubiquitous "campfire" micro-flares blanketing the entire Sun.</div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>SOHO (ESA/NASA)</strong> — Operational since 1996. Monitors the Sun continuously for space weather. Has discovered over 4,800 comets — more than all previous astronomers combined.</div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>STEREO (NASA)</strong> — Twin spacecraft imaging the Sun in 3D from different orbital positions. Enables 3D mapping of coronal mass ejections before they arrive at Earth.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MISSIONS ═══════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-missions">
+  <div class="card">
+    <div class="card-ey">Active missions · March 2026</div>
+    <div class="card-title">Every spacecraft operating in the Solar System right now</div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="card"><div class="card-ey">Inner Solar System · Sun to Mars</div>
+        <div class="mission-row" style="background:rgba(192,66,26,0.04);">
+          <div class="mission-dot" style="background:var(--mars);"></div>
+          <div><div class="mission-name">Perseverance (NASA)</div><div class="mission-meta">MARS · JEZERO CRATER · ACTIVE · SOL ~1,800</div><div class="mission-desc">Collecting cached samples including Cheyava Falls. ~40 km driven. AI-assisted autonomous navigation. Broke Curiosity's distance record 2025.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(192,66,26,0.04);">
+          <div class="mission-dot" style="background:var(--mars);"></div>
+          <div><div class="mission-name">Curiosity (NASA)</div><div class="mission-meta">MARS · GALE CRATER · ACTIVE · YEAR 14</div><div class="mission-desc">Nuclear-powered. Investigating spiderweb ridges (Mar 2026). Climbing Mount Sharp's sedimentary record layer by layer.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(192,66,26,0.04);">
+          <div class="mission-dot" style="background:#c08080;"></div>
+          <div><div class="mission-name">Mars Reconnaissance Orbiter (NASA)</div><div class="mission-meta">MARS ORBIT · ACTIVE SINCE 2006</div><div class="mission-desc">HiRISE camera: 25 cm/pixel. Primary comms relay for surface missions. 20 years at Mars.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(192,66,26,0.04);">
+          <div class="mission-dot" style="background:#c08080;"></div>
+          <div><div class="mission-name">Mars Odyssey (NASA)</div><div class="mission-meta">MARS ORBIT · ACTIVE SINCE 2001 · 25 YEARS</div><div class="mission-desc">Longest-operating Mars spacecraft. Thermal imaging, gamma ray spectrometry.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(192,66,26,0.04);">
+          <div class="mission-dot" style="background:#c08080;"></div>
+          <div><div class="mission-name">ExoMars Trace Gas Orbiter (ESA/Roscosmos)</div><div class="mission-meta">MARS ORBIT · ACTIVE SINCE 2018</div><div class="mission-desc">Searching for atmospheric biosignatures. Monitoring methane. Comms relay for future ESA landers.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(245,200,66,0.04);">
+          <div class="mission-dot" style="background:var(--sol);"></div>
+          <div><div class="mission-name">Parker Solar Probe (NASA)</div><div class="mission-meta">SUN · CORONA DIVER · ACTIVE</div><div class="mission-desc">Closest approach 6.1M km from solar surface — inside the corona. First spacecraft to fly through a stellar atmosphere.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(245,200,66,0.04);">
+          <div class="mission-dot" style="background:var(--sol);"></div>
+          <div><div class="mission-name">Solar Orbiter (ESA/NASA)</div><div class="mission-meta">SUN · ACTIVE · POLAR IMAGING</div><div class="mission-desc">First images of Sun's poles. Venus flyby Dec 24 2026 raises orbit inclination to 24°.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(200,180,150,0.05);">
+          <div class="mission-dot" style="background:var(--mercury);"></div>
+          <div><div class="mission-name">BepiColombo (ESA/JAXA)</div><div class="mission-meta">MERCURY → ARRIVAL NOV 6 2026</div><div class="mission-desc">8-year journey. Two orbiters: surface/interior science + magnetosphere. Mercury orbit insertion Nov 6, 2026.</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card"><div class="card-ey">Outer Solar System · Jupiter and beyond</div>
+        <div class="mission-row" style="background:rgba(196,145,106,0.06);">
+          <div class="mission-dot" style="background:var(--jupiter);"></div>
+          <div><div class="mission-name">Juno (NASA)</div><div class="mission-meta">JUPITER ORBIT · ACTIVE SINCE 2016</div><div class="mission-desc">Originally planned to end 2021 — extended to 2025+. Still returning science. Studies Jupiter's atmosphere, magnetic field, Great Red Spot, and icy moons.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(196,145,106,0.06);">
+          <div class="mission-dot" style="background:#7ab8f0;"></div>
+          <div><div class="mission-name">Europa Clipper (NASA)</div><div class="mission-meta">EN ROUTE TO JUPITER · ARRIVES 2030</div><div class="mission-desc">Will make 49 flybys of Europa to assess habitability of its subsurface ocean. Largest NASA planetary science spacecraft ever built.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(196,145,106,0.06);">
+          <div class="mission-dot" style="background:#7ab8f0;"></div>
+          <div><div class="mission-name">JUICE (ESA)</div><div class="mission-meta">EN ROUTE TO JUPITER · ARRIVES 2031</div><div class="mission-desc">Earth flyby Sep 2026. Will orbit Ganymede — first spacecraft to orbit a moon of another planet. Studies Europa, Callisto, Ganymede for habitability.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(212,184,106,0.06);">
+          <div class="mission-dot" style="background:var(--saturn);"></div>
+          <div><div class="mission-name">No current Saturn missions</div><div class="mission-meta">CASSINI ENDED 2017</div><div class="mission-desc">Dragonfly rotorcraft to Titan launches 2028, arrives 2034. No gap-filler currently en route. The most scientifically rich environment in the Solar System is currently unvisited.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(100,150,100,0.05);">
+          <div class="mission-dot" style="background:#7fcf95;"></div>
+          <div><div class="mission-name">Tianwen-2 (CNSA)</div><div class="mission-meta">KAMOʻOALEWA ASTEROID · ARRIVES JUN 2026</div><div class="mission-desc">First dedicated near-Earth asteroid orbiter. Will also collect samples and eventually proceed to comet 311P/PANSTARRS.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(100,150,100,0.05);">
+          <div class="mission-dot" style="background:#7fcf95;"></div>
+          <div><div class="mission-name">Hayabusa2 Extended (JAXA)</div><div class="mission-meta">TORIFUNE ASTEROID FLYBY · JUL 2026</div><div class="mission-desc">After returning Ryugu samples in 2020, Hayabusa2 continues to Torifune for humanity's first close-up of this near-Earth asteroid.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(100,150,100,0.05);">
+          <div class="mission-dot" style="background:#7fcf95;"></div>
+          <div><div class="mission-name">Hera (ESA)</div><div class="mission-meta">DIDYMOS/DIMORPHOS · ARRIVES NOV 2026</div><div class="mission-desc">Follow-up to DART. Surveys the impact crater, measures asteroid mass and internal structure. Validates planetary defense technology.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(100,100,150,0.05);">
+          <div class="mission-dot" style="background:#a0a0d0;"></div>
+          <div><div class="mission-name">New Horizons (NASA)</div><div class="mission-meta">KUIPER BELT · 57 AU · EXTENDED MISSION</div><div class="mission-desc">After Pluto flyby (2015) and Arrokoth flyby (2019), exploring Kuiper Belt. Science return continues. Power limited but operational.</div></div>
+        </div>
+        <div class="mission-row" style="background:rgba(245,200,66,0.04);">
+          <div class="mission-dot" style="background:var(--sol);"></div>
+          <div><div class="mission-name">Voyager 1 & 2 (NASA)</div><div class="mission-meta">INTERSTELLAR SPACE · 172 AU + 143 AU</div><div class="mission-desc">Only spacecraft operating beyond the heliosphere. Voyager 1 milestone: 1 light-day from Earth, Nov 2026. Expected to communicate until ~2030–2035.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BEYOND NEPTUNE ════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-beyond">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The outer Solar System</div>
+        <div class="card-title">Everything beyond Neptune — the vast, cold, largely unvisited frontier</div>
+        <div class="card-body">
+          <p>Neptune at 30 AU feels like the edge of the Solar System. It is not. Beyond Neptune lies the Kuiper Belt (30–50 AU), home to Pluto, Eris, and hundreds of thousands of icy bodies. Beyond that, the scattered disc extends to ~100 AU. And beyond that: the Oort Cloud, a vast spherical shell of cometary nuclei extending from perhaps 2,000 AU to 100,000 AU — roughly 1.6 light-years from the Sun.</p>
+          <p>The Solar System's true boundary — the heliopause, where the solar wind gives way to interstellar space — is at approximately 120 AU. Voyager 1 crossed it in 2012. Voyager 2 in 2018. No other spacecraft has. No other spacecraft is en route. The two Voyagers are the only humans-made objects to have ever operated in interstellar space.</p>
+          <p>Pluto — reclassified as a dwarf planet in 2006 after the discovery of Eris, which is slightly more massive — was visited for the first time in 2015 by New Horizons. The images revealed a geologically active world with nitrogen ice plains, water ice mountains, and a heart-shaped basin (Tombaugh Regio). Pluto is far more interesting than anyone expected.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Known dwarf planets</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:9px;background:var(--bg);border-radius:8px;"><strong>Pluto · 39.5 AU</strong> — Largest known dwarf planet. Visited by New Horizons 2015. Has 5 moons; Charon is so large the system is a binary. Geologically active. Heart-shaped nitrogen ice plain.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:8px;"><strong>Eris · 96 AU (avg)</strong> — Slightly smaller in volume but slightly more massive than Pluto. Its discovery in 2005 triggered Pluto's reclassification. Has one moon, Dysnomia. Never visited.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:8px;"><strong>Haumea · 43.1 AU</strong> — Elongated, fast-rotating (4 hrs). Has a ring and two moons. Never visited.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:8px;"><strong>Makemake · 45.8 AU</strong> — No confirmed moons. Covered in methane and nitrogen ice. Never visited.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:8px;"><strong>Ceres · 2.77 AU (Asteroid Belt)</strong> — Visited by Dawn mission 2015–18. Has bright salt deposits (faculae) from ancient water activity. The only asteroid-belt dwarf planet.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="voyager-card">
+        <div class="voyager-name">Voyager 1 · In interstellar space</div>
+        <div class="voyager-stat">172 AU from Sun · ~25.7 billion km · Signal delay: ~23.5 hours one way · Launched Sep 5, 1977</div>
+        <div class="voyager-body">
+          <p style="margin-bottom:8px;">Voyager 1 is the most distant human-made object in existence. It crossed the heliopause — the boundary between the solar wind and interstellar space — in August 2012 at 121 AU. It is now moving through the interstellar medium, transmitting data about the magnetic field, cosmic ray flux, and plasma conditions between the stars.</p>
+          <p style="margin-bottom:8px;">In November 2026, Voyager 1 will reach a distance of one light-day from Earth (~25.9 billion km). A radio signal will take 24 hours to reach it. A reply will take another 24 hours. This will be the first time in human history that we operate a functional machine that is one full light-day away.</p>
+          <p>Voyager 1 carries the Golden Record — a 12-inch gold-plated copper disc containing 115 images, sounds, music, and greetings in 55 languages, selected by a committee chaired by Carl Sagan. It includes Chuck Berry's "Johnny B. Goode," Bach's Brandenburg Concerto No. 2, whale songs, Beethoven's 5th Symphony, a photo of a nursing mother, and the sound of rain.</p>
+        </div>
+      </div>
+      <div class="voyager-card">
+        <div class="voyager-name">Voyager 2 · Also in interstellar space</div>
+        <div class="voyager-stat">143 AU from Sun · Signal delay: ~19.75 hours one way · Launched Aug 20, 1977</div>
+        <div class="voyager-body">Voyager 2 is the only spacecraft to have visited all four outer planets — Jupiter (1979), Saturn (1981), Uranus (1986), and Neptune (1989). It crossed the heliopause in November 2018. Still transmitting. Its instruments measure the interstellar medium from a different direction than Voyager 1, providing stereo coverage of humanity's entry into the space between stars. Expected to communicate until approximately 2030–2035, when RTG power falls below operational threshold.</div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Planet Nine hypothesis</div>
+        <div class="card-title">Is there a ninth planet?</div>
+        <div class="card-body">
+          <p>Multiple Kuiper Belt Objects have orbital anomalies that can be explained by the gravitational influence of a large undiscovered planet — perhaps 5–10 Earth masses — orbiting the Sun at 400–800 AU with a period of 10,000–20,000 years. The Caltech astronomers who proposed "Planet Nine" in 2016 (Batygin and Brown) maintain the statistical case is strong.</p>
+          <p>Critics argue the clustering may be observational bias. The Vera Rubin Observatory (first light 2023) is conducting a survey of the outer Solar System that should resolve the question within the next few years. If Planet Nine exists, it is the Solar System's last undiscovered major body.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SPACE LAW ══════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-law">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The governing framework</div>
+        <div class="card-title">One treaty, written in 1967, governs the entire Solar System</div>
+        <div class="card-body">
+          <p>The Outer Space Treaty (OST) of 1967 is the foundational document of international space law. It has 118 parties, including all major spacefaring nations. Its core provisions: no national appropriation of outer space or celestial bodies by claim of sovereignty; peaceful use only; states are internationally responsible for their nationals' space activities; states must avoid harmful contamination of space and adverse changes to the Earth's environment.</p>
+          <p>The OST was written during the Space Race, when only the US and USSR had orbital capability, and was designed to prevent the militarization and territorial partition of the Moon. It succeeded. It also succeeded, accidentally, in creating a framework for the entire Solar System — but that framework was never designed for the situation humanity now faces.</p>
+          <p>The Treaty has never been violated. It has also never been tested in any court, because no international court has jurisdiction over space disputes. There is no Space Court. There is no Space Police. Enforcement depends entirely on political and diplomatic mechanisms — and those mechanisms were designed for a world in which only two states mattered in space.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">The Artemis Accords</div>
+        <div class="card-title">A parallel legal framework that Russia and China reject</div>
+        <div class="card-body">
+          <p>The Artemis Accords (2020) are bilateral agreements between the US and partner nations, built on OST foundations but extending them to address the realities of 21st-century space exploration: transparency, deconfliction of activities, preservation of heritage sites, extraction and use of space resources, and interoperability of rescue systems. As of 2026, 43 nations have signed.</p>
+          <p>Russia and China have not signed — and have characterized the Accords as a US-led attempt to create a unilateral legal framework outside the existing UN treaties. China is developing its own lunar program (Chang'e 7 planning for 2026 south pole landing) and has indicated it will operate under its own interpretation of OST. The Accords nations and China are now operating simultaneously at the lunar south pole region, with no agreed deconfliction mechanism.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">The critical gaps</div>
+        <div class="card-title">Five things the OST cannot handle</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="gap-card" style="background:rgba(139,26,26,0.06);border-color:var(--red);">
+            <div style="font-weight:700;font-size:12px;color:var(--red);margin-bottom:4px;">Gap 1 · Resource extraction has no international framework</div>
+            <div style="font-size:12px;color:var(--ink-soft);">The OST prohibits sovereignty but is silent on resource extraction. The US (2015), Luxembourg (2017), and UAE (2020) have passed domestic laws authorizing citizens to own resources they extract. Russia and China have not recognized these laws. When the first commercial lunar mining operation begins, there is no international arbitrator and no agreed framework. First-mover advantage will likely determine outcomes.</div>
+          </div>
+          <div class="gap-card" style="background:rgba(196,127,0,0.06);border-color:var(--amber);">
+            <div style="font-weight:700;font-size:12px;color:var(--amber);margin-bottom:4px;">Gap 2 · Signal delay makes state supervision physically impossible</div>
+            <div style="font-size:12px;color:var(--ink-soft);">OST Art. VI requires states to authorize and "continuously supervise" their nationals' space activities. Mars is currently 19 minutes away at light speed. Real-time supervision is impossible by physics. Any governance of a Mars colony must be local — but no legal framework exists for creating local governance beyond Earth's jurisdiction.</div>
+          </div>
+          <div class="gap-card" style="background:rgba(58,122,184,0.07);border-color:var(--blue-sci);">
+            <div style="font-weight:700;font-size:12px;color:var(--blue-sci);margin-bottom:4px;">Gap 3 · Planetary protection is voluntary and pre-commercial</div>
+            <div style="font-size:12px;color:var(--ink-soft);">COSPAR's planetary protection guidelines govern biological contamination of other worlds. They were designed for robotic missions. SpaceX intends to send humans to Mars — hundreds of them — in the 2030s. Humans cannot be biologically sterilized. Once human biological material reaches Mars, the scientific search for indigenous Martian life becomes permanently contaminated. There is no treaty governing this. There is no enforcement mechanism.</div>
+          </div>
+          <div class="gap-card" style="background:rgba(74,42,122,0.07);border-color:var(--purple);">
+            <div style="font-weight:700;font-size:12px;color:var(--purple);margin-bottom:4px;">Gap 4 · No framework for legal personhood of off-Earth humans</div>
+            <div style="font-size:12px;color:var(--ink-soft);">A person born on Mars to American parents: are they a US citizen? A citizen of no recognized state? What law governs their contracts, their inheritance, their rights? International law has no answer. The first Martian-born human will be a legal anomaly without a framework. Every previous gap in citizenship law was resolved by expanding existing categories. This one has no existing category to expand.</div>
+          </div>
+          <div class="gap-card" style="background:rgba(139,26,26,0.04);border-color:rgba(139,26,26,0.3);">
+            <div style="font-weight:700;font-size:12px;color:var(--red);margin-bottom:4px;">Gap 5 · No agreed deconfliction at the lunar south pole</div>
+            <div style="font-size:12px;color:var(--ink-soft);">The lunar south pole's permanently shadowed craters contain water ice — the most valuable resource in the inner Solar System for fuel production. NASA's Artemis program, China's CLEP program, and multiple commercial operators are all targeting the same small region. The Artemis Accords establish "safety zones" around operations but China has not accepted these. There is no agreed process for resolving conflicting claims to the same resource deposit.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LIFE QUESTION ══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-life">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The life question</div>
+        <div class="card-title">Are we alone in our own Solar System?</div>
+        <div class="card-body">
+          <p>The search for life within the Solar System is the most consequential scientific program in human history. If life is found — anywhere, in any form — it changes everything we understand about the likelihood of life in the universe and our own place in it. If life is found to have arisen independently from Earth life, it establishes that life is effectively inevitable wherever conditions permit. If Mars life turns out to be related to Earth life (via meteorite exchange — panspermia), it raises a different set of questions about life's ultimate origin.</p>
+          <p>The Solar System currently has at least five candidate locations for extraterrestrial life: Mars (subsurface water, potential biosignatures at Cheyava Falls), Europa (subsurface ocean, hydrothermal venting suspected), Enceladus (active geothermal ocean venting into space), Titan (exotic liquid methane chemistry at the surface, possible water ocean below), and possibly Ganymede and Callisto. Venus's clouds — specifically the 48–60 km altitude region where pressure and temperature resemble Earth's surface — are also a candidate, following the phosphine detection controversy of 2020.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Mars</div>
+        <div class="card-title">The best current candidate · March 2026</div>
+        <div class="card-body">
+          <p>Perseverance's Cheyava Falls sample contains iron-phosphate spots with calcium sulfate halos — the same pattern produced by microbial iron reduction on Earth. A 2025 study concluded that microbial excretion is the most likely explanation, though abiotic chemistry cannot be ruled out without laboratory analysis of the actual sample. The sample is cached; getting it back requires the Mars Sample Return mission.</p>
+          <p>Separately: January 2026 brought confirmation of ancient beaches in Jezero Crater (Imperial College London) — Mars had stable, long-duration standing water in its Noachian period. And March 2026 data from InSight confirmed liquid water at 11.5–20 km depth beneath the surface. An environment that once had the right conditions. Possible current liquid water. Organic chemistry confirmed. The question is not whether Mars ever had the conditions for life, but whether life took hold — and whether anything survives.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">The ocean worlds</div>
+        <div class="card-title">More liquid water than Earth — under ice</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <div style="padding:12px;background:rgba(58,122,184,0.06);border-radius:8px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;font-size:13px;color:var(--blue-sci);margin-bottom:5px;">Europa · Jupiter's moon</div>
+            <div style="color:var(--ink-soft);line-height:1.6;">A liquid water ocean twice the volume of all Earth's oceans, beneath an ice shell 15–25 km thick. Tidal heating from Jupiter keeps it liquid. Evidence suggests hydrothermal venting at the seafloor. Europa Clipper (arriving 2030) will assess habitability through 49 flybys. JUICE will also observe Europa. Considered the highest-probability location for complex life beyond Earth.</div>
+          </div>
+          <div style="padding:12px;background:rgba(212,184,106,0.06);border-radius:8px;border-left:3px solid var(--saturn);">
+            <div style="font-weight:700;font-size:13px;color:var(--sol-dk);margin-bottom:5px;">Enceladus · Saturn's moon</div>
+            <div style="color:var(--ink-soft);line-height:1.6;">Cassini flew through Enceladus's water geysers and detected molecular hydrogen, silica nanoparticles, and complex organic molecules — the signature of hydrothermal chemistry at the seafloor. A small moon, ~500 km diameter, actively venting its ocean into space. The plume material falls back onto Saturn's rings. If you want to sample an ocean world, Enceladus lets you do it without landing — just fly through the plume. No current mission is returning.</div>
+          </div>
+          <div style="padding:12px;background:rgba(212,184,106,0.06);border-radius:8px;border-left:3px solid var(--saturn);">
+            <div style="font-weight:700;font-size:13px;color:var(--sol-dk);margin-bottom:5px;">Titan · Saturn's largest moon</div>
+            <div style="color:var(--ink-soft);line-height:1.6;">The only other world with stable surface liquids — methane and ethane lakes at -179°C. A thick nitrogen atmosphere with complex organic chemistry. Dragonfly (NASA), launching 2028, will fly a rotorcraft across Titan's surface and sample its chemistry. The goal: understand prebiotic chemistry in a liquid-methane environment, and look for evidence of exotic biology based on chemistry unlike anything on Earth.</div>
+          </div>
+          <div style="padding:12px;background:rgba(230,200,120,0.06);border-radius:8px;border-left:3px solid rgba(220,180,80,0.4);">
+            <div style="font-weight:700;font-size:13px;color:rgba(180,140,40,1);margin-bottom:5px;">Venus clouds · 48–60 km altitude</div>
+            <div style="color:var(--ink-soft);line-height:1.6;">Surface: 465°C, 90 atm, sulfuric acid rain. Hostile to any known life. But at 48–60 km altitude, temperature is 30–70°C and pressure is 1 atm — essentially Earth surface conditions. The 2020 phosphine detection (later disputed) pointed at this zone. Rocket Lab's Venus Life Finder targets 2026 launch. A long-shot candidate — but one that, if confirmed, would be reachable by balloon or aircraft habitat.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CULTURE ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-culture">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The Solar System in human history</div>
+        <div class="card-title">How our ancestors mapped the sky and named the wanderers</div>
+        <div class="card-body">
+          <p>For most of human history, the Solar System did not exist as a concept. What existed were five wandering stars — planets — visible to the naked eye moving against the fixed stars: Mercury, Venus, Mars, Jupiter, and Saturn. The Sun and Moon were often counted with them, making seven wanderers in total. Seven became sacred across nearly every civilization — seven days of the week, seven notes in the musical scale, seven metals in alchemy, seven archangels in Jewish and Christian tradition.</p>
+          <p>Babylonian astronomers tracked the wanderers with extraordinary precision from at least 1500 BCE, using them to predict celestial events, agricultural seasons, and the outcomes of wars. Their system was transmitted to the Greeks around 300 BCE, who provided the theoretical framework (a geocentric model with epicycles) that Ptolemy codified in the Almagest (150 CE). This model was good enough to predict planetary positions accurately for 1,400 years.</p>
+          <p>Copernicus proposed heliocentrism in 1543 — a hypothesis, he called it. Galileo confirmed it in 1610 with a telescope: Jupiter had moons, Venus had phases, the Milky Way was not a cloud but stars. Within a century, Newton had explained why: universal gravitation. Within three centuries, we had spacecraft at every planet in that system.</p>
+          <p>The speed of this transition — from geocentric cosmology to interplanetary spacecraft in 400 years — is perhaps the most extraordinary cognitive achievement in human history. Every generation from Galileo to the Apollo astronauts was separated by only a few human lifetimes.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">The seven wanderers and the week</div>
+        <div class="card-title">Why Monday through Sunday map onto the Solar System</div>
+        <div class="card-body">
+          <p>The seven-day week is a Babylonian invention, transmitted through Hellenistic culture into Rome and from Rome into almost every subsequent civilization. Each day was assigned to one of the seven classical planets, in the order of their ancient cosmological sequence (Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon), cycling through each hour of the day. The planet ruling the first hour of each day gave that day its name.</p>
+          <p>The result: <strong>Sunday</strong> (Sun), <strong>Monday</strong> (Moon — French: Lundi), <strong>Tuesday</strong> (Mars/Týr — French: Mardi), <strong>Wednesday</strong> (Mercury/Woden — French: Mercredi), <strong>Thursday</strong> (Jupiter/Thor — French: Jeudi), <strong>Friday</strong> (Venus/Frigg — French: Vendredi), <strong>Saturday</strong> (Saturn). Every week, every person on Earth observes a sequence whose structure was determined by Babylonian cosmology, 2,500 years ago, based on the visible planets of the Solar System. The Solar System names your week. It always has.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="background:linear-gradient(160deg,#06080f,#0d1228);border-color:rgba(245,200,66,0.1);color:white;">
+        <div class="card-ey" style="color:rgba(245,200,66,0.3);">Planetary mythology — the ancient names</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;margin-top:4px;">
+          <div style="padding:9px;background:rgba(200,180,150,0.07);border-radius:7px;border-left:3px solid var(--mercury);"><strong style="color:rgba(200,180,150,0.8);">☿ Mercury / Hermes</strong> — <span style="color:rgba(245,220,160,0.5);">Messenger of the gods. Fastest planet (88-day year), hence the fleet-footed messenger. Patron of trade, travelers, thieves, and communication. Named for his speed, observed darting close to the Sun and vanishing.</span></div>
+          <div style="padding:9px;background:rgba(232,200,100,0.07);border-radius:7px;border-left:3px solid var(--venus);"><strong style="color:rgba(232,200,100,0.8);">♀ Venus / Aphrodite</strong> — <span style="color:rgba(245,220,160,0.5);">Goddess of love and beauty — the brightest object in the sky after the Sun and Moon. The Babylonians called it Ishtar. So bright it casts shadows. The morning star and evening star were once thought to be two different objects; Pythagoras is credited with recognizing they were one.</span></div>
+          <div style="padding:9px;background:rgba(192,66,26,0.12);border-radius:7px;border-left:3px solid var(--mars);"><strong style="color:rgba(240,130,100,0.8);">♂ Mars / Ares</strong> — <span style="color:rgba(245,220,160,0.5);">God of war — the blood-red wanderer. Named consistently for war by every civilization that tracked it: Nergal (Babylon), Ares (Greece), Mars (Rome), Mangala (India), Her Desher "the red one" (Egypt). The color alone was enough. Red meant blood. Blood meant Mars.</span></div>
+          <div style="padding:9px;background:rgba(196,145,106,0.1);border-radius:7px;border-left:3px solid var(--jupiter);"><strong style="color:rgba(220,170,120,0.8);">♃ Jupiter / Zeus</strong> — <span style="color:rgba(245,220,160,0.5);">King of the gods — the largest and most majestic planet. Babylonians called it Marduk, ruler of the gods, who slew the primordial chaos monster Tiamat to create the world. Jupiter's 12-year orbit around the Sun gave rise to the 12-year cycle in Chinese astrology and the 12 signs of the Western zodiac.</span></div>
+          <div style="padding:9px;background:rgba(212,184,106,0.08);border-radius:7px;border-left:3px solid var(--saturn);"><strong style="color:rgba(212,184,106,0.8);">♄ Saturn / Kronos</strong> — <span style="color:rgba(245,220,160,0.5);">The old god — outermost known planet to antiquity, slowest-moving, associated with time, age, restriction, and death. Kronos devoured his children. Saturday is Saturn's day. In alchemy, Saturn's metal was lead — the heaviest, the basest. Melancholy was Saturn's humor. Farmers and old men were Saturn's people. Its rings, of course, were unknown until Galileo's telescope in 1610 — and even then he misread them as two companion spheres.</span></div>
+          <div style="padding:9px;background:rgba(122,196,192,0.08);border-radius:7px;border-left:3px solid var(--uranus);"><strong style="color:rgba(122,196,192,0.8);">⛢ Uranus / Ouranos</strong> — <span style="color:rgba(245,220,160,0.5);">The first planet discovered by telescope — William Herschel, 1781. Initially named Georgium Sidus ("George's Star") after King George III by its discoverer. The international astronomy community eventually settled on Uranus, father of the Titans. The first planet whose existence was unknown to antiquity.</span></div>
+          <div style="padding:9px;background:rgba(74,106,184,0.1);border-radius:7px;border-left:3px solid var(--neptune);"><strong style="color:rgba(122,150,220,0.8);">♆ Neptune / Poseidon</strong> — <span style="color:rgba(245,220,160,0.5);">Discovered by mathematical prediction in 1846 — the first planet found by calculation before observation. Its position was independently predicted by Adams (England) and Le Verrier (France), who calculated where an unseen planet must be to explain Uranus's orbital perturbations. Galle in Berlin pointed his telescope at Le Verrier's coordinates and found Neptune within 1° of the prediction. The most intellectually dramatic discovery in planetary astronomy.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Carl Sagan · Pale Blue Dot · 1990</div>
+        <div class="card-body" style="font-style:italic;font-size:13px;color:var(--ink-soft);border-left:3px solid rgba(245,200,66,0.3);padding-left:14px;line-height:1.8;">
+          "Look again at that dot. That's here. That's home. That's us. On it everyone you love, everyone you know, everyone you ever heard of, every human being who ever was, lived out their lives... on a mote of dust suspended in a sunbeam." — Carl Sagan, reflecting on Voyager 1's "Family Portrait" photograph of Earth from 40 AU, Feb 14 1990.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DISCOURSE ══════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-discourse">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Active deliberations</div>
+
+        <div class="deliberation-card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;">Should humanity adopt the "keep Mars pristine" position — no human missions until the life question is resolved?</div>
+          <div style="font-size:11.5px;color:var(--ink-mut);margin-bottom:8px;">Proposed by @PlanetaryProtectionAdvocate · 142 responses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button class="vote-btn" onclick="vote(this,'dv1',0)">✓ Yes — life search first</button>
+            <button class="vote-btn" onclick="vote(this,'dv1',1)">✗ No — humans must go now</button>
+            <button class="vote-btn" onclick="vote(this,'dv1',2)">◈ Robotic first, then humans</button>
+          </div>
+          <div class="vote-bar-outer"><div class="vote-bar-inner" id="dv1-bar" style="width:38%;"></div></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:3px;" id="dv1-label">38% — Yes / 41% — No / 21% — Robotic first</div>
+        </div>
+
+        <div class="deliberation-card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;">Should the Outer Space Treaty be renegotiated for the commercial era — or is amending it too risky?</div>
+          <div style="font-size:11.5px;color:var(--ink-mut);margin-bottom:8px;">Proposed by @SpaceLawReview · 217 responses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button class="vote-btn" onclick="vote(this,'dv2',0)">✓ Renegotiate now</button>
+            <button class="vote-btn" onclick="vote(this,'dv2',1)">✗ Too risky — leave it</button>
+            <button class="vote-btn" onclick="vote(this,'dv2',2)">◈ Add protocols, don't reopen</button>
+          </div>
+          <div class="vote-bar-outer"><div class="vote-bar-inner" id="dv2-bar" style="width:29%;background:var(--blue-sci);"></div></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:3px;" id="dv2-label">29% — Renegotiate / 22% — Leave it / 49% — Add protocols</div>
+        </div>
+
+        <div class="deliberation-card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;">If the Cheyava Falls sample confirms Martian microbial life, should all human Mars missions be immediately halted?</div>
+          <div style="font-size:11.5px;color:var(--ink-mut);margin-bottom:8px;">Proposed by @NoahG · 89 responses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button class="vote-btn" onclick="vote(this,'dv3',0)">✓ Yes — halt immediately</button>
+            <button class="vote-btn" onclick="vote(this,'dv3',1)">✗ No — proceed with caution</button>
+            <button class="vote-btn" onclick="vote(this,'dv3',2)">◈ International vote required</button>
+          </div>
+          <div class="vote-bar-outer"><div class="vote-bar-inner" id="dv3-bar" style="width:55%;background:#7fcf95;"></div></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:3px;" id="dv3-label">55% — Halt / 19% — Proceed / 26% — International vote</div>
+        </div>
+
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Discourse stats · Solar System jurisdiction</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:12px;">
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--sol-dk);">18</div><div style="color:var(--ink-mut);font-size:11px;">Active deliberations</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--sol-dk);">4,218</div><div style="color:var(--ink-mut);font-size:11px;">Total responses</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--sol-dk);">91</div><div style="color:var(--ink-mut);font-size:11px;">Nations represented</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--sol-dk);">12</div><div style="color:var(--ink-mut);font-size:11px;">Expert credentials verified</div></div>
+        </div>
+        <div class="card-ey">Framing questions</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--sol);">Who should have standing to advocate for the interests of Mars's potential indigenous life — organisms that cannot speak for themselves at any forum?</div>
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--sol);">Does discovery of life elsewhere in the Solar System create a moral obligation to preserve it, even at the cost of human expansion?</div>
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--sol);">The Outer Space Treaty was written by two superpowers in competition. Can a treaty designed for competition create a framework for collaboration?</div>
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--sol);">At what point does a self-sufficient off-Earth colony have the right to self-determination — and who decides when that point is reached?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-body -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-sun" onclick="if(event.target===this)closeModal('modal-sun')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-sun')">✕</button>
+    <h2>☀ The Sun</h2>
+    <p>G2V yellow dwarf star. Age: 4.603 billion years. 99.86% of the Solar System's total mass. Surface temperature: 5,778 K. Core temperature: 15 million K. Luminosity: 3.83 × 10²⁶ watts. Diameter: 1.39 million km (109 Earths). Distance from Earth: 1 AU = 149.6 million km. Light travel time: 8 minutes 20 seconds.</p>
+    <p>The Sun will remain on the main sequence for approximately 5 more billion years, then expand into a red giant, then collapse to a white dwarf.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-planets" onclick="if(event.target===this)closeModal('modal-planets')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-planets')">✕</button>
+    <h2>The Eight Planets</h2>
+    <h3>Rocky inner planets (terrestrial)</h3>
+    <p>Mercury (0.39 AU), Venus (0.72 AU), Earth (1.0 AU), Mars (1.52 AU) — small, dense, rocky, with little or no atmosphere except Venus (thick CO₂) and Earth (N₂/O₂).</p>
+    <h3>Giant outer planets</h3>
+    <p>Jupiter (5.2 AU, gas giant), Saturn (9.5 AU, gas giant with rings), Uranus (19.2 AU, ice giant), Neptune (30.1 AU, ice giant). The gas giants are mostly hydrogen and helium; the ice giants contain water, ammonia, and methane ices beneath hydrogen envelopes.</p>
+    <h3>Beyond the planets</h3>
+    <p>The Kuiper Belt (30–50 AU), scattered disc, and Oort Cloud (2,000–100,000 AU) contain hundreds of thousands of icy bodies including dwarf planets Pluto, Eris, Haumea, and Makemake.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-missions" onclick="if(event.target===this)closeModal('modal-missions')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-missions')">✕</button>
+    <h2>Active Missions · March 2026</h2>
+    <h3>At or en route to destinations</h3>
+    <p>Perseverance & Curiosity (Mars surface) · MRO, Odyssey, ExoMars TGO (Mars orbit) · BepiColombo (Mercury arrival Nov 2026) · Parker Solar Probe, Solar Orbiter (Sun) · Juno (Jupiter) · Europa Clipper, JUICE (en route to Jupiter) · Hayabusa2 (Torifune flyby Jul 2026) · Tianwen-2 (Kamoʻoalewa Jun 2026) · Hera (Didymos Nov 2026) · New Horizons (Kuiper Belt) · Voyager 1 & 2 (interstellar space).</p>
+    <h3>Launching in 2026</h3>
+    <p>JAXA MMX (Mars moon sample return) · NASA ESCAPADE (Mars atmosphere) · Blue Moon Pathfinder (lunar lander) · SunRISE CubeSats (solar activity).</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-voyager" onclick="if(event.target===this)closeModal('modal-voyager')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-voyager')">✕</button>
+    <h2>Voyager 1 · The Golden Record</h2>
+    <p>Voyager 1 is 172 AU from the Sun as of March 2026 — approximately 25.7 billion kilometers. It crossed into interstellar space in August 2012. Signal travel time: ~23.5 hours one way.</p>
+    <p>In November 2026 it will become the first human-made object to reach one light-day from Earth (~25.9 billion km). A round-trip communication will then take 48 hours.</p>
+    <h3>The Golden Record</h3>
+    <p>Both Voyagers carry a gold-plated copper disc containing 115 images, natural sounds (rain, surf, birds, whales), spoken greetings in 55 languages, and 90 minutes of music — including Bach's Brandenburg Concerto No. 2, Chuck Berry's "Johnny B. Goode," Beethoven's 5th Symphony, Azerbaijani folk music, and Peruvian pan pipes. The contents were selected by a committee chaired by Carl Sagan. The record is expected to remain intact for at least a billion years.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-ost" onclick="if(event.target===this)closeModal('modal-ost')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-ost')">✕</button>
+    <h2>Outer Space Treaty · 1967</h2>
+    <p>Signed January 27, 1967. Entered into force October 10, 1967. 118 parties as of 2026, including all major spacefaring nations.</p>
+    <h3>Core provisions</h3>
+    <p>Art. I: Outer space is the province of all mankind, free for exploration and use by all states. Art. II: No national appropriation by claim of sovereignty, use, or occupation. Art. IV: No weapons of mass destruction in orbit or on celestial bodies. Military bases and maneuvers on celestial bodies prohibited. Art. VI: States responsible for national activities in outer space, including those of non-governmental entities. Art. IX: States must avoid harmful contamination of space and adverse changes to the Earth's environment.</p>
+    <h3>What it doesn't cover</h3>
+    <p>Resource extraction, citizenship of off-Earth humans, commercial activities, deconfliction of competing operations, enforcement mechanisms, and governance of permanent settlements.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-scale" onclick="if(event.target===this)closeModal('modal-scale')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-scale')">✕</button>
+    <h2>The Scale of the Solar System</h2>
+    <p>If the Sun were the size of a grapefruit (12 cm), Earth would be 13 meters away — the size of a grain of sand. Neptune would be 400 meters away. The nearest star (Alpha Centauri) would be 3,500 km away.</p>
+    <h3>Light travel times</h3>
+    <p>Sun → Earth: 8 min 20 sec · Sun → Mars (avg): ~12.5 min · Sun → Jupiter: 43 min · Sun → Saturn: 1 hr 20 min · Sun → Neptune: 4 hrs 10 min · Sun → Voyager 1: ~23.5 hrs · Sun → nearest star: 4.37 years</p>
+    <h3>The Oort Cloud</h3>
+    <p>The Solar System extends to the Oort Cloud — approximately 100,000 AU or ~1.6 light-years. Voyager 1 will reach its inner edge in approximately 300 years and pass through it in approximately 30,000 years. Alpha Centauri is 4.37 light-years away — not much further than the Oort Cloud's outer boundary.</p>
+  </div>
+</div>
+
+<script>
+function showTab(id,el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function vote(btn,id,idx){
+  document.querySelectorAll(`[onclick*="${id}"]`).forEach(b=>b.classList.remove('voted'));
+  btn.classList.add('voted');
+  const pcts=[[44,35,21],[29,22,49],[59,15,26]];
+  const dv=parseInt(id.replace('dv',''))-1;
+  const p=pcts[dv];
+  document.getElementById(id+'-bar').style.width=p[idx]+'%';
+  const labels=[['Yes','No','Robotic first'],['Renegotiate','Leave it','Add protocols'],['Halt','Proceed','International vote']];
+  document.getElementById(id+'-label').textContent=`${p[0]}% — ${labels[dv][0]} / ${p[1]}% — ${labels[dv][1]} / ${p[2]}% — ${labels[dv][2]}`;
+}
+</script>
+</body>
+</html>

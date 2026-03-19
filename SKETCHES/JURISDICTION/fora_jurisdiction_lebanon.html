@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Lebanon</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1b3a6b; --blue-lt:#2a5298; --blue-vp:rgba(27,58,107,0.04); --blue-pl:rgba(27,58,107,0.12);
+  --gilt:#b8860b; --gilt-dk:#8b6914; --gilt-pl:#fdf8ed; --gilt-rul:rgba(184,134,11,0.2);
+  --red:#8b1a1a; --red-lt:#c0392b; --red-p:rgba(139,26,26,0.06); --red-r:rgba(139,26,26,0.18);
+  --amber:#c47f00; --amber-p:rgba(196,127,0,0.08); --amber-r:rgba(196,127,0,0.2);
+  --green:#155c2d; --green-p:rgba(21,92,45,0.07); --green-lt:#e5f0e8;
+  --purple:#2d1a4a; --purple-lt:#f0eaf7;
+  --ink:#0e1a2e; --ink-mid:#1e2d45; --ink-soft:#4a5568; --ink-mut:#7a8aaa;
+  --bg:#f2f4f8; --white:#ffffff;
+  --rule:rgba(27,58,107,0.1); --rule-lt:rgba(27,58,107,0.06);
+  /* Lebanon specific */
+  --leb-red:#EE1C25; --leb-cedar:#2E8B57;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* ── NAV ── */
+.nav{background:var(--blue);border-bottom:4px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-logo span{color:var(--gilt);}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;transition:color 0.12s;}
+.nav-link:hover,.nav-link.active{color:white;}
+.nav-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;}
+
+/* ── TICKER — fragile ceasefire (amber, not red) ── */
+.ticker-bar{height:30px;background:#0a0f1a;border-bottom:1px solid rgba(196,127,0,0.25);display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;background:rgba(196,127,0,0.22);border-right:1px solid rgba(196,127,0,0.4);}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:#FAC775;white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;animation:ticker-scroll 30s linear infinite;white-space:nowrap;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.05);}
+.ticker-key{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.ticker-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.tv-amber{color:#FAC775;} .tv-white{color:rgba(255,255,255,0.85);} .tv-red{color:#ff8080;} .tv-green{color:#7fcf95;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#0e1a2e 0%,#1a3520 50%,#1b3a6b 100%);padding:32px 40px 0;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.hero-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;position:relative;}
+.hero-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.bc-sep{opacity:0.2;margin:0 3px;}
+.bc-cosmic{color:rgba(255,255,255,0.15);font-size:7px;}
+.bc-here{color:rgba(255,255,255,0.65);}
+
+/* Lebanon flag */
+.leb-flag{display:flex;flex-direction:column;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.15);width:52px;flex-shrink:0;}
+.lf-red{background:#EE1C25;height:14px;}
+.lf-white{background:#f5f5f5;height:22px;display:flex;align-items:center;justify-content:center;}
+.lf-red2{background:#EE1C25;height:14px;}
+.cedar{font-size:16px;line-height:1;}
+
+.juris-name{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:white;line-height:0.95;letter-spacing:-0.01em;}
+.juris-name-local{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(255,255,255,0.45);margin-top:5px;direction:rtl;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:6px;}
+.juris-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;}
+.jtag-type{color:rgba(184,134,11,0.9);border-color:rgba(184,134,11,0.3);background:rgba(184,134,11,0.1);}
+.jtag-amber{color:rgba(250,199,117,0.9);border-color:rgba(196,127,0,0.3);background:rgba(196,127,0,0.1);}
+.jtag-blue{color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);}
+.jtag-green{color:rgba(127,207,149,0.9);border-color:rgba(21,92,45,0.3);background:rgba(21,92,45,0.12);}
+
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-top:20px;}
+.hs{background:rgba(255,255,255,0.03);padding:11px 14px;}
+.hs-click{cursor:pointer;transition:background 0.15s;}
+.hs-click:hover{background:rgba(255,255,255,0.1);}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;}
+.hs-num.red{color:#ffaaaa;} .hs-num.amber{color:#FAC775;} .hs-num.green{color:#7fcf95;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.27);margin-top:3px;line-height:1.5;}
+
+/* Hero right — governance chips */
+.hero-right{display:flex;flex-direction:column;gap:10px;min-width:200px;flex-shrink:0;}
+.hr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;}
+.gov-chip{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);cursor:pointer;transition:background 0.12s;margin-bottom:4px;}
+.gov-chip:hover{background:rgba(255,255,255,0.1);}
+.gc-name{font-size:12px;font-weight:600;color:white;}
+.gc-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.4);margin-top:1px;}
+.gc-arrow{margin-left:auto;color:rgba(255,255,255,0.3);font-size:12px;}
+.gc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.btn-primary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;transition:all 0.12s;width:100%;margin-top:4px;}
+.btn-secondary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;background:transparent;color:rgba(255,255,255,0.7);transition:all 0.12s;width:100%;}
+
+/* ── TABS ── */
+.org-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;align-items:center;padding:0 40px;gap:0;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 16px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.12s;}
+.tab:hover{color:var(--blue);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+
+/* ── BODY ── */
+.page-body{max-width:1100px;margin:0 auto;padding:32px 40px 80px;}
+.two-col{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── CONTENT CARDS ── */
+.card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:20px;margin-bottom:16px;}
+.card-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;}
+.card-title{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.card-body{font-size:13px;color:var(--ink-soft);line-height:1.75;}
+.card-body p{margin-bottom:10px;}
+.card-body p:last-child{margin-bottom:0;}
+.card-rule{height:1px;background:var(--rule);margin:14px 0;}
+
+/* ── HOVER TERMS ── */
+.term{border-bottom:1px dotted var(--amber);cursor:help;color:inherit;}
+.term:hover{color:var(--amber);}
+
+/* ── STAT MODALS ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,26,46,0.6);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:12px;padding:28px;max-width:480px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,0.2);}
+.modal-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--ink-mut);margin-bottom:16px;}
+.modal-body{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+.modal-close{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;border-radius:100px;border:1px solid var(--rule);color:var(--ink-mut);background:transparent;cursor:pointer;margin-top:16px;}
+.modal-source{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:12px;border-top:1px solid var(--rule);padding-top:10px;}
+
+/* ── SECTION TAGS ── */
+.section-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-right:5px;margin-bottom:4px;}
+
+/* ── TIMELINE ── */
+.tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule-lt);}
+.tl-item:last-child{border-bottom:none;}
+.tl-year{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);width:52px;flex-shrink:0;padding-top:1px;}
+.tl-text{font-size:12.5px;color:var(--ink-soft);line-height:1.55;}
+
+/* ── NGE/RELATIONS CARDS ── */
+.nge-card{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all 0.12s;background:var(--white);}
+.nge-card:hover{border-color:var(--blue-lt);background:var(--blue-vp);}
+.nge-emblem{width:36px;height:36px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.nge-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.nge-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--ink-mut);}
+.nge-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;margin-top:3px;}
+.nge-link{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--blue-lt);margin-top:4px;display:inline-block;}
+.nge-status{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;margin-top:4px;display:inline-block;}
+
+/* ── CIVIC ISSUES ── */
+.ci-card{display:flex;align-items:flex-start;gap:12px;padding:13px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color 0.12s;}
+.ci-card:hover{border-color:var(--blue-lt);}
+.ci-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.ci-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ci-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.ci-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:5px;}
+.ci-arrow{margin-left:auto;color:var(--ink-mut);font-size:14px;flex-shrink:0;}
+
+/* ── DISARMAMENT TRACKER ── */
+.disarm-track{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:16px;margin-bottom:16px;}
+.dt-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:12px;}
+.dt-phase{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule-lt);}
+.dt-phase:last-child{border-bottom:none;}
+.dt-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;flex-shrink:0;}
+.dt-content{flex:1;}
+.dt-name{font-size:12.5px;font-weight:600;color:var(--ink);}
+.dt-desc{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+.dt-status{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;flex-shrink:0;}
+
+/* ── DISCOURSE PREVIEW ── */
+.disc-item{padding:10px 0;border-bottom:1px solid var(--rule-lt);}
+.disc-item:last-child{border-bottom:none;padding-bottom:0;}
+.di-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.di-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 7px;border-radius:100px;}
+.di-page{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+.di-title{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:4px;}
+.di-meta{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+
+/* ── CONFESSIONAL SYSTEM ── */
+.sect-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;}
+.sect-card{padding:10px;border-radius:8px;border:1px solid var(--rule);text-align:center;}
+.sc-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.sc-pct{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;line-height:1;margin-bottom:3px;}
+.sc-roles{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-links">
+    <span class="nav-link">Dashboard</span>
+    <span class="nav-link">Legislation</span>
+    <span class="nav-link">Issues</span>
+    <span class="nav-link active">Events</span>
+    <span class="nav-link">Discourse</span>
+  </div>
+  <button class="nav-btn">+ Follow Lebanon</button>
+</nav>
+
+<!-- FRAGILE CEASEFIRE TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge"><div class="ticker-badge-text">⚠ Fragile Ceasefire</div></div>
+  <div class="ticker-scroll-wrap"><div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-key">Ceasefire</span><span class="ticker-val tv-amber">Nov 27 2024 · Day 475 · Holding fragile</span></div>
+    <div class="ticker-item"><span class="ticker-key">President</span><span class="ticker-val tv-white">Joseph Aoun · Since Jan 9, 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">PM</span><span class="ticker-val tv-white">Nawaf Salam · Since Feb 8, 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hezbollah disarmament</span><span class="ticker-val tv-amber">Phase 1 complete · Phase 2 pending</span></div>
+    <div class="ticker-item"><span class="ticker-key">Israeli violations</span><span class="ticker-val tv-red">2,000+ ceasefire violations since Nov 2024</span></div>
+    <div class="ticker-item"><span class="ticker-key">Israeli positions</span><span class="ticker-val tv-red">5 border sites still occupied</span></div>
+    <div class="ticker-item"><span class="ticker-key">Displaced</span><span class="ticker-val tv-amber">64,000+ still displaced · Oct 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Reconstruction cost</span><span class="ticker-val tv-white">$11B estimated · World Bank 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Mar 2 2026</span><span class="ticker-val tv-red">Hezbollah launched attacks on Israel · Aoun condemned</span></div>
+    <div class="ticker-item"><span class="ticker-key">Elections</span><span class="ticker-val tv-amber">Parliamentary · May 2026</span></div>
+    <div class="ticker-item"><span class="ticker-key">LAF south of Litani</span><span class="ticker-val tv-green">First operational control in 40 years</span></div>
+    <!-- repeat for scroll -->
+    <div class="ticker-item"><span class="ticker-key">Ceasefire</span><span class="ticker-val tv-amber">Nov 27 2024 · Day 475 · Holding fragile</span></div>
+    <div class="ticker-item"><span class="ticker-key">President</span><span class="ticker-val tv-white">Joseph Aoun · Since Jan 9, 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">PM</span><span class="ticker-val tv-white">Nawaf Salam · Since Feb 8, 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hezbollah disarmament</span><span class="ticker-val tv-amber">Phase 1 complete · Phase 2 pending</span></div>
+    <div class="ticker-item"><span class="ticker-key">Israeli violations</span><span class="ticker-val tv-red">2,000+ ceasefire violations since Nov 2024</span></div>
+    <div class="ticker-item"><span class="ticker-key">Israeli positions</span><span class="ticker-val tv-red">5 border sites still occupied</span></div>
+    <div class="ticker-item"><span class="ticker-key">Displaced</span><span class="ticker-val tv-amber">64,000+ still displaced · Oct 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Reconstruction cost</span><span class="ticker-val tv-white">$11B estimated · World Bank 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Mar 2 2026</span><span class="ticker-val tv-red">Hezbollah launched attacks on Israel · Aoun condemned</span></div>
+    <div class="ticker-item"><span class="ticker-key">Elections</span><span class="ticker-val tv-amber">Parliamentary · May 2026</span></div>
+    <div class="ticker-item"><span class="ticker-key">LAF south of Litani</span><span class="ticker-val tv-green">First operational control in 40 years</span></div>
+  </div></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div style="position:relative;z-index:2;">
+    <div class="hero-breadcrumb">
+      <span class="bc-cosmic">The Universe / Laniakea / Milky Way / Solar System /</span>
+      <span class="bc-sep">/</span>
+      <a href="#" style="color:rgba(255,255,255,0.35);">The World</a>
+      <span class="bc-sep">/</span>
+      <a href="#" style="color:rgba(255,255,255,0.35);">Middle East</a>
+      <span class="bc-sep">/</span>
+      <a href="#" style="color:rgba(255,255,255,0.35);">Levant</a>
+      <span class="bc-sep">/</span>
+      <span class="bc-here">Lebanon</span>
+    </div>
+
+    <div class="hero-inner">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+          <!-- Lebanon flag -->
+          <div class="leb-flag">
+            <div class="lf-red"></div>
+            <div class="lf-white"><span class="cedar">🌲</span></div>
+            <div class="lf-red2"></div>
+          </div>
+          <div>
+            <div class="juris-name">Lebanon</div>
+            <div class="juris-name-local">لبنان · Lubnān</div>
+            <div class="juris-sub">Republic of Lebanon · Middle East · Mediterranean coast</div>
+          </div>
+        </div>
+
+        <div style="font-size:13.5px;color:rgba(255,255,255,0.55);line-height:1.7;max-width:560px;margin-bottom:14px;">
+          A <span class="term" style="border-bottom-color:rgba(250,199,117,0.5);color:inherit;" onclick="openModal('confessional')">confessional democracy</span> of 5.5 million people navigating post-war reconstruction, a historic Hezbollah disarmament process, and its first functioning government in three years. Bordered by Syria, Israel, and the Mediterranean. The <span class="term" style="border-bottom-color:rgba(250,199,117,0.5);color:inherit;" onclick="openModal('cedar')">Cedar of Lebanon</span> — the national symbol — has been in the country's flag since 1943.
+        </div>
+
+        <div class="juris-tags">
+          <span class="jtag jtag-type">Republic</span>
+          <span class="jtag jtag-type">Confessional Democracy</span>
+          <span class="jtag jtag-amber">Fragile Ceasefire · Active</span>
+          <span class="jtag jtag-amber">Hezbollah Disarmament · Phase 1 complete</span>
+          <span class="jtag jtag-green">New Government · Feb 2025</span>
+          <span class="jtag jtag-blue">UN Member · Arab League</span>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hs"><div class="hs-num">5.5M</div><div class="hs-label">Population</div></div>
+          <div class="hs hs-click" onclick="openModal('freedom')"><div class="hs-num red">36/100</div><div class="hs-label">Freedom ›</div></div>
+          <div class="hs hs-click" onclick="openModal('happiness')"><div class="hs-num amber">#105</div><div class="hs-label">Happiness ›</div></div>
+          <div class="hs hs-click" onclick="openModal('economy')"><div class="hs-num red">$22B</div><div class="hs-label">GDP ›</div></div>
+          <div class="hs hs-click" onclick="openModal('lbp')"><div class="hs-num amber">~90K</div><div class="hs-label">LBP / USD ›</div></div>
+          <div class="hs hs-click" onclick="openModal('refugees')"><div class="hs-num red">1.5M</div><div class="hs-label">Syrian refugees ›</div></div>
+        </div>
+      </div>
+
+      <!-- Hero right — governance -->
+      <div class="hero-right">
+        <div>
+          <div class="hr-label">Head of state</div>
+          <div class="gov-chip" onclick="openModal('aoun')">
+            <div class="gc-dot" style="background:#2E8B57;"></div>
+            <div><div class="gc-name">Joseph Aoun</div><div class="gc-role">President · 14th · Since Jan 9, 2025</div></div>
+            <div class="gc-arrow">›</div>
+          </div>
+        </div>
+        <div>
+          <div class="hr-label">Head of government</div>
+          <div class="gov-chip" onclick="openModal('salam')">
+            <div class="gc-dot" style="background:#2a5298;"></div>
+            <div><div class="gc-name">Nawaf Salam</div><div class="gc-role">Prime Minister · Since Feb 8, 2025</div></div>
+            <div class="gc-arrow">›</div>
+          </div>
+        </div>
+        <div>
+          <div class="hr-label">Parliament speaker</div>
+          <div class="gov-chip">
+            <div class="gc-dot" style="background:#5a3a1a;"></div>
+            <div><div class="gc-name">Nabih Berri</div><div class="gc-role">Speaker · Amal Movement · Since 1992</div></div>
+            <div class="gc-arrow">›</div>
+          </div>
+        </div>
+        <button class="btn-primary">+ Follow Lebanon</button>
+        <button class="btn-secondary">Add to watchlist</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" onclick="showTab('overview',this)">Overview</div>
+    <div class="tab" onclick="showTab('government',this)">Government</div>
+    <div class="tab" onclick="showTab('hezbollah',this)">Hezbollah Question</div>
+    <div class="tab" onclick="showTab('economy',this)">Economy</div>
+    <div class="tab" onclick="showTab('history',this)">History</div>
+    <div class="tab" onclick="showTab('relations',this)">Relations</div>
+    <div class="tab" onclick="showTab('trajectory',this)">Trajectory</div>
+    <div class="tab" onclick="showTab('discourse',this)">Discourse</div>
+  </div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+<!-- ══ OVERVIEW ════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Overview</div>
+        <div class="card-title">Lebanon in 2026 — a country at a hinge point</div>
+        <div class="card-body">
+          <p>Lebanon is a country that has spent the last four decades of its existence contested from within and without. A <span class="term" onclick="openModal('confessional')">confessional system</span> that assigns government offices by religious sect — the president must be Maronite Christian, the prime minister Sunni Muslim, the parliamentary speaker Shia Muslim — has produced a political culture in which governance is perpetually held hostage to sectarian arithmetic. The <span class="term" onclick="openModal('taif')">Taif Agreement</span> of 1989 ended the civil war but institutionalized the deadlock.</p>
+          <p>For most of the past two decades, that deadlock was amplified by <span class="term" onclick="openModal('hezbollah')">Hezbollah</span> — a Shia militant and political organization that functioned as a state within the state, providing social services, running a military force more powerful than the Lebanese Army, and blocking presidential candidates it did not approve of. Michel Aoun, whose term ended in October 2022, was the last president Hezbollah could support. After twelve failed parliamentary votes over two years, the 2024 war between Israel and Hezbollah changed the calculation.</p>
+          <p>Hezbollah lost most of its senior leadership to Israeli airstrikes in 2024, its secretary-general Hassan Nasrallah was killed, and its military infrastructure was severely degraded. In this weakened state it could no longer veto a presidential election. On January 9, 2025, Joseph Aoun — the Lebanese Army commander, backed by Saudi Arabia and the United States — was elected president on the parliament's thirteenth attempt. Nawaf Salam, a former International Court of Justice judge and former UN Ambassador, was named prime minister in February 2025.</p>
+          <p>The new government has done things no Lebanese government has done in a generation: it voted to require Hezbollah's disarmament, deployed the Lebanese Army across the south for the first time in forty years, and asserted the state's monopoly on the use of force. Whether it can sustain this trajectory — against Hezbollah's resistance, Israel's continued airstrikes, an $11 billion reconstruction bill, and parliamentary elections in May 2026 — is the central question of Lebanon's current moment.</p>
+        </div>
+      </div>
+
+      <!-- Disarmament tracker -->
+      <div class="disarm-track">
+        <div class="dt-label">Hezbollah Disarmament Plan — 5 phases · Adopted Sep 5, 2025</div>
+        <div class="dt-phase">
+          <div class="dt-num" style="background:#e5f0e8;color:#155c2d;">1</div>
+          <div class="dt-content">
+            <div class="dt-name">South of the Litani River</div>
+            <div class="dt-desc">LAF deploys across the south, Hezbollah withdraws, infrastructure dismantled. 90% of Hezbollah outposts handed over. LAF achieves operational control south of Litani for first time in 40 years.</div>
+          </div>
+          <div class="dt-status" style="background:#e5f0e8;color:#155c2d;">✓ Complete</div>
+        </div>
+        <div class="dt-phase">
+          <div class="dt-num" style="background:#fff3dc;color:#c47f00;">2</div>
+          <div class="dt-content">
+            <div class="dt-name">Litani to Awali River</div>
+            <div class="dt-desc">LAF plan submitted to cabinet February 2026. Hezbollah resistance expected to be higher — this covers populated Shia areas and Hezbollah's social infrastructure base.</div>
+          </div>
+          <div class="dt-status" style="background:#fff3dc;color:#c47f00;">In progress</div>
+        </div>
+        <div class="dt-phase">
+          <div class="dt-num" style="background:var(--bg);color:var(--ink-mut);">3</div>
+          <div class="dt-content">
+            <div class="dt-name">Beirut suburbs and Bekaa Valley</div>
+            <div class="dt-desc">Dahiyeh and the Bekaa — Hezbollah's core territorial base. No timeline set. Hezbollah has signaled this phase is non-negotiable while Israeli forces remain in Lebanon.</div>
+          </div>
+          <div class="dt-status" style="background:var(--bg);color:var(--ink-mut);">Pending</div>
+        </div>
+        <div class="dt-phase">
+          <div class="dt-num" style="background:var(--bg);color:var(--ink-mut);">4</div>
+          <div class="dt-content"><div class="dt-name">Palestinian factions</div><div class="dt-desc">Disarmament of Palestinian militias in Lebanese refugee camps — a separate and historically intractable problem.</div></div>
+          <div class="dt-status" style="background:var(--bg);color:var(--ink-mut);">Pending</div>
+        </div>
+        <div class="dt-phase">
+          <div class="dt-num" style="background:var(--bg);color:var(--ink-mut);">5</div>
+          <div class="dt-content"><div class="dt-name">Full national disarmament</div><div class="dt-desc">All non-state armed actors. State monopoly on force fully established. No timeline. Hezbollah characterizes this as "surrender."</div></div>
+          <div class="dt-status" style="background:var(--bg);color:var(--ink-mut);">Pending</div>
+        </div>
+      </div>
+
+      <!-- Civic issues -->
+      <div class="card">
+        <div class="card-ey">Civic Issues — Lebanon</div>
+        <div class="card-title">Active issues in the discourse</div>
+        <div class="ci-card" onclick="openModal('ci-disarm')">
+          <div class="ci-icon">⚔️</div>
+          <div>
+            <div class="ci-title">Can Lebanon actually disarm Hezbollah?</div>
+            <div class="ci-desc">The government has completed phase 1 but Hezbollah retains its arsenal north of the Litani. Hezbollah frames disarmament as surrender while Israeli forces remain on Lebanese soil. The circular logic may be deliberately constructed.</div>
+            <div class="ci-count">1,204 FORA contributions · 6 active amendments · 3 duels</div>
+          </div>
+          <div class="ci-arrow">→</div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">💰</div>
+          <div>
+            <div class="ci-title">$11 billion reconstruction — who controls the money?</div>
+            <div class="ci-desc">International funding is contingent on reform and anti-corruption measures. Historically, Lebanese reconstruction has been captured by patronage networks. Hezbollah rebuilt Dahiyeh after 2006 — will it do so again?</div>
+            <div class="ci-count">847 FORA contributions · 4 active amendments</div>
+          </div>
+          <div class="ci-arrow">→</div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">🗳️</div>
+          <div>
+            <div class="ci-title">May 2026 parliamentary elections — will they shift the balance?</div>
+            <div class="ci-desc">If Hezbollah and allies lose seats, the Aoun-Salam government gains political room. If they hold or gain, disarmament stalls. International observers are watching for interference and manipulation.</div>
+            <div class="ci-count">632 FORA contributions · 2 active amendments</div>
+          </div>
+          <div class="ci-arrow">→</div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">🏚️</div>
+          <div>
+            <div class="ci-title">64,000+ still displaced — return to the south</div>
+            <div class="ci-desc">Israeli forces still occupy five border sites. Daily airstrikes continue. Residents cannot return to border villages. The Lebanese government has counted 2,000+ Israeli ceasefire violations. Israel says it's watching for Hezbollah rearmament.</div>
+            <div class="ci-count">589 FORA contributions · 3 active amendments</div>
+          </div>
+          <div class="ci-arrow">→</div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">🇸🇾</div>
+          <div>
+            <div class="ci-title">1.5 million Syrian refugees — integration or return?</div>
+            <div class="ci-desc">Lebanon hosts more refugees per capita than any country on earth. The fall of Assad changed the calculus but returns have been slow. Lebanese sectarian politics make integration essentially impossible. The burden on infrastructure and services is severe.</div>
+            <div class="ci-count">412 FORA contributions · 2 active amendments</div>
+          </div>
+          <div class="ci-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+      <!-- Confessional breakdown -->
+      <div class="card">
+        <div class="card-ey">The Confessional System</div>
+        <div class="card-title" style="font-size:15px;">18 recognized sects · power shared by sect</div>
+        <div class="card-body" style="font-size:12px;margin-bottom:12px;">Lebanon recognizes 18 religious communities. The <span class="term" onclick="openModal('taif')">Taif Agreement</span> allocated government offices by sect: President (Maronite), PM (Sunni), Speaker (Shia). No census has been conducted since 1932 — demographic reality and political allocation are misaligned.</div>
+        <div class="sect-grid">
+          <div class="sect-card" style="background:#f0eaf7;">
+            <div class="sc-name">Maronite Christian</div>
+            <div class="sc-pct" style="color:#2d1a4a;">~21%</div>
+            <div class="sc-roles">President<br>Army Commander<br>Central Bank</div>
+          </div>
+          <div class="sect-card" style="background:#fff3dc;">
+            <div class="sc-name">Sunni Muslim</div>
+            <div class="sc-pct" style="color:#c47f00;">~30%</div>
+            <div class="sc-roles">Prime Minister<br>Sunni religious courts</div>
+          </div>
+          <div class="sect-card" style="background:var(--blue-vp);">
+            <div class="sc-name">Shia Muslim</div>
+            <div class="sc-pct" style="color:#1b3a6b;">~31%</div>
+            <div class="sc-roles">Parliament Speaker<br>Hezbollah + Amal base</div>
+          </div>
+        </div>
+        <div class="card-body" style="font-size:11.5px;margin-top:10px;color:var(--ink-mut);">Druze (~5%), Greek Orthodox (~8%), Greek Catholic (~5%), Armenian, Alawite, and others share remaining seats. All figures are estimates — no official census since 1932.</div>
+      </div>
+
+      <!-- Neighboring cross-links -->
+      <div class="card">
+        <div class="card-ey">Regional connections</div>
+        <div class="card-title" style="font-size:15px;">Cross-linked pages</div>
+        <div class="nge-card" onclick="window.location='fora_jurisdiction_iran.html'">
+          <div class="nge-emblem" style="background:rgba(35,159,64,0.15);">🇮🇷</div>
+          <div>
+            <div class="nge-name">Iran</div>
+            <div class="nge-type">Jurisdiction · Hezbollah patron state</div>
+            <div class="nge-desc">Iran funds, arms, and commands Hezbollah. Post-2024-war, the supply chain is disrupted. Iran's influence in Lebanon has diminished but not ended.</div>
+            <div class="nge-link">→ Iran jurisdiction page</div>
+          </div>
+        </div>
+        <div class="nge-card" onclick="window.location='fora_nge_hezbollah.html'">
+          <div class="nge-emblem" style="background:rgba(45,26,74,0.12);">☪️</div>
+          <div>
+            <div class="nge-name">Hezbollah</div>
+            <div class="nge-type">NGE · Lebanese militant-political org</div>
+            <div class="nge-desc">Founded 1982 in Lebanon. Post-war: Nasrallah killed, ~70% arsenal degraded, phase 1 disarmament underway. Still holds north of Litani.</div>
+            <div class="nge-status" style="background:rgba(196,127,0,0.1);color:#c47f00;">Severely degraded · Active</div>
+            <div class="nge-link">→ Hezbollah NGE page</div>
+          </div>
+        </div>
+        <div class="nge-card" onclick="window.location='fora_nge_quds_force.html'">
+          <div class="nge-emblem" style="background:rgba(139,26,26,0.1);">⚡</div>
+          <div>
+            <div class="nge-name">IRGC Quds Force</div>
+            <div class="nge-type">NGE · Iran's Lebanon liaison</div>
+            <div class="nge-desc">The Quds Force manages Iran's relationship with Hezbollah. Post-2024, the Beirut Quds Force station is severely degraded. New commander is rebuilding the network.</div>
+            <div class="nge-link">→ Quds Force NGE page</div>
+          </div>
+        </div>
+        <div class="nge-card">
+          <div class="nge-emblem" style="background:rgba(27,58,107,0.08);">🇮🇱</div>
+          <div>
+            <div class="nge-name">Israel</div>
+            <div class="nge-type">Jurisdiction · Ceasefire party · Border dispute</div>
+            <div class="nge-desc">2,000+ ceasefire violations. 5 border positions still occupied. Netanyahu says progress on Hezbollah disarmament "far from sufficient." Formal enemy state under Lebanese law.</div>
+            <div class="nge-status" style="background:rgba(139,26,26,0.08);color:#8b1a1a;">Border dispute · Active</div>
+          </div>
+        </div>
+        <div class="nge-card">
+          <div class="nge-emblem" style="background:rgba(35,159,64,0.1);">🇸🇾</div>
+          <div>
+            <div class="nge-name">Syria</div>
+            <div class="nge-type">Jurisdiction · Border · Refugee origin</div>
+            <div class="nge-desc">Post-Assad Syria is a changed equation for Lebanon. The land bridge between Iran and Hezbollah via Syria is disrupted. 1.5M Syrian refugees in Lebanon remain without a clear return pathway.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GOVERNMENT ══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-government">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Government</div>
+        <div class="card-title">The Aoun-Salam government — a genuine break</div>
+        <div class="card-body">
+          <p>Lebanon's new leadership represents a structural departure from the governments that preceded it. President Joseph Aoun is a Maronite general who built close relationships with the United States and Saudi Arabia while commanding the Lebanese Armed Forces. He is not part of the traditional political class — no family political dynasty, no sectarian militia, no entanglement with the corruption networks that have defined Lebanese governance since the civil war.</p>
+          <p>Prime Minister Nawaf Salam was Lebanon's Ambassador to the United Nations for twelve years and served as a judge on the International Court of Justice. He is also not part of the traditional Sunni political establishment — he is a technocrat and internationalist by background. His government's 24 ministers were selected with an unusual emphasis on competence over sectarian appointment.</p>
+          <p>The structural constraint both men face is that the confessional system still governs Lebanon's constitutional order. Parliament Speaker Nabih Berri, head of the Amal movement and Hezbollah's closest political ally, has held his position since 1992. He is not going anywhere. The Hezbollah-aligned bloc holds five of 24 cabinet posts and boycotted the August 2025 vote to begin disarmament. The new government is genuinely different — but it is operating within a system designed to prevent exactly the reforms it is pursuing.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Key figures</div>
+        <div class="card-title">Leadership as of March 2026</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="nge-card" style="cursor:default;" onclick="openModal('aoun')">
+            <div class="nge-emblem" style="background:#e5f0e8;font-size:22px;">🎖️</div>
+            <div>
+              <div class="nge-name">Joseph Aoun</div>
+              <div class="nge-type">President · 14th · Since Jan 9, 2025</div>
+              <div class="nge-desc">Born 1964 · Sin el-Fil, Beirut · Maronite Christian · Former LAF Commander (2017–2025). Elected on parliament's 13th attempt, ending 26 months of presidential vacuum. US and Saudi-backed. Vowed state monopoly on arms. Condemned Hezbollah's March 2, 2026 attacks on Israel. Not related to former President Michel Aoun.</div>
+            </div>
+          </div>
+          <div class="nge-card" style="cursor:default;" onclick="openModal('salam')">
+            <div class="nge-emblem" style="background:#dde5f5;font-size:22px;">⚖️</div>
+            <div>
+              <div class="nge-name">Nawaf Salam</div>
+              <div class="nge-type">Prime Minister · Since Feb 8, 2025</div>
+              <div class="nge-desc">Born 1953 · Beirut · Sunni Muslim · Former ICJ judge · Former UN Ambassador (2007–2017). Technocrat. Named PM weeks after Aoun's election. First phase of disarmament declared "near completion" under his leadership Dec 2025. Parliamentary elections in May 2026 represent his first major political test.</div>
+            </div>
+          </div>
+          <div class="nge-card" style="cursor:default;">
+            <div class="nge-emblem" style="background:#fdf8ed;font-size:22px;">🕌</div>
+            <div>
+              <div class="nge-name">Nabih Berri</div>
+              <div class="nge-type">Parliament Speaker · Amal Movement · Since 1992</div>
+              <div class="nge-desc">Born 1938 · Shia Muslim · Has been parliament speaker for 33 years. Head of Amal — Hezbollah's political ally. Described the disarmament plan as "surrender" but ultimately did not block Aoun's election. The most durable figure in Lebanese politics. Represents Shia political interest alongside but distinct from Hezbollah.</div>
+            </div>
+          </div>
+          <div class="nge-card" style="cursor:default;">
+            <div class="nge-emblem" style="background:rgba(45,26,74,0.08);font-size:22px;">📢</div>
+            <div>
+              <div class="nge-name">Naim Qassem</div>
+              <div class="nge-type">Hezbollah Secretary-General · Since Oct 29, 2024</div>
+              <div class="nge-desc">Born 1953 · Kfar Kila, Lebanon · Shia Muslim · Chemistry teacher turned cleric · Deputy SG under Nasrallah for 33 years. Described by analysts as a "default choice" after Israel's elimination of Hezbollah's leadership. Warns that full disarmament "may lead to civil war." → Hezbollah NGE page for full profile.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Parliament</div>
+        <div class="card-title" style="font-size:15px;">128 seats · Last elected 2022</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>Lebanon's parliament has 128 seats allocated equally between Christians (64) and Muslims (64), with seats further divided among 18 recognized sects. The last parliamentary elections were May 2022. Elections scheduled May 2026.</p>
+          <p style="margin-top:8px;"><strong>Current balance of key blocs:</strong></p>
+          <p style="margin-top:6px;">Hezbollah + Amal (Shiite bloc): ~27 seats. The bloc holds less influence than before the 2024 war but retains sufficient seats to complicate disarmament legislation.</p>
+          <p style="margin-top:6px;">Change bloc (civil society, post-2019 revolution): ~13 seats. The closest to the Aoun-Salam reformist agenda.</p>
+          <p style="margin-top:6px;">Lebanese Forces (Christian, Geagea): ~19 seats. Anti-Hezbollah. Supported Aoun's election.</p>
+          <p style="margin-top:6px;">Free Patriotic Movement (Christian, Bassil): ~21 seats. Founded by Michel Aoun. Historically close to Hezbollah. Now positioning away from it post-war.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">International Backing</div>
+        <div class="card-title" style="font-size:15px;">The Quintet framework</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>Lebanon's current government was brought to power through coordinated pressure by the "Quintet" — United States, France, Saudi Arabia, Qatar, and Egypt. All five had been trying for two years to break the presidential deadlock.</p>
+          <p style="margin-top:8px;"><strong>US:</strong> Primary funder of the Lebanese Armed Forces. Close relationship with Aoun. Certification of disarmament phases. Military monitoring mechanism.</p>
+          <p style="margin-top:8px;"><strong>Saudi Arabia:</strong> Sees Lebanon as an opportunity to rebuild influence lost during the Hezbollah years. Financial reconstruction aid linked to reform progress.</p>
+          <p style="margin-top:8px;"><strong>World Bank:</strong> $250M reconstruction project approved mid-2025. $11B total estimated need.</p>
+          <p style="margin-top:8px;"><strong>France:</strong> Historic cultural and colonial relationship. Active diplomatic role in ceasefire negotiations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HEZBOLLAH QUESTION ══════════════════════════════ -->
+<div class="tab-panel" id="panel-hezbollah">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The Hezbollah Question</div>
+        <div class="card-title">What disarmament actually requires</div>
+        <div class="card-body">
+          <p>Hezbollah is not simply an armed group that can be disarmed by a government decision. It is a state within a state that provides services to hundreds of thousands of Lebanese Shia citizens — schools, hospitals, construction companies, social welfare. Its military wing is more capable than the Lebanese Armed Forces. Its political wing holds parliamentary seats and cabinet posts. Disarmament is not a security operation. It is a restructuring of Lebanon's entire political economy.</p>
+          <p>The Lebanese government's approach has been graduated and conditional. The five-phase plan adopted September 5, 2025 begins in the least politically contested territory (south of the Litani) and moves north. Phase 1 was completed — the LAF achieved operational control south of the Litani for the first time in 40 years. 90% of Hezbollah's military outposts in the south were handed over.</p>
+          <p>The obstacle is not phase 1. It is phases 2 through 5. Hezbollah has agreed to withdraw south of the Litani — it frames this as complying with the ceasefire agreement. It has refused to relinquish its arsenal north of the Litani, citing two conditions: Israeli withdrawal from occupied Lebanese territory, and Israeli cessation of airstrikes. These conditions create a circular logic. Israel says it will not withdraw until Hezbollah is fully disarmed. Hezbollah says it will not fully disarm until Israel withdraws. Neither side is in a hurry to break the cycle.</p>
+          <p>Hezbollah's secretary-general Naim Qassem has warned that full disarmament "may lead to civil war and internal strife." This is the statement of a weakened organization trying to retain deterrence, not a genuine threat assessment — but in Lebanon's history, that distinction has sometimes been negligible.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Hezbollah's position</div>
+        <div class="card-title">How Hezbollah frames its own situation</div>
+        <div class="card-body">
+          <p>FORA does not endorse or condemn Hezbollah's framing. Both the framing and the critique of it are recorded here for civic literacy.</p>
+          <p><strong>What Hezbollah says:</strong> It is a resistance organization defending Lebanon against Israeli aggression. Its weapons are a Lebanese strategic asset. Disarmament while Israeli forces occupy Lebanese soil and conduct daily airstrikes would leave Lebanon defenseless. The LAF is not capable of defending Lebanon against Israel. Phase 1 compliance demonstrates good faith. Phase 2 requires Israeli reciprocity.</p>
+          <p><strong>What critics say:</strong> Hezbollah started the October 7 escalation by firing into Israel one day after the Hamas attack — it brought the war to Lebanon without Lebanese government consent. Its weapons have never defended Lebanese civilians against Israeli attack; they have consistently made Lebanon a theater of Iranian proxy warfare. The "resistance" framing serves Iranian interests, not Lebanese ones. The Lebanese state cannot function as a state while Hezbollah maintains a parallel military.</p>
+          <p><strong>The structural reality:</strong> Hezbollah's Shia constituency in the south and Dahiyeh is real. They rely on Hezbollah's social services. They share its fear of Israeli aggression. Any disarmament framework that does not address this community's legitimate security concerns and service needs will fail regardless of international pressure.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Timeline</div>
+        <div class="card-title" style="font-size:15px;">Key dates in the disarmament process</div>
+        <div class="tl-item"><div class="tl-year">Oct 7, 2023</div><div class="tl-text">Hamas attacks Israel. One day later, Hezbollah opens a second front from Lebanon. 14 months of fighting begin.</div></div>
+        <div class="tl-item"><div class="tl-year">Sep 2024</div><div class="tl-text">Israel eliminates Hezbollah's leadership. Hassan Nasrallah killed Sep 27. Hezbollah's military command structure effectively destroyed.</div></div>
+        <div class="tl-item"><div class="tl-year">Nov 27, 2024</div><div class="tl-text">US-France brokered ceasefire takes effect. Requires Hezbollah to withdraw north of Litani, LAF to deploy south, Israeli withdrawal from Lebanese territory.</div></div>
+        <div class="tl-item"><div class="tl-year">Jan 9, 2025</div><div class="tl-text">Joseph Aoun elected president on parliament's 13th attempt. 99 of 128 votes. Hezbollah bloc votes yes in round 2 to show "national cohesion."</div></div>
+        <div class="tl-item"><div class="tl-year">Feb 8, 2025</div><div class="tl-text">Nawaf Salam named prime minister. 24-minister government formed. Five Hezbollah/Amal ministers included.</div></div>
+        <div class="tl-item"><div class="tl-year">Aug 5, 2025</div><div class="tl-text">Government votes to give LAF mandate to establish state weapons monopoly. Hezbollah and Amal ministers boycott the vote.</div></div>
+        <div class="tl-item"><div class="tl-year">Sep 5, 2025</div><div class="tl-text">Five-phase disarmament plan adopted by cabinet. No set deadlines. Hezbollah conditionally accepts phase 1.</div></div>
+        <div class="tl-item"><div class="tl-year">Dec 2025</div><div class="tl-text">PM Salam declares phase 1 "near completion." 90% of Hezbollah outposts south of Litani handed over. LAF deploys 9,000+ soldiers.</div></div>
+        <div class="tl-item"><div class="tl-year">Jan 8, 2026</div><div class="tl-text">Phase 1 officially declared complete. Israel says progress "far from sufficient." Netanyahu: Hezbollah rearming faster than army dismantling.</div></div>
+        <div class="tl-item"><div class="tl-year">Mar 2, 2026</div><div class="tl-text">Hezbollah launches attacks on Israel following Iran conflict escalation. Israel retaliates with airstrikes on Lebanon. Aoun condemns Hezbollah, says attacks undermine Lebanon's efforts.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ECONOMY ══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-economy">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Economy</div>
+        <div class="card-title">Financial collapse, reconstruction debt, and the reform imperative</div>
+        <div class="card-body">
+          <p>Lebanon's economy has been in freefall since 2019, when the government defaulted on its sovereign debt — the first time Lebanon had ever done so. The Lebanese pound lost more than 90% of its value. The banking system froze depositors' accounts. The Beirut port explosion in August 2020 destroyed the country's primary trade infrastructure and killed more than 220 people. The 2023–2024 war added an estimated $11 billion in reconstruction costs on top of an economy that was already in collapse.</p>
+          <p>GDP in 2024 was approximately $22 billion — roughly half of what it was in 2018. Unemployment is estimated at 30–40%. More than half the population lives below the poverty line. The Lebanese pound trades at approximately 90,000 per US dollar on the official rate and somewhat lower on the parallel market.</p>
+          <p>The new Salam government has begun banking sector restructuring — the central reform that international creditors have demanded before releasing IMF and World Bank funds. Progress has been made but the structural problems are deep: Lebanon's banking system was built around a Ponzi scheme of high-interest government bonds that collapsed in 2019, and untangling who loses and how much is politically explosive in a country where bank depositors include every major political family.</p>
+          <p>Reconstruction funding is gated on reform progress. The World Bank's $250 million project approved mid-2025 is a fraction of the $11 billion needed. Saudi Arabia and Gulf states have indicated willingness to contribute but require visible governance reform and demonstrated Hezbollah disarmament progress before committing large sums.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Key economic figures</div>
+        <div class="card-body" style="font-size:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div style="background:var(--bg);padding:10px;border-radius:7px;text-align:center;">
+              <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#ffaaaa;">$22B</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;">GDP 2024</div>
+            </div>
+            <div style="background:var(--bg);padding:10px;border-radius:7px;text-align:center;">
+              <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#FAC775;">~90K</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;">LBP per USD</div>
+            </div>
+            <div style="background:var(--bg);padding:10px;border-radius:7px;text-align:center;">
+              <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#ffaaaa;">$11B</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;">Reconstruction cost</div>
+            </div>
+            <div style="background:var(--bg);padding:10px;border-radius:7px;text-align:center;">
+              <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#FAC775;">$250M</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;">World Bank approved</div>
+            </div>
+          </div>
+          <p>Lebanon's financial collapse pre-dates the war. The 2019 sovereign default, the 2020 port explosion, and the 2023–2024 war compounded three separate crises simultaneously.</p>
+          <p style="margin-top:8px;">IMF program negotiations are ongoing. The central demand: banking sector losses must be allocated transparently — not hidden in central bank accounting tricks. The Salam government is moving on this but has not completed it as of March 2026.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Lebanese Diaspora</div>
+        <div class="card-title" style="font-size:15px;">14–20M Lebanese abroad</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>More people of Lebanese descent live outside Lebanon than within it. Major diaspora: Brazil (~7M), United States (~3M), Argentina (~1.5M), Australia, France, West Africa. Remittances are a critical economic lifeline — often exceeding 20% of GDP in crisis years. The diaspora has historically been a source of capital, political pressure, and the occasional foreign intervention. Under the current crisis, emigration of educated young Lebanese has accelerated dramatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HISTORY ════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-history">
+  <div class="card" style="max-width:720px;">
+    <div class="card-ey">History</div>
+    <div class="card-title">From Phoenician coast to confessional republic</div>
+    <div class="card-body">
+      <p>Lebanon's territory has been continuously inhabited for more than 7,000 years. The Phoenicians — who gave the Western world its alphabet — originated on this coast. Their city-states, Tyre and Sidon, were among the most commercially dominant in the ancient Mediterranean. The Cedar of Lebanon was traded across the ancient Near East. The Lebanese are among the primary genetic descendants of the Phoenicians.</p>
+      <p>The modern state of Lebanon was carved from the Ottoman Empire by France under the League of Nations mandate after World War I. French strategy deliberately created a majority-Christian state — the Greater Lebanon of 1920 — by incorporating more Muslim territory than the Maronite heartland of Mount Lebanon. This demographic engineering planted the seeds of every subsequent conflict.</p>
+    </div>
+    <div style="margin-top:14px;">
+      <div class="tl-item"><div class="tl-year">1920</div><div class="tl-text">France creates Greater Lebanon under League of Nations mandate. Maronite Christians and Sunni/Shia Muslims in uneasy coexistence.</div></div>
+      <div class="tl-item"><div class="tl-year">1943</div><div class="tl-text">Lebanese independence. The National Pact — an unwritten agreement allocating government posts by sect based on 1932 census. President: Maronite. PM: Sunni. Speaker: Shia.</div></div>
+      <div class="tl-item"><div class="tl-year">1975–90</div><div class="tl-text">Lebanese Civil War. ~120,000 killed. Syria occupies Lebanon from 1976. Israel invades twice (1978, 1982). PLO expelled 1982. Hezbollah founded 1982 during Israeli occupation.</div></div>
+      <div class="tl-item"><div class="tl-year">1989</div><div class="tl-text">Taif Agreement ends the civil war. Reallocates parliamentary seats 50-50 Christian-Muslim. President loses executive powers to the cabinet. Syria's occupation continues.</div></div>
+      <div class="tl-item"><div class="tl-year">2005</div><div class="tl-text">Cedar Revolution. PM Rafiq Hariri assassinated (attributed to Syria/Hezbollah). One million march in Beirut. Syria withdraws troops after 29 years.</div></div>
+      <div class="tl-item"><div class="tl-year">2006</div><div class="tl-text">34-day war between Israel and Hezbollah. Israel destroys significant Lebanese infrastructure. Hezbollah rebuilds Dahiyeh. UN Resolution 1701 calls for Hezbollah disarmament — never implemented.</div></div>
+      <div class="tl-item"><div class="tl-year">2019</div><div class="tl-text">October 17 revolution. Mass protests against the entire political class across all sects. Government resigns. The economic collapse begins.</div></div>
+      <div class="tl-item"><div class="tl-year">2020</div><div class="tl-text">August 4: Beirut port explosion. 2,750 tons of improperly stored ammonium nitrate detonates. 218 killed. Half of Beirut damaged. No one held accountable as of 2026.</div></div>
+      <div class="tl-item"><div class="tl-year">2022</div><div class="tl-text">Michel Aoun's term ends October 31. Presidential vacuum begins. Parliament fails twelve times to elect a successor.</div></div>
+      <div class="tl-item"><div class="tl-year">2023–24</div><div class="tl-text">Hezbollah enters the war alongside Hamas after October 7. Israel systematically eliminates Hezbollah's leadership. Ceasefire November 2024.</div></div>
+      <div class="tl-item"><div class="tl-year">2025–26</div><div class="tl-text">Joseph Aoun elected president. Nawaf Salam named PM. First functioning government in three years. Hezbollah disarmament phase 1 completed. Phase 2 negotiations ongoing.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RELATIONS ══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-relations">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">External Relations</div>
+        <div class="card-title">Lebanon's contested sovereignty</div>
+        <div class="card-body">
+          <p>Lebanon's formal diplomatic position is neutrality and sovereignty. Its actual position has been, for most of its modern history, a battleground for external powers. Syria occupied it for 29 years. Iran built and funds its most powerful political-military organization. Israel has invaded it twice and conducted thousands of airstrikes. Saudi Arabia and the United States back its current government and hold its reconstruction funding.</p>
+          <p>The Aoun-Salam government is the most genuinely sovereignty-oriented Lebanese government in decades. President Aoun told Iran's representative explicitly that Lebanon "rejects any foreign intervention in its domestic affairs." He condemned Hezbollah's March 2, 2026 attacks. These are not empty gestures — they are direct confrontations with relationships that have governed Lebanese politics for forty years.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Israel-Lebanon</div>
+        <div class="card-title">Formal enemies, fragile ceasefire</div>
+        <div class="card-body">
+          <p>Lebanon and Israel are formally at war. No peace treaty has ever been signed. Israel is classified as an "enemy state" under Lebanese law. The November 2024 ceasefire is a military arrangement, not a political settlement.</p>
+          <p>Since the ceasefire, Israel has conducted more than 2,000 violations — airstrikes targeting what Israel calls Hezbollah rearmament activity. The Lebanese government has protested each violation to the US-led monitoring mechanism. Israeli forces continue to occupy five border sites in southern Lebanon. Netanyahu has said Hezbollah's disarmament progress is "far from sufficient."</p>
+          <p>Direct civilian-level Israel-Lebanon dialogue has begun for the first time — meetings in Naqoura in December 2025 focused on reconstruction and economic cooperation. This is unprecedented. A formal peace process remains distant but is no longer structurally impossible.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Relationship map</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:8px 10px;border-radius:7px;background:var(--green-lt);border:1px solid rgba(21,92,45,0.15);">
+            <div style="font-weight:700;color:#155c2d;font-size:12.5px;">United States</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Primary LAF funder · Monitoring mechanism lead · Backs Aoun-Salam government · Conditioned reconstruction aid on reform</div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;background:var(--green-lt);border:1px solid rgba(21,92,45,0.15);">
+            <div style="font-weight:700;color:#155c2d;font-size:12.5px;">Saudi Arabia</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Backs Aoun. Opportunity to rebuild influence lost to Hezbollah over a decade. Financial reconstruction pledges pending reform progress.</div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;background:var(--amber-p);border:1px solid rgba(196,127,0,0.15);">
+            <div style="font-weight:700;color:#c47f00;font-size:12.5px;">Iran</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Hezbollah patron. Supply chain disrupted by 2024 war and Syria route closure. Still active. Aoun told Iranian envoy Lebanon rejects foreign intervention.</div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;background:var(--red-p);border:1px solid rgba(139,26,26,0.12);">
+            <div style="font-weight:700;color:#8b1a1a;font-size:12.5px;">Israel</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Formal enemy state. Ceasefire holding fragile. 2,000+ violations. 5 border sites occupied. Civilian dialogue begun Dec 2025 — unprecedented.</div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;background:var(--bg);border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);font-size:12.5px;">Syria (post-Assad)</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Changed equation. Iran-Syria-Hezbollah land bridge disrupted. 1.5M Syrian refugees in Lebanon. Return pathway unclear.</div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;background:var(--bg);border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);font-size:12.5px;">France</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Historic cultural/colonial relationship. Active in ceasefire diplomacy. Key EU diplomatic voice on Lebanon.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRAJECTORY ═════════════════════════════════════ -->
+<div class="tab-panel" id="panel-trajectory">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Trajectory</div>
+        <div class="card-title">Three possible Lebanons</div>
+        <div class="card-body">
+          <p>Lebanon's trajectory from here is genuinely uncertain. Three plausible futures present themselves — each dependent on variables that are, as of March 2026, unresolved.</p>
+        </div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;">
+          <div style="padding:14px;border-radius:8px;border-left:3px solid #155c2d;background:var(--green-lt);">
+            <div style="font-size:13px;font-weight:700;color:#155c2d;margin-bottom:5px;">Path 1 — The Chehab Moment</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Aoun proves to be a Fouad Chehab — the army commander who became president in 1958 and built Lebanese state institutions from scratch. Disarmament advances through phases 2 and 3. May 2026 elections shift the parliamentary balance against Hezbollah. IMF program unlocks reconstruction funding. A generation of Lebanese who left during the crisis begins to return. The confessional system begins to erode not through constitutional change but through irrelevance. Probability: possible, requires sustained international support and Hezbollah restraint.</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;border-left:3px solid #c47f00;background:var(--amber-p);">
+            <div style="font-size:13px;font-weight:700;color:#c47f00;margin-bottom:5px;">Path 2 — The Muddle</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Phase 1 is the high-water mark of disarmament. Hezbollah digs in north of the Litani. The circular logic — no disarmament without Israeli withdrawal, no Israeli withdrawal without disarmament — hardens into a permanent condition. Reconstruction funding trickles in but not at the scale needed. Emigration continues. The Aoun-Salam government survives but does not transform the country. Lebanon stabilizes at a lower equilibrium. Probability: the most likely single outcome.</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;border-left:3px solid #8b1a1a;background:var(--red-p);">
+            <div style="font-size:13px;font-weight:700;color:#8b1a1a;margin-bottom:5px;">Path 3 — Renewed Escalation</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The March 2, 2026 Hezbollah attack on Israel — condemned by Aoun — is a preview. If Iran's regional situation deteriorates further (the Iran war page is still active), Hezbollah may be drawn back into direct conflict before disarmament is complete. Israel's "prevention" timeline and Lebanon's "gradual" timeline do not align. A miscalculation triggers another round. The Aoun-Salam government survives politically but Lebanon's reconstruction window closes. Probability: elevated while Iran's war status remains active.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Watching closely</div>
+        <div class="card-title" style="font-size:15px;">Open variables · March 2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;font-size:12.5px;color:var(--ink);margin-bottom:2px;">May 2026 parliamentary elections</div>
+            <div style="color:var(--ink-soft);">Will the Hezbollah-Amal bloc lose seats? The balance of the next parliament determines whether the Aoun-Salam reform agenda can be legislated.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;font-size:12.5px;color:var(--ink);margin-bottom:2px;">Phase 2 disarmament plan</div>
+            <div style="color:var(--ink-soft);">The LAF presented the phase 2 plan to cabinet in February 2026. The area between the Litani and Awali is politically harder than the south. Hezbollah's response to this phase is the next major indicator.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;font-size:12.5px;color:var(--ink);margin-bottom:2px;">UNIFIL mandate expiry</div>
+            <div style="color:var(--ink-soft);">UN Security Council Resolution 2790 sets UNIFIL's mandate to expire December 2026. The United States argues Hezbollah is sufficiently degraded. The UK warns premature drawdown creates an opening for rearmament.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;font-size:12.5px;color:var(--ink);margin-bottom:2px;">Iranian regional posture</div>
+            <div style="color:var(--ink-soft);">The Iran war page is active. Every escalation in the Iran-Israel conflict creates pressure on Hezbollah — and therefore on Lebanon. The March 2 attack is a demonstration of how quickly this dynamic can destabilize Lebanon's fragile ceasefire.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;font-size:12.5px;color:var(--ink);margin-bottom:2px;">Banking sector reform</div>
+            <div style="color:var(--ink-soft);">The IMF program is blocked until losses are allocated. Depositors who lost savings in the 2019 collapse are politically organized. The Salam government must decide who pays — a decision every previous government avoided.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DISCOURSE ══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-discourse">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Discourse · Lebanon</div>
+        <div class="card-title">Active deliberations on this page</div>
+        <div class="disc-item">
+          <div class="di-top">
+            <div class="di-type" style="background:var(--red-p);color:var(--red);">Amendment · Round 2</div>
+            <div class="di-page">Overview · Disarmament tracker</div>
+          </div>
+          <div class="di-title">Phase 1 status — "complete" overstates what was accomplished</div>
+          <div class="di-meta">47 participants · 41h remaining · Israel maintains 5 positions on Lebanese soil, and Hezbollah retains weapons infrastructure in areas LAF has not fully cleared. The "complete" label may be premature.</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top">
+            <div class="di-type" style="background:rgba(196,127,0,0.1);color:#c47f00;">Duel · Round 3</div>
+            <div class="di-page">Hezbollah Question tab</div>
+          </div>
+          <div class="di-title">"The Lebanese state will never fully disarm Hezbollah — the Taif system makes it structurally impossible"</div>
+          <div class="di-meta">@levant_analyst vs @reform_lb · Score 5–4 · 8h remaining · Closing round</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top">
+            <div class="di-type" style="background:var(--blue-pl);color:var(--blue);">Amendment · Round 1</div>
+            <div class="di-page">Economy tab · GDP figure</div>
+          </div>
+          <div class="di-title">$22B GDP figure — source methodology dispute</div>
+          <div class="di-meta">12 participants · 68h remaining · IMF 2024 WEO estimate vs World Bank Rapid Damage Assessment use different methodological baselines</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top">
+            <div class="di-type" style="background:var(--blue-pl);color:var(--blue);">Amendment · Vote open</div>
+            <div class="di-page">History tab · Civil war framing</div>
+          </div>
+          <div class="di-title">The 1975–1990 section underweights Palestinian political-military presence as a cause of the war</div>
+          <div class="di-meta">89 participants · 6h remaining · Vote open · 52 ratify / 37 reject</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Discourse stats · Lebanon page</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;">
+            <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--blue);">3,241</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Contributions</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;">
+            <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--purple);">14</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Active deliberations</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;">
+            <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--amber);">3</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Live duels</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;">
+            <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--green);">7</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Ratified amendments</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <button style="width:100%;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:10px;border-radius:8px;background:var(--purple);color:white;border:none;cursor:pointer;">Start a deliberation →</button>
+        </div>
+        <div style="margin-top:8px;">
+          <button style="width:100%;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:10px;border-radius:8px;background:transparent;color:var(--ink-soft);border:1px solid var(--rule);cursor:pointer;">Challenge to a Duel →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end page-body -->
+
+<!-- ══ MODALS ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-source" id="modal-source"></div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+const MODALS = {
+  confessional:{title:'Confessional Democracy',sub:'Lebanon\'s power-sharing system',body:'Lebanon\'s constitution allocates government offices by religious sect. The president must be Maronite Christian, the prime minister Sunni Muslim, the parliament speaker Shia Muslim. Cabinet seats, civil service positions, and military commands are distributed proportionally by sect. This system was formalized in the 1943 National Pact and adjusted (but not abolished) by the 1989 Taif Agreement. No national census has been conducted since 1932 — the demographic reality and political allocation are no longer aligned, which is one reason no one wants a new census.',source:'Source: Lebanese Constitution (1926, as amended) · Taif Agreement (1989)'},
+  taif:{title:'The Taif Agreement',sub:'1989 · End of the civil war',body:'Negotiated in Taif, Saudi Arabia in 1989. Ended the 15-year Lebanese civil war. Key changes: reduced the president\'s executive powers, moved real power to the Council of Ministers (cabinet), rebalanced parliamentary seats from 6:5 Christian-Muslim to 50-50. The Syrian presence in Lebanon was endorsed rather than required to end. Hezbollah was explicitly excluded from the requirement that militias disarm — it was classified as a "resistance" organization. UN Resolution 1559 (2004) and 1701 (2006) later called for its disarmament; neither was implemented.',source:'Source: Taif Agreement (Oct 22, 1989) · UN Resolution 1701 (2006)'},
+  hezbollah:{title:'Hezbollah',sub:'Political party · Militant organization · Social welfare provider',body:'Founded 1982 by the IRGC during Israel\'s invasion of Lebanon. Three simultaneous identities: (1) a political party with parliamentary seats and cabinet posts; (2) a military force estimated at 40,000 fighters pre-war, with a missile arsenal that threatened all of Israel; (3) a social welfare provider running schools, hospitals, and construction companies for Lebanese Shia. After the 2024 war, its military wing is severely degraded — most senior leadership killed, ~70% of missile arsenal destroyed, phase 1 disarmament underway. Its political wing remains intact. → Full NGE page for complete profile.',source:'Source: FORA NGE page · fora_nge_hezbollah.html'},
+  cedar:{title:'The Cedar of Lebanon',sub:'National symbol · Cedrus libani',body:'The Cedar of Lebanon has appeared on Lebanese flags since independence. In antiquity, Lebanese cedar forests were among the most prized timber in the world — used in Solomon\'s Temple, Egyptian ships, and palaces across the Near East. By the 20th century, the forests had been largely stripped. Conservation efforts have partly restored them in the mountains above Bcharre. The cedar on the flag is green on a white background, flanked by two red stripes matching the Lebanese flag colors.',source:'Source: Lebanese National Heritage'},
+  freedom:{title:'Freedom Score · 36/100',sub:'Freedom House · Freedom in the World 2024',body:'Lebanon scores 36/100 on Freedom House\'s Freedom in the World index — classified as "Partly Free." The score reflects: a functioning (if dysfunctional) electoral system; press freedom that is constrained but not absent; a judiciary that is formally independent but subject to sectarian and political pressure; significant restrictions on association and assembly; Hezbollah\'s parallel governance structure which operates outside state accountability. The score has declined from the low 40s in the early 2010s.',source:'Source: Freedom House Freedom in the World 2024 · freedomhouse.org'},
+  happiness:{title:'World Happiness Report · #105',sub:'Gallup World Poll · 2024',body:'Lebanon ranks #105 in the World Happiness Report 2024, based on Gallup World Poll data. The score reflects average life evaluations on a 0–10 scale (Cantril Ladder). Lebanon\'s score has declined substantially over the past five years — it was in the 70s in 2018, before the economic collapse, Beirut explosion, and war. The WHR notes that Lebanon\'s drop is among the steepest recorded by any country in the modern history of the report.',source:'Source: World Happiness Report 2024 · Gallup World Poll'},
+  economy:{title:'GDP · ~$22B',sub:'World Bank / IMF estimate 2024',body:'Lebanon\'s nominal GDP in 2024 is estimated at approximately $22 billion — roughly half its 2018 level of ~$54 billion. The collapse was driven by: the 2019 sovereign default; the Lebanese pound losing 90%+ of its value; the banking system freezing depositors\' accounts; the 2020 port explosion; and the 2023–2024 war adding $11 billion in reconstruction costs. GDP per capita has fallen from approximately $8,200 (2018) to below $3,500 (2024).',source:'Source: World Bank Lebanon Economic Monitor 2024 · IMF World Economic Outlook 2024'},
+  lbp:{title:'Lebanese Pound · ~90,000 LBP / USD',sub:'Parallel market rate · March 2026',body:'The Lebanese pound has lost more than 90% of its value since the 2019 economic crisis. The official Banque du Liban rate and the parallel market rate have fluctuated widely. Before the crisis, the LBP was pegged at ~1,507 per USD. As of March 2026, the rate is approximately 90,000 LBP per USD on the official market. The economy has become significantly dollarized — many transactions are conducted in USD. Hyperinflation has devastated middle-class savings.',source:'Source: Banque du Liban · Lebanon crisis data · March 2026'},
+  refugees:{title:'1.5 Million Syrian Refugees',sub:'UNHCR estimate · 2024',body:'Lebanon hosts approximately 1.5 million registered and unregistered Syrian refugees — the highest refugee-to-population ratio of any country on earth (approximately 1 in 4 people in Lebanon is a Syrian refugee). The political, economic, and sectarian implications are severe. Lebanese law does not permit formal integration — refugees cannot apply for citizenship or most jobs. The fall of Assad in 2024 changed the return calculus but actual returns have been slow and complicated by ongoing instability in Syria.',source:'Source: UNHCR Lebanon 2024 · IOM displacement data'},
+  aoun:{title:'Joseph Aoun',sub:'14th President of Lebanon · Since January 9, 2025',body:'Born January 10, 1964 in Sin el-Fil, a Beirut suburb. Maronite Christian. Served as Lebanese Armed Forces commander from 2017 to 2025. Built unusually close relationships with the United States and Saudi Arabia during his tenure. Earned national credibility through operations against ISIS fighters on the Syria-Lebanon border in 2017. Elected president on parliament\'s 13th attempt — ending 26 months of presidential vacuum — with 99 of 128 votes. Hezbollah bloc voted for him in round 2 to show "national cohesion." Vowed state monopoly on weapons in inaugural address. Not related to former President Michel Aoun. Married to Nehmat Nehmeh, two children.',source:'Sources: Al Jazeera · Wikipedia · Reuters · January 2025'},
+  salam:{title:'Nawaf Salam',sub:'Prime Minister of Lebanon · Since February 8, 2025',body:'Born 1953. Sunni Muslim. Former Lebanese Ambassador to the United Nations (2007–2017). Former judge on the International Court of Justice. Academic background — taught international law. Named prime minister by President Aoun in January 2025; government formed February 8. First PM in a generation whose primary credential is not connections to a political clan or militia. Led the government\'s disarmament agenda. Declared phase 1 "near completion" in December 2025. Described Hezbollah\'s threat of civil war as "completely unacceptable." Parliamentary elections in May 2026 represent his first major political test.',source:'Sources: UN · Lebanese Presidency · Reuters'},
+};
+
+function openModal(key){
+  const d = MODALS[key];
+  if(!d) return;
+  document.getElementById('modal-title').textContent = d.title;
+  document.getElementById('modal-sub').textContent = d.sub || '';
+  document.getElementById('modal-body').innerHTML = d.body;
+  document.getElementById('modal-source').textContent = d.source || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+
+function showTab(name, el){
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

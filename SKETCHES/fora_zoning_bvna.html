@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · BVNA · Zoning & Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f2f4f8; --bg2:#e8ebf2; --white:#ffffff;
+  --blue:#1b3a6b; --blue-md:#254f92; --blue-lt:#3a6abf;
+  --blue-pl:#dde5f5; --blue-vp:#edf1fb;
+  --gilt:#b8860b; --gilt-lt:#d4a832; --gilt-pl:#f8f0dc; --gilt-rul:rgba(184,134,11,0.22);
+  --ink:#0e1a2e; --ink-mid:#2c3e5a; --ink-soft:#5a6e8a; --ink-mut:#8a9ab8;
+  --rule:rgba(27,58,107,0.1); --rule-lt:rgba(27,58,107,0.05);
+  --green:#155c2d; --green-p:#e5f0e8; --green-r:#8cc4a0;
+  --red:#8b2020; --red-p:#f7eaea; --red-r:#d4a0a0;
+  --amber:#c47f00; --amber-p:#fdf3dc; --amber-r:rgba(196,127,0,0.28);
+  --terra:#c4845a; --terra-p:#faf0e8; --terra-r:rgba(196,132,90,0.28);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--gilt-rul);border-radius:10px;}
+
+/* NAV */
+nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;position:sticky;top:0;z-index:200;border-bottom:4px solid var(--gilt);}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;text-decoration:none;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-links{display:flex;gap:6px;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);padding:6px 14px;border-radius:100px;text-decoration:none;cursor:pointer;}
+.nav-link.active{color:white;background:rgba(255,255,255,0.1);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--gilt-pl);border:2px solid var(--gilt-rul);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gilt);font-weight:700;cursor:pointer;}
+
+/* HERO */
+.hero{background:var(--blue);padding:44px 48px 52px;position:relative;overflow:hidden;}
+.hero::after{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;bottom:0;left:0;right:0;height:26px;display:flex;align-items:center;padding:0 48px;font-size:11px;letter-spacing:0.55em;color:var(--gilt);overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%);mask-image:linear-gradient(to right,black 92%,transparent 100%);}
+.hero-ring{position:absolute;right:-60px;top:-80px;width:400px;height:400px;border-radius:50%;border:44px solid rgba(255,255,255,0.02);pointer-events:none;}
+.hero-ring2{position:absolute;right:60px;top:20px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(184,134,11,0.1);pointer-events:none;}
+.hero-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;}
+.hero-breadcrumb a{color:rgba(255,255,255,0.3);text-decoration:none;}
+.hero-breadcrumb a:hover{color:rgba(255,255,255,0.75);}
+.sep{opacity:0.2;margin:0 5px;}
+.bc-here{color:var(--gilt-lt);}
+.hero-inner{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;}
+.org-identity{display:flex;align-items:flex-start;gap:20px;margin-bottom:18px;}
+.org-mark{width:64px;height:64px;border-radius:12px;background:var(--gilt-pl);border:2px solid var(--gilt-rul);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--gilt);flex-shrink:0;position:relative;}
+.org-verified{position:absolute;bottom:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--green);border:2.5px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:9px;}
+.org-local-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.org-local-label-badge{background:rgba(184,134,11,0.18);border:1px solid var(--gilt-rul);padding:2px 8px;border-radius:3px;}
+.org-verified-text{color:rgba(255,255,255,0.3);font-size:7.5px;letter-spacing:0.12em;}
+.org-name{font-family:'Libre Baskerville',serif;font-size:36px;font-weight:700;color:white;line-height:1.1;margin-bottom:6px;}
+.org-jurisdiction{font-family:'Nunito',sans-serif;font-size:15px;font-weight:300;color:rgba(255,255,255,0.55);margin-bottom:10px;}
+.org-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.org-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid;}
+.tag-type{background:rgba(196,132,90,0.2);border-color:rgba(196,132,90,0.4);color:#f5c9a8;}
+.tag-year{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.14);color:rgba(255,255,255,0.48);}
+.tag-np{background:rgba(21,92,45,0.2);border-color:rgba(140,196,160,0.35);color:#86efac;}
+.hero-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-top:20px;}
+.hs{background:rgba(255,255,255,0.03);padding:12px 16px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.27);margin-top:3px;}
+.hero-right{display:flex;flex-direction:column;gap:8px;min-width:190px;}
+.btn-primary{background:var(--gilt);border:none;border-radius:100px;padding:12px 24px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:white;cursor:pointer;font-weight:700;width:100%;}
+.btn-secondary{background:transparent;border:1.5px solid rgba(255,255,255,0.18);border-radius:100px;padding:11px 24px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);cursor:pointer;width:100%;}
+.btn-green{background:var(--green-p);border:1px solid var(--green-r);border-radius:100px;padding:11px 24px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);cursor:pointer;font-weight:700;width:100%;}
+.hero-followers{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.22);text-align:center;}
+
+/* TABS */
+.org-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;padding:0 48px;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);padding:16px 18px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;}
+.tab.active{color:var(--blue);border-bottom-color:var(--gilt);font-weight:700;}
+.tab.live{color:var(--amber);}
+
+/* BODY */
+.org-body{display:grid;grid-template-columns:1fr 308px;max-width:1200px;margin:0 auto;}
+.org-main{padding:32px 48px;border-right:1px solid var(--rule);}
+.sec-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.sec-ey::before{content:'◆';font-size:6px;}
+.sec-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:16px;}
+.sec-block{margin-bottom:40px;}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+.sec-link{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-lt);text-decoration:none;cursor:pointer;}
+
+/* SIDEBAR */
+.org-sidebar{padding:26px 24px;background:var(--white);}
+.sb-block{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--rule);}
+.sb-block:last-child{border-bottom:none;margin-bottom:0;}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.sb-ey::before{content:'◆';font-size:5.5px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+
+/* ── ZONING BANNER ── */
+.z-banner{background:var(--blue);border-radius:10px;padding:16px 18px;margin-bottom:22px;display:flex;align-items:center;gap:14px;}
+.z-banner-icon{font-size:22px;flex-shrink:0;}
+.z-banner-body{flex:1;}
+.z-banner-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:3px;}
+.z-banner-text{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);line-height:1.6;}
+.z-banner-cta{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:100px;padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:white;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.z-banner-cta:hover{background:rgba(255,255,255,0.16);}
+
+/* ── URGENCY ALERT ── */
+.z-urgent{background:var(--red-p);border:1px solid var(--red-r);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;}
+.zu-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.zu-body{}
+.zu-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:3px;}
+.zu-text{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-mid);line-height:1.55;}
+.zu-action{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);cursor:pointer;font-weight:700;}
+
+/* ── CASE CARDS ── */
+.case-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.15s;overflow:hidden;}
+.case-card:hover{box-shadow:0 4px 16px rgba(27,58,107,0.08);}
+.case-card-top{display:flex;align-items:stretch;gap:0;}
+.case-stripe{width:4px;flex-shrink:0;border-radius:10px 0 0 10px;}
+.stripe-red{background:var(--red);}
+.stripe-amber{background:var(--amber);}
+.stripe-blue{background:var(--blue-lt);}
+.stripe-green{background:var(--green);}
+.case-main{flex:1;padding:14px 16px;}
+.case-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.case-address{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--blue);line-height:1.2;}
+.case-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:3px;flex-shrink:0;margin-top:2px;}
+.badge-urgent{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.badge-pending{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.badge-support{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
+.badge-oppose{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.badge-conditions{background:var(--blue-vp);color:var(--blue-lt);border:1px solid var(--blue-pl);}
+.badge-decided{background:var(--bg2);color:var(--ink-mut);border:1px solid var(--rule);}
+.case-meta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.case-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+.case-clock{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--red);font-weight:700;}
+.case-clock-ok{color:var(--amber);}
+.case-clock-fine{color:var(--ink-mut);}
+.case-zbahearing{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+.case-notify{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;background:var(--blue-vp);border:1px solid var(--blue-pl);color:var(--blue-lt);padding:2px 7px;border-radius:3px;cursor:pointer;}
+.case-near-you{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;background:var(--gilt-pl);border:1px solid var(--gilt-rul);color:var(--gilt);padding:2px 7px;border-radius:3px;}
+
+/* case expand */
+.case-expand{display:none;padding:0 16px 14px 20px;border-top:1px solid var(--rule-lt);}
+.case-expand.open{display:block;}
+.case-expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;}
+.ce-section-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;}
+.ce-checklist{list-style:none;}
+.ce-checklist li{display:flex;align-items:flex-start;gap:7px;padding:4px 0;font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);border-bottom:1px solid var(--rule-lt);}
+.ce-checklist li:last-child{border-bottom:none;}
+.ce-check{font-size:10px;flex-shrink:0;margin-top:1px;}
+.ce-check.done{color:var(--green);}
+.ce-check.pend{color:var(--amber);}
+.ce-check.miss{color:var(--ink-mut);}
+.ce-desc{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.65;margin-top:10px;}
+.ce-values{background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:6px;padding:10px 12px;margin-top:10px;}
+.ce-values-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:6px;}
+.ce-values-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-mid);line-height:1.6;}
+.ce-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.ce-btn{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;border-radius:100px;cursor:pointer;border:1px solid;}
+.ce-btn-rsvp{background:var(--green-p);border-color:var(--green-r);color:var(--green);font-weight:700;}
+.ce-btn-docs{background:var(--bg);border-color:var(--rule);color:var(--ink-soft);}
+.ce-btn-write{background:var(--amber-p);border-color:var(--amber-r);color:var(--amber);}
+.ce-btn-zba{background:var(--blue-vp);border-color:var(--blue-pl);color:var(--blue-lt);}
+.case-toggle-hint{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-top:8px;opacity:0.6;}
+
+/* ── NEXT MEETING ── */
+.meeting-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:0;overflow:hidden;margin-bottom:10px;}
+.mc-top{background:var(--blue);padding:14px 18px;display:flex;gap:14px;align-items:center;}
+.mc-date-box{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 12px;text-align:center;flex-shrink:0;min-width:54px;}
+.mc-month{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-lt);}
+.mc-day{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:white;line-height:1;}
+.mc-info{flex:1;}
+.mc-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:white;margin-bottom:3px;}
+.mc-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.45);line-height:1.65;}
+.mc-body{padding:14px 18px;}
+.mc-agenda-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.mc-agenda-label::before{content:'◆';font-size:5px;color:var(--gilt);}
+.agenda-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule-lt);}
+.agenda-row:last-child{border-bottom:none;}
+.ar-num{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);flex-shrink:0;width:16px;padding-top:2px;}
+.ar-body{flex:1;}
+.ar-address{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--ink);line-height:1.2;}
+.ar-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+.ar-near{font-family:'JetBrains Mono',monospace;font-size:7px;background:var(--gilt-pl);border:1px solid var(--gilt-rul);color:var(--gilt);padding:1px 6px;border-radius:3px;margin-left:4px;}
+.ar-status{flex-shrink:0;}
+.mc-actions{display:flex;gap:8px;margin-top:14px;}
+.mc-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;}
+.mc-btn-rsvp{background:var(--green-p);border:1px solid var(--green-r);color:var(--green);font-weight:700;}
+.mc-btn-cal{background:var(--bg);border:1px solid var(--rule);color:var(--ink-soft);}
+.mc-btn-all{background:var(--blue-vp);border:1px solid var(--blue-pl);color:var(--blue-lt);}
+.mc-notify-bar{background:var(--gilt-pl);border-top:1px solid var(--gilt-rul);padding:8px 18px;display:flex;align-items:center;gap:8px;}
+.mc-notify-text{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--gilt);flex:1;}
+.mc-notify-btn{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;background:var(--gilt);color:white;border:none;border-radius:100px;padding:5px 12px;cursor:pointer;}
+
+/* ── CASE TYPE REFERENCE ── */
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.type-card{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:11px 13px;}
+.type-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:4px;}
+.type-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
+.type-scope{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mut);margin-top:5px;}
+
+/* ── APPLICANT CTA BLOCK ── */
+.applicant-cta{background:var(--bg);border:1.5px dashed rgba(27,58,107,0.18);border-radius:10px;padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
+.app-cta-icon{font-size:24px;flex-shrink:0;}
+.app-cta-body{flex:1;}
+.app-cta-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:3px;}
+.app-cta-text{font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink-mid);line-height:1.55;}
+.app-cta-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;background:var(--blue);color:white;border:none;border-radius:100px;padding:10px 18px;cursor:pointer;flex-shrink:0;white-space:nowrap;}
+.app-cta-btn:hover{background:var(--blue-md);}
+
+/* ── SIDEBAR ── */
+.contact-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule-lt);}
+.contact-row:last-child{border-bottom:none;}
+.contact-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);width:64px;flex-shrink:0;}
+.contact-val{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink);}
+.contact-val a{color:var(--blue-lt);text-decoration:none;}
+.contact-val a:hover{text-decoration:underline;}
+
+.z-faq{margin-top:2px;}
+.faq-item{border-bottom:1px solid var(--rule-lt);cursor:pointer;}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--blue);padding:9px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.35;}
+.faq-arrow{font-size:9px;color:var(--ink-mut);flex-shrink:0;transition:transform 0.15s;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+.faq-a{display:none;font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.65;padding:0 0 10px 0;}
+.faq-item.open .faq-a{display:block;}
+
+.res-link{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--rule-lt);text-decoration:none;}
+.res-link:last-child{border-bottom:none;}
+.res-link-icon{font-size:13px;flex-shrink:0;}
+.res-link-label{font-family:'Nunito',sans-serif;font-size:12px;color:var(--blue-lt);flex:1;line-height:1.3;}
+.res-link-label:hover{text-decoration:underline;}
+.res-link-ext{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+
+.values-list{list-style:none;}
+.values-list li{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);padding:4px 0;border-bottom:1px solid var(--rule-lt);display:flex;gap:7px;align-items:flex-start;line-height:1.5;}
+.values-list li:last-child{border-bottom:none;}
+.v-dot{color:var(--gilt);flex-shrink:0;font-size:9px;margin-top:3px;}
+
+.timeline-strip{margin-top:12px;}
+.tl-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.tl-row:last-child{border-bottom:none;}
+.tl-day{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);width:56px;flex-shrink:0;padding-top:2px;}
+.tl-event{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.45;}
+.tl-event strong{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">F<span>O</span>RA</a>
+  <div class="nav-links">
+    <span class="nav-link">Feed</span>
+    <span class="nav-link active">The Record</span>
+    <span class="nav-link">Discourse</span>
+    <span class="nav-link">My Stack</span>
+  </div>
+  <div class="nav-right">
+    <div class="nav-avatar">NG</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-ring"></div>
+  <div class="hero-ring2"></div>
+  <div class="hero-breadcrumb">
+    <a href="#">···</a><span class="sep">/</span>
+    <a href="#">Pennsylvania</a><span class="sep">/</span>
+    <a href="#">Philadelphia</a><span class="sep">/</span>
+    <a href="#">South Philadelphia</a><span class="sep">/</span>
+    <a href="#">19147 · Bella Vista</a><span class="sep">/</span>
+    <span class="bc-here">Bella Vista Neighbors Association</span>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="org-identity">
+        <div class="org-mark">BV<div class="org-verified">✓</div></div>
+        <div>
+          <div class="org-local-label">
+            <span class="org-local-label-badge">RCO</span>
+            <span class="org-verified-text">✓ Verified · Philadelphia PCPC · Active through 2027</span>
+          </div>
+          <div class="org-name">Bella Vista Neighbors Association</div>
+          <div class="org-jurisdiction">Bella Vista · Philadelphia · 19147 · 6th to 11th, Washington to South</div>
+          <div class="org-tags">
+            <span class="org-tag tag-type">Neighborhood Association</span>
+            <span class="org-tag tag-np">501(c)(3) Nonprofit</span>
+            <span class="org-tag tag-year">Est. 1992</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-num">4</div><div class="hs-label">Active cases</div></div>
+        <div class="hs"><div class="hs-num">12</div><div class="hs-label">Days to next meeting</div></div>
+        <div class="hs"><div class="hs-num">3</div><div class="hs-label">Near you</div></div>
+        <div class="hs"><div class="hs-num">47</div><div class="hs-label">Resolved 2020+</div></div>
+        <div class="hs"><div class="hs-num">2</div><div class="hs-label">Neighbors watching</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <button class="btn-primary">+ Follow</button>
+      <button class="btn-secondary">Join BVNA</button>
+      <button class="btn-green">Contact BVNA</button>
+      <div class="hero-followers">284 FORA citizens following</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab">Overview</div>
+    <div class="tab">Efforts</div>
+    <div class="tab active live">Zoning ●</div>
+    <div class="tab">Events</div>
+    <div class="tab">Members</div>
+    <div class="tab">The Record</div>
+    <div class="tab">Sister Orgs</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="org-body">
+
+  <!-- MAIN -->
+  <div class="org-main">
+
+    <!-- APPLICANT CTA -->
+    <div class="applicant-cta">
+      <div class="app-cta-icon">🏗</div>
+      <div class="app-cta-body">
+        <div class="app-cta-label">Applicant / Developer</div>
+        <div class="app-cta-text">Received an L&amp;I refusal or ZBA appeal notice? Start here to schedule your RCO meeting, generate your neighbor notification letter, and track your submission checklist.</div>
+      </div>
+      <button class="app-cta-btn">I'm an applicant →</button>
+    </div>
+
+    <!-- URGENCY ALERT -->
+    <div class="z-urgent">
+      <div class="zu-icon">⚠️</div>
+      <div class="zu-body">
+        <div class="zu-label">Meeting in 8 days</div>
+        <div class="zu-text">
+          <strong>824–830 S 8th Street</strong> — applicant must attend RCO meeting by <strong>April 20</strong> or BVNA will request ZBA continuance.
+          <span class="zu-action" style="margin-left:8px;">View case →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE CASES -->
+    <div class="sec-block">
+      <div class="sec-head">
+        <div>
+          <div class="sec-ey">RCO Function · Legal obligation</div>
+          <div class="sec-title">Active Zoning Cases</div>
+        </div>
+        <a class="sec-link" href="https://bellavistaneighbors.org/ZoningArchive" target="_blank">Full archive + history →</a>
+      </div>
+
+      <!-- CASE 1 — urgent -->
+      <div class="case-card" onclick="toggleCase('c1')">
+        <div class="case-card-top">
+          <div class="case-stripe stripe-red"></div>
+          <div class="case-main">
+            <div class="case-header">
+              <div>
+                <div class="case-address"><a href="fora_case_824_s8th.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">824–830 S 8th Street ↗</a></div>
+              </div>
+              <span class="case-badge badge-urgent">⚠ Meeting due</span>
+            </div>
+            <div class="case-meta">
+              <span class="case-type">Use variance · Commercial→Residential</span>
+              <span class="case-clock">⏱ 8 days to RCO meeting deadline</span>
+              <span class="case-zbahearing">ZBA: May 6</span>
+              <span class="case-near-you">★ Near you</span>
+            </div>
+            <div class="case-toggle-hint" id="c1-hint">▼ tap to expand</div>
+          </div>
+        </div>
+        <div class="case-expand" id="c1">
+          <div class="ce-desc">Applicant proposes converting ground-floor commercial (CMX-2) to residential. Corner of 8th &amp; Fitzwater. BVNA historically opposes conversion of CMX-zoned corner properties — street-level commerce on commercial corridors is a standing value.</div>
+          <div class="ce-values">
+            <div class="ce-values-label">BVNA Position Context</div>
+            <div class="ce-values-text">BVNA historically supports ground-level CMX-zoned corner properties remaining commercial. Conversion to residential removes a neighborhood amenity and sets precedent on walkable commercial corridors. Neighbors living within 250 ft received mailed notice.</div>
+          </div>
+          <div class="case-expand-grid">
+            <div>
+              <div class="ce-section-label">Submission checklist</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> ZBA appeal filed · Cal #26-0412</li>
+                <li><span class="ce-check done">✓</span> L&amp;I Refusal received</li>
+                <li><span class="ce-check done">✓</span> Site plans submitted</li>
+                <li><span class="ce-check done">✓</span> Site photos submitted</li>
+                <li><span class="ce-check pend">◐</span> Deed / proof of ownership</li>
+                <li><span class="ce-check pend">◐</span> Aerial / vicinity plan</li>
+                <li><span class="ce-check miss">○</span> PCPC notice compliance statement</li>
+              </ul>
+            </div>
+            <div>
+              <div class="ce-section-label">Process stage</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> PCPC notification received</li>
+                <li><span class="ce-check done">✓</span> Applicant contacted BVNA</li>
+                <li><span class="ce-check pend">◐</span> Meeting scheduled — Apr 20</li>
+                <li><span class="ce-check miss">○</span> USPS bulk mailing cert</li>
+                <li><span class="ce-check miss">○</span> Meeting held + vote tallied</li>
+                <li><span class="ce-check miss">○</span> Advisory letter to ZBA</li>
+                <li><span class="ce-check miss">○</span> ZBA hearing + decision</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ce-actions">
+            <button class="ce-btn ce-btn-rsvp">RSVP for Apr 20 meeting</button>
+            <button class="ce-btn ce-btn-docs">View plans</button>
+            <button class="ce-btn ce-btn-write">Write to ZBA</button>
+            <button class="ce-btn ce-btn-zba">ZBA calendar →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 2 -->
+      <div class="case-card" onclick="toggleCase('c2')">
+        <div class="case-card-top">
+          <div class="case-stripe stripe-amber"></div>
+          <div class="case-main">
+            <div class="case-header">
+              <div>
+                <div class="case-address"><a href="fora_case_824_s8th.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">512 S 9th Street ↗</a></div>
+              </div>
+              <span class="case-badge badge-support">Support</span>
+            </div>
+            <div class="case-meta">
+              <span class="case-type">Special exception · Short-term rental</span>
+              <span class="case-clock case-clock-ok">20 days to ZBA</span>
+              <span class="case-zbahearing">ZBA: Apr 28</span>
+            </div>
+            <div class="case-toggle-hint" id="c2-hint">▼ tap to expand</div>
+          </div>
+        </div>
+        <div class="case-expand" id="c2">
+          <div class="ce-desc">Owner-occupant seeks special exception to offer one bedroom as short-term rental. Under Philadelphia's 2023 STR ordinance, owner-occupied units in residential zones require a special exception. BVNA Zoning Committee voted 11–2 in support with no provisos. Advisory letter submitted.</div>
+          <div class="case-expand-grid">
+            <div>
+              <div class="ce-section-label">Submission checklist</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> ZBA appeal filed · Cal #26-0389</li>
+                <li><span class="ce-check done">✓</span> L&amp;I Refusal received</li>
+                <li><span class="ce-check done">✓</span> All plans + photos submitted</li>
+                <li><span class="ce-check done">✓</span> USPS bulk mailing cert</li>
+                <li><span class="ce-check done">✓</span> PCPC notice compliance</li>
+              </ul>
+            </div>
+            <div>
+              <div class="ce-section-label">Process stage</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> Meeting held · Apr 1 · Palumbo</li>
+                <li><span class="ce-check done">✓</span> Vote: 11 support · 2 opposed</li>
+                <li><span class="ce-check done">✓</span> Advisory letter sent Apr 21</li>
+                <li><span class="ce-check pend">◐</span> ZBA hearing Apr 28</li>
+                <li><span class="ce-check miss">○</span> Decision pending</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ce-actions">
+            <button class="ce-btn ce-btn-zba">Attend ZBA Apr 28 →</button>
+            <button class="ce-btn ce-btn-docs">View letter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 3 -->
+      <div class="case-card" onclick="toggleCase('c3')">
+        <div class="case-card-top">
+          <div class="case-stripe stripe-amber"></div>
+          <div class="case-main">
+            <div class="case-header">
+              <div>
+                <div class="case-address"><a href="fora_case_824_s8th.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">938 S 10th Street ↗</a></div>
+              </div>
+              <span class="case-badge badge-pending">Meeting scheduled</span>
+            </div>
+            <div class="case-meta">
+              <span class="case-type">Dimensional variance · 3-unit addition</span>
+              <span class="case-clock case-clock-ok">28 days to ZBA</span>
+              <span class="case-zbahearing">ZBA: May 12</span>
+            </div>
+            <div class="case-toggle-hint" id="c3-hint">▼ tap to expand</div>
+          </div>
+        </div>
+        <div class="case-expand" id="c3">
+          <div class="ce-desc">Owner proposes vertical addition creating a third residential unit, exceeding allowable height in RSA-5 zone. Requires dimensional variance. Neighbors on the block have expressed concern about loss of light and parking impacts. Meeting set for first Tuesday in May.</div>
+          <div class="ce-values">
+            <div class="ce-values-label">Out of scope at BVNA meeting</div>
+            <div class="ce-values-text">Construction logistics, dumpster placement, and duration are not governed by zoning code and are not BVNA's purview. Neighbors should raise height and setback impacts — those are in scope.</div>
+          </div>
+          <div class="case-expand-grid">
+            <div>
+              <div class="ce-section-label">Submission checklist</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> ZBA appeal filed · Cal #26-0441</li>
+                <li><span class="ce-check done">✓</span> L&amp;I Refusal received</li>
+                <li><span class="ce-check done">✓</span> Site plans submitted</li>
+                <li><span class="ce-check pend">◐</span> Photos + aerial pending</li>
+                <li><span class="ce-check miss">○</span> USPS bulk mailing cert</li>
+              </ul>
+            </div>
+            <div>
+              <div class="ce-section-label">Process stage</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> PCPC notification received</li>
+                <li><span class="ce-check done">✓</span> Meeting scheduled — May 6</li>
+                <li><span class="ce-check miss">○</span> Meeting held + vote</li>
+                <li><span class="ce-check miss">○</span> Advisory letter</li>
+                <li><span class="ce-check miss">○</span> ZBA May 12</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ce-actions">
+            <button class="ce-btn ce-btn-rsvp">RSVP for May 6 meeting</button>
+            <button class="ce-btn ce-btn-docs">View plans</button>
+            <button class="ce-btn ce-btn-write">Write a comment</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 4 -->
+      <div class="case-card" onclick="toggleCase('c4')">
+        <div class="case-card-top">
+          <div class="case-stripe stripe-blue"></div>
+          <div class="case-main">
+            <div class="case-header">
+              <div>
+                <div class="case-address"><a href="fora_case_824_s8th.html" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">701–711 S 11th Street ↗</a></div>
+              </div>
+              <span class="case-badge badge-conditions">Conditions</span>
+            </div>
+            <div class="case-meta">
+              <span class="case-type">CDR · 6-story mixed-use</span>
+              <span class="case-clock case-clock-fine">CDR: May 15</span>
+              <span class="case-zbahearing">Civic Design Review</span>
+              <span class="case-near-you">★ Near you</span>
+            </div>
+            <div class="case-toggle-hint" id="c4-hint">▼ tap to expand</div>
+          </div>
+        </div>
+        <div class="case-expand" id="c4">
+          <div class="ce-desc">Six-story mixed-use development on S 11th at Washington Avenue edge. Triggered Civic Design Review (CDR) due to scale. Conforms to CMX-2.5 zoning so no ZBA variance required, but CDR committee must review how the project relates to the public realm. BVNA submitted a letter with conditions: bicycle parking at ground level, retail activation on Washington Ave frontage, ADA-accessible building entrance set back from corner.</div>
+          <div class="case-expand-grid">
+            <div>
+              <div class="ce-section-label">CDR checklist</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check done">✓</span> L&amp;I CDR referral</li>
+                <li><span class="ce-check done">✓</span> Materials to PCPC</li>
+                <li><span class="ce-check done">✓</span> RCO meeting held · Mar 4</li>
+                <li><span class="ce-check done">✓</span> BVNA letter with conditions</li>
+                <li><span class="ce-check pend">◐</span> CDR hearing · May 15</li>
+                <li><span class="ce-check miss">○</span> CDR recommendation to L&amp;I</li>
+              </ul>
+            </div>
+            <div>
+              <div class="ce-section-label">BVNA conditions</div>
+              <ul class="ce-checklist">
+                <li><span class="ce-check pend">◐</span> Bicycle parking at ground level</li>
+                <li><span class="ce-check pend">◐</span> Retail on Washington Ave frontage</li>
+                <li><span class="ce-check pend">◐</span> ADA entrance set back from corner</li>
+                <li><span class="ce-check pend">◐</span> Tree wells on S 11th</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ce-actions">
+            <button class="ce-btn ce-btn-docs">View CDR materials</button>
+            <button class="ce-btn ce-btn-write">Submit CDR comment</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /active cases -->
+
+
+    <!-- NEXT MEETING -->
+    <div class="sec-block">
+      <div class="sec-head">
+        <div>
+          <div class="sec-ey">First Tuesday · Monthly</div>
+          <div class="sec-title">Next Zoning Meeting</div>
+        </div>
+        <a class="sec-link" href="#">All past meetings →</a>
+      </div>
+
+      <div class="meeting-card">
+        <div class="mc-top">
+          <div class="mc-date-box">
+            <div class="mc-month">May</div>
+            <div class="mc-day">6</div>
+          </div>
+          <div class="mc-info">
+            <div class="mc-title">BVNA Zoning Committee Meeting</div>
+            <div class="mc-sub">
+              📍 Palumbo Recreation Center · 700 S 9th Street, Philadelphia<br>
+              🕖 7:00 PM · Open to all Bella Vista residents and neighbors<br>
+              👤 Co-chaired by Larry Weintraub AIA &amp; Dennis Hallda
+            </div>
+          </div>
+        </div>
+        <div class="mc-body">
+          <div class="mc-agenda-label">Agenda · 3 cases</div>
+          <div class="agenda-row">
+            <div class="ar-num">1.</div>
+            <div class="ar-body">
+              <div class="ar-address"><a href="https://www.google.com/maps/search/938+S+10th+Street+Philadelphia+PA" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">938 S 10th Street</a> <span class="ar-near">★ Near you</span></div>
+              <div class="ar-type">Dimensional variance · 3-unit addition · RSA-5</div>
+            </div>
+            <span class="case-badge badge-pending" style="font-size:6.5px;margin-top:3px;">Pending</span>
+          </div>
+          <div class="agenda-row">
+            <div class="ar-num">2.</div>
+            <div class="ar-body">
+              <div class="ar-address"><a href="https://www.google.com/maps/search/1023+Kimball+Street+Philadelphia+PA" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">1023 Kimball Street</a></div>
+              <div class="ar-type">Liquor license · New BYO · PLCB referral</div>
+            </div>
+            <span class="case-badge badge-pending" style="font-size:6.5px;margin-top:3px;">Pending</span>
+          </div>
+          <div class="agenda-row">
+            <div class="ar-num">3.</div>
+            <div class="ar-body">
+              <div class="ar-address"><a href="https://www.google.com/maps/search/636+S+7th+Street+Philadelphia+PA" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(27,58,107,0.3);">636 S 7th Street</a> <span class="ar-near">★ Near you</span></div>
+              <div class="ar-type">Use variance · Parking pad · RSA-5</div>
+            </div>
+            <span class="case-badge badge-pending" style="font-size:6.5px;margin-top:3px;">Pending</span>
+          </div>
+          <div class="mc-actions">
+            <button class="mc-btn mc-btn-rsvp">✓ RSVP to attend</button>
+            <button class="mc-btn mc-btn-cal">Add to calendar</button>
+            <button class="mc-btn mc-btn-all">All meetings →</button>
+          </div>
+        </div>
+        <div class="mc-notify-bar">
+          <div class="mc-notify-text">🔔 You're within 250 ft of 2 cases on this agenda. FORA has notified you in lieu of the mailed notice.</div>
+          <button class="mc-notify-btn">Mark received</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- CASE TYPES -->
+    <div class="sec-block">
+      <div class="sec-head">
+        <div>
+          <div class="sec-ey">Reference</div>
+          <div class="sec-title">What BVNA reviews</div>
+        </div>
+      </div>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-label">Zoning Variance</div>
+          <div class="type-desc">Deviation from code that would cause "unnecessary hardship" if enforced strictly. Use variances (wrong activity for zone) or dimensional (height, setback, lot coverage).</div>
+          <div class="type-scope">Decided by ZBA · 1515 Arch St, 18th Fl</div>
+        </div>
+        <div class="type-card">
+          <div class="type-label">Special Exception</div>
+          <div class="type-desc">Permitted by code but requires applicant to prove no negative neighborhood impact. Examples: take-out restaurants, short-term rentals, group homes.</div>
+          <div class="type-scope">Decided by ZBA · BVNA vote carries weight</div>
+        </div>
+        <div class="type-card">
+          <div class="type-label">Civic Design Review</div>
+          <div class="type-desc">Large projects reviewed for how they relate to the public realm. No zoning change required — triggered by building size or location. CDR committee makes recommendations to L&amp;I.</div>
+          <div class="type-scope">Reviewed by PCPC CDR Committee · Monthly</div>
+        </div>
+        <div class="type-card">
+          <div class="type-label">Liquor License &amp; Sidewalk Cafés</div>
+          <div class="type-desc">New liquor licenses referred by PLCB. New sidewalk cafés introduced as City Council ordinances. BVNA holds meetings on both — neighbors can formally object or support.</div>
+          <div class="type-scope">PLCB / Council District 2 · Not ZBA</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;margin-top:10px;display:flex;gap:10px;align-items:flex-start;">
+        <div style="font-size:14px;flex-shrink:0;">🚫</div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:3px;">Out of scope at BVNA meetings</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.6;">Building materials (brick vs. vinyl), architectural aesthetics, construction duration, dumpster placement, road closures, and noise are not governed by the zoning code and are not BVNA's purview. Bella Vista has no conservation overlay.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /org-main -->
+
+
+  <!-- SIDEBAR -->
+  <div class="org-sidebar">
+
+    <!-- Zoning Committee -->
+    <div class="sb-block">
+      <div class="sb-ey">Standing Committee</div>
+      <div class="sb-title">Zoning Committee</div>
+      <div class="contact-row">
+        <div class="contact-label">Co-Chair</div>
+        <div class="contact-val">Larry Weintraub, AIA</div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-label">Co-Chair</div>
+        <div class="contact-val">Dennis Hallda</div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-label">Email</div>
+        <div class="contact-val"><a href="/cdn-cgi/l/email-protection#4b31242522252c0b292e27272a3d22383f2a252e222c23292439386524392c"><span class="__cf_email__" data-cfemail="b3c9dcdddaddd4f3d1d6dfdfd2c5dac0c7d2ddd6dad4dbd1dcc1c09ddcc1d4">[email&#160;protected]</span></a></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-label">Meets</div>
+        <div class="contact-val">First Tuesday, 7:00 PM</div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-label">Venue</div>
+        <div class="contact-val">Palumbo Rec Center · 700 S 9th St</div>
+      </div>
+      <div style="margin-top:10px;background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:9px 11px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;">Volunteer with zoning committee</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;">BVNA looks for volunteers who can leaflet for meetings, post decisions, write letters, and attend ZBA hearings. Contact the committee to observe first.</div>
+      </div>
+    </div>
+
+    <!-- Process timeline -->
+    <div class="sb-block">
+      <div class="sb-ey">From appeal to decision</div>
+      <div class="sb-title">Applicant Timeline</div>
+      <div class="timeline-strip">
+        <div class="tl-row">
+          <div class="tl-day">Day 0</div>
+          <div class="tl-event"><strong>L&amp;I issues refusal.</strong> Applicant files ZBA appeal. 45-day clock starts.</div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-day">Day 0–10</div>
+          <div class="tl-event"><strong>PCPC notification</strong> sent to RCOs. Applicant notifies PCPC within 10 days.</div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-day">Day 0–20</div>
+          <div class="tl-event"><strong>Applicant contacts BVNA</strong> to schedule RCO meeting. Mails neighbors within 250 ft with USPS cert.</div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-day">≤ Day 45</div>
+          <div class="tl-event"><strong>RCO public meeting held.</strong> First Tuesday, 7 PM, Palumbo. Vote taken. Provisos negotiated.</div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-day">~2 days before ZBA</div>
+          <div class="tl-event"><strong>BVNA advisory letter</strong> sent to ZBA, PCPC, Councilmember, all RCOs, applicant.</div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-day">45–60 days</div>
+          <div class="tl-event"><strong>ZBA hearing.</strong> 1515 Arch St, 18th Floor. Board renders decision. Either party may appeal.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BVNA values -->
+    <div class="sb-block">
+      <div class="sb-ey">Stated positions</div>
+      <div class="sb-title">BVNA Zoning Values</div>
+      <ul class="values-list">
+        <li><span class="v-dot">◆</span>Ground-floor CMX-zoned corners stay commercial — conversions to residential historically opposed</li>
+        <li><span class="v-dot">◆</span>Parking variances that disrupt street fabric discouraged</li>
+        <li><span class="v-dot">◆</span>Adaptive reuse over demolition — Crucifixion parish house, Banca Calabrese as models</li>
+        <li><span class="v-dot">◆</span>Mixed-use, human-scale design; street-level commerce on commercial spines</li>
+        <li><span class="v-dot">◆</span>Bicycle parking, ADA ramps, bus stop amenities, tree-lined streets</li>
+        <li><span class="v-dot">◆</span>High walkability score — neighborhood amenities protected</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div class="sb-block">
+      <div class="sb-ey">Explained</div>
+      <div class="sb-title">Quick answers</div>
+      <div class="z-faq">
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What is a zoning refusal? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">When L&amp;I reviews a permit application and the proposed project doesn't conform to the zoning code, they issue a refusal detailing the violations. The applicant can then withdraw, revise, or appeal to the ZBA.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Does BVNA's vote decide the outcome? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">No. BVNA's advisory letter is a recommendation, not a decision. The ZBA makes the final call. But BVNA's position carries significant weight — and neighbors can attend the ZBA hearing directly to be heard as interested parties.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What's "as-of-right" development? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Projects that fully conform to the zoning code get permits automatically — no RCO meeting required. If you see new construction BVNA hasn't held a meeting on, it's likely as-of-right.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">How does BVNA's vote work? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Show of hands — near neighbors (within ~200 ft, who received mailed notice) vote first, then the community at large. If a clear consensus in favor can't be reached, BVNA opposes. The tally and summary go into the advisory letter.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What are provisos? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Conditions negotiated between the applicant and the community at the RCO meeting. Must be specific enough for L&amp;I to enforce. Private agreements (not in the ZBA record) are still binding if signed — but unenforceable by the City unless formalized through an official mechanism.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Construction permits -->
+    <div class="sb-block">
+      <div class="sb-ey">During construction</div>
+      <div class="sb-title">Street use permits</div>
+      <p style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-bottom:10px;">These are <strong>out of scope at the zoning meeting</strong> — but they are legally required by the City. If a permit hasn't been pulled, report it to 311.</p>
+
+      <div class="z-faq">
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">🚛 Dumpster on street or sidewalk <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Two permits may apply: a <strong>Temporary Construction Dumpster Permit</strong> from the Streets Dept (call 215-686-5500) and an <strong>L&I Construction Dumpster License</strong> via eCLIPSE. Each dumpster must display an RFID medallion. No servicing 9 PM–7 AM. <a href="https://www.phila.gov/services/permits-violations-licenses/get-a-license/business-licenses/dumpsters/get-a-construction-dumpster-license/" target="_blank" style="color:var(--blue-lt);">phila.gov ↗</a></div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">🏗 Scaffolding, boom, lift, fence on ROW <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Requires a <strong>Street Closure Permit</strong> (Equipment Placement type) from Streets Dept, applied online <strong>at least 10 business days in advance</strong>. If a travel lane is blocked, police presence is required. <a href="https://www.phila.gov/services/streets-sidewalks-alleys/street-closures/apply-for-a-street-closure-permit-for-construction/" target="_blank" style="color:var(--blue-lt);">phila.gov ↗</a></div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">🏗 Crane on public right-of-way <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Street Closure Permit <strong>plus</strong> a separate Crane Placement Application with a signed Police Approval Application. Tower cranes also need an L&I Tower Crane Permit via eCLIPSE. $15M liability insurance required. <a href="https://www.phila.gov/services/permits-violations-licenses/apply-for-a-permit/building-and-repair-permits/get-a-tower-crane-permit/" target="_blank" style="color:var(--blue-lt);">phila.gov ↗</a></div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">📬 7+ day full closure — neighbor notice <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Contractor must notify <strong>all properties within 540 ft</strong> at least one week prior — by mail, email, or door-to-door. Must include duration, hazards, parking restrictions, detours, and contact info. (Philadelphia Code § 11-705(c.1))</div>
+        </div>
+      </div>
+
+      <div style="background:var(--amber-p);border:1px solid var(--amber-r);border-radius:7px;padding:9px 11px;margin-top:10px;display:flex;gap:8px;align-items:flex-start;">
+        <div style="font-size:13px;flex-shrink:0;">📞</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-mid);line-height:1.6;">No permit visible? Call <strong>311</strong> or check the <a href="https://stsweb.phila.gov/streetclosure/" target="_blank" style="color:var(--blue-lt);text-decoration:none;">Streets Dept live permit map</a> — updated every 30 minutes.</div>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="sb-block">
+      <div class="sb-ey">External links</div>
+      <div class="sb-title">Official resources</div>
+      <a class="res-link" href="https://li.phila.gov/zba-appeals-calendar?region=rco%3ABella%20Vista%20Neighbors%20Association" target="_blank">
+        <span class="res-link-icon">📅</span>
+        <span class="res-link-label">ZBA calendar — BVNA cases</span>
+        <span class="res-link-ext">phila.gov ↗</span>
+      </a>
+      <a class="res-link" href="https://bellavistaneighbors.org/ZoningArchive" target="_blank">
+        <span class="res-link-icon">📁</span>
+        <span class="res-link-label">BVNA case archive (2020–present)</span>
+        <span class="res-link-ext">bvna ↗</span>
+      </a>
+      <a class="res-link" href="https://atlas.phila.gov" target="_blank">
+        <span class="res-link-icon">🗺</span>
+        <span class="res-link-label">Atlas — look up any property's zoning</span>
+        <span class="res-link-ext">phila.gov ↗</span>
+      </a>
+      <a class="res-link" href="https://www.phila.gov/departments/zoning-board-of-adjustment/public-meetings/" target="_blank">
+        <span class="res-link-icon">🎥</span>
+        <span class="res-link-label">ZBA hearing recordings</span>
+        <span class="res-link-ext">phila.gov ↗</span>
+      </a>
+      <a class="res-link" href="https://irp-cdn.multiscreensite.com/acfbe516/files/uploaded/ZoningProtocols.pdf" target="_blank">
+        <span class="res-link-icon">📄</span>
+        <span class="res-link-label">BVNA Zoning Protocols (PDF)</span>
+        <span class="res-link-ext">bvna ↗</span>
+      </a>
+      <a class="res-link" href="https://www.phila.gov/media/20230928121817/PCPC.RCO-Notice_-Instructions-for-Applicants-Appellants.pdf" target="_blank">
+        <span class="res-link-icon">📋</span>
+        <span class="res-link-label">PCPC applicant notification instructions</span>
+        <span class="res-link-ext">phila.gov ↗</span>
+      </a>
+    </div>
+
+  </div><!-- /sidebar -->
+
+</div><!-- /org-body -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function toggleCase(id) {
+  const el = document.getElementById(id);
+  const hint = document.getElementById(id + '-hint');
+  if (el.classList.contains('open')) {
+    el

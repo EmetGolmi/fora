@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Discover Your Government</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f2f4f8;
+  --white:   #ffffff;
+  --blue:    #1b3a6b;
+  --blue-md: #254f92;
+  --blue-lt: #3a6abf;
+  --blue-pl: #dde5f5;
+  --blue-vp: #edf1fb;
+  --gilt:    #b8860b;
+  --gilt-lt: #d4a832;
+  --gilt-pl: #f8f0dc;
+  --gilt-rul:rgba(184,134,11,0.25);
+  --ink:     #0e1a2e;
+  --ink-soft:#5a6e8a;
+  --ink-mut: #8a9ab8;
+  --rule:    rgba(27,58,107,0.1);
+  --green:   #155c2d;
+  --green-p: #e5f0e8;
+  --green-r: #8cc4a0;
+
+  /* entry screen dark field */
+  --field:   #080f1e;
+  --field-2: #0d1628;
+  --field-3: #121e36;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'Nunito',sans-serif;background:var(--field);color:white;overflow-x:hidden;}
+
+/* ══════════════════════════════════
+   STAGE SYSTEM
+   Each stage fills the viewport.
+   JS swaps .active class.
+══════════════════════════════════ */
+.stage {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.stage.active { display: flex; }
+
+/* ══════════════════════════════════
+   SHARED NAV
+══════════════════════════════════ */
+.top-bar {
+  display: flex;
+  align-items: center;
+  padding: 20px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.logo {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.1em;
+}
+.logo span { color: var(--gilt-lt); }
+.top-step {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.step-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.step-dot.done { background: var(--gilt); }
+.step-dot.current { background: white; }
+
+/* ══════════════════════════════════
+   STAGE 1 — THE ASK
+══════════════════════════════════ */
+#stage-1 {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(27,58,107,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 20%, rgba(184,134,11,0.06) 0%, transparent 60%),
+    var(--field);
+  justify-content: center;
+  align-items: center;
+}
+
+.ask-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 580px;
+  padding: 0 32px;
+  animation: fadeUp 0.7s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.ask-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ask-eyebrow::before,
+.ask-eyebrow::after {
+  content: '';
+  width: 28px; height: 1px;
+  background: var(--gilt-rul);
+}
+.ask-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+.ask-title em {
+  font-style: italic;
+  color: var(--gilt-lt);
+}
+.ask-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 440px;
+}
+
+/* address input */
+.addr-form {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+}
+.addr-input-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 18px 24px;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: text;
+}
+.addr-input-wrap:focus-within {
+  border-color: var(--gilt);
+  background: rgba(255,255,255,0.07);
+}
+.addr-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+.addr-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: white;
+}
+.addr-input::placeholder { color: rgba(255,255,255,0.28); }
+.addr-btn {
+  background: var(--gilt);
+  border: none;
+  border-radius: 9px;
+  padding: 9px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
+}
+.addr-btn:hover { background: var(--gilt-lt); }
+.addr-btn:active { transform: scale(0.97); }
+
+/* suggestions dropdown */
+.addr-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0; right: 0;
+  background: var(--field-3);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+}
+.addr-suggestions.visible { display: block; animation: fadeIn 0.15s ease; }
+.addr-suggestion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.1s;
+}
+.addr-suggestion:last-child { border-bottom: none; }
+.addr-suggestion:hover { background: rgba(255,255,255,0.05); }
+.sug-icon { font-size: 13px; opacity: 0.4; }
+.sug-main { font-size: 13.5px; color: white; }
+.sug-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; margin-top: 1px; }
+
+.ask-privacy {
+  margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ask-privacy::before { content: '🔒'; font-size: 10px; opacity: 0.5; }
+
+/* ══════════════════════════════════
+   STAGE 2 — THE REVEAL
+══════════════════════════════════ */
+#stage-2 {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(27,58,107,0.5) 0%, transparent 70%),
+    var(--field);
+}
+
+.reveal-top {
+  padding: 32px 48px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.reveal-address {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.rev-addr-pill {
+  background: rgba(184,134,11,0.15);
+  border: 1px solid rgba(184,134,11,0.3);
+  border-radius: 100px;
+  padding: 4px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gilt-lt);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rev-change {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.reveal-hed {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+.reveal-hed em { color: var(--gilt-lt); font-style: italic; }
+.reveal-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-top: 5px;
+}
+
+/* stack layout */
+.stack-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  overflow-y: auto;
+  padding: 28px 48px 40px;
+}
+.stack-layout::-webkit-scrollbar { width: 4px; }
+.stack-layout::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+/* tier column */
+.stack-tier {
+  padding: 0 20px 0 0;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.stack-tier:last-child { border-right: none; padding-right: 0; padding-left: 20px; }
+.stack-tier:nth-child(2) { padding: 0 20px; }
+
+.tier-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(184,134,11,0.2);
+}
+.tier-label::before { content: '◆'; font-size: 6px; }
+
+/* official row */
+.off-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+  animation: slideIn 0.4s ease both;
+}
+.off-row:hover { background: rgba(255,255,255,0.05); }
+
+/* staggered animation delays */
+.off-row:nth-child(2) { animation-delay: 0.05s; }
+.off-row:nth-child(3) { animation-delay: 0.1s; }
+.off-row:nth-child(4) { animation-delay: 0.15s; }
+.off-row:nth-child(5) { animation-delay: 0.2s; }
+.off-row:nth-child(6) { animation-delay: 0.25s; }
+.off-row:nth-child(7) { animation-delay: 0.3s; }
+
+.off-av {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+.av-fed   { background: rgba(27,58,107,0.6);  border: 1.5px solid rgba(58,106,191,0.5); color: #8aaad8; }
+.av-state { background: rgba(21,92,45,0.5);   border: 1.5px solid rgba(140,196,160,0.4); color: #8cc4a0; }
+.av-local { background: rgba(184,134,11,0.2); border: 1.5px solid rgba(184,134,11,0.35); color: var(--gilt-lt); }
+
+.off-body { flex: 1; min-width: 0; }
+.off-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.off-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-top: 1px;
+}
+.off-active {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-active { background: var(--green); box-shadow: 0 0 6px rgba(21,92,45,0.6); }
+.dot-vacant { background: rgba(255,255,255,0.15); }
+
+/* follow strip at bottom */
+.reveal-footer {
+  padding: 20px 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  background: rgba(8,15,30,0.8);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  bottom: 0;
+}
+.follow-cta {
+  background: var(--gilt);
+  border: none;
+  border-radius: 100px;
+  padding: 13px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.1s;
+}
+.follow-cta:hover { background: var(--gilt-lt); }
+.follow-cta:active { transform: scale(0.97); }
+.follow-desc {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.5;
+}
+.follow-desc strong { color: rgba(255,255,255,0.75); font-weight: 700; }
+
+/* ══════════════════════════════════
+   STAGE 3 — THE HOOK
+══════════════════════════════════ */
+#stage-3 {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(27,58,107,0.35) 0%, transparent 70%),
+    var(--field);
+  justify-content: center;
+  align-items: center;
+}
+
+.hook-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 520px;
+  padding: 0 32px;
+  animation: fadeUp 0.5s ease both;
+}
+
+.hook-check {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: rgba(21,92,45,0.2);
+  border: 2px solid var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.4s 0.1s ease both;
+}
+.hook-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.hook-title em { font-style: italic; color: var(--gilt-lt); }
+.hook-sub {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.42);
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+/* stack summary pills */
+.hook-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+.hook-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+  animation: fadeIn 0.4s ease both;
+}
+.hook-pill:nth-child(1){animation-delay:0.1s;}
+.hook-pill:nth-child(2){animation-delay:0.15s;}
+.hook-pill:nth-child(3){animation-delay:0.2s;}
+.hook-pill:nth-child(4){animation-delay:0.25s;}
+.hook-pill:nth-child(5){animation-delay:0.3s;}
+.hook-pill:nth-child(6){animation-delay:0.35s;}
+.hook-pill.fed { border-color: rgba(58,106,191,0.4); color: #8aaad8; }
+.hook-pill.state { border-color: rgba(140,196,160,0.4); color: #8cc4a0; }
+.hook-pill.local { border-color: var(--gilt-rul); color: var(--gilt-lt); }
+
+.hook-btn-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+.btn-primary {
+  width: 100%;
+  background: var(--gilt);
+  border: none;
+  border-radius: 12px;
+  padding: 15px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:hover { background: var(--gilt-lt); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-secondary {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 13px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+
+/* ══════════════════════════════════
+   STAGE 4 — SAVE YOUR STACK
+══════════════════════════════════ */
+#stage-4 {
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 30%, rgba(184,134,11,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(27,58,107,0.3) 0%, transparent 70%),
+    var(--field);
+  justify-content: center;
+  align-items: center;
+}
+
+.save-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 480px;
+  padding: 0 32px;
+  animation: fadeUp 0.5s ease both;
+}
+.save-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.save-eyebrow::before,.save-eyebrow::after{content:'';width:24px;height:1px;background:var(--gilt-rul);}
+.save-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.save-title em { font-style: italic; color: var(--gilt-lt); }
+.save-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+/* identity form */
+.save-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.save-field {
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  color: white;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.save-field::placeholder { color: rgba(255,255,255,0.25); }
+.save-field:focus { border-color: var(--gilt); }
+
+.save-anon-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  text-align: left;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border-left: 2px solid rgba(184,134,11,0.3);
+  line-height: 1.6;
+}
+
+.save-btn-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
+.save-skip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: none;
+  border: none;
+}
+.save-skip:hover { color: rgba(255,255,255,0.4); }
+
+/* ══ CIVIC IDENTITY STAGES 4-11 ══ */
+.ci-stage { background: var(--field); display: flex; flex-direction: column; min-height: 100vh; }
+.ci-bar { height: 3px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+.ci-bar-fill { height: 100%; background: var(--gilt); transition: width 0.4s ease; }
+.ci-top { display: flex; align-items: center; padding: 16px 24px 0; flex-shrink: 0; gap: 12px; }
+.ci-logo { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.1em; }
+.ci-logo span { color: var(--gilt-lt); }
+.ci-step-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-left: auto; }
+.ci-back { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 18px; cursor: pointer; padding: 0; line-height: 1; }
+.ci-back:hover { color: white; }
+
+.ci-body { flex: 1; padding: 28px 24px 24px; display: flex; flex-direction: column; gap: 0; overflow-y: auto; }
+.ci-q-ey { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gilt); margin-bottom: 10px; }
+.ci-q-title { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 10px; }
+.ci-q-title em { color: var(--gilt-lt); font-style: italic; }
+.ci-q-sub { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 24px; }
+
+.ci-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.ci-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 7px; }
+.ci-input { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 13px 16px; font-size: 14px; color: white; width: 100%; font-family: 'Nunito', sans-serif; transition: border-color 0.15s; outline: none; }
+.ci-input:focus { border-color: rgba(184,134,11,0.6); background: rgba(255,255,255,0.09); }
+.ci-input::placeholder { color: rgba(255,255,255,0.2); }
+.ci-hint { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.55; }
+.ci-law { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gilt); letter-spacing: 0.04em; cursor: pointer; border-bottom: 1px dotted rgba(184,134,11,0.35); display: inline; }
+
+.ci-date-row { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 8px; }
+
+.ci-why { background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.2); border-left: 3px solid var(--gilt); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-bottom: 20px; }
+.ci-why-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gilt); margin-bottom: 5px; }
+.ci-why-body { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+.ci-why-cite { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(184,134,11,0.7); margin-top: 6px; }
+
+.ci-help { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.45); font-size: 9px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Libre Baskerville', serif; font-style: italic; flex-shrink: 0; position: relative; }
+.ci-help:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1b3a6b; border: 1px solid rgba(184,134,11,0.35); border-top: 2px solid var(--gilt); color: rgba(255,255,255,0.75); font-size: 11px; font-family: 'Nunito', sans-serif; font-style: normal; padding: 10px 12px; border-radius: 8px; white-space: pre-wrap; width: 220px; z-index: 50; line-height: 1.55; pointer-events: none; }
+
+.ci-occ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.ci-occ-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 13px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 3px; transition: all 0.12s; }
+.ci-occ-btn:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
+.ci-occ-btn.on { background: rgba(184,134,11,0.15); border-color: var(--gilt); }
+.ci-occ-name { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; }
+.ci-occ-sub { font-size: 9.5px; font-family: 'JetBrains Mono', monospace; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.ci-radio-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.ci-radio { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 13px 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.12s; }
+.ci-radio:hover { border-color: rgba(255,255,255,0.25); }
+.ci-radio.on { background: rgba(184,134,11,0.12); border-color: var(--gilt); }
+.ci-radio-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.12s; }
+.ci-radio.on .ci-radio-dot { border-color: var(--gilt); background: var(--gilt); }
+.ci-radio.on .ci-radio-dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: white; display: block; }
+.ci-radio-text { font-size: 13px; color: rgba(255,255,255,0.75); }
+.ci-radio-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+
+.ci-tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.ci-tag { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 11px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.12s; }
+.ci-tag:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.7); }
+.ci-tag.on { background: rgba(184,134,11,0.2); border-color: var(--gilt); color: var(--gilt-lt); }
+
+.ci-cred-card { background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.25); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.ci-cred-title { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
+.ci-cred-sub { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.55; margin-bottom: 14px; }
+.ci-select { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: rgba(255,255,255,0.6); width: 100%; font-family: 'Nunito', sans-serif; appearance: none; outline: none; }
+
+.ci-btn-primary { background: var(--gilt); color: white; border: none; border-radius: 100px; padding: 14px 28px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; font-weight: 700; width: 100%; transition: opacity 0.12s; margin-top: auto; }
+.ci-btn-primary:hover { opacity: 0.88; }
+.ci-btn-skip { background: transparent; color: rgba(255,255,255,0.3); border: none; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; width: 100%; padding: 12px; margin-top: 6px; }
+.ci-btn-skip:hover { color: rgba(255,255,255,0.6); }
+
+.ci-identity-preview { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+.cip-avatar { width: 44px; height: 44px; border-radius: 50%; background: rgba(200,216,240,0.25); border: 2px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.4); flex-shrink: 0; }
+.cip-text { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+.cip-text strong { color: rgba(255,255,255,0.8); }
+
+.ci-complete { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; text-align: center; gap: 16px; }
+.ci-ring-display { margin: 8px 0; }
+.ci-complete-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: white; line-height: 1.2; }
+.ci-complete-title em { color: var(--gilt-lt); font-style: italic; }
+.ci-complete-sub { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 280px; }
+.ci-complete-identity { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 8px 18px; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     STAGE 1 — THE ASK
+══════════════════════════════════ -->
+<div class="stage active" id="stage-1">
+  <div class="top-bar">
+    <div class="logo">F<span>O</span>RA</div>
+    <div class="top-step">
+      <div class="step-dot current"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding: 0 32px;">
+    <div class="ask-body">
+      <div class="ask-eyebrow">Civic Platform</div>
+      <h1 class="ask-title">Where do you<br><em>live?</em></h1>
+      <p class="ask-sub">Enter your zip code. We'll show you every official who governs you — from the President down to your state representatives.</p>
+
+      <div class="addr-form">
+        <div class="addr-input-wrap" id="addr-wrap">
+          <input
+            class="addr-input"
+            id="addr-input"
+            type="text"
+            inputmode="numeric"
+            maxlength="5"
+            placeholder="22314"
+            autocomplete="postal-code"
+            style="font-size:28px; font-family:'Libre Baskerville',serif; font-weight:700; letter-spacing:0.18em; text-align:center; color:white;"
+          />
+        </div>
+        <button class="addr-btn" id="zip-btn" onclick="goToReveal()" style="width:100%; margin-top:14px; padding:16px; border-radius:12px; font-size:10px; letter-spacing:0.18em; opacity:0.35; pointer-events:none; transition:opacity 0.2s;">
+          Show my government →
+        </button>
+      </div>
+
+      <div class="ask-privacy">Your zip is used only to find your officials</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 2 — THE REVEAL
+══════════════════════════════════ -->
+<div class="stage" id="stage-2">
+  <div class="top-bar">
+    <div class="logo">F<span>O</span>RA</div>
+    <div class="top-step">
+      <div class="step-dot done"></div>
+      <div class="step-dot current"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+
+  <div class="reveal-top">
+    <div class="reveal-address">
+      <div class="rev-addr-pill">📍 22314 · Alexandria, VA</div>
+      <span class="rev-change" onclick="goTo(1)">Change</span>
+    </div>
+    <div class="reveal-hed">Your government.<br><em>All of it.</em></div>
+    <div class="reveal-count" id="reveal-count">Loading your officials…</div>
+  </div>
+
+  <div class="stack-layout" id="stack-layout">
+
+    <!-- FEDERAL — animates in immediately -->
+    <div class="stack-tier" id="tier-federal" style="opacity:0;">
+      <div class="tier-label">Federal</div>
+
+      <div class="off-row">
+        <div class="off-av av-fed">WH</div>
+        <div class="off-body">
+          <div class="off-name">Donald Trump</div>
+          <div class="off-role">President · United States</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-fed">VP</div>
+        <div class="off-body">
+          <div class="off-name">JD Vance</div>
+          <div class="off-role">Vice President</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-fed">S1</div>
+        <div class="off-body">
+          <div class="off-name">Mark Warner</div>
+          <div class="off-role">U.S. Senator · Virginia</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-fed">S2</div>
+        <div class="off-body">
+          <div class="off-name">Tim Kaine</div>
+          <div class="off-role">U.S. Senator · Virginia</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-fed">H8</div>
+        <div class="off-body">
+          <div class="off-name">Don Beyer</div>
+          <div class="off-role">Representative · VA-08</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+    </div>
+
+    <!-- STATE — animates in 600ms after federal -->
+    <div class="stack-tier" id="tier-state" style="opacity:0;">
+      <div class="tier-label">State</div>
+
+      <div class="off-row">
+        <div class="off-av av-state">GV</div>
+        <div class="off-body">
+          <div class="off-name">Abigail Spanberger</div>
+          <div class="off-role">Governor · Virginia</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-state">LG</div>
+        <div class="off-body">
+          <div class="off-name">Ghazala Hashmi</div>
+          <div class="off-role">Lt. Governor · Virginia</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-state">SS</div>
+        <div class="off-body">
+          <div class="off-name">Scott Surovell</div>
+          <div class="off-role">State Senator · SD-36</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+      <div class="off-row">
+        <div class="off-av av-state">HD</div>
+        <div class="off-body">
+          <div class="off-name">Paul Krizek</div>
+          <div class="off-role">Delegate · HD-44</div>
+        </div>
+        <div class="off-active dot-active"></div>
+      </div>
+    </div>
+
+    <!-- LOCAL — locked, animates in 1200ms, prompts for address -->
+    <div class="stack-tier" id="tier-local" style="opacity:0;">
+      <div class="tier-label">Local</div>
+
+      <!-- locked overlay -->
+      <div id="local-locked" style="
+        background: rgba(8,15,30,0.82);
+        border: 1px solid rgba(184,134,11,0.25);
+        border-radius: 14px;
+        padding: 24px 20px;
+        text-align: center;
+        backdrop-filter: blur(4px);
+        margin-bottom: 12px;
+      ">
+        <div style="font-size:22px; margin-bottom:10px; opacity:0.6;">📍</div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:white; margin-bottom:6px; line-height:1.3;">Unlock local government</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6; margin-bottom:16px;">Your zip gives us federal and state. A street address gets you your city council, school board, planning commission, and more.</div>
+        <button onclick="unlockLocal()" style="
+          background: var(--gilt);
+          border: none;
+          border-radius: 100px;
+          padding: 9px 22px;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 8.5px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: white;
+          cursor: pointer;
+          font-weight: 700;
+        ">Add street address →</button>
+      </div>
+
+      <!-- blurred local officials — hint of what's behind the lock -->
+      <div style="filter: blur(3px); opacity:0.35; pointer-events:none;">
+        <div class="off-row">
+          <div class="off-av av-local">MA</div>
+          <div class="off-body">
+            <div class="off-name">Mayor</div>
+            <div class="off-role">Alexandria City</div>
+          </div>
+        </div>
+        <div class="off-row">
+          <div class="off-av av-local">CC</div>
+          <div class="off-body">
+            <div class="off-name">City Council</div>
+            <div class="off-role">6 members</div>
+          </div>
+        </div>
+        <div class="off-row">
+          <div class="off-av av-local">SB</div>
+          <div class="off-body">
+            <div class="off-name">School Board</div>
+            <div class="off-role">9 members · ACPS</div>
+          </div>
+        </div>
+        <div class="off-row">
+          <div class="off-av av-local">PC</div>
+          <div class="off-body">
+            <div class="off-name">Planning Commission</div>
+            <div class="off-role">7 members</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- sticky footer — profile or browse -->
+  <div class="reveal-footer">
+    <button class="follow-cta" onclick="goTo(3)">Follow all officials →</button>
+    <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
+      <div class="follow-desc"><strong>One tap.</strong> Your civic feed populates with bill activity, votes, and official statements.</div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button onclick="ciGo(4)" style="background:transparent; border:1px solid rgba(255,255,255,0.15); border-radius:100px; padding:6px 18px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.5); cursor:pointer;">Create profile</button>
+        <button onclick="goToFeed()" style="background:transparent; border:none; padding:6px 0; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.25); cursor:pointer; text-decoration:underline; text-underline-offset:2px;">Browse anonymously</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 3 — THE HOOK
+══════════════════════════════════ -->
+<div class="stage" id="stage-3">
+  <div class="top-bar">
+    <div class="logo">F<span>O</span>RA</div>
+    <div class="top-step">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot current"></div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+
+  <div class="hook-body" style="flex:1;justify-content:center;display:flex;flex-direction:column;align-items:center;">
+    <div class="hook-check">✓</div>
+    <h2 class="hook-title">Your stack is<br><em>ready.</em></h2>
+    <p class="hook-sub">You're now following 14 officials across federal, state, and local government. Your civic feed is live.</p>
+
+    <div class="hook-pills">
+      <div class="hook-pill fed">President</div>
+      <div class="hook-pill fed">2 Senators</div>
+      <div class="hook-pill fed">Rep. VA-08</div>
+      <div class="hook-pill state">Governor</div>
+      <div class="hook-pill state">State Senate</div>
+      <div class="hook-pill local">Mayor + Council</div>
+    </div>
+
+    <div class="hook-btn-row">
+      <button class="btn-primary" onclick="ciGo(4)">Save my stack →</button>
+      <button class="btn-secondary" onclick="goToFeed()">Browse without saving</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 4 — SAVE YOUR STACK
+══════════════════════════════════ -->
+
+<!-- ══════════════════════════════════
+     STAGE 4 — YOUR NAME (internal only)
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-4">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:12%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="goTo(3)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">1 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 1 &middot; Your name</div>
+    <h2 class="ci-q-title">What do we<br><em>call you?</em></h2>
+    <p class="ci-q-sub">FORA never displays your full name to other users. We use your first name internally to address you — nothing more.</p>
+
+    <div class="ci-field">
+      <label class="ci-label">First name</label>
+      <input class="ci-input" type="text" placeholder="Your first name" id="ci-firstname"/>
+      <div class="ci-hint">Never shown publicly. Your community sees your occupation and region, not your name.</div>
+    </div>
+
+    <div class="ci-field">
+      <label class="ci-label">Email address <span class="ci-help" data-tip="Used for account recovery and notification preferences only. Never sold, shared, or displayed. You can change notification settings at any time.">i</span></label>
+      <input class="ci-input" type="email" placeholder="your@email.com" id="ci-email"/>
+      <div class="ci-hint">Account recovery only. <span class="ci-law" onclick="ciShowWhy('email')">Why we ask &rarr;</span></div>
+    </div>
+
+    <div class="ci-field">
+      <label class="ci-label">Phone number <span class="ci-help" data-tip="Used only to confirm you&#39;re a real person, not a bot or automated account. You&#39;ll receive one SMS verification code. FORA never calls you or shares your number.&#10;&#10;Federal Election Commission guidelines on online civic platforms recommend real-person verification.">i</span></label>
+      <input class="ci-input" type="tel" placeholder="+1 (555) 000-0000" id="ci-phone"/>
+      <div class="ci-hint">One-time SMS verification. Never shared or sold. <span class="ci-law" onclick="ciShowWhy('phone')">Why this matters &rarr;</span></div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button class="ci-btn-primary" onclick="ciGo(5)">Continue &rarr;</button>
+      <button class="ci-btn-skip" onclick="ciGo(5)">Skip name &mdash; continue anonymously</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 5 — DATE OF BIRTH
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-5">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:25%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(4)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">2 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 2 &middot; Your age</div>
+    <h2 class="ci-q-title">When were<br><em>you born?</em></h2>
+    <p class="ci-q-sub">FORA derives your age range from your birthdate and displays that to your community. A "45&ndash;54 · Alexandria VA" carries civic context that an anonymous post doesn't.</p>
+
+    <div class="ci-why">
+      <div class="ci-why-title">Why FORA asks for your birthdate</div>
+      <div class="ci-why-body">Federal law requires online platforms to verify that users are old enough to participate. We also use your birthdate to show your age range (e.g. "35&ndash;44") to your community &mdash; never your exact age or birthday. Generational voice is civic context.</div>
+      <div class="ci-why-cite">Children&rsquo;s Online Privacy Protection Act &middot; 15 U.S.C. &sect; 6501 &middot; FTC Rule 16 C.F.R. Part 312</div>
+    </div>
+
+    <div class="ci-field">
+      <label class="ci-label">Date of birth</label>
+      <div class="ci-date-row">
+        <input class="ci-input" type="number" placeholder="MM" min="1" max="12" id="ci-dob-m" style="text-align:center;"/>
+        <input class="ci-input" type="number" placeholder="DD" min="1" max="31" id="ci-dob-d" style="text-align:center;"/>
+        <input class="ci-input" type="number" placeholder="YYYY" min="1900" max="2010" id="ci-dob-y" style="text-align:center;"/>
+      </div>
+      <div class="ci-hint">Your community sees your age range, e.g. "35&ndash;44". Your exact birthdate is encrypted and never shared.</div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button class="ci-btn-primary" onclick="ciGo(6)">Continue &rarr;</button>
+      <button class="ci-btn-skip" onclick="ciGo(6)">Prefer not to say</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 6 — ADDRESS CONFIRMATION
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-6">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:37%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(5)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">3 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 3 &middot; Where you live</div>
+    <h2 class="ci-q-title">Confirm your<br><em>address.</em></h2>
+    <p class="ci-q-sub">You entered your zip code to see your government stack. Now we bind your account to your address &mdash; so FORA knows exactly which representatives, bills, and local issues belong to you.</p>
+
+    <div class="ci-why">
+      <div class="ci-why-title">Why your address determines your civic stack</div>
+      <div class="ci-why-body">Every level of government &mdash; federal, state, county, city, school district &mdash; is determined by your residential address. Your congressional district, state legislative district, and local representatives are all address-specific. FORA uses the same address standards as voter registration.</div>
+      <div class="ci-why-cite">Help America Vote Act &middot; 52 U.S.C. &sect; 20901 &middot; National Voter Registration Act &middot; 52 U.S.C. &sect; 20501</div>
+    </div>
+
+    <div class="ci-field">
+      <label class="ci-label">Street address <span class="ci-help" data-tip="Optional but recommended. Street address lets FORA identify your specific legislative districts with precision. Without it, we use zip code only, which may place you in the wrong district near boundaries.">i</span></label>
+      <input class="ci-input" type="text" placeholder="123 Main Street" id="ci-street"/>
+      <div class="ci-hint">Optional. Used only to identify your exact representative districts.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;">
+      <div class="ci-field" style="margin:0;">
+        <label class="ci-label">City</label>
+        <input class="ci-input" type="text" placeholder="Alexandria" id="ci-city"/>
+      </div>
+      <div class="ci-field" style="margin:0;min-width:80px;">
+        <label class="ci-label">State</label>
+        <input class="ci-input" type="text" placeholder="VA" id="ci-state" style="text-align:center;"/>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="ci-btn-primary" onclick="ciGo(7)">Continue &rarr;</button>
+      <button class="ci-btn-skip" onclick="ciGo(7)">Use zip code only</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 7 — OCCUPATION
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-7">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:50%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(6)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">4 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 4 &middot; What you do</div>
+    <h2 class="ci-q-title">What is your<br><em>occupation?</em></h2>
+    <p class="ci-q-sub">This becomes your public civic identity. You don&rsquo;t choose how you&rsquo;re perceived &mdash; FORA derives it from what you verify. Select your field to begin.</p>
+
+    <div class="ci-occ-grid" id="ci-occ-grid">
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Law')">
+        <span class="ci-occ-name">Law</span>
+        <span class="ci-occ-sub">Attorney, judge, paralegal</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Healthcare')">
+        <span class="ci-occ-name">Healthcare</span>
+        <span class="ci-occ-sub">MD, RN, PT, pharmacist</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Engineering')">
+        <span class="ci-occ-name">Engineering</span>
+        <span class="ci-occ-sub">PE, architect, surveyor</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Skilled trades')">
+        <span class="ci-occ-name">Skilled trades</span>
+        <span class="ci-occ-sub">Electrician, plumber, HVAC</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Finance')">
+        <span class="ci-occ-name">Finance</span>
+        <span class="ci-occ-sub">CPA, CFP, advisor</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Education')">
+        <span class="ci-occ-name">Education</span>
+        <span class="ci-occ-sub">Teacher, professor</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Government')">
+        <span class="ci-occ-name">Government</span>
+        <span class="ci-occ-sub">Elected, appointed, civil service</span>
+      </button>
+      <button class="ci-occ-btn" onclick="ciSelectOcc(this,'Other')">
+        <span class="ci-occ-name">Other</span>
+        <span class="ci-occ-sub">Type your occupation</span>
+      </button>
+    </div>
+
+    <div class="ci-field" id="ci-occ-other-wrap" style="display:none;">
+      <label class="ci-label">Your occupation</label>
+      <input class="ci-input" type="text" placeholder="e.g. Small business owner, Farmer, Retired..." id="ci-occ-other"/>
+    </div>
+
+    <div class="ci-why">
+      <div class="ci-why-title">Why occupation shapes your civic identity</div>
+      <div class="ci-why-body">Your occupation provides context for your contributions. A Master Electrician commenting on building code carries different weight than an anonymous post &mdash; not more or less validity, but different perspective. FORA makes that context visible so readers can weigh it themselves.</div>
+      <div class="ci-why-cite">First Amendment &middot; U.S. Const. amend. I &middot; Context is not censorship &mdash; it&rsquo;s civic literacy.</div>
+    </div>
+
+    <button class="ci-btn-primary" onclick="ciGo(8)" id="ci-occ-continue" style="margin-top:8px;">Continue &rarr;</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 8 — MILITARY SERVICE
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-8">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:62%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(7)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">5 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 5 &middot; Military service</div>
+    <h2 class="ci-q-title">Have you served<br><em>in the military?</em></h2>
+    <p class="ci-q-sub">Military service is a civic credential independent of your occupation. A veteran who is also an attorney carries both. This question is separate from your occupation.</p>
+
+    <div class="ci-radio-list">
+      <div class="ci-radio" onclick="ciSelectRadio(this,'mil-yes')">
+        <div class="ci-radio-dot"></div>
+        <div>
+          <div class="ci-radio-text">Yes &mdash; I served or am currently serving</div>
+          <div class="ci-radio-sub">Veteran, active duty, reservist, National Guard</div>
+        </div>
+      </div>
+      <div class="ci-radio" onclick="ciSelectRadio(this,'mil-no')">
+        <div class="ci-radio-dot"></div>
+        <div>
+          <div class="ci-radio-text">No military service</div>
+        </div>
+      </div>
+      <div class="ci-radio" onclick="ciSelectRadio(this,'mil-skip')">
+        <div class="ci-radio-dot"></div>
+        <div>
+          <div class="ci-radio-text">Prefer not to answer</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="ci-mil-detail" style="display:none;">
+      <div class="ci-field">
+        <label class="ci-label">Branch of service</label>
+        <select class="ci-input ci-select" id="ci-mil-branch">
+          <option value="">Select branch&hellip;</option>
+          <option>Army</option><option>Navy</option><option>Marine Corps</option>
+          <option>Air Force</option><option>Space Force</option><option>Coast Guard</option>
+          <option>National Guard</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="ci-field" style="margin:0;">
+          <label class="ci-label">Service start</label>
+          <input class="ci-input" type="number" placeholder="YYYY" style="text-align:center;"/>
+        </div>
+        <div class="ci-field" style="margin:0;">
+          <label class="ci-label">Service end</label>
+          <input class="ci-input" type="number" placeholder="YYYY or present" style="text-align:center;font-size:11px;"/>
+        </div>
+      </div>
+      <div class="ci-hint" style="margin-top:6px;">DD-214 upload available in profile settings to earn a verified Veteran badge. <span class="ci-law">What is a DD-214? &rarr;</span></div>
+    </div>
+
+    <div class="ci-why" style="margin-top:12px;">
+      <div class="ci-why-title">Why military service is a separate credential</div>
+      <div class="ci-why-body">Veterans have a distinct relationship to civic life &mdash; service, sacrifice, and firsthand knowledge of federal policy. FORA treats military service as a credential independent of occupation, verifiable through DD-214 documentation.</div>
+      <div class="ci-why-cite">Uniformed Services Employment and Reemployment Rights Act &middot; 38 U.S.C. &sect; 4301 &middot; Veterans&rsquo; Benefits Improvement Act</div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button class="ci-btn-primary" onclick="ciGo(9)">Continue &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 9 — PROFESSIONAL ORGS
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-9">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:75%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(8)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">6 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 6 &middot; Professional organizations</div>
+    <h2 class="ci-q-title">Are you a member<br><em>of any organizations?</em></h2>
+    <p class="ci-q-sub">Union membership, professional associations, and civic organizations are separate from your license. An IBEW card is a credential. ABA membership is a credential. Select all that apply.</p>
+
+    <div class="ci-tag-row" id="ci-org-tags">
+      <span class="ci-tag" onclick="ciToggleTag(this)">IBEW (Electricians)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">ABA (Attorneys)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">AMA (Physicians)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">AFT (Teachers)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">NEA (Educators)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">UAW (Auto workers)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">SEIU</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">Teamsters (IBT)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">ASCE (Civil Engrs)</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">CFA Institute</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">VFW</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">American Legion</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">NAACP</span>
+      <span class="ci-tag" onclick="ciToggleTag(this)">ACLU</span>
+    </div>
+
+    <div class="ci-field">
+      <label class="ci-label">Not listed? Add yours</label>
+      <input class="ci-input" type="text" placeholder="Organization name&hellip;" id="ci-org-other"/>
+    </div>
+
+    <div class="ci-why">
+      <div class="ci-why-title">Why organizational membership matters</div>
+      <div class="ci-why-body">Union membership, professional associations, and civic organizations represent collective civic standing. An IBEW union member commenting on electrical code brings organized labor perspective. An ABA member commenting on legislation brings institutional legal perspective. These affiliations are part of your civic identity.</div>
+      <div class="ci-why-cite">National Labor Relations Act &middot; 29 U.S.C. &sect; 151 &middot; Right of association &middot; U.S. Const. amend. I</div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button class="ci-btn-primary" onclick="ciGo(10)">Continue &rarr;</button>
+      <button class="ci-btn-skip" onclick="ciGo(10)">No memberships to add</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 10 — CREDENTIAL BRANCH
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-10">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:87%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(9)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">7 of 8 &middot; Civic Identity</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Step 7 &middot; Professional license</div>
+    <h2 class="ci-q-title">Do you hold a<br><em>professional license?</em></h2>
+    <p class="ci-q-sub">If your occupation requires a state or federal license, FORA can verify it. A verified license earns you a gold ring &mdash; the highest credential marker on the platform.</p>
+
+    <div class="ci-cred-card">
+      <div class="ci-cred-title">What the gold ring means</div>
+      <div class="ci-cred-sub">Your credential type is displayed to your community (e.g. &ldquo;Licensed PE&rdquo; or &ldquo;MD&rdquo;). Your license number is never shown. Verification happens through state licensing board records.</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
+        <svg width="44" height="52" viewBox="0 0 44 52">
+          <circle cx="22" cy="22" r="19" fill="none" stroke="rgba(212,168,50,0.3)" stroke-width="6"/>
+          <circle cx="22" cy="22" r="15" fill="none" stroke="rgba(184,134,11,0.6)" stroke-width="2.5"/>
+          <circle cx="22" cy="22" r="13" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+          <circle cx="22" cy="22" r="12" fill="rgba(200,216,240,0.3)"/>
+          <rect x="10" y="37" width="24" height="11" rx="5.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+          <text x="22" y="45.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#8b6914">PE</text>
+        </svg>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;">Gold ring · Credential visible · License number private</div>
+      </div>
+    </div>
+
+    <div class="ci-radio-list">
+      <div class="ci-radio" onclick="ciSelectRadio(this,'cred-yes');ciGo(11);">
+        <div class="ci-radio-dot"></div>
+        <div>
+          <div class="ci-radio-text">Yes &mdash; I hold a professional license</div>
+          <div class="ci-radio-sub">State license, federal certification, or equivalent</div>
+        </div>
+      </div>
+      <div class="ci-radio" onclick="ciSelectRadio(this,'cred-later');ciGo(12);">
+        <div class="ci-radio-dot"></div>
+        <div>
+          <div class="ci-radio-text">Not right now &mdash; I&rsquo;ll verify later</div>
+          <div class="ci-radio-sub">Available in your profile settings at any time</div>
+        </div>
+      </div>
+      <div class="ci-radio" onclick="ciSelectRadio(this,'cred-no');ciGo(12);">
+        <div class="ci-radio-dot"></div>
+        <div>
+          <div class="ci-radio-text">No license required for my occupation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 11 — CREDENTIAL VERIFICATION
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-11">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:94%;"></div></div>
+  <div class="ci-top">
+    <button class="ci-back" onclick="ciGo(10)">&#8592;</button>
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">7b &middot; Credential verification</div>
+  </div>
+  <div class="ci-body">
+    <div class="ci-q-ey">Credential verification</div>
+    <h2 class="ci-q-title">Let&rsquo;s verify your<br><em>credential.</em></h2>
+    <p class="ci-q-sub">Select your credential type, enter your license number and issuing state, and FORA will check it against the relevant licensing board. Your license number is never displayed publicly.</p>
+
+    <div class="ci-field">
+      <label class="ci-label">Credential type <span class="ci-help" data-tip="Select the credential that best matches your license. If your exact credential type isn&#39;t listed, select the closest category. FORA will ask for clarification.">i</span></label>
+      <select class="ci-input ci-select" id="ci-cred-type" onchange="ciCredTypeChange(this.value)">
+        <option value="">Select credential type&hellip;</option>
+        <optgroup label="Law">
+          <option value="esq">Attorney / Esquire (ESQ)</option>
+          <option value="judge">Judge / Magistrate</option>
+        </optgroup>
+        <optgroup label="Medicine &amp; Health">
+          <option value="md">Physician (MD / DO)</option>
+          <option value="rn">Registered Nurse (RN)</option>
+          <option value="np">Nurse Practitioner (NP)</option>
+          <option value="pa">Physician Assistant (PA)</option>
+          <option value="pharm">Pharmacist (PharmD / RPh)</option>
+          <option value="pt">Physical / Occupational Therapist</option>
+          <option value="dds">Dentist (DDS / DMD)</option>
+        </optgroup>
+        <optgroup label="Engineering &amp; Architecture">
+          <option value="pe">Professional Engineer (PE)</option>
+          <option value="ra">Registered Architect (RA / AIA)</option>
+          <option value="pls">Professional Land Surveyor</option>
+        </optgroup>
+        <optgroup label="Finance">
+          <option value="cpa">Certified Public Accountant (CPA)</option>
+          <option value="cfp">Certified Financial Planner (CFP)</option>
+          <option value="cfa">CFA Charterholder</option>
+        </optgroup>
+        <optgroup label="Skilled Trades">
+          <option value="master-elec">Master Electrician</option>
+          <option value="journeyman-elec">Journeyman Electrician</option>
+          <option value="master-plumb">Master Plumber</option>
+          <option value="gc">General Contractor</option>
+          <option value="hvac">HVAC Technician (EPA 608)</option>
+        </optgroup>
+        <optgroup label="Education">
+          <option value="teacher">Licensed K&ndash;12 Teacher</option>
+          <option value="principal">Licensed Principal / Administrator</option>
+        </optgroup>
+        <optgroup label="First Responders">
+          <option value="post">Police Officer (POST certified)</option>
+          <option value="emt">EMT / Paramedic</option>
+          <option value="fire">Firefighter (NFPA certified)</option>
+        </optgroup>
+        <optgroup label="Other">
+          <option value="other">Other licensed occupation</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="ci-field" id="ci-cred-state-wrap">
+      <label class="ci-label">Issuing state <span class="ci-help" data-tip="Most professional licenses are issued by the state where you practice. If you hold licenses in multiple states, enter your primary state. You can add additional states in your profile settings.">i</span></label>
+      <select class="ci-input ci-select" id="ci-cred-state">
+        <option value="">Select state&hellip;</option>
+        <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+        <option>Arkansas</option><option>California</option><option>Colorado</option>
+        <option>Connecticut</option><option>Delaware</option><option>Florida</option>
+        <option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+        <option>Illinois</option><option>Indiana</option><option>Iowa</option>
+        <option>Kansas</option><option>Kentucky</option><option>Louisiana</option>
+        <option>Maine</option><option>Maryland</option><option>Massachusetts</option>
+        <option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+        <option>Missouri</option><option>Montana</option><option>Nebraska</option>
+        <option>Nevada</option><option>New Hampshire</option><option>New Jersey</option>
+        <option>New Mexico</option><option>New York</option><option>North Carolina</option>
+        <option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+        <option>Oregon</option><option selected>Virginia</option><option>Washington</option>
+        <option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+        <option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+        <option>South Dakota</option><option>Tennessee</option><option>Texas</option>
+        <option>Utah</option><option>Vermont</option>
+        <option value="fed">Federal / National</option>
+      </select>
+    </div>
+
+    <div class="ci-field">
+      <label class="ci-label">License number <span class="ci-help" data-tip="Your license number is used only to verify your credential against the issuing board&rsquo;s public registry. It is never displayed to other users, stored in plaintext, or shared with any third party. FORA uses a one-way hash after verification.&#10;&#10;Right to Privacy &middot; Fourth Amendment &middot; U.S. Const. amend. IV">i</span></label>
+      <input class="ci-input" type="text" placeholder="e.g. VA-PE-12345" id="ci-cred-number"/>
+      <div class="ci-hint">Never displayed publicly. Used only for verification. Encrypted after confirmation. <span class="ci-law" onclick="ciShowWhy('license')">How verification works &rarr;</span></div>
+    </div>
+
+    <div id="ci-union-wrap" style="display:none;">
+      <div class="ci-field">
+        <label class="ci-label">Union local <span class="ci-help" data-tip="Union locals are verified through AFL-CIO affiliated directories. Enter your local number (e.g. IBEW Local 26). Your membership card number is not required for initial verification.">i</span></label>
+        <input class="ci-input" type="text" placeholder="e.g. IBEW Local 26" id="ci-union-local"/>
+      </div>
+      <div class="ci-field">
+        <label class="ci-label">Member ID (optional)</label>
+        <input class="ci-input" type="text" placeholder="Your union member ID"/>
+        <div class="ci-hint">Optional. Speeds up verification but not required. <span class="ci-law">AFL-CIO verification process &rarr;</span></div>
+      </div>
+    </div>
+
+    <div class="ci-why" style="margin-top:4px;">
+      <div class="ci-why-title">What happens after you submit</div>
+      <div class="ci-why-body">FORA checks your license number against your state&rsquo;s public licensing board registry. Most verifications complete within 24 hours. You receive a silver ring immediately (pending) and a gold ring once confirmed. Your license number is hashed and never stored in readable form.</div>
+      <div class="ci-why-cite">State licensing board public registries &middot; NCEES for engineers &middot; ABA for attorneys &middot; NPI registry for healthcare providers</div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button class="ci-btn-primary" onclick="ciGo(12)">Submit for verification &rarr;</button>
+      <button class="ci-btn-skip" onclick="ciGo(12)">Skip &mdash; verify later in profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 12 — COMPLETE
+══════════════════════════════════ -->
+<div class="stage ci-stage" id="stage-12">
+  <div class="ci-bar"><div class="ci-bar-fill" style="width:100%;"></div></div>
+  <div class="ci-top">
+    <div class="ci-logo">F<span>O</span>RA</div>
+    <div class="ci-step-label">Identity complete</div>
+  </div>
+  <div class="ci-complete">
+    <div class="ci-ring-display">
+      <svg width="80" height="94" viewBox="0 0 80 94">
+        <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(184,134,11,0.15)" stroke-width="10"/>
+        <circle cx="40" cy="40" r="28" fill="none" stroke="rgba(184,134,11,0.3)" stroke-width="8"/>
+        <circle cx="40" cy="40" r="24" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+        <circle cx="40" cy="40" r="22" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+        <circle cx="40" cy="40" r="20" fill="#c8d8f0" opacity="0.8"/>
+        <circle cx="40" cy="36" r="8" fill="#8aaac8"/>
+        <ellipse cx="40" cy="52" rx="13" ry="9" fill="#8aaac8"/>
+        <rect x="24" y="62" width="32" height="14" rx="7" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+        <text x="40" y="72.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#8b6914" id="ci-complete-pill">PE</text>
+      </svg>
+    </div>
+    <div class="ci-complete-title">Your civic<br><em>identity is set.</em></div>
+    <div class="ci-complete-identity" id="ci-complete-tag">Engineer &middot; 35&ndash;44 &middot; Alexandria VA</div>
+    <p class="ci-complete-sub">This is how your community sees you. Your name stays private. Your voice is yours.</p>
+    <button class="ci-btn-primary" onclick="goToFeed()" style="max-width:280px;">Enter FORA &rarr;</button>
+    <div style="font-size:10px;color:rgba(255,255,255,0.25);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;">Credential verification pending &middot; Silver ring active</div>
+  </div>
+</div>
+
+
+<script>
+// ── stage navigation ──
+function goTo(n) {
+  document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+  document.getElementById('stage-' + n).classList.add('active');
+  window.scrollTo(0,0);
+  if (n === 2) startReveal();
+}
+
+// ── zip input — enable button at 5 digits ──
+const input  = document.getElementById('addr-input');
+const zipBtn = document.getElementById('zip-btn');
+
+input.addEventListener('input', () => {
+  const val = input.value.replace(/\D/g,'');
+  input.value = val;
+  const ready = val.length === 5;
+  zipBtn.style.opacity = ready ? '1' : '0.35';
+  zipBtn.style.pointerEvents = ready ? 'auto' : 'none';
+  if (val.length === 5) setTimeout(goToReveal, 120); // auto-advance on 5 digits
+});
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && input.value.length === 5) goToReveal();
+});
+
+function goToReveal() {
+  if (input.value.replace(/\D/g,'').length !== 5) return;
+  goTo(2);
+}
+
+// ── tier reveal animation ──
+function startReveal() {
+  const count = document.getElementById('reveal-count');
+  const fed   = document.getElementById('tier-federal');
+  const state = document.getElementById('tier-state');
+  const local = document.getElementById('tier-local');
+
+  // reset
+  [fed, state, local].forEach(t => { t.style.opacity = '0'; t.style.transition = ''; });
+  count.textContent = 'Finding your officials…';
+
+  // federal — immediate
+  setTimeout(() => {
+    fed.style.transition = 'opacity 0.5s ease';
+    fed.style.opacity = '1';
+    count.textContent = '5 federal officials found…';
+  }, 300);
+
+  // state — 800ms
+  setTimeout(() => {
+    state.style.transition = 'opacity 0.5s ease';
+    state.style.opacity = '1';
+    count.textContent = '9 officials found · checking local…';
+  }, 900);
+
+  // local — 1600ms (locked)
+  setTimeout(() => {
+    local.style.transition = 'opacity 0.5s ease';
+    local.style.opacity = '1';
+    count.textContent = '9 officials · local government requires street address';
+  }, 1600);
+}
+
+// ── unlock local — show address input inline ──
+function unlockLocal() {
+  const locked = document.getElementById('local-locked');
+  locked.innerHTML = `
+    <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.18em; text-transform:uppercase; color:var(--gilt); margin-bottom:10px;">Add street address</div>
+    <input
+      id="street-input"
+      type="text"
+      placeholder="123 King Street"
+      autocomplete="street-address"
+      style="width:100%; background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 14px; font-family:'Nunito',sans-serif; font-size:13px; color:white; outline:none; margin-bottom:10px;"
+    />
+    <button onclick="revealLocal()" style="
+      background:var(--gilt); border:none; border-radius:100px;
+      padding:9px 22px; font-family:'JetBrains Mono',monospace;
+      font-size:8.5px; letter-spacing:0.14em; text-transform:uppercase;
+      color:white; cursor:pointer; font-weight:700; width:100%;
+    ">Unlock local government →</button>
+  `;
+  document.getElementById('street-input').focus();
+}
+
+function revealLocal() {
+  const locked = document.getElementById('local-locked');
+  const count  = document.getElementById('reveal-count');
+
+  // replace lock with real officials
+  locked.style.display = 'none';
+
+  // un-blur the ghost officials and show real ones
+  const blurred = locked.nextElementSibling;
+  blurred.style.filter = '';
+  blurred.style.opacity = '1';
+  blurred.style.pointerEvents = 'auto';
+  blurred.innerHTML = `
+    <div class="off-row" style="animation:slideIn 0.3s ease both;">
+      <div class="off-av av-local">MA</div>
+      <div class="off-body">
+        <div class="off-name">Justin Wilson</div>
+        <div class="off-role">Mayor · Alexandria</div>
+      </div>
+      <div class="off-active dot-active"></div>
+    </div>
+    <div class="off-row" style="animation:slideIn 0.3s 0.07s ease both;">
+      <div class="off-av av-local">CC</div>
+      <div class="off-body">
+        <div class="off-name">City Council</div>
+        <div class="off-role">6 members · Alexandria</div>
+      </div>
+      <div class="off-active dot-active"></div>
+    </div>
+    <div class="off-row" style="animation:slideIn 0.3s 0.14s ease both;">
+      <div class="off-av av-local">SB</div>
+      <div class="off-body">
+        <div class="off-name">School Board</div>
+        <div class="off-role">9 members · ACPS</div>
+      </div>
+      <div class="off-active dot-active"></div>
+    </div>
+    <div class="off-row" style="animation:slideIn 0.3s 0.21s ease both;">
+      <div class="off-av av-local">PC</div>
+      <div class="off-body">
+        <div class="off-name">Planning Commission</div>
+        <div class="off-role">7 members · Alexandria</div>
+      </div>
+      <div class="off-active dot-active"></div>
+    </div>
+  `;
+  count.textContent = '14 officials · federal, state, and local · all yours';
+}
+
+function goToFeed() {
+  alert('→ Feed loads here.\n\nIn production this navigates to /feed with your stack populated.');
+}
+
+
+// ── Civic Identity navigation ──
+function ciGo(n) {
+  document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+  var el = document.getElementById('stage-' + n);
+  if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
+}
+
+// ── Occupation selection ──
+var ciOccSelected = '';
+function ciSelectOcc(btn, occ) {
+  document.querySelectorAll('.ci-occ-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  ciOccSelected = occ;
+  var other = document.getElementById('ci-occ-other-wrap');
+  if (other) other.style.display = occ === 'Other' ? 'flex' : 'none';
+}
+
+// ── Radio selection ──
+function ciSelectRadio(el, val) {
+  var list = el.parentElement;
+  list.querySelectorAll('.ci-radio').forEach(r => r.classList.remove('on'));
+  el.classList.add('on');
+  // Show military detail if yes
+  var milDetail = document.getElementById('ci-mil-detail');
+  if (milDetail) milDetail.style.display = val === 'mil-yes' ? 'flex' : 'none';
+  if (milDetail && val === 'mil-yes') milDetail.style.flexDirection = 'column';
+}
+
+// ── Tag toggle ──
+function ciToggleTag(el) { el.classList.toggle('on'); }
+
+// ── Credential type change ──
+function ciCredTypeChange(val) {
+  var unionWrap = document.getElementById('ci-union-wrap');
+  var stateWrap = document.getElementById('ci-cred-state-wrap');
+  if (!unionWrap || !stateWrap) return;
+  var isUnion = ['master-elec','journeyman-elec','master-plumb','gc','hvac'].includes(val);
+  unionWrap.style.display = isUnion ? 'flex' : 'none';
+  if (isUnion) unionWrap.style.flexDirection = 'column';
+  // Federal credentials don't need state
+  var isFederal = ['cfp','cfa'].includes(val);
+  stateWrap.querySelector('select').value = isFederal ? 'fed' : stateWrap.querySelector('select').value;
+}
+
+// ── Why modal (simple inline expand) ──
+function ciShowWhy(type) {
+  var msgs = {
+    email: 'Your email is used only for account recovery and notification settings. FORA never sells, shares, or displays your email. You can use a temporary email if you prefer — you can update it later in settings.',
+    phone: 'Phone verification confirms you are a real person, not an automated account. Civic platforms are targets for bot campaigns designed to distort public discourse. The FORA community depends on real voices. Your number is used for one SMS verification code only. Federal Election Commission guidelines on online civic platforms recommend real-person authentication.',
+    license: 'FORA checks your license number against your state licensing board's public registry — the same registry anyone could search manually. We use the number to verify, then store only a one-way cryptographic hash. Your license number cannot be reconstructed or shared from our systems.'
+  };
+  alert(msgs[type] || '');
+}
+
+</script>
+</body>
+</html>

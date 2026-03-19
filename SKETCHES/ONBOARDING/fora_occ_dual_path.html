@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Occupation · Step 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --field:#080f1e;--field-2:#0d1628;--field-3:#121e36;
+  --green:#155c2d;--green-p:#e5f0e8;
+  --rule:rgba(255,255,255,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:var(--field);color:white;}
+
+/* ── NAV ─────────────────────────────────────────────────── */
+.nav{height:56px;background:var(--blue);border-bottom:3px solid var(--gilt);display:flex;align-items:center;padding:0 32px;gap:16px;flex-shrink:0;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;letter-spacing:0.1em;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.nav-step{margin-left:auto;display:flex;gap:6px;}
+.sp{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);}
+.sp.done{background:var(--gilt);}
+.sp.curr{background:white;}
+
+/* ── PROGRESS ────────────────────────────────────────────── */
+.prog{height:3px;background:rgba(255,255,255,0.07);}
+.prog-fill{height:100%;background:var(--gilt);width:37%;transition:width 0.4s ease;}
+
+/* ── OUTER LAYOUT ────────────────────────────────────────── */
+.screen{height:calc(100vh - 59px);display:flex;flex-direction:column;overflow:hidden;}
+.screen-body{flex:1;overflow-y:auto;padding:36px 40px 32px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+.screen-body::-webkit-scrollbar{width:4px;}
+.screen-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+
+/* ── PAGE HEADER ─────────────────────────────────────────── */
+.pg-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:10px;}
+.pg-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:white;line-height:1.2;margin-bottom:8px;}
+.pg-title em{color:var(--gilt-lt);font-style:italic;}
+.pg-sub{font-size:13px;color:rgba(255,255,255,0.42);line-height:1.7;max-width:560px;margin-bottom:32px;}
+
+/* ── PATH CHOOSER ────────────────────────────────────────── */
+.path-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+.path-card{background:var(--field-2);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.path-card:hover{border-color:rgba(255,255,255,0.2);}
+.path-card.active{border-color:var(--gilt);background:rgba(184,134,11,0.07);}
+.path-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gilt),var(--gilt-lt),var(--gilt));}
+.pc-radio{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:12px;transition:all 0.15s;flex-shrink:0;}
+.path-card.active .pc-radio{border-color:var(--gilt);background:var(--gilt);}
+.path-card.active .pc-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:white;display:block;}
+.pc-title{font-size:14px;font-weight:700;color:white;margin-bottom:4px;line-height:1.3;}
+.pc-desc{font-size:11.5px;color:rgba(255,255,255,0.4);line-height:1.6;}
+.pc-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-top:8px;}
+
+/* ── PATH A: AI INTERPRETER ──────────────────────────────── */
+.path-content{display:none;}
+.path-content.show{display:block;}
+
+.interp-area{background:var(--field-2);border:1px solid var(--rule);border-radius:12px;padding:24px;}
+.interp-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;}
+textarea.interp-ta{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:13px 15px;font-size:13px;color:white;font-family:'Nunito',sans-serif;resize:none;outline:none;min-height:96px;line-height:1.65;transition:border-color 0.15s;}
+textarea.interp-ta:focus{border-color:rgba(184,134,11,0.5);background:rgba(255,255,255,0.08);}
+textarea.interp-ta::placeholder{color:rgba(255,255,255,0.18);}
+.interp-examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.interp-ex{font-size:11px;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 10px;cursor:pointer;transition:all 0.12s;}
+.interp-ex:hover{color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.18);}
+
+/* Thinking indicator */
+.thinking{display:none;align-items:center;gap:10px;margin-top:14px;font-size:11px;color:rgba(255,255,255,0.3);}
+.thinking.show{display:flex;}
+.dp span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gilt);margin:0 2px;animation:dp 1.2s ease-in-out infinite;}
+.dp span:nth-child(2){animation-delay:0.2s;}
+.dp span:nth-child(3){animation-delay:0.4s;}
+@keyframes dp{0%,80%,100%{opacity:0.2;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+
+/* Interpretation result */
+.interp-result{background:rgba(21,92,45,0.1);border:1px solid rgba(21,92,45,0.3);border-radius:10px;padding:16px;margin-top:14px;display:none;}
+.interp-result.show{display:block;}
+.ir-ey{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(26,160,80,0.8);margin-bottom:8px;}
+.ir-identity{font-size:15px;font-weight:700;color:white;margin-bottom:4px;}
+.ir-soc{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:0.06em;margin-bottom:10px;}
+.ir-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.ir-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px;}
+.ir-note{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:12px;}
+.ir-actions{display:flex;gap:8px;}
+.btn-confirm{background:rgba(21,92,45,0.25);border:1px solid rgba(21,92,45,0.5);color:#9FE1CB;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;transition:all 0.12s;}
+.btn-confirm:hover{background:rgba(21,92,45,0.4);}
+.btn-refine{background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;}
+
+/* ── PATH B: 22 SECTORS ──────────────────────────────────── */
+.sector-area{background:var(--field-2);border:1px solid var(--rule);border-radius:12px;overflow:hidden;}
+.sector-step{transition:all 0.3s ease;}
+.sector-step.hidden{display:none;}
+
+/* Step 1: sector card grid */
+.sector-header{padding:18px 20px 14px;border-bottom:1px solid var(--rule);}
+.sector-header-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px;}
+.sector-header-title{font-size:14px;font-weight:600;color:white;}
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px;}
+.sec-tile{border-radius:10px;padding:14px 13px;cursor:pointer;transition:all 0.15s;border:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:5px;}
+.sec-tile:hover{border-color:rgba(255,255,255,0.24);transform:translateY(-1px);}
+.sec-tile.on{border-color:var(--gilt)!important;background:rgba(184,134,11,0.12)!important;transform:none;}
+.sec-layer-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:100px;display:inline-block;width:fit-content;margin-bottom:2px;}
+.sec-name{font-size:13px;font-weight:700;color:white;line-height:1.2;}
+.sec-fn{font-size:10.5px;color:rgba(255,255,255,0.35);line-height:1.4;margin-top:1px;}
+.sec-tile:hover .sec-fn{color:rgba(255,255,255,0.55);}
+.sec-tile.on .sec-name{color:white;}
+.sec-tile.on .sec-fn{color:rgba(255,255,255,0.55);}
+
+/* Step 2: stacked */
+.step2-back{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);cursor:pointer;padding:13px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;transition:color 0.12s;}
+.step2-back:hover{color:rgba(255,255,255,0.65);}
+.step2-bc{font-size:12px;color:white;font-weight:600;padding:12px 20px 4px;display:flex;align-items:center;gap:10px;}
+.step2-bc-name{font-size:14px;font-weight:700;}
+.step2-bc-fn{font-size:11px;color:rgba(255,255,255,0.35);font-weight:400;}
+
+.step2-stack{display:flex;flex-direction:column;gap:0;padding:14px 20px 20px;}
+.step2-col-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);}
+
+/* role chips — horizontal wrap */
+.role-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
+.role-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:100px;padding:7px 14px;cursor:pointer;transition:all 0.12s;display:flex;align-items:center;gap:8px;}
+.role-chip:hover{border-color:rgba(255,255,255,0.24);background:rgba(255,255,255,0.07);}
+.role-chip.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.rc-name{font-size:12px;color:rgba(255,255,255,0.8);}
+.rc-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:100px;}
+
+/* SOC search — full width below chips */
+.soc-col{display:flex;flex-direction:column;}
+.soc-input-wrap{position:relative;margin-bottom:8px;}
+.soc-inp{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 14px;font-size:13px;color:white;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;}
+.soc-inp:focus{border-color:rgba(184,134,11,0.5);background:rgba(255,255,255,0.09);}
+.soc-inp::placeholder{color:rgba(255,255,255,0.2);}
+.soc-results{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+.soc-res-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:9px 11px;cursor:pointer;transition:all 0.12s;}
+.soc-res-item:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
+.soc-res-item.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.soc-res-title{font-size:12px;color:white;margin-bottom:3px;line-height:1.3;}
+.soc-res-title mark{background:transparent;color:var(--gilt-lt);font-weight:700;}
+.soc-res-meta{display:flex;gap:8px;}
+.soc-res-code{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;}
+.soc-res-workers{font-size:9.5px;color:rgba(21,160,80,0.7);}
+.soc-bls{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.18);letter-spacing:0.06em;margin-top:10px;}
+.soc-bls a{color:rgba(184,134,11,0.4);text-decoration:none;border-bottom:1px dotted rgba(184,134,11,0.25);}
+
+/* ── FOOTER / CTA ────────────────────────────────────────── */
+.screen-footer{padding:16px 40px;border-top:1px solid var(--rule);background:rgba(0,0,0,0.2);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.btn-continue{background:var(--gilt);color:white;border:none;border-radius:100px;padding:12px 32px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity 0.12s;}
+.btn-continue:hover{opacity:0.88;}
+.btn-continue:disabled{opacity:0.3;cursor:not-allowed;}
+.btn-skip{background:transparent;color:rgba(255,255,255,0.25);border:none;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;}
+.btn-skip:hover{color:rgba(255,255,255,0.55);}
+.footer-selection{font-size:12px;color:rgba(255,255,255,0.45);margin-left:auto;display:flex;align-items:center;gap:8px;}
+.footer-sel-val{color:white;font-weight:600;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-lbl">Civic Identity · Step 4 of 8</div>
+  <div class="nav-step">
+    <div class="sp done"></div><div class="sp done"></div><div class="sp done"></div>
+    <div class="sp curr"></div><div class="sp"></div><div class="sp"></div>
+    <div class="sp"></div><div class="sp"></div>
+  </div>
+</nav>
+<div class="prog"><div class="prog-fill" id="prog-fill"></div></div>
+
+<div class="screen">
+<div class="screen-body">
+
+  <div class="pg-ey">Step 4 · What you do</div>
+  <h2 class="pg-title">Your occupation<br><em>in your own words,</em><br>or ours.</h2>
+  <p class="pg-sub">Two paths. Either one gets you to the same place. Choose whichever feels more natural.</p>
+
+  <!-- PATH CHOOSER -->
+  <div class="path-row">
+    <div class="path-card active" id="path-a-card" onclick="choosePath('a')">
+      <div class="pc-radio"></div>
+      <div class="pc-title">Describe what you do</div>
+      <div class="pc-desc">Write it in plain English. FORA's AI reads your description and proposes your civic identity. Best for complex or hybrid careers.</div>
+      <span class="pc-tag" style="background:rgba(74,31,122,0.2);border:1px solid rgba(74,31,122,0.4);color:#c080ff;">AI interpreter</span>
+    </div>
+    <div class="path-card" id="path-b-card" onclick="choosePath('b')">
+      <div class="pc-radio"></div>
+      <div class="pc-title">Pick your sector, then your role</div>
+      <div class="pc-desc">Choose from 22 civilizational sectors, then narrow to your specific occupation using curated roles or the BLS job database.</div>
+      <span class="pc-tag" style="background:rgba(26,79,160,0.2);border:1px solid rgba(26,79,160,0.4);color:#80b0ff;">22 sectors · BLS</span>
+    </div>
+  </div>
+
+  <!-- ── PATH A ──────────────────────────────────────────── -->
+  <div class="path-content show" id="path-a-content">
+    <div class="interp-area">
+      <div class="interp-label">Describe what you do for a living</div>
+      <textarea class="interp-ta" id="interp-ta" placeholder="e.g. I do project management for a living but I went to school for architecture and I'm still licensed. I stamp drawings occasionally…" oninput="interpInput()"></textarea>
+      <div class="interp-examples">
+        <span class="interp-ex" onclick="fillEx(this)">Project manager / licensed architect</span>
+        <span class="interp-ex" onclick="fillEx(this)">Server in LA, writing screenplays on the side</span>
+        <span class="interp-ex" onclick="fillEx(this)">Retired RN, still volunteer at a clinic</span>
+        <span class="interp-ex" onclick="fillEx(this)">IBEW electrician, union steward</span>
+      </div>
+      <div class="thinking" id="thinking"><div class="dp"><span></span><span></span><span></span></div>Reading your description…</div>
+      <div class="interp-result" id="interp-result">
+        <div class="ir-ey">FORA read this as</div>
+        <div class="ir-identity" id="ir-identity"></div>
+        <div class="ir-soc" id="ir-soc"></div>
+        <div class="ir-tags" id="ir-tags"></div>
+        <div class="ir-note" id="ir-note"></div>
+        <div class="ir-actions">
+          <button class="btn-confirm" onclick="confirmInterp()">✓ That's right — continue</button>
+          <button class="btn-refine" onclick="resetInterp()">Adjust</button>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
+        <button style="background:rgba(184,134,11,0.15);border:1px solid rgba(184,134,11,0.35);color:var(--gilt-lt);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;padding:9px 20px;border-radius:100px;cursor:pointer;" onclick="runInterp()">Interpret →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PATH B ──────────────────────────────────────────── -->
+  <div class="path-content" id="path-b-content">
+    <div class="sector-area">
+
+      <!-- STEP 1: SECTOR GRID -->
+      <div class="sector-step" id="b-step-1">
+        <div class="sector-header">
+          <div class="sector-header-label">Step 1 of 2 · Select your sector</div>
+          <div class="sector-header-title">Which of the 22 sectors of civilization describes your work?</div>
+        </div>
+        <div class="sector-grid" id="sector-grid"></div>
+      </div>
+
+      <!-- STEP 2: STACKED — roles then SOC -->
+      <div class="sector-step hidden" id="b-step-2">
+        <div class="step2-back" onclick="backToStep1()">← All sectors</div>
+        <div class="step2-bc" id="step2-bc"></div>
+        <div class="step2-stack">
+          <div class="step2-col-label">Roles in this sector — select yours</div>
+          <div class="role-chips" id="role-chips"></div>
+          <div class="step2-col-label" style="margin-top:8px;">BLS occupational search <span style="color:rgba(184,134,11,0.45);margin-left:6px;font-size:7px;">↗ bls.gov/soc · 867 occupations</span></div>
+          <div class="soc-col">
+            <div class="soc-input-wrap">
+              <input class="soc-inp" type="text" id="soc-inp" placeholder="Search by job title or keyword…" oninput="socSearch(this.value)" autocomplete="off">
+            </div>
+            <div class="soc-results" id="soc-results"></div>
+            <div class="soc-bls">Source: <a href="https://www.bls.gov/soc/" target="_blank">U.S. Bureau of Labor Statistics · Standard Occupational Classification 2018</a></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end screen-body -->
+
+<div class="screen-footer">
+  <button class="btn-continue" id="btn-continue" disabled onclick="goNext()">Continue →</button>
+  <button class="btn-skip">Skip for now</button>
+  <div class="footer-selection" id="footer-sel" style="display:none;">
+    Selected: <span class="footer-sel-val" id="footer-sel-val"></span>
+  </div>
+</div>
+</div><!-- end screen -->
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────
+const SECTORS = [
+  { letter:'א', roman:'Aleph', name:'Governance',           fn:'Direction of society',     layer:'order',    color:'#8b6000' },
+  { letter:'ב', roman:'Bet',   name:'Domestic Life',         fn:'The private sphere',       layer:'order',    color:'#7a5500' },
+  { letter:'ג', roman:'Gimel', name:'Trade & Transport',     fn:'Movement of goods',        layer:'systems',  color:'#1a3f7a' },
+  { letter:'ד', roman:'Dalet', name:'Access & Opportunity',  fn:'Entry points',             layer:'order',    color:'#6b3d00' },
+  { letter:'ה', roman:'He',    name:'Knowledge & Discovery', fn:'Revealing truth',          layer:'knowledge',color:'#1a5c30' },
+  { letter:'ו', roman:'Vav',   name:'Infrastructure',        fn:'Connection systems',       layer:'systems',  color:'#163278' },
+  { letter:'ז', roman:'Zayin', name:'Defense & Food',        fn:'Survival systems',         layer:'survival', color:'#6b1a1a' },
+  { letter:'ח', roman:'Chet',  name:'Law & Boundaries',      fn:'Societal boundaries',      layer:'order',    color:'#5c3800' },
+  { letter:'ט', roman:'Tet',   name:'Engineering & Tech',    fn:'Complex systems',          layer:'systems',  color:'#12296e' },
+  { letter:'י', roman:'Yod',   name:'Labor & Craft',         fn:'Manual creation',          layer:'survival', color:'#7a1212' },
+  { letter:'כ', roman:'Kaph',  name:'Care & Welfare',        fn:'Holding and supporting',   layer:'systems',  color:'#0f5060' },
+  { letter:'ל', roman:'Lamed', name:'Education & Wisdom',    fn:'Teaching and guiding',     layer:'knowledge',color:'#145028' },
+  { letter:'מ', roman:'Mem',   name:'Resources & Finance',   fn:'Flow of resources',        layer:'survival', color:'#5e1010' },
+  { letter:'נ', roman:'Nun',   name:'Life Sciences',         fn:'Life systems',             layer:'survival', color:'#500e0e' },
+  { letter:'ס', roman:'Samech',name:'Maintenance',           fn:'Keeping systems running',  layer:'systems',  color:'#0d3060' },
+  { letter:'ע', roman:'Ayin',  name:'Observation & Analysis',fn:'Seeing patterns',          layer:'knowledge',color:'#0e4020' },
+  { letter:'פ', roman:'Pe',    name:'Communication',         fn:'Speech and persuasion',    layer:'knowledge',color:'#0a3818' },
+  { letter:'צ', roman:'Tsade', name:'Service & Justice',     fn:'Responding to needs',      layer:'order',    color:'#4a2e00' },
+  { letter:'ק', roman:'Qoph',  name:'Time & Planning',       fn:'Long-term thinking',       layer:'order',    color:'#3a2400' },
+  { letter:'ר', roman:'Resh',  name:'Identity & Leadership', fn:'Initiating new identity',  layer:'knowledge',color:'#083010' },
+  { letter:'ש', roman:'Shin',  name:'Transformation',        fn:'Changing materials',       layer:'survival', color:'#3c0a0a' },
+  { letter:'ת', roman:'Tav',   name:'Record & Certification',fn:'Finalizing systems',       layer:'order',    color:'#2e1c00' },
+];
+
+const LAYER_ACCENT = { survival:'#ff8080', systems:'#80b0ff', knowledge:'#9FE1CB', order:'#d4a832' };
+
+const SECTOR_ROLES = {
+  'Chet':    { roles:['Lawyer (ESQ)','Judge','Architect (RA)','Urban Planner','Compliance Officer','Regulator','Land Use Attorney'], soc:'17-1011 23-1011' },
+  'Tet':     { roles:['Civil Engineer (PE)','Mechanical Engineer','Electrical Engineer','Software Engineer','Systems Analyst','Industrial Designer'], soc:'17-2051 17-2071 17-2141' },
+  'Yod':     { roles:['Master Electrician','Journeyman Electrician','Master Plumber','HVAC Tech','Carpenter','Welder','Construction Worker'], soc:'47-2111 47-2152' },
+  'Kaph':    { roles:['Registered Nurse (RN)','Physician (MD/DO)','Nurse Practitioner','Physical Therapist','Social Worker','EMT/Paramedic'], soc:'29-1141 29-1171' },
+  'Lamed':   { roles:['K–12 Teacher','University Faculty','School Administrator','Librarian','Coach/Mentor','Curriculum Developer'], soc:'25-2021 25-1099' },
+  'Mem':     { roles:['CPA / Accountant','CFP / Financial Planner','Investment Analyst (CFA)','Banker','Insurance Underwriter','Economist'], soc:'13-2011 13-2052' },
+  'Aleph':   { roles:['Elected Official','Appointed Official','Military Officer','Police Chief','Government Executive','Ambassador'], soc:'11-1031 55-1010' },
+  'He':      { roles:['Research Scientist','Journalist/Reporter','Documentary Maker','Investigative Journalist','Science Writer'], soc:'27-3021 19-1042' },
+  'Pe':      { roles:['Reporter','Editor','Broadcaster','PR Specialist','Marketing Director','Public Speaker','Copywriter'], soc:'27-3021 27-3031' },
+  'Ayin':    { roles:['Data Scientist','Detective','Auditor','Intelligence Analyst','Market Research Analyst','Forensic Accountant'], soc:'15-2051 33-3021' },
+  'Zayin':   { roles:['Active Duty Military','Farmer/Rancher','Police Officer','Security Professional','Corrections Officer'], soc:'55-1010 45-2099' },
+  'Gimel':   { roles:['Truck Driver','Logistics Manager','Supply Chain Analyst','Shipping Coordinator','Import/Export Specialist'], soc:'53-3032 13-1081' },
+};
+
+const SOC_FULL = [
+  { code:'17-1011', title:'Architects, Except Landscape and Naval', group:'Architecture & Engineering', workers:'128,800', sectors:['Chet','Tet'] },
+  { code:'17-2051', title:'Civil Engineers', group:'Architecture & Engineering', workers:'329,200', sectors:['Tet','Chet'] },
+  { code:'17-2071', title:'Electrical Engineers', group:'Architecture & Engineering', workers:'188,300', sectors:['Tet'] },
+  { code:'17-2141', title:'Mechanical Engineers', group:'Architecture & Engineering', workers:'303,400', sectors:['Tet'] },
+  { code:'11-9021', title:'Construction Managers', group:'Management', workers:'471,800', sectors:['Chet','Tet'] },
+  { code:'23-1011', title:'Lawyers', group:'Legal', workers:'813,900', sectors:['Chet'] },
+  { code:'29-1141', title:'Registered Nurses', group:'Healthcare Practitioners', workers:'3,130,600', sectors:['Kaph','Nun'] },
+  { code:'29-1171', title:'Nurse Practitioners', group:'Healthcare Practitioners', workers:'234,900', sectors:['Kaph','Nun'] },
+  { code:'29-1062', title:'Family Medicine Physicians', group:'Healthcare Practitioners', workers:'124,900', sectors:['Kaph','Nun'] },
+  { code:'13-2011', title:'Accountants and Auditors', group:'Business & Financial', workers:'1,392,200', sectors:['Mem','Ayin'] },
+  { code:'13-2052', title:'Personal Financial Advisors', group:'Business & Financial', workers:'271,700', sectors:['Mem'] },
+  { code:'25-2021', title:'Elementary School Teachers', group:'Education', workers:'1,462,700', sectors:['Lamed'] },
+  { code:'25-1099', title:'Postsecondary Teachers, All Other', group:'Education', workers:'622,400', sectors:['Lamed','He'] },
+  { code:'47-2111', title:'Electricians', group:'Construction & Extraction', workers:'739,200', sectors:['Yod'] },
+  { code:'47-2152', title:'Plumbers, Pipefitters, and Steamfitters', group:'Construction & Extraction', workers:'480,600', sectors:['Yod'] },
+  { code:'15-2051', title:'Data Scientists', group:'Computer & Mathematical', workers:'168,900', sectors:['Ayin','Tet'] },
+  { code:'15-1252', title:'Software Developers', group:'Computer & Mathematical', workers:'1,847,900', sectors:['Tet'] },
+  { code:'27-3021', title:'Reporters and Correspondents', group:'Arts, Design, Entertainment', workers:'40,600', sectors:['Pe','He'] },
+  { code:'11-1031', title:'Legislators', group:'Management', workers:'55,200', sectors:['Aleph'] },
+  { code:'35-3031', title:'Waiters and Waitresses', group:'Food Preparation & Serving', workers:'2,079,700', sectors:['Tsade','Shin'] },
+  { code:'11-1021', title:'General and Operations Managers', group:'Management', workers:'3,109,200', sectors:['Aleph','Tet'] },
+  { code:'13-1111', title:'Management Analysts', group:'Business & Financial', workers:'876,300', sectors:['Tet','Mem'] },
+  { code:'19-1042', title:'Medical Scientists', group:'Life, Physical & Social Science', workers:'136,400', sectors:['Nun','He'] },
+  { code:'33-3051', title:'Police and Sheriff Patrol Officers', group:'Protective Service', workers:'667,700', sectors:['Zayin','Aleph'] },
+  { code:'33-2011', title:'Firefighters', group:'Protective Service', workers:'327,300', sectors:['Zayin'] },
+];
+
+// ── STATE ───────────────────────────────────────────────────────────────────
+let activePath = 'a';
+let selectedSector = null;
+let selectedRole = null;
+let selectedSoc = null;
+let interpConfirmed = false;
+
+// ── PATH SWITCHER ───────────────────────────────────────────────────────────
+function choosePath(p) {
+  activePath = p;
+  document.getElementById('path-a-card').classList.toggle('active', p==='a');
+  document.getElementById('path-b-card').classList.toggle('active', p==='b');
+  document.getElementById('path-a-content').classList.toggle('show', p==='a');
+  document.getElementById('path-b-content').classList.toggle('show', p==='b');
+  updateContinue();
+}
+
+// ── BUILD SECTOR GRID ───────────────────────────────────────────────────────
+function buildSectorGrid() {
+  const grid = document.getElementById('sector-grid');
+  const LAYER_LABELS = { survival:'Physical survival', systems:'Systems & infrastructure', knowledge:'Knowledge & culture', order:'Order & governance' };
+  const LAYER_STYLES = {
+    survival:  { bg:'rgba(139,26,26,0.15)',  border:'rgba(139,26,26,0.35)',  tag:'rgba(139,26,26,0.35)',  tagTxt:'#ff8080' },
+    systems:   { bg:'rgba(26,79,160,0.15)',  border:'rgba(26,79,160,0.35)',  tag:'rgba(26,79,160,0.35)',  tagTxt:'#80b0ff' },
+    knowledge: { bg:'rgba(26,107,53,0.15)', border:'rgba(26,107,53,0.35)', tag:'rgba(26,107,53,0.35)', tagTxt:'#9FE1CB' },
+    order:     { bg:'rgba(139,107,0,0.15)', border:'rgba(139,107,0,0.35)', tag:'rgba(139,107,0,0.35)', tagTxt:'#d4a832' },
+  };
+  SECTORS.forEach((s, i) => {
+    const ls = LAYER_STYLES[s.layer];
+    const tile = document.createElement('div');
+    tile.className = 'sec-tile';
+    tile.style.background = ls.bg;
+    tile.style.borderColor = ls.border;
+    tile.title = s.fn;
+    tile.innerHTML = `
+      <span class="sec-layer-tag" style="background:${ls.tag};color:${ls.tagTxt};border:1px solid ${ls.tagTxt}44;">${LAYER_LABELS[s.layer]}</span>
+      <div class="sec-name">${s.name}</div>
+      <div class="sec-fn">${s.fn}</div>
+    `;
+    tile.addEventListener('click', () => selectSector(s, tile, ls.tagTxt));
+    grid.appendChild(tile);
+  });
+}
+
+function selectSector(s, tile, accent) {
+  document.querySelectorAll('.sec-tile').forEach(t => t.classList.remove('on'));
+  tile.classList.add('on');
+  selectedSector = s;
+  showStep2(s, accent);
+}
+
+// ── STEP 2 ──────────────────────────────────────────────────────────────────
+function showStep2(s, accent) {
+  document.getElementById('b-step-1').classList.add('hidden');
+  document.getElementById('b-step-2').classList.remove('hidden');
+
+  document.getElementById('step2-bc').innerHTML = `
+    <span class="step2-bc-name" style="color:${accent};">${s.name}</span>
+    <span style="color:rgba(255,255,255,0.2);">·</span>
+    <span class="step2-bc-fn">${s.fn}</span>
+  `;
+
+  // Curated roles
+  const sectorData = SECTOR_ROLES[s.roman] || { roles:['Other — describe below'], soc:'' };
+  const chipsEl = document.getElementById('role-chips');
+  chipsEl.innerHTML = sectorData.roles.map(r => {
+    const isLicensed = r.includes('(PE)') || r.includes('(ESQ)') || r.includes('(MD') || r.includes('(RN)') || r.includes('(RA)') || r.includes('(CPA)') || r.includes('(CFP)') || r.includes('(CFA)');
+    const badge = isLicensed
+      ? `<span class="rc-badge" style="background:rgba(184,134,11,0.2);border:1px solid rgba(184,134,11,0.4);color:var(--gilt-lt);">Licensed</span>`
+      : '';
+    return `<div class="role-chip" onclick="selectRole(this,'${r.replace(/'/g,"\\'")}')"><span class="rc-name">${r}</span>${badge}</div>`;
+  }).join('');
+
+  // Pre-populate SOC search with sector-relevant results
+  populateSocForSector(s.roman);
+}
+
+function populateSocForSector(roman) {
+  const matches = SOC_FULL.filter(s => s.sectors.includes(roman));
+  renderSocResults(matches, '');
+}
+
+function socSearch(q) {
+  const ql = q.toLowerCase().trim();
+  if (ql.length < 1) {
+    populateSocForSector(selectedSector ? selectedSector.roman : '');
+    return;
+  }
+  // Search full SOC, prioritize sector matches
+  const sectorMatches = SOC_FULL.filter(s =>
+    (selectedSector && s.sectors.includes(selectedSector.roman)) &&
+    (s.title.toLowerCase().includes(ql) || s.code.includes(ql))
+  );
+  const otherMatches = SOC_FULL.filter(s =>
+    !(selectedSector && s.sectors.includes(selectedSector.roman)) &&
+    (s.title.toLowerCase().includes(ql) || s.code.includes(ql))
+  );
+  renderSocResults([...sectorMatches, ...otherMatches].slice(0,8), ql);
+}
+
+function renderSocResults(items, q) {
+  const el = document.getElementById('soc-results');
+  if (!items.length) {
+    el.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.2);padding:8px 0;font-style:italic;">No matches — try a different term</div>';
+    return;
+  }
+  el.innerHTML = items.map((s, i) => {
+    const hi = q ? s.title.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>') : s.title;
+    const isOn = selectedSoc && selectedSoc.code === s.code;
+    return `<div class="soc-res-item${isOn?' on':''}" onclick="selectSocItem(${SOC_FULL.indexOf(s)})">
+      <div class="soc-res-title">${hi}</div>
+      <div class="soc-res-meta">
+        <span class="soc-res-code">${s.code}</span>
+        <span class="soc-res-workers">${s.workers} US workers</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectRole(el, role) {
+  document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  selectedRole = role;
+  selectedSoc = null;
+  document.querySelectorAll('.soc-res-item').forEach(i => i.classList.remove('on'));
+  setFooterSel(role);
+  updateContinue();
+}
+
+function selectSocItem(idx) {
+  const s = SOC_FULL[idx];
+  selectedSoc = s;
+  selectedRole = null;
+  document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll('.soc-res-item').forEach((item, i) => item.classList.toggle('on', i === idx));
+  // Re-render to preserve mark highlights
+  const q = document.getElementById('soc-inp').value.toLowerCase().trim();
+  const existing = SOC_FULL.filter(x =>
+    selectedSector ? x.sectors.includes(selectedSector.roman) : true
+  );
+  setFooterSel(s.title + ' · ' + s.code);
+  updateContinue();
+}
+
+function backToStep1() {
+  document.getElementById('b-step-2').classList.add('hidden');
+  document.getElementById('b-step-1').classList.remove('hidden');
+  selectedRole = null;
+  selectedSoc = null;
+  updateContinue();
+}
+
+// ── PATH A: INTERPRETER ────────────────────────────────────────────────────
+const INTERP_DATA = {
+  default: {
+    identity:'Licensed Architect & Project Manager',
+    soc:'Primary: SOC 17-1011 Architects · Secondary: SOC 11-9021 Construction Managers',
+    tags:[
+      {l:'Licensed RA',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},
+      {l:'Engineering · Chet',c:'rgba(26,79,160,0.2)',b:'rgba(26,79,160,0.4)',t:'#80b0ff'},
+      {l:'Management',c:'rgba(26,107,53,0.2)',b:'rgba(26,107,53,0.4)',t:'#9FE1CB'},
+    ],
+    note:'FORA detected two occupational identities. Your licensed credential (Architecture) appears as your primary civic identity and unlocks the gold ring verification path. Your management role appears as your secondary occupation.',
+  },
+  nurse:{
+    identity:'Registered Nurse (Retired) · Volunteer Clinician',
+    soc:'Primary: SOC 29-1141 Registered Nurses',
+    tags:[
+      {l:'Licensed RN',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},
+      {l:'Healthcare · Kaph',c:'rgba(139,26,26,0.2)',b:'rgba(139,26,26,0.4)',t:'#ff8080'},
+      {l:'Retired flag',c:'rgba(90,100,120,0.2)',b:'rgba(90,100,120,0.4)',t:'rgba(255,255,255,0.5)'},
+    ],
+    note:'FORA detected a licensed credential (RN), retired status, and ongoing civic participation through clinic volunteering. Your identity will display as Retired RN. The gold ring verification path remains available through your state nursing board.',
+  },
+  server:{
+    identity:'Food Service Worker · Pursuing Screenwriting',
+    soc:'Primary: SOC 35-3031 Waiters & Waitresses · Aspiration: Arts & Media noted',
+    tags:[
+      {l:'Service industry · Tsade',c:'rgba(26,107,53,0.2)',b:'rgba(26,107,53,0.4)',t:'#9FE1CB'},
+      {l:'Creative (self-reported)',c:'rgba(74,31,122,0.2)',b:'rgba(74,31,122,0.4)',t:'#c080ff'},
+    ],
+    note:'FORA detected a primary income occupation and a pursued creative career. Both are part of your civic identity. A server has direct civic standing on wage policy, tipping legislation, and labor classification. Your creative aspiration is noted as a secondary identity.',
+  },
+  electrician:{
+    identity:'Union Electrician (IBEW) · Master Electrician',
+    soc:'Primary: SOC 47-2111 Electricians',
+    tags:[
+      {l:'Union IBEW',c:'rgba(26,79,160,0.2)',b:'rgba(26,79,160,0.4)',t:'#80b0ff'},
+      {l:'Licensed ME',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},
+      {l:'Labor · Yod',c:'rgba(139,26,26,0.2)',b:'rgba(139,26,26,0.4)',t:'#ff8080'},
+    ],
+    note:'FORA detected both a union membership (IBEW) and a state license (Master Electrician). Both credentials will be represented — union membership in your organizational profile, state license as your gold ring credential.',
+  },
+};
+
+function fillEx(el) {
+  const t = el.textContent;
+  document.getElementById('interp-ta').value = t;
+  interpInput();
+}
+
+function interpInput() {
+  document.getElementById('interp-result').classList.remove('show');
+  interpConfirmed = false;
+  updateContinue();
+}
+
+function runInterp() {
+  const txt = document.getElementById('interp-ta').value.trim();
+  if (!txt) { document.getElementById('interp-ta').focus(); return; }
+  document.getElementById('interp-result').classList.remove('show');
+  interpConfirmed = false;
+  document.getElementById('thinking').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('thinking').classList.remove('show');
+    const lower = txt.toLowerCase();
+    let data = INTERP_DATA.default;
+    if ((lower.includes('nurse') || lower.includes(' rn')) && !lower.includes('architect')) data = INTERP_DATA.nurse;
+    else if ((lower.includes('server')||lower.includes('waiter')||lower.includes('bartend')||lower.includes('restaurant'))&&!lower.includes('architect')) data = INTERP_DATA.server;
+    else if (lower.includes('electrician')||lower.includes('ibew')||lower.includes('union elec')) data = INTERP_DATA.electrician;
+    document.getElementById('ir-identity').textContent = data.identity;
+    document.getElementById('ir-soc').textContent = data.soc;
+    document.getElementById('ir-tags').innerHTML = data.tags.map(t =>
+      `<span class="ir-tag" style="background:${t.c};border:1px solid ${t.b};color:${t.t};">${t.l}</span>`
+    ).join('');
+    document.getElementById('ir-note').textContent = data.note;
+    document.getElementById('interp-result').classList.add('show');
+  }, 1400);
+}
+
+function confirmInterp() {
+  interpConfirmed = true;
+  const id = document.getElementById('ir-identity').textContent;
+  setFooterSel(id);
+  updateContinue();
+}
+
+function resetInterp() {
+  document.getElementById('interp-result').classList.remove('show');
+  interpConfirmed = false;
+  updateContinue();
+}
+
+// ── FOOTER + CONTINUE ──────────────────────────────────────────────────────
+function setFooterSel(val) {
+  document.getElementById('footer-sel').style.display = 'flex';
+  document.getElementById('footer-sel-val').textContent = val;
+}
+
+function updateContinue() {
+  const btn = document.getElementById('btn-continue');
+  let ready = false;
+  if (activePath === 'a' && interpConfirmed) ready = true;
+  if (activePath === 'b' && (selectedRole || selectedSoc)) ready = true;
+  btn.disabled = !ready;
+  document.getElementById('prog-fill').style.width = ready ? '50%' : '37%';
+}
+
+function goNext() {
+  alert('Continuing to Step 5 — Military Service');
+}
+
+// ── INIT ────────────────────────────────────────────────────────────────────
+buildSectorGrid();
+</script>
+</body>
+</html>

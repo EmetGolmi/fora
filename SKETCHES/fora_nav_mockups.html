@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Nav Mockups · 3 Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f2f4f8;--white:#ffffff;--rule:rgba(27,58,107,0.1);
+  --green:#155c2d;--field:#080f1e;
+  --scarlet:#8b1a1a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#e8ebf0;color:var(--ink);padding:40px;}
+
+/* ── PAGE HEADER ──────────────────────────────────────────── */
+.page-header{margin-bottom:40px;}
+.ph-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+.ph-title{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.ph-sub{font-size:13.5px;color:var(--ink-soft);line-height:1.65;}
+.options-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;align-items:start;}
+.option-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+.option-name{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.option-desc{font-size:12px;color:var(--ink-soft);line-height:1.6;margin-bottom:16px;max-width:280px;}
+
+/* ── SHARED MOCK CHROME ───────────────────────────────────── */
+.mock-browser{border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.18);border:1px solid rgba(0,0,0,0.08);}
+.mock-browser-bar{background:#2a2a2a;padding:10px 16px;display:flex;align-items:center;gap:8px;}
+.mbb-dot{width:12px;height:12px;border-radius:50%;}
+.mbb-url{flex:1;background:rgba(255,255,255,0.08);border-radius:6px;padding:4px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);margin-left:8px;}
+
+/* ── SHARED WIDGET PLACEHOLDER ────────────────────────────── */
+.w{border-radius:8px;background:white;border:1px solid var(--rule);}
+.w-hdr{padding:10px 12px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;}
+.w-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);}
+.w-body{padding:12px;}
+.w-line{height:8px;background:var(--rule);border-radius:4px;margin-bottom:7px;}
+.w-line:last-child{margin-bottom:0;}
+.w-line.short{width:60%;}
+.w-line.med{width:75%;}
+
+/* marker mini SVG */
+.marker-xs{width:36px;height:36px;}
+.marker-sm{width:52px;height:52px;}
+
+/* ═══════════════════════════════════════════════════════════
+   OPTION A — TOP NAV
+═══════════════════════════════════════════════════════════ */
+.mock-a{background:var(--bg);}
+
+.a-nav{background:var(--blue);height:52px;display:flex;align-items:center;padding:0 20px;gap:0;border-bottom:3px solid var(--gilt);}
+.a-logo{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:28px;}
+.a-logo span{color:var(--gilt-lt);}
+.a-tabs{display:flex;align-items:stretch;height:100%;gap:2px;}
+.a-tab{display:flex;align-items:center;padding:0 14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.12s;border-bottom:3px solid transparent;margin-bottom:-3px;}
+.a-tab:hover{color:rgba(255,255,255,0.8);}
+.a-tab.active{color:white;border-bottom-color:var(--gilt-lt);}
+.a-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.a-search{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:5px 11px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.4);width:120px;}
+.a-avatar{width:28px;height:28px;border-radius:50%;background:var(--blue-md);border:2px solid var(--gilt);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+.a-body{padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto;gap:10px;}
+.a-widget{border-radius:8px;background:white;border:1px solid var(--rule);padding:0;overflow:hidden;}
+.a-widget.span2{grid-column:span 2;}
+.aw-hdr{background:var(--blue);padding:8px 12px;display:flex;align-items:center;gap:8px;}
+.aw-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+.aw-dot{width:5px;height:5px;border-radius:50%;background:var(--gilt);}
+.aw-body{padding:10px 12px;}
+.feed-item{padding:7px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;align-items:flex-start;}
+.feed-item:last-child{border-bottom:none;padding-bottom:0;}
+.fi-dot{width:6px;height:6px;border-radius:50%;background:var(--scarlet);flex-shrink:0;margin-top:4px;}
+.fi-lines{flex:1;}
+.fi-l1{height:7px;background:var(--rule);border-radius:3px;margin-bottom:4px;}
+.fi-l2{height:6px;background:#eef1f5;border-radius:3px;width:70%;}
+.rep-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--rule);}
+.rep-row:last-child{border-bottom:none;}
+.rep-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;padding:2px 6px;border-radius:100px;background:var(--blue-pl);color:var(--blue);}
+.rep-lines{flex:1;}
+.rep-l1{height:7px;background:var(--rule);border-radius:3px;margin-bottom:3px;width:80%;}
+.rep-l2{height:6px;background:#eef1f5;border-radius:3px;width:55%;}
+
+/* marker widget A */
+.a-marker-widget{display:flex;flex-direction:column;align-items:center;padding:14px 12px;gap:8px;}
+
+/* ═══════════════════════════════════════════════════════════
+   OPTION B — LEFT SIDEBAR
+═══════════════════════════════════════════════════════════ */
+.mock-b{background:var(--bg);display:flex;}
+
+.b-sidebar{width:200px;flex-shrink:0;background:var(--blue);min-height:480px;display:flex;flex-direction:column;}
+.bs-logo{padding:16px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.bs-fora{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;letter-spacing:0.1em;}
+.bs-fora span{color:var(--gilt-lt);}
+.bs-identity{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;}
+.bs-marker{width:38px;height:38px;flex-shrink:0;}
+.bs-id-lines{}
+.bs-l1{height:7px;background:rgba(255,255,255,0.25);border-radius:3px;margin-bottom:4px;width:80px;}
+.bs-l2{height:6px;background:rgba(255,255,255,0.12);border-radius:3px;width:55px;}
+.bs-nav{flex:1;padding:8px 0;}
+.bs-section{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:8px 16px 4px;}
+.bs-link{display:flex;align-items:center;gap:9px;padding:7px 16px;color:rgba(255,255,255,0.55);font-size:11.5px;cursor:pointer;transition:all 0.12s;}
+.bs-link:hover{background:rgba(255,255,255,0.06);color:white;}
+.bs-link.active{background:rgba(184,134,11,0.18);color:var(--gilt-lt);border-right:2px solid var(--gilt);}
+.bs-link-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;}
+.bs-link.active .bs-link-dot{background:var(--gilt);}
+.bs-search{padding:10px 14px;border-top:1px solid rgba(255,255,255,0.08);}
+.bs-search-inp{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.4);}
+
+.b-main{flex:1;display:flex;flex-direction:column;}
+.b-topbar{height:40px;background:white;border-bottom:1px solid var(--rule);display:flex;align-items:center;padding:0 16px;gap:12px;}
+.b-topbar-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--ink);}
+.b-topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.b-notif{width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:11px;}
+.b-body{flex:1;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ═══════════════════════════════════════════════════════════
+   OPTION C — TOP NAV + LEFT SIDEBAR
+═══════════════════════════════════════════════════════════ */
+.mock-c{background:var(--bg);display:flex;flex-direction:column;}
+
+.c-nav{background:var(--blue);height:48px;display:flex;align-items:center;padding:0 16px;gap:0;border-bottom:3px solid var(--gilt);}
+.c-logo{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
+.c-logo span{color:var(--gilt-lt);}
+.c-nav-tabs{display:flex;align-items:stretch;height:100%;gap:1px;}
+.c-nav-tab{display:flex;align-items:center;padding:0 12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;}
+.c-nav-tab.active{color:white;border-bottom-color:var(--gilt-lt);}
+.c-nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.c-search{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:rgba(255,255,255,0.35);width:110px;}
+.c-av{width:26px;height:26px;border-radius:50%;background:var(--blue-md);border:2px solid var(--gilt);}
+
+.c-lower{display:flex;flex:1;}
+.c-sidebar{width:172px;flex-shrink:0;background:white;border-right:1px solid var(--rule);min-height:440px;display:flex;flex-direction:column;}
+.cs-identity{padding:12px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;}
+.cs-id-lines{}
+.cs-l1{height:7px;background:var(--rule);border-radius:3px;margin-bottom:3px;width:72px;}
+.cs-l2{height:6px;background:#eef1f5;border-radius:3px;width:50px;}
+.cs-nav{flex:1;padding:6px 0;}
+.cs-section{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);padding:7px 14px 3px;}
+.cs-link{display:flex;align-items:center;gap:8px;padding:6px 14px;color:var(--ink-soft);font-size:11px;cursor:pointer;}
+.cs-link.active{color:var(--blue);background:var(--blue-pl);border-right:2px solid var(--blue);}
+.cs-link-dot{width:4px;height:4px;border-radius:50%;background:var(--rule);flex-shrink:0;}
+.cs-link.active .cs-link-dot{background:var(--blue);}
+
+.c-main{flex:1;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto;gap:10px;}
+.c-widget{border-radius:8px;background:white;border:1px solid var(--rule);overflow:hidden;}
+.c-widget.tall{grid-row:span 2;}
+.cw-hdr{background:var(--bg);padding:7px 11px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:7px;}
+.cw-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);}
+.cw-dot{width:4px;height:4px;border-radius:50%;background:var(--gilt);}
+.cw-body{padding:10px 11px;}
+
+/* ── PROS/CONS ─────────────────────────────────────────────── */
+.verdict{margin-top:16px;background:white;border-radius:10px;padding:14px 16px;border:1px solid var(--rule);}
+.v-pro,.v-con{display:flex;gap:8px;margin-bottom:5px;font-size:12px;line-height:1.5;}
+.v-pro:last-of-type,.v-con:last-of-type{margin-bottom:0;}
+.v-icon{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px;}
+.v-pro .v-icon{background:var(--green-p);color:var(--green);}
+.v-con .v-icon{background:#faeaea;color:var(--scarlet);}
+.v-sep{height:1px;background:var(--rule);margin:8px 0;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="ph-ey">Navigation exploration · FORA Dashboard · 3 options</div>
+  <h1 class="ph-title">How should FORA navigate?</h1>
+  <p class="ph-sub">Three distinct navigation models. Same content, different architecture. Pick one — then we build the full dashboard.</p>
+</div>
+
+<div class="options-row">
+
+  <!-- ══ OPTION A ══════════════════════════════════════════ -->
+  <div>
+    <div class="option-label">Option A</div>
+    <div class="option-name">Top Navigation</div>
+    <div class="option-desc">Sections live as tabs across the top nav bar. Maximum horizontal real estate for content. Clean, minimal. The nav disappears when you're inside a section — all focus goes to the content.</div>
+
+    <div class="mock-browser">
+      <div class="mock-browser-bar">
+        <div class="mbb-dot" style="background:#ff5f57;"></div>
+        <div class="mbb-dot" style="background:#febc2e;"></div>
+        <div class="mbb-dot" style="background:#28c840;"></div>
+        <div class="mbb-url">fora.gov/dashboard</div>
+      </div>
+      <div class="mock-a">
+        <!-- Top nav -->
+        <div class="a-nav">
+          <div class="a-logo">F<span>O</span>RA</div>
+          <div class="a-tabs">
+            <div class="a-tab active">Dashboard</div>
+            <div class="a-tab">Feed</div>
+            <div class="a-tab">Legislation</div>
+            <div class="a-tab">Issues</div>
+            <div class="a-tab">Events</div>
+          </div>
+          <div class="a-nav-right">
+            <div class="a-search">Search FORA…</div>
+            <div class="a-avatar">
+              <svg width="28" height="28" viewBox="0 0 28 28">
+                <defs><clipPath id="cpa"><circle cx="14" cy="14" r="12"/></clipPath></defs>
+                <circle cx="14" cy="14" r="13" fill="none" stroke="#b8860b" stroke-width="2"/>
+                <circle cx="14" cy="14" r="11" fill="#254f92" clip-path="url(#cpa)"/>
+                <circle cx="14" cy="10" r="4" fill="#6a9ab8" clip-path="url(#cpa)"/>
+                <ellipse cx="14" cy="21" rx="7" ry="5" fill="#6a9ab8" clip-path="url(#cpa)"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="a-body">
+          <!-- Civic Feed - span 2 -->
+          <div class="a-widget span2">
+            <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Civic Feed · Mid-Atlantic</div></div>
+            <div class="aw-body">
+              <div class="feed-item"><div class="fi-dot" style="background:#8b1a1a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2"></div></div></div>
+              <div class="feed-item"><div class="fi-dot" style="background:#1b3a6b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:55%;"></div></div></div>
+              <div class="feed-item"><div class="fi-dot" style="background:#b8860b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:80%;"></div></div></div>
+              <div class="feed-item"><div class="fi-dot" style="background:#1b3a6b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:65%;"></div></div></div>
+            </div>
+          </div>
+
+          <!-- Civic Marker -->
+          <div class="a-widget">
+            <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Civic Identity</div></div>
+            <div class="a-marker-widget">
+              <svg width="72" height="86" viewBox="0 0 72 86">
+                <defs>
+                  <clipPath id="cpam"><circle cx="36" cy="32" r="24"/></clipPath>
+                  <radialGradient id="pham" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient>
+                </defs>
+                <circle cx="36" cy="32" r="30" fill="none" stroke="rgba(184,134,11,0.2)" stroke-width="7"/>
+                <circle cx="36" cy="32" r="26" fill="none" stroke="#b8860b" stroke-width="2"/>
+                <circle cx="36" cy="32" r="24" fill="url(#pham)" clip-path="url(#cpam)"/>
+                <circle cx="36" cy="26" r="9" fill="#5a8aaa" clip-path="url(#cpam)"/>
+                <ellipse cx="36" cy="47" rx="13" ry="9" fill="#5a8aaa" clip-path="url(#cpam)"/>
+                <rect x="19" y="54" width="34" height="12" rx="6" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+                <text x="36" y="63.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#8b6914">PE</text>
+                <rect x="8" y="72" width="56" height="8" rx="3" fill="#1a1a1a"/>
+                <rect x="20" y="72" width="16" height="8" fill="#c9a84c"/>
+                <rect x="36" y="72" width="12" height="8" fill="#1a1a1a"/>
+              </svg>
+              <div style="text-align:center;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);font-weight:700;">Licensed Engineer</div>
+                <div style="font-size:9px;color:var(--ink-soft);margin-top:2px;">Mid-Atlantic · 35–44</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reps -->
+          <div class="a-widget">
+            <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">My Representatives</div></div>
+            <div class="aw-body">
+              <div class="rep-row"><div class="rep-badge">US Sen</div><div class="rep-lines"><div class="rep-l1"></div><div class="rep-l2"></div></div></div>
+              <div class="rep-row"><div class="rep-badge">US Sen</div><div class="rep-lines"><div class="rep-l1" style="width:70%;"></div><div class="rep-l2"></div></div></div>
+              <div class="rep-row"><div class="rep-badge">US Rep</div><div class="rep-lines"><div class="rep-l1" style="width:55%;"></div><div class="rep-l2" style="width:40%;"></div></div></div>
+              <div class="rep-row"><div class="rep-badge">VA Sen</div><div class="rep-lines"><div class="rep-l1" style="width:60%;"></div><div class="rep-l2"></div></div></div>
+            </div>
+          </div>
+
+          <!-- Bills -->
+          <div class="a-widget">
+            <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Bills I'm Tracking</div></div>
+            <div class="aw-body">
+              <div class="feed-item"><div class="fi-dot" style="background:#254f92;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:50%;"></div></div></div>
+              <div class="feed-item"><div class="fi-dot" style="background:#b8860b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:65%;"></div></div></div>
+              <div class="feed-item"><div class="fi-dot" style="background:#155c2d;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:45%;"></div></div></div>
+            </div>
+          </div>
+
+          <!-- Active deliberations -->
+          <div class="a-widget">
+            <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Active Deliberations</div></div>
+            <div class="aw-body">
+              <div class="feed-item"><div class="fi-dot" style="background:#2d1a4a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:60%;"></div></div></div>
+              <div class="feed-item"><div class="fi-dot" style="background:#2d1a4a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:75%;"></div></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <div class="v-pro"><div class="v-icon">+</div><div>Maximum content width — dashboard widgets get the full viewport. No side real estate consumed.</div></div>
+      <div class="v-pro"><div class="v-icon">+</div><div>Familiar pattern — every user already knows how top tabs work. Zero learning curve.</div></div>
+      <div class="v-pro"><div class="v-icon">+</div><div>Section context is always visible — you always know where you are.</div></div>
+      <div class="v-sep"></div>
+      <div class="v-con"><div class="v-icon">−</div><div>No persistent personal anchor — your identity, followed jurisdictions, and active items disappear when you navigate to a section.</div></div>
+      <div class="v-con"><div class="v-icon">−</div><div>Scales poorly — adding a sixth or seventh section makes the tab bar crowded.</div></div>
+    </div>
+  </div>
+
+  <!-- ══ OPTION B ══════════════════════════════════════════ -->
+  <div>
+    <div class="option-label">Option B</div>
+    <div class="option-name">Left Sidebar</div>
+    <div class="option-desc">Navigation lives in a persistent left sidebar. Your civic identity anchors the top of the sidebar — always visible, always yours. The sidebar can collapse to icon-only on demand. Deep hierarchy lives here: followed jurisdictions, tracked bills, active deliberations.</div>
+
+    <div class="mock-browser">
+      <div class="mock-browser-bar">
+        <div class="mbb-dot" style="background:#ff5f57;"></div>
+        <div class="mbb-dot" style="background:#febc2e;"></div>
+        <div class="mbb-dot" style="background:#28c840;"></div>
+        <div class="mbb-url">fora.gov/dashboard</div>
+      </div>
+      <div class="mock-b">
+        <!-- Sidebar -->
+        <div class="b-sidebar">
+          <div class="bs-logo"><div class="bs-fora">F<span>O</span>RA</div></div>
+          <div class="bs-identity">
+            <svg class="bs-marker" width="38" height="38" viewBox="0 0 38 38">
+              <defs><clipPath id="cpb"><circle cx="19" cy="19" r="13"/></clipPath></defs>
+              <circle cx="19" cy="19" r="17" fill="none" stroke="#b8860b" stroke-width="2"/>
+              <circle cx="19" cy="19" r="13" fill="#254f92" clip-path="url(#cpb)"/>
+              <circle cx="19" cy="15" r="5" fill="#6a9ab8" clip-path="url(#cpb)"/>
+              <ellipse cx="19" cy="27" rx="8" ry="5" fill="#6a9ab8" clip-path="url(#cpb)"/>
+              <rect x="9" y="30" width="20" height="7" rx="3.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.2"/>
+              <text x="19" y="35.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="700" fill="#8b6914">PE</text>
+            </svg>
+            <div><div class="bs-l1"></div><div class="bs-l2"></div></div>
+          </div>
+          <div class="bs-nav">
+            <div class="bs-section">Navigation</div>
+            <div class="bs-link active"><div class="bs-link-dot"></div>Dashboard</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>Feed</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>Legislation</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>Issues</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>Events</div>
+            <div class="bs-section">My FORA</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>My Jurisdictions</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>Bills Tracking</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>Deliberations</div>
+            <div class="bs-link"><div class="bs-link-dot"></div>My Profile</div>
+          </div>
+          <div class="bs-search"><div class="bs-search-inp">Search FORA…</div></div>
+        </div>
+
+        <!-- Main -->
+        <div class="b-main">
+          <div class="b-topbar">
+            <div class="b-topbar-title">My Dashboard</div>
+            <div class="b-topbar-right">
+              <div class="b-notif">🔔</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-soft);letter-spacing:0.06em;">Alexandria, VA</div>
+            </div>
+          </div>
+          <div class="b-body">
+            <div class="a-widget">
+              <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Civic Feed</div></div>
+              <div class="aw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#8b1a1a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#1b3a6b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:55%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#b8860b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:80%;"></div></div></div>
+              </div>
+            </div>
+            <div class="a-widget">
+              <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">My Representatives</div></div>
+              <div class="aw-body">
+                <div class="rep-row"><div class="rep-badge">US Sen</div><div class="rep-lines"><div class="rep-l1"></div><div class="rep-l2"></div></div></div>
+                <div class="rep-row"><div class="rep-badge">US Rep</div><div class="rep-lines"><div class="rep-l1" style="width:70%;"></div><div class="rep-l2"></div></div></div>
+                <div class="rep-row"><div class="rep-badge">VA Sen</div><div class="rep-lines"><div class="rep-l1" style="width:55%;"></div><div class="rep-l2"></div></div></div>
+              </div>
+            </div>
+            <div class="a-widget">
+              <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Bills I'm Tracking</div></div>
+              <div class="aw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#254f92;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:50%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#b8860b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:65%;"></div></div></div>
+              </div>
+            </div>
+            <div class="a-widget">
+              <div class="aw-hdr"><div class="aw-dot"></div><div class="aw-ey">Active Deliberations</div></div>
+              <div class="aw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#2d1a4a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:60%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#2d1a4a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:75%;"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <div class="v-pro"><div class="v-icon">+</div><div>Identity always visible — your civic marker anchors the sidebar. You never forget who you are on FORA.</div></div>
+      <div class="v-pro"><div class="v-icon">+</div><div>Deep hierarchy fits naturally — followed jurisdictions, tracked bills, active deliberations all nest into "My FORA."</div></div>
+      <div class="v-pro"><div class="v-icon">+</div><div>Scales well — adding items to the sidebar doesn't break the layout.</div></div>
+      <div class="v-sep"></div>
+      <div class="v-con"><div class="v-icon">−</div><div>200px permanently consumed on every page — less content width everywhere.</div></div>
+      <div class="v-con"><div class="v-icon">−</div><div>On a 1280px viewport, the content area after sidebar is noticeably narrower — noticeable on jurisdiction pages with complex layouts.</div></div>
+    </div>
+  </div>
+
+  <!-- ══ OPTION C ══════════════════════════════════════════ -->
+  <div>
+    <div class="option-label">Option C</div>
+    <div class="option-name">Both — Top nav + Left sidebar</div>
+    <div class="option-desc">Top nav carries the five major sections. Left sidebar carries personal items — your identity, followed jurisdictions, tracked bills, active deliberations. Sidebar is narrower (160px) since it holds only personal content, not full section navigation. Sidebar collapses on content pages to free up width.</div>
+
+    <div class="mock-browser">
+      <div class="mock-browser-bar">
+        <div class="mbb-dot" style="background:#ff5f57;"></div>
+        <div class="mbb-dot" style="background:#febc2e;"></div>
+        <div class="mbb-dot" style="background:#28c840;"></div>
+        <div class="mbb-url">fora.gov/dashboard</div>
+      </div>
+      <div class="mock-c">
+        <!-- Top nav -->
+        <div class="c-nav">
+          <div class="c-logo">F<span>O</span>RA</div>
+          <div class="c-nav-tabs">
+            <div class="c-nav-tab active">Dashboard</div>
+            <div class="c-nav-tab">Feed</div>
+            <div class="c-nav-tab">Legislation</div>
+            <div class="c-nav-tab">Issues</div>
+            <div class="c-nav-tab">Events</div>
+          </div>
+          <div class="c-nav-right">
+            <div class="c-search">Search FORA…</div>
+            <div class="c-av"></div>
+          </div>
+        </div>
+
+        <!-- Lower: sidebar + main -->
+        <div class="c-lower">
+          <!-- Sidebar (narrower — personal only) -->
+          <div class="c-sidebar">
+            <div class="cs-identity">
+              <svg width="32" height="32" viewBox="0 0 32 32">
+                <defs><clipPath id="cpc"><circle cx="16" cy="16" r="11"/></clipPath></defs>
+                <circle cx="16" cy="16" r="14" fill="none" stroke="#b8860b" stroke-width="1.8"/>
+                <circle cx="16" cy="16" r="11" fill="#254f92" clip-path="url(#cpc)"/>
+                <circle cx="16" cy="12" r="4" fill="#6a9ab8" clip-path="url(#cpc)"/>
+                <ellipse cx="16" cy="22" rx="6.5" ry="4" fill="#6a9ab8" clip-path="url(#cpc)"/>
+                <rect x="7" y="25" width="18" height="6" rx="3" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.2"/>
+                <text x="16" y="29.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" font-weight="700" fill="#8b6914">PE</text>
+              </svg>
+              <div><div class="cs-l1"></div><div class="cs-l2"></div></div>
+            </div>
+            <div class="cs-nav">
+              <div class="cs-section">My FORA</div>
+              <div class="cs-link active"><div class="cs-link-dot"></div>Dashboard</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Jurisdictions</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Bills</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Deliberations</div>
+              <div class="cs-section">Following</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Virginia</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Alexandria</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Iran</div>
+              <div class="cs-link"><div class="cs-link-dot"></div>Gaza</div>
+            </div>
+          </div>
+
+          <!-- Main grid -->
+          <div class="c-main">
+            <div class="c-widget">
+              <div class="cw-hdr"><div class="cw-dot"></div><div class="cw-ey">Civic Feed</div></div>
+              <div class="cw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#8b1a1a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#1b3a6b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:60%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#b8860b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:75%;"></div></div></div>
+              </div>
+            </div>
+            <div class="c-widget">
+              <div class="cw-hdr"><div class="cw-dot"></div><div class="cw-ey">My Representatives</div></div>
+              <div class="cw-body">
+                <div class="rep-row"><div class="rep-badge">US Sen</div><div class="rep-lines"><div class="rep-l1"></div><div class="rep-l2"></div></div></div>
+                <div class="rep-row"><div class="rep-badge">US Rep</div><div class="rep-lines"><div class="rep-l1" style="width:65%;"></div><div class="rep-l2"></div></div></div>
+                <div class="rep-row"><div class="rep-badge">VA Del</div><div class="rep-lines"><div class="rep-l1" style="width:50%;"></div><div class="rep-l2"></div></div></div>
+              </div>
+            </div>
+            <div class="c-widget">
+              <div class="cw-hdr"><div class="cw-dot"></div><div class="cw-ey">Civic Identity</div></div>
+              <div class="cw-body" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px;">
+                <svg width="58" height="70" viewBox="0 0 58 70">
+                  <defs><clipPath id="cpmc"><circle cx="29" cy="26" r="19"/></clipPath><radialGradient id="phmc" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient></defs>
+                  <circle cx="29" cy="26" r="24" fill="none" stroke="rgba(184,134,11,0.22)" stroke-width="6"/>
+                  <circle cx="29" cy="26" r="21" fill="none" stroke="#b8860b" stroke-width="1.8"/>
+                  <circle cx="29" cy="26" r="19" fill="url(#phmc)" clip-path="url(#cpmc)"/>
+                  <circle cx="29" cy="20" r="7" fill="#5a8aaa" clip-path="url(#cpmc)"/>
+                  <ellipse cx="29" cy="38" rx="10" ry="7" fill="#5a8aaa" clip-path="url(#cpmc)"/>
+                  <rect x="15" y="44" width="28" height="10" rx="5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.4"/>
+                  <text x="29" y="51.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="700" fill="#8b6914">PE</text>
+                  <rect x="6" y="58" width="46" height="7" rx="2.5" fill="#1a1a1a"/>
+                  <rect x="16" y="58" width="13" height="7" fill="#c9a84c"/>
+                  <rect x="29" y="58" width="9" height="7" fill="#1a1a1a"/>
+                </svg>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);text-align:center;">Eng · 35–44 · VA</div>
+              </div>
+            </div>
+            <div class="c-widget">
+              <div class="cw-hdr"><div class="cw-dot"></div><div class="cw-ey">Bills I'm Tracking</div></div>
+              <div class="cw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#254f92;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:55%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#b8860b;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:70%;"></div></div></div>
+              </div>
+            </div>
+            <div class="c-widget">
+              <div class="cw-hdr"><div class="cw-dot"></div><div class="cw-ey">Deliberations</div></div>
+              <div class="cw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#2d1a4a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:60%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#2d1a4a;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:45%;"></div></div></div>
+              </div>
+            </div>
+            <div class="c-widget">
+              <div class="cw-hdr"><div class="cw-dot"></div><div class="cw-ey">Trending in FORA</div></div>
+              <div class="cw-body">
+                <div class="feed-item"><div class="fi-dot" style="background:#155c2d;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:65%;"></div></div></div>
+                <div class="feed-item"><div class="fi-dot" style="background:#155c2d;"></div><div class="fi-lines"><div class="fi-l1"></div><div class="fi-l2" style="width:80%;"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <div class="v-pro"><div class="v-icon">+</div><div>Best separation of concerns — top nav = where you're going, sidebar = who you are and what you're following. Two different jobs, two different places.</div></div>
+      <div class="v-pro"><div class="v-icon">+</div><div>Sidebar collapses on content pages (Iran, bill pages) — full content width when you need it, personal context when you're on the dashboard.</div></div>
+      <div class="v-pro"><div class="v-icon">+</div><div>Jurisdiction following lives naturally in the sidebar, not cluttering the top nav.</div></div>
+      <div class="v-sep"></div>
+      <div class="v-con"><div class="v-icon">−</div><div>Two navigation systems to learn — slightly higher cognitive overhead on first use.</div></div>
+      <div class="v-con"><div class="v-icon">−</div><div>Requires clear rules about when the sidebar shows vs. collapses — needs to be consistent or users get disoriented.</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

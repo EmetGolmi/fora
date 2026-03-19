@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Civic Identity Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:#1b3a6b; --blue-md:#254f92; --gilt:#b8860b; --gilt-lt:#d4a832;
+  --gilt-pl:#f8f0dc; --ink:#0e1a2e; --ink-soft:#5a6e8a;
+  --field:#080f1e; --field-2:#0d1628; --field-3:#121e36;
+  --bg:#f2f4f8; --white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--field);}
+body{font-family:'Nunito',sans-serif;color:white;}
+
+/* ── PAGE CHROME ─────────────────────────────────────────── */
+.nav{height:56px;background:var(--blue);border-bottom:3px solid var(--gilt);display:flex;align-items:center;padding:0 40px;gap:20px;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;letter-spacing:0.1em;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.page{max-width:1100px;margin:0 auto;padding:56px 40px 80px;}
+.page-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:12px;}
+.page-title{font-family:'Libre Baskerville',serif;font-size:38px;font-weight:700;color:white;line-height:1.15;margin-bottom:12px;}
+.page-title em{color:var(--gilt-lt);font-style:italic;}
+.page-sub{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:580px;margin-bottom:48px;}
+
+/* ── SHARE TIER SELECTOR ─────────────────────────────────── */
+.tier-bar{display:flex;align-items:center;gap:8px;margin-bottom:48px;background:var(--field-2);border:1px solid rgba(255,255,255,0.06);border-radius:100px;padding:6px 8px;width:fit-content;}
+.tier-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 18px;border-radius:100px;border:none;cursor:pointer;transition:all 0.15s;color:rgba(255,255,255,0.35);background:transparent;}
+.tier-btn.active{background:var(--gilt);color:white;}
+.tier-btn:hover:not(.active){color:rgba(255,255,255,0.7);}
+.tier-label{font-size:12px;color:rgba(255,255,255,0.35);margin-left:12px;}
+
+/* ── TEMPLATE SECTION ────────────────────────────────────── */
+.template-section{margin-bottom:72px;}
+.template-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:6px;}
+.template-name{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;margin-bottom:4px;}
+.template-desc{font-size:12.5px;color:rgba(255,255,255,0.4);line-height:1.65;max-width:500px;margin-bottom:28px;}
+.card-row{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;}
+.card-wrap{position:relative;}
+.card-shadow{filter:drop-shadow(0 24px 48px rgba(0,0,0,0.7));}
+.share-actions{display:flex;flex-direction:column;gap:10px;padding-top:8px;}
+.share-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;border-radius:100px;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);background:transparent;cursor:pointer;transition:all 0.12s;width:160px;text-align:center;}
+.share-btn:hover{border-color:var(--gilt);color:var(--gilt-lt);}
+.share-btn.primary{background:var(--gilt);border-color:var(--gilt);color:white;}
+.share-btn.primary:hover{opacity:0.88;}
+.tier-tag{font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:4px;}
+.divider{height:1px;background:rgba(255,255,255,0.05);margin:64px 0;}
+
+/* ── CARD: THE FRANCHISE ─────────────────────────────────── */
+.card-franchise{width:300px;border-radius:14px;overflow:hidden;background:#0a1628;border:2px solid #1b3a6b;font-family:'Nunito',sans-serif;flex-shrink:0;}
+.cf-header{background:linear-gradient(135deg,#1b3a6b 0%,#0d1f3d 100%);padding:0;position:relative;overflow:hidden;height:180px;}
+.cf-header-bg{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,0.015) 14px,rgba(255,255,255,0.015) 15px);}
+.cf-gilt-strip{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gilt),var(--gilt-lt),var(--gilt));}
+.cf-number{position:absolute;top:12px;right:14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+.cf-edition{position:absolute;top:12px;left:14px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gilt);opacity:0.7;}
+.cf-avatar-area{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.cf-body{padding:16px 16px 18px;}
+.cf-name-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:3px;}
+.cf-identity{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:white;line-height:1.2;}
+.cf-region{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.cf-occ-row{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
+.cf-occ{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gilt-lt);}
+.cf-age{font-size:10px;color:rgba(255,255,255,0.3);}
+.cf-divider{height:1px;background:rgba(255,255,255,0.07);margin-bottom:12px;}
+.cf-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.cf-stat{text-align:center;}
+.cf-stat-num{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;line-height:1;}
+.cf-stat-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:2px;}
+.cf-motto{font-size:10.5px;color:rgba(255,255,255,0.4);font-style:italic;line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px;text-align:center;}
+.cf-footer{background:#050d1a;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;}
+.cf-footer-logo{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
+.cf-footer-logo span{color:rgba(184,134,11,0.5);}
+.cf-series{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.15);}
+
+/* ── CARD: THE TOME ──────────────────────────────────────── */
+.card-tome{width:280px;border-radius:10px;overflow:hidden;background:#1a0e08;border:6px solid #3a2208;font-family:'Nunito',sans-serif;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08);}
+.ct-outer{border:2px solid #8b6014;border-radius:5px;margin:4px;overflow:hidden;}
+.ct-title-bar{background:linear-gradient(90deg,#3a2208,#5a3410,#3a2208);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(184,134,11,0.3);}
+.ct-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:white;}
+.ct-cost{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gilt-lt);letter-spacing:0.1em;}
+.ct-art{background:#0e1a2e;height:160px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.ct-art-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(184,134,11,0.12) 0%,transparent 70%);}
+.ct-type-line{background:linear-gradient(90deg,#2a1a08,#4a2c10,#2a1a08);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(184,134,11,0.2);border-bottom:1px solid rgba(184,134,11,0.2);}
+.ct-type{font-family:'Libre Baskerville',serif;font-size:10px;color:rgba(255,255,255,0.7);}
+.ct-rarity{font-size:14px;}
+.ct-text-box{background:#1e1208;padding:10px 12px;min-height:90px;border-bottom:1px solid rgba(184,134,11,0.15);}
+.ct-flavor{font-size:10.5px;color:rgba(255,255,255,0.55);line-height:1.6;font-style:italic;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:8px;}
+.ct-rules{font-size:10px;color:rgba(255,255,255,0.65);line-height:1.6;}
+.ct-rules strong{color:var(--gilt-lt);}
+.ct-stats-row{display:flex;gap:0;background:#150e04;}
+.ct-stat-box{flex:1;text-align:center;padding:7px 0;border-right:1px solid rgba(255,255,255,0.06);}
+.ct-stat-box:last-child{border-right:none;}
+.ct-stat-val{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;line-height:1;}
+.ct-stat-lbl{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:1px;}
+.ct-footer{background:#0a0600;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;}
+.ct-set{font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;text-transform:uppercase;}
+
+/* ── CARD: THE FIELD GUIDE ───────────────────────────────── */
+.card-field{width:280px;border-radius:16px;overflow:hidden;font-family:'Nunito',sans-serif;flex-shrink:0;position:relative;}
+.cfg-bg{position:absolute;inset:0;background:linear-gradient(160deg,#0a2010 0%,#061408 50%,#020a04 100%);}
+.cfg-border{position:absolute;inset:0;border-radius:16px;border:3px solid #1a6b35;pointer-events:none;z-index:10;}
+.cfg-inner-border{position:absolute;inset:6px;border-radius:12px;border:1px solid rgba(26,107,53,0.3);pointer-events:none;z-index:10;}
+.cfg-content{position:relative;z-index:2;padding:14px;}
+.cfg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cfg-name{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:white;}
+.cfg-hp{font-family:'JetBrains Mono',monospace;font-size:11px;color:#9FE1CB;font-weight:700;}
+.cfg-hp span{font-size:8px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.7;margin-left:2px;}
+.cfg-art{background:rgba(255,255,255,0.04);border-radius:10px;height:150px;position:relative;overflow:hidden;margin-bottom:10px;border:1px solid rgba(26,107,53,0.2);display:flex;align-items:center;justify-content:center;}
+.cfg-art-overlay{position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,0.7));display:flex;gap:5px;}
+.cfg-type-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:100px;}
+.cfg-desc{font-size:10px;color:rgba(255,255,255,0.5);line-height:1.55;margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:7px;border-left:2px solid #1a6b35;}
+.cfg-moves{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.cfg-move{display:flex;align-items:center;gap:8px;}
+.cfg-move-icon{width:18px;height:18px;border-radius:50%;background:#1a6b35;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.cfg-move-name{font-size:11px;font-weight:600;color:white;flex:1;}
+.cfg-move-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:#9FE1CB;font-weight:700;}
+.cfg-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(26,107,53,0.2);padding-top:8px;}
+.cfg-rarity{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.cfg-logo{font-family:'Libre Baskerville',serif;font-size:11px;font-weight:700;color:rgba(26,107,53,0.6);letter-spacing:0.1em;}
+.cfg-logo span{color:rgba(100,200,140,0.6);}
+
+/* ── CARD: THE BLUEPRINT ─────────────────────────────────── */
+.card-blueprint{width:300px;border-radius:6px;overflow:hidden;background:#02101e;font-family:'JetBrains Mono',monospace;flex-shrink:0;border:1px solid #1a4fa0;}
+.cbp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,79,160,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,79,160,0.06) 1px,transparent 1px);background-size:20px 20px;pointer-events:none;}
+.cbp-content{position:relative;z-index:2;}
+.cbp-header{padding:14px 16px 10px;border-bottom:1px solid rgba(26,79,160,0.3);}
+.cbp-project{font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(80,138,221,0.6);margin-bottom:4px;}
+.cbp-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;margin-bottom:2px;}
+.cbp-subtitle{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.cbp-drawing{height:160px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#010d1a;border-bottom:1px solid rgba(26,79,160,0.2);}
+.cbp-cross{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;height:100%;pointer-events:none;opacity:0.06;}
+.cbp-specs{padding:12px 16px;border-bottom:1px solid rgba(26,79,160,0.2);}
+.cbp-spec-row{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin-bottom:4px;}
+.cbp-spec-key{font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(80,138,221,0.6);}
+.cbp-spec-val{font-size:8.5px;color:rgba(255,255,255,0.7);}
+.cbp-stats-header{font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(80,138,221,0.6);padding:10px 16px 6px;border-bottom:1px solid rgba(26,79,160,0.15);}
+.cbp-stats{display:grid;grid-template-columns:1fr 1fr 1fr;padding:10px 16px;}
+.cbp-stat{text-align:center;padding:4px 0;}
+.cbp-stat-val{font-size:18px;font-weight:700;color:white;line-height:1;}
+.cbp-stat-lbl{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(80,138,221,0.5);margin-top:2px;}
+.cbp-footer{padding:8px 16px;background:#010d1a;border-top:1px solid rgba(26,79,160,0.3);display:flex;align-items:center;justify-content:space-between;}
+.cbp-stamp{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(26,79,160,0.5);}
+.cbp-logo{font-family:'Libre Baskerville',serif;font-size:12px;font-weight:700;color:rgba(26,79,160,0.5);letter-spacing:0.1em;}
+.cbp-logo span{color:rgba(80,138,221,0.6);}
+
+/* ── TIER VISIBILITY ─────────────────────────────────────── */
+.tier-1 .t2,.tier-1 .t3{opacity:0.12;filter:blur(3px);}
+.tier-2 .t3{opacity:0.12;filter:blur(3px);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-label">Civic Identity Card</div>
+</nav>
+
+<div class="page">
+  <div class="page-ey">Your civic identity · collectible card</div>
+  <h1 class="page-title">Every voice has<br><em>a face.</em></h1>
+  <p class="page-sub">Your onboarding data becomes a card. Choose a template. Personalize the motto. Share what you want — the tier system controls what's visible when you export. Four templates. One card. Yours.</p>
+
+  <!-- SHARE TIER SELECTOR -->
+  <div style="margin-bottom:16px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;">Share tier — controls what others see when you export</div>
+    <div class="tier-bar">
+      <button class="tier-btn active" onclick="setTier(1,this)">Tier 1 · Public</button>
+      <button class="tier-btn" onclick="setTier(2,this)">Tier 2 · Extended</button>
+      <button class="tier-btn" onclick="setTier(3,this)">Tier 3 · Full card</button>
+    </div>
+    <div id="tier-desc" style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.6;">
+      <strong style="color:rgba(255,255,255,0.55);">Tier 1 — Public:</strong> Occupation, age range, region, and credential ring only. No stats, no motto, no edition.
+    </div>
+  </div>
+
+  <div id="cards-container">
+
+  <!-- ══ TEMPLATE 1: THE FRANCHISE ══════════════════════════ -->
+  <div class="template-section">
+    <div class="template-ey">Template 01</div>
+    <div class="template-name">The Franchise</div>
+    <div class="template-desc">Sports card structure. Photo header, gilt accent strip, stat block, team-color borders. Clean and American. Available in your sector ring color — the card border and header gradient shift to match.</div>
+    <div class="card-row">
+      <div class="card-wrap card-shadow tier-1" id="franchise-card">
+        <div class="card-franchise">
+          <div class="cf-header">
+            <div class="cf-header-bg"></div>
+            <div class="cf-gilt-strip"></div>
+            <div class="cf-edition t2">Founding Member · 2026</div>
+            <div class="cf-number t2">#0047 / 2026</div>
+            <div class="cf-avatar-area">
+              <!-- MARKER SVG -->
+              <svg width="110" height="134" viewBox="0 0 110 134">
+                <defs>
+                  <clipPath id="cp-f1"><circle cx="55" cy="55" r="38"/></clipPath>
+                  <radialGradient id="ph-f1" cx="40%" cy="32%">
+                    <stop offset="0%" stop-color="#c8e0f0"/>
+                    <stop offset="100%" stop-color="#6a9ab8"/>
+                  </radialGradient>
+                </defs>
+                <!-- Gold ring glow -->
+                <circle cx="55" cy="55" r="52" fill="none" stroke="rgba(184,134,11,0.14)" stroke-width="10"/>
+                <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(184,134,11,0.28)" stroke-width="8"/>
+                <!-- Gold ring -->
+                <circle cx="55" cy="55" r="42" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+                <circle cx="55" cy="55" r="44" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+                <!-- Avatar -->
+                <circle cx="55" cy="55" r="38" fill="url(#ph-f1)" clip-path="url(#cp-f1)"/>
+                <circle cx="55" cy="46" r="13" fill="#5a8aaa" clip-path="url(#cp-f1)"/>
+                <ellipse cx="55" cy="76" rx="20" ry="14" fill="#5a8aaa" clip-path="url(#cp-f1)"/>
+                <!-- Credential pill -->
+                <rect x="33" y="90" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+                <text x="55" y="101" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#8b6914">PE</text>
+                <!-- Army ribbon -->
+                <rect x="18" y="112" width="74" height="10" rx="3" fill="#1a1a1a"/>
+                <rect x="32" y="112" width="22" height="10" fill="#c9a84c"/>
+                <rect x="54" y="112" width="16" height="10" fill="#1a1a1a"/>
+                <rect x="70" y="112" width="22" height="10" fill="#1a1a1a"/>
+              </svg>
+            </div>
+          </div>
+          <div class="cf-body">
+            <div class="cf-name-row">
+              <div class="cf-identity">Licensed Engineer</div>
+              <div class="cf-region t2">Mid-Atlantic</div>
+            </div>
+            <div class="cf-occ-row">
+              <div class="cf-occ">PE &amp; Project Manager</div>
+              <div class="cf-age t2">· 35–44</div>
+            </div>
+            <div class="cf-divider"></div>
+            <div class="cf-stats t3">
+              <div class="cf-stat">
+                <div class="cf-stat-num" style="color:#9FE1CB;">247</div>
+                <div class="cf-stat-lbl">Contribs</div>
+              </div>
+              <div class="cf-stat">
+                <div class="cf-stat-num" style="color:#d4a832;">14</div>
+                <div class="cf-stat-lbl">Sectors</div>
+              </div>
+              <div class="cf-stat">
+                <div class="cf-stat-num" style="color:#80b0ff;">3</div>
+                <div class="cf-stat-lbl">Amendments</div>
+              </div>
+            </div>
+            <div class="cf-motto t3">"Good cities don't happen by accident.<br>They happen by argument."</div>
+          </div>
+          <div class="cf-footer t2">
+            <div class="cf-footer-logo">F<span>O</span>RA</div>
+            <div class="cf-series">Founding Series · 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="share-actions">
+        <button class="share-btn primary">Export card</button>
+        <button class="share-btn">Copy link</button>
+        <button class="share-btn">Download PNG</button>
+        <div class="tier-tag" id="franchise-tier-tag">Tier 1 visible</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ TEMPLATE 2: THE TOME ═══════════════════════════════ -->
+  <div class="template-section">
+    <div class="template-ey">Template 02</div>
+    <div class="template-name">The Tome</div>
+    <div class="template-desc">Magic: The Gathering card structure. Illustration frame, type line, rules text box with the user's motto as flavor text, stat block at the base. Feels scholarly and civic. The rarity pip reflects ring tier.</div>
+    <div class="card-row">
+      <div class="card-wrap card-shadow tier-1" id="tome-card">
+        <div class="card-tome">
+          <div class="ct-outer">
+            <div class="ct-title-bar">
+              <div class="ct-title">Licensed Engineer</div>
+              <div class="ct-cost t2">PE · 35–44</div>
+            </div>
+            <div class="ct-art">
+              <div class="ct-art-bg"></div>
+              <svg width="100" height="120" viewBox="0 0 100 120">
+                <defs>
+                  <clipPath id="cp-t1"><circle cx="50" cy="50" r="34"/></clipPath>
+                  <radialGradient id="ph-t1" cx="40%" cy="32%">
+                    <stop offset="0%" stop-color="#d0c0f0"/>
+                    <stop offset="100%" stop-color="#8060b0"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(184,134,11,0.2)" stroke-width="8"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+                <circle cx="50" cy="50" r="34" fill="url(#ph-t1)" clip-path="url(#cp-t1)"/>
+                <circle cx="50" cy="42" r="12" fill="#6050a0" clip-path="url(#cp-t1)"/>
+                <ellipse cx="50" cy="68" rx="18" ry="12" fill="#6050a0" clip-path="url(#cp-t1)"/>
+                <rect x="30" y="82" width="40" height="14" rx="7" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+                <text x="50" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#8b6914">PE</text>
+              </svg>
+            </div>
+            <div class="ct-type-line">
+              <div class="ct-type t2">Civic Actor — Engineer · Project Manager</div>
+              <div class="ct-rarity t3">◆</div>
+            </div>
+            <div class="ct-text-box">
+              <div class="ct-flavor t3">"Good cities don't happen by accident. They happen by argument."</div>
+              <div class="ct-rules">
+                <strong>Verified Credential</strong> — Gold ring awarded by state licensing board. Credential type visible. License number never displayed.<br><br class="t2">
+                <span class="t2"><strong>Mid-Atlantic</strong> · U.S. Army Veteran · 35–44</span>
+              </div>
+            </div>
+            <div class="ct-stats-row t3">
+              <div class="ct-stat-box">
+                <div class="ct-stat-val" style="color:#9FE1CB;">247</div>
+                <div class="ct-stat-lbl">Contribs</div>
+              </div>
+              <div class="ct-stat-box">
+                <div class="ct-stat-val" style="color:#d4a832;">14</div>
+                <div class="ct-stat-lbl">Sectors</div>
+              </div>
+              <div class="ct-stat-box">
+                <div class="ct-stat-val" style="color:#80b0ff;">3</div>
+                <div class="ct-stat-lbl">Amends</div>
+              </div>
+            </div>
+            <div class="ct-footer t2">
+              <div class="ct-set">FORA · Founding Series · 2026</div>
+              <div class="ct-set">#0047</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="share-actions">
+        <button class="share-btn primary">Export card</button>
+        <button class="share-btn">Copy link</button>
+        <button class="share-btn">Download PNG</button>
+        <div class="tier-tag" id="tome-tier-tag">Tier 1 visible</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ TEMPLATE 3: THE FIELD GUIDE ════════════════════════ -->
+  <div class="template-section">
+    <div class="template-ey">Template 03</div>
+    <div class="template-name">The Field Guide</div>
+    <div class="template-desc">Naturalist's field guide meets collector card. The user as a civic species. Contribution count becomes HP. Civic moves show areas of engagement. Type tags show sectors. Green palette for the knowledge layer.</div>
+    <div class="card-row">
+      <div class="card-wrap card-shadow tier-1" id="field-card">
+        <div class="card-field">
+          <div class="cfg-bg"></div>
+          <div class="cfg-border"></div>
+          <div class="cfg-inner-border"></div>
+          <div class="cfg-content">
+            <div class="cfg-header">
+              <div class="cfg-name">Licensed Engineer</div>
+              <div class="cfg-hp t3">247 <span>Civic HP</span></div>
+            </div>
+            <div class="cfg-art">
+              <svg width="90" height="110" viewBox="0 0 90 110">
+                <defs>
+                  <clipPath id="cp-g1"><circle cx="45" cy="44" r="32"/></clipPath>
+                  <radialGradient id="ph-g1" cx="40%" cy="32%">
+                    <stop offset="0%" stop-color="#c8f0d0"/>
+                    <stop offset="100%" stop-color="#5aaa70"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="45" cy="44" r="40" fill="none" stroke="rgba(26,107,53,0.25)" stroke-width="8"/>
+                <circle cx="45" cy="44" r="36" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+                <circle cx="45" cy="44" r="38" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+                <circle cx="45" cy="44" r="32" fill="url(#ph-g1)" clip-path="url(#cp-g1)"/>
+                <circle cx="45" cy="36" r="11" fill="#3a8850" clip-path="url(#cp-g1)"/>
+                <ellipse cx="45" cy="62" rx="17" ry="12" fill="#3a8850" clip-path="url(#cp-g1)"/>
+                <rect x="25" y="74" width="40" height="14" rx="7" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+                <text x="45" y="84.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#8b6914">PE</text>
+                <!-- Ribbon -->
+                <rect x="10" y="96" width="70" height="9" rx="3" fill="#1a1a1a"/>
+                <rect x="24" y="96" width="20" height="9" fill="#c9a84c"/>
+                <rect x="44" y="96" width="14" height="9" fill="#1a1a1a"/>
+              </svg>
+              <div class="cfg-art-overlay">
+                <span class="cfg-type-tag" style="background:rgba(26,107,53,0.4);color:#9FE1CB;border:1px solid rgba(26,107,53,0.5);">Engineer</span>
+                <span class="cfg-type-tag t2" style="background:rgba(184,134,11,0.3);color:#d4a832;border:1px solid rgba(184,134,11,0.4);">Veteran</span>
+              </div>
+            </div>
+            <div class="cfg-desc t3">"Good cities don't happen by accident. They happen by argument."</div>
+            <div class="cfg-moves t3">
+              <div class="cfg-move">
+                <div class="cfg-move-icon">⚙</div>
+                <div class="cfg-move-name">Infrastructure</div>
+                <div class="cfg-move-val">84 pts</div>
+              </div>
+              <div class="cfg-move">
+                <div class="cfg-move-icon">🏗</div>
+                <div class="cfg-move-name">Housing & Zoning</div>
+                <div class="cfg-move-val">63 pts</div>
+              </div>
+              <div class="cfg-move">
+                <div class="cfg-move-icon">⚖</div>
+                <div class="cfg-move-name">Labor & Economy</div>
+                <div class="cfg-move-val">47 pts</div>
+              </div>
+            </div>
+            <div class="cfg-footer">
+              <div class="cfg-rarity t2">Mid-Atlantic · 35–44 · Founding 2026</div>
+              <div class="cfg-logo">F<span>O</span>RA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="share-actions">
+        <button class="share-btn primary">Export card</button>
+        <button class="share-btn">Copy link</button>
+        <button class="share-btn">Download PNG</button>
+        <div class="tier-tag" id="field-tier-tag">Tier 1 visible</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ TEMPLATE 4: THE BLUEPRINT ══════════════════════════ -->
+  <div class="template-section">
+    <div class="template-ey">Template 04</div>
+    <div class="template-name">The Blueprint</div>
+    <div class="template-desc">Architectural drawing aesthetic. The avatar rendered as a technical illustration on a grid. Stats in a specification block. Occupation as a project designation. Monospace throughout. Navy and cyan palette. Natural fit for engineers, architects, planners.</div>
+    <div class="card-row">
+      <div class="card-wrap card-shadow tier-1" id="blueprint-card">
+        <div class="card-blueprint">
+          <div class="cbp-grid"></div>
+          <div class="cbp-content">
+            <div class="cbp-header">
+              <div class="cbp-project">Civic Profile — Verified Credential</div>
+              <div class="cbp-title">Licensed Engineer</div>
+              <div class="cbp-subtitle t2">PE · Project Manager · Mid-Atlantic · U.S. Army Veteran</div>
+            </div>
+            <div class="cbp-drawing">
+              <svg class="cbp-cross" viewBox="0 0 300 160" preserveAspectRatio="none">
+                <line x1="150" y1="0" x2="150" y2="160" stroke="rgba(26,79,160,0.4)" stroke-width="0.5"/>
+                <line x1="0" y1="80" x2="300" y2="80" stroke="rgba(26,79,160,0.4)" stroke-width="0.5"/>
+                <circle cx="150" cy="80" r="60" fill="none" stroke="rgba(26,79,160,0.3)" stroke-width="0.5"/>
+                <circle cx="150" cy="80" r="40" fill="none" stroke="rgba(26,79,160,0.2)" stroke-width="0.5"/>
+              </svg>
+              <svg width="100" height="130" viewBox="0 0 100 130">
+                <defs>
+                  <clipPath id="cp-b1"><circle cx="50" cy="50" r="34"/></clipPath>
+                  <radialGradient id="ph-b1" cx="40%" cy="32%">
+                    <stop offset="0%" stop-color="#c0d4f0"/>
+                    <stop offset="100%" stop-color="#4878b0"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(184,134,11,0.2)" stroke-width="8"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+                <circle cx="50" cy="50" r="34" fill="url(#ph-b1)" clip-path="url(#cp-b1)"/>
+                <circle cx="50" cy="42" r="12" fill="#3060a0" clip-path="url(#cp-b1)"/>
+                <ellipse cx="50" cy="68" rx="18" ry="12" fill="#3060a0" clip-path="url(#cp-b1)"/>
+                <rect x="30" y="82" width="40" height="14" rx="7" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+                <text x="50" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#8b6914">PE</text>
+                <!-- Ribbon -->
+                <rect x="12" y="106" width="76" height="9" rx="3" fill="#1a1a1a"/>
+                <rect x="26" y="106" width="24" height="9" fill="#c9a84c"/>
+                <rect x="50" y="106" width="14" height="9" fill="#1a1a1a"/>
+                <rect x="64" y="106" width="24" height="9" fill="#1a1a1a"/>
+              </svg>
+            </div>
+            <div class="cbp-specs">
+              <div class="cbp-spec-row">
+                <div class="cbp-spec-key">OCCUPATION</div>
+                <div class="cbp-spec-val">Professional Engineer · Project Manager</div>
+              </div>
+              <div class="cbp-spec-row t2">
+                <div class="cbp-spec-key">REGION</div>
+                <div class="cbp-spec-val">Mid-Atlantic · 35–44</div>
+              </div>
+              <div class="cbp-spec-row t3">
+                <div class="cbp-spec-key">MOTTO</div>
+                <div class="cbp-spec-val" style="font-style:italic;color:rgba(255,255,255,0.5);">"Good cities don't happen by accident."</div>
+              </div>
+            </div>
+            <div class="cbp-stats-header t3">Civic Specifications</div>
+            <div class="cbp-stats t3">
+              <div class="cbp-stat">
+                <div class="cbp-stat-val" style="color:#9FE1CB;">247</div>
+                <div class="cbp-stat-lbl">Contributions</div>
+              </div>
+              <div class="cbp-stat">
+                <div class="cbp-stat-val" style="color:#80b0ff;">14</div>
+                <div class="cbp-stat-lbl">Sectors</div>
+              </div>
+              <div class="cbp-stat">
+                <div class="cbp-stat-val" style="color:#d4a832;">3</div>
+                <div class="cbp-stat-lbl">Amendments</div>
+              </div>
+            </div>
+            <div class="cbp-footer t2">
+              <div class="cbp-stamp">FORA Founding Series · 2026 · #0047</div>
+              <div class="cbp-logo">F<span>O</span>RA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="share-actions">
+        <button class="share-btn primary">Export card</button>
+        <button class="share-btn">Copy link</button>
+        <button class="share-btn">Download PNG</button>
+        <div class="tier-tag" id="blueprint-tier-tag">Tier 1 visible</div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- end cards-container -->
+</div><!-- end page -->
+
+<script>
+const TIER_DESCS = {
+  1: '<strong style="color:rgba(255,255,255,0.55);">Tier 1 — Public:</strong> Occupation, age range, region, and credential ring only. No stats, no motto, no edition number.',
+  2: '<strong style="color:rgba(255,255,255,0.55);">Tier 2 — Extended:</strong> Adds region, age range, edition number, credential type, military branch, and card series. Stats and motto still private.',
+  3: '<strong style="color:rgba(255,255,255,0.55);">Tier 3 — Full card:</strong> Everything visible — stats, contribution areas, motto, rarity indicator, founding edition. You stand fully behind this card.',
+};
+
+let currentTier = 1;
+
+function setTier(n, btn) {
+  currentTier = n;
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tier-desc').innerHTML = TIER_DESCS[n];
+
+  // Update all card wrappers
+  document.querySelectorAll('.card-wrap').forEach(card => {
+    card.className = card.className.replace(/tier-\d/g, '').trim();
+    card.classList.add('tier-' + n);
+  });
+
+  // Update tier tags
+  const label = ['','Tier 1 visible','Tier 2 visible','Full card visible'][n];
+  ['franchise','tome','field','blueprint'].forEach(id => {
+    const el = document.getElementById(id + '-tier-tag');
+    if (el) el.textContent = label;
+  });
+}
+</script>
+</body>
+</html>

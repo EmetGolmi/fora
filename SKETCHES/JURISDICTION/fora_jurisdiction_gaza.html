@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Gaza Strip · Jurisdiction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1b3a6b; --blue-lt:#2a5298; --blue-vp:rgba(27,58,107,0.04); --blue-pl:rgba(27,58,107,0.12);
+  --gilt:#b8860b; --gilt-dk:#8b6914; --gilt-pl:#fdf8ed; --gilt-rul:rgba(184,134,11,0.2);
+  --red:#8b1a1a; --red-lt:#c0392b; --red-p:rgba(139,26,26,0.06); --red-r:rgba(139,26,26,0.18);
+  --amber:#c47f00; --amber-p:rgba(196,127,0,0.07); --amber-r:rgba(196,127,0,0.2);
+  --green:#155c2d; --green-p:rgba(21,92,45,0.07);
+  --purple:#2d1a4a; --purple-lt:#f0eaf7;
+  --ink:#0e1a2e; --ink-mid:#1e2d45; --ink-soft:#4a5568; --ink-mut:#7a8aaa;
+  --bg:#f2f4f8; --bg2:#e8ebf2; --white:#ffffff;
+  --rule:rgba(27,58,107,0.1); --rule-lt:rgba(27,58,107,0.06); --rule-dk:rgba(14,26,46,0.15);
+  /* Paper palette for newspaper sections */
+  --paper:#f7f4ee; --paper-dk:#ede9df; --paper-rule:rgba(14,12,8,0.15);
+  --paper-ink:#0e0c08; --paper-soft:#5a5448; --paper-mut:#8a8278;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* ── NAV ── */
+.nav{background:var(--blue);border-bottom:4px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-stars{font-size:10px;letter-spacing:0.55em;color:var(--gilt);opacity:0.7;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;transition:color 0.12s;}
+.nav-link:hover,.nav-link.active{color:white;}
+.nav-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;transition:all 0.12s;}
+.nav-btn:hover{background:rgba(255,255,255,0.1);color:white;}
+
+/* ── WAR ALERT ── */
+
+/* ── TICKER ── */
+.ticker-bar{height:30px;background:#0a0f1a;border-bottom:1px solid #1b3a6b;display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;background:#7a1212;border-right:1px solid #c0392b;}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:white;white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;position:relative;}
+.ticker-track{display:flex;align-items:center;animation:ticker-scroll 22s linear infinite;white-space:nowrap;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.06);}
+.ticker-key{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.ticker-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.ticker-val.tv-red{color:#ff8080;}
+.ticker-val.tv-white{color:rgba(255,255,255,0.85);}
+.ticker-val.tv-amber{color:#FAC775;}
+
+.war-alert{background:linear-gradient(135deg,#4a0808,#7a1212);border-bottom:2px solid #c0392b;padding:10px 40px;display:flex;align-items:center;gap:14px;}
+.wa-pulse{width:8px;height:8px;border-radius:50%;background:#ff4444;flex-shrink:0;animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,68,68,0.4);}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(255,68,68,0);}}
+.wa-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);flex-shrink:0;}
+.wa-text{font-family:'Nunito',sans-serif;font-size:13px;color:white;line-height:1.4;flex:1;}
+.wa-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.3);flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#0e1a2e 0%,#1b3a6b 50%,#12295a 100%);padding:32px 40px 28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.hero-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;position:relative;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.bc-sep{color:rgba(255,255,255,0.15);}
+.bc-here{color:rgba(255,255,255,0.6);}
+.juris-identity{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.iran-flag{display:flex;flex-direction:column;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.15);width:48px;flex-shrink:0;}
+.flag-green{background:#239f40;height:15px;}
+.flag-white{background:#f5f5f5;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;}
+.flag-red{background:#da0000;height:15px;}
+.juris-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:white;line-height:0.95;letter-spacing:-0.01em;}
+.juris-name-local{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.45);margin-top:4px;direction:rtl;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:6px;}
+.juris-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;}
+.jtag-type{color:rgba(184,134,11,0.9);border-color:rgba(184,134,11,0.3);background:rgba(184,134,11,0.1);}
+.jtag-war{color:rgba(255,100,100,0.9);border-color:rgba(255,100,100,0.3);background:rgba(255,100,100,0.08);animation:pulse 1.4s ease-in-out infinite;}
+.jtag-blue{color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);}
+
+/* Stats bar */
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.03);padding:11px 14px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;}
+.hs-num.red{color:#ffaaaa;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.27);margin-top:3px;line-height:1.5;}
+.hs-click{cursor:pointer;transition:background 0.15s;}
+.hs-click:hover{background:rgba(255,255,255,0.1);}
+.hero-right{display:flex;flex-direction:column;gap:8px;min-width:180px;flex-shrink:0;}
+.btn-primary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;transition:all 0.12s;}
+.btn-secondary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;background:transparent;color:rgba(255,255,255,0.7);transition:all 0.12s;}
+.btn-red{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,100,100,0.3);cursor:pointer;background:rgba(255,100,100,0.08);color:rgba(255,150,150,0.9);transition:all 0.12s;}
+
+/* ── TABS ── */
+.org-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;align-items:center;padding:0 40px;gap:0;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 16px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.12s;}
+.tab:hover{color:var(--blue);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+.tab.live{color:var(--red);}
+
+/* ── TAB HOVER TOOLTIP ── */
+.tab[title]{position:relative;}
+.tab[title]:hover::after{
+  content:attr(title);
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--ink);
+  color:rgba(255,255,255,0.9);
+  font-family:'Source Serif 4',serif;
+  font-size:11px;
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:0.01em;
+  white-space:nowrap;
+  padding:5px 10px;
+  border-radius:4px;
+  pointer-events:none;
+  z-index:300;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+}
+.tab[title]:hover::before{
+  content:'';
+  position:absolute;
+  bottom:calc(100% + 2px);
+  left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:var(--ink);
+  pointer-events:none;
+  z-index:300;
+}
+
+.tab.live.active{border-bottom-color:var(--red);}
+
+/* ── BODY GRID ── */
+.juris-body{display:grid;grid-template-columns:1fr 280px;gap:0;max-width:1400px;margin:0 auto;padding:0 40px 60px;align-items:start;}
+.juris-main{padding:32px 32px 0 0;min-width:0;}
+.juris-sidebar{padding:32px 0 0;border-left:1px solid var(--rule);padding-left:24px;}
+
+/* ── HYBRID SECTION BLOCKS ── */
+/* Each section: newspaper header (Playfair eyebrow + headline + lead) then dashboard cards */
+.sec-block{margin-bottom:40px;}
+.sec-block + .sec-block{padding-top:32px;border-top:2px solid var(--paper-rule);}
+
+/* Newspaper section header */
+.nh-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.nh-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--gilt-dk);flex-shrink:0;}
+.nh-headline{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--paper-ink);line-height:1.1;letter-spacing:-0.01em;margin-bottom:8px;}
+.nh-headline.crisis{color:var(--red);}
+.nh-lead{font-family:'Source Serif 4',serif;font-size:13.5px;color:var(--paper-soft);line-height:1.75;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--rule);}
+.nh-rule{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.nh-rule-line{flex:1;height:1px;background:var(--rule);}
+.nh-rule-label{font-family:'Playfair Display',serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);}
+
+/* Crisis block */
+.cb-label{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+.cb-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.4s ease-in-out infinite;}
+.cb-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.35;}
+.cb-text{font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px;}
+.cb-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.cbf{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:9px 12px;}
+.cbf-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:2px;}
+.cbf-val{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);}
+.succession-note{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;}
+.sn-icon{font-size:14px;flex-shrink:0;}
+.sn-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
+
+/* Gov authority table */
+.auth-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.auth-table thead tr{background:var(--blue);}
+.auth-table th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.auth-table td{padding:10px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.auth-table tr:last-child td{border-bottom:none;}
+.auth-table tr:hover td{background:var(--bg);}
+.at-body{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.at-body.red{color:var(--red);}
+.at-body.purple{color:var(--purple);}
+.at-badge{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.08em;text-transform:uppercase;padding:1px 6px;border-radius:3px;display:inline-block;}
+.ab-unelect{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.ab-appoint{color:var(--gilt);background:var(--gilt-pl);border:1px solid var(--gilt-rul);}
+.ab-vetted{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.ab-nge{color:var(--purple);background:var(--purple-lt);border:1px solid rgba(45,26,74,0.2);}
+.at-holder{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:1px;}
+.at-meta{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+.at-meta.crisis{color:var(--red);}
+.at-meta.green{color:var(--green);}
+.at-meta.purple{color:var(--purple);}
+.at-note{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);}
+.circular-lock{background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:8px;padding:10px 14px;font-family:'Source Serif 4',serif;font-size:12px;color:var(--ink-soft);line-height:1.65;margin-top:12px;}
+
+/* Philosophy */
+.philosophy-block{background:var(--gilt-pl);border:1px solid var(--gilt-rul);border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+.pb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.pb-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--paper-ink);margin-bottom:6px;}
+.pb-text{font-family:'Source Serif 4',serif;font-size:13px;color:var(--paper-soft);line-height:1.7;}
+.endonym-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;border:1px solid var(--rule);}
+.endonym-table th{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 12px;text-align:left;font-weight:400;background:var(--ink);color:rgba(255,255,255,0.45);}
+.endonym-table td{padding:9px 12px;border-bottom:1px solid var(--rule-lt);vertical-align:top;font-size:12.5px;}
+.endonym-table tr:last-child td{border-bottom:none;}
+.endonym-table tr:hover td{background:var(--bg);}
+.et-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;}
+.et-end{color:var(--green);}
+.et-exo{color:var(--ink-mut);}
+.et-name{font-family:'Source Serif 4',serif;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.et-source{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+
+/* NGE cards */
+.nge-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.nge-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;transition:box-shadow 0.12s;}
+.nge-card:hover{box-shadow:0 2px 12px rgba(27,58,107,0.08);}
+.nge-card.controls{border-left:3px solid var(--blue);}
+.nge-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.nge-name{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.nge-rel{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:1px 6px;border-radius:3px;background:var(--blue-vp);color:var(--blue);border:1px solid var(--blue-pl);display:inline-block;margin-bottom:5px;}
+.nge-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
+.nge-link{color:var(--blue-lt);font-size:11px;}
+
+/* CivicIssues */
+.ci-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:13px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;transition:box-shadow 0.12s;cursor:pointer;}
+.ci-card:hover{box-shadow:0 2px 12px rgba(27,58,107,0.08);}
+.ci-icon{font-size:18px;flex-shrink:0;}
+.ci-title{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.35;}
+.ci-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+.ci-count{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-top:5px;}
+.ci-arrow{font-size:14px;color:var(--ink-mut);flex-shrink:0;margin-left:auto;}
+
+/* Sidebar */
+.sb-block{margin-bottom:24px;}
+.sb-block + .sb-block{padding-top:20px;border-top:1px solid var(--rule);}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+.data-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.data-row:last-child{border-bottom:none;}
+.dr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+.dr-val{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;color:var(--ink);text-align:right;max-width:60%;}
+.dr-val.red{color:var(--red);}
+.official-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--rule-lt);}
+.official-row:last-child{border-bottom:none;}
+.or-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.or-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--ink);}
+.or-role{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;color:var(--ink-mut);margin-top:1px;}
+.or-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-top:3px;margin-right:3px;}
+.ob-new{background:rgba(21,92,45,0.08);color:var(--green);border:1px solid rgba(21,92,45,0.2);}
+.ob-crisis{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.ob-incumbent{background:var(--blue-vp);color:var(--blue);border:1px solid var(--blue-pl);}
+.quick-link{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--blue);transition:color 0.1s;}
+.quick-link:last-child{border-bottom:none;}
+.quick-link:hover{color:var(--gilt-dk);}
+.ql-icon{font-size:12px;flex-shrink:0;}
+.ql-label{flex:1;}
+.ql-ext{color:var(--ink-mut);}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,26,46,0.6);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--white);border-radius:10px;padding:28px 30px;max-width:560px;width:100%;position:relative;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(14,26,46,0.3);}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;color:var(--ink-mut);padding:4px 8px;border-radius:4px;transition:background 0.1s;}
+.modal-close:hover{background:var(--bg);}
+.modal-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--paper-ink);line-height:1.15;margin-bottom:14px;}
+.modal-body{font-family:'Source Serif 4',serif;font-size:13.5px;color:#2a2620;line-height:1.8;}
+.modal-link{display:flex;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);}
+.modal-link:hover{color:var(--gilt-dk);}
+/* Death table */
+.death-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:4px;}
+.death-table th{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 10px;text-align:left;font-weight:400;background:var(--ink);color:rgba(255,255,255,0.5);}
+.death-table td{padding:8px 10px;border-bottom:1px solid var(--rule-lt);vertical-align:top;font-family:'Source Serif 4',serif;line-height:1.5;}
+.death-table tr:last-child td{border-bottom:none;}
+.dt-source{font-weight:600;}
+.dt-count{font-weight:700;white-space:nowrap;}
+.dt-gov{background:rgba(139,26,26,0.04);}
+.dt-rights{background:rgba(27,58,107,0.03);}
+.dt-leaked{background:rgba(21,92,45,0.04);}
+.dt-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-bottom:2px;}
+.dt-b-gov{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.dt-b-rights{background:var(--blue-vp);color:var(--blue);border:1px solid var(--blue-pl);}
+.dt-b-leaked{background:var(--green-p);color:var(--green);border:1px solid rgba(21,92,45,0.2);}
+.death-caveat{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule);line-height:1.6;}
+/* breadcrumb cosmic */
+.hero-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;line-height:2;position:relative;}
+.hero-breadcrumb a{color:rgba(255,255,255,0.3);text-decoration:none;white-space:nowrap;}
+.hero-breadcrumb a:hover{color:rgba(255,255,255,0.75);}
+.hero-breadcrumb .sep{opacity:0.2;margin:0 5px;}
+.bc-row{display:flex;flex-wrap:wrap;align-items:center;gap:0;}
+.bc-cosmic{color:rgba(255,255,255,0.15);font-size:7px;letter-spacing:0.1em;}
+.bc-cosmic a{color:rgba(255,255,255,0.15);}
+.bc-cosmic a:hover{color:rgba(255,255,255,0.5);}
+.bc-earth{color:rgba(255,255,255,0.22);font-size:7.5px;}
+.bc-earth a{color:rgba(255,255,255,0.22);}
+.bc-earth a:hover{color:rgba(255,255,255,0.6);}
+.bc-local{color:rgba(255,255,255,0.45);font-size:8px;}
+.bc-local a{color:rgba(255,255,255,0.45);}
+.bc-local a:hover{color:rgba(255,255,255,0.85);}
+.bc-here{color:var(--gilt-lt);font-size:8px;font-weight:600;}
+.bc-collapse{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);cursor:pointer;border:1px solid rgba(255,255,255,0.12);padding:2px 8px;border-radius:3px;margin-left:4px;transition:all 0.12s;white-space:nowrap;}
+.bc-collapse:hover{color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.3);}
+.bc-full{display:none;}
+.bc-full.open{display:flex;flex-wrap:wrap;align-items:center;gap:0;}
+
+.hero-inner{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div class="nav-logo">FORA</div>
+    <div class="nav-stars">★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link">Feed</div>
+    <div class="nav-link active">The Record</div>
+    <div class="nav-link">Discourse</div>
+    <div class="nav-link">My Civics</div>
+    <button class="nav-btn">Sign in</button>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge crisis"><div class="wa-pulse"></div><span class="ticker-badge-text">ACTIVE CRISIS</span></div>
+  <div class="ticker-scroll-wrap"><div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-key">Gaza ceasefire</span><span class="ticker-val tv-amber">Phase 1 holding · Oct 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Displaced</span><span class="ticker-val tv-red">~1.9M at peak · 85% of population</span></div>
+    <div class="ticker-item"><span class="ticker-key">Deaths</span><span class="ticker-val tv-red">70,000+ · Gaza Health Ministry</span></div>
+    <div class="ticker-item"><span class="ticker-key">Infrastructure</span><span class="ticker-val tv-red">80–90% destroyed</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hormuz / oil impact</span><span class="ticker-val tv-amber">Iran-Israel war complicates reconstruction</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hamas political bureau</span><span class="ticker-val tv-amber">Qatar · ceasefire negotiations ongoing</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hostages</span><span class="ticker-val tv-white">Partial releases · Phase 1 exchange</span></div>
+    <div class="ticker-item"><span class="ticker-key">Governance status</span><span class="ticker-val tv-amber">Hamas de facto · PA claim · contested</span></div>
+    <div class="ticker-item"><span class="ticker-key">Gaza ceasefire</span><span class="ticker-val tv-amber">Phase 1 holding · Oct 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Displaced</span><span class="ticker-val tv-red">~1.9M at peak · 85% of population</span></div>
+    <div class="ticker-item"><span class="ticker-key">Deaths</span><span class="ticker-val tv-red">70,000+ · Gaza Health Ministry</span></div>
+    <div class="ticker-item"><span class="ticker-key">Infrastructure</span><span class="ticker-val tv-red">80–90% destroyed</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hormuz / oil impact</span><span class="ticker-val tv-amber">Iran-Israel war complicates reconstruction</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hamas political bureau</span><span class="ticker-val tv-amber">Qatar · ceasefire negotiations ongoing</span></div>
+    <div class="ticker-item"><span class="ticker-key">Hostages</span><span class="ticker-val tv-white">Partial releases · Phase 1 exchange</span></div>
+    <div class="ticker-item"><span class="ticker-key">Governance status</span><span class="ticker-val tv-amber">Hamas de facto · PA claim · contested</span></div>
+  </div></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-breadcrumb">
+    <div class="bc-row" id="bc-short">
+      <span class="bc-cosmic">···</span>
+      <span class="sep">/</span>
+      <a href="#" class="bc-earth">Asia</a>
+      <span class="sep">/</span>
+      <a href="#" class="bc-earth">Middle East</a>
+      <span class="sep">/</span>
+      <a href="#" class="bc-earth">Levant</a>
+      <span class="sep">/</span>
+      <a href="#" class="bc-local">Palestinian Territories</a>
+      <span class="sep">/</span>
+      <span class="bc-here">Gaza Strip</span>
+      <span class="bc-collapse" onclick="toggleCosmic()" id="bc-toggle">↑ Show full location</span>
+    </div>
+    <div class="bc-full" id="bc-full">
+      <a href="#" class="bc-cosmic">The Universe</a><span class="sep">/</span>
+      <a href="#" class="bc-cosmic">Laniakea Supercluster</a><span class="sep">/</span>
+      <a href="#" class="bc-cosmic">Virgo Supercluster</a><span class="sep">/</span>
+      <a href="#" class="bc-cosmic">Local Group</a><span class="sep">/</span>
+      <a href="#" class="bc-cosmic">Milky Way</a><span class="sep">/</span>
+      <a href="#" class="bc-cosmic">Orion Arm</a><span class="sep">/</span>
+      <a href="#" class="bc-cosmic">Solar System</a><span class="sep">/</span>
+      <a href="#" class="bc-earth">Earth</a><span class="sep">/</span>
+      <a href="#" class="bc-earth">Asia</a><span class="sep">/</span>
+      <a href="#" class="bc-earth">Middle East</a><span class="sep">/</span>
+      <a href="#" class="bc-earth">Levant</a><span class="sep">/</span>
+      <a href="#" class="bc-local">Palestinian Territories</a><span class="sep">/</span>
+      <span class="bc-here">Gaza Strip</span>
+      <span class="bc-collapse" onclick="toggleCosmic()" id="bc-toggle2">↓ Collapse</span>
+    </div>
+  </div>
+
+  <div class="hero-inner">
+    <div style="flex:1;min-width:0;">
+      <div class="juris-identity">
+        <div class="iran-flag" style="background:#006233;border:0.5px solid rgba(255,255,255,0.2);border-radius:2px;width:48px;height:32px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;">
+          <div style="font-size:9px;color:white;font-family:'JetBrains Mono',monospace;">غزة</div>
+          <div style="font-size:6px;color:rgba(255,255,255,0.6);">☽</div>
+        </div>
+        <div>
+          <div class="juris-name">Gaza Strip</div>
+          <div class="juris-name-local">قطاع غزة · Qiṭāʿ Ghazza</div>
+          <div class="juris-sub">Palestinian Territory · Mediterranean coast · 41 × 10 km · ~2.3M population pre-war</div>
+          <div class="juris-tags">
+            <span class="jtag jtag-war">⚠ Active crisis · Ceasefire fragile</span>
+            <span class="jtag" style="background:rgba(196,127,0,0.2);border-color:#c47f00;color:#FAC775;">Sovereignty contested</span>
+            <span class="jtag jtag-blue">Palestinian territory</span>
+            <span class="jtag jtag-blue">Hamas de facto authority</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hs hs-click" onclick="openStatModal('stat-pop')"><div class="hs-num red">~2.3M</div><div class="hs-label">Population ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-freedom')"><div class="hs-num red">15/100</div><div class="hs-label">Freedom ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-happiness')"><div class="hs-num" style="color:#FAC775;font-size:13px;">Rate it ›</div><div class="hs-label">Happiness · pending</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-gdp')"><div class="hs-num red">Collapsed</div><div class="hs-label">Economy ›</div></div>
+      </div>
+    </div>
+
+    <div class="hero-right" style="min-width:260px;max-width:300px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:2px;">Governance — contested</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">
+        <a href="fora_nge_hamas.html" style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(196,127,0,0.2);border:0.5px solid #c47f00;color:#FAC775;white-space:nowrap;text-decoration:none;">Hamas · De facto authority →</a>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">PA · Claims jurisdiction</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(139,26,26,0.3);border:0.5px solid #8b1a1a;color:#ffaaaa;white-space:nowrap;">Israel · Occupying power (int'l law)</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">UN · Observer state member</span>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-top:4px;">Key external relationships</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Egypt · Rafah crossing</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Qatar · Aid + ceasefire mediation</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">UNRWA · Humanitarian</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Hamas NGE →</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+        <button class="btn-primary">+ Follow Gaza</button>
+        <button class="btn-secondary">Active CivicEvents →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" title="What is this place?">Overview</div>
+    <div class="tab live active-crisis-tab" title="What is happening right now?">Active Crisis ●</div>
+    <div class="tab" title="How is it governed?">Government</div>
+    <div class="tab" title="How does it relate to the world?">Foreign Affairs</div>
+    <div class="tab" title="What does it believe?">Doctrine &amp; History</div>
+    <div class="tab" title="What is contested?">Discourse</div>
+    <div class="tab" title="What is the record?">The Record</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="juris-body">
+  <div class="juris-main">
+
+    <!-- ACTIVE CRISIS -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Ongoing · Oct 2023 – present</div>
+      <div class="nh-headline crisis">A Territory Under War — 70,000 Dead,<br>2.3 Million Displaced, No Clear End State</div>
+      <div class="nh-lead">The Gaza war that began after Hamas's October 7 2023 attack on Israel has killed more than 70,000 Palestinians, displaced nearly the entire population, and destroyed the majority of Gaza's infrastructure. A Phase 1 ceasefire took effect October 2025. As of March 2026, Phase 1 is holding, but a permanent resolution — including the fundamental question of who governs Gaza after the war — remains unresolved.</div>
+
+      <div class="cb-facts">
+        <div class="cbf"><div class="cbf-label">Deaths (Gaza Health Ministry)</div><div class="cbf-val">70,000+</div></div>
+        <div class="cbf"><div class="cbf-label">Displaced at peak</div><div class="cbf-val">~1.9M · 85% of population</div></div>
+        <div class="cbf"><div class="cbf-label">Infrastructure destroyed</div><div class="cbf-val">80–90% (World Bank)</div></div>
+        <div class="cbf"><div class="cbf-label">Ceasefire status</div><div class="cbf-val">Phase 1 · Oct 2025 · fragile</div></div>
+        <div class="cbf"><div class="cbf-label">Reconstruction cost</div><div class="cbf-val">$40–80B est. (World Bank)</div></div>
+        <div class="cbf"><div class="cbf-label">Post-war governance</div><div class="cbf-val">Unresolved · active negotiation</div></div>
+      </div>
+
+      <div class="succession-note" style="background:rgba(196,127,0,0.1);border-color:rgba(196,127,0,0.3);">
+        <div class="sn-icon">⚠</div>
+        <div class="sn-text"><strong style="color:var(--amber);">Governance void.</strong> Hamas's military leadership has been decapitated but its administrative structure partially persists. Israel has not announced a post-war governance plan. The Palestinian Authority (West Bank) claims jurisdiction but has no presence in Gaza. The US has proposed a "revitalized PA" governing Gaza; Hamas rejects this. Qatar and Egypt are mediating. No resolution as of March 2026.</div>
+      </div>
+    </div>
+
+    <!-- WHAT IS GAZA -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Territory · people · history</div>
+      <div class="nh-headline">What Gaza Is — and What It Is Not</div>
+      <div class="nh-lead">Gaza is a 365 km² strip of land on the southeastern Mediterranean coast — one of the most densely populated territories on Earth. It is not a state. It is not formally part of Israel. Its legal status is disputed — Israel withdrew settlers and military in 2005 but maintains a blockade; international law generally considers it still occupied. Its 2.3 million residents are among the world's largest stateless populations.</div>
+
+      <table class="auth-table">
+        <thead><tr><th>Dimension</th><th>Detail</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><div class="at-body">Territory</div></td><td class="at-note">365 km² · 41km long × 10km wide · Mediterranean coast</td><td class="at-note">Approximately the size of Philadelphia. Borders Israel (north and east), Egypt (south), Mediterranean Sea (west).</td></tr>
+          <tr style="background:var(--gilt-pl);"><td><div class="at-body">Population</div></td><td class="at-note">~2.3M pre-war (2023)</td><td class="at-note">~50% under age 18. One of the world's youngest populations. ~70% are refugees or descendants of 1948 refugees (Nakba).</td></tr>
+          <tr><td><div class="at-body">Legal status</div></td><td class="at-note">Disputed</td><td class="at-note">Israel: "hostile territory" (not occupied since 2005 withdrawal). International law / ICJ: occupied territory. Hamas: liberated territory under resistance. PA: part of Palestinian state.</td></tr>
+          <tr style="background:var(--gilt-pl);"><td><div class="at-body">De facto authority</div></td><td class="at-note">Hamas — since 2007</td><td class="at-note">Hamas administers civil services, courts, taxes, police. Severely degraded 2023–2025 but administrative structure partially persists.</td></tr>
+          <tr><td><div class="at-body">Religion</div></td><td class="at-note">~99% Sunni Muslim</td><td class="at-note">Small Christian community (~1,000 people). Most are members of the Greek Orthodox Church of Jerusalem.</td></tr>
+          <tr style="background:var(--gilt-pl);"><td><div class="at-body">Economy</div></td><td class="at-note">Blockade economy since 2007</td><td class="at-note">Israel and Egypt control all land crossings and the maritime perimeter. GDP collapsed 80%+ during 2023–25 war.</td></tr>
+          <tr><td><div class="at-body" style="color:var(--purple);">Raster/vector note</div></td><td class="at-note">Hybrid — territory + diaspora</td><td class="at-note">Gaza has a defined territory (raster) but ~7 million Palestinians in diaspora maintain communal identity with Gaza (vector). Hamas's authority extends into diaspora networks beyond the physical territory.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CIVIC ISSUES -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Persistent questions · FORA does not resolve</div>
+      <div class="nh-headline">The Questions Gaza Forces</div>
+      <div class="nh-lead">Gaza is not primarily a question about Hamas. It is a question about 2.3 million people and the political future of a territory that has been under blockade, occupation, or war for most of its modern existence. These are the CivicIssues that Gaza generates.</div>
+
+      <div class="ci-card"><div class="ci-icon">🗳️</div><div><div class="ci-title">Who should govern Gaza after the war — and how should that authority be established?</div><div class="ci-desc">Options range from a revitalized PA to an international mandate to a new Palestinian technocratic government to Hamas remaining in power. Every option has a constituency and every option has structural problems. This is the defining unresolved question of the conflict.</div><div class="ci-count">4,217 contributions · 58 jurisdictions · Live</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">⚖️</div><div><div class="ci-title">Does the scale of Gaza's destruction constitute genocide under the Genocide Convention?</div><div class="ci-desc">The ICJ found a plausible risk of genocide in Jan 2024 but did not rule definitively. The question of legal definition, intent, and threshold is actively litigated. South Africa brought the case; Israel, US, UK dispute the characterization. FORA records all legal arguments.</div><div class="ci-count">6,841 contributions · 89 jurisdictions · Highest-traffic active CivicIssue</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">🏗️</div><div><div class="ci-title">Can Gaza be rebuilt under the current political framework — and who pays?</div><div class="ci-desc">Reconstruction estimated at $40–80B. No reconstruction can proceed without a political settlement on governance. Qatar, Saudi Arabia, and Gulf states have indicated conditional willingness to fund reconstruction. The Iran-Israel war (Feb 2026) has complicated regional financing.</div><div class="ci-count">1,893 contributions · 34 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">🌍</div><div><div class="ci-title">What is the relationship between Gaza and a Palestinian state?</div><div class="ci-desc">Two-state solution frameworks assume a Palestinian state comprising Gaza + West Bank. Hamas and PA are rival governments. Gaza and West Bank have been governed separately since 2007. Reunification is a prerequisite for any two-state outcome — and no reunification roadmap currently exists.</div><div class="ci-count">3,104 contributions · 47 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="juris-sidebar">
+    <div class="sb-block">
+      <div class="sb-ey">At a glance</div>
+      <div class="sb-title">Gaza Strip · March 2026</div>
+      <div class="data-row"><div class="dr-label">Territory</div><div class="dr-val">365 km²</div></div>
+      <div class="data-row"><div class="dr-label">Population (pre-war)</div><div class="dr-val">~2.3 million</div></div>
+      <div class="data-row"><div class="dr-label">Capital / main city</div><div class="dr-val">Gaza City</div></div>
+      <div class="data-row"><div class="dr-label">Language</div><div class="dr-val">Arabic</div></div>
+      <div class="data-row"><div class="dr-label">Religion</div><div class="dr-val">~99% Sunni Muslim</div></div>
+      <div class="data-row"><div class="dr-label">De facto authority</div><div class="dr-val red">Hamas (contested)</div></div>
+      <div class="data-row"><div class="dr-label">Blockade in force</div><div class="dr-val">Since 2007</div></div>
+      <div class="data-row"><div class="dr-label">Crisis status</div><div class="dr-val red">Ceasefire fragile</div></div>
+      <div class="data-row"><div class="dr-label">War duration</div><div class="dr-val red">Oct 2023 – present</div></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Related pages</div>
+      <div class="sb-title">See also</div>
+      <a class="quick-link" href="fora_nge_hamas.html"><span class="ql-icon">⚔️</span><div class="ql-label">Hamas — Organization page</div><span class="ql-ext">→</span></a>
+      <a class="quick-link" href="#"><span class="ql-icon">🇮🇱</span><div class="ql-label">Israel — Jurisdiction</div><span class="ql-ext">→</span></a>
+      <a class="quick-link" href="#"><span class="ql-icon">🇵🇸</span><div class="ql-label">West Bank — Jurisdiction</div><span class="ql-ext">→</span></a>
+      <a class="quick-link" href="fora_nge_quds_force.html"><span class="ql-icon">🛡</span><div class="ql-label">IRGC Quds Force — NGE</div><span class="ql-ext">→</span></a>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">External sources</div>
+      <div class="sb-title">Reference</div>
+      <a class="quick-link" href="https://www.ochaopt.org" target="_blank"><span class="ql-icon">🌐</span><div class="ql-label">OCHA · Gaza humanitarian</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://www.unrwa.org" target="_blank"><span class="ql-icon">🌐</span><div class="ql-label">UNRWA · Palestinian refugees</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://www.icj-cij.org" target="_blank"><span class="ql-icon">⚖️</span><div class="ql-label">ICJ · South Africa v. Israel</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://freedomhouse.org/country/gaza-strip/freedom-world/2025" target="_blank"><span class="ql-icon">📊</span><div class="ql-label">Freedom House · 2025</div><span class="ql-ext">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕ close</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+
+const statData = {
+  'stat-pop': {
+    ey: 'Gaza Strip · 2023 pre-war estimate',
+    title: 'Population: ~2.3 Million',
+    body: 'Gaza had an estimated 2.3 million residents before the October 2023 war. By 2025, displacement, deaths, and emigration have dramatically altered the demographic reality. The Gaza Health Ministry estimated over 70,000 killed. The UN estimated 85% of the population — ~1.9 million people — were internally displaced at the war\'s peak. Gaza is one of the most densely populated territories on Earth: 41km × 10km, approximately the size of Philadelphia.'
+  },
+  'stat-freedom': {
+    ey: 'Freedom House · 2025 · Gaza / Palestinian Territories',
+    title: 'Freedom: 15 / 100 — Not Free',
+    body: 'Freedom House rates the Palestinian Territories (including Gaza) 15 out of 100. Political Rights: 3/40. Civil Liberties: 12/60. The score reflects Hamas\'s suppression of political opposition in Gaza, restrictions on press freedom, the absence of elections since 2006, and the impact of the ongoing Israeli military campaign and blockade. The score does not distinguish between Hamas governance failures and Israeli military-imposed restrictions — a methodological limitation FORA notes.'
+  },
+  'stat-happiness': {
+    ey: 'World Happiness Report / FORA pending',
+    title: 'Happiness: Not separately measured',
+    body: 'The World Happiness Report does not separately measure Gaza. Palestinian Territories score approximately 4.4 on the Cantril Ladder — among the lowest in the world. Gaza\'s specific score would be substantially lower than the West Bank given the scale of destruction. FORA is building a bottom-up wellbeing measurement that will produce a Gaza-specific score from user contributions. The "Rate it ›" prompt in the hero bar seeds this process.'
+  },
+  'stat-gdp': {
+    ey: 'GDP / Economy · Pre-war and current',
+    title: 'Economy: Collapsed',
+    body: 'Gaza\'s GDP was approximately $2.4 billion (2022, World Bank). The 2023–2025 war destroyed an estimated 80–90% of Gaza\'s economic infrastructure. The World Bank estimated GDP contraction of 80%+ in 2024. Unemployment reached near-total levels. The blockade since 2007 had already constrained the economy severely — per capita income was approximately $1,000/year, among the lowest in the Middle East. Reconstruction costs estimated at $40–80 billion.'
+  }
+};
+
+
+
+const deathRows = [
+  { cls:'dt-gov', badge:'dt-b-gov', label:'Official', source:'Iranian Govt (Martyrs Foundation)', count:'3,117', date:'Jan 21, 2026', note:'Includes 2,427 "civilians and security forces." 690 labeled "terrorists." IHRNGO says govt historically reports ~12% of actual deaths. Widely disputed.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Iran Human Rights (IHRNGO)', count:'3,428+', date:'Jan 22, 2026', note:'Norway-based. Named, verified list. Notes govt figure represents ~12% of IHRNGO\'s historically verified counts.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Iran HRM', count:'3,000+', date:'Jan 2026', note:'US-based monitor. States actual toll "significantly higher." Notes 50,000+ arrests. Further verification ongoing.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Human Rights Watch', count:'Thousands', date:'Jan 16, 2026', note:'Mass killings documented in 8 provinces. Verified videos of body bags at Kahrizak — 400+ bodies at one site alone. Called for UN special session.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Amnesty International', count:'Thousands', date:'Jan 26, 2026', note:'"Deadliest period of repression in decades of Amnesty research." Documented direct fire at heads and torsos of unarmed protesters.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'UN Special Rapporteur (Mai Sato)', count:'5,000–20,000', date:'Jan 16, 2026', note:'Based on medical source intelligence. Wide range reflects internet blackout. Separately called the death toll "potentially as high as 20,000."' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'HRANA (Human Rights Activists News Agency)', count:'7,015 confirmed\n+11,744 under review', date:'Feb 5, 2026', note:'US-based. Named list with photos, circumstances, family testimony. Less than 100 names overlap with government list. 53,777 arrested.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Wire / NPR', source:'NPR / AP (citing HRANA)', count:'6,126+', date:'Jan 27, 2026', note:'5,777 protesters, 214 government forces, 86 children, 49 bystanders. 41,800+ arrested. Unable to independently verify due to internet shutdown.' },
+  { cls:'dt-leaked', badge:'dt-b-leaked', label:'Leaked IRGC doc', source:'IRGC Internal Report (reviewed by Iran Intl)', count:'12,000+', date:'Jan 11, 2026', note:'Internal IRGC Intelligence Organization figure submitted to Supreme National Security Council 2 days after the Jan 8–9 massacre. Reviewed by Iran International.' },
+  { cls:'dt-leaked', badge:'dt-b-leaked', label:'Leaked IRGC doc', source:'Iran International (leaked SNSC report, Jan 22–24)', count:'36,500+', date:'Jan 25, 2026', note:'From leaked IRGC Intelligence Organization reports to Supreme National Security Council. IRGC\'s own internal count. Khamenei acknowledged "thousands" were killed. Not independently verifiable but sourced from regime\'s own classified documents.' }
+];
+
+function buildDeathTable() {
+  let rows = deathRows.map(r =>
+    '<tr class="' + r.cls + '">'
+    + '<td><div class="dt-source"><span class="dt-badge ' + r.badge + '">' + r.label + '</span><br>' + r.source + '</div></td>'
+    + '<td class="dt-count" style="color:' + (r.cls === 'dt-gov' ? 'var(--red)' : r.cls === 'dt-leaked' ? 'var(--green)' : 'var(--blue)') + '">' + r.count.replace('\n','<br>') + '</td>'
+    + '<td style="color:var(--ink-soft);white-space:nowrap;font-size:11px;">' + r.date + '</td>'
+    + '<td style="font-size:11.5px;color:var(--ink-soft);line-height:1.55;">' + r.note + '</td>'
+    + '</tr>'
+  ).join('');
+  return '<table class="death-table">'
+    + '<thead><tr><th>Source</th><th>Count</th><th>Date</th><th>Notes</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table>'
+    + '<div class="death-caveat">FORA displays the range 7,000–36,500 as the estimated bounds from verified and leaked sources. None of these figures can be independently verified due to the internet blackout imposed Jan 8. The government figure and the leaked IRGC internal figure represent the floor and the ceiling respectively of what Iranian state actors themselves have recorded.</div>';
+}
+
+function openStatModal(id) {
+  const data = statData[id];
+  if (!data) return;
+  const overlay = document.getElementById('modal-overlay');
+  const mc = document.getElementById('modal-content');
+  let html = '<div class="modal-ey">' + data.ey + '</div>'
+    + '<div class="modal-title">' + data.title + '</div>';
+  if (data.isTable) {
+    html += '<div class="modal-body" style="font-size:12.5px;margin-bottom:14px;">The death toll from the January 2026 uprising is one of the most contested figures in modern Iranian history. The internet shutdown, media blackout, and the government\'s documented pattern of underreporting make independent verification impossible. The table below spans all major sources, from the Iranian government\'s official count to leaked internal IRGC documents.</div>';
+    html += buildDeathTable();
+  } else if (data.isChart) {
+    html += '<canvas id="modalChart" style="width:100%;height:140px;display:block;margin-bottom:12px;"></canvas>';
+    html += '<div class="modal-body" style="margin-bottom:8px;">' + data.body + '</div>';
+    html += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:4px;">' + (data.chartNote || '') + '</div>';
+  } else {
+    html += '<div class="modal-body">' + data.body + '</div>';
+  }
+  mc.innerHTML = html;
+  overlay.style.display = 'flex';
+  if (data.isChart && data.chartData) {
+    var canvas = document.getElementById('modalChart');
+    if (canvas && window.Chart) {
+      new Chart(canvas, {
+        type: 'line',
+        data: { labels: data.chartData.labels, datasets: data.chartData.datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: true, position: 'bottom', labels: { font: { family: 'JetBrains Mono', size: 8 }, boxWidth: 10, padding: 6 } },
+            tooltip: { callbacks: {
+              label: function(item) { return item.dataset.label + ': $' + item.parsed.y.toFixed(2) + ' per 1,000 IRR'; }
+            }}
+          },
+          scales: {
+            x: { ticks: { font: { family: 'JetBrains Mono', size: 8 }, maxTicksLimit: 10 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+            y: { ticks: { font: { family: 'JetBrains Mono', size: 8 }, callback: function(v) { return '$' + v.toFixed(1); } }, grid: { color: 'rgba(0,0,0,0.05)' }, title: { display: true, text: 'USD per 1,000 IRR', font: { family: 'JetBrains Mono', size: 8 }, color: '#7a8aaa' } }
+          }
+        }
+      });
+    }
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+function toggleCosmic() {
+  const full = document.getElementById('bc-full');
+  const short = document.getElementById('bc-short');
+  const isOpen = full.classList.contains('open');
+  if (isOpen) { full.classList.remove('open'); short.style.display = 'flex'; }
+  else { full.classList.add('open'); short.style.display = 'none'; }
+}
+function toggleCosmic() {
+  const full = document.getElementById('bc-full');
+  const short = document.getElementById('bc-short');
+  const isOpen = full.classList.contains('open');
+  if (isOpen) {
+    full.classList.remove('open');
+    short.style.display = 'flex';
+  } else {
+    full.classList.add('open');
+    short.style.display = 'none';
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Mars · Jurisdiction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --mars-rust:#c0421a;--mars-rust-lt:#e8622a;--mars-rust-dk:#8a2e10;
+  --mars-dust:#d4907a;--mars-sky:#b0c4d8;
+  --gilt:#b8860b;--gilt-lt:#d4a832;
+  --red:#8b1a1a;--red-p:rgba(139,26,26,0.08);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.08);
+  --green:#155c2d;--green-lt:#e5f0e8;
+  --blue-sci:#3a7ab8;--blue-sci-p:rgba(58,122,184,0.1);
+  --purple:#4a2a7a;
+  --ink:#0e1a2e;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f2f4f8;--white:#fff;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+.nav{background:#100806;border-bottom:3px solid var(--mars-rust);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-logo span{color:var(--mars-rust-lt);}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;}
+.nav-link:hover,.nav-link.active{color:white;}
+
+.ticker-bar{height:30px;background:#0c0503;border-bottom:1px solid rgba(192,66,26,0.15);display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 14px;display:flex;align-items:center;gap:7px;background:rgba(192,66,26,0.12);border-right:1px solid rgba(192,66,26,0.2);}
+.ticker-pulse{width:7px;height:7px;border-radius:50%;background:var(--mars-rust-lt);animation:pulse 2.2s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mars-rust-lt);white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;white-space:nowrap;animation:ts 42s linear infinite;}
+@keyframes ts{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ti{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.04);}
+.tk{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.tv{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.tv-r2{color:#f09070;}.tv-w{color:rgba(255,255,255,0.82);}.tv-a{color:#FAC775;}.tv-rd{color:#ff8080;}.tv-g{color:#7fcf95;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0e0603 0%,#1e0c07 40%,#2a1208 70%,#120705 100%);padding:36px 40px 0;position:relative;overflow:hidden;min-height:300px;}
+/* stars */
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:
+  radial-gradient(1px 1px at 6% 14%,rgba(255,255,255,0.55) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 15% 68%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 24% 32%,rgba(255,220,200,0.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 38% 8%,rgba(255,255,255,0.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 48% 82%,rgba(255,255,255,0.35) 0%,transparent 100%),
+  radial-gradient(2px 2px at 60% 24%,rgba(255,220,200,0.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 72% 55%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 82% 78%,rgba(255,255,255,0.45) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 90% 18%,rgba(255,255,255,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 95% 88%,rgba(255,220,200,0.35) 0%,transparent 100%),
+  radial-gradient(1px 1px at 44% 48%,rgba(255,255,255,0.22) 0%,transparent 100%);}
+.hero-inner{display:flex;align-items:flex-start;gap:28px;position:relative;z-index:2;}
+.hero-bc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;position:relative;z-index:2;}
+.bc-c{color:rgba(255,255,255,0.1);font-size:6.5px;}
+.bc-sep{opacity:0.15;}
+.bc-h{color:rgba(240,144,112,0.8);}
+
+/* Mars sphere — CSS rendered */
+.mars-sphere{width:120px;height:120px;border-radius:50%;flex-shrink:0;margin-top:4px;position:relative;
+  background:radial-gradient(circle at 35% 32%,#e8826a 0%,#c0421a 25%,#8a2e10 55%,#5a1c08 80%,#2e0e04 100%);
+  box-shadow:0 0 40px rgba(192,66,26,0.2),inset -18px -10px 36px rgba(20,8,4,0.6);}
+/* surface detail — polar cap + dust stripes */
+.mars-sphere::before{content:'';position:absolute;inset:0;border-radius:50%;background:
+  radial-gradient(circle at 50% 8%,rgba(255,240,230,0.5) 0%,transparent 14%),
+  radial-gradient(circle at 50% 92%,rgba(200,180,160,0.3) 0%,transparent 10%),
+  radial-gradient(ellipse at 30% 55%,rgba(100,40,20,0.25) 0%,transparent 22%),
+  radial-gradient(ellipse at 65% 40%,rgba(160,80,40,0.2) 0%,transparent 18%),
+  radial-gradient(circle at 45% 65%,rgba(80,30,12,0.2) 0%,transparent 10%),
+  radial-gradient(circle at 72% 30%,rgba(90,35,15,0.18) 0%,transparent 8%);}
+/* terminator */
+.mars-sphere::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 74% 50%,transparent 42%,rgba(12,5,2,0.55) 62%,rgba(6,2,1,0.75) 78%);}
+
+.juris-name{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:#f09070;line-height:0.9;letter-spacing:-0.01em;}
+.juris-name-sub{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(192,66,26,0.5);margin-top:5px;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,144,112,0.3);margin-top:6px;}
+.juris-lead{font-size:13.5px;color:rgba(240,180,160,0.5);line-height:1.7;max-width:540px;margin-top:12px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;display:inline-block;margin:3px 3px 0 0;}
+
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.02);padding:10px 12px;cursor:pointer;transition:background 0.15s;}
+.hs:hover{background:rgba(192,66,26,0.1);}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:#f09070;}
+.hs-num.amber{color:#FAC775;}.hs-num.red{color:#ff8080;}.hs-num.green{color:#7fcf95;}.hs-num.white{color:rgba(255,255,255,0.85);}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(240,144,112,0.28);margin-top:3px;line-height:1.5;}
+
+/* hero right — live facts */
+.hero-right{min-width:210px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;}
+.hr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,144,112,0.3);margin-bottom:2px;display:flex;align-items:center;gap:6px;}
+.hr-card{padding:10px 12px;border-radius:8px;border:1px solid rgba(192,66,26,0.18);background:rgba(192,66,26,0.06);}
+.btn-mars{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:9px 14px;border-radius:6px;border:1px solid rgba(192,66,26,0.3);cursor:pointer;background:rgba(192,66,26,0.12);color:var(--mars-rust-lt);transition:all 0.12s;width:100%;margin-top:4px;}
+.btn-mars:hover{background:rgba(192,66,26,0.2);}
+
+/* TABS */
+.org-tabs{background:#0e0603;border-bottom:1px solid rgba(192,66,26,0.15);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;padding:0 40px;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 16px;cursor:pointer;color:rgba(240,144,112,0.35);border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.12s;}
+.tab:hover{color:rgba(240,144,112,0.7);}
+.tab.active{color:var(--mars-rust-lt);border-bottom-color:var(--mars-rust-lt);}
+
+/* BODY */
+.page-body{max-width:1100px;margin:0 auto;padding:32px 40px 80px;}
+.two-col{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:20px;margin-bottom:16px;}
+.card-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;}
+.card-title{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.card-body{font-size:13px;color:var(--ink-soft);line-height:1.75;}
+.card-body p{margin-bottom:10px;}
+.card-body p:last-child{margin-bottom:0;}
+
+.tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule-lt);}
+.tl-item:last-child{border-bottom:none;}
+.tl-year{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--mars-rust);width:72px;flex-shrink:0;padding-top:1px;}
+.tl-text{font-size:12.5px;color:var(--ink-soft);line-height:1.55;}
+
+.ci-card{display:flex;gap:12px;padding:13px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color 0.12s;}
+.ci-card:hover{border-color:var(--mars-rust);}
+.ci-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.ci-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ci-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.ci-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:5px;}
+
+.traj-path{padding:14px;border-radius:8px;margin-bottom:12px;}
+
+.disc-item{padding:10px 0;border-bottom:1px solid var(--rule-lt);}
+.disc-item:last-child{border-bottom:none;}
+.di-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.di-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 7px;border-radius:100px;}
+.di-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.di-meta{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,4,2,0.72);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:12px;padding:28px;max-width:500px;width:92%;box-shadow:0 24px 64px rgba(0,0,0,0.35);max-height:88vh;overflow-y:auto;}
+.modal-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--ink-mut);margin-bottom:14px;}
+.modal-body{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+.modal-source{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:12px;border-top:1px solid var(--rule);padding-top:10px;}
+.modal-close{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;border-radius:100px;border:1px solid var(--rule);color:var(--ink-mut);background:transparent;cursor:pointer;margin-top:14px;}
+
+/* dark science card */
+.sci-card{background:#0e0603;border:1px solid rgba(192,66,26,0.12);border-radius:10px;padding:20px;margin-bottom:16px;color:rgba(240,180,160,0.7);}
+.sci-card .card-title{color:#f09070;}
+.sci-card .card-ey{color:rgba(240,144,112,0.35);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-links">
+    <span class="nav-link">Dashboard</span>
+    <span class="nav-link">Legislation</span>
+    <span class="nav-link active">Issues</span>
+    <span class="nav-link">Discourse</span>
+  </div>
+  <button class="btn-mars" style="width:auto;padding:6px 18px;font-size:7.5px;letter-spacing:0.06em;">+ Follow Mars</button>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge">
+    <div class="ticker-pulse"></div>
+    <span class="ticker-badge-text">MARSNEWS:</span>
+  </div>
+  <div class="ticker-scroll-wrap"><div class="ticker-track">
+    <div class="ti"><span class="tk">🔭 Tonight</span><span class="tv tv-g">Moon passes 1.5° north of Mars · Aquarius · Visible just before dawn Alexandria VA</span></div>
+    <div class="ti"><span class="tk">Perseverance</span><span class="tv tv-r2">1,795+ sols on Mars · Heading to Lac de Charmes · ~40 km driven · First AI-planned drive Jan 2026</span></div>
+    <div class="ti"><span class="tk">Cheyava Falls</span><span class="tv tv-a">Potential biosignature rock · Leopard-spot pattern · 2025 study: microbial life most likely explanation</span></div>
+    <div class="ti"><span class="tk">Ancient beach</span><span class="tv tv-r2">Jezero had a wave-lapped shoreline · January 2026 study · Imperial College London · JGR Planets</span></div>
+    <div class="ti"><span class="tk">Sample Return</span><span class="tv tv-a">Decision expected mid-2026 · Two alternatives under study · Earth return earliest 2035</span></div>
+    <div class="ti"><span class="tk">SpaceX delay</span><span class="tv tv-rd">Feb 9 2026 · Mars ambitions delayed 5–7 years · Focus shifted to lunar</span></div>
+    <div class="ti"><span class="tk">Distance today</span><span class="tv tv-w">346.8M km · Light travel: 19 min 16 sec · Moving closer</span></div>
+    <div class="ti"><span class="tk">Next opposition</span><span class="tv tv-r2">February 19 2027 · Best viewing: Dec 2026 onward</span></div>
+    <div class="ti"><span class="tk">Curiosity</span><span class="tv tv-w">Active · 36+ km driven · Gale Crater · Year 14</span></div>
+    <div class="ti"><span class="tk">Tianwen-3</span><span class="tv tv-a">China sample return · Spacecraft construction phase · Launch 2028–30</span></div>
+    <div class="ti"><span class="tk">🔭 Tonight</span><span class="tv tv-g">Moon passes 1.5° north of Mars · Aquarius · Visible just before dawn Alexandria VA</span></div>
+    <div class="ti"><span class="tk">Perseverance</span><span class="tv tv-r2">1,795+ sols on Mars · Heading to Lac de Charmes · ~40 km driven</span></div>
+    <div class="ti"><span class="tk">Cheyava Falls</span><span class="tv tv-a">Potential biosignature rock · Leopard-spot pattern · Microbial excretion most likely explanation</span></div>
+    <div class="ti"><span class="tk">Sample Return</span><span class="tv tv-a">Decision expected mid-2026 · Earth return earliest 2035</span></div>
+    <div class="ti"><span class="tk">SpaceX delay</span><span class="tv tv-rd">Feb 9 2026 · Mars ambitions delayed 5–7 years</span></div>
+    <div class="ti"><span class="tk">Distance today</span><span class="tv tv-w">346.8M km · Light travel: 19 min 16 sec</span></div>
+  </div></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bc">
+    <span class="bc-c">The Universe / Laniakea Supercluster / Virgo Supercluster / Local Group / Milky Way / Orion Arm /</span>
+    <span class="bc-sep">/</span>
+    <a href="#" style="color:rgba(255,255,255,0.28);">Solar System</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-h">Mars</span>
+  </div>
+  <div class="hero-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div class="mars-sphere"></div>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
+        <span class="jtag" style="color:rgba(240,144,112,0.8);border-color:rgba(192,66,26,0.25);background:rgba(192,66,26,0.08);">Celestial Body</span>
+        <span class="jtag" style="color:rgba(250,199,117,0.8);border-color:rgba(196,127,0,0.22);background:rgba(196,127,0,0.07);">No Sovereignty · OST Art. II</span>
+        <span class="jtag" style="color:rgba(255,150,150,0.8);border-color:rgba(139,26,26,0.22);background:rgba(139,26,26,0.07);">No Permanent Humans</span>
+        <span class="jtag" style="color:rgba(127,207,149,0.8);border-color:rgba(21,92,45,0.22);background:rgba(21,92,45,0.08);">2 Active Rovers</span>
+      </div>
+    </div>
+
+    <div style="flex:1;">
+      <div class="juris-name">Mars</div>
+      <div class="juris-name-sub">Ares · Mangala · 火星 · المريخ</div>
+      <div class="juris-sub">Fourth planet · Solar System · 346.8M km from Earth today · No sovereign · No permanent residents</div>
+      <div class="juris-lead">
+        Mars is a future jurisdiction with active robotic scouts. Two rovers are on its surface right now. One of them may be sitting next to a rock that contains the first confirmed evidence of life beyond Earth. The decision on whether to bring that rock home — and how — will be made this year. No human has set foot here. No law governs it beyond a treaty written for a world that couldn't imagine reaching it.
+      </div>
+      <div class="hero-stats">
+        <div class="hs" onclick="openModal('marsdist')"><div class="hs-num">346.8M km</div><div class="hs-label">Today's distance ›</div></div>
+        <div class="hs" onclick="openModal('marsday')"><div class="hs-num">24h 37m</div><div class="hs-label">Day length (sol) ›</div></div>
+        <div class="hs" onclick="openModal('marsatmo')"><div class="hs-num red">0.6%</div><div class="hs-label">Earth atmo ›</div></div>
+        <div class="hs" onclick="openModal('marspercy')"><div class="hs-num amber">1,795+</div><div class="hs-label">Perseverance sols ›</div></div>
+        <div class="hs" onclick="openModal('marssignal')"><div class="hs-num">19m 16s</div><div class="hs-label">Signal delay ›</div></div>
+        <div class="hs" onclick="openModal('marslaw')"><div class="hs-num red">Zero</div><div class="hs-label">Mars-specific law ›</div></div>
+      </div>
+    </div>
+
+    <!-- Hero right — live facts -->
+    <div class="hero-right">
+      <div class="hr-label">
+        <span>🔴 Right now · Mars</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:6.5px;padding:1px 6px;border-radius:100px;background:rgba(127,207,149,0.15);color:#7fcf95;letter-spacing:0.1em;">LIVE</span>
+      </div>
+
+      <div class="hr-card">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(240,144,112,0.35);margin-bottom:5px;">Distance · March 17 2026</div>
+        <div style="font-size:19px;font-weight:700;color:#f09070;font-family:'Libre Baskerville',serif;">346,762,716 km</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(240,144,112,0.45);margin-top:3px;">Moving closer · ↓ 2.6 km/s</div>
+        <div style="margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;color:rgba(240,144,112,0.3);">Closest (54.6M km)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;color:rgba(240,144,112,0.3);">Farthest (401M km)</div>
+          </div>
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:100px;position:relative;">
+            <div style="position:absolute;left:0;top:0;height:100%;width:83%;background:linear-gradient(90deg,rgba(192,66,26,0.3),rgba(192,66,26,0.6));border-radius:100px;"></div>
+            <div style="position:absolute;left:83%;top:50%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:50%;background:var(--mars-rust-lt);box-shadow:0 0 6px rgba(232,98,42,0.7);"></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.4);margin-top:4px;text-align:center;">Between average and far · Opposition was Jan 12 2025</div>
+        </div>
+      </div>
+
+      <div class="hr-card" style="border-color:rgba(250,199,117,0.2);background:rgba(196,127,0,0.06);position:relative;cursor:help;" class="opp-card">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(250,199,117,0.4);margin-bottom:5px;">Next opposition</div>
+        <div style="font-size:14px;font-weight:700;color:#FAC775;font-family:'Libre Baskerville',serif;">February 19, 2027</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(250,199,117,0.45);margin-top:2px;">~339 days · Best viewing Dec 2026+</div>
+        <div class="opp-pop">At opposition Mars rises at sunset and is visible all night — brightest and largest. The next crewed mission transfer window opens ~Nov 2028.</div>
+      </div>
+      <style>
+        .hr-card{position:relative;}
+        .opp-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:0;background:#0e0603;border:1px solid rgba(250,199,117,0.25);border-radius:9px;padding:10px 12px;font-size:11px;color:rgba(250,199,117,0.75);line-height:1.6;z-index:50;box-shadow:0 8px 28px rgba(0,0,0,0.5);}
+        .opp-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#0e0603;}
+        .hr-card:hover .opp-pop{display:block;}
+      </style>
+
+      <button class="btn-mars">+ Follow Mars</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" onclick="showTab('overview',this)">Overview</div>
+    <div class="tab" onclick="showTab('geography',this)">Geography</div>
+    <div class="tab" onclick="showTab('science',this)">Science & Life</div>
+    <div class="tab" onclick="showTab('missions',this)">Missions</div>
+    <div class="tab" onclick="showTab('rovers',this)">Rovers</div>
+    <div class="tab" onclick="showTab('law',this)">Legal Status</div>
+    <div class="tab" onclick="showTab('colony',this)">Colony Question</div>
+    <div class="tab" onclick="showTab('future',this)">Future</div>
+    <div class="tab" onclick="showTab('travel',this)">How to Get There</div>
+    <div class="tab" onclick="showTab('culture',this)">Culture & Astrology</div>
+    <div class="tab" onclick="showTab('discourse',this)">Discourse</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+<!-- ══ OVERVIEW ══════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Overview</div>
+        <div class="card-title">The planet we're about to change — before we're ready</div>
+        <div class="card-body">
+          <p>Mars is 346 million kilometers away today. A signal takes 19 minutes to reach it. Two robotic rovers are currently driving across its surface — one of them sitting next to a rock that a 2025 study concluded was most likely shaped by microbial excretion. A January 2026 study confirmed that Jezero Crater once had a real shoreline, wave-lapped, where liquid water pooled for long enough that life could have taken hold. The samples Perseverance has collected over five years may contain the most important scientific cargo ever assembled. Whether those samples come home — and when — is the most consequential decision in planetary science history, and it will be made this year.</p>
+          <p>Mars is also, simultaneously, a future jurisdiction being contested before it is occupied. SpaceX announced in February 2026 that it is delaying its Mars ambitions 5–7 years to focus on the Moon. NASA's human Mars roadmap is in place but unfunded at mission level. China's Tianwen-3 robotic sample return is in spacecraft construction. The next crewed mission transfer window opens in late 2028. The question of who governs a Mars settlement, what legal system applies to colonists 350 million kilometers from Earth, and whether the OST's non-sovereignty clause can be enforced across interplanetary distances is entirely unresolved.</p>
+          <p>What makes Mars uniquely urgent among FORA jurisdictions: the decisions being made now — about sample return, about the biosignature at Cheyava Falls, about whether to confirm or postpone the life question — are irreversible in both directions. If humans land on Mars before we answer whether Mars harbors life, we contaminate Mars with Earth microbes forever. If we wait too long, the political window for an international governance framework closes and facts on the ground are set by whoever arrives first under whatever rules they choose to recognize.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Civic issues · Mars</div>
+        <div class="card-title">The questions with no answers yet</div>
+        <div class="ci-card"><div class="ci-icon">🦠</div><div>
+          <div class="ci-title">Is there life on Mars — and does it change everything if there is?</div>
+          <div class="ci-desc">Cheyava Falls shows leopard-spot patterns that a 2025 peer-reviewed study concluded are most likely the result of microbial excretion — not the most likely abiotic explanation. This is not a confirmed detection of life. It is the strongest candidate biosignature ever found. The samples are in titanium tubes on a rover 347 million km away. If they reach Earth, the question may be answerable. If they don't, we may never know for certain.</div>
+          <div class="ci-count">4,201 FORA contributions · 18 active amendments · 9 duels</div>
+        </div></div>
+        <div class="ci-card"><div class="ci-icon">🔬</div><div>
+          <div class="ci-title">Should we send humans to Mars before confirming whether Mars has life?</div>
+          <div class="ci-desc">Planetary protection protocols require Mars landers to be sterilized to strict microbial limits. A crewed mission is a planetary protection catastrophe — humans carry trillions of microorganisms. If Mars harbors extant life, landing humans makes the question permanently unanswerable. OST Article IX requires avoiding harmful contamination of celestial bodies. The life question and the crewed mission timeline are in direct conflict.</div>
+          <div class="ci-count">3,108 FORA contributions · 14 active amendments · 7 duels</div>
+        </div></div>
+        <div class="ci-card"><div class="ci-icon">⚖️</div><div>
+          <div class="ci-title">Who governs a Mars colony? Can it declare independence?</div>
+          <div class="ci-desc">SpaceX's 2021 Starlink terms included a clause declaring Mars a "free planet" outside Earth government jurisdiction. Musk has stated publicly that a self-sufficient Martian settlement should be self-governing. The OST makes states responsible for their nationals' space activities — but was not written for a permanent settlement. A 19-minute signal delay makes Earth-based governance structurally impossible in real time.</div>
+          <div class="ci-count">2,844 FORA contributions · 11 active amendments · 5 duels</div>
+        </div></div>
+        <div class="ci-card"><div class="ci-icon">🌍</div><div>
+          <div class="ci-title">Does any single company or nation have the right to colonize Mars?</div>
+          <div class="ci-desc">The OST declares space the "province of all mankind." A colonization program led by one US corporation, using one nation's regulatory framework, does not represent all mankind. Legal scholars, Global South advocates, and indigenous rights scholars have drawn parallels to the colonial legal structures that used "discovery" to justify appropriation of lands already claimed by others. Mars has no indigenous people — but the question of who gets to decide humanity's future on another world is not settled.</div>
+          <div class="ci-count">1,932 FORA contributions · 8 active amendments · 5 duels</div>
+        </div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Fast facts</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--mars-rust);">6,779 km</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Diameter (~½ Earth)</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--mars-rust);">38%</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Earth gravity</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--mars-rust);">−63°C</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Average temp</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#FAC775;">687 d</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Martian year</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--mars-rust);">2</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Moons (Phobos + Deimos)</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--mars-rust);">25.2°</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Axial tilt (similar to Earth)</div></div>
+          </div>
+          <div style="background:var(--bg);padding:9px;border-radius:7px;"><div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Iron oxide — why it's red</div><div style="font-size:11.5px;color:var(--ink-soft);">The Martian surface is covered in fine iron oxide (rust) dust blown across the entire planet by global dust storms. The "sky" appears butterscotch to pinkish-orange from the surface. During dust storms, which can last months and cover the entire planet, skies turn dark brown. The dust also coats solar panels — it's what killed the Opportunity rover in 2018.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Two moons</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">Phobos — Fear (Φόβος)</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Only 27 km across. Orbits Mars in just 7 hours 39 minutes — faster than Mars rotates. Rises in the west and sets in the east. Slowly spiraling inward — will either crash into Mars or break apart into a ring system in ~50 million years. Already shows surface grooves possibly from tidal stress.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid #9a6040;">
+            <div style="font-weight:700;color:#9a6040;">Deimos — Dread (Δεῖμος)</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Only 15 km across. Smoothest moon in the Solar System — craters filled with fine regolith. So small that from the Martian surface it appears as just a bright star. Takes 30 hours to orbit — so it rises and sets like a slow moon.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GEOGRAPHY ═════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-geography">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Geography</div>
+        <div class="card-title">A world of records — tallest volcano, deepest canyon, largest impact basin</div>
+        <div class="card-body">
+          <p>Mars has a total surface area of 144.4 million km² — approximately equal to all the dry land on Earth. Despite being half Earth's size, the planet's lack of oceans means its entire surface is accessible terrain. The Martian landscape is defined by extreme dichotomy: smooth, low-lying plains in the north (mostly younger volcanic material) and heavily cratered highlands in the south, thousands of meters higher in elevation. The cause of this north-south divide — the Martian Dichotomy — remains one of the fundamental unsolved questions in planetary science.</p>
+          <p>Mars holds the tallest volcano in the Solar System (Olympus Mons at 21.9 km, nearly three times Everest), the longest canyon system (Valles Marineris, 4,000 km long — wide enough to cross the continental United States), and the largest impact basin (Hellas Planitia, 7,152 km wide and 9 km deep). The planet is geologically active — marsquakes are regularly detected, and the enormous Tharsis Bulge, a volcanic plateau the size of North America, has deformed the entire Martian crust with its mass.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Key features</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">Olympus Mons — 21.9 km tall</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The tallest volcano and highest point in the Solar System. ~600 km across at its base — so large that from its summit, the horizon curves below the base. The escarpment at its edge drops 8 km vertically. Likely still geologically active within the last 25 million years.</div>
+          </div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid #8a5a30;">
+            <div style="font-weight:700;color:#8a5a30;">Valles Marineris — 4,000 km long</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The Solar System's largest canyon system. Up to 7 km deep, 200 km wide. If placed on Earth it would stretch from Los Angeles to New York. Formed primarily by tectonic rifting and collapse — not water erosion, though water may have flowed through it.</div>
+          </div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid #6a4a80;">
+            <div style="font-weight:700;color:#6a4a80;">Hellas Planitia — deepest basin</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">7,152 km wide impact basin, 9 km below average surface elevation. Atmospheric pressure at its floor is nearly double the planetary average — the closest Mars gets to conditions where liquid water could theoretically persist on the surface today.</div>
+          </div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">Jezero Crater — active science site</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">45 km wide ancient lake crater. Site of an ancient river delta confirmed to have harbored a lake for potentially millions of years. Perseverance's landing site. A 2026 study confirmed a wave-lapped shoreline within the crater — real beach geology. The most astrobiologically promising site ever explored on Mars.</div>
+          </div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid #7fa870;">
+            <div style="font-weight:700;color:#5a8050;">Polar ice caps</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Both poles have permanent water ice caps covered seasonally by CO₂ (dry ice) frost. The north polar cap is ~1.6 km thick, ~1,000 km wide. Radar data from Mars Express and MRO suggests large subsurface liquid water lakes beneath the south polar ice — potentially habitable niches today.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">The Martian dichotomy</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>Mars is split hemispheres. The northern hemisphere is smooth, low, and relatively young volcanic plains — the "lowlands." The southern hemisphere is ancient, heavily cratered, and sits an average 3–5 km higher — the "highlands." The boundary between them is one of the sharpest topographic discontinuities of any planet.</p>
+          <p style="margin-top:8px;">Two main theories: (1) a massive impact in the early Solar System removed the northern crust (the "giant impact" hypothesis); (2) convection patterns in the early Martian mantle thinned the northern crust naturally. Neither is definitively proven. The MAVEN and InSight missions have provided data constraining both, without settling the question.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Water — then and now</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--blue-sci);">3–4 billion years ago</strong><br><span style="color:var(--ink-soft);">Mars had rivers, lakes, possibly a northern ocean. Evidence: valley networks, delta deposits, lake sediments, orbital mineral signatures of water-altered rocks across vast regions.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--blue-sci);">Today — surface</strong><br><span style="color:var(--ink-soft);">No stable liquid water on the surface. Atmospheric pressure too low — water either evaporates or freezes instantly. CO₂ and water ice at poles. Seasonal frost. Possible brine flows (dark streaks on crater walls — still debated).</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--blue-sci);">Today — subsurface</strong><br><span style="color:var(--ink-soft);">InSight found that 11.5–20 km below the Martian surface, the crust is saturated with liquid water. If confirmed, this represents the largest known reservoir of liquid water on Mars — a potential habitat for extant microbial life today.</span></div>
+          <div style="padding:7px;background:rgba(192,66,26,0.06);border-radius:6px;border:1px solid rgba(192,66,26,0.12);"><strong style="color:var(--mars-rust);">March 15 2026 — breaking</strong><br><span style="color:var(--ink-soft);">New study published: hidden water discovered beneath Mars surface that could have supported life — Britannica March 2026 update. Details being analyzed.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCIENCE & LIFE ════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-science">
+  <div class="two-col">
+    <div>
+      <div class="sci-card">
+        <div class="card-ey">Science &amp; Life</div>
+        <div class="card-title" style="color:#f09070;">The most important question in science — and we're close to answering it</div>
+        <div style="font-size:13px;line-height:1.75;color:rgba(240,180,160,0.65);">
+          <p>Did life ever exist on Mars? Does it exist there now? These are not rhetorical questions — they have answers, the answers exist in physical material, and some of that material may currently be sitting in titanium tubes aboard Perseverance. We have never been closer to knowing. We have also never been closer to contaminating the question permanently.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Cheyava Falls — the leopard rock</div>
+        <div class="card-title">The strongest biosignature candidate ever found off Earth</div>
+        <div class="card-body">
+          <p>In July 2024, Perseverance discovered the "Cheyava Falls" rock on the edge of an ancient river valley in Jezero Crater. The rock is light-colored with vivid reddish-brown leopard-spot patterns — irregular patches of iron and phosphate minerals surrounded by halos of whitish calcium sulfate.</p>
+          <p>On Earth, these patterns are commonly produced by microbial colonies oxidizing iron for energy — a process called chemolithotrophy. Organisms called iron-oxidizing bacteria leave behind exactly these mineral signatures as metabolic byproducts. Abiotic (non-biological) processes can produce similar-looking patterns through water-rock chemistry, but they tend to be more regular, more uniform, and less precisely structured than what Cheyava Falls shows.</p>
+          <p>A 2025 peer-reviewed study analyzing the rock concluded that microbial excretion is the most likely explanation for the leopard-spot pattern — ahead of the most plausible abiotic mechanisms. This is not a confirmed detection of life. It is a statement that the biological hypothesis fits the data better than the alternatives we have tested so far. The only way to know for certain is to analyze the samples in Earth-based laboratories with instruments far more powerful than anything a rover can carry. Those samples are in tubes on Perseverance's belly right now.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">The ancient beach — January 2026</div>
+        <div class="card-title">Jezero once had a real shoreline</div>
+        <div class="card-body">
+          <p>A January 2026 study published in JGR Planets by a team led by Imperial College London analyzed the geology of Jezero Crater's Margin Unit — a band of rock lining the inner edge of the crater that Perseverance explored in 2023–24. The findings: the Margin Unit is a paleoshoreline. The rocks show wave-generated structures, layered beach deposits, and mineral signatures consistent with prolonged immersion in shallow standing water.</p>
+          <p>This matters because it pushes back the window for Martian life significantly. Lakes can form and dry in geologically short periods. Shorelines require sustained water over much longer timescales — the kind of stable, persistent aquatic environment where life as we know it not only originates but has time to become complex. Jezero wasn't a flash flood or a transient melt event. It had a beach. It had seasons. It had time.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Mars Sample Return — the decision of 2026</div>
+        <div class="card-title">The most important scientific decision of the decade</div>
+        <div class="card-body">
+          <p>Perseverance has sealed 23 of its 43 sample tubes. The sealed tubes contain material from some of the most astrobiologically significant sites ever sampled on Mars, including the Cheyava Falls biosignature rock, delta sediments from the ancient lake floor, and igneous rocks from Jezero's volcanic basement that provide a geological timeline of the crater's history.</p>
+          <p>Bringing them to Earth requires a Mars Sample Return (MSR) mission — the most complex interplanetary mission ever attempted. After NASA's original MSR plan ballooned to an estimated $11 billion and faced Congressional cancellation, NASA identified two streamlined alternatives: one using the proven sky-crane landing system ($6.6–7.7B) and one leveraging SpaceX Starship ($5.8–7.1B). Both aim for Earth return as early as 2035. A decision between these alternatives is expected mid-2026.</p>
+          <p>China's Tianwen-3, now in spacecraft construction, is targeting a simpler "grab-and-go" sample return from a single accessible surface site — it could potentially bring Martian material home before NASA's curated samples, though from a less scientifically selected location. The geopolitical and scientific stakes of who returns the first Martian samples — and what those samples contain — are without precedent in the history of space exploration.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Key science findings · 2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">Cheyava Falls leopard-spots</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Iron-phosphate spots with calcium sulfate halos. 2025 study: microbial excretion is the most likely explanation. Best biosignature candidate in Solar System exploration history.</div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">Ancient beach in Jezero</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Jan 2026 · Imperial College London · Wave-lapped shoreline confirmed in the Margin Unit. Jezero had stable, long-duration standing water — a habitable environment for billions of years.</div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">Subsurface liquid water</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">InSight data: crust saturated with liquid water at 11.5–20 km depth. Enough water to cover the entire surface of Mars in an ocean ~1 km deep. Potential habitat for extant life today.</div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">MOXIE oxygen production</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Perseverance's MOXIE experiment successfully produced oxygen from Martian CO₂ atmosphere. Demonstrated at scale sufficient to support human exploration. Critical for both life support and rocket propellant production on Mars.</div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">AI-planned rover driving</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Dec 2025 · First Mars drives planned by AI using Claude (Anthropic) and JPL vision-language models. Perseverance drove 210m on AI-generated waypoints without human planners. Increases autonomous range dramatically.</div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">Marsquakes · ongoing</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">InSight (now retired) detected 1,300+ marsquakes before November 2022. Data revealed a liquid outer core, confirmed tectonic activity, and mapped the planet's interior in 3D for the first time. Mars is not geologically dead.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Planetary protection · the contamination clock</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>Article IX of the Outer Space Treaty requires states to "avoid harmful contamination" of celestial bodies. NASA's Planetary Protection Office classifies Mars as Category IV — the second-highest protection level, reserved for bodies where conditions may support Earth life and that may harbor extant life.</p>
+          <p style="margin-top:8px;">Every Mars lander is sterilized to strict microbial limits before launch. Rovers are built in ISO-certified clean rooms. Yet none of this is sufficient for a crewed mission. Humans carry trillions of microorganisms — in their gut, on their skin, in their respiratory tract. A crewed Mars landing is, from a planetary protection standpoint, an extinction-level event for any indigenous Martian microbial ecosystem.</p>
+          <p style="margin-top:8px;">The irreversibility is absolute: once humans land on Mars, it is permanently and irrecoverably contaminated with Earth life. If Mars harbors indigenous microbes, we will never be able to distinguish them from human-introduced contamination with any certainty. The life question becomes permanently ambiguous. Some scientists argue this means we must confirm or deny Martian life before any crewed mission. Others argue that certainty may never come, and that human presence is the only way to explore at sufficient depth. There is no scientific consensus and no legal framework for resolving it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MISSIONS ══════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-missions">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Missions · History</div>
+        <div class="card-title">From Mariner to Perseverance — 60 years of exploring Mars</div>
+        <div class="tl-item"><div class="tl-year">1964</div><div class="tl-text">Mariner 4 — first successful Mars flyby. 22 photographs. Mars is cratered and cold — not the canal-crossed world of 19th-century imagination. Atmospheric pressure only 1% of Earth's. The dream of Martian civilization ends here.</div></div>
+        <div class="tl-item"><div class="tl-year">1971</div><div class="tl-text">Mariner 9 — first spacecraft to orbit another planet. Arrives during a global dust storm — waits two months for the dust to clear. Maps 85% of the surface. Discovers Olympus Mons, Valles Marineris, and ancient riverbeds. Mars has geological complexity — and a past with water.</div></div>
+        <div class="tl-item"><div class="tl-year">1976</div><div class="tl-text">Viking 1 and 2 land successfully. Conducted biology experiments — including the Labeled Release experiment, which produced a positive result that the mission's chief experimenter, Gilbert Levin, maintained until his death was evidence of life. The scientific consensus declared the results likely chemical, not biological. The ambiguity never fully resolved.</div></div>
+        <div class="tl-item"><div class="tl-year">1997</div><div class="tl-text">Pathfinder and Sojourner — first rover on Mars. Proves surface mobility is feasible. Returns 16,500 images and data on 15 chemical analyses of rocks. Sojourner drives ~100 meters total. The era of rovers begins.</div></div>
+        <div class="tl-item"><div class="tl-year">2004</div><div class="tl-text">Spirit and Opportunity land 3 weeks apart. Spirit operates 6 years; Opportunity, 15 years (died in the 2018 global dust storm). Opportunity drives 45.16 km — a record that Perseverance is approaching. Both confirm Mars was once wet enough to sustain liquid water for extended periods.</div></div>
+        <div class="tl-item"><div class="tl-year">2012</div><div class="tl-text">Curiosity lands in Gale Crater. Car-sized rover, still operating. Detects organic molecules in rocks. Detects seasonal methane fluctuations — possibly biological, possibly geological. Confirms Mars was habitable to microbial life in the past. Still driving as of March 2026.</div></div>
+        <div class="tl-item"><div class="tl-year">2021</div><div class="tl-text">Perseverance lands in Jezero Crater (Feb 18). Ingenuity helicopter makes the first powered flight on another planet (Apr 19). UAE Hope orbiter and China's Tianwen-1/Zhurong all arrive in the same window — the most missions to Mars in a single launch window in history. The international character of Mars exploration is established.</div></div>
+        <div class="tl-item"><div class="tl-year">2024–26</div><div class="tl-text">Perseverance crosses 40 km driven, surpassing Curiosity. First AI-planned rover drives (Dec 2025). Cheyava Falls biosignature rock analyzed. Ancient beach confirmed at Jezero (Jan 2026). Mars Sample Return decision pending. Next opposition: Feb 2027.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Active missions · March 2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 Perseverance (NASA) · Active</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Jezero Crater · ~1,800 sols · ~40 km driven · Heading to Lac de Charmes · 23 sealed sample tubes · Cheyava Falls in cache. Broke Curiosity's distance record in 2025. First AI-planned drives completed Jan 2026 using Anthropic/Claude models.</div>
+          </div>
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 Curiosity (NASA) · Active</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Gale Crater · Year 14 · 36+ km driven · Currently investigating "spiderweb ridges" (Mar 2026). RTG-powered — will operate for decades. Still detecting methane pulses and studying habitability.</div>
+          </div>
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 Mars Reconnaissance Orbiter (NASA) · Active</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Orbiting since 2006 · HiRISE camera provides ~25 cm/pixel resolution. Primary communications relay for surface missions. Responsible for AI training imagery used in Perseverance's autonomous drives.</div>
+          </div>
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 Mars Odyssey (NASA) · Active</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Orbiting since 2001 · Longest-operating Mars spacecraft. Thermal imaging, gamma ray spectrometry, communications relay. 25 years operating at Mars.</div>
+          </div>
+          <div style="padding:9px;background:rgba(192,66,26,0.05);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">🇨🇳 Tianwen-1 / Zhurong (CNSA)</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Zhurong rover hibernated May 2022 and has not woken — likely permanently inactive due to dust on solar panels. Tianwen-1 orbiter status: uncertain after solar conjunction. China's first Mars mission proved the capability; follow-on Tianwen-3 sample return in construction.</div>
+          </div>
+          <div style="padding:9px;background:rgba(196,127,0,0.05);border-radius:7px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;color:var(--amber);">🇦🇪 Hope Orbiter (UAE) · Active</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Emirates Mars Mission · Elliptical orbit · Full-planet atmospheric science · First Mars mission from the Arab world and from any developing nation. Climate monitoring and weather patterns.</div>
+          </div>
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇪🇺 ESA Trace Gas Orbiter · Active</div>
+            <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Detailed atmospheric chemistry · Methane mapping · Results have direct implications for life detection. Best atmospheric instrument suite ever deployed at Mars.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ROVERS ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-rovers">
+  <div class="card">
+    <div class="card-ey">The rovers</div>
+    <div class="card-title">Every wheel that has turned on Mars</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:12px;">
+
+      <div style="background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.15);border-radius:9px;overflow:hidden;">
+        <div style="position:relative;height:180px;overflow:hidden;"><img src="https://science.nasa.gov/wp-content/uploads/2024/04/perseverance-crater-rim-tracks-pia26380-1041.jpg" alt="Perseverance tracks on Mars crater rim" style="width:100%;height:100%;object-fit:cover;display:block;"><div style="position:absolute;bottom:0;left:0;right:0;padding:5px 10px;background:linear-gradient(transparent,rgba(10,4,2,0.85));font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.75);letter-spacing:0.08em;">NASA/JPL-Caltech · Perseverance tracks, Jezero Crater rim · 2024</div></div>
+        <div style="padding:14px;">
+          <div style="font-size:14px;font-weight:700;color:var(--mars-rust);margin-bottom:4px;">Perseverance · 2021–present</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-bottom:8px;">NASA · Jezero Crater · ~1,800 sols · ~40 km · RTG powered</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Size of a car. Seven instruments. 19 cameras. Two microphones — first spacecraft to record audio on another planet. Nuclear-powered RTG. Primary mission: seek biosignatures and collect cached samples. Deployed Ingenuity helicopter. Now drives via AI-generated waypoints using Claude models. Has GPS-equivalent self-localization since Feb 2026. Key sample: Cheyava Falls potential biosignature. Mission can continue a decade or more.</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.15);border-radius:9px;overflow:hidden;">
+        <div style="position:relative;height:180px;overflow:hidden;"><img src="https://cdn.mos.cms.futurecdn.net/frmhfFoVhBqWdEtfYqBSmJ.jpg" alt="Curiosity panoramic view Gale Crater Mars" style="width:100%;height:100%;object-fit:cover;display:block;"><div style="position:absolute;bottom:0;left:0;right:0;padding:5px 10px;background:linear-gradient(transparent,rgba(10,4,2,0.85));font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.75);letter-spacing:0.08em;">NASA/JPL-Caltech · Curiosity panorama, Gale Crater</div></div>
+        <div style="padding:14px;">
+          <div style="font-size:14px;font-weight:700;color:var(--mars-rust);margin-bottom:4px;">Curiosity · 2012–present</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-bottom:8px;">NASA · Gale Crater · Year 14 · 36+ km · RTG powered</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Nuclear-powered — will outlast almost anything. Confirmed Mars was once habitable. Detected organic molecules and seasonal methane fluctuations — the most tantalizing unexplained chemistry on Mars. Now investigating spiderweb-like ridges (Mar 2026). Climbing Mount Sharp's 5 km sedimentary record of Mars' geological history, layer by layer.</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(100,80,60,0.04);border:1px solid rgba(100,80,60,0.15);border-radius:9px;overflow:hidden;">
+        <div style="position:relative;height:180px;overflow:hidden;"><img src="https://science.nasa.gov/wp-content/uploads/2024/02/opportunity-lion-king-panorama-pia05314.jpg" alt="Opportunity Lion King panorama Meridiani Planum Mars" style="width:100%;height:100%;object-fit:cover;display:block;"><div style="position:absolute;bottom:0;left:0;right:0;padding:5px 10px;background:linear-gradient(transparent,rgba(10,4,2,0.85));font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.75);letter-spacing:0.08em;">NASA/JPL-Caltech · Opportunity "Lion King" panorama · Meridiani Planum</div></div>
+        <div style="padding:14px;">
+          <div style="font-size:14px;font-weight:700;color:#8a6040;margin-bottom:4px;">Opportunity · 2004–2018</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-bottom:8px;">NASA · Meridiani Planum · 15 years · 45.16 km · Solar powered</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Planned for 90 days. Operated for 15 years. Confirmed Mars had standing water through hematite "blueberries" formed only in liquid water. Died in the 2018 global dust storm. Last transmission June 10, 2018. NASA called for eight months. No response. Mission ended Feb 13, 2019. Last words sent to it: Billie Holiday's "I'll Be Seeing You."</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(100,80,60,0.04);border:1px solid rgba(100,80,60,0.15);border-radius:9px;overflow:hidden;">
+        <div style="position:relative;height:180px;overflow:hidden;"><img src="https://apod.nasa.gov/apod/image/0406/columbia_spirit_full.jpg" alt="Spirit rover Columbia Hills Gusev Crater Mars" style="width:100%;height:100%;object-fit:cover;display:block;"><div style="position:absolute;bottom:0;left:0;right:0;padding:5px 10px;background:linear-gradient(transparent,rgba(10,4,2,0.85));font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.75);letter-spacing:0.08em;">NASA/JPL · Spirit approaches Columbia Hills · Gusev Crater · 2004</div></div>
+        <div style="padding:14px;">
+          <div style="font-size:14px;font-weight:700;color:#8a6040;margin-bottom:4px;">Spirit · 2004–2010</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-bottom:8px;">NASA · Gusev Crater · 6 years · 7.73 km · Solar powered</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Opportunity's twin. Planned for 90 days, operated for 6 years. Discovered silica-rich soils near volcanic formations — evidence of ancient hydrothermal activity. Got stuck in soft soil in 2009, lost contact 2010. NASA tried to reach it for over a year.</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(100,80,60,0.04);border:1px solid rgba(100,80,60,0.15);border-radius:9px;overflow:hidden;">
+        <div style="position:relative;height:180px;overflow:hidden;"><img src="https://mars.nasa.gov/system/resources/detail_files/1196_PIA01120.jpg" alt="Sojourner rover near rock Pathfinder 1997 Mars" style="width:100%;height:100%;object-fit:cover;display:block;object-position:center;"><div style="position:absolute;bottom:0;left:0;right:0;padding:5px 10px;background:linear-gradient(transparent,rgba(10,4,2,0.85));font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.75);letter-spacing:0.08em;">NASA/JPL · Sojourner at "The Dice" · Ares Vallis · 1997</div></div>
+        <div style="padding:14px;">
+          <div style="font-size:14px;font-weight:700;color:#8a6040;margin-bottom:4px;">Sojourner · 1997</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-bottom:8px;">NASA · Ares Vallis · 83 days · ~100 m · Solar powered</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The first Mars rover. Size of a microwave oven. Everything that followed was built on what Sojourner proved: that surface mobility on Mars was possible, practical, and survivable. 550 images, 15 chemical analyses, 83 days, ~100 meters. Changed everything.</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(196,127,0,0.04);border:1px solid rgba(196,127,0,0.15);border-radius:9px;overflow:hidden;">
+        <div style="position:relative;height:180px;overflow:hidden;"><img src="https://ichef.bbci.co.uk/news/1024/branded_news/6CA2/production/_118977413_zhurong1.jpg" alt="China Zhurong rover Utopia Planitia Mars surface" style="width:100%;height:100%;object-fit:cover;display:block;"><div style="position:absolute;bottom:0;left:0;right:0;padding:5px 10px;background:linear-gradient(transparent,rgba(10,4,2,0.85));font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,144,112,0.75);letter-spacing:0.08em;">CNSA/CLEP · Zhurong rover · Utopia Planitia · 2021</div></div>
+        <div style="padding:14px;">
+          <div style="font-size:14px;font-weight:700;color:#8a6020;margin-bottom:4px;">Zhurong · 2021–2022</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-bottom:8px;">CNSA · Utopia Planitia · ~12 months · 1.92 km · Solar powered</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">China's first Mars rover. Hibernated May 2022 for winter. Never woke — dust on solar panels. Detected water ice mixed with dust beneath Utopia Planitia. Proved China's Mars landing capability — leading directly to Tianwen-3 sample return now in development.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ LEGAL STATUS ══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-law">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Legal Status</div>
+        <div class="card-title">Mars has one law, written before anyone was going there, and it has four fatal gaps</div>
+        <div class="card-body">
+          <p>The Outer Space Treaty of 1967 applies to Mars exactly as it applies to the Moon: no sovereignty claims by any means, peaceful use only, states responsible for their nationals' activities. Mars is explicitly covered — the treaty covers "the Moon and other celestial bodies." These provisions are binding on all 118 parties, including the US, Russia, and China.</p>
+          <p>Beyond the OST, there is no Mars-specific law. Not a treaty, not a framework, not a set of agreed norms. The Artemis Accords mention Mars in their scope — their provisions on heritage protection, safety zones, and resource extraction extend explicitly to Mars — but they are non-binding political commitments and Russia and China have not signed them. The Moon Agreement (1979) applies to Mars in theory but has been ratified by none of the major spacefaring nations.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">The four gaps that matter</div>
+        <div class="card-body" style="font-size:13px;display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:12px;background:var(--red-p);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-weight:700;color:var(--red);margin-bottom:4px;">Gap 1 · Signal delay makes Earth governance structurally impossible</div>
+            <div style="color:var(--ink-soft);">19 minutes one way, 38 minutes round trip at current distance. This is a physics problem, not a policy problem. Any governance system for Mars must be local by necessity — Earth cannot supervise or instruct in real time. The OST's framework of state responsibility for nationals assumes the state can respond. On Mars, it cannot.</div>
+          </div>
+          <div style="padding:12px;background:var(--amber-p);border-radius:8px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;color:var(--amber);margin-bottom:4px;">Gap 2 · No resource extraction framework</div>
+            <div style="color:var(--ink-soft);">As with the Moon, OST Article II forbids sovereignty over Mars. The US Commercial Space Launch Competitiveness Act (2015) asserts Americans can own extracted resources without claiming the planet. But Mars contains water ice, perchlorates, carbon dioxide convertible to rocket fuel, and potentially rare minerals. No international framework governs who can extract what, where, or under what terms.</div>
+          </div>
+          <div style="padding:12px;background:var(--blue-sci-p);border-radius:8px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);margin-bottom:4px;">Gap 3 · Citizenship, succession, and legal personhood of Martian-born humans</div>
+            <div style="color:var(--ink-soft);">A person born on Mars to American parents is — what? A US citizen by birthright citizenship? A citizen of no recognized state? What legal system governs their rights, their contracts, their disputes? No nation has addressed this. International law has no answer. The first Martian-born human will be a legal anomaly with no existing framework.</div>
+          </div>
+          <div style="padding:12px;background:rgba(74,42,122,0.07);border-radius:8px;border-left:3px solid var(--purple);">
+            <div style="font-weight:700;color:var(--purple);margin-bottom:4px;">Gap 4 · The independence threshold</div>
+            <div style="color:var(--ink-soft);">SpaceX's stated position: when a Mars settlement is self-sustaining, it should be self-governing. At what population? What economic threshold? What legal trigger? The OST does not contemplate the transition from exploration to settlement to self-determination. No legal framework does. The question of when Mars stops being a territory of Earth states and becomes its own political entity has no answer in existing law.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">The SpaceX Starlink clause</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>In 2021, SpaceX's Starlink terms of service included the following clause for services provided on Mars:</p>
+          <blockquote style="margin:8px 0;padding:8px 12px;background:rgba(192,66,26,0.06);border-left:3px solid var(--mars-rust);font-style:italic;color:var(--ink-soft);font-size:11.5px;">"For services provided on Mars, or in transit to Mars via Starship or other colonization spacecraft, the parties recognize Mars as a free planet and that no Earth-based government has authority or sovereignty over Martian activities."</blockquote>
+          <p>This is a Terms of Service clause, not a law. No government agreed to it. No court has evaluated it. No international body has recognized it. But it is the clearest public statement of SpaceX's intended legal position on Mars governance — and it was published three years before any Mars mission was imminent, as a deliberate legal signal.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Planetary protection law</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>OST Article IX requires avoiding "harmful contamination" of celestial bodies. NASA has formal Category IV planetary protection protocols for Mars — the second-highest protection level. These are implemented through domestic US law and NASA policy.</p>
+          <p style="margin-top:8px;">The legal question: does landing humans on Mars — which inevitably and irreversibly introduces Earth microbes — violate Article IX? If Mars harbors extant life, arguably yes. If it doesn't, arguably no. The answer depends on a fact we don't yet know: whether Mars is currently alive.</p>
+          <p style="margin-top:8px;">No court has ever addressed this. No international enforcement mechanism for Article IX exists. If SpaceX landed humans on Mars tomorrow, the treaty violation — if it is one — could not be enforced by anyone against anyone. International space law has no compliance mechanism beyond diplomatic pressure and political cost.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COLONY QUESTION ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-colony">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">The Colony Question</div>
+        <div class="card-title">SpaceX, a million people, and the law of a world that doesn't exist yet</div>
+        <div class="card-body">
+          <p>SpaceX's stated mission is to establish a self-sustaining human colony on Mars — ultimately of one million people, as insurance against human extinction on Earth. This is not a distant ambition: SpaceX has named the first Starship to go to Mars the "Heart of Gold" (after the spaceship in The Hitchhiker's Guide to the Galaxy), has published architecture documents for Mars colonization, and has built Starbase in Texas as the primary Mars launch facility. The program has been delayed — on February 9, 2026, Musk announced a 5–7 year delay to focus on the Moon. It has not been cancelled.</p>
+          <p>The governance problem is not primarily legal — it is physical. The 19-minute signal delay means that any dispute, emergency, or governance decision on Mars must be resolved locally. A medical emergency cannot wait 38 minutes for an Earth response. A criminal matter cannot be adjudicated by a court 350 million kilometers away. A political crisis cannot be resolved by a government that receives news of it 19 minutes after it happens. Whatever governs a Mars settlement, it must be local by necessity — not just by preference.</p>
+          <p>The democratic deficit is equally acute. The first Mars settlers would depend entirely on SpaceX for their means of survival: the spacecraft that brought them, the habitat that houses them, the ISRU equipment that produces their air and water and fuel. They cannot leave without SpaceX's help. They cannot be resupplied without SpaceX's help. The relationship between a corporation and a captive settlement entirely dependent on that corporation for survival is not analogous to any prior political arrangement in human history — including colonial ones, which at least could be physically left.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Historical parallels — and why they all fail</div>
+        <div class="card-body">
+          <p><strong>American colonies:</strong> Similar in the sense of physical distance from the governing power, gradual development of local governance, eventual independence. Different in that colonists could sail home, and the distance was weeks, not years. The signal delay alone makes Mars constitutionally unlike any colony in history.</p>
+          <p style="margin-top:8px;"><strong>Antarctica:</strong> The closest legal analog — an international commons governed by the Antarctic Treaty, with scientific stations but no permanent settlement. Mars could develop similarly if major powers agreed. The difference: no one has an economic or strategic incentive to colonize Antarctica permanently. Mars has rocket fuel, potential real estate, and a second chance for civilization.</p>
+          <p style="margin-top:8px;"><strong>High seas:</strong> Another commons with no sovereignty, freedom of navigation, resource use without ownership. The law of the sea took centuries to develop and is still contested. Mars would need a framework before permanent settlement — after the fact is too late.</p>
+          <p style="margin-top:8px;"><strong>The answer:</strong> Mars is genuinely new. The combination of: (1) physical impossibility of Earth governance, (2) total dependency on a single corporate provider, (3) potential first-generation Martian-born citizens, (4) possible indigenous life, and (5) strategic resource value — produces a situation that has no historical precedent and no existing legal framework.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">The irreversible decisions</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:9px;background:var(--red-p);border-radius:7px;border:1px solid rgba(139,26,26,0.12);">
+            <div style="font-weight:700;color:var(--red);">🦠 Contamination</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Once humans land, Mars is permanently contaminated with Earth microbes. The life-detection question becomes permanently ambiguous. This cannot be undone.</div>
+          </div>
+          <div style="padding:9px;background:var(--amber-p);border-radius:7px;border:1px solid rgba(196,127,0,0.12);">
+            <div style="font-weight:700;color:var(--amber);">🏗️ First infrastructure</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Whoever builds the first permanent habitat defines where the first settlement is. That location becomes the de facto capital of Mars. Its governance structures become the template.</div>
+          </div>
+          <div style="padding:9px;background:var(--green-lt);border-radius:7px;border:1px solid rgba(21,92,45,0.12);">
+            <div style="font-weight:700;color:var(--green);">👶 First Martian born</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The first human born on Mars is a legal and cultural inflection point. Their citizenship, rights, and identity will be the first test case of whatever governance framework exists — or doesn't.</div>
+          </div>
+          <div style="padding:9px;background:var(--blue-sci-p);border-radius:7px;border:1px solid rgba(58,122,184,0.12);">
+            <div style="font-weight:700;color:var(--blue-sci);">📜 First Martian law</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The first rule a Mars settlement makes — about safety, water allocation, property — is the beginning of Martian law. This will be drafted by engineers in a habitat, not diplomats in Vienna.</div>
+          </div>
+          <div style="padding:9px;background:rgba(74,42,122,0.07);border-radius:7px;border:1px solid rgba(74,42,122,0.12);">
+            <div style="font-weight:700;color:var(--purple);">🧪 The life question answer</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">If MSR returns Cheyava Falls and we confirm life — Mars law changes entirely. The planet that might be alive cannot be colonized under the same framework as a sterile world. This decision may arrive this decade.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FUTURE ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-future">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Future</div>
+        <div class="card-title">Three possible Mars — 2026 to 2050</div>
+        <div class="traj-path" style="background:var(--green-lt);border-left:3px solid var(--green);">
+          <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:5px;">Path 1 — Science leads, governance follows</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">MSR returns Cheyava Falls in 2035. Life is confirmed. The confirmation triggers a UN COPUOS emergency process that produces a Mars governance framework before crewed missions. The life question answers the governance question: if Mars has life, colonization requires a framework respecting that life, which provides the political impetus for an international agreement. The most optimistic path.</div>
+        </div>
+        <div class="traj-path" style="background:var(--amber-p);border-left:3px solid var(--amber);">
+          <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:5px;">Path 2 — Corporate first-mover, retrospective governance</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">SpaceX establishes the first permanent Mars presence in the early 2030s before any governance framework exists. The settlement operates under SpaceX's internal rules + OST + US domestic law. Earth governments attempt to extend jurisdiction retroactively. A de facto Martian legal system emerges from operational necessity, gradually formalized by Congress and eventually by international agreement. The most likely path.</div>
+        </div>
+        <div class="traj-path" style="background:var(--red-p);border-left:3px solid var(--red);">
+          <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:5px;">Path 3 — Two Mars, competing systems</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The US-China competition on Earth replicates on Mars. SpaceX/NASA establishes one zone under Artemis Accords norms; China establishes another under ILRS norms. Two incompatible legal and technical systems on the same planet. The first interplanetary geopolitical crisis occurs with a 38-minute round-trip communications delay and no dispute resolution mechanism.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Key decisions · 2026–2030</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Mars Sample Return — mid-2026</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Which MSR architecture does NASA choose? Sky-crane ($6.6–7.7B) or Starship-based ($5.8–7.1B)? This determines whether samples return by 2035 or later — and whether the Cheyava Falls biosignature is ever definitively analyzed.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Will Tianwen-3 beat NASA home?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">China's sample return launches 2028–30, potentially returning before NASA's MSR. Simpler grab-and-go vs. Perseverance's curated scientifically selected samples. Who returns the first Martian material has historic, symbolic, and scientific weight.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Starship capability · 2026–28</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">SpaceX's Mars timeline depends entirely on Starship achieving full reusability and orbital refueling. Both are untested at required reliability. The 2028 transfer window is the earliest realistic crewed Mars mission if Starship achieves all milestones on schedule.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Is Cheyava Falls biological?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The most consequential scientific question of the decade. Current evidence points toward biological origin. Earth-based lab analysis is the only path to certainty. Everything else — the colonization timeline, the governance framework, the contamination calculus — changes if the answer is yes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRAVEL ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-travel">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">How to Get There</div>
+        <div class="card-title">The physics and engineering of reaching Mars</div>
+        <div class="card-body">
+          <p>Getting to Mars is an exercise in patience, orbital mechanics, and the rocket equation. Mars and Earth orbit at different distances from the Sun, so the distance between them varies from 54.6 million km (closest approach) to 401 million km (opposite sides of the Sun). You can't just point at Mars and go — you launch into a Hohmann transfer orbit that puts you on an elliptical path meeting Mars at the right time. This only works efficiently every 26 months, when Earth and Mars are in the right relative positions.</p>
+          <p>A one-way trip takes approximately 7–9 months. The 2021 missions (Perseverance, Tianwen-1, Hope) took 6–7 months. Faster trajectories are possible but require dramatically more fuel. During the journey, there is no resupply, no rescue, and communications take 3–22 minutes each way — longer as Earth and Mars move apart in their orbits.</p>
+          <p>The surface of Mars presents its own challenges: thin atmosphere (0.6% Earth pressure) produces severe drag for landing but almost no lift for flight. The sky crane landing system used for Curiosity and Perseverance worked for ~1-tonne rovers. A crewed mission would require landing 10–100 tonnes — a problem that has never been solved at Mars. SpaceX's Starship is the most credible current candidate, using propulsive landing at 52 metres tall and >200 tonnes — roughly 200 times heavier than any previous Mars lander. No one has done this before.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Propellant on Mars — ISRU</div>
+        <div class="card-title">The mission that produces its own return fuel</div>
+        <div class="card-body">
+          <p>SpaceX's Mars architecture depends on in-situ resource utilization (ISRU) — producing rocket propellant on Mars from local resources, using the Sabatier reaction. CO₂ from the Martian atmosphere + H₂ from water ice = methane + water. The methane is the fuel; the oxygen from splitting water is the oxidizer. Starship runs on liquid methane/liquid oxygen — specifically chosen because these propellants can be produced on Mars.</p>
+          <p>Perseverance's MOXIE experiment demonstrated oxygen production from Martian CO₂ at small scale (10 grams/hour). A crewed mission return would require tons per day. The difference is seven orders of magnitude. The chemistry is proven. The engineering scale-up is the challenge, and it must be solved and operating on Mars before any crewed mission arrives — otherwise the crew cannot leave.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Transfer windows</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px;">
+            <div style="background:rgba(192,66,26,0.06);padding:8px;border-radius:7px;border:1px solid rgba(192,66,26,0.12);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(192,66,26,0.5);margin-bottom:3px;">Last window</div>
+              <div style="font-size:13px;font-weight:700;color:var(--mars-rust);">Jan 2025</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Opposition Jan 15–16 · Closest Jan 12</div>
+            </div>
+            <div style="background:rgba(196,127,0,0.06);padding:8px;border-radius:7px;border:1px solid rgba(196,127,0,0.15);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(196,127,0,0.5);margin-bottom:3px;">Next window</div>
+              <div style="font-size:13px;font-weight:700;color:#FAC775;">Nov 2026</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Opposition Feb 19 2027 · No crewed missions</div>
+            </div>
+          </div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Nov 2026 window</strong> — The next launch opportunity. No crewed missions are confirmed. NASA's ESCAPADE twin spacecraft performing Mars gravity assist in Nov 2026. JAXA's MMX (Martian Moon eXploration) to Mars' moons. SpaceX focus is now lunar. Window closes early 2027.</div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Late 2028 window</strong> — SpaceX's revised earliest target for uncrewed Starship missions to Mars. This is the planning horizon for the program as of March 2026.</div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Late 2030 / 2031 window</strong> — Potential crewed mission window if uncrewed Starship missions in 2028–29 succeed and ISRU infrastructure is established. This is the optimistic scenario.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">The hazards</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--red);">Radiation</strong><br><span style="color:var(--ink-soft);">Mars has no global magnetosphere and a thin atmosphere. Surface radiation is ~17x Earth background. A 2.5-year round trip mission (6 months each way + 1 year surface) would deliver ~0.66 Sv — approaching NASA's career limits. Shielding during transit and underground habitats on the surface are required.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--red);">Global dust storms</strong><br><span style="color:var(--ink-soft);">Mars has planet-encircling dust storms that can last months. They block 99% of direct sunlight, coat solar panels, and drop temperatures. They killed Opportunity. Any Mars habitat must survive indefinitely without solar power — another argument for nuclear ISRU systems rather than solar-dependent ones.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--amber);">Thin atmosphere · landing</strong><br><span style="color:var(--ink-soft);">0.6% of Earth atmospheric pressure: too thin for effective aerobraking alone, not thin enough to ignore. The "seven minutes of terror" — the entry, descent, and landing sequence — must work perfectly every time. No rescue is possible. A crewed EDL failure 350 million km from Earth is a fatal, irreversible event.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--amber);">Perchlorates</strong><br><span style="color:var(--ink-soft);">Martian soil contains perchlorates at ~0.5% concentration — toxic to humans if ingested and carcinogenic. They inhibit thyroid function. Any Martian agriculture would require thorough soil decontamination. Perchlorates also have the theoretical advantage of being energy-rich oxidizers — possibly useful for industrial chemistry.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CULTURE & ASTROLOGY ════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-culture">
+  <div class="two-col">
+    <div>
+
+      <div class="card">
+        <div class="card-ey">Mars in human history</div>
+        <div class="card-title">The red wanderer — 5,000 years of watching, fearing, and naming</div>
+        <div class="card-body">
+          <p>Mars has been watched by humans for at least 5,000 years. Its distinctive blood-red color made it unlike anything else in the night sky — brighter than most stars, visibly colored, moving against the fixed stars in a pattern that ancient astronomers tracked with precision. Every major civilization that studied the sky assigned Mars a name, a deity, and a meaning. The name was almost always war. The reason was almost always the color.</p>
+          <p>Red meant blood. Blood meant battle. Battle meant Mars. This association is so universal — spanning Babylon, Egypt, Greece, Rome, India, China, and Mesoamerica — that it is one of the most consistent acts of human symbolic reasoning across cultures that never communicated with each other. The red wandering star was danger. It was the warrior's planet. It was the god of death in battle and plague in peacetime.</p>
+          <p>What makes this remarkable is that the association was entirely correct in one sense and entirely wrong in another. Mars is red because of iron oxide — rust — on its surface. There is nothing intrinsically martial about iron oxide. The cultural inference (red = blood = war) was a projection. And yet the projection was so powerful that it named the planet, named the month of March, named Tuesday in most of the world's languages, gave us the words "martial" and "martial arts" and "martial law," named the children Marcus, Martin, and Mark, and defined the astrological meaning of an entire celestial body for three millennia.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">The deities</div>
+        <div class="card-title">Mars across the world's mythologies</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">🏛️ Roman — Mars</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The most complex Mars deity of antiquity — not simply a god of destruction but a protector of the state, patron of agriculture, and <em>father of Romulus and Remus</em>, the mythological founders of Rome. The Romans ranked Mars second only to Jupiter. Unlike the Greek Ares (reviled by his own parents), Mars was beloved — the guardian father of the Roman people. His month, Martius, was the first month of the original Roman calendar. March is named for him. The Campus Martius — the Field of Mars in Rome — was the center of military and electoral life for centuries.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">🏺 Greek — Ares</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The most disliked god in the Greek pantheon — reviled by both his parents Zeus and Hera, despised by his sister Athena who called him "a thing of rage, made of evil." Ares represented the chaos and bloodlust of war, not its strategic glory. He had no proper temples in Greece — only battlefields. He fathered the Amazons (with the nymph Harmony) and was associated with Thrace. His affair with Aphrodite — caught in flagrante by Hephaestus's magical net — became one of mythology's great comedies. The Greeks' contempt for Ares is entirely reflected in how they treated the planet: they tracked it with precision but named it after a god they didn't even like.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">⚔️ Babylonian — Nergal</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The oldest recorded Mars deity. <em>Nergal</em> (also Nirgal) was the Babylonian god of war, plague, fire, and the underworld — the god of "inflicted death." He was also the scorching noonday sun. Nergal stormed the Underworld, deposed its queen Ereshkigal, and became its co-ruler — making him a deity of both the heat above and the darkness below. Babylonian astronomers tracked Mars with extraordinary precision from at least 1500 BCE, recording its retrograde motions and using them to predict war and plague. When Mars moved retrograde, priests issued warnings. The Nergal tradition flowed directly into the Greek Ares and Roman Mars through Hellenistic cultural transmission.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">🕉️ Hindu — Mangala / Angaraka</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Mars is known in Sanskrit as <em>Mangala</em> (the auspicious one), <em>Angaraka</em> (red like embers or burning coal), and <em>Kuja</em> (the fair one born of earth). He is identified with <em>Kartikeya</em> — the six-headed god of war born from the sparks of Shiva's eyes to slay the demon Taraka. He rides a ram, carries a mace and spear, and has blood-red skin. In Vedic astrology, Mars rules Aries and Scorpio, is exalted in Capricorn, and governs energy, ambition, siblings, accidents, engineers, surgeons, and soldiers. The feared <em>Mangal Dosha</em> — a malefic Mars placement in a horoscope — is believed to cause delayed marriage and conflict. Tuesdays (Mangalavar) are devoted to Mars worship.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">🔥 Chinese — 火星 Huǒxīng</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">In Chinese astronomy, Mars is the <em>Fire Star</em> (火星, Huǒxīng) — one of the Five Planets governing the five elements. Unlike the Western war association, Chinese interpretation was more nuanced: the Fire Star governed fluctuation, change, and the unpredictable force of fire. It was considered inauspicious when it appeared in certain asterisms, signaling floods, war, or the fall of dynasties. Some Chinese sources associated Mars with a purplish tinge rather than red, linking it to royalty and calling it "the purple star." In Japanese (火星, Kasei) and Korean (화성, Hwaseong), the same "Fire Star" name is used.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">🏔️ Incan — Mama Ocllo's brother</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Inca astronomers tracked Mars as one of the "wandering stars" (huancas) and associated its red color with blood and Inti's warrior aspects. Mars was observed at the horizon and its heliacal rising was used for agricultural timing. The Inca were sophisticated naked-eye astronomers — their calendar combined lunar, solar, and stellar observations. Mars appears in the Inca ceque system of sacred sight-lines radiating from Cuzco. The Mayan equivalent in Mesoamerica also tracked Mars with great precision, recording its synodic period in the Dresden Codex to within a fraction of a day.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">🦅 Egyptian — Her Desher / Horus the Red</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The Egyptians called Mars <em>Her Desher</em> — "the red one." They connected it to <em>Horus the Red</em>, a battle aspect of the falcon-headed sky god, and sometimes to Set, god of chaos and storms. The red color was not symbolic to them — it was literal blood staining the heavens. Mars in Egyptian astronomical texts appears as a "backward-traveling star" with documented retrograde observations. The planet was also linked to Sekhmet, the lion-headed goddess of war and healing — power that both destroys and cures, just as iron (Mars's metal) makes both weapons and surgical tools.</div>
+          </div>
+
+          <div style="padding:12px;background:rgba(192,66,26,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:8px;">
+            <div style="font-size:13px;font-weight:700;color:var(--mars-rust);margin-bottom:5px;">⚡ Norse — Týr</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Tuesday derives not from Mars/Ares but from <em>Týr</em> (Old English: <em>Tiw</em>), the Norse/Germanic one-handed god of law, justice, and single combat — the oldest Germanic sky-father deity. When the Romans encountered Germanic peoples, they identified Týr with Mars (interpretatio romana), so "Tiw's day" became Mars's day in the Romance languages. Týr sacrificed his hand to bind the Fenris wolf — an act of cosmic heroism, not martial aggression. The identification of Týr with Mars tells us something important: the "war god" archetype covers not just violence but honor, courage, law-in-battle, and the sacrifices required to protect cosmic order.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">The canals — humanity's greatest astronomical wish</div>
+        <div class="card-title">1877–1909 · The civilization that wasn't there</div>
+        <div class="card-body">
+          <p>In 1877, Italian astronomer Giovanni Schiaparelli observed Mars at opposition and reported <em>canali</em> — channels — across the Martian surface. The word means "channels" in Italian, implying natural features. When translated into English, it became "canals" — implying engineering. Percival Lowell, a wealthy Boston astronomer, ran with the inference.</p>
+          <p>Between 1894 and his death in 1916, Lowell mapped hundreds of canals at his observatory in Flagstaff, Arizona, and published three influential books arguing that Mars was inhabited by an ancient, intelligent civilization — more advanced than ours, desperately engineering a planet-wide canal system to transport water from the poles to the arid equatorial regions as their world died. His Mars was a tragedy: a dying civilization on a cooling, drying planet, building a civilization-scale engineering project to survive.</p>
+          <p>H.G. Wells read Lowell. In 1898 he published <em>The War of the Worlds</em> — but inverted the tragedy. What if the Martians, desperate for resources on their dying world, came to Earth? The novel launched the entire tradition of Martian invasion literature and set the template for the alien invasion genre. Orson Welles' 1938 radio broadcast of it caused real panic across the American northeast.</p>
+          <p>The canals were an optical illusion — the human brain connecting random surface features at the limit of resolution into lines. Viking 1 and 2 (1976) ended the dream permanently. But the canal era launched a century of Mars fascination that is the direct cultural precursor to the scientific programs now active on the Martian surface. As Carl Sagan wrote: "Mars has become a kind of mythic arena onto which we have projected our Earthly hopes and fears."</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="background:linear-gradient(160deg,#0e0603 0%,#1a0c07 100%);border:1px solid rgba(192,66,26,0.15);color:white;">
+        <div class="card-ey" style="color:rgba(240,144,112,0.4);">Astrology — Mars in the natal chart</div>
+        <div class="card-title" style="color:#f09070;">What Mars governs</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;">
+          <div style="padding:9px;background:rgba(192,66,26,0.08);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:#f09070;margin-bottom:3px;">Western astrology</div>
+            <div style="color:rgba(240,180,160,0.6);line-height:1.6;">Mars governs drive, desire, and assertion — how you pursue what you want, where your energy goes when obstacles appear, how you handle anger. Co-ruler of Aries (cardinal fire, direct action) and traditionally of Scorpio (fixed water, will and transformation). Exalted in Capricorn. Ptolemy classified Mars as "hot and dry" — a malefic planet whose energy needed directing. Modern astrology reframes this: Mars is the animus, raw will, the capacity to set boundaries and act on desire. Its house placement shows where you expend the most energy; its aspects show how your drive interacts with other psychological functions.</div>
+          </div>
+          <div style="padding:9px;background:rgba(192,66,26,0.08);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:#f09070;margin-bottom:3px;">Vedic / Jyotish</div>
+            <div style="color:rgba(240,180,160,0.6);line-height:1.6;">Mars (Mangala/Kuja) is a first-order malefic in Jyotish — governing siblings, property, blood, vitality, engineers, surgeons, soldiers, accidents, and ambition. His nature is Pitta (fiery). His gem is red coral. His day is Tuesday. Mangal Dosha — Mars in the 1st, 2nd, 4th, 7th, 8th, or 12th house from the ascendant, Moon, or Venus — is one of the most widely consulted astrological conditions in the world, particularly for marriage compatibility in South Asia. Tuesdays are observed as Mars's day with fasting and worship of Hanuman or Kartikeya.</div>
+          </div>
+          <div style="padding:9px;background:rgba(192,66,26,0.08);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:#f09070;margin-bottom:3px;">Mars retrograde · every ~2 years</div>
+            <div style="color:rgba(240,180,160,0.6);line-height:1.6;">Mars goes retrograde for ~70 days every 26 months (roughly coinciding with its opposition cycle). In astrology this is associated with frustrated energy, redirected ambition, revisiting old conflicts, and delays in action. The 2026 Mars retrograde cycle completed in early 2025 near opposition. The next Mars retrograde: December 2026–February 2027, coinciding with the next opposition. Retrograde Mars was considered particularly dangerous by traditional astrologers — "deprived of its dignity."</div>
+          </div>
+          <div style="padding:9px;background:rgba(192,66,26,0.08);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:#f09070;margin-bottom:3px;">Mars today · March 17 2026</div>
+            <div style="color:rgba(240,180,160,0.6);line-height:1.6;">Mars is currently in Aquarius (tropical), moving direct. In Western astrology, Mars in Aquarius is associated with principled action, humanitarian drive, and unconventional approaches to conflict. The Moon conjoins Mars today (1.5° apart) in the pre-dawn sky — a short-lived but intense emotional-willful combination, traditionally associated with decisive but sometimes impulsive energy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Mars in language</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:5px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">火星</div><div style="color:var(--ink-mut);font-size:10px;">Huǒxīng · Chinese<br>Fire Star</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">मंगल</div><div style="color:var(--ink-mut);font-size:10px;">Mangal · Hindi<br>Auspicious</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">المريخ</div><div style="color:var(--ink-mut);font-size:10px;">Al-Mirrikh · Arabic</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">화성</div><div style="color:var(--ink-mut);font-size:10px;">Hwaseong · Korean<br>Fire Star</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">מאדים</div><div style="color:var(--ink-mut);font-size:10px;">Ma'adim · Hebrew<br>The red one</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">Ares</div><div style="color:var(--ink-mut);font-size:10px;">Greek · Ἄρης<br>Unknown origin</div></div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.05);border-radius:7px;border:1px solid rgba(192,66,26,0.1);font-size:11.5px;color:var(--ink-soft);">Tuesday is Mars's day in most languages: <strong>Mardi</strong> (French), <strong>Martes</strong> (Spanish), <strong>Martedì</strong> (Italian), <strong>Mangalavar</strong> (Hindi), <strong>Kayōbi</strong> (Japanese — Fire-day). The English "Tuesday" comes from Tiw/Týr through Norse, not directly from Mars — but the Roman identification of Týr with Mars preserved the meaning. <strong>"March"</strong> (Martius), <strong>"martial"</strong> (as in martial arts, martial law), and the names <strong>Marcus, Martin, Mark</strong> all derive from Mars.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Mars in fiction — the mirror of humanity</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>H.G. Wells — The War of the Worlds (1898)</strong><br><span style="color:var(--ink-soft);">The Martian invasion as dying-civilization resource extraction. Set the template for every alien invasion story after it. Directly inspired by Lowell's dying Mars.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Edgar Rice Burroughs — Barsoom (1912–1943)</strong><br><span style="color:var(--ink-soft);">John Carter of Mars. A dying Mars of warring civilizations, four-armed green warriors, and red-skinned humanoids. The series defined pulp science fiction and influenced everyone from Robert A. Heinlein to George Lucas.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Ray Bradbury — The Martian Chronicles (1950)</strong><br><span style="color:var(--ink-soft);">Not about Martians attacking Earth but about humans destroying Mars the same way they destroyed everything on Earth. An elegy. Still the most quietly devastating Mars fiction ever written.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Kim Stanley Robinson — Mars Trilogy (1992–1996)</strong><br><span style="color:var(--ink-soft);">Red Mars, Green Mars, Blue Mars. The most rigorous and politically serious Mars colonization fiction ever written. Directly confronts the terraforming debate, governance questions, and the ethics of transforming a world. Robinson was writing FORA's Colony Question tab 30 years ago.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Andy Weir — The Martian (2011)</strong><br><span style="color:var(--ink-soft);">The NASA-accurate survival story that brought Mars into the mainstream for a new generation. Helped create the cultural appetite for the Perseverance mission. Mark Watney's problem-solving spirit is the unofficial mascot of the rover teams at JPL.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CULTURE & ASTROLOGY ════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-culture">
+
+  <!-- TODAY'S MARS IN THE SKY -->
+  <div class="card" style="background:linear-gradient(135deg,#100806 0%,#1e0d07 100%);border:1px solid rgba(192,66,26,0.18);color:white;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div style="font-size:28px;">🔴</div>
+      <div>
+        <div class="card-ey" style="color:rgba(240,144,112,0.4);">Mars in astrology today · March 17, 2026</div>
+        <div class="card-title" style="color:#f09070;margin-bottom:0;">Mars is in Aquarius · Waning phase of its synodic cycle</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+      <div style="padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:9px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(240,144,112,0.35);margin-bottom:5px;">Western astrology</div>
+        <div style="font-size:13px;font-weight:700;color:#f09070;margin-bottom:4px;">Mars in Aquarius</div>
+        <div style="font-size:11px;color:rgba(240,180,160,0.55);line-height:1.55;">Mars transits Aquarius — associating the planet's drive and assertion energy with collective action, progressive causes, and unconventional approaches. In traditional astrology Mars rules Aries and (co-rules) Scorpio. In Aquarius it takes an impersonal, intellectual quality. Opposition approaching: Feb 2027 places Mars in Leo.</div>
+      </div>
+      <div style="padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:9px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(240,144,112,0.35);margin-bottom:5px;">Vedic / Jyotish</div>
+        <div style="font-size:13px;font-weight:700;color:#f09070;margin-bottom:4px;">Mangala · Kumbha Rashi</div>
+        <div style="font-size:11px;color:rgba(240,180,160,0.55);line-height:1.55;">In Jyotish, Mars (Mangala) in Kumbha (Aquarius) is in an enemy sign — Saturn rules Aquarius, and Mars-Saturn is a tense combination associated with frustrated action. Mangala dosha — an inauspicious condition for marriage and relationships — is one of the most consulted astrological factors in Indian matrimonial decisions, affecting ~50% of birth charts.</div>
+      </div>
+      <div style="padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(192,66,26,0.12);border-radius:9px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(240,144,112,0.35);margin-bottom:5px;">Chinese astrology</div>
+        <div style="font-size:13px;font-weight:700;color:#f09070;margin-bottom:4px;">熒惑 · "Dazzling Deluder"</div>
+        <div style="font-size:11px;color:rgba(240,180,160,0.55);line-height:1.55;">In traditional Chinese astronomy, Mars was called 熒惑 (Yíng-huò) — the "Dazzling Deluder" or "Glittering Confusion." Its retrograde motion (appearing to reverse direction) was considered an extremely bad omen, particularly associated with military disasters, the death of rulers, and the fall of dynasties. Court astronomers tracked it obsessively.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+
+      <!-- DEITIES GRID -->
+      <div class="card">
+        <div class="card-ey">The war gods of the red star</div>
+        <div class="card-title">Mars has had a thousand names — nearly all of them mean danger</div>
+        <div class="card-body">
+          <p>Every civilization that observed Mars systematically — and that is every major civilization in history — named the red wandering star for something dangerous. War, pestilence, death, destruction, fire. The color was inescapable: Mars shines blood-red, especially near opposition when it is bright in the sky. Ancient peoples associated that color with blood on the battlefield, and built an entire cosmological architecture around the correspondence.</p>
+          <p>What is striking is not that cultures associated Mars with war — that is nearly universal — but how much the associations diverge beyond that. Nergal was also the god of the underworld, of summer heat that destroys crops, of plague. Ares was despised by the other Greek gods as chaotic and undisciplined. Mars was Rome's second-most important deity, a civilizing force and the father of the Roman people. Mangala was associated with energy, ambition, and the martial arts, but also with property and agriculture. The same red light in the same sky generated radically different meanings — and those meanings shaped centuries of political decision-making, battle timing, marriage counseling, and agricultural planning.</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #8a5020;">
+          <div class="card-ey">Mesopotamia · 3000 BCE–600 BCE</div>
+          <div style="font-size:15px;font-weight:700;color:#8a5020;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Nergal — Lord of the Great City of the Dead</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The oldest continuous association between Mars and a deity. Nergal was worshipped from ~3000 BCE in Kutha, eventually becoming the king of the Mesopotamian underworld (Kur) and god of war, plague, fire, and the scorching noonday sun. His name translates roughly as "dunghill cock" — a crowing herald of death. In the Late Babylonian astral system, Mars was explicitly identified with Nergal. Babylonian astronomical texts tracked Mars compulsively — each appearance of Nergal in the sky was read for omens. A conjunction with Saturn signified the death of the king. The appearance of Mars at opposition near a major city was a war omen. Babylonian priests sent "astrological reports to Assyrian kings" — a cuneiform archive of political Mars-watching spanning centuries. Nergal also appeared in the Bible — 2 Kings 17:30 records men from Cuthah (Kutha) worshipping him in Samaria.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #6a3a8a;">
+          <div class="card-ey">Greece · ~800 BCE–146 BCE</div>
+          <div style="font-size:15px;font-weight:700;color:#6a3a8a;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Ares — Most Hated of the Olympians</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The Greeks were unusual in actively despising their war god. In the Iliad, Zeus tells Ares: "To me you are the most hateful of all gods who hold Olympus. Forever quarrelling is dear to your heart." Ares was associated with the brutality, bloodlust, and chaos of war — as opposed to Athena, who represented the strategic, rational aspect of warfare. His children were Phobos (Fear) and Deimos (Dread) — the names now given to Mars's two moons, a tribute to the mythological tradition that the two small, dim companions of the red war god should be named for his sons. Ares was also the lover of Aphrodite (Venus) — the eternal mythological opposition and attraction between War and Love, Mars and Venus, that runs from ancient cosmology through Shakespeare through modern pop psychology. The Greeks named the planet Ares after him — and it was the Romans who renamed it Mars, after their own, more dignified war god.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid var(--mars-rust);">
+          <div class="card-ey">Rome · 753 BCE–476 CE</div>
+          <div style="font-size:15px;font-weight:700;color:var(--mars-rust);font-family:'Libre Baskerville',serif;margin-bottom:6px;">Mars — Father of the Roman People</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The most important military deity in the Roman pantheon — second only to Jupiter himself. Unlike the despised Ares, Mars was a dignified, even paternal figure. He was the father of Romulus and Remus, the legendary founders of Rome. The month of March — Martius — was named for him and was originally the first month of the Roman year (the Roman year began in spring, when military campaigns resumed). The Campus Martius — the Field of Mars — was the great public space of Rome where armies mustered, elections were held, and athletic contests took place. Augustus built the Temple of Mars Ultor (Mars the Avenger) as the centerpiece of his new forum after avenging Julius Caesar's murder. The word "martial" — martial arts, martial law, martial music — descends directly from Mars's name. So does the name "Marcus," and its variants Mark and Martin.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #b06020;">
+          <div class="card-ey">India · 1500 BCE–present</div>
+          <div style="font-size:15px;font-weight:700;color:#b06020;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Mangala / Angaraka / Kuja</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Mars is one of the Navagraha — the nine celestial "seizers" whose positions at birth determine destiny in Vedic astrology. Mangala (the auspicious one) rules Aries and Scorpio, governs energy, courage, ambition, and assertiveness. But Mars also carries a severe affliction: Mangal dosha — the condition of Mars in the 1st, 4th, 7th, 8th, or 12th house of a birth chart. Mangal dosha is believed to cause harm to a spouse and is one of the primary considerations in Hindu matrimonial matching — millions of horoscope consultations annually involve determining whether a prospective partner has mangal dosha. Mars is also associated with Lord Kartikeya (Skanda), the god of war, and with the color red, fire, and the metal copper. Tuesday (Mangalvar — Mars's day) is considered auspicious for beginning new ventures related to energy, courage, and competition.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #4a6888;">
+          <div class="card-ey">China · ~2000 BCE–present</div>
+          <div style="font-size:15px;font-weight:700;color:#4a6888;font-family:'Libre Baskerville',serif;margin-bottom:6px;">熒惑 — The Dazzling Deluder</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Chinese astronomy tracked Mars under the name 熒惑 (Yíng-huò) — "the Dazzling Deluder" — because its retrograde motion appeared to deceive observers. Chinese court astronomers kept continuous records of Mars's position and behavior, and any anomaly was treated as a political omen. "Yinghuò enters the Heart" — when Mars passed through the Heart asterism (Antares region) — was the most feared event in Chinese astronomical divination, signifying the death of an emperor, the fall of a dynasty, or major military defeat. Emperors who received such an omen would sometimes perform elaborate rituals, redistribute wealth, or even conduct mock abdications to deflect the cosmic threat. The Chinese Mars is also the Fire Planet (火星, Huǒxīng) — the modern Mandarin name — one of the five elements (fire) governing one of the five classical planets.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #507850;">
+          <div class="card-ey">Egypt · 3000 BCE–30 BCE</div>
+          <div style="font-size:15px;font-weight:700;color:#507850;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Her Desher — "The Red One"</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The Egyptians called Mars Heru-khuti ("Horus of the Horizon") in its role as a wandering celestial body, and also Her Desher — simply "the red one." The red color associated Mars with Set, the god of storms, chaos, and desert — and also with Sekhmet, the lion-headed goddess of war and healing, whose fury the gods had to appease with red-colored drinks (beer mixed with ochre) to prevent her from annihilating humanity. Egyptian astronomical records tracked Mars for calendrical purposes; Mars appears in the Ramesside Star Chart and other astronomical ceilings. The association of redness with violence was as instinctive to Egyptian priests as to every other ancient culture.</div>
+        </div>
+      </div>
+
+      <!-- MARS IN WESTERN ASTROLOGY -->
+      <div class="card">
+        <div class="card-ey">Mars in Western astrology</div>
+        <div class="card-title">The planet of will, drive, and the capacity for violence</div>
+        <div class="card-body">
+          <p>In Western astrology — both traditional and modern — Mars is the planet of will, desire, assertion, physical energy, courage, anger, and aggression. Where Venus attracts, Mars pursues. Where the Moon feels, Mars acts. It rules the initiative, the drive to compete, the capacity for both physical exertion and physical violence.</p>
+          <p>In traditional astrology (Ptolemy, later codified by medieval Arab and European astrologers), Mars was one of the two "malefic" planets — planets inherently associated with difficulty and harm (the other being Saturn). Mars was the "Lesser Malefic," Saturn the "Greater." Mars's malefic qualities expressed as impulsiveness, anger, injury, warfare, accident, and fever. Its benefic qualities expressed as courage, ambition, athletic prowess, and decisiveness. Context determined which.</p>
+          <p>Mars rules Aries (its primary domicile) and Scorpio (its secondary, though modern astrologers assign Scorpio to Pluto). It is exalted in Capricorn — its most powerful and controlled expression. It is in detriment in Libra and Taurus, and in fall in Cancer. Each natal Mars placement was interpreted as indicating the native's relationship to conflict, desire, physical body, and ambition.</p>
+          <p>The Mars cycle was also practically important: Mars retrogrades approximately every 26 months, staying in a sign for unusually long periods. Ancient military planners consulted astrologers on Mars retrograde — the conventional wisdom was that campaigns begun during Mars retrograde tended to fail or reverse. This advice influenced actual military decisions in Rome, Persia, and medieval Europe. The planet named for war was consulted before going to war.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+
+      <!-- MARS IN LANGUAGE -->
+      <div class="card">
+        <div class="card-ey">Mars in language</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;font-size:11px;">
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">火星</div><div style="color:var(--ink-mut);">Huǒxīng · Chinese<br>Fire Star</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">火星</div><div style="color:var(--ink-mut);">Kasei · Japanese<br>Fire Star</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">화성</div><div style="color:var(--ink-mut);">Hwaseong · Korean<br>Fire Star</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">Mangal</div><div style="color:var(--ink-mut);">मंगल · Hindi<br>Auspicious</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">المريخ</div><div style="color:var(--ink-mut);">Al-Mirrīkh · Arabic<br>The Bloodshot</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">Ареc</div><div style="color:var(--ink-mut);">Ares · Greek<br>War god</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">Nergal</div><div style="color:var(--ink-mut);">𒀭𒄊𒀕𒃲 · Sumerian<br>Lord of the Dead</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">Marte</div><div style="color:var(--ink-mut);">Spanish/Italian<br>From Latin Mars</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:15px;color:var(--mars-rust);">Merih</div><div style="color:var(--ink-mut);">Turkish<br>From Arabic</div></div>
+          </div>
+          <div style="padding:8px;background:rgba(192,66,26,0.06);border-radius:7px;font-size:11.5px;color:var(--ink-soft);">The word <strong>martial</strong> (martial arts, martial law, court-martial), the name <strong>March</strong>, and the personal names <strong>Marcus, Mark, Martin, Mario</strong> all descend from <em>Mars</em> — the Roman god whose month opened the military season and whose name was embedded in the Roman calendar before the Julian reform. <strong>Tuesday</strong> = Tīwesdæg (Old English) = Tiw's day — Tiw being the Germanic war god equated with Mars. In French: <em>mardi</em>. Spanish: <em>martes</em>. Italian: <em>martedì</em>. Mars runs through the entire week.</div>
+        </div>
+      </div>
+
+      <!-- SCIENCE FICTION -->
+      <div class="card">
+        <div class="card-ey">Mars in imagination · 1877–2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">1877 — Schiaparelli's "canali"</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Italian astronomer Giovanni Schiaparelli mapped Mars and labeled surface features "canali" — channels. The word was mistranslated into English as "canals" — implying artificial construction. Percival Lowell built an observatory in Arizona to study them, concluded Mars had a dying civilization building canals to move water from the poles. This was complete fantasy. The canals do not exist. But it launched 80 years of Martian civilization mythology.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">1898 — H.G. Wells, The War of the Worlds</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Martians invade Earth — tentacled, mechanical, utterly alien. The first great alien invasion narrative and a direct response to British colonialism: Wells deliberately wrote the Martian invasion as a mirror of how Britain treated colonized peoples. The 1938 Orson Welles radio broadcast caused widespread panic. The book has never been out of print.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">1950 — Ray Bradbury, The Martian Chronicles</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">A lyrical meditation on colonization, loss, and what humans do to places they touch. The Martians are beautiful, telepathic, and already dying when humans arrive. One of the most influential books about human expansion ever written — it was NASA's unofficial bible for a generation of Mars scientists.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">1991 — Kim Stanley Robinson, Red Mars</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The definitive Mars colonization trilogy. Technically rigorous terraforming, political factions over how to treat Mars's potential ecosystem, the ethics of changing another world. Elon Musk and multiple SpaceX engineers have cited it directly as foundational to their Mars thinking.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--mars-rust);">
+            <div style="font-weight:700;color:var(--mars-rust);">2015 — Andy Weir, The Martian</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The most technically accurate Mars survival story ever written. Weir researched every detail with NASA input. The film adaptation changed public perception of Mars exploration more measurably than any NASA press release. "I'm going to have to science the shit out of this" became the unofficial motto of a generation of Mars engineers.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CANAL FALLACY -->
+      <div class="card">
+        <div class="card-ey">The great Mars mistake</div>
+        <div class="card-title">How a mistranslation shaped 80 years of human imagination</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>In 1877, Schiaparelli described faint linear features on Mars as <em>canali</em> — the Italian word for "channels," which can be natural or artificial. When the American astronomer Percival Lowell read about them, he built the Lowell Observatory in Flagstaff, Arizona specifically to study Martian civilization. He spent decades mapping canals, writing books about the dying Martian civilization, and arguing for a complex network of water transportation built by beings far older and more intelligent than humanity.</p>
+          <p style="margin-top:8px;">None of it was real. The canals were an optical illusion — the human brain's pattern-matching tendency connecting random surface features across the vast observational distance. Better telescopes showed nothing. Mariner 4 (1964) photographed craters. The civilization that Lowell had dedicated his career to was never there.</p>
+          <p style="margin-top:8px;">What Lowell's mistake produced, however, was one of the most fertile creative periods in science fiction history — and a deep cultural expectation that Mars might harbor life. That expectation, transmitted through a century of stories, films, and imaginings, is part of why the Cheyava Falls potential biosignature generates global headlines in 2026. We have been hoping for Martian life since 1877. The hope has been wrong about its form — no canals, no civilization, no little green men. But it may not be wrong about the fact.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ DISCOURSE ═════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-discourse">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Discourse · Mars</div>
+        <div class="card-title">Active deliberations</div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--red-p);color:var(--red);">Duel · Round 6 · Most contested on FORA</div></div>
+          <div class="di-title">"We should send no humans to Mars until we definitively confirm whether Mars harbors life — contamination is irreversible and the scientific cost is too high"</div>
+          <div class="di-meta">@astrobiology_first vs @human_exploration · Score 9–8 · 1h remaining</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--red-p);color:var(--red);">Duel · Round 4</div></div>
+          <div class="di-title">"A self-sufficient Mars colony has the right to declare independence — the OST cannot bind people born 350 million kilometers from Earth who have never lived under any Earth government"</div>
+          <div class="di-meta">@mars_sovereignty vs @international_law · Score 7–6 · 8h remaining</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--amber-p);color:var(--amber);">Amendment · Round 3</div></div>
+          <div class="di-title">The Colony Question tab should include non-SpaceX governance models: NASA-led intergovernmental settlement, UN trusteeship, Antarctic Treaty analogue for Mars</div>
+          <div class="di-meta">112 participants · 44h remaining</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--blue-sci-p);color:var(--blue-sci);">Deliberation · Open</div></div>
+          <div class="di-title">If Cheyava Falls is confirmed as evidence of past microbial life, should Mars colonization be paused until an international framework is agreed — even if that takes decades?</div>
+          <div class="di-meta">892 participants · 72h remaining · 614 yes / 278 no</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--blue-sci-p);color:var(--blue-sci);">Deliberation · Open</div></div>
+          <div class="di-title">Should FORA's Mars page link to the Perseverance mission's live position and sample cache data? "The jurisdiction has active residents — six-wheeled ones"</div>
+          <div class="di-meta">341 participants · 48h remaining</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Discourse stats · Mars page</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--mars-rust);">12,884</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Contributions</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--purple);">38</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Active deliberations</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--amber);">11</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Live duels</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--green);">6</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Ratified amendments</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:11.5px;color:var(--ink-soft);background:rgba(192,66,26,0.05);padding:10px;border-radius:7px;border:1px solid rgba(192,66,26,0.1);">Mars is FORA's most active non-Earth jurisdiction by contributions per km². It has no residents — unless you count the rovers. The civic questions it raises are being debated here before anyone is in a position to answer them.</div>
+        <button class="btn-mars" style="margin-top:12px;">Start a deliberation →</button>
+        <button style="width:100%;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:10px;border-radius:8px;background:transparent;color:var(--ink-soft);border:1px solid var(--rule);cursor:pointer;margin-top:8px;">Challenge to a Duel →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end page-body -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-source" id="modal-source"></div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+const MODALS = {
+  marsdist:{title:'Today: 346,762,716 km from Earth',sub:'March 17, 2026 · Moving closer at 2.6 km/s',body:`
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+  <div style="background:#f2f4f8;border-radius:7px;padding:10px;text-align:center;">
+    <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#c0421a;">346.8M km</div>
+    <div style="font-family:monospace;font-size:8px;color:#7a8aaa;text-transform:uppercase;margin-top:2px;">Right now · Mar 17 2026</div>
+  </div>
+  <div style="background:#f2f4f8;border-radius:7px;padding:10px;text-align:center;">
+    <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#7a8aaa;">↓ Closing</div>
+    <div style="font-family:monospace;font-size:8px;color:#7a8aaa;text-transform:uppercase;margin-top:2px;">2.6 km/s toward Earth</div>
+  </div>
+</div>
+<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin:10px 0;font-size:12px;">
+  <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:6px;">Distance reference points</div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Today (Mar 17 2026)</span><span style="font-weight:700;">346.8M km</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Average distance</span><span style="font-weight:700;">225M km</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:#c0421a;"><span>Last opposition (Jan 12 2025)</span><span style="font-weight:700;">~101M km</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>All-time closest (2003)</span><span style="font-weight:700;">55.7M km</span></div>
+  <div style="display:flex;justify-content:space-between;"><span>Maximum (opposite side of Sun)</span><span style="font-weight:700;">401M km</span></div>
+</div>
+<p>Light takes <strong>19 minutes 16 seconds</strong> to reach Mars right now. A round-trip signal takes <strong>38 minutes 32 seconds</strong> — real-time communication is physically impossible. Perseverance must make all driving decisions autonomously; mission controllers send daily plan uploads rather than live instructions. Mars is currently past opposition and moving away from its closest point, heading toward the far side of its orbit.</p>`,source:'Source: Starlust.org JPL Horizons API · March 17 2026 · TheSkyLive.com'},
+  marsday:{title:'Martian day: 24 hours 37 minutes 22 seconds',sub:'A "sol" — just 37 minutes longer than an Earth day',body:'A Martian day — called a sol — is 24 hours, 37 minutes, and 22 seconds. This is remarkably close to Earth\'s 24-hour day, and is one of the more favorable coincidences for human colonization of Mars. NASA rover operations teams work on "Mars time" — their schedules shift 37 minutes later each Earth day to stay synchronized with daylight on the Martian surface. Over the course of a mission, rover operators\' sleep schedules drift completely around the clock relative to Earth time. The Martian year, by contrast, is much longer: 686.97 Earth days (~1.88 Earth years). Martian seasons are roughly twice as long as Earth\'s.',source:'Source: NASA Mars Fact Sheet'},
+  marsatmo:{title:'Martian atmosphere: 0.6% of Earth\'s',sub:'95.3% CO₂ · Unbreathable · Insufficient for unaided survival',body:'Mars has a very thin atmosphere with mean surface pressure of ~610 Pascals, compared to Earth\'s 101,325 Pa — about 0.6% of Earth\'s. Composition: 95.3% carbon dioxide, 2.7% nitrogen, 1.6% argon, trace oxygen (0.13%). Not breathable. Insufficient to prevent boiling of blood at Mars surface temperatures without pressurization suits. Provides only minimal radiation shielding. However, the atmosphere does produce useful effects: it enables parachutes (though not sufficient alone for landing heavy payloads), allows CO₂ to be extracted for oxygen production via MOXIE-type systems, and drives the global dust storm cycle. Mars once had a much thicker atmosphere — it was stripped by solar wind after the planet lost its global magnetic field ~4 billion years ago.',source:'Source: NASA Mars Fact Sheet · Viking lander atmospheric data'},
+  marspercy:{title:'Perseverance — 1,795+ sols on Mars',sub:'As of early March 2026 · Still operating · Heading to Lac de Charmes',body:'Perseverance landed at Jezero Crater on February 18, 2021. As of March 9, 2026, it had been operating for 1,795 sols (1,845 Earth days — 5 years and 19 days). In 2025, it surpassed Curiosity\'s total driven distance and is approaching Opportunity\'s all-time record of 45.16 km. It is now driving to a new region called "Lac de Charmes" to search for new sample collection targets. Key achievements: 23 sealed sample tubes; potential biosignature at Cheyava Falls; first powered flight on another planet (Ingenuity); produced oxygen from CO₂ (MOXIE); first AI-planned rover drives (Dec 2025, in collaboration with Anthropic using Claude models); first autonomous GPS-equivalent positioning (Feb 2026). Nuclear-powered — can operate for a decade or more.',source:'Source: NASA JPL Perseverance mission updates · NASASpaceFlight.com · Wikipedia Mars 2020 · March 2026'},
+  marssignal:{title:'Signal delay: 19 minutes 16 seconds',sub:'One way · March 17 2026 · Round-trip: 38m 32s',body:'Light and radio waves travel at 299,792 km/s. At Mars\'s current distance of 346.8 million km, a signal takes 19 minutes and 16 seconds to arrive. A round-trip command-and-response therefore takes over 38 minutes — making real-time control of anything on Mars impossible. This delay varies between 3 minutes (closest approach) and 22 minutes (farthest). The implication for human Mars missions is profound: a medical emergency cannot be handled by a doctor on Earth in real time. A structural failure cannot be addressed by ground engineers in real time. A political or legal dispute cannot be adjudicated by an Earth court in real time. Any permanent Mars settlement must be operationally self-governing by physical necessity.',source:'Source: TheSkyLive.com · JPL Horizons API · March 17 2026'},
+  marslaw:{title:'Mars-specific law: Zero',sub:'The OST applies. Nothing else does.',body:'There is no Mars-specific treaty, framework, governance agreement, or international norm that applies specifically to Mars. The Outer Space Treaty (1967) applies — no sovereignty claims, peaceful use, states responsible for their nationals. That is the entire applicable legal framework beyond domestic law of operating states.<br><br>The Artemis Accords mention Mars in scope but are non-binding political commitments with 61 signatories, excluding Russia and China. The Moon Agreement (1979) applies in theory but has been ratified by none of the major spacefaring nations. COPUOS has not produced any Mars-specific instrument since 1979.<br><br>For comparison: Antarctica has the Antarctic Treaty System (1959), enforced by 56 parties, with specific protocols on environmental protection, resource exploitation, and science cooperation. The International Seabed Authority governs deep-sea mining in international waters. Mars has nothing equivalent. The legal vacuum will be filled by whoever gets there first, under whatever rules they choose to apply.',source:'Source: UNOOSA · Artemis Accords · Space law scholarship · COPUOS records'},
+};
+
+function openModal(key){
+  const d=MODALS[key]; if(!d) return;
+  document.getElementById('modal-title').textContent=d.title;
+  document.getElementById('modal-sub').textContent=d.sub||'';
+  document.getElementById('modal-body').innerHTML=d.body;
+  document.getElementById('modal-source').textContent=d.source||'';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function showTab(name,el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

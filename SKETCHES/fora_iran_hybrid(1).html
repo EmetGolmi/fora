@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Iran · Hybrid</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1b3a6b; --blue-lt:#2a5298; --blue-vp:rgba(27,58,107,0.04); --blue-pl:rgba(27,58,107,0.12);
+  --gilt:#b8860b; --gilt-dk:#8b6914; --gilt-pl:#fdf8ed; --gilt-rul:rgba(184,134,11,0.2);
+  --red:#8b1a1a; --red-lt:#c0392b; --red-p:rgba(139,26,26,0.06); --red-r:rgba(139,26,26,0.18);
+  --amber:#c47f00; --amber-p:rgba(196,127,0,0.07); --amber-r:rgba(196,127,0,0.2);
+  --green:#155c2d; --green-p:rgba(21,92,45,0.07);
+  --purple:#2d1a4a; --purple-lt:#f0eaf7;
+  --ink:#0e1a2e; --ink-mid:#1e2d45; --ink-soft:#4a5568; --ink-mut:#7a8aaa;
+  --bg:#f2f4f8; --bg2:#e8ebf2; --white:#ffffff;
+  --rule:rgba(27,58,107,0.1); --rule-lt:rgba(27,58,107,0.06); --rule-dk:rgba(14,26,46,0.15);
+  /* Paper palette for newspaper sections */
+  --paper:#f7f4ee; --paper-dk:#ede9df; --paper-rule:rgba(14,12,8,0.15);
+  --paper-ink:#0e0c08; --paper-soft:#5a5448; --paper-mut:#8a8278;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* ── NAV ── */
+.nav{background:var(--blue);border-bottom:4px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-stars{font-size:10px;letter-spacing:0.55em;color:var(--gilt);opacity:0.7;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;transition:color 0.12s;}
+.nav-link:hover,.nav-link.active{color:white;}
+.nav-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;transition:all 0.12s;}
+.nav-btn:hover{background:rgba(255,255,255,0.1);color:white;}
+
+/* ── WAR ALERT ── */
+.war-alert{background:linear-gradient(135deg,#4a0808,#7a1212);border-bottom:2px solid #c0392b;padding:10px 40px;display:flex;align-items:center;gap:14px;}
+.wa-pulse{width:8px;height:8px;border-radius:50%;background:#ff4444;flex-shrink:0;animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,68,68,0.4);}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(255,68,68,0);}}
+.wa-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);flex-shrink:0;}
+.wa-text{font-family:'Nunito',sans-serif;font-size:13px;color:white;line-height:1.4;flex:1;}
+.wa-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.3);flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#0e1a2e 0%,#1b3a6b 50%,#12295a 100%);padding:32px 40px 28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.hero-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;position:relative;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.bc-sep{color:rgba(255,255,255,0.15);}
+.bc-here{color:rgba(255,255,255,0.6);}
+.juris-identity{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.iran-flag{display:flex;flex-direction:column;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.15);width:48px;flex-shrink:0;}
+.flag-green{background:#239f40;height:15px;}
+.flag-white{background:#f5f5f5;height:15px;display:flex;align-items:center;justify-content:center;font-size:8px;}
+.flag-red{background:#da0000;height:15px;}
+.juris-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:white;line-height:0.95;letter-spacing:-0.01em;}
+.juris-name-local{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.45);margin-top:4px;direction:rtl;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:6px;}
+.juris-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;}
+.jtag-type{color:rgba(184,134,11,0.9);border-color:rgba(184,134,11,0.3);background:rgba(184,134,11,0.1);}
+.jtag-war{color:rgba(255,100,100,0.9);border-color:rgba(255,100,100,0.3);background:rgba(255,100,100,0.08);animation:pulse 1.4s ease-in-out infinite;}
+.jtag-blue{color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);}
+
+/* Stats bar */
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.03);padding:11px 14px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;}
+.hs-num.red{color:#ffaaaa;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.27);margin-top:3px;line-height:1.5;}
+.hs-click{cursor:pointer;transition:background 0.15s;}
+.hs-click:hover{background:rgba(255,255,255,0.1);}
+.hero-right{display:flex;flex-direction:column;gap:8px;min-width:180px;flex-shrink:0;}
+.btn-primary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;transition:all 0.12s;}
+.btn-secondary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;background:transparent;color:rgba(255,255,255,0.7);transition:all 0.12s;}
+.btn-red{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,100,100,0.3);cursor:pointer;background:rgba(255,100,100,0.08);color:rgba(255,150,150,0.9);transition:all 0.12s;}
+
+/* ── TABS ── */
+.org-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;align-items:center;padding:0 40px;gap:0;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 16px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.12s;}
+.tab:hover{color:var(--blue);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+.tab.live{color:var(--red);}
+
+/* ── TAB HOVER TOOLTIP ── */
+.tab[title]{position:relative;}
+.tab[title]:hover::after{
+  content:attr(title);
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--ink);
+  color:rgba(255,255,255,0.9);
+  font-family:'Source Serif 4',serif;
+  font-size:11px;
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:0.01em;
+  white-space:nowrap;
+  padding:5px 10px;
+  border-radius:4px;
+  pointer-events:none;
+  z-index:300;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+}
+.tab[title]:hover::before{
+  content:'';
+  position:absolute;
+  bottom:calc(100% + 2px);
+  left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:var(--ink);
+  pointer-events:none;
+  z-index:300;
+}
+
+.tab.live.active{border-bottom-color:var(--red);}
+
+/* ── BODY GRID ── */
+.juris-body{display:grid;grid-template-columns:1fr 280px;gap:0;max-width:1400px;margin:0 auto;padding:0 40px 60px;align-items:start;}
+.juris-main{padding:32px 32px 0 0;min-width:0;}
+.juris-sidebar{padding:32px 0 0;border-left:1px solid var(--rule);padding-left:24px;}
+
+/* ── HYBRID SECTION BLOCKS ── */
+/* Each section: newspaper header (Playfair eyebrow + headline + lead) then dashboard cards */
+.sec-block{margin-bottom:40px;}
+.sec-block + .sec-block{padding-top:32px;border-top:2px solid var(--paper-rule);}
+
+/* Newspaper section header */
+.nh-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.nh-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--gilt-dk);flex-shrink:0;}
+.nh-headline{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--paper-ink);line-height:1.1;letter-spacing:-0.01em;margin-bottom:8px;}
+.nh-headline.crisis{color:var(--red);}
+.nh-lead{font-family:'Source Serif 4',serif;font-size:13.5px;color:var(--paper-soft);line-height:1.75;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--rule);}
+.nh-rule{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.nh-rule-line{flex:1;height:1px;background:var(--rule);}
+.nh-rule-label{font-family:'Playfair Display',serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);}
+
+/* Crisis block */
+.cb-label{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+.cb-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.4s ease-in-out infinite;}
+.cb-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.35;}
+.cb-text{font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px;}
+.cb-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.cbf{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:9px 12px;}
+.cbf-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:2px;}
+.cbf-val{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);}
+.succession-note{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;}
+.sn-icon{font-size:14px;flex-shrink:0;}
+.sn-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
+
+/* Gov authority table */
+.auth-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.auth-table thead tr{background:var(--blue);}
+.auth-table th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.auth-table td{padding:10px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.auth-table tr:last-child td{border-bottom:none;}
+.auth-table tr:hover td{background:var(--bg);}
+.at-body{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.at-body.red{color:var(--red);}
+.at-body.purple{color:var(--purple);}
+.at-badge{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.08em;text-transform:uppercase;padding:1px 6px;border-radius:3px;display:inline-block;}
+.ab-unelect{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.ab-appoint{color:var(--gilt);background:var(--gilt-pl);border:1px solid var(--gilt-rul);}
+.ab-vetted{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.ab-nge{color:var(--purple);background:var(--purple-lt);border:1px solid rgba(45,26,74,0.2);}
+.at-holder{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:1px;}
+.at-meta{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+.at-meta.crisis{color:var(--red);}
+.at-meta.green{color:var(--green);}
+.at-meta.purple{color:var(--purple);}
+.at-note{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);}
+.circular-lock{background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:8px;padding:10px 14px;font-family:'Source Serif 4',serif;font-size:12px;color:var(--ink-soft);line-height:1.65;margin-top:12px;}
+
+/* Philosophy */
+.philosophy-block{background:var(--gilt-pl);border:1px solid var(--gilt-rul);border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+.pb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.pb-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--paper-ink);margin-bottom:6px;}
+.pb-text{font-family:'Source Serif 4',serif;font-size:13px;color:var(--paper-soft);line-height:1.7;}
+.endonym-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;border:1px solid var(--rule);}
+.endonym-table th{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 12px;text-align:left;font-weight:400;background:var(--ink);color:rgba(255,255,255,0.45);}
+.endonym-table td{padding:9px 12px;border-bottom:1px solid var(--rule-lt);vertical-align:top;font-size:12.5px;}
+.endonym-table tr:last-child td{border-bottom:none;}
+.endonym-table tr:hover td{background:var(--bg);}
+.et-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;}
+.et-end{color:var(--green);}
+.et-exo{color:var(--ink-mut);}
+.et-name{font-family:'Source Serif 4',serif;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.et-source{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+
+/* NGE cards */
+.nge-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.nge-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;transition:box-shadow 0.12s;}
+.nge-card:hover{box-shadow:0 2px 12px rgba(27,58,107,0.08);}
+.nge-card.controls{border-left:3px solid var(--blue);}
+.nge-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.nge-name{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.nge-rel{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:1px 6px;border-radius:3px;background:var(--blue-vp);color:var(--blue);border:1px solid var(--blue-pl);display:inline-block;margin-bottom:5px;}
+.nge-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
+.nge-link{color:var(--blue-lt);font-size:11px;}
+
+/* CivicIssues */
+.ci-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:13px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;transition:box-shadow 0.12s;cursor:pointer;}
+.ci-card:hover{box-shadow:0 2px 12px rgba(27,58,107,0.08);}
+.ci-icon{font-size:18px;flex-shrink:0;}
+.ci-title{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.35;}
+.ci-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+.ci-count{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-top:5px;}
+.ci-arrow{font-size:14px;color:var(--ink-mut);flex-shrink:0;margin-left:auto;}
+
+/* Sidebar */
+.sb-block{margin-bottom:24px;}
+.sb-block + .sb-block{padding-top:20px;border-top:1px solid var(--rule);}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+.data-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.data-row:last-child{border-bottom:none;}
+.dr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+.dr-val{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;color:var(--ink);text-align:right;max-width:60%;}
+.dr-val.red{color:var(--red);}
+.official-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--rule-lt);}
+.official-row:last-child{border-bottom:none;}
+.or-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.or-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--ink);}
+.or-role{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;color:var(--ink-mut);margin-top:1px;}
+.or-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-top:3px;margin-right:3px;}
+.ob-new{background:rgba(21,92,45,0.08);color:var(--green);border:1px solid rgba(21,92,45,0.2);}
+.ob-crisis{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.ob-incumbent{background:var(--blue-vp);color:var(--blue);border:1px solid var(--blue-pl);}
+.quick-link{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--blue);transition:color 0.1s;}
+.quick-link:last-child{border-bottom:none;}
+.quick-link:hover{color:var(--gilt-dk);}
+.ql-icon{font-size:12px;flex-shrink:0;}
+.ql-label{flex:1;}
+.ql-ext{color:var(--ink-mut);}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,26,46,0.6);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--white);border-radius:10px;padding:28px 30px;max-width:560px;width:100%;position:relative;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(14,26,46,0.3);}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;color:var(--ink-mut);padding:4px 8px;border-radius:4px;transition:background 0.1s;}
+.modal-close:hover{background:var(--bg);}
+.modal-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--paper-ink);line-height:1.15;margin-bottom:14px;}
+.modal-body{font-family:'Source Serif 4',serif;font-size:13.5px;color:#2a2620;line-height:1.8;}
+.modal-link{display:flex;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);}
+.modal-link:hover{color:var(--gilt-dk);}
+/* Death table */
+.death-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:4px;}
+.death-table th{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 10px;text-align:left;font-weight:400;background:var(--ink);color:rgba(255,255,255,0.5);}
+.death-table td{padding:8px 10px;border-bottom:1px solid var(--rule-lt);vertical-align:top;font-family:'Source Serif 4',serif;line-height:1.5;}
+.death-table tr:last-child td{border-bottom:none;}
+.dt-source{font-weight:600;}
+.dt-count{font-weight:700;white-space:nowrap;}
+.dt-gov{background:rgba(139,26,26,0.04);}
+.dt-rights{background:rgba(27,58,107,0.03);}
+.dt-leaked{background:rgba(21,92,45,0.04);}
+.dt-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-bottom:2px;}
+.dt-b-gov{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.dt-b-rights{background:var(--blue-vp);color:var(--blue);border:1px solid var(--blue-pl);}
+.dt-b-leaked{background:var(--green-p);color:var(--green);border:1px solid rgba(21,92,45,0.2);}
+.death-caveat{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div class="nav-logo">FORA</div>
+    <div class="nav-stars">★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link">Feed</div>
+    <div class="nav-link active">The Record</div>
+    <div class="nav-link">Discourse</div>
+    <div class="nav-link">My Civics</div>
+    <button class="nav-btn">Sign in</button>
+  </div>
+</nav>
+
+<!-- WAR ALERT -->
+<div class="war-alert">
+  <div class="wa-pulse"></div>
+  <div class="wa-label">Active conflict</div>
+  <div class="wa-text"><strong>2026 Iran War — Day 15.</strong> Operation Epic Fury ongoing. Supreme Leader Ali Khamenei killed Feb 28. Mojtaba Khamenei selected Mar 9. Strait of Hormuz effectively closed. No ceasefire.</div>
+  <div class="wa-date">Updated Mar 15, 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="breadcrumb">
+    <span>FORA</span><span class="bc-sep">/</span>
+    <span>Middle East</span><span class="bc-sep">/</span>
+    <span class="bc-here">Islamic Republic of Iran</span>
+  </div>
+  <div class="hero-inner">
+    <div style="flex:1;min-width:0;">
+      <div class="juris-identity">
+        <div class="iran-flag">
+          <div class="flag-green"></div>
+          <div class="flag-white">☪</div>
+          <div class="flag-red"></div>
+        </div>
+        <div>
+          <div class="juris-name">Iran</div>
+          <div class="juris-name-local">جمهوری اسلامی ایران</div>
+          <div class="juris-sub">Islamic Republic of Iran · Tehran · Founded 1979</div>
+          <div class="juris-tags">
+            <span class="jtag jtag-type">Islamic Republic</span>
+            <span class="jtag jtag-war">⚠ Active War · Mar 2026</span>
+            <span class="jtag jtag-blue">90M population</span>
+            <span class="jtag jtag-blue">UN Member</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hs hs-click" onclick="openStatModal('stat-warday')"><div class="hs-num red">15</div><div class="hs-label">Days at war ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-rep')"><div class="hs-num">47</div><div class="hs-label">Yrs Islamic Rep. ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-oil')"><div class="hs-num red">$114</div><div class="hs-label">Oil / bbl ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-irr')"><div class="hs-num red">~630K</div><div class="hs-label">IRR / 1 USD ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-strikes')"><div class="hs-num">1,300+</div><div class="hs-label">Killed in strikes ›</div></div>
+        <div class="hs hs-click" onclick="openStatModal('stat-protests')" style="border-left:2px solid rgba(139,26,26,0.3);">
+          <div class="hs-num red" style="font-size:16px;">7K–36.5K</div>
+          <div class="hs-label">Protesters killed ›<br><span style="font-size:5px;color:rgba(255,255,255,0.18);">Jan 2026 · est. range</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <button class="btn-primary">+ Follow Iran</button>
+      <button class="btn-secondary">Active CivicEvents →</button>
+      <button class="btn-red">⚠ War tracker →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" title="What is this place?">Overview</div>
+    <div class="tab live active-crisis-tab" title="What is happening right now?">Active Crisis ●</div>
+    <div class="tab" title="How is it governed?">Government</div>
+    <div class="tab" title="How does it relate to the world?">Foreign Affairs</div>
+    <div class="tab" title="What does it believe?">Doctrine &amp; History</div>
+    <div class="tab" title="What is contested?">Discourse</div>
+    <div class="tab" title="What is the record?">The Record</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="juris-body">
+  <div class="juris-main">
+
+    <!-- ═══ SECTION 1: ACTIVE CRISIS ═══ -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Ongoing · March 2026</div>
+      <div class="nh-headline crisis">A Supreme Leader Killed, a Son Installed,<br>and No End in Sight</div>
+      <div class="nh-lead">When US-Israeli strikes killed Ayatollah Ali Khamenei on February 28, Washington expected a regime without a head to collapse. Instead, the Islamic Revolutionary Guard Corps drove a succession in nine days — installing the slain leader's son — and Iran shut the Strait of Hormuz to the world. Day 15, no ceasefire.</div>
+
+      <div class="cb-label"><div class="cb-dot"></div>2026 Iran War — Operation Epic Fury</div>
+      <div class="cb-title">US-Israel strikes kill Supreme Leader · Strait of Hormuz closed · Succession crisis</div>
+      <div class="cb-text">On February 28, 2026, the United States and Israel launched coordinated airstrikes on Iran. Supreme Leader Ali Khamenei, dozens of senior officials, and his family were killed. Iran responded by closing the Strait of Hormuz — through which 20% of world oil flows — striking 9 countries, and selecting Mojtaba Khamenei, son of the slain leader, as the third Supreme Leader on March 9. No ceasefire as of March 15.</div>
+      <div class="cb-facts">
+        <div class="cbf"><div class="cbf-label">New Supreme Leader</div><div class="cbf-val">Mojtaba Khamenei · Mar 9</div></div>
+        <div class="cbf"><div class="cbf-label">Strait of Hormuz</div><div class="cbf-val">Effectively closed · $114/bbl</div></div>
+        <div class="cbf"><div class="cbf-label">Iranian deaths (strikes)</div><div class="cbf-val">1,300+ confirmed</div></div>
+        <div class="cbf"><div class="cbf-label">Countries struck by Iran</div><div class="cbf-val">9 · US bases, Gulf states, Israel</div></div>
+      </div>
+      <div class="succession-note">
+        <div class="sn-icon">⚠</div>
+        <div class="sn-text"><strong style="color:var(--amber);">Succession contested.</strong> Mojtaba Khamenei is a <em>hojatoleslam</em>, not an ayatollah — selected under heavy IRGC pressure. Son succeeding father echoes the Pahlavi monarchy the revolution overthrew. US has issued a $10M bounty. Israel has threatened to target him directly.</div>
+      </div>
+    </div>
+
+    <!-- ═══ SECTION 2: GOVERNMENT STRUCTURE ═══ -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Constitutional architecture · Velayat-e Faqih</div>
+      <div class="nh-headline">The Circular Lock: How Every Path to Power<br>Leads Back to the Supreme Leader</div>
+      <div class="nh-lead">Iran's government combines a modern republic — elected president, parliament, courts — with a theocratic superstructure rooted in Velayat-e Faqih. The Supreme Leader sits above all three branches. The Guardian Council vets all candidates. The Assembly of Experts selects the Supreme Leader. The Supreme Leader appoints the Guardian Council. The circle is closed.</div>
+
+      <table class="auth-table">
+        <thead>
+          <tr>
+            <th>Body</th>
+            <th>Selection</th>
+            <th>Current holder</th>
+            <th>Key power</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:rgba(139,26,26,0.03);">
+            <td><div class="at-body red">Supreme Leader</div><span class="at-badge ab-unelect">Unelected</span></td>
+            <td class="at-note">Assembly of Experts<br><span style="font-size:11px;color:var(--ink-mut);">(itself vetted by Guardian Council)</span></td>
+            <td><div class="at-holder">Mojtaba Khamenei</div><div class="at-meta crisis">Since Mar 9, 2026 · contested · US bounty</div></td>
+            <td class="at-note">Sets all domestic and foreign policy. Commands armed forces. Above all three branches.</td>
+          </tr>
+          <tr style="background:var(--gilt-pl);">
+            <td><div class="at-body">Guardian Council</div><span class="at-badge ab-appoint">Appointed</span></td>
+            <td class="at-note">6 by Supreme Leader + 6 by judiciary</td>
+            <td><div class="at-holder">Ahmad Jannati (Chair)</div><div class="at-meta">12 members · 6-yr staggered terms</div></td>
+            <td class="at-note">Vets all candidates for office. Vetoes all legislation for Islamic compliance. Disqualifies majority of candidates.</td>
+          </tr>
+          <tr style="background:var(--gilt-pl);">
+            <td><div class="at-body">Assembly of Experts</div><span class="at-badge ab-vetted">Vetted vote</span></td>
+            <td class="at-note">Popular vote — all candidates vetted by Guardian Council</td>
+            <td><div class="at-holder">Movahedi Kermani, 92 (Chair)</div><div class="at-meta">88 clerics · 8-yr terms · hard-liners dominant</div></td>
+            <td class="at-note">Nominally selects and can remove Supreme Leader. Has never challenged one.</td>
+          </tr>
+          <tr style="background:var(--gilt-pl);">
+            <td><div class="at-body">Expediency Council</div><span class="at-badge ab-appoint">Appointed</span></td>
+            <td class="at-note">Appointed by Supreme Leader every 5 years</td>
+            <td><div class="at-holder">Sadeq Amoli Larijani (Chair)</div><div class="at-meta">~45 members</div></td>
+            <td class="at-note">Mediates between parliament and Guardian Council. Primary advisory role to Supreme Leader.</td>
+          </tr>
+          <tr>
+            <td><div class="at-body">President</div><span class="at-badge ab-vetted">Vetted vote</span></td>
+            <td class="at-note">Popular vote — Guardian Council screens candidates. Max 2 consecutive terms.</td>
+            <td><div class="at-holder">Masoud Pezeshkian</div><div class="at-meta green">Since Aug 2024 · first reformist in 20 yrs</div></td>
+            <td class="at-note">Head of government. Executes Supreme Leader's decrees. Appoints cabinet subject to parliamentary confirmation.</td>
+          </tr>
+          <tr>
+            <td><div class="at-body">Majlis (Parliament)</div><span class="at-badge ab-vetted">Vetted vote</span></td>
+            <td class="at-note">290 seats · 4-yr terms · 2024 turnout 41%, historic low</td>
+            <td><div class="at-holder">Ghalibaf (Speaker)</div><div class="at-meta">Hard-liners dominant · IRGC ties rising</div></td>
+            <td class="at-note">Legislates subject to Guardian Council veto. Can impeach president. Cannot challenge Supreme Leader.</td>
+          </tr>
+          <tr style="background:#f8f5ff;">
+            <td><div class="at-body purple">IRGC</div><span class="at-badge ab-nge">Appointed</span></td>
+            <td class="at-note">Commander appointed by Supreme Leader</td>
+            <td><div class="at-holder">Hossein Salami</div><div class="at-meta purple">→ Quds Force NGE page · US FTO designation 2019</div></td>
+            <td class="at-note">Protects the Revolution. Commands Quds Force external ops. Controls ~30% of Iran's economy via Bonyads. Drove Mojtaba's selection.</td>
+          </tr>
+          <tr>
+            <td><div class="at-body">Chief Justice</div><span class="at-badge ab-appoint">Appointed</span></td>
+            <td class="at-note">Appointed by Supreme Leader · 5-yr term</td>
+            <td><div class="at-holder">Mohseni-Ejei</div><div class="at-meta">Led post-Khamenei interim council</div></td>
+            <td class="at-note">Nominates 6 Guardian Council jurists. Heads Special Clerical Court.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="circular-lock"><strong style="color:var(--blue);">The circular lock:</strong> The Supreme Leader appoints the Guardian Council → The Guardian Council vets Assembly of Experts candidates → The Assembly of Experts selects the Supreme Leader. All paths lead back.</div>
+    </div>
+
+    <!-- ═══ SECTION 3: GOVERNING PHILOSOPHY ═══ -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>State doctrine · 1979–present</div>
+      <div class="nh-headline">What the Islamic Republic Calls Itself —<br>and What Others Call It</div>
+      <div class="nh-lead">Every state has a governing philosophy — a doctrine that justifies its authority. Iran calls its system Velayat-e Faqih, the guardianship of the Islamic jurist. Contested theologically within Islam, declared illegitimate by Iranian opposition, framed as imperialism by Arab neighbors. FORA records all names.</div>
+
+      <div class="philosophy-block">
+        <div class="pb-eyebrow">Endonym · What they call themselves</div>
+        <div class="pb-title">Velayat-e Faqih — Guardianship of the Islamic Jurist</div>
+        <div class="pb-text">Developed by Khomeini before 1979: in the absence of the Twelfth Imam, legitimate political authority belongs to a qualified Islamic jurist. Constitutionally entrenched — not a policy preference but the legal foundation of the Republic. The Supreme Leader's authority is simultaneously political and religious.</div>
+      </div>
+
+      <table class="endonym-table">
+        <thead><tr>
+          <th style="width:80px;">Register</th>
+          <th>Name / Label</th>
+          <th>Source</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span class="et-type et-end">Endonym</span></td><td><div class="et-name">Islamic Republic · Axis of Resistance</div></td><td class="et-source">Constitutional self-designation + Iran's framing of its regional proxy network</td></tr>
+          <tr><td><span class="et-type et-exo">West</span></td><td><div class="et-name">State sponsor of terrorism · Rogue state · Theocracy</div></td><td class="et-source">US State Dept · European governments · Israeli government</td></tr>
+          <tr><td><span class="et-type et-exo">Arab world</span></td><td><div class="et-name">Persian imperialism · Shia expansionism</div></td><td class="et-source">Saudi Arabia, Gulf states, Sunni governments</td></tr>
+          <tr><td><span class="et-type et-exo">Opposition</span></td><td><div class="et-name">Dictatorship · The regime · Usurpation</div></td><td class="et-source">Green Movement · January 2026 protesters · MEK</td></tr>
+          <tr><td><span class="et-type et-exo">Global South</span></td><td><div class="et-name">Anti-imperialist resistance · Multipolar partner</div></td><td class="et-source">Venezuela · segments of Latin American and African political discourse</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══ SECTION 4: NGE RELATIONS ═══ -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Non-governmental power layer</div>
+      <div class="nh-headline">The Axis of Resistance, Degraded but Not Dismantled</div>
+      <div class="nh-lead">Iran's regional strategy has relied for four decades on proxy militias — organizations it funds, arms, and commands, giving it influence across Lebanon, Gaza, Yemen, and Iraq without direct Iranian troops on foreign soil. The 2024–2026 period has severely degraded this network. Whether it can regenerate is one of the central open questions of the war.</div>
+
+      <div class="nge-grid">
+        <div class="nge-card controls">
+          <div class="nge-icon">⚔️</div>
+          <div>
+            <div class="nge-name">IRGC Quds Force</div>
+            <span class="nge-rel">Creates · Funds · Commands</span>
+            <div class="nge-desc">Iran's external operations arm. HQ destroyed Mar 4. Air fleet obliterated Mar 7. Commander Qaani status disputed — espionage detention reports unconfirmed. <a class="nge-link" href="#">→ NGE page</a></div>
+          </div>
+        </div>
+        <div class="nge-card controls">
+          <div class="nge-icon">🌿</div>
+          <div>
+            <div class="nge-name">Hezbollah</div>
+            <span class="nge-rel">Created · Funds · Commands</span>
+            <div class="nge-desc">Founded 1982 by IRGC. Severely degraded 2024–2026. Nasrallah and Safieddine killed. Re-engaged in Lebanon since Feb 28. <a class="nge-link" href="#">→ NGE page</a></div>
+          </div>
+        </div>
+        <div class="nge-card controls">
+          <div class="nge-icon">🇾🇪</div>
+          <div>
+            <div class="nge-name">Houthis (Ansar Allah)</div>
+            <span class="nge-rel">Funds · Arms · Advises</span>
+            <div class="nge-desc">Active during 2026 war. Supply chain cut after Quds Force transport fleet destroyed. Continue drone and missile attacks from Yemen.</div>
+          </div>
+        </div>
+        <div class="nge-card controls">
+          <div class="nge-icon">🇮🇶</div>
+          <div>
+            <div class="nge-name">Popular Mobilization Forces</div>
+            <span class="nge-rel">Funds · Commands key factions</span>
+            <div class="nge-desc">Iraq-based Shia paramilitary. Iran-aligned factions striking US installations in Iraq and Gulf during the 2026 war.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SECTION 5: CIVIC ISSUES ═══ -->
+    <div class="sec-block">
+      <div class="nh-eyebrow"><div class="nh-eyebrow-dot"></div>Persistent questions · FORA does not resolve</div>
+      <div class="nh-headline">Five Questions the War Has Made More Urgent,<br>Not Less</div>
+      <div class="nh-lead">These are not new questions. They were contested before the first strike and will be contested after any ceasefire. FORA records the competing positions. It does not adjudicate them.</div>
+
+      <div class="ci-card"><div class="ci-icon">🕌</div><div><div class="ci-title">Velayat-e Faqih — Is theological authority a legitimate basis for state power?</div><div class="ci-desc">Iranian reformists, Sunni scholars, secular Iranians, and Western liberal theory dispute this on different grounds — and do not agree with each other either.</div><div class="ci-count">847 contributions · 12 CivicEvents · 4 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">☢️</div><div><div class="ci-title">Iran's nuclear program — civilian energy or weapons development?</div><div class="ci-desc">~1,000 lbs of highly enriched uranium accumulated by 2026 — the stated primary justification for Operation Epic Fury.</div><div class="ci-count">1,204 contributions · 28 CivicEvents · 18 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">🌐</div><div><div class="ci-title">Axis of Resistance — liberation theology or regional imperialism?</div><div class="ci-desc">Iran frames its proxy network as anti-imperial resistance. Arab Sunni states and the West describe it as Shia expansionism. Lebanese Shia populations are divided.</div><div class="ci-count">632 contributions · 19 CivicEvents · 9 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">⚖️</div><div><div class="ci-title">2026 war — legal, illegal, or somewhere between?</div><div class="ci-desc">US and Israel frame strikes as preventive self-defense under Article 51. Iran, Russia, China, and the Global South frame them as illegal aggression without UN authorization.</div><div class="ci-count">2,108 contributions · 15 days · Live</div></div><div class="ci-arrow">→</div></div>
+      <div class="ci-card"><div class="ci-icon">🧬</div><div><div class="ci-title">Dynastic succession — has the Islamic Republic become what it overthrew?</div><div class="ci-desc">Mojtaba Khamenei's selection reprises the hereditary monarchy the 1979 revolution destroyed. Iranian protesters had chanted against it for years.</div><div class="ci-count">389 contributions · 6 days · Live</div></div><div class="ci-arrow">→</div></div>
+    </div>
+
+  </div><!-- /juris-main -->
+
+  <!-- SIDEBAR -->
+  <div class="juris-sidebar">
+    <div class="sb-block">
+      <div class="sb-ey">At a glance</div>
+      <div class="sb-title">Iran · March 2026</div>
+      <div class="data-row"><div class="dr-label">Official name</div><div class="dr-val">Islamic Republic of Iran</div></div>
+      <div class="data-row"><div class="dr-label">Persian name</div><div class="dr-val">جمهوری اسلامی ایران</div></div>
+      <div class="data-row"><div class="dr-label">Capital</div><div class="dr-val">Tehran</div></div>
+      <div class="data-row"><div class="dr-label">Population</div><div class="dr-val">~90 million</div></div>
+      <div class="data-row"><div class="dr-label">Founded</div><div class="dr-val">Apr 1, 1979</div></div>
+      <div class="data-row"><div class="dr-label">State religion</div><div class="dr-val">Shia Islam (Twelver)</div></div>
+      <div class="data-row"><div class="dr-label">Currency</div><div class="dr-val">Iranian Rial (IRR)</div></div>
+      <div class="data-row"><div class="dr-label">UN member</div><div class="dr-val">Yes · since 1945</div></div>
+      <div class="data-row"><div class="dr-label">War status</div><div class="dr-val red">Active · Day 15</div></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Current officials</div>
+      <div class="sb-title">Key Leadership</div>
+      <div class="official-row"><div class="or-avatar">MK</div><div><div class="or-name">Mojtaba Khamenei</div><div class="or-role">Supreme Leader · Since Mar 9, 2026</div><span class="or-badge ob-new">New · contested</span><span class="or-badge ob-crisis">US bounty $10M</span></div></div>
+      <div class="official-row"><div class="or-avatar">MP</div><div><div class="or-name">Masoud Pezeshkian</div><div class="or-role">President · Since Aug 2024</div><span class="or-badge ob-incumbent">Reformist · 1st in 20 yrs</span></div></div>
+      <div class="official-row"><div class="or-avatar">MG</div><div><div class="or-name">Mohammad Bagher Ghalibaf</div><div class="or-role">Parliament Speaker · Since 2020</div><span class="or-badge ob-crisis">Former IRGC cmdr</span></div></div>
+      <div class="official-row"><div class="or-avatar">HS</div><div><div class="or-name">Hossein Salami</div><div class="or-role">IRGC Commander-in-Chief</div><span class="or-badge ob-crisis">Drove Mojtaba selection</span></div></div>
+      <div class="official-row"><div class="or-avatar" style="font-size:8px;">GH</div><div><div class="or-name">Mohseni-Ejei</div><div class="or-role">Chief Justice</div><span class="or-badge ob-crisis">Led interim council</span></div></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Historical · since 1979</div>
+      <div class="sb-title">Supreme Leaders</div>
+      <div class="official-row"><div class="or-avatar" style="font-size:8px;">RK</div><div><div class="or-name">Ruhollah Khomeini</div><div class="or-role">1979 – Jun 3, 1989 · Died in office</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-top:2px;">Founded the Republic</div></div></div>
+      <div class="official-row"><div class="or-avatar" style="font-size:8px;">AK</div><div><div class="or-name">Ali Khamenei</div><div class="or-role">1989 – Feb 28, 2026 · Killed</div><span class="or-badge ob-crisis">🕯 Killed · Operation Epic Fury</span></div></div>
+      <div class="official-row"><div class="or-avatar" style="font-size:8px;">MK</div><div><div class="or-name">Mojtaba Khamenei</div><div class="or-role">Mar 9, 2026 – present</div><span class="or-badge ob-new">3rd Supreme Leader</span></div></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">External sources</div>
+      <div class="sb-title">Reference</div>
+      <a class="quick-link" href="https://www.cfr.org/articles/islamic-republics-power-centers" target="_blank"><span class="ql-icon">🏛</span><div class="ql-label">CFR · Iran power centers</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://freedomhouse.org/country/iran/freedom-world/2025" target="_blank"><span class="ql-icon">📊</span><div class="ql-label">Freedom House · 2025</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://en.wikipedia.org/wiki/2026_Iran_war" target="_blank"><span class="ql-icon">⚔️</span><div class="ql-label">2026 Iran War · Wikipedia</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://en.wikipedia.org/wiki/Mojtaba_Khamenei" target="_blank"><span class="ql-icon">👤</span><div class="ql-label">Mojtaba Khamenei · Wikipedia</div><span class="ql-ext">↗</span></a>
+      <a class="quick-link" href="https://en.wikipedia.org/wiki/2025-2026_Iranian_protests" target="_blank"><span class="ql-icon">✊</span><div class="ql-label">2025–26 Protests · Wikipedia</div><span class="ql-ext">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕ close</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+const statData = {
+  'stat-warday': {
+    ey: 'Operation Epic Fury · Feb 28 – present',
+    title: 'Day 15 — The 2026 Iran War',
+    body: 'Operation Epic Fury began February 28, 2026 with coordinated US-Israeli airstrikes. Supreme Leader Ali Khamenei was killed on Day 1. Iran responded with missile and drone strikes across 9 countries and closed the Strait of Hormuz. As of March 15, no ceasefire agreement exists. The US has struck over 5,000 targets. Iran has struck 9 countries. Trump said the war may end "soon" as there is "practically nothing left to bomb." Iran has not agreed to any terms.'
+  },
+  'stat-rep': {
+    ey: 'April 1, 1979 – present',
+    title: '47 Years — The Islamic Republic',
+    body: 'The Islamic Republic of Iran was formally established April 1, 1979, following the referendum that replaced the Pahlavi monarchy after the Islamic Revolution. One of only three states officially named an Islamic Republic (with Pakistan and Mauritania). It has had three Supreme Leaders in 47 years. The 2026 war is the gravest existential challenge in its history — yet the regime\'s core apparatus has thus far survived the assassination of its leader.'
+  },
+  'stat-oil': {
+    ey: 'Brent crude · March 15, 2026',
+    title: 'Oil at $114 per Barrel',
+    isChart: true,
+    body: 'Brent crude reached $114/bbl following Iran\'s effective closure of the Strait of Hormuz, through which approximately 20% of the world\'s daily oil supply passes. Qatar declared force majeure on gas contracts. Kuwait cut production. The IEA authorized a record release of 400 million barrels from strategic reserves. Some Gulf states are diverting shipments overland. Analysts project $150+ if the closure persists beyond 30 days.',
+    chartData: {
+      labels: ['2000','2002','2004','2006','2008','2010','2011','2012','2014','2016','2018','2019','2020 Mar','2020 Apr','2021','2022 Jan','2022 Jun','2022 Oct','2023','2024 Jan','2024 Jun','2024 Oct','2025 Jan','2025 Jun','2025 Oct','2026 Jan','Feb 28','Mar 15'],
+      datasets: [
+        {
+          label: 'Brent crude (USD/bbl)',
+          data: [28,26,38,65,133,79,111,112,99,44,72,64,33,17,71,83,122,92,83,78,85,74,76,72,68,82,96,114],
+          borderColor: '#b8860b',
+          backgroundColor: 'rgba(184,134,11,0.08)',
+          fill: true,
+          tension: 0.35,
+          borderWidth: 2,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+        }
+      ]
+    },
+    chartNote: 'USD per barrel · Brent crude spot price. Key events: 2008 peak ($133) · 2014–16 Saudi price war · 2020 COVID collapse ($17) · 2022 Ukraine war spike · Feb 28 2026 Operation Epic Fury / Hormuz closure. Sources: EIA · Bloomberg · Reuters.'
+  },
+  'stat-irr': {
+    ey: 'Iranian Rial · March 15, 2026',
+    title: 'Iranian Rial: ~630,000 per USD',
+    isChart: true,
+    body: 'The rial has been in freefall for years before the 2026 war — international sanctions, economic mismanagement, and chronic inflation had already devastated purchasing power. In January 2026 the currency hit a record low, directly triggering the protests that preceded the war. The war has accelerated the collapse further. Iran\'s black market has become the primary economic reality for most citizens. The official exchange rate diverges significantly from the street rate.',
+    chartNote: 'USD per 1,000 IRR — higher = stronger rial. Sources: Bonbast.com (black market) · CBI official rate · IMF estimates · Reuters.',
+      datasets: [
+        {
+          label: 'Black market rate',
+          data: [111,101,74,29,28,31,25,23,9.1,7.1,4.4,3.7,3.2,2.4,2.0,1.9,1.8,1.7,1.7,1.7,1.6,1.6,1.6],
+          borderColor: '#8b1a1a',
+          backgroundColor: 'rgba(139,26,26,0.08)',
+          fill: true,
+          tension: 0.35,
+          borderWidth: 2,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+        },
+        {
+          label: 'Official CBI rate',
+          data: [111,101,82,82,40,33,31,27,24,24,24,24,24,24,24,24,24,3.5,3.5,3.5,3.5,3.5,3.5],
+          borderColor: '#1b3a6b',
+          backgroundColor: 'transparent',
+          fill: false,
+          tension: 0.2,
+          borderWidth: 1.5,
+          borderDash: [4,3],
+          pointRadius: 2,
+          pointHoverRadius: 5,
+        }
+      ]
+    }
+  },
+  'stat-strikes': {
+    ey: 'Operation Epic Fury · killed in airstrikes',
+    title: '1,300+ Killed in US-Israeli Strikes',
+    body: 'As of March 15, Iranian state media citing the Red Crescent reported over 1,300 deaths from Operation Epic Fury — civilian and military combined. This includes Supreme Leader Ali Khamenei, dozens of senior officials, and his family members. Civilian deaths include those reported in a strike on a girls\' school in southern Iran. The US and Israel have struck over 5,000 targets: nuclear sites at Natanz and Isfahan, missile factories at Parchin and Shahrud, the IRGC compound in eastern Tehran, 11 of 17 Air Force tactical airbases, and Kharg Island oil infrastructure. Independent verification is severely limited due to active war and media access restrictions.'
+  },
+  'stat-protests': {
+    ey: 'January 2026 · Contested figures',
+    title: 'January 2026 Protest Deaths',
+    isTable: true
+  }
+};
+
+const deathRows = [
+  { cls:'dt-gov', badge:'dt-b-gov', label:'Official', source:'Iranian Govt (Martyrs Foundation)', count:'3,117', date:'Jan 21, 2026', note:'Includes 2,427 "civilians and security forces." 690 labeled "terrorists." IHRNGO says govt historically reports ~12% of actual deaths. Widely disputed.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Iran Human Rights (IHRNGO)', count:'3,428+', date:'Jan 22, 2026', note:'Norway-based. Named, verified list. Notes govt figure represents ~12% of IHRNGO\'s historically verified counts.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Iran HRM', count:'3,000+', date:'Jan 2026', note:'US-based monitor. States actual toll "significantly higher." Notes 50,000+ arrests. Further verification ongoing.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Human Rights Watch', count:'Thousands', date:'Jan 16, 2026', note:'Mass killings documented in 8 provinces. Verified videos of body bags at Kahrizak — 400+ bodies at one site alone. Called for UN special session.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'Amnesty International', count:'Thousands', date:'Jan 26, 2026', note:'"Deadliest period of repression in decades of Amnesty research." Documented direct fire at heads and torsos of unarmed protesters.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'UN Special Rapporteur (Mai Sato)', count:'5,000–20,000', date:'Jan 16, 2026', note:'Based on medical source intelligence. Wide range reflects internet blackout. Separately called the death toll "potentially as high as 20,000."' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Rights org', source:'HRANA (Human Rights Activists News Agency)', count:'7,015 confirmed\n+11,744 under review', date:'Feb 5, 2026', note:'US-based. Named list with photos, circumstances, family testimony. Less than 100 names overlap with government list. 53,777 arrested.' },
+  { cls:'dt-rights', badge:'dt-b-rights', label:'Wire / NPR', source:'NPR / AP (citing HRANA)', count:'6,126+', date:'Jan 27, 2026', note:'5,777 protesters, 214 government forces, 86 children, 49 bystanders. 41,800+ arrested. Unable to independently verify due to internet shutdown.' },
+  { cls:'dt-leaked', badge:'dt-b-leaked', label:'Leaked IRGC doc', source:'IRGC Internal Report (reviewed by Iran Intl)', count:'12,000+', date:'Jan 11, 2026', note:'Internal IRGC Intelligence Organization figure submitted to Supreme National Security Council 2 days after the Jan 8–9 massacre. Reviewed by Iran International.' },
+  { cls:'dt-leaked', badge:'dt-b-leaked', label:'Leaked IRGC doc', source:'Iran International (leaked SNSC report, Jan 22–24)', count:'36,500+', date:'Jan 25, 2026', note:'From leaked IRGC Intelligence Organization reports to Supreme National Security Council. IRGC\'s own internal count. Khamenei acknowledged "thousands" were killed. Not independently verifiable but sourced from regime\'s own classified documents.' }
+];
+
+function buildDeathTable() {
+  let rows = deathRows.map(r =>
+    '<tr class="' + r.cls + '">'
+    + '<td><div class="dt-source"><span class="dt-badge ' + r.badge + '">' + r.label + '</span><br>' + r.source + '</div></td>'
+    + '<td class="dt-count" style="color:' + (r.cls === 'dt-gov' ? 'var(--red)' : r.cls === 'dt-leaked' ? 'var(--green)' : 'var(--blue)') + '">' + r.count.replace('\n','<br>') + '</td>'
+    + '<td style="color:var(--ink-soft);white-space:nowrap;font-size:11px;">' + r.date + '</td>'
+    + '<td style="font-size:11.5px;color:var(--ink-soft);line-height:1.55;">' + r.note + '</td>'
+    + '</tr>'
+  ).join('');
+  return '<table class="death-table">'
+    + '<thead><tr><th>Source</th><th>Count</th><th>Date</th><th>Notes</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table>'
+    + '<div class="death-caveat">FORA displays the range 7,000–36,500 as the estimated bounds from verified and leaked sources. None of these figures can be independently verified due to the internet blackout imposed Jan 8. The government figure and the leaked IRGC internal figure represent the floor and the ceiling respectively of what Iranian state actors themselves have recorded.</div>';
+}
+
+function openStatModal(id) {
+  const data = statData[id];
+  if (!data) return;
+  const overlay = document.getElementById('modal-overlay');
+  const mc = document.getElementById('modal-content');
+  let html = '<div class="modal-ey">' + data.ey + '</div>'
+    + '<div class="modal-title">' + data.title + '</div>';
+  if (data.isTable) {
+    html += '<div class="modal-body" style="font-size:12.5px;margin-bottom:14px;">The death toll from the January 2026 uprising is one of the most contested figures in modern Iranian history. The internet shutdown, media blackout, and the government\'s documented pattern of underreporting make independent verification impossible. The table below spans all major sources, from the Iranian government\'s official count to leaked internal IRGC documents.</div>';
+    html += buildDeathTable();
+  } else if (data.isChart) {
+    html += '<div class="modal-body" style="margin-bottom:12px;">' + data.body + '</div>';
+    html += '<canvas id="modalChart" style="width:100%;height:140px;display:block;"></canvas>';
+    const note = data.chartNote || 'Sources: Bonbast.com (black market) · CBI official rate · IMF estimates · Reuters.';
+    html += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:8px;">' + note + '</div>';
+  } else {
+    html += '<div class="modal-body">' + data.body + '</div>';
+  }
+  mc.innerHTML = html;
+  overlay.style.display = 'flex';
+  if (data.isChart && data.chartData) {
+    const ctx = document.getElementById('modalChart');
+    if (ctx && window.Chart) {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.chartData.labels,
+          datasets: data.chartData.datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: true, position: 'bottom', labels: { font: { family: 'JetBrains Mono', size: 8 }, boxWidth: 10, padding: 6 } },
+            tooltip: { callbacks: {
+              label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + ' per 1,000 IRR'
+            }}
+          },
+          scales: {
+            x: { ticks: { font: { family: 'JetBrains Mono', size: 8 }, maxTicksLimit: 10 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+            y: { ticks: { font: { family: 'JetBrains Mono', size: 8 }, callback: v => '$' + v.toFixed(1) }, grid: { color: 'rgba(0,0,0,0.05)' }, title: { display: true, text: 'USD per 1,000 IRR', font: { family: 'JetBrains Mono', size: 8 }, color: '#7a8aaa' } }
+          }
+        }
+      });
+    }
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

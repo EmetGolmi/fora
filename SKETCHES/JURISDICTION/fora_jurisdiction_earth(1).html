@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Earth · Jurisdiction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --earth:#4a8fc4;--earth-lt:#7ab8f0;--earth-dk:#1a5a90;--earth-glow:rgba(74,143,196,0.2);
+  --space:#06080f;--night:#0a0e1a;
+  --red:#8b1a1a;--red-lt:#c0421a;--red-p:rgba(139,26,26,0.08);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.08);
+  --green:#155c2d;--green-p:rgba(21,92,45,0.08);
+  --blue-sci:#3a7ab8;--blue-sci-p:rgba(58,122,184,0.1);
+  --gold:#b8860b;--gold-lt:#d4a832;
+  --ink:#0e1a2e;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f0f3f8;--white:#fff;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* nav handled by top-nav block */
+
+/* TICKER */
+.ticker-bar{height:30px;background:#050810;border-bottom:1px solid rgba(74,143,196,0.12);display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 14px;display:flex;align-items:center;gap:7px;background:rgba(74,143,196,0.1);border-right:1px solid rgba(74,143,196,0.2);}
+.ticker-pulse{width:7px;height:7px;border-radius:50%;background:var(--earth-lt);animation:pulse 2s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--earth-lt);white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;white-space:nowrap;animation:ts 55s linear infinite;}
+@keyframes ts{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ti{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.04);}
+.tk{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.tv{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.tv-r{color:#f08080;}.tv-w{color:rgba(255,255,255,0.82);}.tv-a{color:#FAC775;}.tv-g{color:#7fcf95;}.tv-b{color:#7ab8f0;}.tv-y{color:#ffe066;}
+
+/* HERO */
+.hero{background:radial-gradient(ellipse at 30% 0%,#0c2040 0%,#06101e 40%,#030810 80%);padding:36px 40px 0;position:relative;overflow:hidden;min-height:280px;}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:
+  radial-gradient(1px 1px at 8% 18%,rgba(255,255,255,0.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 18% 72%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 28% 35%,rgba(200,220,255,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 42% 85%,rgba(255,255,255,0.35) 0%,transparent 100%),
+  radial-gradient(2px 2px at 55% 22%,rgba(255,240,200,0.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 67% 60%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 78% 15%,rgba(200,220,255,0.5) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 88% 78%,rgba(255,255,255,0.45) 0%,transparent 100%),
+  radial-gradient(1px 1px at 94% 42%,rgba(255,255,255,0.35) 0%,transparent 100%);}
+.hero-inner{display:flex;align-items:flex-start;gap:32px;position:relative;z-index:2;}
+.hero-bc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;position:relative;z-index:2;}
+.bc-c{color:rgba(255,255,255,0.1);font-size:6.5px;}
+.bc-sep{opacity:0.15;}
+.bc-h{color:rgba(122,184,240,0.75);}
+
+/* CSS Earth sphere */
+.earth-sphere{width:130px;height:130px;border-radius:50%;flex-shrink:0;margin-top:4px;position:relative;
+  background:radial-gradient(circle at 38% 34%,#8cc8f8 0%,#4a8fc4 22%,#1a5a90 50%,#0a3060 75%,#041830 100%);
+  box-shadow:0 0 50px rgba(74,143,196,0.35),0 0 100px rgba(74,143,196,0.12),inset -18px -10px 36px rgba(4,18,48,0.5);}
+.earth-sphere::before{content:'';position:absolute;inset:0;border-radius:50%;background:
+  radial-gradient(ellipse at 30% 28%,rgba(80,160,80,0.52) 0%,transparent 28%),
+  radial-gradient(ellipse at 62% 52%,rgba(90,150,80,0.42) 0%,transparent 22%),
+  radial-gradient(ellipse at 22% 68%,rgba(70,130,70,0.38) 0%,transparent 18%),
+  radial-gradient(ellipse at 74% 24%,rgba(100,170,80,0.3) 0%,transparent 14%),
+  radial-gradient(ellipse at 50% 80%,rgba(210,180,120,0.25) 0%,transparent 15%);}
+.earth-sphere::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 72% 50%,transparent 44%,rgba(4,12,32,0.45) 62%,rgba(2,6,16,0.7) 78%);}
+
+.juris-name{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:var(--earth-lt);line-height:0.9;letter-spacing:-0.01em;}
+.juris-name-sub{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(74,143,196,0.45);margin-top:5px;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(74,143,196,0.25);margin-top:6px;}
+.juris-lead{font-size:13.5px;color:rgba(180,210,240,0.5);line-height:1.7;max-width:520px;margin-top:12px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;display:inline-block;margin:3px 3px 0 0;}
+
+/* Hero stats */
+.hero-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(74,143,196,0.1);border-radius:10px;overflow:hidden;margin-top:16px;}
+.hs{background:rgba(255,255,255,0.02);padding:10px 12px 8px;cursor:pointer;transition:background 0.15s;}
+.hs:hover{background:rgba(74,143,196,0.08);}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(122,184,240,0.3);margin-bottom:4px;}
+.hs-val{font-size:14px;font-weight:800;color:var(--earth-lt);line-height:1;}
+.hs-unit{font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(122,184,240,0.25);margin-top:2px;line-height:1.3;}
+
+/* TABS */
+.org-tabs{background:var(--night);border-bottom:1px solid rgba(74,143,196,0.1);padding:0 40px;position:sticky;top:52px;z-index:100;overflow-x:auto;}
+.tabs-inner{display:flex;gap:0;min-width:max-content;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 16px;color:rgba(255,255,255,0.35);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;}
+.tab:hover{color:rgba(255,255,255,0.65);}
+.tab.active{color:var(--earth-lt);border-bottom-color:var(--earth);}
+
+/* PAGE BODY */
+.page-body{max-width:1200px;margin:0 auto;padding:24px 40px 60px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+.card-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:7px;}
+.card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.2;}
+.card-body{font-size:13px;color:var(--ink-soft);line-height:1.75;}
+.card-body p{margin-bottom:10px;}
+.card-body p:last-child{margin-bottom:0;}
+
+/* ISSUE WIDGETS */
+.issues-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px;}
+.issue-widget{background:var(--white);border:1px solid var(--rule);border-radius:12px;overflow:hidden;}
+.iw-header{padding:10px 14px 8px;border-bottom:1px solid var(--rule-lt);display:flex;align-items:center;justify-content:space-between;}
+.iw-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--ink);}
+.iw-severity{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;}
+.iw-body{padding:12px 14px;}
+.iw-stat{display:flex;align-items:baseline;gap:6px;margin-bottom:6px;}
+.iw-stat-val{font-size:22px;font-weight:800;line-height:1;}
+.iw-stat-label{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);letter-spacing:0.06em;}
+.iw-text{font-size:11.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:8px;}
+.iw-update{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);letter-spacing:0.06em;border-top:1px solid var(--rule-lt);padding-top:6px;margin-top:4px;}
+.iw-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:100px;border:1px solid;display:inline-block;margin:1px 2px 1px 0;}
+
+/* MARKET WIDGETS */
+.markets-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.market-widget{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;}
+.mw-index{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:5px;}
+.mw-val{font-size:20px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:3px;}
+.mw-change{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;}
+.mw-change.up{color:#1a7a40;}
+.mw-change.dn{color:#8b1a1a;}
+.mw-sub{font-size:10px;color:var(--ink-mut);margin-top:4px;}
+.mw-bar{height:3px;border-radius:100px;margin-top:8px;background:var(--rule);}
+.mw-bar-fill{height:3px;border-radius:100px;}
+
+/* CURRENCY + COMMODITIES */
+.currency-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.cw{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;}
+.cw-pair{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);letter-spacing:0.1em;margin-bottom:4px;}
+.cw-rate{font-size:19px;font-weight:800;color:var(--ink);line-height:1;}
+.cw-change{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:3px;}
+
+/* Pinned section header */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.sh-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);}
+.sh-action{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--earth);cursor:pointer;padding:3px 10px;border:1px solid rgba(74,143,196,0.25);border-radius:100px;}
+.sh-action:hover{background:rgba(74,143,196,0.06);}
+
+/* severity levels */
+.sev-critical{color:#8b1a1a;border-color:rgba(139,26,26,0.25);background:rgba(139,26,26,0.07);}
+.sev-high{color:#c47f00;border-color:rgba(196,127,0,0.25);background:rgba(196,127,0,0.07);}
+.sev-elevated{color:#3a7ab8;border-color:rgba(58,122,184,0.25);background:rgba(58,122,184,0.07);}
+
+/* Modals */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(5,8,22,0.8);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#0a1228;border:1px solid rgba(74,143,196,0.2);border-radius:16px;padding:28px 32px;max-width:680px;width:92%;max-height:85vh;overflow-y:auto;position:relative;}
+.modal h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--earth-lt);margin-bottom:14px;}
+.modal p{font-size:13px;color:rgba(180,210,240,0.6);line-height:1.75;margin-bottom:10px;}
+.modal-close{position:absolute;top:14px;right:16px;font-size:20px;color:rgba(74,143,196,0.4);cursor:pointer;background:none;border:none;}
+.modal-close:hover{color:var(--earth-lt);}
+
+/* discourse */
+.deliberation-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin-bottom:10px;}
+.vote-bar-outer{height:5px;background:var(--rule);border-radius:100px;margin:6px 0;}
+.vote-bar-inner{height:5px;border-radius:100px;background:var(--earth);transition:width 0.3s;}
+.vote-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid var(--rule);background:none;cursor:pointer;color:var(--ink-soft);}
+.vote-btn:hover,.vote-btn.voted{background:rgba(74,143,196,0.08);border-color:rgba(74,143,196,0.3);color:var(--earth-dk);}
+
+/* two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* ── WIDGET GRID SYSTEM (from dashboard) ─────────────────── */
+.widget-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:60px;gap:10px;min-height:400px;position:relative;}
+.widget{background:var(--white);border:1px solid var(--rule);border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column;transition:box-shadow 0.15s,transform 0.15s;cursor:default;}
+.widget.dragging{box-shadow:0 20px 48px rgba(0,0,0,0.15);transform:scale(1.02);z-index:200;opacity:0.95;cursor:grabbing;}
+.widget.drag-over{border:2px dashed var(--earth);background:rgba(74,143,196,0.04);}
+.widget-handle{position:absolute;top:8px;right:8px;width:18px;height:18px;display:flex;align-items:center;justify-content:center;cursor:grab;opacity:0;transition:opacity 0.12s;z-index:10;}
+.widget:hover .widget-handle{opacity:0.45;}
+.widget-handle:hover{opacity:1!important;}
+.handle-dots{display:grid;grid-template-columns:1fr 1fr;gap:2.5px;}
+.hd{width:3px;height:3px;border-radius:50%;background:var(--ink-mut);}
+.wh{padding:9px 12px 8px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.wh-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.wh-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);flex:1;}
+.wh-action{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--earth);cursor:pointer;padding:2px 6px;border-radius:4px;transition:background 0.1s;}
+.wh-action:hover{background:rgba(74,143,196,0.08);}
+.wb{flex:1;overflow:auto;padding:10px 12px;}
+.wb.nop{padding:0;}
+
+/* edit mode */
+.edit-mode .widget{border:1.5px dashed rgba(74,143,196,0.4);cursor:grab;}
+.edit-mode .widget-handle{opacity:0.6!important;}
+.edit-mode .widget:hover{border-color:var(--earth);background:rgba(74,143,196,0.02);}
+.add-widget-zone{border:2px dashed var(--rule);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;grid-column:span 4;grid-row:span 2;}
+.add-widget-zone:hover{border-color:var(--earth);background:rgba(74,143,196,0.04);}
+.awz-inner{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-mut);}
+.awz-icon{font-size:22px;opacity:0.4;}
+.awz-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;}
+
+/* resize handles */
+.resize-handle{position:absolute;z-index:50;}
+.resize-handle.right{top:20%;right:-4px;width:8px;height:60%;cursor:ew-resize;border-radius:4px;}
+.resize-handle.bottom{bottom:-4px;left:20%;height:8px;width:60%;cursor:ns-resize;border-radius:4px;}
+.resize-handle.corner{bottom:-4px;right:-4px;width:12px;height:12px;cursor:nwse-resize;border-radius:3px;}
+.resize-handle::after{content:'';position:absolute;inset:2px;border-radius:inherit;background:var(--rule);transition:background 0.12s;}
+.widget:hover .resize-handle::after{background:var(--earth-lt);opacity:0.5;}
+.resize-handle:hover::after,.resize-handle:active::after{background:var(--earth);opacity:1;}
+
+/* widget picker panel */
+.widget-picker{position:fixed;top:0;right:0;bottom:0;width:280px;background:white;border-left:1px solid var(--rule);box-shadow:-8px 0 32px rgba(0,0,0,0.1);z-index:500;display:none;flex-direction:column;}
+.widget-picker.show{display:flex;}
+.wp-header{padding:16px 18px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;}
+.wp-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);}
+.wp-close{width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--rule);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-soft);}
+.wp-list{flex:1;overflow-y:auto;padding:12px;}
+.wp-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all 0.12s;}
+.wp-item:hover{border-color:var(--earth);background:rgba(74,143,196,0.04);}
+.wp-icon{width:32px;height:32px;border-radius:7px;background:var(--earth);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.wp-name{font-size:12.5px;font-weight:700;color:var(--ink);}
+.wp-desc{font-size:11px;color:var(--ink-soft);margin-top:1px;line-height:1.4;}
+
+/* customize bar */
+.customize-bar{padding:10px 40px 8px;background:white;border-bottom:1px solid var(--rule);display:none;align-items:center;gap:12px;}
+.customize-bar.visible{display:flex;}
+.cb-title{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
+.cb-hint{font-size:11.5px;color:var(--ink-mut);margin-left:4px;}
+.cb-right{margin-left:auto;display:flex;gap:8px;}
+.dh-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid var(--rule);color:var(--ink-soft);background:var(--bg);cursor:pointer;transition:all 0.12s;}
+.dh-btn:hover{border-color:var(--earth);color:var(--earth);background:rgba(74,143,196,0.05);}
+.dh-btn.primary{background:var(--earth);border-color:var(--earth);color:white;}
+.dh-btn.primary:hover{opacity:0.88;}
+</style>
+</head>
+<body>
+
+<!-- NAV CSS from dashboard -->
+<style>
+.top-nav{height:52px;background:#1b3a6b;border-bottom:3px solid #b8860b;display:flex;align-items:stretch;padding:0 20px;flex-shrink:0;z-index:200;position:sticky;top:0;}
+.tn-logo{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;letter-spacing:0.1em;display:flex;align-items:center;margin-right:28px;}
+.tn-logo span{color:#d4a832;}
+.tn-tabs{display:flex;align-items:stretch;gap:2px;}
+.tn-tab{display:flex;align-items:center;padding:0 15px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;transition:all 0.12s;white-space:nowrap;}
+.tn-tab:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.05);}
+.tn-tab.active{color:white;border-bottom-color:#d4a832;}
+.tn-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.tn-search{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);width:180px;outline:none;transition:all 0.15s;}
+.tn-search:focus{background:rgba(255,255,255,0.16);border-color:rgba(184,134,11,0.5);color:white;}
+.tn-search::placeholder{color:rgba(255,255,255,0.28);}
+.tn-notif{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all 0.12s;}
+.tn-notif:hover{background:rgba(255,255,255,0.15);}
+.tn-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#8b1a1a;border:1.5px solid #1b3a6b;}
+.tn-avatar{width:30px;height:30px;border-radius:50%;border:2px solid #b8860b;cursor:pointer;overflow:hidden;flex-shrink:0;}
+</style>
+<nav class="top-nav">
+  <div class="tn-logo">F<span>O</span>RA</div>
+  <div class="tn-tabs">
+    <div class="tn-tab">Dashboard</div>
+    <div class="tn-tab">Legislation</div>
+    <div class="tn-tab">Issues</div>
+    <div class="tn-tab">Events</div>
+    <div class="tn-tab active">Discourse</div>
+  </div>
+  <div class="tn-right">
+    <input class="tn-search" type="text" placeholder="Search FORA…">
+    <div class="tn-notif">
+      <span>🔔</span>
+      <div class="tn-notif-dot"></div>
+    </div>
+    <div class="tn-avatar">
+      <svg width="30" height="30" viewBox="0 0 30 30">
+        <defs><clipPath id="cpnav"><circle cx="15" cy="15" r="13"/></clipPath></defs>
+        <circle cx="15" cy="15" r="14" fill="none" stroke="#b8860b" stroke-width="2"/>
+        <circle cx="15" cy="15" r="13" fill="#254f92" clip-path="url(#cpnav)"/>
+        <circle cx="15" cy="11" r="5" fill="#6a9ab8" clip-path="url(#cpnav)"/>
+        <ellipse cx="15" cy="23" rx="8" ry="5.5" fill="#6a9ab8" clip-path="url(#cpnav)"/>
+        <rect x="5" y="24" width="20" height="7" rx="3.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.2"/>
+        <text x="15" y="29" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="700" fill="#8b6914">PE</text>
+      </svg>
+    </div>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge">
+    <div class="ticker-pulse"></div>
+    <div class="ticker-badge-text">Earth to Noah:</div>
+  </div>
+  <div class="ticker-scroll-wrap">
+    <div class="ticker-track">
+      <div class="ti"><span class="tk">Iran War · Day 18</span><span class="tv tv-r">1,444+ killed in Iran · 886 in Lebanon · 15 Israelis · 13 US troops · Strait of Hormuz closed</span></div>
+      <div class="ti"><span class="tk">Oil · Brent Crude</span><span class="tv tv-a">$104.20/bbl · +3% today · Hovering above $100 for 12 days</span></div>
+      <div class="ti"><span class="tk">S&amp;P 500</span><span class="tv tv-g">6,716 · +0.25% · Recovering from last week's sell-off</span></div>
+      <div class="ti"><span class="tk">Antisemitism</span><span class="tv tv-r">815 severe incidents documented 2025 · 21 Jews murdered · 124M antisemitic posts on X</span></div>
+      <div class="ti"><span class="tk">Cuba</span><span class="tv tv-a">Trump: "Whether I free it or take it, I think I can do anything I want with Cuba" · Mar 17</span></div>
+      <div class="ti"><span class="tk">Iran · New Supreme Leader</span><span class="tv tv-w">Mojtaba Khamenei elected Mar 8 · Son of Ali Khamenei · Trump calls him "lightweight"</span></div>
+      <div class="ti"><span class="tk">Nikkei 225</span><span class="tv tv-w">53,700 · Flat · Bank of Japan holds rates amid oil shock uncertainty</span></div>
+      <div class="ti"><span class="tk">Hormuz Strait</span><span class="tv tv-r">Iran closed to "enemies" · EU refuses US request to join naval operations</span></div>
+      <div class="ti"><span class="tk">Venezuela</span><span class="tv tv-a">Trump references US military operation · Administration signals continued pressure campaign</span></div>
+      <div class="ti"><span class="tk">Antisemitism · US</span><span class="tv tv-r">91% of American Jews say they feel less safe · AJC report Feb 2026</span></div>
+      <!-- duplicate -->
+      <div class="ti"><span class="tk">Iran War · Day 18</span><span class="tv tv-r">1,444+ killed in Iran · 886 in Lebanon · 15 Israelis · 13 US troops · Strait of Hormuz closed</span></div>
+      <div class="ti"><span class="tk">Oil · Brent Crude</span><span class="tv tv-a">$104.20/bbl · +3% today · Hovering above $100 for 12 days</span></div>
+      <div class="ti"><span class="tk">S&amp;P 500</span><span class="tv tv-g">6,716 · +0.25% · Recovering from last week's sell-off</span></div>
+      <div class="ti"><span class="tk">Antisemitism</span><span class="tv tv-r">815 severe incidents documented 2025 · 21 Jews murdered · 124M antisemitic posts on X</span></div>
+      <div class="ti"><span class="tk">Cuba</span><span class="tv tv-a">Trump: "Whether I free it or take it, I think I can do anything I want with Cuba" · Mar 17</span></div>
+      <div class="ti"><span class="tk">Iran · New Supreme Leader</span><span class="tv tv-w">Mojtaba Khamenei elected Mar 8 · Son of Ali Khamenei · Trump calls him "lightweight"</span></div>
+      <div class="ti"><span class="tk">Nikkei 225</span><span class="tv tv-w">53,700 · Flat · Bank of Japan holds rates amid oil shock uncertainty</span></div>
+      <div class="ti"><span class="tk">Hormuz Strait</span><span class="tv tv-r">Iran closed to "enemies" · EU refuses US request to join naval operations</span></div>
+      <div class="ti"><span class="tk">Venezuela</span><span class="tv tv-a">Trump references US military operation · Administration signals continued pressure campaign</span></div>
+      <div class="ti"><span class="tk">Antisemitism · US</span><span class="tv tv-r">91% of American Jews say they feel less safe · AJC report Feb 2026</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bc">
+    <span class="bc-c">The Universe / Laniakea / Milky Way / Orion Arm / Solar System /</span>
+    <span class="bc-sep">/</span>
+    <a href="fora_jurisdiction_solar_system.html" style="color:rgba(122,184,240,0.3);">Solar System</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-h">Earth</span>
+  </div>
+  <div class="hero-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div class="earth-sphere"></div>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
+        <span class="jtag" style="color:rgba(122,184,240,0.75);border-color:rgba(74,143,196,0.2);background:rgba(74,143,196,0.07);">Inhabited World</span>
+        <span class="jtag" style="color:rgba(127,207,149,0.8);border-color:rgba(21,92,45,0.22);background:rgba(21,92,45,0.08);">195 Nations · 8.1B Humans</span>
+        <span class="jtag" style="color:rgba(250,199,117,0.8);border-color:rgba(196,127,0,0.22);background:rgba(196,127,0,0.07);">No World Government</span>
+        <span class="jtag" style="color:rgba(255,120,120,0.8);border-color:rgba(139,26,26,0.22);background:rgba(139,26,26,0.07);">Active War · Middle East</span>
+      </div>
+    </div>
+    <div style="flex:1;">
+      <div class="juris-name">Earth</div>
+      <div class="juris-name-sub">Terra · The only confirmed inhabited world</div>
+      <div class="juris-sub">1 AU from Sol · 4.54 Gyr old · 510M km² surface · 71% ocean</div>
+      <div class="juris-lead">Eight billion people. 195 nations. One atmosphere. No world government, no planetary constitution, no enforcement mechanism capable of stopping a determined state actor. Earth is the original jurisdiction — the one every other FORA page traces back to. It is currently hosting its most dangerous regional war in decades, a global surge in antisemitism at levels not seen since 1945, and a geopolitical realignment whose shape will not be clear for years.</div>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;">
+        <span class="jtag" style="color:rgba(122,184,240,0.45);border-color:rgba(74,143,196,0.1);background:rgba(74,143,196,0.04);">193 UN member states</span>
+        <span class="jtag" style="color:rgba(122,184,240,0.45);border-color:rgba(74,143,196,0.1);background:rgba(74,143,196,0.04);">7,000+ languages</span>
+        <span class="jtag" style="color:rgba(122,184,240,0.45);border-color:rgba(74,143,196,0.1);background:rgba(74,143,196,0.04);">$105T world GDP</span>
+        <span class="jtag" style="color:rgba(255,120,120,0.5);border-color:rgba(139,26,26,0.15);background:rgba(139,26,26,0.04);">~50 active armed conflicts</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hs" onclick="openModal('modal-pop')"><div class="hs-label">Population</div><div class="hs-val">8.1B</div><div class="hs-unit">+200k per day</div></div>
+        <div class="hs" onclick="openModal('modal-war')"><div class="hs-label">Iran War · Day</div><div class="hs-val" style="color:#f08080;">18</div><div class="hs-unit">Since Feb 28 2026</div></div>
+        <div class="hs" onclick="openModal('modal-oil')"><div class="hs-label">Brent Crude</div><div class="hs-val" style="color:#FAC775;">$104</div><div class="hs-unit">+3% today · Hormuz closed</div></div>
+        <div class="hs" onclick="openModal('modal-climate')"><div class="hs-label">CO₂ (Mauna Loa)</div><div class="hs-val" style="color:#7fcf95;">424</div><div class="hs-unit">ppm · Mar 2026</div></div>
+        <div class="hs" onclick="openModal('modal-antisemitism')"><div class="hs-label">Antisemitism</div><div class="hs-val" style="color:#f08080;">↑340%</div><div class="hs-unit">vs 2022 baseline · global</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" onclick="showTab('overview',this)">Overview</div>
+    <div class="tab" onclick="showTab('issues',this)">Active Issues</div>
+    <div class="tab" onclick="showTab('markets',this)">Markets & Economy</div>
+    <div class="tab" onclick="showTab('regions',this)">Regions</div>
+    <div class="tab" onclick="showTab('discourse',this)">Discourse</div>
+  </div>
+</div>
+
+<!-- CUSTOMIZE BAR -->
+<div class="customize-bar" id="customize-bar">
+  <div class="cb-title">✦ Edit Mode</div>
+  <div class="cb-hint">Drag widgets to rearrange · Drag edges to resize</div>
+  <div class="cb-right">
+    <button class="dh-btn" id="add-btn" onclick="openPicker()" style="display:none;">+ Add Widget</button>
+    <button class="dh-btn primary" id="edit-btn" onclick="toggleEdit()">✓ Done</button>
+  </div>
+</div>
+
+<div class="page-body">
+
+<!-- ══ OVERVIEW ══════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-overview">
+
+  <!-- overview header -->
+  <div class="section-header" style="margin-bottom:14px;">
+    <div class="sh-title">🌍 Earth · March 17 2026</div>
+    <button class="dh-btn" onclick="toggleEdit()" style="font-size:8px;padding:5px 14px;">✦ Customize</button>
+  </div>
+
+  <!-- WIDGET GRID -->
+  <div class="widget-grid" id="grid">
+
+    <!-- ── ISSUES WIDGET ── col 1-9, row 1-6 -->
+    <div class="widget" id="w-issues" style="grid-column:1/9;grid-row:1/7;" draggable="false">
+      <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+      <div class="wh">
+        <div class="wh-dot" style="background:#8b1a1a;"></div>
+        <div class="wh-label">⚑ Top Issues · Live</div>
+        <div class="wh-action" onclick="openPicker()">+ Add issue</div>
+        <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+      </div>
+      <div class="wb nop" style="overflow:auto;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;height:100%;">
+          <!-- Iran -->
+          <div style="border-right:1px solid var(--rule-lt);padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);">🔴 US–Israel War on Iran</div>
+              <span class="iw-severity sev-critical" style="font-size:6.5px;">Day 18</span>
+            </div>
+            <div class="iw-stat"><span class="iw-stat-val" style="color:#8b1a1a;">2,300+</span><span class="iw-stat-label">killed region-wide</span></div>
+            <div class="iw-text">Strikes began Feb 28. Khamenei killed; son elected successor Mar 8. Hormuz closed. 5,000+ targets hit. Lebanon simultaneously under attack.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;"><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">Iran 1,444</span><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">Lebanon 886</span><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">Israel 15</span></div>
+            <div class="iw-update" style="margin-top:auto;">Today · Al Jazeera · CNN · Fox</div>
+          </div>
+          <!-- Antisemitism -->
+          <div style="border-right:1px solid var(--rule-lt);padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);">✡ Global Antisemitism</div>
+              <span class="iw-severity sev-critical" style="font-size:6.5px;">Ongoing</span>
+            </div>
+            <div class="iw-stat"><span class="iw-stat-val" style="color:#8b1a1a;">340%</span><span class="iw-stat-label">rise since 2022</span></div>
+            <div class="iw-text">107.7% rise in 2024 alone. Worst wave since WWII. 46% of world adults hold antisemitic views (ADL). 91% of US Jews feel less safe. 21 Jews murdered in 2025.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;"><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">US +288%</span><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">UK +450%</span><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">France +350%</span></div>
+            <div class="iw-update" style="margin-top:auto;">AJC Feb 10 2026 · CAM ARC · Eurobarometer</div>
+          </div>
+          <!-- Israel -->
+          <div style="padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);">🇮🇱 Israel</div>
+              <span class="iw-severity sev-critical" style="font-size:6.5px;">Multi-front</span>
+            </div>
+            <div class="iw-stat"><span class="iw-stat-val" style="color:#c47f00;">3</span><span class="iw-stat-label">simultaneous fronts</span></div>
+            <div class="iw-text">Co-leads Iran strikes. Ground ops in Lebanon. Gaza continuing. Iranian missile hit Beit Shemesh Mar 1. IDF killed Basij chief Mar 17. Netanyahu: "peace and democracy in Iran."</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;"><span class="iw-tag" style="color:#c47f00;border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.05);">Iran</span><span class="iw-tag" style="color:#c47f00;border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.05);">Lebanon</span><span class="iw-tag" style="color:#c47f00;border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.05);">Gaza</span></div>
+            <div class="iw-update" style="margin-top:auto;">Today · IDF · CNN</div>
+          </div>
+          <!-- Cuba -->
+          <div style="border-right:1px solid var(--rule-lt);border-top:1px solid var(--rule-lt);padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);">🇨🇺 Cuba</div>
+              <span class="iw-severity sev-high" style="font-size:6.5px;">US Pressure</span>
+            </div>
+            <div class="iw-stat"><span class="iw-stat-val" style="color:#c47f00;">65yr</span><span class="iw-stat-label">embargo still in force</span></div>
+            <div class="iw-text">Trump today: "Whether I free it, take it, I think I can do anything I want with Cuba." Weakest government in decades. Power blackouts, food shortages, mass emigration.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;"><span class="iw-tag" style="color:#c47f00;border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.05);">Trump Mar 17</span></div>
+            <div class="iw-update" style="margin-top:auto;">Today · CNBC · Reuters</div>
+          </div>
+          <!-- Venezuela -->
+          <div style="border-right:1px solid var(--rule-lt);border-top:1px solid var(--rule-lt);padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);">🇻🇪 Venezuela</div>
+              <span class="iw-severity sev-high" style="font-size:6.5px;">US Pressure</span>
+            </div>
+            <div class="iw-stat"><span class="iw-stat-val" style="color:#c47f00;">7M+</span><span class="iw-stat-label">displaced globally</span></div>
+            <div class="iw-text">Trump referenced "the US military operation in Venezuela" same statement as Cuba. Maduro disputed 2024 election. US sanctions. Alien Enemies Act deportations.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;"><span class="iw-tag" style="color:#c47f00;border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.05);">Sanctions</span><span class="iw-tag" style="color:#c47f00;border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.05);">Disputed election</span></div>
+            <div class="iw-update" style="margin-top:auto;">Today · CNBC · AP</div>
+          </div>
+          <!-- Hormuz -->
+          <div style="border-top:1px solid var(--rule-lt);padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ink);">🛢 Hormuz · Energy</div>
+              <span class="iw-severity sev-critical" style="font-size:6.5px;">Closed</span>
+            </div>
+            <div class="iw-stat"><span class="iw-stat-val" style="color:#8b1a1a;">20%</span><span class="iw-stat-label">of global oil at risk</span></div>
+            <div class="iw-text">Iran closed Hormuz to "enemies." Brent peaked $120, now $104. EU refuses US naval request. Japan releasing reserves. Above $100 for 12 days.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;"><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">Brent $104</span><span class="iw-tag" style="color:#8b1a1a;border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.05);">WTI $101</span></div>
+            <div class="iw-update" style="margin-top:auto;">Today · Al Jazeera · CNBC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MARKETS WIDGET ── col 9-13, row 1-5 -->
+    <div class="widget" id="w-markets" style="grid-column:9/13;grid-row:1/6;" draggable="false">
+      <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+      <div class="wh">
+        <div class="wh-dot" style="background:#1a7a40;"></div>
+        <div class="wh-label">📈 Markets · Close Mar 17</div>
+        <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+      </div>
+      <div class="wb" style="padding:8px 10px;overflow:auto;">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">S&amp;P 500</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">6,716</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#1a7a40;">▲ +0.25%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">Dow Jones</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">46,993</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#1a7a40;">▲ +0.10%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">Nasdaq</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">22,479</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#1a7a40;">▲ +0.47%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">Nikkei 225</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">53,700</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8b1a1a;">▼ -0.09%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">FTSE 100</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">10,261</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8b1a1a;">▼ -0.43%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">DAX</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">22,983</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8b1a1a;">▼ -0.61%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">Hang Seng</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">25,868</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#1a7a40;">▲ +0.94%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:5px 7px;background:var(--bg);border-radius:6px;"><span style="font-size:11px;font-weight:600;">Kospi</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">5,640</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#1a7a40;">▲ +1.63%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CURRENCIES WIDGET ── col 9-13, row 6-8 -->
+    <div class="widget" id="w-currencies" style="grid-column:9/13;grid-row:6/9;" draggable="false">
+      <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+      <div class="wh">
+        <div class="wh-dot" style="background:var(--amber);"></div>
+        <div class="wh-label">💱 Currencies &amp; Commodities</div>
+        <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+      </div>
+      <div class="wb" style="padding:8px 10px;overflow:auto;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+          <div style="padding:6px 8px;background:var(--bg);border-radius:6px;"><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">EUR/USD</div><div style="font-size:14px;font-weight:800;color:var(--ink);">1.0842</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#8b1a1a;">▼ USD safe-haven</div></div>
+          <div style="padding:6px 8px;background:var(--bg);border-radius:6px;"><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">USD/JPY</div><div style="font-size:14px;font-weight:800;color:var(--ink);">149.80</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#8b1a1a;">▼ Yen weak</div></div>
+          <div style="padding:6px 8px;background:rgba(139,26,26,0.05);border-radius:6px;border:1px solid rgba(139,26,26,0.1);"><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Brent Crude</div><div style="font-size:14px;font-weight:800;color:#8b1a1a;">$104.20</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#c47f00;">▲ +3% Hormuz</div></div>
+          <div style="padding:6px 8px;background:rgba(21,92,45,0.05);border-radius:6px;border:1px solid rgba(21,92,45,0.1);"><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Gold XAU</div><div style="font-size:14px;font-weight:800;color:var(--green);">$3,028</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#1a7a40;">▲ Near ATH</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CO₂ WIDGET ── col 1-5, row 7-9 -->
+    <div class="widget" id="w-co2" style="grid-column:1/5;grid-row:7/10;" draggable="false">
+      <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+      <div class="wh">
+        <div class="wh-dot" style="background:#3ab864;"></div>
+        <div class="wh-label">🌡 CO₂ · Mauna Loa · 424 ppm</div>
+        <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+      </div>
+      <div class="wb nop" style="padding:8px 12px;">
+        <svg viewBox="0 0 300 60" style="width:100%;height:60px;display:block;">
+          <polyline fill="none" stroke="rgba(60,184,100,0.2)" stroke-width="1.5" points="0,55 20,53 40,51 60,49 80,46 100,43 120,40 140,37 160,34 180,31 200,28 220,25 240,23 260,20 280,18 300,16"/>
+          <polyline fill="none" stroke="rgba(60,184,100,0.85)" stroke-width="2" points="240,23 250,22 260,23 270,21 280,20 290,18 300,16"/>
+          <circle cx="300" cy="16" r="3" fill="rgba(60,184,100,0.9)"/>
+          <line x1="0" y1="45" x2="300" y2="45" stroke="rgba(255,200,80,0.15)" stroke-width="0.8" stroke-dasharray="4,3"/>
+          <text x="2" y="43" font-family="'JetBrains Mono',monospace" font-size="6" fill="rgba(255,200,80,0.4)">350ppm</text>
+          <text x="270" y="14" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(60,184,100,0.8)">424</text>
+        </svg>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);padding:0 2px;">316 ppm in 1960 · +108 ppm in 66 years · 1.5°C target essentially locked in</div>
+      </div>
+    </div>
+
+    <!-- ── POPULATION WIDGET ── col 5-9, row 7-9 -->
+    <div class="widget" id="w-pop" style="grid-column:5/9;grid-row:7/10;" draggable="false">
+      <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+      <div class="wh">
+        <div class="wh-dot" style="background:var(--earth);"></div>
+        <div class="wh-label">🌍 Population · 8.1 Billion</div>
+        <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+      </div>
+      <div class="wb nop" style="padding:8px 12px;">
+        <svg viewBox="0 0 300 60" style="width:100%;height:60px;display:block;">
+          <polyline fill="none" stroke="rgba(74,143,196,0.2)" stroke-width="1.5" points="0,55 30,52 60,49 90,46 120,43 150,39 180,35 210,31 240,27 270,23 300,20"/>
+          <polyline fill="none" stroke="rgba(74,143,196,0.85)" stroke-width="2" points="240,27 260,24 280,22 300,20"/>
+          <circle cx="300" cy="20" r="3" fill="rgba(74,143,196,0.9)"/>
+          <text x="264" y="18" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(74,143,196,0.8)">8.1B</text>
+        </svg>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);padding:0 2px;">3.0B in 1960 · +200,000 per day · Projected peak ~10B around 2080</div>
+      </div>
+    </div>
+
+    <!-- Add zone (shown in edit mode) -->
+    <div class="add-widget-zone" id="add-zone" style="display:none;" onclick="openPicker()">
+      <div class="awz-inner">
+        <div class="awz-icon">＋</div>
+        <div class="awz-label">Add Widget</div>
+      </div>
+    </div>
+
+  </div><!-- /widget-grid -->
+
+</div><!-- /panel-overview -->
+
+
+<!-- ══ ACTIVE ISSUES ══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-issues">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Iran War · Day 18 · March 17 2026</div>
+        <div class="card-title">US–Israel strikes on Iran — the most significant Middle East war since 2003</div>
+        <div class="card-body">
+          <p>On February 28 2026, the United States and Israel launched coordinated strikes on Iran, targeting its nuclear infrastructure, ballistic missile program, and military command-and-control. The operation — called "Operation Epic Fury" by US CENTCOM — began hours after Oman's Foreign Minister announced a diplomatic "breakthrough" was imminent, with Iran having agreed to nuclear concessions. Trump said he was "not thrilled" with the negotiations and chose force instead.</p>
+          <p>Supreme Leader Ali Khamenei was killed in the opening strikes. His son Mojtaba Khamenei was elected as his successor on March 8 by the Assembly of Experts — the same body that was bombed by Israel while in session on March 3. Trump called the new supreme leader "lightweight" and threatened he would not last long without US approval.</p>
+          <p>Iran has retaliated with waves of ballistic missiles and drones targeting Israel and US military bases across at least 12 countries in the region. Iran has closed the Strait of Hormuz to "enemies." The deadliest single incident: a US strike on an elementary school in Minab, Iran, killing at least 170 people — mostly schoolgirls. Amnesty International has confirmed the strike and is investigating it as a potential war crime.</p>
+          <p>The EU has refused to join US naval operations at Hormuz. Germany: "no intention of joining." Europe has "no appetite" to send troops. Separately, the UK has allowed the US to use British bases at Diego Garcia and RAF Fairford for strikes against Iran's missile infrastructure.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">International Antisemitism</div>
+        <div class="card-title">Levels not seen since the end of World War II</div>
+        <div class="card-body">
+          <p>Global antisemitism has reached a 340% increase compared to 2022 — with 107.7% growth in 2024 alone. The World Zionist Organization's 2024 report found 46% of the world's adults hold significant antisemitic views (ADL Global 100, 2024), compared to 26% in 2014. UNESCO's Director-General: hate speech including antisemitism and Holocaust denial has "reached levels not seen since World War II."</p>
+          <p>The AJC's State of Antisemitism in America Report (Feb 10 2026) found that 91% of American Jews say they feel less safe as a result of attacks on Jews in the past 12 months. Events cited include the arson attack on a Jewish governor's home in Pennsylvania, the firebombing of Jews in Boulder, Colorado, and the murder of a young couple outside the Capital Jewish Museum in Washington DC.</p>
+          <p>Country-level data: US +288%, UK +450%, France +350%, Canada +562%, Australia +387%, Chile +325%. In Europe, Eurobarometer (Feb 2026) found more than half of Europeans consider antisemitism a problem in their country. More than three-quarters of teachers in 23 EU member states have encountered antisemitic incidents in their classrooms. 61% have encountered Holocaust denial and distortion among their students.</p>
+          <p>Israel's Diaspora Affairs Ministry (Jan 27 2026): 815 severe antisemitic incidents documented in 2025, including the murder of 21 Jews. 124 million antisemitic posts logged on X/Twitter. Over 4,000 anti-Israel demonstrations, some involving direct incitement against Jews.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Cuba</div>
+        <div class="card-title">Trump: "I think I can do anything I want with Cuba"</div>
+        <div class="card-body">
+          <p>President Trump said today (March 17): "Whether I free it, take it, I think I can do anything I want with Cuba." The statement came in the Oval Office alongside Vice President JD Vance, in the same breath as references to the US military operation in Venezuela. The statement follows Trump's repeated claims about acquiring Greenland and retaking the Panama Canal.</p>
+          <p>Cuba remains designated a State Sponsor of Terrorism by the US. The 65-year embargo continues. The Cuban government — the weakest it has been in decades, following years of power blackouts, food shortages, and mass emigration — has not responded publicly. Cuba's position in the context of the Iran war is significant: Cuba and Iran have historically maintained diplomatic ties as fellow US adversaries.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Venezuela</div>
+        <div class="card-title">US pressure intensifies alongside Cuba statement</div>
+        <div class="card-body">
+          <p>Trump referenced "the US military operation in Venezuela" in the same statement as Cuba. The Maduro government — following the disputed 2024 election, US deportations under the Alien Enemies Act, and ongoing sanctions — is under sustained pressure. More than 7 million Venezuelans have been displaced globally, the largest displacement crisis in the Western Hemisphere. The US continues to recognize opposition-aligned governance over Maduro's government.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Other active situations</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid rgba(139,26,26,0.4);"><strong>Ukraine</strong> — War continues. US has reduced military aid pressure under Trump. Zelensky seeking European security guarantees. Frontlines largely static through winter 2025–26.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid rgba(196,127,0,0.4);"><strong>Gaza</strong> — Israeli operations continuing alongside Lebanon and Iran fronts. Palestinian civilian death toll above 50,000 (Gaza Health Ministry). ICC arrest warrants for Netanyahu and Gallant remain active.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid rgba(196,127,0,0.4);"><strong>Sudan</strong> — Civil war between SAF and RSF entering its third year. 8M+ displaced. Worst humanitarian crisis in the world per UN. No ceasefire.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid rgba(58,122,184,0.4);"><strong>Taiwan Strait</strong> — PLA exercises continuing. US arms sales to Taiwan ongoing. Xi has described reunification as "irreversible." No imminent military action assessed, but strategic ambiguity tested monthly.</div>
+          <div style="padding:9px;background:var(--bg);border-radius:7px;border-left:3px solid rgba(58,122,184,0.4);"><strong>North Korea</strong> — DPRK troops fighting alongside Russia in Ukraine (verified). Kim Jong-un has not tested nuclear weapons in 2025–26 but missile tests continue. ICBMs capable of reaching US mainland.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MARKETS ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-markets">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Market context · Iran War Effect</div>
+        <div class="card-title">The economic shock of an active Middle East war</div>
+        <div class="card-body">
+          <p>The US–Israel war on Iran has become the dominant driver of global market behavior since February 28. The Strait of Hormuz closure — through which 20% of global oil and 25% of LNG passes — pushed Brent crude from ~$70/barrel to a peak of $120/barrel last week. It has since settled around $104, but remains well above pre-war levels.</p>
+          <p>On March 9 (day 9 of the war), markets saw one of their sharpest single-day declines since the 2020 COVID shock: Japan's Nikkei plunged 7% intraday, closing down 5.2%. Germany's DAX fell 2.6%. The UK's FTSE 100 lost 1.9%. Since then, markets have partially recovered as tankers navigated the strait safely and major economies signaled they would release strategic petroleum reserves.</p>
+          <p>Energy companies are reaching 52-week highs. APA, BP, ConocoPhillips, Devon Energy all up sharply. The XOP energy ETF has reached all-time highs. Conversely, consumer discretionary, manufacturing, and airlines have been under pressure from oil-driven cost inflation — though airline stocks recovered today on strong guidance from Delta and American.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">All major indices · March 17 2026</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:5px;">
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">S&amp;P 500</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">6,716.09</span><span style="font-family:'JetBrains Mono',monospace;color:#1a7a40;font-size:11px;">▲ +0.25%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">Dow Jones</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">46,993.26</span><span style="font-family:'JetBrains Mono',monospace;color:#1a7a40;font-size:11px;">▲ +0.10%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">Nasdaq Composite</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">22,479.53</span><span style="font-family:'JetBrains Mono',monospace;color:#1a7a40;font-size:11px;">▲ +0.47%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">Nikkei 225 (Japan)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">53,700.39</span><span style="font-family:'JetBrains Mono',monospace;color:#8b1a1a;font-size:11px;">▼ -0.09%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">TOPIX (Japan)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">3,627.07</span><span style="font-family:'JetBrains Mono',monospace;color:#1a7a40;font-size:11px;">▲ +0.45%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">Kospi (South Korea)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">5,640.48</span><span style="font-family:'JetBrains Mono',monospace;color:#1a7a40;font-size:11px;">▲ +1.63%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">Hang Seng (HK)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">25,868.54</span><span style="font-family:'JetBrains Mono',monospace;color:#1a7a40;font-size:11px;">▲ +0.94%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">CSI 300 (Mainland China)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">4,637.44</span><span style="font-family:'JetBrains Mono',monospace;color:#8b1a1a;font-size:11px;">▼ -0.73%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">FTSE 100 (UK)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">10,261.15</span><span style="font-family:'JetBrains Mono',monospace;color:#8b1a1a;font-size:11px;">▼ -0.43%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">DAX (Germany)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">22,983.67</span><span style="font-family:'JetBrains Mono',monospace;color:#8b1a1a;font-size:11px;">▼ -0.61%</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-weight:600;">CAC 40 (France)</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">7,779.46</span><span style="font-family:'JetBrains Mono',monospace;color:#8b1a1a;font-size:11px;">▼ -1.03%</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Commodities · March 17 2026</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:5px;">
+          <div style="padding:10px;background:rgba(139,26,26,0.05);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-weight:700;color:var(--red);margin-bottom:3px;">Brent Crude · $104.20 ▲ +3%</div>
+            <div style="color:var(--ink-soft);">Hormuz closed by Iran. 20% of global supply at risk. Strategic reserves being released by Japan and others. $120 peak last week — down from there but still $35 above pre-war level.</div>
+          </div>
+          <div style="padding:10px;background:rgba(139,26,26,0.05);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-weight:700;color:var(--red);margin-bottom:3px;">WTI Crude · $101.50 ▲</div>
+            <div style="color:var(--ink-soft);">US benchmark above $100. Energy ETFs (XOP, XLE, VDE) at all-time highs. APA, BP, ConocoPhillips among biggest gainers.</div>
+          </div>
+          <div style="padding:10px;background:rgba(196,127,0,0.05);border-radius:8px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;color:var(--amber);margin-bottom:3px;">Natural Gas · $4.82 ▲</div>
+            <div style="color:var(--ink-soft);">LNG supply disruption from Hormuz closure. Europe particularly exposed given continued post-Russia energy transition. Qatar (world's largest LNG exporter) is in Hormuz zone.</div>
+          </div>
+          <div style="padding:10px;background:rgba(21,92,45,0.05);border-radius:8px;border-left:3px solid var(--green);">
+            <div style="font-weight:700;color:var(--green);margin-bottom:3px;">Gold · $3,028 ▲ Near ATH</div>
+            <div style="color:var(--ink-soft);">War safe-haven demand pushing gold near all-time highs. Also benefiting from dollar safe-haven flows competing with gold — but war fear is winning.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Currencies · March 17 2026</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:5px;">
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-mut);">EUR/USD</span><span style="color:var(--ink-soft);font-size:11px;">Euro vs Dollar — USD strengthening on war safe-haven</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">1.0842</span></div>
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-mut);">USD/JPY</span><span style="color:var(--ink-soft);font-size:11px;">Yen weakening — BoJ holds, oil shock hits</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">149.80</span></div>
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-mut);">GBP/USD</span><span style="color:var(--ink-soft);font-size:11px;">Pound holding — UK allowing US use of bases</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">1.2740</span></div>
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-mut);">USD/CNY</span><span style="color:var(--ink-soft);font-size:11px;">Yuan stable — China less exposed to Hormuz</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">7.2480</span></div>
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-mut);">USD/ILS</span><span style="color:var(--ink-soft);font-size:11px;">Israeli Shekel — multi-front war pressure</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">3.74</span></div>
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;background:var(--bg);border-radius:7px;"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-mut);">USD/KRW</span><span style="color:var(--ink-soft);font-size:11px;">Korean Won — recovering after oil panic selloff</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;">1,346</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REGIONS ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-regions">
+  <div class="three-col">
+    <div>
+      <div class="card"><div class="card-ey">Middle East</div><div class="card-title" style="font-size:15px;">Active war theater</div><div class="card-body" style="font-size:12px;">US–Israel strikes on Iran. Lebanon under attack. Hormuz closed. Gulf states under Iranian drone/missile attack. Bahrain intercepted 350 missiles and drones. Saudi Arabia intercepting drones in Eastern Region. UAE attacked. Iraq attacked. New Iranian supreme leader Mojtaba Khamenei elected Mar 8.</div></div>
+      <div class="card"><div class="card-ey">Europe</div><div class="card-title" style="font-size:15px;">Watching and refusing</div><div class="card-body" style="font-size:12px;">EU "no appetite" for war. UK allowing US use of Diego Garcia and RAF Fairford. Germany explicitly refusing to join. ECB acting on oil-shock inflation. Ukraine war ongoing. Markets down 1–3% from war shock. NATO in consultations.</div></div>
+    </div>
+    <div>
+      <div class="card"><div class="card-ey">Americas</div><div class="card-title" style="font-size:15px;">US at war · Western Hemisphere signals</div><div class="card-body" style="font-size:12px;">US conducting Operation Epic Fury on Iran. Trump signaling potential action on Cuba and Venezuela in same Oval Office statement today. Artemis II crewed lunar flyby pending. Canada under pressure on NATO spending. Mexico navigating US tariff pressure.</div></div>
+      <div class="card"><div class="card-ey">East Asia</div><div class="card-title" style="font-size:15px;">Oil-shock volatility</div><div class="card-body" style="font-size:12px;">Japan releasing strategic oil reserves; Nikkei down from war shock peak but recovering. South Korea's Kospi volatile. China less exposed due to domestic energy mix. Taiwan monitoring US military capacity in context of ongoing PLA exercises. North Korea supplying Russia.</div></div>
+    </div>
+    <div>
+      <div class="card"><div class="card-ey">Africa</div><div class="card-title" style="font-size:15px;">Multiple ongoing crises</div><div class="card-body" style="font-size:12px;">Sudan civil war entering year three — worst humanitarian crisis globally. Ethiopia stabilizing post-Tigray. Sahel military governments expanding Russian Wagner/Africa Corps ties. DRC conflict ongoing. South Africa leading ICJ Gaza case.</div></div>
+      <div class="card"><div class="card-ey">South Asia</div><div class="card-title" style="font-size:15px;">Watching energy markets</div><div class="card-body" style="font-size:12px;">India's Sensex down 2.3% on peak Iran war day — recovering. India navigating US pressure over Russia ties while benefiting from discounted Russian oil. Pakistan political instability continues. Bangladesh recovering from 2024 revolution. Afghanistan under Taliban governance.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DISCOURSE ══════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-discourse">
+  <div class="two-col">
+    <div>
+      <div class="card"><div class="card-ey">Active deliberations · Earth</div>
+        <div class="deliberation-card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;">Was the US–Israel strike on Iran legally justified under international law?</div>
+          <div style="font-size:11.5px;color:var(--ink-mut);margin-bottom:8px;">Proposed by @IntlLawWatch · 842 responses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button class="vote-btn" onclick="vote(this,'dv1',0)">✓ Yes — self-defense basis</button>
+            <button class="vote-btn" onclick="vote(this,'dv1',1)">✗ No — unprovoked aggression</button>
+            <button class="vote-btn" onclick="vote(this,'dv1',2)">◈ Contested · no clear answer</button>
+          </div>
+          <div class="vote-bar-outer"><div class="vote-bar-inner" id="dv1-bar" style="width:31%;"></div></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:3px;" id="dv1-label">31% Yes / 44% No / 25% Contested</div>
+        </div>
+        <div class="deliberation-card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;">Is global antisemitism primarily a left-wing, right-wing, or Islamist problem in 2026 — or all three simultaneously?</div>
+          <div style="font-size:11.5px;color:var(--ink-mut);margin-bottom:8px;">Proposed by @NoahG · 318 responses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button class="vote-btn" onclick="vote(this,'dv2',0)">Far-left dominant</button>
+            <button class="vote-btn" onclick="vote(this,'dv2',1)">Far-right dominant</button>
+            <button class="vote-btn" onclick="vote(this,'dv2',2)">All three · no hierarchy</button>
+          </div>
+          <div class="vote-bar-outer"><div class="vote-bar-inner" id="dv2-bar" style="width:18%;background:var(--red-lt);"></div></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:3px;" id="dv2-label">18% Far-left / 12% Far-right / 70% All three</div>
+        </div>
+        <div class="deliberation-card">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;">Should the US pursue regime change in Cuba?</div>
+          <div style="font-size:11.5px;color:var(--ink-mut);margin-bottom:8px;">Proposed by @HemisphericPolicy · 204 responses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button class="vote-btn" onclick="vote(this,'dv3',0)">✓ Yes — freedom for Cubans</button>
+            <button class="vote-btn" onclick="vote(this,'dv3',1)">✗ No — sovereignty</button>
+            <button class="vote-btn" onclick="vote(this,'dv3',2)">◈ Diplomacy not force</button>
+          </div>
+          <div class="vote-bar-outer"><div class="vote-bar-inner" id="dv3-bar" style="width:28%;background:#7fcf95;"></div></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:3px;" id="dv3-label">28% Yes / 39% No / 33% Diplomacy</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Framing questions</div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--earth);">If the Strait of Hormuz remains closed for 60 days, which economies will face recession first — and what does that mean for civilian populations who had nothing to do with the decisions that closed it?</div>
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--earth);">At what point does rising global antisemitism become a civilizational emergency requiring coordinated international response comparable to COVID or climate agreements?</div>
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--earth);">Is there a meaningful distinction between Trump's statements about "taking" Cuba and Venezuela versus his statements about Greenland and Panama — and if so, what is it?</div>
+          <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border-left:2px solid var(--earth);">The strike on the school in Minab killed 170 people, most of them girls. Under what doctrine of war does this become acceptable — and who decides?</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Discourse stats · Earth</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--earth-dk);">147</div><div style="color:var(--ink-mut);font-size:11px;">Active deliberations</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--earth-dk);">88,420</div><div style="color:var(--ink-mut);font-size:11px;">Total responses</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--earth-dk);">158</div><div style="color:var(--ink-mut);font-size:11px;">Nations represented</div></div>
+          <div style="padding:10px;background:var(--bg);border-radius:8px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--earth-dk);">342</div><div style="color:var(--ink-mut);font-size:11px;">Expert credentials verified</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-body -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-pop" onclick="if(event.target===this)closeModal('modal-pop')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-pop')">✕</button>
+    <h2>🌍 Earth Population</h2>
+    <!-- Chart: World population 1960–2026 -->
+    <div style="margin:12px 0 16px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(122,184,240,0.4);margin-bottom:6px;">World population · billions · 1960–2026</div>
+      <svg viewBox="0 0 480 120" style="width:100%;height:120px;display:block;">
+        <defs><linearGradient id="popGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(74,143,196,0.3)"/><stop offset="100%" stop-color="rgba(74,143,196,0)"/></linearGradient></defs>
+        <!-- grid lines -->
+        <line x1="0" y1="20" x2="480" y2="20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="50" x2="480" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="80" x2="480" y2="80" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="105" x2="480" y2="105" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <!-- y-axis labels -->
+        <text x="2" y="19" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)">10B</text>
+        <text x="2" y="49" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)">7B</text>
+        <text x="2" y="79" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)">4B</text>
+        <text x="2" y="104" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)">2B</text>
+        <!-- fill area: pop scaled: 0B=110, 10B=10 → y = 110 - val*10 -->
+        <!-- 1960=3.0→80, 65=3.3→77, 70=3.7→73, 75=4.1→69, 80=4.4→66, 85=4.8→62, 90=5.3→57, 95=5.7→53, 2000=6.1→49, 05=6.5→45, 10=6.9→41, 15=7.4→36, 20=7.8→32, 23=8.0→30, 26=8.1→29 -->
+        <polygon fill="url(#popGrad)"
+          points="28,80 60,77 92,73 124,69 156,66 188,62 220,57 252,53 284,49 316,45 348,41 380,36 412,32 436,30 452,29 452,110 28,110"/>
+        <polyline fill="none" stroke="rgba(74,143,196,0.6)" stroke-width="1.5"
+          points="28,80 60,77 92,73 124,69 156,66 188,62 220,57 252,53 284,49 316,45 348,41 380,36 412,32 436,30 452,29"/>
+        <polyline fill="none" stroke="rgba(122,184,240,0.9)" stroke-width="2"
+          points="412,32 436,30 452,29"/>
+        <circle cx="452" cy="29" r="3" fill="rgba(122,184,240,0.9)"/>
+        <!-- x-axis labels -->
+        <text x="24" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)" text-anchor="middle">1960</text>
+        <text x="156" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)" text-anchor="middle">1980</text>
+        <text x="284" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)" text-anchor="middle">2000</text>
+        <text x="412" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.3)" text-anchor="middle">2020</text>
+        <text x="452" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(122,184,240,0.85)" text-anchor="middle">2026</text>
+        <!-- current label -->
+        <text x="458" y="28" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(122,184,240,0.85)">8.1B</text>
+      </svg>
+    </div>
+    <p>8.1 billion humans as of March 2026. Growing at approximately 200,000 per day (net births minus deaths). Expected to peak near 10–10.4 billion around 2080–2100 before declining in most projections. Distributed across 195 nations, with the largest populations in China (~1.4B), India (~1.45B), and the United States (~340M).</p>
+    <p>More than 4 billion people live on less than $6.85/day (World Bank). 700M+ in extreme poverty. 800M+ food insecure. These numbers interact directly with conflict: the Iran war's oil shock will raise food and energy prices globally, with the sharpest impact on the poorest populations who spend the most of their income on food and fuel.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-war" onclick="if(event.target===this)closeModal('modal-war')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-war')">✕</button>
+    <h2>🔴 Iran War — Day 18</h2>
+    <!-- Chart: cumulative casualties by day -->
+    <div style="margin:12px 0 16px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,128,128,0.4);margin-bottom:6px;">Cumulative killed · all parties · Days 1–18 · Feb 28 – Mar 17 2026</div>
+      <svg viewBox="0 0 480 120" style="width:100%;height:120px;display:block;">
+        <defs><linearGradient id="warGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(220,60,60,0.3)"/><stop offset="100%" stop-color="rgba(220,60,60,0)"/></linearGradient></defs>
+        <line x1="0" y1="20" x2="480" y2="20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="50" x2="480" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="80" x2="480" y2="80" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <text x="2" y="19" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">2500</text>
+        <text x="2" y="49" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">1500</text>
+        <text x="2" y="79" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">600</text>
+        <!-- Day 1→18: cumulative ~ 60,200,350,500,650,800,950,1050,1150,1250,1450,1650,1850,2000,2100,2200,2300,2350
+             y = 105 - val/25 -->
+        <polygon fill="url(#warGrad)"
+          points="28,103 55,97 82,91 109,85 136,79 163,73 190,67 217,63 244,59 271,55 298,47 325,39 352,31 379,25 406,21 433,17 460,13 460,110 28,110"/>
+        <polyline fill="none" stroke="rgba(220,60,60,0.5)" stroke-width="1.5"
+          points="28,103 55,97 82,91 109,85 136,79 163,73 190,67 217,63 244,59 271,55 298,47 325,39 352,31 379,25 406,21 433,17 460,13"/>
+        <polyline fill="none" stroke="rgba(240,80,80,0.95)" stroke-width="2.5"
+          points="352,31 379,25 406,21 433,17 460,13"/>
+        <circle cx="460" cy="13" r="3.5" fill="rgba(240,80,80,0.95)"/>
+        <!-- day labels -->
+        <text x="28" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">D1</text>
+        <text x="163" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">D6</text>
+        <text x="298" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">D11</text>
+        <text x="406" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">D16</text>
+        <text x="460" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,80,80,0.9)" text-anchor="middle">D18</text>
+        <text x="460" y="10" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(240,80,80,0.9)" text-anchor="end">2,300+</text>
+      </svg>
+      <!-- breakdown bars -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;">
+        <div style="text-align:center;padding:6px;background:rgba(220,60,60,0.08);border-radius:6px;border:1px solid rgba(220,60,60,0.15);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:rgba(240,80,80,0.9);">1,444</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,128,128,0.5);margin-top:2px;">Iran</div>
+        </div>
+        <div style="text-align:center;padding:6px;background:rgba(220,60,60,0.08);border-radius:6px;border:1px solid rgba(220,60,60,0.15);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:rgba(240,80,80,0.9);">886</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,128,128,0.5);margin-top:2px;">Lebanon</div>
+        </div>
+        <div style="text-align:center;padding:6px;background:rgba(220,60,60,0.08);border-radius:6px;border:1px solid rgba(220,60,60,0.15);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:rgba(240,80,80,0.9);">15</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,128,128,0.5);margin-top:2px;">Israel</div>
+        </div>
+        <div style="text-align:center;padding:6px;background:rgba(220,60,60,0.08);border-radius:6px;border:1px solid rgba(220,60,60,0.15);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:rgba(240,80,80,0.9);">13+</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,128,128,0.5);margin-top:2px;">US troops</div>
+        </div>
+      </div>
+    </div>
+    <p>US–Israel "Operation Epic Fury" began February 28, 2026, targeting Iran's nuclear infrastructure, ballistic missile program, and military command. Supreme Leader Khamenei killed in opening strikes. His son Mojtaba elected successor March 8.</p>
+    <p>Strait of Hormuz closed by Iran to "enemies." Oil above $100 for 12 consecutive days. EU refused US request for naval assistance. UK allowing US use of Diego Garcia and RAF Fairford bases.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-oil" onclick="if(event.target===this)closeModal('modal-oil')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-oil')">✕</button>
+    <h2>🛢 Brent Crude Price Shock</h2>
+    <!-- Chart: Brent price Jan–Mar 2026 -->
+    <div style="margin:12px 0 16px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(250,199,117,0.4);margin-bottom:6px;">Brent crude · USD/barrel · Jan 2026 – Mar 17 2026</div>
+      <svg viewBox="0 0 480 120" style="width:100%;height:120px;display:block;">
+        <defs><linearGradient id="oilGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(250,160,40,0.35)"/><stop offset="100%" stop-color="rgba(250,160,40,0)"/></linearGradient></defs>
+        <line x1="0" y1="15" x2="480" y2="15" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="40" x2="480" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="65" x2="480" y2="65" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="90" x2="480" y2="90" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <text x="2" y="14" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.3)">$120</text>
+        <text x="2" y="39" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.3)">$100</text>
+        <text x="2" y="64" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.3)">$80</text>
+        <text x="2" y="89" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.3)">$60</text>
+        <!-- price mapping: $60=95, $80=70, $100=45, $120=20 → y = 95 - (price-60)*(75/60) = 95 - price*1.25 + 75 -->
+        <!-- Jan: ~$72 → y=83. Feb 1:$70→85. Feb 14:$68→87. Feb 21:$70→85. Feb 27(pre-war):$70→85 -->
+        <!-- Feb 28 war start: $78→76. Mar 1:$88→60. Mar 3:$95→51. Mar 5:$102→43. Mar 9(peak):$120→20 -->
+        <!-- Mar 10:$112→29. Mar 12:$108→33. Mar 14:$106→36. Mar 15:$105→37. Mar 17:$104→38 -->
+        <polygon fill="url(#oilGrad)"
+          points="20,83 40,85 68,87 88,85 108,85 116,76 128,60 140,51 155,43 175,20 188,29 208,33 228,36 248,37 268,38 460,38 460,110 20,110"/>
+        <polyline fill="none" stroke="rgba(250,160,40,0.4)" stroke-width="1.5"
+          points="20,83 40,85 68,87 88,85 108,85 116,76 128,60 140,51 155,43 175,20 188,29 208,33 228,36 248,37 268,38"/>
+        <polyline fill="none" stroke="rgba(250,160,40,0.9)" stroke-width="2"
+          points="268,38 300,38 340,38 380,38 420,38 460,38"/>
+        <!-- war start vertical line -->
+        <line x1="108" y1="5" x2="108" y2="110" stroke="rgba(240,80,80,0.3)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="110" y="12" font-family="'JetBrains Mono',monospace" font-size="6.5" fill="rgba(240,80,80,0.6)">War begins</text>
+        <text x="110" y="20" font-family="'JetBrains Mono',monospace" font-size="6.5" fill="rgba(240,80,80,0.5)">Feb 28</text>
+        <!-- peak label -->
+        <circle cx="175" cy="20" r="3" fill="rgba(250,160,40,0.9)"/>
+        <text x="178" y="18" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.8)">$120 peak</text>
+        <!-- current dot -->
+        <circle cx="460" cy="38" r="3.5" fill="rgba(250,160,40,0.95)"/>
+        <text x="430" y="34" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(250,199,117,0.95)">$104</text>
+        <!-- x labels -->
+        <text x="20" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.3)" text-anchor="middle">Jan 1</text>
+        <text x="108" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,80,80,0.5)" text-anchor="middle">Feb 28</text>
+        <text x="175" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.3)" text-anchor="middle">Mar 9</text>
+        <text x="460" y="116" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(250,199,117,0.85)" text-anchor="middle">Mar 17</text>
+      </svg>
+    </div>
+    <p>Brent crude peaked at ~$120/barrel on day 9 of the Iran war (March 9) and has since settled around $104. WTI (US benchmark) is at $101.50. Both are approximately $35 above pre-war levels.</p>
+    <p>The Strait of Hormuz carries roughly 20% of globally traded oil and 25% of LNG. Iran has declared it closed to "enemies." Several tankers have successfully navigated it under escort, but shipping insurance costs have risen dramatically and most commercial traffic has diverted.</p>
+    <p>Japan, South Korea, and other oil-importing nations are releasing strategic reserves. The EU has decided against joining US naval operations. Saudi Arabia, UAE, and Kuwait are absorbing Iranian drone and missile attacks while their own oil exports are affected.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-climate" onclick="if(event.target===this)closeModal('modal-climate')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-climate')">✕</button>
+    <h2>🌡 CO₂ · The Keeling Curve</h2>
+    <!-- Chart: Keeling Curve 1960–2026 with seasonal wobble -->
+    <div style="margin:12px 0 16px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(127,207,149,0.4);margin-bottom:6px;">Atmospheric CO₂ · ppm · Mauna Loa Observatory · 1960–2026</div>
+      <svg viewBox="0 0 480 130" style="width:100%;height:130px;display:block;">
+        <defs><linearGradient id="co2Grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(60,180,100,0.25)"/><stop offset="100%" stop-color="rgba(60,180,100,0)"/></linearGradient></defs>
+        <!-- grid -->
+        <line x1="0" y1="15" x2="480" y2="15" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="45" x2="480" y2="45" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="75" x2="480" y2="75" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="0" y1="100" x2="480" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <!-- y labels: ppm, range 310–430 → y=105-(ppm-310)*(90/120) -->
+        <text x="2" y="14" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)">425</text>
+        <text x="2" y="44" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)">400</text>
+        <text x="2" y="74" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)">375</text>
+        <text x="2" y="99" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)">355</text>
+        <!-- 350ppm safety threshold: y=105-(350-310)*0.75=105-30=75 -->
+        <line x1="30" y1="78" x2="480" y2="78" stroke="rgba(255,200,80,0.2)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="32" y="75" font-family="'JetBrains Mono',monospace" font-size="6.5" fill="rgba(255,200,80,0.4)">350 ppm — original "safe" threshold</text>
+        <!-- 400ppm line -->
+        <line x1="30" y1="33" x2="480" y2="33" stroke="rgba(255,150,80,0.12)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="32" y="30" font-family="'JetBrains Mono',monospace" font-size="6.5" fill="rgba(255,150,80,0.3)">400 ppm — crossed 2013</text>
+        <!-- main Keeling curve: ppm→y: 316→82, 320→79, 325→75, 330→71, 335→68, 340→64, 345→60, 350→56, 355→52, 360→48, 365→44, 370→40, 375→36, 380→32, 385→28, 390→24, 395→21, 400→18, 405→15, 410→12, 415→9, 420→6, 424→3 -->
+        <!-- mapped to x: 1960=28 to 2026=452, step per yr = 424/66 = 6.4px -->
+        <!-- smooth backbone every 5 years: 60,65,70,75,80,85,90,95,00,05,10,15,20,25,26 -->
+        <polygon fill="url(#co2Grad)"
+          points="28,82 60,79 92,75 124,71 156,68 188,64 220,60 252,56 284,52 316,48 348,44 380,40 412,36 444,32 452,30 452,115 28,115"/>
+        <!-- backbone trend line (no wobble) -->
+        <polyline fill="none" stroke="rgba(60,180,100,0.3)" stroke-width="1.5"
+          points="28,82 60,79 92,75 124,71 156,68 188,64 220,60 252,56 284,52 316,48 348,44 380,40 412,36 444,32 452,30"/>
+        <!-- recent 10 years with seasonal wobble approximation (higher detail) -->
+        <polyline fill="none" stroke="rgba(60,180,100,0.85)" stroke-width="2"
+          points="380,40 384,38.5 388,40.5 392,38 396,36.5 400,38 404,36 408,34.5 412,36 416,34.5 420,36 424,34 428,32.5 432,33.5 436,31.5 440,33 444,31 448,29.5 452,30"/>
+        <circle cx="452" cy="30" r="3.5" fill="rgba(60,180,100,0.9)"/>
+        <!-- x labels -->
+        <text x="28" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)" text-anchor="middle">1960</text>
+        <text x="156" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)" text-anchor="middle">1980</text>
+        <text x="284" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)" text-anchor="middle">2000</text>
+        <text x="412" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(127,207,149,0.3)" text-anchor="middle">2020</text>
+        <text x="452" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(60,180,100,0.85)" text-anchor="middle">2026</text>
+        <text x="455" y="29" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(60,180,100,0.9)">424 ppm</text>
+      </svg>
+    </div>
+    <p>Atmospheric CO₂ as measured at Mauna Loa Observatory is approximately 424 ppm in March 2026. Pre-industrial baseline: 280 ppm. The 350 ppm threshold was crossed in 1988. The 400 ppm threshold was crossed in 2013. The seasonal wobble visible in recent years reflects the annual cycle of Northern Hemisphere plant growth absorbing CO₂ in summer and releasing it in winter — the planet breathing.</p>
+    <p>The 1.5°C Paris Agreement target is now considered essentially locked in by most climate scientists. The Iran war creates an ironic climate dynamic: higher oil prices suppress demand and may accelerate the energy transition — but strategic petroleum reserve releases and energy security anxiety may delay renewables investment in several economies.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-antisemitism" onclick="if(event.target===this)closeModal('modal-antisemitism')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-antisemitism')">✕</button>
+    <h2>✡ Global Antisemitism</h2>
+    <!-- Chart: incident counts 2015–2024 -->
+    <div style="margin:12px 0 16px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,128,128,0.4);margin-bottom:6px;">Documented antisemitic incidents globally · 2015–2024 · ADL &amp; CAM/ARC data</div>
+      <svg viewBox="0 0 480 130" style="width:100%;height:130px;display:block;">
+        <!-- Data: 2015=942, 2016=1267, 2017=1986, 2018=2717, 2019=2107, 2020=2024, 2021=2717, 2022=3050, 2023=4835, 2024=10082 -->
+        <!-- y scale: 0=115, 10000=10 → y = 115 - val*0.0105 -->
+        <!-- bar chart approach -->
+        <defs><linearGradient id="asGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(240,80,80,0.8)"/><stop offset="100%" stop-color="rgba(240,80,80,0.3)"/></linearGradient>
+        <linearGradient id="asGrad2024" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(240,60,60,0.95)"/><stop offset="100%" stop-color="rgba(240,80,80,0.5)"/></linearGradient></defs>
+        <line x1="30" y1="10" x2="480" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="30" y1="35" x2="480" y2="35" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="30" y1="60" x2="480" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <line x1="30" y1="85" x2="480" y2="85" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <text x="2" y="9" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">10k</text>
+        <text x="2" y="34" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">7.5k</text>
+        <text x="2" y="59" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">5k</text>
+        <text x="2" y="84" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)">2.5k</text>
+        <!-- bars: x start=35, width=38, gap=7 per bar+gap=45 total. 10 bars -->
+        <!-- 2015: h=942*0.0105=9.9 → bar from y=115 up 10 -->
+        <rect x="35" y="105" width="33" height="10" fill="url(#asGrad)" rx="2"/>
+        <rect x="83" y="102" width="33" height="13" fill="url(#asGrad)" rx="2"/>
+        <rect x="131" y="94" width="33" height="21" fill="url(#asGrad)" rx="2"/>
+        <rect x="179" y="86" width="33" height="29" fill="url(#asGrad)" rx="2"/>
+        <rect x="227" y="93" width="33" height="22" fill="url(#asGrad)" rx="2"/>
+        <rect x="275" y="94" width="33" height="21" fill="url(#asGrad)" rx="2"/>
+        <rect x="323" y="86" width="33" height="29" fill="url(#asGrad)" rx="2"/>
+        <rect x="371" y="83" width="33" height="32" fill="url(#asGrad)" rx="2"/>
+        <!-- Oct 7 marker -->
+        <line x1="371" y1="5" x2="371" y2="115" stroke="rgba(240,80,80,0.25)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="373" y="12" font-family="'JetBrains Mono',monospace" font-size="6" fill="rgba(240,80,80,0.5)">Oct 7</text>
+        <!-- 2023 -->
+        <rect x="371" y="64" width="33" height="51" fill="url(#asGrad)" rx="2"/>
+        <!-- 2024 — dramatic spike -->
+        <rect x="419" y="9" width="38" height="106" fill="url(#asGrad2024)" rx="2"/>
+        <text x="424" y="7" font-family="'JetBrains Mono',monospace" font-size="7.5" font-weight="700" fill="rgba(240,80,80,0.95)">10,082</text>
+        <!-- x labels -->
+        <text x="51" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">2015</text>
+        <text x="99" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'16</text>
+        <text x="147" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'17</text>
+        <text x="195" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'18</text>
+        <text x="243" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'19</text>
+        <text x="291" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'20</text>
+        <text x="339" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'21</text>
+        <text x="387" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,128,128,0.3)" text-anchor="middle">'22–23</text>
+        <text x="438" y="122" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(240,80,80,0.85)" text-anchor="middle">2024</text>
+      </svg>
+    </div>
+    <p>Global antisemitic incidents rose 107.7% in 2024 (Combat Antisemitism Movement's Antisemitism Research Center). Compared to 2022, the increase is 340%. 46% of the world's adults now hold significant antisemitic views (ADL Global 100, 2024).</p>
+    <p>Israel's Diaspora Affairs Ministry (Jan 27 2026): 815 severe antisemitic incidents documented in 2025, including the murder of 21 Jews. 124 million antisemitic posts on X/Twitter. Over 4,000 anti-Israel demonstrations, some involving direct incitement against Jews. Top countries by incident count: US, UK, France, Australia, Canada.</p>
+    <p>AJC State of Antisemitism Report (Feb 10 2026): 91% of American Jews say they feel less safe. 42% of college students report experiencing antisemitism during their time at university.</p>
+    <p>UNESCO: hate speech including antisemitism and Holocaust denial has "reached levels not seen since World War II." More than 3/4 of teachers in 23 EU member states have encountered antisemitic incidents in classrooms. 61% have encountered Holocaust denial among students.</p>
+  </div>
+</div>
+
+<!-- WIDGET PICKER PANEL -->
+<div class="widget-picker" id="widget-picker">
+  <div class="wp-header">
+    <div class="wp-title">Add Widget</div>
+    <div class="wp-close" onclick="closePicker()">✕</div>
+  </div>
+  <div class="wp-list">
+    <div class="wp-item"><div class="wp-icon" style="background:#8b1a1a;">⚑</div><div><div class="wp-name">Top Issues</div><div class="wp-desc">Live global crises filtered to your regions</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:#1a7a40;">📈</div><div><div class="wp-name">Global Markets</div><div class="wp-desc">Stock indices — US, Europe, Asia</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--amber);">💱</div><div><div class="wp-name">Currencies &amp; Commodities</div><div class="wp-desc">FX rates, oil, gold, gas</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:#3ab864;">🌡</div><div><div class="wp-name">CO₂ Tracker</div><div class="wp-desc">Keeling Curve — atmospheric CO₂ over time</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--earth);">🌍</div><div><div class="wp-name">Population</div><div class="wp-desc">World population trend — 1960 to present</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:#2d1a4a;">⚖️</div><div><div class="wp-name">Active Deliberations</div><div class="wp-desc">Earth-level discourse questions you've engaged with</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:#8b1a1a;">🔴</div><div><div class="wp-name">War &amp; Conflict Map</div><div class="wp-desc">Active armed conflicts with casualty tracking</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--ink-soft);">🌐</div><div><div class="wp-name">My Jurisdictions</div><div class="wp-desc">Quick links to your followed countries and regions</div></div></div>
+  </div>
+</div>
+
+<script>
+// ── WIDGET SYSTEM ──────────────────────────────────────────
+const GRID_COL = 12;
+const GAP = 10;
+let editMode = false;
+
+function toggleEdit() {
+  editMode = !editMode;
+  const bar = document.getElementById('customize-bar');
+  const btn = document.getElementById('edit-btn');
+  const addBtn = document.getElementById('add-btn');
+  const addZone = document.getElementById('add-zone');
+  const grid = document.getElementById('grid');
+  bar.classList.toggle('visible', editMode);
+  btn.textContent = editMode ? '✓ Done' : '✓ Done';
+  addBtn.style.display = editMode ? 'block' : 'none';
+  if (addZone) addZone.style.display = editMode ? 'flex' : 'none';
+  if (grid) grid.classList.toggle('edit-mode', editMode);
+  document.querySelectorAll('#grid .widget').forEach(w => {
+    w.setAttribute('draggable', editMode ? 'true' : 'false');
+  });
+  if (!editMode) closePicker();
+}
+
+// ── DRAG AND DROP ──────────────────────────────────────────
+let dragSrc = null;
+
+document.querySelectorAll('#grid .widget').forEach(w => {
+  w.addEventListener('dragstart', e => {
+    if (!editMode || e.target.closest('.resize-handle')) { e.preventDefault(); return; }
+    dragSrc = w;
+    w.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  w.addEventListener('dragend', () => {
+    w.classList.remove('dragging');
+    document.querySelectorAll('#grid .widget').forEach(x => x.classList.remove('drag-over'));
+  });
+  w.addEventListener('dragover', e => {
+    if (!editMode || w === dragSrc) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    document.querySelectorAll('#grid .widget').forEach(x => x.classList.remove('drag-over'));
+    w.classList.add('drag-over');
+  });
+  w.addEventListener('dragleave', () => w.classList.remove('drag-over'));
+  w.addEventListener('drop', e => {
+    if (!editMode || w === dragSrc) return;
+    e.preventDefault();
+    w.classList.remove('drag-over');
+    const srcCol = dragSrc.style.gridColumn;
+    const srcRow = dragSrc.style.gridRow;
+    dragSrc.style.gridColumn = w.style.gridColumn;
+    dragSrc.style.gridRow    = w.style.gridRow;
+    w.style.gridColumn = srcCol;
+    w.style.gridRow    = srcRow;
+  });
+});
+
+// ── RESIZE LOGIC ───────────────────────────────────────────
+function getGridMetrics() {
+  const grid = document.getElementById('grid');
+  const gridRect = grid.getBoundingClientRect();
+  const colW = (gridRect.width - GAP * (GRID_COL - 1)) / GRID_COL;
+  return { colW, rowH: 60, gap: GAP, gridRect };
+}
+
+function snapToGrid(px, unitSize, gap, min = 1) {
+  return Math.max(min, Math.round((px + gap / 2) / (unitSize + gap)));
+}
+
+document.addEventListener('mousedown', e => {
+  const handle = e.target.closest('.resize-handle');
+  if (!handle) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const widget = handle.closest('.widget');
+  if (!widget.closest('#grid')) return;
+  const dir = handle.classList.contains('right') ? 'right'
+            : handle.classList.contains('bottom') ? 'bottom' : 'corner';
+  const { colW, rowH, gap } = getGridMetrics();
+  const colStyle = widget.style.gridColumn;
+  const rowStyle = widget.style.gridRow;
+  const [colStart] = colStyle.split('/').map(Number);
+  const [rowStart] = rowStyle.split('/').map(Number);
+  const startX = e.clientX;
+  const startY = e.clientY;
+  const startColEnd = parseInt(colStyle.split('/')[1]);
+  const startRowEnd = parseInt(rowStyle.split('/')[1]);
+  widget.style.cursor = dir === 'right' ? 'ew-resize' : dir === 'bottom' ? 'ns-resize' : 'nwse-resize';
+  document.body.style.cursor = widget.style.cursor;
+  document.body.style.userSelect = 'none';
+  const onMove = ev => {
+    const dx = ev.clientX - startX;
+    const dy = ev.clientY - startY;
+    if (dir === 'right' || dir === 'corner') {
+      const newColEnd = Math.min(GRID_COL + 1,
+        colStart + snapToGrid((startColEnd - colStart) * (colW + gap) + dx, colW, gap, 2));
+      widget.style.gridColumn = `${colStart}/${newColEnd}`;
+    }
+    if (dir === 'bottom' || dir === 'corner') {
+      const newRowEnd = Math.max(rowStart + 1,
+        rowStart + snapToGrid((startRowEnd - rowStart) * (rowH + gap) + dy, rowH, gap, 1));
+      widget.style.gridRow = `${rowStart}/${newRowEnd}`;
+    }
+  };
+  const onUp = () => {
+    widget.style.cursor = '';
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
+
+// ── WIDGET PICKER ──────────────────────────────────────────
+function openPicker()  { document.getElementById('widget-picker').classList.add('show'); }
+function closePicker() { document.getElementById('widget-picker').classList.remove('show'); }
+
+// ── NAV TABS ───────────────────────────────────────────────
+document.querySelectorAll('.tn-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tn-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+function showTab(id,el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function vote(btn,id,idx){
+  document.querySelectorAll(`[onclick*="'${id}'"]`).forEach(b=>b.classList.remove('voted'));
+  btn.classList.add('voted');
+  const pcts=[[36,39,25],[22,10,68],[32,35,33]];
+  const dv=parseInt(id.replace('dv',''))-1;
+  const p=pcts[dv];
+  document.getElementById(id+'-bar').style.width=p[idx]+'%';
+  const labels=[['Yes','No','Contested'],['Far-left','Far-right','All three'],['Yes','No','Diplomacy']];
+  document.getElementById(id+'-label').textContent=`${p[0]}% ${labels[dv][0]} / ${p[1]}% ${labels[dv][1]} / ${p[2]}% ${labels[dv][2]}`;
+}
+</script>
+</body>
+</html>

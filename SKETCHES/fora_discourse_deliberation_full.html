@@ -1,0 +1,344 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.pg{background:var(--color-background-tertiary);padding:1.5rem;display:flex;flex-direction:column;gap:20px;}
+.mono{font-family:var(--font-mono);}
+.serif{font-family:var(--font-serif);}
+
+/* Nav strip */
+.disc-nav{display:flex;align-items:center;gap:0;border-bottom:1.5px solid #1b3a6b;margin-bottom:4px;}
+.disc-tab{font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;padding:8px 16px;color:var(--color-text-tertiary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1.5px;}
+.disc-tab.on{color:#b8860b;border-bottom-color:#b8860b;}
+
+/* Section anchor pill */
+.anchor-pill{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;}
+.ap-ey{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-text-tertiary);font-weight:500;margin-bottom:6px;}
+.ap-quote{font-family:var(--font-serif);font-size:13px;color:var(--color-text-secondary);line-height:1.65;border-left:3px solid #b8860b;padding-left:12px;margin-bottom:8px;}
+.ap-stats{display:flex;gap:12px;flex-wrap:wrap;}
+.ap-stat{font-size:10px;color:var(--color-text-tertiary);}
+.ap-stat strong{color:var(--color-text-primary);font-weight:500;}
+
+/* Comment card */
+.ccard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;}
+.ccard.reply{margin-left:28px;border-left:2px solid var(--color-border-secondary);}
+.cc-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;}
+.role-badge{height:32px;padding:0 10px;border-radius:16px;background:var(--color-background-secondary);display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.role-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.role-text{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.role-region{font-size:10px;color:var(--color-text-tertiary);}
+.cc-right{flex:1;min-width:0;}
+.cc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+.cc-time{font-size:10px;color:var(--color-text-tertiary);}
+.cc-score{font-size:10px;color:#1D9E75;font-weight:500;}
+.cc-views{font-size:10px;color:var(--color-text-tertiary);}
+.cc-body{font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:9px;}
+.cc-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.btn-sm{font-size:11px;color:var(--color-text-tertiary);border:0.5px solid var(--color-border-secondary);border-radius:4px;padding:3px 9px;cursor:pointer;background:transparent;}
+.btn-sm:hover{background:var(--color-background-secondary);}
+.btn-amend{font-size:11px;color:#633806;background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:4px;padding:3px 9px;cursor:pointer;}
+.upvote{font-size:11px;color:var(--color-text-tertiary);margin-left:auto;}
+.upvote strong{color:var(--color-text-primary);font-weight:500;}
+.popular-badge{font-size:9px;background:#EAF3DE;color:#27500A;border:0.5px solid #97C459;border-radius:3px;padding:1px 6px;font-weight:500;}
+
+/* Psych layer */
+.psych{background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:var(--border-radius-md);padding:10px 12px;margin-top:9px;}
+.psych-head{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
+.psych-pip{width:12px;height:12px;border-radius:50%;background:#534AB7;flex-shrink:0;}
+.psych-lbl{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#3C3489;}
+.psych-grid{display:flex;flex-direction:column;gap:4px;margin-bottom:7px;}
+.pg-row{display:grid;grid-template-columns:105px 1fr;gap:8px;}
+.pgk{font-size:10px;color:#534AB7;font-weight:500;}
+.pgv{font-size:11px;color:#26215C;line-height:1.5;}
+.steelman{background:white;border:0.5px solid #7F77DD;border-radius:var(--border-radius-md);padding:8px 10px;margin-top:6px;}
+.sm-lbl{font-size:9px;font-weight:500;color:#534AB7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;}
+.sm-body{font-size:11.5px;color:#3C3489;line-height:1.6;font-style:italic;}
+
+/* DELIBERATION CHAMBER */
+.chamber{background:var(--color-background-primary);border:2px solid #EF9F27;border-radius:var(--border-radius-lg);overflow:hidden;}
+.chamber-header{background:#FAEEDA;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ch-title{font-size:13px;font-weight:500;color:#412402;}
+.ch-meta{font-size:10px;color:#633806;}
+.ch-status{font-size:10px;background:#EF9F27;color:white;border-radius:3px;padding:2px 8px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;}
+.chamber-body{padding:16px;}
+
+/* Amendment diff */
+.diff-block{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:14px;font-family:var(--font-serif);font-size:13px;line-height:1.75;}
+.del{background:#FCEBEB;color:#791F1F;text-decoration:line-through;padding:0 2px;border-radius:2px;}
+.ins{background:#EAF3DE;color:#27500A;padding:0 2px;border-radius:2px;}
+
+/* Round structure */
+.rounds{display:flex;flex-direction:column;gap:0;margin-bottom:14px;}
+.round{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:6px;}
+.round-header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--color-background-secondary);}
+.round-num{width:20px;height:20px;border-radius:50%;background:#1b3a6b;color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.round-label{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.round-who{font-size:10px;color:var(--color-text-tertiary);}
+.round-status{margin-left:auto;font-size:9px;border-radius:3px;padding:2px 7px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;}
+.rs-done{background:#EAF3DE;color:#27500A;}
+.rs-active{background:#FAEEDA;color:#633806;}
+.rs-wait{background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary);}
+.round-body{padding:10px 12px;font-size:12.5px;color:var(--color-text-secondary);line-height:1.7;}
+
+/* Vote panel */
+.vote-panel{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;}
+.vp-head{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.vp-pool{font-size:10px;color:var(--color-text-tertiary);margin-bottom:10px;}
+.vp-bar-wrap{margin-bottom:8px;}
+.vp-bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px;}
+.vp-bar{height:8px;background:var(--color-border-tertiary);border-radius:4px;overflow:hidden;display:flex;}
+.vp-yes{background:#639922;height:100%;}
+.vp-no{background:#E24B4A;height:100%;}
+.vp-thresh{height:8px;width:1.5px;background:#b8860b;position:relative;margin-left:-1.5px;z-index:1;}
+.vp-thresh-label{font-size:9px;color:#633806;white-space:nowrap;position:absolute;top:-16px;left:-12px;}
+.vp-counts{display:flex;gap:16px;margin-top:4px;}
+.vpc{font-size:10px;color:var(--color-text-tertiary);}
+.vpc strong{font-weight:500;}
+.vpc.yes strong{color:#27500A;}
+.vpc.no strong{color:#791F1F;}
+.vpc.abs strong{color:var(--color-text-secondary);}
+.vp-buttons{display:flex;gap:8px;margin-top:10px;}
+.btn-yes{font-size:12px;color:white;background:#3B6D11;border:none;border-radius:var(--border-radius-md);padding:7px 18px;cursor:pointer;font-weight:500;}
+.btn-no{font-size:12px;color:white;background:#A32D2D;border:none;border-radius:var(--border-radius-md);padding:7px 18px;cursor:pointer;font-weight:500;}
+.btn-abstain{font-size:12px;color:var(--color-text-secondary);background:transparent;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 18px;cursor:pointer;}
+.mod-note{font-size:11px;color:var(--color-text-tertiary);margin-top:8px;font-style:italic;}
+
+/* PSYCH MIRROR POPUP */
+.mirror-wrap{background:rgba(14,26,46,0.55);border-radius:var(--border-radius-lg);padding:24px;display:flex;align-items:center;justify-content:center;min-height:360px;}
+.mirror-box{background:white;border-radius:var(--border-radius-lg);max-width:500px;width:100%;overflow:hidden;}
+.mirror-top{height:4px;background:#b8860b;}
+.mirror-inner{padding:20px 22px;}
+.mirror-ey{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#7a8aaa;margin-bottom:6px;}
+.mirror-title{font-size:17px;font-weight:700;color:#0e1a2e;font-family:Georgia,serif;margin-bottom:14px;line-height:1.3;}
+.mirror-row{display:grid;grid-template-columns:100px 1fr;gap:8px;padding:7px 0;border-bottom:0.5px solid #e8ebf2;}
+.mirror-row:last-of-type{border-bottom:none;}
+.mrk{font-size:10px;font-weight:500;color:#534AB7;}
+.mrv{font-size:12px;color:#26215C;line-height:1.5;}
+.steelman-block{background:#EEEDFE;border-radius:var(--border-radius-md);padding:10px 12px;margin:12px 0;}
+.slbl{font-size:9px;font-weight:500;color:#534AB7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
+.sbody{font-size:12px;color:#3C3489;line-height:1.65;font-style:italic;}
+.mirror-question{font-size:13px;color:#0e1a2e;font-weight:500;margin-bottom:12px;}
+.mirror-btns{display:flex;gap:8px;}
+.btn-revise{font-size:12px;color:#633806;background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:var(--border-radius-md);padding:8px 16px;cursor:pointer;font-weight:500;}
+.btn-post{font-size:12px;color:white;background:#1b3a6b;border:none;border-radius:var(--border-radius-md);padding:8px 16px;cursor:pointer;font-weight:500;}
+
+/* Composer */
+.composer{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;}
+.comp-lbl{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;}
+textarea{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px;font-size:13px;color:var(--color-text-primary);background:var(--color-background-primary);resize:none;font-family:var(--font-sans);}
+.comp-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:8px;}
+.comp-hint{font-size:10px;color:#534AB7;background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:4px;padding:3px 8px;}
+.comp-right{display:flex;align-items:center;gap:8px;}
+.comp-note{font-size:10px;color:var(--color-text-tertiary);}
+.btn-submit{font-size:12px;color:white;background:#1b3a6b;border:none;border-radius:var(--border-radius-md);padding:7px 16px;cursor:pointer;font-weight:500;}
+
+.sec-lbl{font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:6px;}
+</style>
+
+<div class="pg">
+
+<div class="disc-nav">
+  <div class="disc-tab on">Discourse</div>
+  <div class="disc-tab">The Record</div>
+  <div class="disc-tab">Government</div>
+</div>
+
+<div class="sec-lbl">Pinned thread · most active · stat-displaced :: scale-in-context</div>
+<div class="anchor-pill">
+  <div class="ap-ey">Section anchor · Gaza Strip · Displacement modal</div>
+  <div class="ap-quote">"This is one of the fastest and most complete displacements of a civilian population in modern conflict history... The Srebrenica genocide displaced a smaller total number."</div>
+  <div class="ap-stats">
+    <span class="ap-stat"><strong>4,218</strong> modal views</span>
+    <span class="ap-stat"><strong>23</strong> comments</span>
+    <span class="ap-stat"><strong>1</strong> amendment in deliberation</span>
+    <span class="ap-stat">60% of <strong>4,218</strong> required to ratify = <strong>2,531 votes</strong></span>
+  </div>
+</div>
+
+<div class="sec-lbl">Top comments · sorted by upvotes</div>
+
+<div class="ccard">
+  <div class="cc-head">
+    <div class="role-badge">
+      <div class="role-dot" style="background:#378ADD;"></div>
+      <div>
+        <div class="role-text">Architect</div>
+        <div class="role-region">Mid-Atlantic</div>
+      </div>
+    </div>
+    <div class="cc-right">
+      <div class="cc-meta">
+        <span class="cc-time">Mar 15 2026 · 2:14pm</span>
+        <span class="cc-score">Civic 847</span>
+        <span class="popular-badge">Top comment</span>
+      </div>
+    </div>
+    <div class="upvote"><strong>84</strong> ↑</div>
+  </div>
+  <div class="cc-body">This comparison omits the Holocaust, the Jewish exodus from Arab states (~850,000 people, 1948–1972), and Soviet Jewish expulsions. The "scale in context" framing is selective. Jewish displacement was also massive, also modern, and also historically underrepresented in this kind of comparison.</div>
+  <div class="cc-actions">
+    <button class="btn-sm">Reply</button>
+    <button class="btn-amend">Propose amendment ↗</button>
+    <button class="btn-sm">↑ Upvote</button>
+    <button class="btn-sm">Flag</button>
+  </div>
+  <div class="psych">
+    <div class="psych-head"><div class="psych-pip"></div><div class="psych-lbl">FORA read this as</div></div>
+    <div class="psych-grid">
+      <div class="pg-row"><span class="pgk">Register</span><span class="pgv">Defensive · Identity-protective</span></div>
+      <div class="pg-row"><span class="pgk">Pattern</span><span class="pgv">Whataboutism — redirects from the specific claim to a related grievance</span></div>
+      <div class="pg-row"><span class="pgk">Legitimate core</span><span class="pgv">The comparison set is genuinely incomplete. Jewish mass displacement events are directly comparable in scale and are absent.</span></div>
+      <div class="pg-row"><span class="pgk">What it is not</span><span class="pgv">Does not dispute the Gaza displacement figures. Disputes which comparisons were chosen.</span></div>
+    </div>
+    <div class="steelman">
+      <div class="sm-lbl">Strongest version of this argument</div>
+      <div class="sm-body">"A list of historical displacement analogues that excludes ~850,000 Jewish refugees from Arab states — who received no UN agency, no right of return, and comparable displacement speed — is not a neutral editorial choice. That omission should be explained or corrected."</div>
+    </div>
+  </div>
+</div>
+
+<div class="ccard reply">
+  <div class="cc-head">
+    <div class="role-badge">
+      <div class="role-dot" style="background:#1D9E75;"></div>
+      <div>
+        <div class="role-text">Physician</div>
+        <div class="role-region">Northeast</div>
+      </div>
+    </div>
+    <div class="cc-right">
+      <div class="cc-meta">
+        <span class="cc-time">Mar 15 2026 · 3:41pm</span>
+        <span class="cc-score">Civic 1,204</span>
+      </div>
+    </div>
+    <div class="upvote"><strong>31</strong> ↑</div>
+  </div>
+  <div class="cc-body">The Mizrahi point is valid and should be added. But the semantic critique — "this isn't displacement, it's forced eviction; the buildings are gone" — is a separate objection. One is about missing comparisons. The other is about whether "displacement" is even the right word when 80% of the structures no longer exist.</div>
+  <div class="cc-actions">
+    <button class="btn-sm">Reply</button>
+    <button class="btn-sm">↑ Upvote</button>
+    <button class="btn-sm">Flag</button>
+  </div>
+  <div class="psych">
+    <div class="psych-head"><div class="psych-pip"></div><div class="psych-lbl">FORA read this as</div></div>
+    <div class="psych-grid">
+      <div class="pg-row"><span class="pgk">Register</span><span class="pgv">Analytical · Constructive</span></div>
+      <div class="pg-row"><span class="pgk">Pattern</span><span class="pgv">Disambiguation — separates two valid objections that were conflated</span></div>
+      <div class="pg-row"><span class="pgk">Signal quality</span><span class="pgv">High. Both objections deserve separate amendment proposals.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-lbl">Amendment in deliberation · 1 of 3 rounds complete</div>
+
+<div class="chamber">
+  <div class="chamber-header">
+    <div>
+      <div class="ch-title">Amendment #1 — "Scale in context" comparisons</div>
+      <div class="ch-meta">Proposed by Architect · Mid-Atlantic · Mar 15 2026 · Last editor notified · 48h response window</div>
+    </div>
+    <div class="ch-status">Round 2 of 3 · Active</div>
+  </div>
+  <div class="chamber-body">
+
+    <div class="diff-block">
+      <span class="del">For comparison: the 1948 Nakba displaced ~700,000 Palestinians over a longer period. The Srebrenica genocide displaced a smaller total number.</span>
+      <br><br>
+      <span class="ins">For comparison: the 1948 Nakba displaced ~700,000 Palestinians (a comparable percentage of that population). The Jewish exodus from Arab states displaced ~850,000 Jews between 1948 and 1972, with no UN refugee agency and no right of return. The Holocaust killed 6 million Jews and displaced millions more. The Srebrenica massacre involved the killing of ~8,000 Bosniaks. These comparisons are offered for scale, not equivalence — each case has distinct causes, contexts, and outcomes that FORA documents separately.</span>
+    </div>
+
+    <div class="rounds">
+
+      <div class="round">
+        <div class="round-header">
+          <div class="round-num">1</div>
+          <div class="round-label">Proposal</div>
+          <div class="round-who">· Architect · Mid-Atlantic</div>
+          <span class="round-status rs-done">Complete</span>
+        </div>
+        <div class="round-body">"The scale in context section compares Gaza only to the Nakba and Srebrenica. The Jewish exodus from Arab states (~850,000 people, 1948–1972) and the Holocaust are directly comparable in scale and speed and are absent. The text should include them or explain why they were excluded. I am proposing the addition above."</div>
+      </div>
+
+      <div class="round">
+        <div class="round-header">
+          <div class="round-num">2</div>
+          <div class="round-label">Last editor response</div>
+          <div class="round-who">· FORA Editorial · responding as last editor</div>
+          <span class="round-status rs-active">Active · 31h remaining</span>
+        </div>
+        <div class="round-body" style="color:var(--color-text-tertiary);font-style:italic;">Awaiting response from last editor. If no response within the window, the deliberation advances to community rebuttal.</div>
+      </div>
+
+      <div class="round">
+        <div class="round-header">
+          <div class="round-num">3</div>
+          <div class="round-label">Community rebuttal</div>
+          <div class="round-who">· Open to all · 48h window after Round 2</div>
+          <span class="round-status rs-wait">Waiting</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="vote-panel">
+      <div class="vp-head">Community vote — opens after Round 3</div>
+      <div class="vp-pool">Eligible pool: 4,218 modal views (anyone who opened this modal) · Threshold: 60% of pool = 2,531 votes to ratify</div>
+      <div class="vp-bar-wrap">
+        <div class="vp-bar-label"><span>Ratify</span><span>Reject</span></div>
+        <div style="position:relative;">
+          <div class="vp-bar">
+            <div class="vp-yes" style="width:0%;"></div>
+            <div class="vp-no" style="width:0%;"></div>
+          </div>
+          <div style="position:absolute;top:0;left:60%;height:8px;width:1.5px;background:#b8860b;">
+            <div style="position:absolute;top:-15px;left:-18px;font-size:8px;color:#633806;white-space:nowrap;font-family:var(--font-mono);">60% threshold</div>
+          </div>
+        </div>
+        <div class="vp-counts">
+          <div class="vpc yes"><strong>0</strong> ratify</div>
+          <div class="vpc no"><strong>0</strong> reject</div>
+          <div class="vpc abs"><strong>4,218</strong> not yet voted</div>
+        </div>
+      </div>
+      <div class="mod-note">After vote closes: moderator review required before any change goes live. Moderator may ratify, reject, or request a second deliberation.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="sec-lbl">Psych mirror — shown to user before posting</div>
+<div class="mirror-wrap">
+  <div class="mirror-box">
+    <div class="mirror-top"></div>
+    <div class="mirror-inner">
+      <div class="mirror-ey">Before you post · FORA read your comment as</div>
+      <div class="mirror-title">Here is what FORA sees in what you wrote.</div>
+      <div class="mirror-row"><span class="mrk">Register</span><span class="mrv">Defensive · Identity-protective cognition</span></div>
+      <div class="mirror-row"><span class="mrk">Pattern</span><span class="mrv">Whataboutism — you redirected from the specific claim to a related grievance</span></div>
+      <div class="mirror-row"><span class="mrk">Valid core</span><span class="mrv">Your underlying point — that the comparisons are incomplete — is legitimate and worth making.</span></div>
+      <div class="steelman-block">
+        <div class="slbl">The strongest version of your argument</div>
+        <div class="sbody">"A comparison set that excludes the Jewish exodus from Arab states — ~850,000 people with no UN agency, no right of return — is not neutral. That omission deserves explanation."</div>
+      </div>
+      <div class="mirror-question">Would you like to revise your comment before posting?</div>
+      <div class="mirror-btns">
+        <button class="btn-revise">Revise</button>
+        <button class="btn-post">Post as written</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-lbl">Add a comment</div>
+<div class="composer">
+  <div class="comp-lbl">Commenting on: stat-displaced :: scale-in-context · Gaza Strip · Displacement</div>
+  <textarea rows="3" placeholder="What would you add, challenge, or clarify about this section?"></textarea>
+  <div class="comp-foot">
+    <div class="comp-hint">FORA will show you a mirror before this posts</div>
+    <div class="comp-right">
+      <span class="comp-note">Any registered user may comment or propose amendment</span>
+      <button class="btn-submit">Post comment</button>
+    </div>
+  </div>
+</div>
+
+</div>

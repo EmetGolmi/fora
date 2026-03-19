@@ -1,0 +1,375 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{display:flex;flex-direction:column;gap:36px;padding:1rem 0;}
+.scale-label{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px;}
+.scale-name{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:0;}
+
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;}
+.alert-bar{padding:6px 16px;display:flex;align-items:center;gap:8px;}
+.alert-bar.crisis{background:#501313;}
+.alert-bar.quiet{background:#0e1a2e;}
+.alert-dot{width:6px;height:6px;border-radius:50%;background:#ff6b6b;flex-shrink:0;}
+.alert-text{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.75);font-family:var(--font-mono);}
+
+.hero{background:#0e1a2e;padding:18px 20px 14px;display:grid;gap:14px;}
+.hero.two-col{grid-template-columns:1fr 1fr;}
+.hero.three-col{grid-template-columns:1.2fr 1fr 1fr;}
+
+.identity{display:flex;flex-direction:column;gap:7px;}
+.flag{width:48px;height:32px;border:0.5px solid rgba(255,255,255,0.15);display:flex;flex-direction:column;overflow:hidden;border-radius:2px;flex-shrink:0;}
+.flag-row{display:flex;align-items:center;gap:8px;}
+.ent-name{font-family:var(--font-serif);font-size:17px;color:white;line-height:1.2;}
+.ent-sub{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.38);font-family:var(--font-mono);margin-top:1px;}
+.stats{display:flex;gap:6px;flex-wrap:wrap;}
+.stat{background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:4px;padding:4px 8px;}
+.stat-n{font-size:12px;font-weight:500;color:white;}
+.stat-n.red{color:#ffaaaa;}
+.stat-n.amber{color:#FAC775;}
+.stat-n.green{color:#C0DD97;}
+.stat-l{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);font-family:var(--font-mono);margin-top:1px;}
+
+.network{display:flex;flex-direction:column;gap:6px;}
+.net-label{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);font-family:var(--font-mono);}
+.net-nodes{display:flex;flex-wrap:wrap;gap:5px;}
+.chip{font-size:8px;font-family:var(--font-mono);padding:2px 7px;border-radius:3px;border:0.5px solid;white-space:nowrap;}
+.chip.active{background:rgba(21,92,45,0.3);border-color:#3B6D11;color:#C0DD97;}
+.chip.degraded{background:rgba(196,127,0,0.2);border-color:#c47f00;color:#FAC775;}
+.chip.severed{background:rgba(80,19,19,0.4);border-color:#791F1F;color:rgba(255,150,150,0.6);}
+.chip.neutral{background:rgba(55,138,221,0.12);border-color:rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);}
+.chip.amber{background:rgba(196,127,0,0.15);border-color:rgba(196,127,0,0.35);color:#FAC775;}
+.chip.purple{background:rgba(83,74,183,0.2);border-color:rgba(83,74,183,0.4);color:#CEC BF6;}
+
+.power-col{display:flex;flex-direction:column;gap:6px;}
+.power-table{width:100%;border-collapse:collapse;}
+.power-table td{font-size:9px;padding:3px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);vertical-align:top;}
+.power-table td:first-child{color:rgba(255,255,255,0.35);font-family:var(--font-mono);width:38%;padding-right:6px;}
+.power-table td:last-child{color:rgba(255,255,255,0.8);}
+
+.avatar{width:36px;height:36px;border-radius:50%;background:#1b3a6b;border:1.5px solid #b8860b;display:flex;align-items:center;justify-content:center;font-size:10px;color:#b8860b;font-family:var(--font-mono);font-weight:500;flex-shrink:0;}
+
+.tabs-bar{border-top:0.5px solid rgba(255,255,255,0.06);padding:8px 16px;display:flex;gap:0;overflow:hidden;}
+.tab{font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-mono);padding:5px 9px;color:rgba(255,255,255,0.28);border-bottom:2px solid transparent;white-space:nowrap;}
+.tab.act{color:#b8860b;border-bottom-color:#b8860b;}
+.tab.live{color:rgba(255,100,100,0.8);}
+</style>
+
+<div class="wrap">
+
+<!-- ① NATION-STATE: IRAN -->
+<div>
+<div class="scale-label">Scale 1 · Nation-state</div>
+<div class="scale-name">Iran — active war, proxy network, theocratic overlay</div>
+<div class="card">
+  <div class="alert-bar crisis"><div class="alert-dot"></div><span class="alert-text">Active war · Operation Epic Fury · Day 15 · Supreme Leader killed Feb 28 · Hormuz closed</span></div>
+  <div class="hero two-col">
+    <div class="identity">
+      <div class="flag-row">
+        <div class="flag"><div style="flex:1;background:#239f40;"></div><div style="flex:1;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:7px;">☀</div><div style="flex:1;background:#da0000;"></div></div>
+        <div><div class="ent-name">Islamic Republic<br>of Iran</div><div class="ent-sub">جمهوری اسلامی ایران · Theocratic republic · Est. 1979</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n red">$114</div><div class="stat-l">Oil/bbl</div></div>
+        <div class="stat"><div class="stat-n red">~630K</div><div class="stat-l">IRR/USD</div></div>
+        <div class="stat"><div class="stat-n red">Day 15</div><div class="stat-l">War</div></div>
+        <div class="stat"><div class="stat-n">14/100</div><div class="stat-l">Freedom</div></div>
+        <div class="stat"><div class="stat-n">0.774</div><div class="stat-l">HDI</div></div>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Axis of Resistance · Proxy &amp; affiliated network</div>
+      <div class="net-nodes">
+        <span class="chip degraded">Hezbollah</span>
+        <span class="chip active">Houthis</span>
+        <span class="chip active">PMF Iraq</span>
+        <span class="chip degraded">Hamas</span>
+        <span class="chip degraded">PIJ</span>
+        <span class="chip severed">Syria network</span>
+        <span class="chip amber">Fatemiyoun</span>
+        <span class="chip amber">Zainabiyoun</span>
+        <span class="chip neutral">Al-Ashtar (BHR)</span>
+      </div>
+      <div class="net-label" style="margin-top:4px;">IRGC · Parallel authority layer</div>
+      <div class="net-nodes">
+        <span class="chip neutral">Ramazan Corps · IRQ</span>
+        <span class="chip neutral">Levant Corps · LBN/SYR</span>
+        <span class="chip neutral">Rasulallah · Gulf</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tab act">Overview</div>
+    <div class="tab live">Active Crisis ●</div>
+    <div class="tab">Government</div>
+    <div class="tab">Foreign Affairs</div>
+    <div class="tab">Doctrine &amp; History</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- ② NATION-STATE: GERMANY -->
+<div>
+<div class="scale-label">Scale 1 · Nation-state</div>
+<div class="scale-name">Germany — stable democracy, institutional power projection</div>
+<div class="card">
+  <div class="alert-bar quiet"><div class="alert-text">Federal parliamentary republic · NATO · EU · No active crisis</div></div>
+  <div class="hero two-col">
+    <div class="identity">
+      <div class="flag-row">
+        <div class="flag"><div style="flex:1;background:#222;"></div><div style="flex:1;background:#DD0000;"></div><div style="flex:1;background:#FFCE00;"></div></div>
+        <div><div class="ent-name">Federal Republic<br>of Germany</div><div class="ent-sub">Bundesrepublik Deutschland · Parliamentary republic · Est. 1949</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n green">94/100</div><div class="stat-l">Freedom</div></div>
+        <div class="stat"><div class="stat-n">0.942</div><div class="stat-l">HDI</div></div>
+        <div class="stat"><div class="stat-n">€4.1T</div><div class="stat-l">GDP</div></div>
+        <div class="stat"><div class="stat-n">#24</div><div class="stat-l">Happiness</div></div>
+        <div class="stat"><div class="stat-n">84M</div><div class="stat-l">Population</div></div>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Alliances &amp; supranational memberships</div>
+      <div class="net-nodes">
+        <span class="chip neutral">NATO</span>
+        <span class="chip neutral">European Union</span>
+        <span class="chip neutral">G7</span>
+        <span class="chip neutral">UN</span>
+        <span class="chip neutral">OECD</span>
+        <span class="chip neutral">WTO</span>
+        <span class="chip neutral">ICC</span>
+        <span class="chip neutral">Schengen Area</span>
+      </div>
+      <div class="net-label" style="margin-top:4px;">Key bilateral relationships</div>
+      <div class="net-nodes">
+        <span class="chip active">France · Strategic partner</span>
+        <span class="chip active">USA · NATO ally</span>
+        <span class="chip active">Poland · Eastern flank</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tab act">Overview</div>
+    <div class="tab">Government</div>
+    <div class="tab">Foreign Affairs</div>
+    <div class="tab">Doctrine &amp; History</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- ③ US REPRESENTATIVE + LOBBYISTS -->
+<div>
+<div class="scale-label">Scale 2 · Elected official</div>
+<div class="scale-name">Rep. Don Beyer (VA-08) — official profile + affiliated interests</div>
+<div class="card">
+  <div class="alert-bar quiet"><div class="alert-text">US House of Representatives · Virginia 8th · Active term · 119th Congress</div></div>
+  <div class="hero three-col">
+    <div class="identity">
+      <div class="flag-row">
+        <div class="avatar">DB</div>
+        <div><div class="ent-name">Rep. Don Beyer</div><div class="ent-sub">D · Virginia 8th · House Ways &amp; Means · Since 2015</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">87%</div><div class="stat-l">Dem party line</div></div>
+        <div class="stat"><div class="stat-n">$2.1M</div><div class="stat-l">Cycle raised</div></div>
+        <div class="stat"><div class="stat-n">+18D</div><div class="stat-l">District PVI</div></div>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Committee assignments</div>
+      <div class="net-nodes">
+        <span class="chip neutral">Ways &amp; Means</span>
+        <span class="chip neutral">Joint Economic</span>
+        <span class="chip neutral">Science &amp; Technology</span>
+      </div>
+      <div class="net-label" style="margin-top:6px;">Top donor industries</div>
+      <div class="net-nodes">
+        <span class="chip amber">Tech / Software · $340K</span>
+        <span class="chip amber">Finance / Securities · $210K</span>
+        <span class="chip amber">Real estate · $180K</span>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Registered lobbyist contacts · 119th Congress</div>
+      <div class="net-nodes">
+        <span class="chip amber">Amazon · 4 contacts</span>
+        <span class="chip amber">AIPAC · 2 contacts</span>
+        <span class="chip amber">NVCA (venture) · 3 contacts</span>
+        <span class="chip amber">Sierra Club · 2 contacts</span>
+        <span class="chip amber">AFGE (federal workers) · 1 contact</span>
+      </div>
+      <div class="net-label" style="margin-top:6px;">Notable positions</div>
+      <div class="net-nodes">
+        <span class="chip active">Pro EV tax credits</span>
+        <span class="chip active">Carbon pricing</span>
+        <span class="chip neutral">Ukraine aid · Yes</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tab act">Overview</div>
+    <div class="tab">Voting Record</div>
+    <div class="tab">Funding &amp; Affiliates</div>
+    <div class="tab">Legislation</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- ④ US STATE: VIRGINIA -->
+<div>
+<div class="scale-label">Scale 3 · US State</div>
+<div class="scale-name">Virginia — commonwealth, federal nexus, contested swing state</div>
+<div class="card">
+  <div class="alert-bar quiet"><div class="alert-text">Commonwealth of Virginia · Governor: Glenn Youngkin · General Assembly · No active state emergency</div></div>
+  <div class="hero two-col">
+    <div class="identity">
+      <div class="flag-row">
+        <div class="flag" style="width:36px;height:36px;border-radius:50%;background:#00297B;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;">VA</div>
+        <div><div class="ent-name">Commonwealth<br>of Virginia</div><div class="ent-sub">United States · Southeast · Est. 1788 · Parent: Federal (US)</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">8.7M</div><div class="stat-l">Population</div></div>
+        <div class="stat"><div class="stat-n">$640B</div><div class="stat-l">GDP</div></div>
+        <div class="stat"><div class="stat-n amber">Swing</div><div class="stat-l">PVI lean</div></div>
+        <div class="stat"><div class="stat-n">16</div><div class="stat-l">Congress seats</div></div>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Federal nexus — agencies &amp; contractors headquartered in Virginia</div>
+      <div class="net-nodes">
+        <span class="chip neutral">Pentagon · Arlington</span>
+        <span class="chip neutral">CIA · Langley</span>
+        <span class="chip neutral">DHS HQ</span>
+        <span class="chip neutral">Amazon HQ2</span>
+        <span class="chip neutral">Booz Allen Hamilton</span>
+        <span class="chip neutral">Leidos · SAIC</span>
+      </div>
+      <div class="net-label" style="margin-top:4px;">Active CivicIssues</div>
+      <div class="net-nodes">
+        <span class="chip amber">NOVA housing density</span>
+        <span class="chip amber">I-95 corridor transit</span>
+        <span class="chip amber">Data center proliferation</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tab act">Overview</div>
+    <div class="tab">Government</div>
+    <div class="tab">Foreign Affairs</div>
+    <div class="tab">Doctrine &amp; History</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- ⑤ CITY: ALEXANDRIA -->
+<div>
+<div class="scale-label">Scale 4 · City</div>
+<div class="scale-name">Alexandria, VA — independent city, federal adjacency, active civic life</div>
+<div class="card">
+  <div class="alert-bar quiet"><div class="alert-text">Independent city · Virginia · Mayor: Justin Wilson · City Council · Parent: Commonwealth of Virginia</div></div>
+  <div class="hero two-col">
+    <div class="identity">
+      <div class="flag-row">
+        <div class="flag" style="width:36px;height:36px;border-radius:50%;background:#1b3a6b;display:flex;align-items:center;justify-content:center;font-size:8px;color:#b8860b;font-family:var(--font-mono);">ALX</div>
+        <div><div class="ent-name">City of<br>Alexandria</div><div class="ent-sub">Virginia · Independent city · Est. 1749 · Pop. 160K</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">160K</div><div class="stat-l">Population</div></div>
+        <div class="stat"><div class="stat-n">$1.2B</div><div class="stat-l">City budget</div></div>
+        <div class="stat"><div class="stat-n green">A+</div><div class="stat-l">Bond rating</div></div>
+        <div class="stat"><div class="stat-n">7</div><div class="stat-l">Council seats</div></div>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Key civic bodies &amp; active efforts</div>
+      <div class="net-nodes">
+        <span class="chip neutral">Planning Commission</span>
+        <span class="chip neutral">Alexandria Renew (utilities)</span>
+        <span class="chip neutral">DASH transit</span>
+        <span class="chip neutral">Alexandria City Public Schools</span>
+      </div>
+      <div class="net-label" style="margin-top:4px;">Active CivicIssues</div>
+      <div class="net-nodes">
+        <span class="chip amber">Potomac Yard Metro density</span>
+        <span class="chip amber">Route 1 corridor rezoning</span>
+        <span class="chip amber">Duke St. transitway</span>
+        <span class="chip amber">Affordable housing production</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tab act">Overview</div>
+    <div class="tab">Government</div>
+    <div class="tab">Active Issues ●</div>
+    <div class="tab">Zoning &amp; Land Use</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
+  </div>
+</div>
+</div>
+
+<hr class="divider">
+
+<!-- ⑥ NEIGHBORHOOD ORG: BVNA -->
+<div>
+<div class="scale-label">Scale 5 · Neighborhood organization</div>
+<div class="scale-name">Bella Vista NA — hyperlocal, resident-led, no formal power</div>
+<div class="card">
+  <div class="alert-bar quiet"><div class="alert-text">Community organization · Bella Vista · Alexandria VA · Parent: City of Alexandria</div></div>
+  <div class="hero two-col">
+    <div class="identity">
+      <div class="flag-row">
+        <div class="avatar" style="background:#2d1a4a;border-color:#9FE1CB;color:#9FE1CB;font-size:8px;">BVNA</div>
+        <div><div class="ent-name">Bella Vista<br>Neighborhood Assoc.</div><div class="ent-sub">Alexandria VA · Resident-led · Est. ~2008 · ~1,200 households</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">~1.2K</div><div class="stat-l">Households</div></div>
+        <div class="stat"><div class="stat-n">340</div><div class="stat-l">Members</div></div>
+        <div class="stat"><div class="stat-n amber">3</div><div class="stat-l">Active efforts</div></div>
+        <div class="stat"><div class="stat-n">Monthly</div><div class="stat-l">Meetings</div></div>
+      </div>
+    </div>
+    <div class="network">
+      <div class="net-label">Affiliated orgs &amp; government targets</div>
+      <div class="net-nodes">
+        <span class="chip neutral">Alexandria Planning Dept.</span>
+        <span class="chip neutral">City Council · Dist. liaison</span>
+        <span class="chip neutral">ACPS (schools)</span>
+        <span class="chip neutral">Del Ray Civic Assoc.</span>
+        <span class="chip neutral">NOVA Bike Coalition</span>
+      </div>
+      <div class="net-label" style="margin-top:4px;">Active Efforts</div>
+      <div class="net-nodes">
+        <span class="chip amber">Bella Vista Slow Zone · Active</span>
+        <span class="chip amber">824 S. 8th St. zoning case · Active</span>
+        <span class="chip amber">Duke St. transitway comments · Active</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tab act">Overview</div>
+    <div class="tab">Efforts</div>
+    <div class="tab">Members</div>
+    <div class="tab">Government Targets</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
+  </div>
+</div>
+</div>
+
+</div>

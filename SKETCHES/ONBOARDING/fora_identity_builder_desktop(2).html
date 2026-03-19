@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Build Your Civic Identity</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:    #1b3a6b;
+  --blue-md: #254f92;
+  --blue-lt: #3a6abf;
+  --blue-pl: #dde5f5;
+  --blue-vp: #edf1fb;
+  --gilt:    #b8860b;
+  --gilt-lt: #d4a832;
+  --gilt-pl: #f8f0dc;
+  --gilt-rul:rgba(184,134,11,0.25);
+  --ink:     #0e1a2e;
+  --ink-soft:#5a6e8a;
+  --ink-mut: #8a9ab8;
+  --rule:    rgba(27,58,107,0.1);
+  --bg:      #f2f4f8;
+  --white:   #ffffff;
+  --field:   #080f1e;
+  --field-2: #0d1628;
+  --field-3: #121e36;
+  --green:   #155c2d;
+  --green-p: #e5f0e8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:var(--field);color:white;}
+
+/* ── CHROME ─────────────────────────────────────────────────── */
+.nav{height:56px;background:var(--blue);border-bottom:3px solid var(--gilt);display:flex;align-items:center;padding:0 32px;gap:20px;flex-shrink:0;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;letter-spacing:0.1em;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.nav-step{margin-left:auto;display:flex;align-items:center;gap:6px;}
+.step-pip{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);}
+.step-pip.done{background:var(--gilt);}
+.step-pip.curr{background:white;}
+
+/* ── PROGRESS ───────────────────────────────────────────────── */
+.prog-wrap{height:3px;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.prog-fill{height:100%;background:var(--gilt);transition:width 0.5s cubic-bezier(.4,0,.2,1);}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.layout{display:grid;grid-template-columns:1fr 340px;height:calc(100vh - 59px);overflow:hidden;}
+
+/* ── LEFT PANEL ─────────────────────────────────────────────── */
+.form-panel{overflow-y:auto;padding:40px 48px;display:flex;flex-direction:column;gap:36px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+.form-panel::-webkit-scrollbar{width:4px;}
+.form-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:2px;}
+
+.form-intro{margin-bottom:4px;}
+.form-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:10px;}
+.form-title{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;color:white;line-height:1.2;margin-bottom:10px;}
+.form-title em{color:var(--gilt-lt);font-style:italic;}
+.form-sub{font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:520px;}
+
+/* ── FORM SECTIONS ──────────────────────────────────────────── */
+.form-section{display:flex;flex-direction:column;gap:16px;}
+.fs-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.fs-num{width:22px;height:22px;border-radius:50%;background:var(--gilt);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:white;flex-shrink:0;}
+.fs-num.done{background:rgba(21,92,45,0.8);border:1px solid var(--green);}
+.fs-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.fs-title.active{color:white;}
+
+/* ── FIELDS ─────────────────────────────────────────────────── */
+.field-row{display:grid;gap:12px;}
+.field-row.two{grid-template-columns:1fr 1fr;}
+.field-row.three{grid-template-columns:1fr 1fr 1.4fr;}
+.field-row.date{grid-template-columns:80px 80px 110px;}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:7px;}
+.field-input{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:11px 14px;font-size:13px;color:white;font-family:'Nunito',sans-serif;transition:border-color 0.15s,background 0.15s;outline:none;width:100%;}
+.field-input:focus{border-color:rgba(184,134,11,0.55);background:rgba(255,255,255,0.1);}
+.field-input::placeholder{color:rgba(255,255,255,0.18);}
+.field-input.center{text-align:center;}
+.field-hint{font-size:10.5px;color:rgba(255,255,255,0.28);line-height:1.5;}
+.law-ref{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gilt);border-bottom:1px dotted rgba(184,134,11,0.35);cursor:pointer;letter-spacing:0.04em;}
+
+/* help icon */
+.help{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.4);font-size:9px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-family:'Libre Baskerville',serif;font-style:italic;flex-shrink:0;position:relative;}
+.help:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:0;transform:translateX(-20%);background:#1b3a6b;border:1px solid rgba(184,134,11,0.35);border-top:2px solid var(--gilt);color:rgba(255,255,255,0.75);font-size:11px;font-family:'Nunito',sans-serif;font-style:normal;padding:10px 13px;border-radius:8px;white-space:pre-wrap;width:240px;z-index:200;line-height:1.6;pointer-events:none;}
+
+/* why callout */
+.why{background:rgba(184,134,11,0.07);border:1px solid rgba(184,134,11,0.18);border-left:3px solid var(--gilt);border-radius:0 8px 8px 0;padding:11px 14px;}
+.why-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px;}
+.why-body{font-size:11.5px;color:rgba(255,255,255,0.5);line-height:1.65;}
+.why-cite{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(184,134,11,0.6);margin-top:5px;}
+
+/* occupation grid */
+.occ-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.occ-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:all 0.12s;text-align:left;}
+.occ-btn:hover{border-color:rgba(255,255,255,0.24);background:rgba(255,255,255,0.07);}
+.occ-btn.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.occ-name{font-size:12px;color:rgba(255,255,255,0.8);font-weight:600;}
+.occ-sub{font-size:8.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.28);letter-spacing:0.05em;text-transform:uppercase;}
+
+/* dual occ toggle */
+.dual-occ-toggle{background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.14);border-radius:8px;padding:9px 14px;color:rgba(255,255,255,0.35);font-size:11.5px;cursor:pointer;text-align:left;transition:all 0.12s;}
+.dual-occ-toggle:hover{border-color:rgba(255,255,255,0.28);color:rgba(255,255,255,0.6);}
+
+/* retired checkbox */
+.check-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;cursor:pointer;transition:all 0.12s;}
+.check-row:hover{border-color:rgba(255,255,255,0.22);}
+.check-row.on{border-color:rgba(184,134,11,0.4);background:rgba(184,134,11,0.08);}
+.check-box{width:18px;height:18px;border-radius:4px;border:2px solid rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.12s;}
+.check-row.on .check-box{background:var(--gilt);border-color:var(--gilt);}
+.check-label{font-size:12.5px;color:rgba(255,255,255,0.65);}
+.check-sub{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:1px;}
+
+/* radio */
+.radio-list{display:flex;flex-direction:column;gap:8px;}
+.radio-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;cursor:pointer;transition:all 0.12s;}
+.radio-row:hover{border-color:rgba(255,255,255,0.22);}
+.radio-row.on{background:rgba(184,134,11,0.12);border-color:var(--gilt);}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.22);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.12s;}
+.radio-row.on .radio-dot{border-color:var(--gilt);background:var(--gilt);}
+.radio-row.on .radio-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:white;display:block;}
+.radio-text{font-size:13px;color:rgba(255,255,255,0.75);}
+.radio-sub{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:1px;}
+
+/* tags */
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px;border-radius:100px;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.12s;}
+.tag:hover{border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.65);}
+.tag.on{background:rgba(184,134,11,0.18);border-color:var(--gilt);color:var(--gilt-lt);}
+
+/* credential section */
+.cred-branch{display:flex;gap:10px;flex-wrap:wrap;}
+.cred-branch-btn{flex:1;min-width:140px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all 0.12s;text-align:left;}
+.cred-branch-btn:hover{border-color:rgba(255,255,255,0.22);}
+.cred-branch-btn.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.cred-branch-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:600;margin-bottom:2px;}
+.cred-branch-sub{font-size:9.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;}
+
+select.field-input{appearance:none;cursor:pointer;}
+
+/* submit */
+.submit-area{padding:32px 0 0;display:flex;flex-direction:column;gap:10px;}
+.btn-submit{background:var(--gilt);color:white;border:none;border-radius:100px;padding:15px 40px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity 0.12s;align-self:flex-start;}
+.btn-submit:hover{opacity:0.88;}
+.btn-skip{background:transparent;color:rgba(255,255,255,0.28);border:none;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;align-self:flex-start;padding:0;}
+.btn-skip:hover{color:rgba(255,255,255,0.55);}
+
+/* ── RIGHT PANEL ─────────────────────────────────────────────── */
+.preview-panel{background:var(--field-2);border-left:1px solid rgba(255,255,255,0.06);padding:0;display:flex;flex-direction:column;overflow:hidden;}
+.card-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.18);cursor:pointer;transition:all 0.15s;}
+.card-dot:hover{background:rgba(255,255,255,0.45);}
+.card-dot.active{background:var(--gilt);box-shadow:0 0 6px rgba(184,134,11,0.6);}
+
+.preview-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:24px;}
+
+/* live marker */
+.marker-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;margin-bottom:36px;}
+.marker-svg-wrap{position:relative;}
+
+/* identity display */
+.identity-display{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px 16px;text-align:center;}
+.id-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);line-height:1.8;}
+.id-tag .filled{color:white;}
+.id-tag .pending{color:rgba(255,255,255,0.2);font-style:italic;}
+
+/* progress checklist */
+.checklist{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.cl-item{display:flex;align-items:center;gap:10px;font-size:11.5px;color:rgba(255,255,255,0.3);transition:color 0.2s;}
+.cl-item.done{color:rgba(255,255,255,0.65);}
+.cl-item.active{color:white;}
+.cl-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);flex-shrink:0;transition:all 0.2s;}
+.cl-item.done .cl-dot{background:var(--green);}
+.cl-item.active .cl-dot{background:var(--gilt);box-shadow:0 0 6px rgba(184,134,11,0.6);}
+
+/* ring legend */
+.ring-legend{margin-top:32px;display:flex;flex-direction:column;gap:8px;}
+.rl-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;}
+.rl-item{display:flex;align-items:center;gap:10px;font-size:11px;color:rgba(255,255,255,0.35);}
+.rl-swatch{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+
+/* ── COMPLETION SCREEN ──────────────────────────────────────── */
+.completion{display:none;position:fixed;inset:0;background:var(--field);flex-direction:column;align-items:center;justify-content:center;gap:24px;z-index:100;}
+.completion.show{display:flex;}
+.comp-title{font-family:'Libre Baskerville',serif;font-size:42px;font-weight:700;color:white;text-align:center;line-height:1.2;}
+.comp-title em{color:var(--gilt-lt);}
+.comp-tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:100px;padding:8px 20px;}
+.comp-sub{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px;text-align:center;}
+.btn-enter{background:var(--gilt);color:white;border:none;border-radius:100px;padding:15px 48px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;font-weight:700;margin-top:8px;}
+
+/* ── §D OCCUPATION DUAL PATH ── */
+.path-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+.path-card{background:var(--field-2);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+
+.path-card:hover{border-color:rgba(255,255,255,0.2);}
+.path-card.active{border-color:var(--gilt);background:rgba(184,134,11,0.07);}
+
+.path-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gilt),var(--gilt-lt),var(--gilt));}
+.pc-radio{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:12px;transition:all 0.15s;flex-shrink:0;}
+
+.path-card.active .pc-radio{border-color:var(--gilt);background:var(--gilt);}
+.path-card.active .pc-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:white;display:block;}
+
+.pc-title{font-size:14px;font-weight:700;color:white;margin-bottom:4px;line-height:1.3;}
+.pc-desc{font-size:11.5px;color:rgba(255,255,255,0.4);line-height:1.6;}
+
+.pc-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-top:8px;}
+
+
+.path-content{display:none;}
+.path-content.show{display:block;}
+
+.interp-area{background:var(--field-2);border:1px solid var(--rule);border-radius:12px;padding:24px;}
+.interp-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;}
+
+textarea.interp-ta{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:13px 15px;font-size:13px;color:white;font-family:'Nunito',sans-serif;resize:none;outline:none;min-height:96px;line-height:1.65;transition:border-color 0.15s;}
+textarea.interp-ta:focus{border-color:rgba(184,134,11,0.5);background:rgba(255,255,255,0.08);}
+
+textarea.interp-ta::placeholder{color:rgba(255,255,255,0.18);}
+.interp-examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+
+.interp-ex{font-size:11px;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 10px;cursor:pointer;transition:all 0.12s;}
+.interp-ex:hover{color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.18);}
+
+.thinking{display:none;align-items:center;gap:10px;margin-top:14px;font-size:11px;color:rgba(255,255,255,0.3);}
+.thinking.show{display:flex;}
+
+.dp span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gilt);margin:0 2px;animation:dp 1.2s ease-in-out infinite;}
+.dp span:nth-child(2){animation-delay:0.2s;}
+
+.dp span:nth-child(3){animation-delay:0.4s;}
+@keyframes dp{0%,80%,100%{opacity:0.2;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+
+.interp-result{background:rgba(21,92,45,0.1);border:1px solid rgba(21,92,45,0.3);border-radius:10px;padding:16px;margin-top:14px;display:none;}
+.interp-result.show{display:block;}
+
+.ir-ey{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(26,160,80,0.8);margin-bottom:8px;}
+.ir-identity{font-size:15px;font-weight:700;color:white;margin-bottom:4px;}
+
+.ir-soc{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:0.06em;margin-bottom:10px;}
+.ir-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+
+.ir-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px;}
+.ir-note{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:12px;}
+
+.ir-actions{display:flex;gap:8px;}
+.btn-confirm{background:rgba(21,92,45,0.25);border:1px solid rgba(21,92,45,0.5);color:#9FE1CB;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;transition:all 0.12s;}
+
+.btn-confirm:hover{background:rgba(21,92,45,0.4);}
+.btn-refine{background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;}
+
+.sector-area{background:var(--field-2);border:1px solid var(--rule);border-radius:12px;overflow:hidden;}
+.sector-step{transition:all 0.3s ease;}
+
+.sector-step.hidden{display:none;}
+
+
+/* Step 1: sector card grid */
+.sector-header{padding:18px 20px 14px;border-bottom:1px solid var(--rule);}
+.sector-header-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px;}
+
+.sector-header-title{font-size:14px;font-weight:600;color:white;}
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px;}
+
+.sec-tile{border-radius:10px;padding:14px 13px;cursor:pointer;transition:all 0.15s;border:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:5px;}
+.sec-tile:hover{border-color:rgba(255,255,255,0.24);transform:translateY(-1px);}
+
+.sec-tile.on{border-color:var(--gilt)!important;background:rgba(184,134,11,0.12)!important;transform:none;}
+.sec-layer-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:100px;display:inline-block;width:fit-content;margin-bottom:2px;}
+
+.sec-name{font-size:13px;font-weight:700;color:white;line-height:1.2;}
+.sec-fn{font-size:10.5px;color:rgba(255,255,255,0.35);line-height:1.4;margin-top:1px;}
+
+.sec-tile:hover .sec-fn{color:rgba(255,255,255,0.55);}
+.sec-tile.on .sec-name{color:white;}
+
+.sec-tile.on .sec-fn{color:rgba(255,255,255,0.55);}
+
+
+.step2-back{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);cursor:pointer;padding:13px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;transition:color 0.12s;}
+.step2-back:hover{color:rgba(255,255,255,0.65);}
+
+.step2-bc{font-size:12px;color:white;font-weight:600;padding:12px 20px 4px;display:flex;align-items:center;gap:10px;}
+.step2-bc-name{font-size:14px;font-weight:700;}
+
+.step2-bc-fn{font-size:11px;color:rgba(255,255,255,0.35);font-weight:400;}
+
+
+.step2-stack{display:flex;flex-direction:column;gap:0;padding:14px 20px 20px;}
+.step2-col-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);}
+
+/* role chips — horizontal wrap */
+.role-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
+.role-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:100px;padding:7px 14px;cursor:pointer;transition:all 0.12s;display:flex;align-items:center;gap:8px;}
+
+.role-chip:hover{border-color:rgba(255,255,255,0.24);background:rgba(255,255,255,0.07);}
+.role-chip.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+
+.rc-name{font-size:12px;color:rgba(255,255,255,0.8);}
+.rc-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:100px;}
+
+.soc-col{display:flex;flex-direction:column;}
+.soc-input-wrap{position:relative;margin-bottom:8px;}
+
+.soc-inp{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 14px;font-size:13px;color:white;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;}
+.soc-inp:focus{border-color:rgba(184,134,11,0.5);background:rgba(255,255,255,0.09);}
+
+.soc-inp::placeholder{color:rgba(255,255,255,0.2);}
+.soc-results{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+
+.soc-res-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:9px 11px;cursor:pointer;transition:all 0.12s;}
+.soc-res-item:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
+
+.soc-res-item.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.soc-res-title{font-size:12px;color:white;margin-bottom:3px;line-height:1.3;}
+
+.soc-res-title mark{background:transparent;color:var(--gilt-lt);font-weight:700;}
+.soc-res-meta{display:flex;gap:8px;}
+
+.soc-res-code{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;}
+.soc-res-workers{font-size:9.5px;color:rgba(21,160,80,0.7);}
+
+.soc-bls{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.18);letter-spacing:0.06em;margin-top:10px;}
+.soc-bls a{color:rgba(184,134,11,0.4);text-decoration:none;border-bottom:1px dotted rgba(184,134,11,0.25);}
+
+
+
+/* ── SECTION D: DUAL PATH OCCUPATION ─────────────────────── */
+/* ── PATH CHOOSER ────────────────────────────────────────── */
+.path-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+.path-card{background:var(--field-2);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.path-card:hover{border-color:rgba(255,255,255,0.2);}
+.path-card.active{border-color:var(--gilt);background:rgba(184,134,11,0.07);}
+.path-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gilt),var(--gilt-lt),var(--gilt));}
+.pc-radio{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:12px;transition:all 0.15s;flex-shrink:0;}
+.path-card.active .pc-radio{border-color:var(--gilt);background:var(--gilt);}
+.path-card.active .pc-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:white;display:block;}
+.pc-title{font-size:14px;font-weight:700;color:white;margin-bottom:4px;line-height:1.3;}
+.pc-desc{font-size:11.5px;color:rgba(255,255,255,0.4);line-height:1.6;}
+.pc-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-top:8px;}
+
+/* ── PATH A: AI INTERPRETER ──────────────────────────────── */
+.path-content{display:none;}
+.path-content.show{display:block;}
+
+.interp-area{background:var(--field-2);border:1px solid var(--rule);border-radius:12px;padding:24px;}
+.interp-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;}
+textarea.interp-ta{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:13px 15px;font-size:13px;color:white;font-family:'Nunito',sans-serif;resize:none;outline:none;min-height:96px;line-height:1.65;transition:border-color 0.15s;}
+textarea.interp-ta:focus{border-color:rgba(184,134,11,0.5);background:rgba(255,255,255,0.08);}
+textarea.interp-ta::placeholder{color:rgba(255,255,255,0.18);}
+.interp-examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.interp-ex{font-size:11px;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 10px;cursor:pointer;transition:all 0.12s;}
+.interp-ex:hover{color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.18);}
+
+/* Thinking indicator */
+.thinking{display:none;align-items:center;gap:10px;margin-top:14px;font-size:11px;color:rgba(255,255,255,0.3);}
+.thinking.show{display:flex;}
+.dp span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gilt);margin:0 2px;animation:dp 1.2s ease-in-out infinite;}
+.dp span:nth-child(2){animation-delay:0.2s;}
+.dp span:nth-child(3){animation-delay:0.4s;}
+@keyframes dp{0%,80%,100%{opacity:0.2;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+
+/* Interpretation result */
+.interp-result{background:rgba(21,92,45,0.1);border:1px solid rgba(21,92,45,0.3);border-radius:10px;padding:16px;margin-top:14px;display:none;}
+.interp-result.show{display:block;}
+.ir-ey{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(26,160,80,0.8);margin-bottom:8px;}
+.ir-identity{font-size:15px;font-weight:700;color:white;margin-bottom:4px;}
+.ir-soc{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:0.06em;margin-bottom:10px;}
+.ir-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.ir-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px;}
+.ir-note{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:12px;}
+.ir-actions{display:flex;gap:8px;}
+.btn-confirm{background:rgba(21,92,45,0.25);border:1px solid rgba(21,92,45,0.5);color:#9FE1CB;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;transition:all 0.12s;}
+.btn-confirm:hover{background:rgba(21,92,45,0.4);}
+.btn-refine{background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:100px;cursor:pointer;}
+
+/* ── PATH B: 22 SECTORS ──────────────────────────────────── */
+.sector-area{background:var(--field-2);border:1px solid var(--rule);border-radius:12px;overflow:hidden;}
+.sector-step{transition:all 0.3s ease;}
+.sector-step.hidden{display:none;}
+
+/* Step 1: sector card grid */
+.sector-header{padding:18px 20px 14px;border-bottom:1px solid var(--rule);}
+.sector-header-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px;}
+.sector-header-title{font-size:14px;font-weight:600;color:white;}
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px;}
+.sec-tile{border-radius:10px;padding:14px 13px;cursor:pointer;transition:all 0.15s;border:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:5px;}
+.sec-tile:hover{border-color:rgba(255,255,255,0.24);transform:translateY(-1px);}
+.sec-tile.on{border-color:var(--gilt)!important;background:rgba(184,134,11,0.12)!important;transform:none;}
+.sec-layer-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:100px;display:inline-block;width:fit-content;margin-bottom:2px;}
+.sec-name{font-size:13px;font-weight:700;color:white;line-height:1.2;}
+.sec-fn{font-size:10.5px;color:rgba(255,255,255,0.35);line-height:1.4;margin-top:1px;}
+.sec-tile:hover .sec-fn{color:rgba(255,255,255,0.55);}
+.sec-tile.on .sec-name{color:white;}
+.sec-tile.on .sec-fn{color:rgba(255,255,255,0.55);}
+
+/* Step 2: stacked */
+.step2-back{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);cursor:pointer;padding:13px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;transition:color 0.12s;}
+.step2-back:hover{color:rgba(255,255,255,0.65);}
+.step2-bc{font-size:12px;color:white;font-weight:600;padding:12px 20px 4px;display:flex;align-items:center;gap:10px;}
+.step2-bc-name{font-size:14px;font-weight:700;}
+.step2-bc-fn{font-size:11px;color:rgba(255,255,255,0.35);font-weight:400;}
+
+.step2-stack{display:flex;flex-direction:column;gap:0;padding:14px 20px 20px;}
+.step2-col-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);}
+
+/* role chips — horizontal wrap */
+.role-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
+.role-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:100px;padding:7px 14px;cursor:pointer;transition:all 0.12s;display:flex;align-items:center;gap:8px;}
+.role-chip:hover{border-color:rgba(255,255,255,0.24);background:rgba(255,255,255,0.07);}
+.role-chip.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.rc-name{font-size:12px;color:rgba(255,255,255,0.8);}
+.rc-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:100px;}
+
+/* SOC search — full width below chips */
+.soc-col{display:flex;flex-direction:column;}
+.soc-input-wrap{position:relative;margin-bottom:8px;}
+.soc-inp{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 14px;font-size:13px;color:white;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;}
+.soc-inp:focus{border-color:rgba(184,134,11,0.5);background:rgba(255,255,255,0.09);}
+.soc-inp::placeholder{color:rgba(255,255,255,0.2);}
+.soc-results{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+.soc-res-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:9px 11px;cursor:pointer;transition:all 0.12s;}
+.soc-res-item:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
+.soc-res-item.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.soc-res-title{font-size:12px;color:white;margin-bottom:3px;line-height:1.3;}
+.soc-res-title mark{background:transparent;color:var(--gilt-lt);font-weight:700;}
+.soc-res-meta{display:flex;gap:8px;}
+.soc-res-code{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;}
+.soc-res-workers{font-size:9.5px;color:rgba(21,160,80,0.7);}
+.soc-bls{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.18);letter-spacing:0.06em;margin-top:10px;}
+.soc-bls a{color:rgba(184,134,11,0.4);text-decoration:none;border-bottom:1px dotted rgba(184,134,11,0.25);}
+
+/* ── FOOTER / CTA ────────────────────────────────────────── */
+.screen-footer{padding:16px 40px;border-top:1px solid var(--rule);background:rgba(0,0,0,0.2);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.btn-continue{background:var(--gilt);color:white;border:none;border-radius:100px;padding:12px 32px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity 0.12s;}
+.btn-continue:hover{opacity:0.88;}
+.btn-continue:disabled{opacity:0.3;cursor:not-allowed;}
+.btn-skip{background:transparent;color:rgba(255,255,255,0.25);border:none;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;}
+.btn-skip:hover{color:rgba(255,255,255,0.55);}
+.footer-selection{font-size:12px;color:rgba(255,255,255,0.45);margin-left:auto;display:flex;align-items:center;gap:8px;}
+.footer-sel-val{color:white;font-weight:600;}
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-label">Building your civic identity</div>
+  <div class="nav-step">
+    <div class="step-pip done"></div>
+    <div class="step-pip done"></div>
+    <div class="step-pip done"></div>
+    <div class="step-pip curr"></div>
+  </div>
+</nav>
+<div class="prog-wrap"><div class="prog-fill" id="prog" style="width:0%;"></div></div>
+
+<!-- ── MAIN LAYOUT ─────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- ── LEFT: FORM ─────────────────────────────────────────── -->
+  <div class="form-panel" id="form-panel">
+
+    <div class="form-intro">
+      <div class="form-ey">Civic Identity · Step 4 of your onboarding</div>
+      <h1 class="form-title">Who are you<br><em>in the forum?</em></h1>
+      <p class="form-sub">Your identity on FORA is derived from what you verify — not what you choose. Fill in what you know. Everything updates in real time on the right. You can always return and complete or update later.</p>
+    </div>
+
+    <!-- §A NAME + CONTACT ──────────────────────────────────── -->
+    <div class="form-section" id="sec-a">
+      <div class="fs-head">
+        <div class="fs-num" id="num-a">A</div>
+        <div class="fs-title active">Name &amp; contact</div>
+      </div>
+
+      <div class="field-row two">
+        <div class="field-group">
+          <label class="field-label">First name <span class="help" data-tip="Used internally to address you. Never displayed publicly. Your community sees your occupation and region, not your name.">i</span></label>
+          <input class="field-input" type="text" placeholder="Your first name" id="inp-name" oninput="updatePreview()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email <span class="help" data-tip="Account recovery and notification preferences only. Never sold, shared, or displayed to other users.">i</span></label>
+          <input class="field-input" type="email" placeholder="your@email.com" id="inp-email" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Phone <span class="help" data-tip="One-time SMS verification to confirm you are a real person, not an automated account. After verification, your phone number is hashed and the original is deleted. FORA cannot reconstruct it.&#10;&#10;FEC guidance on civic platform authentication.">i</span></label>
+        <input class="field-input" type="tel" placeholder="+1 (555) 000-0000" id="inp-phone" oninput="updatePreview()" style="max-width:260px;">
+        <div class="field-hint">Used once for verification. Original deleted after. <span class="law-ref">Why this matters →</span></div>
+      </div>
+    </div>
+
+    <!-- §B DATE OF BIRTH ──────────────────────────────────── -->
+    <div class="form-section" id="sec-b">
+      <div class="fs-head">
+        <div class="fs-num" id="num-b">B</div>
+        <div class="fs-title">Date of birth</div>
+      </div>
+      <div class="why">
+        <div class="why-title">Why FORA asks</div>
+        <div class="why-body">Your community sees your age range (e.g. 35–44) — never your exact birthday. We use your birthdate to compute the range, to verify you are 13+, and to surface generational patterns in civic engagement. Your birthdate is encrypted and never shown.</div>
+        <div class="why-cite">COPPA · 15 U.S.C. § 6501 · FTC Rule 16 C.F.R. Part 312</div>
+      </div>
+      <div class="field-row">
+        <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div class="field-group">
+            <label class="field-label">Month</label>
+            <input class="field-input center" type="number" placeholder="MM" min="1" max="12" id="inp-dobm" oninput="updatePreview()" style="width:80px;">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Day</label>
+            <input class="field-input center" type="number" placeholder="DD" min="1" max="31" id="inp-dobd" oninput="updatePreview()" style="width:80px;">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Year</label>
+            <input class="field-input center" type="number" placeholder="YYYY" min="1920" max="2010" id="inp-doby" oninput="updatePreview()" style="width:110px;">
+          </div>
+          <div style="padding-bottom:2px;padding-left:12px;">
+            <div style="font-size:10px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px;">Displayed as</div>
+            <div id="age-range-preview" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,0.4);">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §C ADDRESS ──────────────────────────────────────────── -->
+    <div class="form-section" id="sec-c">
+      <div class="fs-head">
+        <div class="fs-num" id="num-c">C</div>
+        <div class="fs-title">Residential address</div>
+      </div>
+      <div class="why">
+        <div class="why-title">Why we ask for your full address</div>
+        <div class="why-body">Your zip code helps us show you the platform, but it isn't precise enough to determine your local representatives. Zip codes were created for mail delivery, not political boundaries. A single zip code can cross multiple cities, counties, congressional districts, and school districts. Your representatives at every level — federal, state, county, city, school board — are determined by your exact residential address. FORA uses the same address standards as voter registration.</div>
+        <div class="why-cite">Help America Vote Act · 52 U.S.C. § 20901 · National Voter Registration Act · 52 U.S.C. § 20501</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Street address <span class="help" data-tip="Optional but strongly recommended. Without it, FORA may assign you to the wrong district near boundaries.">i</span></label>
+        <input class="field-input" type="text" placeholder="123 Main Street" id="inp-street" oninput="updatePreview()">
+      </div>
+      <div class="field-row two">
+        <div class="field-group">
+          <label class="field-label">City</label>
+          <input class="field-input" type="text" placeholder="Alexandria" id="inp-city" oninput="updatePreview()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">State</label>
+          <input class="field-input" type="text" placeholder="VA" id="inp-state" oninput="updatePreview()" style="max-width:80px;">
+        </div>
+      </div>
+      <div class="field-hint">Street address is optional. Publicly shown as region only (e.g. "Mid-Atlantic" or "Alexandria VA").</div>
+    </div>
+
+    <!-- §D OCCUPATION ──────────────────────────────────────── -->
+    <div class="form-section" id="sec-d">
+      <div class="fs-head">
+        <div class="fs-num" id="num-d">D</div>
+        <div class="fs-title">Occupation</div>
+      </div>
+
+      <div class="why">
+        <div class="why-title">Why occupation shapes your civic identity</div>
+        <div class="why-body">Your occupation is your public civic identity. A Master Electrician commenting on building code carries a different perspective than an anonymous post &mdash; not more validity, but different context. Alexandria Ocasio-Cortez was a bartender before Congress. A bartender commenting on alcohol licensing has direct standing. Everyone who lives somewhere has a stake in how it is governed.</div>
+        <div class="why-cite">First Amendment &middot; U.S. Const. amend. I &middot; Context is not censorship &mdash; it&rsquo;s civic literacy.</div>
+      </div>
+
+      <!-- path chooser -->
+      <div class="path-row">
+        <div class="path-card active" id="d-path-a-card" onclick="dChoosePath('a')">
+          <div class="pc-radio"></div>
+          <div class="pc-title">Describe what you do</div>
+          <div class="pc-desc">Write it in plain English. FORA&rsquo;s AI reads your description and proposes your civic identity. Best for complex or hybrid careers.</div>
+          <span class="pc-tag" style="background:rgba(74,31,122,0.2);border:1px solid rgba(74,31,122,0.4);color:#c080ff;">AI interpreter</span>
+        </div>
+        <div class="path-card" id="d-path-b-card" onclick="dChoosePath('b')">
+          <div class="pc-radio"></div>
+          <div class="pc-title">Pick your sector, then your role</div>
+          <div class="pc-desc">Choose from 22 civilizational sectors, then narrow to your specific occupation using curated roles or the BLS job database.</div>
+          <span class="pc-tag" style="background:rgba(26,79,160,0.2);border:1px solid rgba(26,79,160,0.4);color:#80b0ff;">22 sectors &middot; BLS</span>
+        </div>
+      </div>
+
+      <!-- PATH A: AI interpreter -->
+      <div id="d-path-a-content" style="display:block;">
+        <div class="interp-area">
+          <div class="interp-label">Describe what you do for a living</div>
+          <textarea class="interp-ta" id="d-interp-ta" placeholder="e.g. I do project management for a living but I went to school for architecture and I&rsquo;m still licensed. I stamp drawings occasionally&hellip;" oninput="dInterpInput()"></textarea>
+          <div class="interp-examples">
+            <span class="interp-ex" onclick="dFillEx(this)">Project manager / licensed architect</span>
+            <span class="interp-ex" onclick="dFillEx(this)">Server in LA, writing screenplays on the side</span>
+            <span class="interp-ex" onclick="dFillEx(this)">Retired RN, still volunteer at a clinic</span>
+            <span class="interp-ex" onclick="dFillEx(this)">IBEW electrician, union steward</span>
+          </div>
+          <div class="thinking" id="d-thinking"><div class="dp"><span></span><span></span><span></span></div>Reading your description&hellip;</div>
+          <div class="interp-result" id="d-interp-result">
+            <div class="ir-ey">FORA read this as</div>
+            <div class="ir-identity" id="d-ir-identity"></div>
+            <div class="ir-soc" id="d-ir-soc"></div>
+            <div class="ir-tags" id="d-ir-tags"></div>
+            <div class="ir-note" id="d-ir-note"></div>
+            <div class="ir-actions">
+              <button class="btn-confirm" onclick="dConfirmInterp()">&#10003; That&rsquo;s right</button>
+              <button class="btn-refine" onclick="dResetInterp()">Adjust</button>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <button style="background:rgba(184,134,11,0.14);border:1px solid rgba(184,134,11,0.35);color:var(--gilt-lt);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 18px;border-radius:100px;cursor:pointer;" onclick="dRunInterp()">Interpret &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATH B: 22 sectors + SOC -->
+      <div id="d-path-b-content" style="display:none;">
+        <div class="sector-area">
+
+          <!-- Step 1: sector grid -->
+          <div id="d-b-step-1">
+            <div class="sector-header">
+              <div class="sector-header-label">Step 1 of 2 &middot; Select your sector</div>
+              <div class="sector-header-title">Which of the 22 sectors of civilization describes your work?</div>
+            </div>
+            <div class="sector-grid" id="d-sector-grid"></div>
+          </div>
+
+          <!-- Step 2: stacked roles + SOC -->
+          <div id="d-b-step-2" style="display:none;">
+            <div class="step2-back" onclick="dBackToStep1()">&larr; All sectors</div>
+            <div class="step2-bc" id="d-step2-bc"></div>
+            <div class="step2-stack">
+              <div class="step2-col-label">Roles in this sector &mdash; select yours</div>
+              <div class="role-chips" id="d-role-chips"></div>
+              <div class="step2-col-label" style="margin-top:8px;">BLS occupational search <span style="color:rgba(184,134,11,0.45);margin-left:6px;font-size:9px;">&uarr; bls.gov/soc &middot; 867 occupations</span></div>
+              <div class="soc-col">
+                <div class="soc-input-wrap">
+                  <input class="soc-inp" type="text" id="d-soc-inp" placeholder="Search by job title or keyword&hellip;" oninput="dSocSearch(this.value)" autocomplete="off">
+                </div>
+                <div class="soc-results" id="d-soc-results"></div>
+                <div class="soc-bls">Source: <a href="https://www.bls.gov/soc/" target="_blank">U.S. Bureau of Labor Statistics &middot; Standard Occupational Classification 2018</a></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- dual occupation + retired (preserved) -->
+      <div id="d-second-occ-area" style="display:none;flex-direction:column;gap:12px;margin-top:8px;">
+        <button class="dual-occ-toggle" id="dual-occ-toggle" onclick="toggleDualOcc()">+ Add a second occupation</button>
+        <div id="occ-grid-secondary" style="display:none;flex-direction:column;gap:8px;">
+          <div class="field-label">Second occupation <span class="help" data-tip="Many people wear two hats &mdash; an architect who manages projects, a nurse who also teaches, a lawyer who also farms. Both appear in your civic identity.">i</span></div>
+          <div class="occ-grid">
+            <button class="occ-btn" onclick="selectOcc2(this,'Law','law')"><span class="occ-name">Law</span><span class="occ-sub">Attorney, judge</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Healthcare','healthcare')"><span class="occ-name">Healthcare</span><span class="occ-sub">MD, RN, PT</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Engineering','engineering')"><span class="occ-name">Engineering</span><span class="occ-sub">PE, architect</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Skilled trades','skilled_trades')"><span class="occ-name">Skilled trades</span><span class="occ-sub">Electrician, plumber</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Finance','finance')"><span class="occ-name">Finance</span><span class="occ-sub">CPA, CFP</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Business','business')"><span class="occ-name">Business</span><span class="occ-sub">Owner, manager</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Education','education')"><span class="occ-name">Education</span><span class="occ-sub">Teacher, faculty</span></button>
+            <button class="occ-btn" onclick="selectOcc2(this,'Other','other')"><span class="occ-name">Other</span><span class="occ-sub">Type below</span></button>
+          </div>
+        </div>
+        <div class="check-row" id="retired-row" onclick="toggleRetired()">
+          <div class="check-box" id="retired-check"></div>
+          <div>
+            <div class="check-label">I am retired</div>
+            <div class="check-sub">Your occupation will display as your former field, e.g. &ldquo;Retired Engineer&rdquo;</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- §E MILITARY ─────────────────────────────────────────── -->
+    <div class="form-section" id="sec-e">
+      <div class="fs-head">
+        <div class="fs-num" id="num-e">E</div>
+        <div class="fs-title">Military service</div>
+      </div>
+      <div class="radio-list">
+        <div class="radio-row" onclick="selectMil(this,'yes')">
+          <div class="radio-dot"></div>
+          <div><div class="radio-text">Yes — I served or am currently serving</div><div class="radio-sub">Veteran, active duty, reservist, National Guard</div></div>
+        </div>
+        <div class="radio-row" onclick="selectMil(this,'no')">
+          <div class="radio-dot"></div>
+          <div><div class="radio-text">No military service</div></div>
+        </div>
+        <div class="radio-row" onclick="selectMil(this,'skip')">
+          <div class="radio-dot"></div>
+          <div><div class="radio-text">Prefer not to answer</div></div>
+        </div>
+      </div>
+      <div id="mil-detail" style="display:none;flex-direction:column;gap:12px;">
+        <div class="field-group">
+          <label class="field-label">Branch of service</label>
+          <select class="field-input" id="inp-branch" onchange="updatePreview()" style="max-width:260px;">
+            <option value="">Select branch…</option>
+            <option value="army">Army</option>
+            <option value="navy">Navy</option>
+            <option value="marines">Marine Corps</option>
+            <option value="air_force">Air Force</option>
+            <option value="space_force">Space Force</option>
+            <option value="coast_guard">Coast Guard</option>
+            <option value="national_guard">National Guard</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div class="field-group">
+            <label class="field-label">Service start</label>
+            <input class="field-input center" type="number" placeholder="YYYY" style="width:100px;">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Service end</label>
+            <input class="field-input center" type="number" placeholder="YYYY" style="width:100px;">
+          </div>
+        </div>
+        <div class="field-hint">DD-214 upload available in profile settings to earn a verified branch ribbon. <span class="law-ref">What is a DD-214? →</span></div>
+      </div>
+      <div class="why">
+        <div class="why-title">Why military service is a separate credential</div>
+        <div class="why-body">Veterans have a distinct relationship to civic life — service, sacrifice, and firsthand knowledge of federal policy. FORA treats military service as a credential independent of occupation, shown as a branch ribbon below your civic marker.</div>
+        <div class="why-cite">USERRA · 38 U.S.C. § 4301</div>
+      </div>
+    </div>
+
+    <!-- §F ORGANIZATIONS ─────────────────────────────────────── -->
+    <div class="form-section" id="sec-f">
+      <div class="fs-head">
+        <div class="fs-num" id="num-f">F</div>
+        <div class="fs-title">Professional organizations &amp; union membership</div>
+      </div>
+      <div class="tag-row" id="org-tags">
+        <span class="tag" onclick="toggleTag(this)">IBEW (Electricians)</span>
+        <span class="tag" onclick="toggleTag(this)">ABA (Attorneys)</span>
+        <span class="tag" onclick="toggleTag(this)">AMA (Physicians)</span>
+        <span class="tag" onclick="toggleTag(this)">AFT (Teachers)</span>
+        <span class="tag" onclick="toggleTag(this)">NEA (Educators)</span>
+        <span class="tag" onclick="toggleTag(this)">UAW (Auto workers)</span>
+        <span class="tag" onclick="toggleTag(this)">SEIU</span>
+        <span class="tag" onclick="toggleTag(this)">Teamsters (IBT)</span>
+        <span class="tag" onclick="toggleTag(this)">ASCE (Civil Engrs)</span>
+        <span class="tag" onclick="toggleTag(this)">VFW</span>
+        <span class="tag" onclick="toggleTag(this)">American Legion</span>
+        <span class="tag" onclick="toggleTag(this)">NAACP</span>
+        <span class="tag" onclick="toggleTag(this)">ACLU</span>
+        <span class="tag" onclick="toggleTag(this)">CFA Institute</span>
+      </div>
+      <div class="field-group" style="margin-top:4px;">
+        <label class="field-label">Not listed? Add yours</label>
+        <input class="field-input" type="text" placeholder="Organization name…" style="max-width:320px;">
+      </div>
+      <div id="union-verify-wrap" style="display:none;flex-direction:column;gap:10px;margin-top:4px;">
+        <div class="field-label" style="margin-bottom:2px;">Verify your union membership <span class="help" data-tip="Union membership can be verified through AFL-CIO affiliated local directories. Verification confirms you are an active member in good standing. Your member ID is hashed on receipt and never stored in readable form.">i</span></div>
+        <div class="field-row two">
+          <div class="field-group">
+            <label class="field-label">Union local</label>
+            <input class="field-input" type="text" placeholder="e.g. IBEW Local 26" id="inp-union-local" oninput="updatePreview()">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Member ID <span style="font-size:9px;color:rgba(255,255,255,0.25);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;">optional</span></label>
+            <input class="field-input" type="text" placeholder="Your member ID">
+            <div class="field-hint">Hashed on receipt. Original deleted. <span class="law-ref">AFL-CIO verification →</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="why" style="margin-top:4px;">
+        <div class="why-body" style="font-size:11px;">An IBEW card is a credential. ABA membership is a credential. These affiliations are part of your civic identity and provide context for your contributions. Union membership is verifiable through AFL-CIO affiliated local directories — select your union above to verify.</div>
+        <div class="why-cite">NLRA · 29 U.S.C. § 151 · NAACP v. Alabama, 357 U.S. 449 (1958)</div>
+      </div>
+    </div>
+
+    <!-- §G CREDENTIAL ───────────────────────────────────────── -->
+    <div class="form-section" id="sec-g">
+      <div class="fs-head">
+        <div class="fs-num" id="num-g">G</div>
+        <div class="fs-title">Professional license · optional</div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(184,134,11,0.06);border:1px solid rgba(184,134,11,0.18);border-radius:10px;padding:14px 16px;">
+        <svg width="52" height="62" viewBox="0 0 52 62" style="flex-shrink:0;margin-top:2px;">
+          <circle cx="26" cy="26" r="18" fill="none" stroke="rgba(184,134,11,0.25)" stroke-width="6"/>
+          <circle cx="26" cy="26" r="13" fill="none" stroke="#b8860b" stroke-width="2"/>
+          <circle cx="26" cy="26" r="11" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+          <circle cx="26" cy="26" r="9" fill="rgba(200,216,240,0.5)"/>
+          <circle cx="26" cy="23" r="4" fill="#8aaac8"/>
+          <ellipse cx="26" cy="33" rx="7" ry="5" fill="#8aaac8"/>
+          <rect x="10" y="42" width="32" height="12" rx="6" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+          <text x="26" y="51.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#8b6914" id="cred-pill-preview">—</text>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:white;margin-bottom:4px;">Gold ring &mdash; licensed credential marker</div>
+          <div style="font-size:11.5px;color:rgba(255,255,255,0.45);line-height:1.6;">Verify your credentials against your state licensing board records. Your credential type is shown (e.g. &ldquo;Licensed PE&rdquo;). Your license number is never displayed.</div>
+        </div>
+      </div>
+
+      <div id="cred-license-fields" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="field-row two">
+          <div class="field-group">
+            <label class="field-label">Credential type</label>
+            <select class="field-input" id="inp-cred-type" onchange="updateCredPill()">
+              <option value="">Select type…</option>
+              <optgroup label="Law"><option value="ESQ">Attorney (ESQ)</option><option value="JDG">Judge</option></optgroup>
+              <optgroup label="Medicine"><option value="MD">Physician (MD)</option><option value="DO">Physician (DO)</option><option value="RN">Registered Nurse</option><option value="NP">Nurse Practitioner</option><option value="PA">Physician Assistant</option><option value="PharmD">Pharmacist</option><option value="DDS">Dentist</option></optgroup>
+              <optgroup label="Engineering"><option value="PE">Professional Engineer</option><option value="RA">Registered Architect</option><option value="PLS">Land Surveyor</option></optgroup>
+              <optgroup label="Finance"><option value="CPA">CPA</option><option value="CFP">CFP</option><option value="CFA">CFA</option></optgroup>
+              <optgroup label="Trades"><option value="ME">Master Electrician</option><option value="JE">Journeyman Electrician</option><option value="MP">Master Plumber</option><option value="GC">General Contractor</option></optgroup>
+              <optgroup label="Education"><option value="TCH">Licensed Teacher</option></optgroup>
+              <optgroup label="First Responders"><option value="LEO">Police (POST)</option><option value="EMT">EMT / Paramedic</option><option value="FF">Firefighter</option></optgroup>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Issuing state</label>
+            <select class="field-input" id="inp-cred-state">
+              <option value="">Select state…</option>
+              <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option selected>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option><option value="FED">Federal / National</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">License number <span class="help" data-tip="Used only to verify against the issuing board's public registry. Hashed immediately on receipt — the original is permanently deleted. Never displayed to other users. Cannot be reconstructed.&#10;&#10;Fourth Amendment · U.S. Const. amend. IV">i</span></label>
+          <input class="field-input" type="text" placeholder="e.g. VA-PE-12345" style="max-width:280px;">
+          <div class="field-hint">Never displayed. SHA-256 hashed on receipt. Original deleted. <span class="law-ref">How verification works →</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §G WHY CALLOUT ──────────────────────────────────────── -->
+    <style>
+      .term{border-bottom:1px dotted rgba(184,134,11,0.5);color:rgba(255,255,255,0.72);cursor:help;position:relative;white-space:nowrap;}
+      .term::after{content:attr(data-def);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#1b3a6b;border:1px solid rgba(184,134,11,0.35);border-top:2px solid var(--gilt);color:rgba(255,255,255,0.82);font-size:11px;font-family:'Nunito',sans-serif;font-style:normal;font-weight:400;padding:10px 13px;border-radius:8px;white-space:normal;width:260px;z-index:300;line-height:1.65;pointer-events:none;opacity:0;transition:opacity 0.15s;}
+      .term:hover::after{opacity:1;}
+    </style>
+    <div class="why">
+      <div class="why-title">Why licensed professionals are a distinct civic category</div>
+      <div class="why-body" style="font-size:12px;line-height:1.9;">
+        All individuals <span class="term" data-def="Licensed by a state means a government agency — typically a state board — has reviewed your qualifications and granted you legal permission to practice. Without that permission, practicing the occupation is illegal in that state.">licensed by a state</span> to perform their jobs share a common foundation: they are
+        <span class="term" data-def="Legal authorization is distinct from a private certification or a degree. A degree shows you studied something. A certification shows you passed a test. A license means a government agency has formally recognized your right to practice — and can revoke it.">legally authorized by a government agency</span>
+        to work in their occupation, having met
+        <span class="term" data-def="Predetermined standards are the minimum requirements set by a licensing board before a license is granted: education hours, supervised practice, written exams, background checks, and more. They vary by state and by occupation — a master electrician in Virginia faces different standards than one in California.">predetermined standards</span>
+        of
+        <span class="term" data-def="Competency in a licensing context means the demonstrated ability to perform the job safely and correctly — not just knowledge of it. Boards test competency through exams, supervised practice hours, and continuing education requirements designed to reflect real-world conditions.">competency</span>,
+        <span class="term" data-def="Training requirements are the supervised, hands-on hours a board requires before a license can be issued. A licensed electrician may need thousands of apprenticeship hours. A licensed attorney needs three years of law school plus bar passage. Training is separate from education and is often more rigorous.">training</span>, and
+        <span class="term" data-def="Education requirements are the formal academic credentials a board requires before you can even apply — a medical degree, a law degree, an engineering degree, a teaching credential. They are a prerequisite to training and examination, not a substitute for them.">education</span>.
+        These licenses are
+        <span class="term" data-def="Time-limited means licenses expire — typically every one to three years. Renewal requires continuing education to ensure practitioners stay current. An expired license means the holder is no longer legally authorized to practice, regardless of their previous standing.">time-limited credentials</span>
+        designed to protect
+        <span class="term" data-def="Public health, safety, and welfare is the constitutional justification for occupational licensing. States license doctors, engineers, and electricians because an incompetent practitioner can injure or kill people. The license is the public's assurance that a verified minimum standard has been met. This power flows from the 10th Amendment's reservation of police powers to the states.">public health, safety, and welfare</span>
+        by ensuring a minimum standard of professional practice.
+      </div>
+      <div class="why-cite">
+        National Council of State Legislatures &middot; Institute for Justice &ldquo;License to Work&rdquo; &middot; U.S. Dept. of Labor Occupational Licensing Policy &middot; Police powers reserved to the states &middot; U.S. Const. amend. X
+      </div>
+    </div>
+
+    <!-- SUBMIT ──────────────────────────────────────────────── -->
+    <div class="submit-area">
+      <button class="btn-submit" onclick="submitIdentity()">Create my civic identity →</button>
+      <button class="btn-skip" onclick="submitIdentity()">Save what I have — complete later in profile</button>
+    </div>
+
+  </div><!-- end form-panel -->
+
+  <!-- ── RIGHT: AVATAR CARD ──────────────────────────────── -->
+  <div class="preview-panel" style="padding:28px 24px 24px;justify-content:space-between;">
+
+    <!-- Hidden SVG — keeps all IDs alive for JS without displaying them -->
+    <svg width="0" height="0" style="position:absolute;pointer-events:none;overflow:hidden;">
+      <defs>
+        <clipPath id="cp-main"><circle cx="60" cy="60" r="40"/></clipPath>
+        <radialGradient id="ph-main" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#c8d8f0"/>
+          <stop offset="100%" stop-color="#8aaac8"/>
+        </radialGradient>
+      </defs>
+      <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(27,58,107,0.0)" stroke-width="0" id="glow-outer"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(27,58,107,0.0)" stroke-width="0" id="glow-mid"/>
+      <circle cx="60" cy="60" r="44" fill="none" stroke="transparent" stroke-width="0" id="ring-main"/>
+      <circle cx="60" cy="60" r="46" fill="none" stroke="transparent" stroke-width="0" id="ring-inner"/>
+      <circle cx="60" cy="60" r="40" fill="url(#ph-main)" clip-path="url(#cp-main)"/>
+      <circle cx="60" cy="52" r="15" fill="#8aaac8" clip-path="url(#cp-main)"/>
+      <ellipse cx="60" cy="82" rx="22" ry="16" fill="#8aaac8" clip-path="url(#cp-main)"/>
+      <rect x="38" y="96" width="44" height="16" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" id="pill-bg"/>
+      <text x="60" y="107.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="rgba(255,255,255,0.2)" id="pill-text">—</text>
+      <rect x="20" y="118" width="80" height="10" rx="3" fill="transparent" id="ribbon-bg"/>
+      <rect x="20" y="118" width="18" height="10" fill="transparent" id="ribbon-c1"/>
+      <rect x="38" y="118" width="20" height="10" fill="transparent" id="ribbon-c2"/>
+      <rect x="58" y="118" width="20" height="10" fill="transparent" id="ribbon-c3"/>
+      <rect x="78" y="118" width="22" height="10" fill="transparent" id="ribbon-c4" rx="0"/>
+      <!-- identity display anchors (hidden, used by JS) -->
+      <text id="id-occ" style="display:none"></text>
+      <text id="id-age" style="display:none"></text>
+      <text id="id-loc" style="display:none"></text>
+    </svg>
+
+    <!-- Card viewport -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+      <div id="card-viewport" style="width:100%;display:flex;transition:transform 0.35s cubic-bezier(.4,0,.2,1);will-change:transform;">
+
+        <!-- ── CARD 1: FRANCHISE ── -->
+        <div class="av-card" style="flex-shrink:0;width:100%;display:flex;justify-content:center;">
+          <div style="width:248px;border-radius:12px;overflow:hidden;background:#0a1628;border:2px solid #1b3a6b;font-family:'Nunito',sans-serif;">
+            <div style="background:linear-gradient(135deg,#1b3a6b 0%,#0d1f3d 100%);padding:0;position:relative;overflow:hidden;height:168px;">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,0.012) 14px,rgba(255,255,255,0.012) 15px);"></div>
+              <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#b8860b,#d4a832,#b8860b);"></div>
+              <div style="position:absolute;top:10px;left:12px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(184,134,11,0.7);">Founding Member · 2026</div>
+              <div style="position:absolute;top:10px;right:12px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;color:rgba(255,255,255,0.18);">#0001</div>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="100" height="120" viewBox="0 0 100 120" id="card-f-svg">
+                  <defs>
+                    <clipPath id="cpf"><circle cx="50" cy="46" r="32"/></clipPath>
+                    <radialGradient id="phf" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient>
+                  </defs>
+                  <circle cx="50" cy="46" r="40" fill="none" id="cf-glow-o" stroke="rgba(184,134,11,0.14)" stroke-width="10"/>
+                  <circle cx="50" cy="46" r="34" fill="none" id="cf-glow-m" stroke="rgba(184,134,11,0.28)" stroke-width="8"/>
+                  <circle cx="50" cy="46" r="36" fill="none" id="cf-ring" stroke="transparent" stroke-width="0"/>
+                  <circle cx="50" cy="46" r="32" fill="url(#phf)" clip-path="url(#cpf)"/>
+                  <circle cx="50" cy="39" r="11" fill="#5a8aaa" clip-path="url(#cpf)"/>
+                  <ellipse cx="50" cy="62" rx="18" ry="12" fill="#5a8aaa" clip-path="url(#cpf)"/>
+                  <rect x="30" y="76" width="40" height="13" rx="6.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" id="cf-pill-bg"/>
+                  <text x="50" y="85.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="rgba(255,255,255,0.2)" id="cf-pill">—</text>
+                  <rect x="12" y="100" width="76" height="9" rx="3" fill="transparent" id="cf-rib-bg"/>
+                  <rect x="12" y="100" width="16" height="9" fill="transparent" id="cf-rib-1"/>
+                  <rect x="28" y="100" width="18" height="9" fill="transparent" id="cf-rib-2"/>
+                  <rect x="46" y="100" width="18" height="9" fill="transparent" id="cf-rib-3"/>
+                  <rect x="64" y="100" width="24" height="9" fill="transparent" id="cf-rib-4"/>
+                </svg>
+              </div>
+            </div>
+            <div style="padding:13px 14px 14px;">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px;">
+                <div style="font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:white;" id="cf-identity">—</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);" id="cf-region">—</div>
+              </div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:#d4a832;margin-bottom:10px;" id="cf-occ">—</div>
+              <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:10px;"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+                <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#9FE1CB;line-height:1;">—</div><div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.25);margin-top:2px;">Contribs</div></div>
+                <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#d4a832;line-height:1;">—</div><div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.25);margin-top:2px;">Sectors</div></div>
+                <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#80b0ff;line-height:1;">—</div><div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.25);margin-top:2px;">Amends</div></div>
+              </div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,0.35);font-style:italic;border-top:1px solid rgba(255,255,255,0.06);padding-top:8px;text-align:center;" id="cf-motto">&ldquo;Your motto goes here&rdquo;</div>
+            </div>
+            <div style="background:#050d1a;padding:6px 14px;display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-family:'Libre Baskerville',serif;font-size:11px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:0.1em;">F<span style="color:rgba(184,134,11,0.4);">O</span>RA</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.14);">Founding Series · 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CARD 2: THE TOME ── -->
+        <div class="av-card" style="flex-shrink:0;width:100%;display:flex;justify-content:center;">
+          <div style="width:236px;border-radius:8px;overflow:hidden;background:#1a0e08;border:5px solid #3a2208;font-family:'Nunito',sans-serif;">
+            <div style="border:1.5px solid #8b6014;border-radius:4px;margin:3px;overflow:hidden;">
+              <div style="background:linear-gradient(90deg,#3a2208,#5a3410,#3a2208);padding:7px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(184,134,11,0.3);">
+                <div style="font-family:'Libre Baskerville',serif;font-size:12px;font-weight:700;color:white;" id="ct-identity">—</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:#d4a832;letter-spacing:0.08em;" id="ct-cred">—</div>
+              </div>
+              <div style="background:#0e1a2e;height:148px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+                <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(184,134,11,0.1) 0%,transparent 70%);"></div>
+                <svg width="88" height="108" viewBox="0 0 88 108">
+                  <defs>
+                    <clipPath id="cpt"><circle cx="44" cy="42" r="30"/></clipPath>
+                    <radialGradient id="pht" cx="40%" cy="32%"><stop offset="0%" stop-color="#d0c0f0"/><stop offset="100%" stop-color="#8060b0"/></radialGradient>
+                  </defs>
+                  <circle cx="44" cy="42" r="38" fill="none" id="ct-glow" stroke="rgba(184,134,11,0.18)" stroke-width="10"/>
+                  <circle cx="44" cy="42" r="34" fill="none" id="ct-ring" stroke="transparent" stroke-width="0"/>
+                  <circle cx="44" cy="42" r="30" fill="url(#pht)" clip-path="url(#cpt)"/>
+                  <circle cx="44" cy="35" r="10" fill="#6050a0" clip-path="url(#cpt)"/>
+                  <ellipse cx="44" cy="57" rx="16" ry="11" fill="#6050a0" clip-path="url(#cpt)"/>
+                  <rect x="26" y="70" width="36" height="13" rx="6.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" id="ct-pill-bg"/>
+                  <text x="44" y="79.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="rgba(255,255,255,0.2)" id="ct-pill">—</text>
+                  <rect x="8" y="92" width="72" height="9" rx="3" fill="transparent" id="ct-rib-bg"/>
+                  <rect x="8" y="92" width="16" height="9" fill="transparent" id="ct-rib-1"/>
+                  <rect x="24" y="92" width="16" height="9" fill="transparent" id="ct-rib-2"/>
+                  <rect x="40" y="92" width="16" height="9" fill="transparent" id="ct-rib-3"/>
+                  <rect x="56" y="92" width="24" height="9" fill="transparent" id="ct-rib-4"/>
+                </svg>
+              </div>
+              <div style="background:linear-gradient(90deg,#2a1a08,#4a2c10,#2a1a08);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(184,134,11,0.2);border-bottom:1px solid rgba(184,134,11,0.2);">
+                <div style="font-family:'Libre Baskerville',serif;font-size:9.5px;color:rgba(255,255,255,0.65);" id="ct-type">Civic Actor</div>
+                <div style="font-size:12px;">◆</div>
+              </div>
+              <div style="background:#1e1208;padding:9px 11px;border-bottom:1px solid rgba(184,134,11,0.12);">
+                <div style="font-size:9.5px;color:rgba(255,255,255,0.5);line-height:1.55;font-style:italic;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:6px;" id="ct-motto">&ldquo;Your motto goes here&rdquo;</div>
+                <div style="font-size:9.5px;color:rgba(255,255,255,0.6);line-height:1.55;" id="ct-rules"><span style="color:#d4a832;font-weight:600;">Verified Credential</span> — Gold ring. License number never displayed.</div>
+              </div>
+              <div style="background:#150e04;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.18);">FORA · Founding · 2026</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CARD 3: FIELD GUIDE ── -->
+        <div class="av-card" style="flex-shrink:0;width:100%;display:flex;justify-content:center;">
+          <div style="width:242px;border-radius:14px;overflow:hidden;position:relative;font-family:'Nunito',sans-serif;border:2.5px solid #1a6b35;">
+            <div style="position:absolute;inset:0;background:linear-gradient(160deg,#0a2010 0%,#061408 50%,#020a04 100%);"></div>
+            <div style="position:absolute;inset:5px;border-radius:10px;border:1px solid rgba(26,107,53,0.25);pointer-events:none;z-index:1;"></div>
+            <div style="position:relative;z-index:2;padding:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div style="font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:white;" id="cfg-identity">—</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9FE1CB;font-weight:700;">— <span style="font-size:7.5px;opacity:0.7;text-transform:uppercase;letter-spacing:0.06em;">HP</span></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);border-radius:8px;height:148px;position:relative;overflow:hidden;margin-bottom:9px;border:1px solid rgba(26,107,53,0.18);display:flex;align-items:center;justify-content:center;">
+                <svg width="88" height="118" viewBox="0 0 88 118">
+                  <defs>
+                    <clipPath id="cpg"><circle cx="44" cy="42" r="30"/></clipPath>
+                    <radialGradient id="phg" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8f0d0"/><stop offset="100%" stop-color="#5aaa70"/></radialGradient>
+                  </defs>
+                  <circle cx="44" cy="42" r="38" fill="none" id="cfg-glow" stroke="rgba(26,107,53,0.2)" stroke-width="10"/>
+                  <circle cx="44" cy="42" r="34" fill="none" id="cfg-ring" stroke="transparent" stroke-width="0"/>
+                  <circle cx="44" cy="42" r="30" fill="url(#phg)" clip-path="url(#cpg)"/>
+                  <circle cx="44" cy="35" r="10" fill="#3a8850" clip-path="url(#cpg)"/>
+                  <ellipse cx="44" cy="57" rx="16" ry="11" fill="#3a8850" clip-path="url(#cpg)"/>
+                  <rect x="26" y="70" width="36" height="13" rx="6.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" id="cfg-pill-bg"/>
+                  <text x="44" y="79.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="rgba(255,255,255,0.2)" id="cfg-pill">—</text>
+                  <rect x="8" y="92" width="72" height="9" rx="3" fill="transparent" id="cfg-rib-bg"/>
+                  <rect x="8" y="92" width="16" height="9" fill="transparent" id="cfg-rib-1"/>
+                  <rect x="24" y="92" width="16" height="9" fill="transparent" id="cfg-rib-2"/>
+                  <rect x="40" y="92" width="16" height="9" fill="transparent" id="cfg-rib-3"/>
+                  <rect x="56" y="92" width="24" height="9" fill="transparent" id="cfg-rib-4"/>
+                </svg>
+                <div style="position:absolute;bottom:0;left:0;right:0;padding:5px 7px;background:linear-gradient(transparent,rgba(0,0,0,0.7));display:flex;gap:5px;" id="cfg-tags">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:100px;background:rgba(26,107,53,0.4);color:#9FE1CB;border:1px solid rgba(26,107,53,0.5);" id="cfg-type">—</span>
+                </div>
+              </div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,0.4);line-height:1.5;margin-bottom:8px;padding:7px 9px;background:rgba(255,255,255,0.04);border-radius:6px;border-left:2px solid #1a6b35;font-style:italic;" id="cfg-motto">&ldquo;Your motto goes here&rdquo;</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(26,107,53,0.2);padding-top:7px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.22);" id="cfg-meta">— · 2026</div>
+                <div style="font-family:'Libre Baskerville',serif;font-size:11px;font-weight:700;color:rgba(26,107,53,0.55);letter-spacing:0.1em;">F<span style="color:rgba(100,200,140,0.55);">O</span>RA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CARD 4: BLUEPRINT ── -->
+        <div class="av-card" style="flex-shrink:0;width:100%;display:flex;justify-content:center;">
+          <div style="width:248px;border-radius:5px;overflow:hidden;background:#02101e;border:1px solid #1a4fa0;font-family:'JetBrains Mono',monospace;position:relative;">
+            <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(26,79,160,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(26,79,160,0.05) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;"></div>
+            <div style="position:relative;z-index:2;">
+              <div style="padding:12px 14px 8px;border-bottom:1px solid rgba(26,79,160,0.3);">
+                <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(80,138,221,0.55);margin-bottom:3px;">Civic Profile — Verified</div>
+                <div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:white;margin-bottom:1px;" id="cbp-identity">—</div>
+                <div style="font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.28);" id="cbp-subtitle">—</div>
+              </div>
+              <div style="height:150px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#010d1a;border-bottom:1px solid rgba(26,79,160,0.2);">
+                <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.06;" viewBox="0 0 248 150" preserveAspectRatio="none">
+                  <line x1="124" y1="0" x2="124" y2="150" stroke="rgba(26,79,160,1)" stroke-width="0.5"/>
+                  <line x1="0" y1="75" x2="248" y2="75" stroke="rgba(26,79,160,1)" stroke-width="0.5"/>
+                  <circle cx="124" cy="75" r="55" fill="none" stroke="rgba(26,79,160,1)" stroke-width="0.5"/>
+                  <circle cx="124" cy="75" r="35" fill="none" stroke="rgba(26,79,160,1)" stroke-width="0.5"/>
+                </svg>
+                <svg width="90" height="120" viewBox="0 0 90 120">
+                  <defs>
+                    <clipPath id="cpbp"><circle cx="45" cy="44" r="30"/></clipPath>
+                    <radialGradient id="phbp" cx="40%" cy="32%"><stop offset="0%" stop-color="#c0d4f0"/><stop offset="100%" stop-color="#4878b0"/></radialGradient>
+                  </defs>
+                  <circle cx="45" cy="44" r="38" fill="none" id="cbp-glow" stroke="rgba(184,134,11,0.18)" stroke-width="10"/>
+                  <circle cx="45" cy="44" r="34" fill="none" id="cbp-ring" stroke="transparent" stroke-width="0"/>
+                  <circle cx="45" cy="44" r="30" fill="url(#phbp)" clip-path="url(#cpbp)"/>
+                  <circle cx="45" cy="37" r="10" fill="#3060a0" clip-path="url(#cpbp)"/>
+                  <ellipse cx="45" cy="59" rx="16" ry="11" fill="#3060a0" clip-path="url(#cpbp)"/>
+                  <rect x="27" y="72" width="36" height="13" rx="6.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" id="cbp-pill-bg"/>
+                  <text x="45" y="81.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="rgba(255,255,255,0.2)" id="cbp-pill">—</text>
+                  <rect x="9" y="95" width="72" height="9" rx="3" fill="transparent" id="cbp-rib-bg"/>
+                  <rect x="9" y="95" width="16" height="9" fill="transparent" id="cbp-rib-1"/>
+                  <rect x="25" y="95" width="16" height="9" fill="transparent" id="cbp-rib-2"/>
+                  <rect x="41" y="95" width="16" height="9" fill="transparent" id="cbp-rib-3"/>
+                  <rect x="57" y="95" width="24" height="9" fill="transparent" id="cbp-rib-4"/>
+                </svg>
+              </div>
+              <div style="padding:10px 14px;border-bottom:1px solid rgba(26,79,160,0.2);">
+                <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
+                  <span style="font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(80,138,221,0.55);">OCC</span>
+                  <span style="font-size:8px;color:rgba(255,255,255,0.65);" id="cbp-occ">—</span>
+                  <span style="font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(80,138,221,0.55);">LOC</span>
+                  <span style="font-size:8px;color:rgba(255,255,255,0.65);" id="cbp-loc">—</span>
+                </div>
+              </div>
+              <div style="padding:8px 14px;background:#010d1a;border-top:1px solid rgba(26,79,160,0.3);display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(26,79,160,0.4);">FORA · Founding · 2026</div>
+                <div style="font-family:'Libre Baskerville',serif;font-size:11px;font-weight:700;color:rgba(26,79,160,0.4);letter-spacing:0.1em;">F<span style="color:rgba(80,138,221,0.5);">O</span>RA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end card-viewport -->
+    </div>
+
+    <!-- Dots + template label -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:16px;flex-shrink:0;">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="card-dot active" onclick="showCard(0)" title="The Franchise"></div>
+        <div class="card-dot" onclick="showCard(1)" title="The Tome"></div>
+        <div class="card-dot" onclick="showCard(2)" title="The Field Guide"></div>
+        <div class="card-dot" onclick="showCard(3)" title="The Blueprint"></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);" id="card-template-label">The Franchise</div>
+    </div>
+
+  </div><!-- end preview-panel -->
+
+</div><!-- end layout -->
+
+<!-- ── COMPLETION ─────────────────────────────────────────────── -->
+<div class="completion" id="completion">
+  <svg width="120" height="144" viewBox="0 0 120 144" id="comp-marker">
+    <defs>
+      <clipPath id="cp-comp"><circle cx="60" cy="60" r="40"/></clipPath>
+      <radialGradient id="ph-comp" cx="40%" cy="35%">
+        <stop offset="0%" stop-color="#c8d8f0"/>
+        <stop offset="100%" stop-color="#8aaac8"/>
+      </radialGradient>
+    </defs>
+    <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(184,134,11,0.2)" stroke-width="12"/>
+    <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(184,134,11,0.35)" stroke-width="10"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+    <circle cx="60" cy="60" r="42" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="40" fill="url(#ph-comp)" clip-path="url(#cp-comp)"/>
+    <circle cx="60" cy="52" r="15" fill="#8aaac8" clip-path="url(#cp-comp)"/>
+    <ellipse cx="60" cy="82" rx="22" ry="16" fill="#8aaac8" clip-path="url(#cp-comp)"/>
+    <rect x="38" y="96" width="44" height="16" rx="8" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+    <text x="60" y="107.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#8b6914" id="comp-pill">PE</text>
+  </svg>
+  <h1 class="comp-title">Your civic<br><em>identity is set.</em></h1>
+  <div class="comp-tag" id="comp-identity-tag">Engineer · 35–44 · Alexandria VA</div>
+  <p class="comp-sub">This is how your community sees you. Your name stays private. Your voice is yours.</p>
+  <button class="btn-enter" onclick="window.location='#'">Enter FORA →</button>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const state = {
+  name:'', email:'', phone:'',
+  dobM:'', dobD:'', dobY:'',
+  city:'', state_:'',
+  occ1:'', occ1Cat:'', occ2:'', occ2Cat:'',
+  retired: false,
+  mil: '',
+  branch: '',
+  credType:'', credDisplay:'',
+  credPath: '',
+};
+
+const BRANCH_RIBBONS = {
+  army:         {bg:'#1a1a1a', c:['#1a1a1a','#c9a84c','#1a1a1a','#1a1a1a']},
+  navy:         {bg:'#0a1f44', c:['#0a1f44','#c9a84c','#0a1f44','#0a1f44']},
+  air_force:    {bg:'#1c3d8f', c:['#1c3d8f','#e8c84a','#1c3d8f','#1c3d8f']},
+  marines:      {bg:'#8b1a1a', c:['#8b1a1a','#c9a84c','#8b1a1a','#8b1a1a']},
+  coast_guard:  {bg:'#003087', c:['#003087','white',  '#c0392b','#003087']},
+  space_force:  {bg:'#0a0a14', c:['#0a0a14','#b0b8c8','#1a3060','#0a0a14']},
+  national_guard:{bg:'#1a1a1a',c:['#1a1a1a','#c9a84c','#1a1a1a','#1a1a1a']},
+};
+
+// ── Age range ──────────────────────────────────────────────────────────────
+function ageRange(y) {
+  if (!y || y < 1920 || y > 2010) return null;
+  const age = new Date().getFullYear() - y;
+  if (age < 13) return null;
+  const lo = Math.floor(age/10)*10;
+  return `${lo}–${lo+9}`;
+}
+
+// ── Progress ───────────────────────────────────────────────────────────────
+function calcProgress() {
+  let score = 0;
+  const n = document.getElementById('inp-name').value;
+  const e = document.getElementById('inp-email').value;
+  if (n) score += 10;
+  if (e) score += 5;
+  const y = parseInt(document.getElementById('inp-doby').value);
+  if (ageRange(y)) score += 15;
+  const city = document.getElementById('inp-city').value;
+  if (city) score += 15;
+  if (state.occ1) score += 20;
+  if (state.mil) score += 15;
+  if (document.querySelectorAll('.tag.on').length > 0) score += 10;
+  if (state.credType || state.credPath === 'none') score += 10;
+  return Math.min(score, 100);
+}
+
+// ── Checklist ──────────────────────────────────────────────────────────────
+function updateChecklist() {
+  const n = document.getElementById('inp-name').value;
+  const e = document.getElementById('inp-email').value;
+  setClItem('cl-a', !!(n && e));
+
+  const y = parseInt(document.getElementById('inp-doby').value);
+  setClItem('cl-b', !!ageRange(y));
+
+  const city = document.getElementById('inp-city').value;
+  setClItem('cl-c', !!city);
+
+  setClItem('cl-d', !!state.occ1);
+  setClItem('cl-e', !!state.mil);
+  setClItem('cl-f', document.querySelectorAll('.tag.on').length > 0);
+  setClItem('cl-g', !!(state.credType || state.credPath === 'none'));
+}
+
+function setClItem(id, done) {
+  const el = document.getElementById(id);
+  el.classList.toggle('done', done);
+}
+
+// ── Identity display ───────────────────────────────────────────────────────
+function updatePreview() {
+  state.name  = document.getElementById('inp-name').value;
+  state.email = document.getElementById('inp-email').value;
+
+  // Age range
+  const y = parseInt(document.getElementById('inp-doby').value);
+  const ar = ageRange(y);
+  const ageEl = document.getElementById('id-age');
+  const arPrev = document.getElementById('age-range-preview');
+  if (ar) {
+    ageEl.textContent = ar;
+    ageEl.className = 'filled';
+    arPrev.textContent = ar;
+    arPrev.style.color = 'rgba(255,255,255,0.75)';
+  } else {
+    ageEl.textContent = 'Age range';
+    ageEl.className = 'pending';
+    arPrev.textContent = '—';
+    arPrev.style.color = 'rgba(255,255,255,0.3)';
+  }
+
+  // Location
+  const city = document.getElementById('inp-city').value;
+  const st   = document.getElementById('inp-state').value;
+  const locEl = document.getElementById('id-loc');
+  if (city) {
+    locEl.textContent = st ? `${city} ${st.toUpperCase()}` : city;
+    locEl.className = 'filled';
+  } else {
+    locEl.textContent = 'Region';
+    locEl.className = 'pending';
+  }
+
+  // Occupation
+  const occEl = document.getElementById('id-occ');
+  if (state.occ1) {
+    let display = state.occ1;
+    if (state.retired) display = 'Retired ' + display;
+    if (state.occ2) display += ' & ' + state.occ2;
+    occEl.textContent = display;
+    occEl.className = 'filled';
+  } else {
+    occEl.textContent = 'Occupation';
+    occEl.className = 'pending';
+  }
+
+  // Military ribbon
+  const branch = document.getElementById('inp-branch').value;
+  state.branch = branch;
+  const ribbonData = BRANCH_RIBBONS[branch];
+  const ids = ['ribbon-bg','ribbon-c1','ribbon-c2','ribbon-c3','ribbon-c4'];
+  if (ribbonData && state.mil === 'yes') {
+    document.getElementById('ribbon-bg').setAttribute('fill', ribbonData.bg);
+    ribbonData.c.forEach((col, i) => {
+      document.getElementById('ribbon-c'+(i+1)).setAttribute('fill', col);
+    });
+  } else {
+    ids.forEach(id => document.getElementById(id).setAttribute('fill','transparent'));
+  }
+
+  // Credential pill on marker
+  updateCredPill();
+
+  // Progress bar
+  const prog = calcProgress();
+  document.getElementById('prog').style.width = prog + '%';
+
+  // Checklist
+  updateChecklist();
+
+  // Section number badges — mark done
+  updateSectionBadges();
+
+  // Push state to all four card templates
+  updateAllCards();
+}
+
+function updateSectionBadges() {
+  const n = document.getElementById('inp-name').value;
+  const e = document.getElementById('inp-email').value;
+  const y = parseInt(document.getElementById('inp-doby').value);
+  const city = document.getElementById('inp-city').value;
+  const badges = {
+    'num-a': !!(n && e),
+    'num-b': !!ageRange(y),
+    'num-c': !!city,
+    'num-d': !!state.occ1,
+    'num-e': !!state.mil,
+    'num-f': document.querySelectorAll('.tag.on').length > 0,
+    'num-g': !!(state.credType || state.credPath === 'none'),
+  };
+  Object.entries(badges).forEach(([id, done]) => {
+    const el = document.getElementById(id);
+    if (done) {
+      el.classList.add('done');
+      el.innerHTML = '✓';
+    }
+  });
+}
+
+function updateCredPill() {
+  const typeEl = document.getElementById('inp-cred-type');
+  const val = typeEl ? typeEl.value : '';
+  state.credType = val;
+  const pillText = document.getElementById('pill-text');
+  const pillBg   = document.getElementById('pill-bg');
+  const credPrev = document.getElementById('cred-pill-preview');
+
+  if (val) {
+    pillText.setAttribute('fill', '#b8860b');
+    pillText.textContent = val;
+    pillBg.setAttribute('fill','#f8f0dc');
+    pillBg.setAttribute('stroke','#b8860b');
+    if (credPrev) credPrev.textContent = val;
+    // Show ring on marker
+    document.getElementById('ring-main').setAttribute('stroke','#b8860b');
+    document.getElementById('ring-main').setAttribute('stroke-width','2.5');
+    document.getElementById('ring-inner').setAttribute('stroke','#e8c84a');
+    document.getElementById('ring-inner').setAttribute('stroke-width','1.5');
+    document.getElementById('glow-mid').setAttribute('stroke','rgba(184,134,11,0.3)');
+    document.getElementById('glow-mid').setAttribute('stroke-width','8');
+    document.getElementById('glow-outer').setAttribute('stroke','rgba(184,134,11,0.15)');
+    document.getElementById('glow-outer').setAttribute('stroke-width','10');
+  } else {
+    pillText.setAttribute('fill','rgba(255,255,255,0.2)');
+    pillText.textContent = '—';
+    pillBg.setAttribute('fill','rgba(255,255,255,0.06)');
+    pillBg.setAttribute('stroke','rgba(255,255,255,0.12)');
+    if (credPrev) credPrev.textContent = '—';
+    document.getElementById('ring-main').setAttribute('stroke','transparent');
+    document.getElementById('ring-inner').setAttribute('stroke','transparent');
+    document.getElementById('glow-mid').setAttribute('stroke','rgba(27,58,107,0.0)');
+    document.getElementById('glow-outer').setAttribute('stroke','rgba(27,58,107,0.0)');
+  }
+}
+
+// selectOcc replaced by dual-path system
+
+function selectOcc2(btn, name, cat) {
+  document.querySelectorAll('#occ-grid-secondary .occ-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  state.occ2 = name; state.occ2Cat = cat;
+  const toggle = document.getElementById('dual-occ-toggle');
+  toggle.textContent = '✓ Second: ' + name + '  (tap to change)';
+  updatePreview();
+}
+
+let dualOccOpen = false;
+function toggleDualOcc() {
+  dualOccOpen = !dualOccOpen;
+  const grid = document.getElementById('occ-grid-secondary');
+  grid.style.display = dualOccOpen ? 'flex' : 'none';
+}
+
+let retired = false;
+function toggleRetired() {
+  retired = !retired;
+  state.retired = retired;
+  const row = document.getElementById('retired-row');
+  const check = document.getElementById('retired-check');
+  row.classList.toggle('on', retired);
+  check.innerHTML = retired ? '<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' : '';
+  updatePreview();
+}
+
+// ── Military ───────────────────────────────────────────────────────────────
+function selectMil(btn, val) {
+  btn.closest('.radio-list').querySelectorAll('.radio-row').forEach(r=>r.classList.remove('on'));
+  btn.classList.add('on');
+  state.mil = val;
+  const detail = document.getElementById('mil-detail');
+  detail.style.display = val==='yes' ? 'flex' : 'none';
+  if (val==='yes') detail.style.flexDirection = 'column';
+  updatePreview();
+}
+
+// ── Tags ───────────────────────────────────────────────────────────────────
+const UNION_TAGS = ['IBEW (Electricians)','UAW (Auto workers)','SEIU','Teamsters (IBT)'];
+function toggleTag(el) {
+  el.classList.toggle('on');
+  // Show union verify fields if any union tag is selected
+  const anyUnion = Array.from(document.querySelectorAll('.tag.on'))
+    .some(t => UNION_TAGS.includes(t.textContent.trim()));
+  const wrap = document.getElementById('union-verify-wrap');
+  wrap.style.display = anyUnion ? 'flex' : 'none';
+  if (anyUnion) wrap.style.flexDirection = 'column';
+  updatePreview();
+}
+
+// ── Credential path ────────────────────────────────────────────────────────
+function selectCredPath(btn, path) {
+  // no-op — union path removed, no branching needed in section G
+}
+
+// ── Submit ─────────────────────────────────────────────────────────────────
+function submitIdentity() {
+  const occ = state.occ1 || 'Registered Member';
+  const y = parseInt(document.getElementById('inp-doby').value);
+  const ar = ageRange(y) || '—';
+  const city = document.getElementById('inp-city').value;
+  const st   = document.getElementById('inp-state').value;
+  const loc  = city ? (st ? `${city} ${st.toUpperCase()}` : city) : '—';
+  let display = state.retired ? 'Retired ' + occ : occ;
+  if (state.occ2) display += ' & ' + state.occ2;
+
+  document.getElementById('comp-identity-tag').textContent = `${display} · ${ar} · ${loc}`;
+
+  const pill = document.getElementById('comp-pill');
+  if (state.credType) {
+    pill.textContent = state.credType;
+    pill.setAttribute('fill','#8b6914');
+  } else {
+    pill.textContent = 'NA';
+    pill.setAttribute('fill','rgba(255,255,255,0.3)');
+  }
+
+  document.getElementById('completion').classList.add('show');
+}
+
+// ── UPDATE ALL CARD TEMPLATES ───────────────────────────────────────────────
+function updateAllCards() {
+  const y    = parseInt(document.getElementById('inp-doby').value);
+  const ar   = ageRange(y) || '—';
+  const city = document.getElementById('inp-city').value;
+  const st   = document.getElementById('inp-state').value;
+  const loc  = city ? (st ? city + ' ' + st.toUpperCase() : city) : '—';
+
+  let occDisplay = state.occ1 || '—';
+  if (state.occ1 && state.retired) occDisplay = 'Retired ' + state.occ1;
+  if (state.occ1 && state.occ2)    occDisplay = state.occ1 + ' & ' + state.occ2;
+
+  const credType   = document.getElementById('inp-cred-type') ? document.getElementById('inp-cred-type').value : '';
+  const pillVal    = credType || '—';
+  const hasCred    = !!credType;
+  const branch     = (document.getElementById('inp-branch') || {}).value || '';
+  const ribbonData = BRANCH_RIBBONS[branch];
+  const hasRibbon  = ribbonData && state.mil === 'yes';
+  const subLine    = [ar !== '—' ? ar : null, loc !== '—' ? loc : null].filter(Boolean).join(' · ') || '—';
+
+  function s(id, attr, val) { const el = document.getElementById(id); if (el) el.setAttribute(attr, val); }
+  function t(id, val)        { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+  function ring(rId, g1, g2, pbId, ptId) {
+    if (hasCred) {
+      s(rId,'stroke','#b8860b'); s(rId,'stroke-width','2.5');
+      if (g1) { s(g1,'stroke','rgba(184,134,11,0.28)'); s(g1,'stroke-width','8'); }
+      if (g2) { s(g2,'stroke','rgba(184,134,11,0.14)'); s(g2,'stroke-width','10'); }
+      s(pbId,'fill','#f8f0dc'); s(pbId,'stroke','#b8860b');
+      s(ptId,'fill','#8b6914');
+    } else {
+      s(rId,'stroke','transparent'); s(rId,'stroke-width','0');
+      if (g1) { s(g1,'stroke','rgba(184,134,11,0)'); s(g1,'stroke-width','0'); }
+      if (g2) { s(g2,'stroke','rgba(184,134,11,0)'); s(g2,'stroke-width','0'); }
+      s(pbId,'fill','rgba(255,255,255,0.06)'); s(pbId,'stroke','rgba(255,255,255,0.12)');
+      s(ptId,'fill','rgba(255,255,255,0.2)');
+    }
+    t(ptId, pillVal);
+  }
+
+  function ribbon(bg, c1, c2, c3, c4) {
+    if (hasRibbon) {
+      s(bg,'fill',ribbonData.bg);
+      [c1,c2,c3,c4].forEach((id,i) => s(id,'fill',ribbonData.c[i]));
+    } else {
+      [bg,c1,c2,c3,c4].forEach(id => s(id,'fill','transparent'));
+    }
+  }
+
+  // Card 1 — Franchise
+  t('cf-identity', occDisplay);
+  t('cf-region',   loc);
+  t('cf-occ',      hasCred ? occDisplay + ' · ' + credType : occDisplay);
+  ring('cf-ring','cf-glow-m','cf-glow-o','cf-pill-bg','cf-pill');
+  ribbon('cf-rib-bg','cf-rib-1','cf-rib-2','cf-rib-3','cf-rib-4');
+
+  // Card 2 — Tome
+  t('ct-identity', occDisplay);
+  t('ct-cred',     hasCred ? credType + ' · ' + ar : ar);
+  t('ct-type',     'Civic Actor' + (occDisplay !== '—' ? ' — ' + occDisplay : ''));
+  ring('ct-ring','ct-glow',null,'ct-pill-bg','ct-pill');
+  ribbon('ct-rib-bg','ct-rib-1','ct-rib-2','ct-rib-3','ct-rib-4');
+
+  // Card 3 — Field Guide
+  t('cfg-identity', occDisplay);
+  const cfgType = document.getElementById('cfg-type');
+  if (cfgType) cfgType.textContent = occDisplay !== '—' ? occDisplay.split(' ')[0] : '—';
+  const cfgMeta = document.getElementById('cfg-meta');
+  if (cfgMeta) cfgMeta.textContent = subLine + ' · 2026';
+  ring('cfg-ring','cfg-glow',null,'cfg-pill-bg','cfg-pill');
+  ribbon('cfg-rib-bg','cfg-rib-1','cfg-rib-2','cfg-rib-3','cfg-rib-4');
+
+  // Card 4 — Blueprint
+  t('cbp-identity', occDisplay);
+  t('cbp-subtitle', hasCred ? credType + ' · ' + subLine : subLine);
+  t('cbp-occ',      occDisplay);
+  t('cbp-loc',      loc);
+  ring('cbp-ring','cbp-glow',null,'cbp-pill-bg','cbp-pill');
+  ribbon('cbp-rib-bg','cbp-rib-1','cbp-rib-2','cbp-rib-3','cbp-rib-4');
+}
+
+// Init
+updatePreview();
+
+// ── SECTION D: DUAL PATH OCCUPATION ─────────────────────────────────────────
+
+// ── DATA ────────────────────────────────────────────────────────────────────
+const SECTORS = [
+  { letter:'א', roman:'Aleph', name:'Governance',           fn:'Direction of society',     layer:'order',    color:'#8b6000' },
+  { letter:'ב', roman:'Bet',   name:'Domestic Life',         fn:'The private sphere',       layer:'order',    color:'#7a5500' },
+  { letter:'ג', roman:'Gimel', name:'Trade & Transport',     fn:'Movement of goods',        layer:'systems',  color:'#1a3f7a' },
+  { letter:'ד', roman:'Dalet', name:'Access & Opportunity',  fn:'Entry points',             layer:'order',    color:'#6b3d00' },
+  { letter:'ה', roman:'He',    name:'Knowledge & Discovery', fn:'Revealing truth',          layer:'knowledge',color:'#1a5c30' },
+  { letter:'ו', roman:'Vav',   name:'Infrastructure',        fn:'Connection systems',       layer:'systems',  color:'#163278' },
+  { letter:'ז', roman:'Zayin', name:'Defense & Food',        fn:'Survival systems',         layer:'survival', color:'#6b1a1a' },
+  { letter:'ח', roman:'Chet',  name:'Law & Boundaries',      fn:'Societal boundaries',      layer:'order',    color:'#5c3800' },
+  { letter:'ט', roman:'Tet',   name:'Engineering & Tech',    fn:'Complex systems',          layer:'systems',  color:'#12296e' },
+  { letter:'י', roman:'Yod',   name:'Labor & Craft',         fn:'Manual creation',          layer:'survival', color:'#7a1212' },
+  { letter:'כ', roman:'Kaph',  name:'Care & Welfare',        fn:'Holding and supporting',   layer:'systems',  color:'#0f5060' },
+  { letter:'ל', roman:'Lamed', name:'Education & Wisdom',    fn:'Teaching and guiding',     layer:'knowledge',color:'#145028' },
+  { letter:'מ', roman:'Mem',   name:'Resources & Finance',   fn:'Flow of resources',        layer:'survival', color:'#5e1010' },
+  { letter:'נ', roman:'Nun',   name:'Life Sciences',         fn:'Life systems',             layer:'survival', color:'#500e0e' },
+  { letter:'ס', roman:'Samech',name:'Maintenance',           fn:'Keeping systems running',  layer:'systems',  color:'#0d3060' },
+  { letter:'ע', roman:'Ayin',  name:'Observation & Analysis',fn:'Seeing patterns',          layer:'knowledge',color:'#0e4020' },
+  { letter:'פ', roman:'Pe',    name:'Communication',         fn:'Speech and persuasion',    layer:'knowledge',color:'#0a3818' },
+  { letter:'צ', roman:'Tsade', name:'Service & Justice',     fn:'Responding to needs',      layer:'order',    color:'#4a2e00' },
+  { letter:'ק', roman:'Qoph',  name:'Time & Planning',       fn:'Long-term thinking',       layer:'order',    color:'#3a2400' },
+  { letter:'ר', roman:'Resh',  name:'Identity & Leadership', fn:'Initiating new identity',  layer:'knowledge',color:'#083010' },
+  { letter:'ש', roman:'Shin',  name:'Transformation',        fn:'Changing materials',       layer:'survival', color:'#3c0a0a' },
+  { letter:'ת', roman:'Tav',   name:'Record & Certification',fn:'Finalizing systems',       layer:'order',    color:'#2e1c00' },
+];
+
+const LAYER_ACCENT = { survival:'#ff8080', systems:'#80b0ff', knowledge:'#9FE1CB', order:'#d4a832' };
+
+const SECTOR_ROLES = {
+  'Chet':    { roles:['Lawyer (ESQ)','Judge','Architect (RA)','Urban Planner','Compliance Officer','Regulator','Land Use Attorney'], soc:'17-1011 23-1011' },
+  'Tet':     { roles:['Civil Engineer (PE)','Mechanical Engineer','Electrical Engineer','Software Engineer','Systems Analyst','Industrial Designer'], soc:'17-2051 17-2071 17-2141' },
+  'Yod':     { roles:['Master Electrician','Journeyman Electrician','Master Plumber','HVAC Tech','Carpenter','Welder','Construction Worker'], soc:'47-2111 47-2152' },
+  'Kaph':    { roles:['Registered Nurse (RN)','Physician (MD/DO)','Nurse Practitioner','Physical Therapist','Social Worker','EMT/Paramedic'], soc:'29-1141 29-1171' },
+  'Lamed':   { roles:['K–12 Teacher','University Faculty','School Administrator','Librarian','Coach/Mentor','Curriculum Developer'], soc:'25-2021 25-1099' },
+  'Mem':     { roles:['CPA / Accountant','CFP / Financial Planner','Investment Analyst (CFA)','Banker','Insurance Underwriter','Economist'], soc:'13-2011 13-2052' },
+  'Aleph':   { roles:['Elected Official','Appointed Official','Military Officer','Police Chief','Government Executive','Ambassador'], soc:'11-1031 55-1010' },
+  'He':      { roles:['Research Scientist','Journalist/Reporter','Documentary Maker','Investigative Journalist','Science Writer'], soc:'27-3021 19-1042' },
+  'Pe':      { roles:['Reporter','Editor','Broadcaster','PR Specialist','Marketing Director','Public Speaker','Copywriter'], soc:'27-3021 27-3031' },
+  'Ayin':    { roles:['Data Scientist','Detective','Auditor','Intelligence Analyst','Market Research Analyst','Forensic Accountant'], soc:'15-2051 33-3021' },
+  'Zayin':   { roles:['Active Duty Military','Farmer/Rancher','Police Officer','Security Professional','Corrections Officer'], soc:'55-1010 45-2099' },
+  'Gimel':   { roles:['Truck Driver','Logistics Manager','Supply Chain Analyst','Shipping Coordinator','Import/Export Specialist'], soc:'53-3032 13-1081' },
+};
+
+const SOC_FULL = [
+  { code:'17-1011', title:'Architects, Except Landscape and Naval', group:'Architecture & Engineering', workers:'128,800', sectors:['Chet','Tet'] },
+  { code:'17-2051', title:'Civil Engineers', group:'Architecture & Engineering', workers:'329,200', sectors:['Tet','Chet'] },
+  { code:'17-2071', title:'Electrical Engineers', group:'Architecture & Engineering', workers:'188,300', sectors:['Tet'] },
+  { code:'17-2141', title:'Mechanical Engineers', group:'Architecture & Engineering', workers:'303,400', sectors:['Tet'] },
+  { code:'11-9021', title:'Construction Managers', group:'Management', workers:'471,800', sectors:['Chet','Tet'] },
+  { code:'23-1011', title:'Lawyers', group:'Legal', workers:'813,900', sectors:['Chet'] },
+  { code:'29-1141', title:'Registered Nurses', group:'Healthcare Practitioners', workers:'3,130,600', sectors:['Kaph','Nun'] },
+  { code:'29-1171', title:'Nurse Practitioners', group:'Healthcare Practitioners', workers:'234,900', sectors:['Kaph','Nun'] },
+  { code:'29-1062', title:'Family Medicine Physicians', group:'Healthcare Practitioners', workers:'124,900', sectors:['Kaph','Nun'] },
+  { code:'13-2011', title:'Accountants and Auditors', group:'Business & Financial', workers:'1,392,200', sectors:['Mem','Ayin'] },
+  { code:'13-2052', title:'Personal Financial Advisors', group:'Business & Financial', workers:'271,700', sectors:['Mem'] },
+  { code:'25-2021', title:'Elementary School Teachers', group:'Education', workers:'1,462,700', sectors:['Lamed'] },
+  { code:'25-1099', title:'Postsecondary Teachers, All Other', group:'Education', workers:'622,400', sectors:['Lamed','He'] },
+  { code:'47-2111', title:'Electricians', group:'Construction & Extraction', workers:'739,200', sectors:['Yod'] },
+  { code:'47-2152', title:'Plumbers, Pipefitters, and Steamfitters', group:'Construction & Extraction', workers:'480,600', sectors:['Yod'] },
+  { code:'15-2051', title:'Data Scientists', group:'Computer & Mathematical', workers:'168,900', sectors:['Ayin','Tet'] },
+  { code:'15-1252', title:'Software Developers', group:'Computer & Mathematical', workers:'1,847,900', sectors:['Tet'] },
+  { code:'27-3021', title:'Reporters and Correspondents', group:'Arts, Design, Entertainment', workers:'40,600', sectors:['Pe','He'] },
+  { code:'11-1031', title:'Legislators', group:'Management', workers:'55,200', sectors:['Aleph'] },
+  { code:'35-3031', title:'Waiters and Waitresses', group:'Food Preparation & Serving', workers:'2,079,700', sectors:['Tsade','Shin'] },
+  { code:'11-1021', title:'General and Operations Managers', group:'Management', workers:'3,109,200', sectors:['Aleph','Tet'] },
+  { code:'13-1111', title:'Management Analysts', group:'Business & Financial', workers:'876,300', sectors:['Tet','Mem'] },
+  { code:'19-1042', title:'Medical Scientists', group:'Life, Physical & Social Science', workers:'136,400', sectors:['Nun','He'] },
+  { code:'33-3051', title:'Police and Sheriff Patrol Officers', group:'Protective Service', workers:'667,700', sectors:['Zayin','Aleph'] },
+  { code:'33-2011', title:'Firefighters', group:'Protective Service', workers:'327,300', sectors:['Zayin'] },
+];
+
+
+
+// Path switcher
+function dChoosePath(p) {
+  document.getElementById('d-path-a-card').classList.toggle('active', p==='a');
+  document.getElementById('d-path-b-card').classList.toggle('active', p==='b');
+  document.getElementById('d-path-a').classList.toggle('show', p==='a');
+  document.getElementById('d-path-b').classList.toggle('show', p==='b');
+}
+
+// Build sector grid (d-prefixed)
+function dBuildSectorGrid() {
+  const grid = document.getElementById('d-sector-grid');
+  if (!grid) return;
+  const LAYER_LABELS = { survival:'Physical survival', systems:'Systems & infrastructure', knowledge:'Knowledge & culture', order:'Order & governance' };
+  const LAYER_STYLES = {
+    survival:  { bg:'rgba(139,26,26,0.15)',  border:'rgba(139,26,26,0.35)',  tag:'rgba(139,26,26,0.35)',  tagTxt:'#ff8080' },
+    systems:   { bg:'rgba(26,79,160,0.15)',  border:'rgba(26,79,160,0.35)',  tag:'rgba(26,79,160,0.35)',  tagTxt:'#80b0ff' },
+    knowledge: { bg:'rgba(26,107,53,0.15)', border:'rgba(26,107,53,0.35)', tag:'rgba(26,107,53,0.35)', tagTxt:'#9FE1CB' },
+    order:     { bg:'rgba(139,107,0,0.15)', border:'rgba(139,107,0,0.35)', tag:'rgba(139,107,0,0.35)', tagTxt:'#d4a832' },
+  };
+  SECTORS.forEach(s => {
+    const ls = LAYER_STYLES[s.layer];
+    const tile = document.createElement('div');
+    tile.className = 'sec-tile';
+    tile.style.background = ls.bg;
+    tile.style.borderColor = ls.border;
+    tile.innerHTML = `<span class="sec-layer-tag" style="background:${ls.tag};color:${ls.tagTxt};border:1px solid ${ls.tagTxt}44;">${LAYER_LABELS[s.layer]}</span><div class="sec-name">${s.name}</div><div class="sec-fn">${s.fn}</div>`;
+    tile.addEventListener('click', () => dSelectSector(s, tile, ls.tagTxt));
+    grid.appendChild(tile);
+  });
+}
+
+function dSelectSector(s, tile, accent) {
+  document.querySelectorAll('#d-sector-grid .sec-tile').forEach(t => t.classList.remove('on'));
+  tile.classList.add('on');
+  document.getElementById('d-b-step-1').classList.add('hidden');
+  document.getElementById('d-b-step-2').classList.remove('hidden');
+  document.getElementById('d-step2-bc').innerHTML = `<span class="step2-bc-name" style="color:${accent};">${s.name}</span><span style="color:rgba(255,255,255,0.2);margin:0 8px;">·</span><span class="step2-bc-fn">${s.fn}</span>`;
+  const sd = SECTOR_ROLES[s.roman] || { roles:['Other — describe below'] };
+  const chipsEl = document.getElementById('d-role-chips');
+  chipsEl.innerHTML = sd.roles.map(r => {
+    const isLic = /\(PE\)|\(ESQ\)|\(MD|\(RN\)|\(RA\)|\(CPA\)|\(CFP\)|\(CFA\)/.test(r);
+    const badge = isLic ? `<span class="rc-badge" style="background:rgba(184,134,11,0.2);border:1px solid rgba(184,134,11,0.4);color:var(--gilt-lt);">Licensed</span>` : '';
+    return `<div class="role-chip" onclick="dSelectRole(this,'${r.replace(/'/g,"\\'")}')"><span class="rc-name">${r}</span>${badge}</div>`;
+  }).join('');
+  dPopulateSocForSector(s.roman);
+}
+
+function dBackToStep1() {
+  document.getElementById('d-b-step-2').classList.add('hidden');
+  document.getElementById('d-b-step-1').classList.remove('hidden');
+}
+
+function dSelectRole(el, role) {
+  document.querySelectorAll('#d-role-chips .role-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('#d-soc-results .soc-res-item').forEach(i => i.classList.remove('on'));
+  // Set occ1 and trigger preview
+  state.occ1 = role;
+  state.occ1Cat = role.toLowerCase().replace(/[^a-z]/g,'_');
+  document.getElementById('dual-occ-toggle').style.display = 'block';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+
+function dPopulateSocForSector(roman) {
+  const matches = SOC_FULL.filter(s => s.sectors.includes(roman));
+  dRenderSocResults(matches, '');
+}
+
+function dSocSearch(q) {
+  const ql = q.toLowerCase().trim();
+  if (!ql) { dPopulateSocForSector(''); return; }
+  const hits = SOC_FULL.filter(s => s.title.toLowerCase().includes(ql) || s.code.includes(ql) || s.group.toLowerCase().includes(ql)).slice(0,10);
+  dRenderSocResults(hits, ql);
+}
+
+function dRenderSocResults(items, q) {
+  const el = document.getElementById('d-soc-results');
+  if (!items.length) { el.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.2);padding:8px 0;font-style:italic;">No matches — try a different term</div>'; return; }
+  el.innerHTML = items.map((s, i) => {
+    const hi = q ? s.title.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>') : s.title;
+    return `<div class="soc-res-item" onclick="dSelectSocItem(${SOC_FULL.indexOf(s)})"><div class="soc-res-title">${hi}</div><div class="soc-res-meta"><span class="soc-res-code">${s.code}</span><span class="soc-res-workers">${s.workers} US workers</span></div></div>`;
+  }).join('');
+}
+
+function dSelectSocItem(idx) {
+  const s = SOC_FULL[idx];
+  document.querySelectorAll('#d-soc-results .soc-res-item').forEach((item, i) => item.classList.toggle('on', i === idx));
+  document.querySelectorAll('#d-role-chips .role-chip').forEach(c => c.classList.remove('on'));
+  state.occ1 = s.title;
+  state.occ1Cat = s.group.toLowerCase().replace(/[^a-z]/g,'_');
+  document.getElementById('dual-occ-toggle').style.display = 'block';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+
+// AI interpreter
+const D_INTERP_DATA = {
+  default:     { identity:'Licensed Architect & Project Manager', soc:'SOC 17-1011 Architects · SOC 11-9021 Construction Managers', tags:[{l:'Licensed RA',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},{l:'Engineering',c:'rgba(26,79,160,0.2)',b:'rgba(26,79,160,0.4)',t:'#80b0ff'},{l:'Management',c:'rgba(26,107,53,0.2)',b:'rgba(26,107,53,0.4)',t:'#9FE1CB'}], note:'FORA detected two occupational identities. Your licensed credential (Architecture) appears as your primary civic identity and unlocks the gold ring path. Your management role appears as secondary.' },
+  nurse:       { identity:'Registered Nurse (Retired) · Volunteer Clinician', soc:'SOC 29-1141 Registered Nurses', tags:[{l:'Licensed RN',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},{l:'Healthcare',c:'rgba(139,26,26,0.2)',b:'rgba(139,26,26,0.4)',t:'#ff8080'},{l:'Retired',c:'rgba(90,100,120,0.2)',b:'rgba(90,100,120,0.4)',t:'rgba(255,255,255,0.5)'}], note:'FORA detected a licensed RN credential, retired status, and ongoing civic participation. Your identity displays as Retired RN. Gold ring verification path remains available.' },
+  server:      { identity:'Food Service Worker · Pursuing Screenwriting', soc:'SOC 35-3031 Waiters & Waitresses · Arts & Media noted', tags:[{l:'Service · Tsade',c:'rgba(26,107,53,0.2)',b:'rgba(26,107,53,0.4)',t:'#9FE1CB'},{l:'Creative (self-reported)',c:'rgba(74,31,122,0.2)',b:'rgba(74,31,122,0.4)',t:'#c080ff'}], note:'FORA detected a primary income occupation and a pursued creative career. A server has direct civic standing on wage policy, tipping legislation, and labor classification.' },
+  electrician: { identity:'Union Electrician (IBEW) · Master Electrician', soc:'SOC 47-2111 Electricians', tags:[{l:'Union IBEW',c:'rgba(26,79,160,0.2)',b:'rgba(26,79,160,0.4)',t:'#80b0ff'},{l:'Licensed ME',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'}], note:'FORA detected both union membership (IBEW) and a state license (Master Electrician). Union membership goes to Section F; state license unlocks the gold ring in Section G.' },
+};
+
+function dFillEx(el) {
+  document.getElementById('d-interp-ta').value = el.textContent;
+  dInterpInput();
+}
+function dInterpInput() {
+  document.getElementById('d-interp-result').classList.remove('show');
+}
+function dRunInterp() {
+  const txt = document.getElementById('d-interp-ta').value.trim();
+  if (!txt) { document.getElementById('d-interp-ta').focus(); return; }
+  document.getElementById('d-interp-result').classList.remove('show');
+  document.getElementById('d-thinking').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('d-thinking').classList.remove('show');
+    const lower = txt.toLowerCase();
+    let data = D_INTERP_DATA.default;
+    if ((lower.includes('nurse')||lower.includes(' rn'))&&!lower.includes('architect')) data = D_INTERP_DATA.nurse;
+    else if ((lower.includes('server')||lower.includes('waiter')||lower.includes('bartend'))&&!lower.includes('architect')) data = D_INTERP_DATA.server;
+    else if (lower.includes('electrician')||lower.includes('ibew')) data = D_INTERP_DATA.electrician;
+    document.getElementById('d-ir-identity').textContent = data.identity;
+    document.getElementById('d-ir-soc').textContent = data.soc;
+    document.getElementById('d-ir-tags').innerHTML = data.tags.map(t => `<span class="ir-tag" style="background:${t.c};border:1px solid ${t.b};color:${t.t};">${t.l}</span>`).join('');
+    document.getElementById('d-ir-note').textContent = data.note;
+    document.getElementById('d-interp-result').classList.add('show');
+  }, 1400);
+}
+function dConfirmInterp() {
+  const id = document.getElementById('d-ir-identity').textContent;
+  state.occ1 = id;
+  document.getElementById('dual-occ-toggle').style.display = 'block';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+function dResetInterp() {
+  document.getElementById('d-interp-result').classList.remove('show');
+  document.getElementById('d-interp-ta').focus();
+}
+
+// Init sector grid
+dBuildSectorGrid();
+// ── END SECTION D ──────────────────────────────────────────────────────────
+
+
+// ── SECTION D: DUAL PATH OCCUPATION ──────────────────────────────────────
+const D_SECTORS = [
+  {roman:'Aleph',name:'Governance',          fn:'Direction of society',     layer:'order'   },
+  {roman:'Bet',  name:'Domestic Life',         fn:'The private sphere',       layer:'order'   },
+  {roman:'Gimel',name:'Trade & Transport',     fn:'Movement of goods',        layer:'systems' },
+  {roman:'Dalet',name:'Access & Opportunity',  fn:'Entry points',             layer:'order'   },
+  {roman:'He',   name:'Knowledge & Discovery', fn:'Revealing truth',          layer:'knowledge'},
+  {roman:'Vav',  name:'Infrastructure',        fn:'Connection systems',       layer:'systems' },
+  {roman:'Zayin',name:'Defense & Food',        fn:'Survival systems',         layer:'survival'},
+  {roman:'Chet', name:'Law & Boundaries',      fn:'Societal boundaries',      layer:'order'   },
+  {roman:'Tet',  name:'Engineering & Tech',    fn:'Complex systems',          layer:'systems' },
+  {roman:'Yod',  name:'Labor & Craft',         fn:'Manual creation',          layer:'survival'},
+  {roman:'Kaph', name:'Care & Welfare',        fn:'Holding and supporting',   layer:'systems' },
+  {roman:'Lamed',name:'Education & Wisdom',    fn:'Teaching and guiding',     layer:'knowledge'},
+  {roman:'Mem',  name:'Resources & Finance',   fn:'Flow of resources',        layer:'survival'},
+  {roman:'Nun',  name:'Life Sciences',         fn:'Life systems',             layer:'survival'},
+  {roman:'Samech',name:'Maintenance',          fn:'Keeping systems running',  layer:'systems' },
+  {roman:'Ayin', name:'Observation & Analysis',fn:'Seeing patterns',          layer:'knowledge'},
+  {roman:'Pe',   name:'Communication',         fn:'Speech and persuasion',    layer:'knowledge'},
+  {roman:'Tsade',name:'Service & Justice',     fn:'Responding to needs',      layer:'order'   },
+  {roman:'Qoph', name:'Time & Planning',       fn:'Long-term thinking',       layer:'order'   },
+  {roman:'Resh', name:'Identity & Leadership', fn:'Initiating new identity',  layer:'knowledge'},
+  {roman:'Shin', name:'Transformation',        fn:'Changing materials',       layer:'survival'},
+  {roman:'Tav',  name:'Record & Certification',fn:'Finalizing systems',       layer:'order'   },
+];
+
+const D_LAYER_STYLES = {
+  survival: {bg:'rgba(139,26,26,0.15)', border:'rgba(139,26,26,0.35)', tag:'rgba(139,26,26,0.35)', tagTxt:'#ff8080',  label:'Physical survival'},
+  systems:  {bg:'rgba(26,79,160,0.15)', border:'rgba(26,79,160,0.35)', tag:'rgba(26,79,160,0.35)', tagTxt:'#80b0ff',  label:'Systems & infrastructure'},
+  knowledge:{bg:'rgba(26,107,53,0.15)',border:'rgba(26,107,53,0.35)',tag:'rgba(26,107,53,0.35)',tagTxt:'#9FE1CB', label:'Knowledge & culture'},
+  order:    {bg:'rgba(139,107,0,0.15)', border:'rgba(139,107,0,0.35)', tag:'rgba(139,107,0,0.35)', tagTxt:'#d4a832',  label:'Order & governance'},
+};
+
+const D_SECTOR_ROLES = {
+  Chet:  {roles:['Lawyer (ESQ)','Judge','Architect (RA)','Urban Planner','Compliance Officer','Regulator','Land Use Attorney']},
+  Tet:   {roles:['Civil Engineer (PE)','Mechanical Engineer','Electrical Engineer','Software Engineer','Systems Analyst','Industrial Designer']},
+  Yod:   {roles:['Master Electrician','Journeyman Electrician','Master Plumber','HVAC Tech','Carpenter','Welder','Construction Worker']},
+  Kaph:  {roles:['Registered Nurse (RN)','Physician (MD/DO)','Nurse Practitioner','Physical Therapist','Social Worker','EMT/Paramedic']},
+  Lamed: {roles:['K-12 Teacher','University Faculty','School Administrator','Librarian','Coach/Mentor']},
+  Mem:   {roles:['CPA / Accountant','CFP / Financial Planner','Investment Analyst (CFA)','Banker','Insurance Underwriter','Economist']},
+  Aleph: {roles:['Elected Official','Appointed Official','Military Officer','Police Chief','Government Executive']},
+  He:    {roles:['Research Scientist','Journalist/Reporter','Documentary Maker','Science Writer','Editor']},
+  Pe:    {roles:['Reporter','Editor','Broadcaster','PR Specialist','Marketing Director','Public Speaker']},
+  Ayin:  {roles:['Data Scientist','Detective','Auditor','Intelligence Analyst','Market Research Analyst']},
+  Zayin: {roles:['Active Duty Military','Farmer/Rancher','Police Officer','Security Professional']},
+  Gimel: {roles:['Truck Driver','Logistics Manager','Supply Chain Analyst','Shipping Coordinator']},
+  Tsade: {roles:['Restaurant/Food Service','Retail Worker','Customer Support','Emergency Responder','Consultant']},
+  Shin:  {roles:['Chef/Cook','Manufacturer','Chemist','Metallurgist','Brewer/Distiller']},
+  Nun:   {roles:['Biologist','Doctor (research)','Veterinarian','Environmental Scientist','Ecologist']},
+  Resh:  {roles:['Entrepreneur','Artist','Inventor','Founder','Creative Director']},
+  Bet:   {roles:['Property Manager','HR Professional','Office Manager','Household Manager','Hospitality Manager']},
+  Vav:   {roles:['Network Engineer','Diplomat','Social Worker','Community Organizer','Partnerships Manager']},
+  Dalet: {roles:['Recruiter','Admissions Officer','Salesperson','Real Estate Agent','Border Agent']},
+  Samech:{roles:['IT Support','Maintenance Worker','Infrastructure Engineer','Customer Support Specialist']},
+  Qoph:  {roles:['Strategist','Urban Planner','Futurist','Historian','Environmental Planner']},
+  Tav:   {roles:['Notary','Regulator','Inspector','Archivist','Records Manager']},
+};
+
+const D_SOC = [
+  {code:'17-1011',title:'Architects, Except Landscape and Naval',group:'Architecture & Engineering',workers:'128,800',sectors:['Chet','Tet']},
+  {code:'17-2051',title:'Civil Engineers',group:'Architecture & Engineering',workers:'329,200',sectors:['Tet','Chet']},
+  {code:'17-2071',title:'Electrical Engineers',group:'Architecture & Engineering',workers:'188,300',sectors:['Tet']},
+  {code:'17-2141',title:'Mechanical Engineers',group:'Architecture & Engineering',workers:'303,400',sectors:['Tet']},
+  {code:'11-9021',title:'Construction Managers',group:'Management',workers:'471,800',sectors:['Chet','Tet']},
+  {code:'23-1011',title:'Lawyers',group:'Legal',workers:'813,900',sectors:['Chet']},
+  {code:'29-1141',title:'Registered Nurses',group:'Healthcare Practitioners',workers:'3,130,600',sectors:['Kaph','Nun']},
+  {code:'29-1171',title:'Nurse Practitioners',group:'Healthcare Practitioners',workers:'234,900',sectors:['Kaph']},
+  {code:'29-1062',title:'Family Medicine Physicians',group:'Healthcare Practitioners',workers:'124,900',sectors:['Kaph','Nun']},
+  {code:'13-2011',title:'Accountants and Auditors',group:'Business & Financial',workers:'1,392,200',sectors:['Mem','Ayin']},
+  {code:'13-2052',title:'Personal Financial Advisors',group:'Business & Financial',workers:'271,700',sectors:['Mem']},
+  {code:'25-2021',title:'Elementary School Teachers',group:'Education',workers:'1,462,700',sectors:['Lamed']},
+  {code:'25-1099',title:'Postsecondary Teachers',group:'Education',workers:'622,400',sectors:['Lamed','He']},
+  {code:'47-2111',title:'Electricians',group:'Construction & Extraction',workers:'739,200',sectors:['Yod']},
+  {code:'47-2152',title:'Plumbers, Pipefitters, and Steamfitters',group:'Construction & Extraction',workers:'480,600',sectors:['Yod']},
+  {code:'15-2051',title:'Data Scientists',group:'Computer & Mathematical',workers:'168,900',sectors:['Ayin','Tet']},
+  {code:'15-1252',title:'Software Developers',group:'Computer & Mathematical',workers:'1,847,900',sectors:['Tet']},
+  {code:'27-3021',title:'Reporters and Correspondents',group:'Arts, Design, Entertainment',workers:'40,600',sectors:['Pe','He']},
+  {code:'11-1031',title:'Legislators',group:'Management',workers:'55,200',sectors:['Aleph']},
+  {code:'35-3031',title:'Waiters and Waitresses',group:'Food Preparation & Serving',workers:'2,079,700',sectors:['Tsade','Shin']},
+  {code:'11-1021',title:'General and Operations Managers',group:'Management',workers:'3,109,200',sectors:['Aleph','Tet']},
+  {code:'13-1111',title:'Management Analysts',group:'Business & Financial',workers:'876,300',sectors:['Tet','Mem']},
+  {code:'33-3051',title:'Police and Sheriff Patrol Officers',group:'Protective Service',workers:'667,700',sectors:['Zayin','Aleph']},
+  {code:'33-2011',title:'Firefighters',group:'Protective Service',workers:'327,300',sectors:['Zayin']},
+  {code:'35-1011',title:'Chefs and Head Cooks',group:'Food Preparation & Serving',workers:'155,900',sectors:['Shin','Tsade']},
+];
+
+// State for section D
+let dActivePath = 'a';
+let dSelectedSector = null;
+let dSelectedRole = null;
+let dSelectedSoc = null;
+let dInterpOk = false;
+
+function dChoosePath(p) {
+  dActivePath = p;
+  document.getElementById('d-path-a-card').classList.toggle('active', p==='a');
+  document.getElementById('d-path-b-card').classList.toggle('active', p==='b');
+  document.getElementById('d-path-a-content').style.display = p==='a' ? 'block' : 'none';
+  document.getElementById('d-path-b-content').style.display = p==='b' ? 'block' : 'none';
+  // Reset selections on switch
+  dSelectedRole = null; dSelectedSoc = null; dInterpOk = false;
+  state.occ1 = ''; updatePreview();
+}
+
+// ── Sector grid ──
+function dBuildSectorGrid() {
+  const grid = document.getElementById('d-sector-grid');
+  if (!grid || grid.children.length > 0) return;
+  D_SECTORS.forEach(s => {
+    const ls = D_LAYER_STYLES[s.layer];
+    const tile = document.createElement('div');
+    tile.className = 'sec-tile';
+    tile.style.background = ls.bg;
+    tile.style.borderColor = ls.border;
+    tile.title = s.fn;
+    tile.innerHTML = \`<span class="sec-layer-tag" style="background:\${ls.tag};color:\${ls.tagTxt};border:1px solid \${ls.tagTxt}44;">\${ls.label}</span><div class="sec-name">\${s.name}</div><div class="sec-fn">\${s.fn}</div>\`;
+    tile.addEventListener('click', () => dSelectSector(s, tile, ls.tagTxt));
+    grid.appendChild(tile);
+  });
+}
+
+function dSelectSector(s, tile, accent) {
+  document.querySelectorAll('#d-sector-grid .sec-tile').forEach(t => t.classList.remove('on'));
+  tile.classList.add('on');
+  dSelectedSector = s;
+  dShowStep2(s, accent);
+}
+
+function dShowStep2(s, accent) {
+  document.getElementById('d-b-step-1').style.display = 'none';
+  document.getElementById('d-b-step-2').style.display = 'block';
+  document.getElementById('d-step2-bc').innerHTML = \`<span class="step2-bc-name" style="color:\${accent};">\${s.name}</span><span style="color:rgba(255,255,255,0.2);margin:0 8px;">&middot;</span><span class="step2-bc-fn">\${s.fn}</span>\`;
+  // Curated roles
+  const rolesData = D_SECTOR_ROLES[s.roman] || {roles:['Other — describe below']};
+  const chipsEl = document.getElementById('d-role-chips');
+  chipsEl.innerHTML = rolesData.roles.map(r => {
+    const isLicensed = /\(PE\)|\(ESQ\)|\(MD|\(RN\)|\(RA\)|\(CPA\)|\(CFP\)|\(CFA\)/.test(r);
+    const badge = isLicensed ? \`<span class="rc-badge" style="background:rgba(184,134,11,0.2);border:1px solid rgba(184,134,11,0.4);color:var(--gilt-lt);">Licensed</span>\` : '';
+    return \`<div class="role-chip" onclick="dSelectRole(this,'\${r.replace(/'/g,"\\'")}')"><span class="rc-name">\${r}</span>\${badge}</div>\`;
+  }).join('');
+  // Pre-fill SOC for sector
+  dPopulateSoc(s.roman);
+}
+
+function dPopulateSoc(roman) {
+  const matches = D_SOC.filter(s => s.sectors.includes(roman));
+  dRenderSoc(matches, '');
+}
+
+function dSocSearch(q) {
+  const ql = q.toLowerCase().trim();
+  if (ql.length < 1) { dPopulateSoc(dSelectedSector ? dSelectedSector.roman : ''); return; }
+  const sector = dSelectedSector ? dSelectedSector.roman : null;
+  const pri = D_SOC.filter(s => (sector ? s.sectors.includes(sector) : true) && (s.title.toLowerCase().includes(ql)||s.code.includes(ql)));
+  const sec = D_SOC.filter(s => !(sector ? s.sectors.includes(sector) : false) && (s.title.toLowerCase().includes(ql)||s.code.includes(ql)));
+  dRenderSoc([...pri,...sec].slice(0,10), ql);
+}
+
+function dRenderSoc(items, q) {
+  const el = document.getElementById('d-soc-results');
+  if (!items.length) { el.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.2);padding:8px 0;font-style:italic;">No matches</div>'; return; }
+  el.innerHTML = items.map(s => {
+    const hi = q ? s.title.replace(new RegExp(\`(\${q})\`,'gi'),'<mark>$1</mark>') : s.title;
+    const on = dSelectedSoc && dSelectedSoc.code === s.code;
+    return \`<div class="soc-res-item\${on?' on':''}" onclick="dSelectSocItem('\${s.code}')"><div class="soc-res-title">\${hi}</div><div class="soc-res-meta"><span class="soc-res-code">\${s.code}</span><span class="soc-res-workers">\${s.workers} US workers</span></div></div>\`;
+  }).join('');
+}
+
+function dSelectRole(el, role) {
+  document.querySelectorAll('#d-role-chips .role-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  dSelectedRole = role; dSelectedSoc = null;
+  document.querySelectorAll('#d-soc-results .soc-res-item').forEach(i => i.classList.remove('on'));
+  state.occ1 = role; state.occ1Cat = dSelectedSector ? dSelectedSector.roman : '';
+  document.getElementById('d-second-occ-area').style.display = 'flex';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+
+function dSelectSocItem(code) {
+  const s = D_SOC.find(x => x.code === code);
+  if (!s) return;
+  dSelectedSoc = s; dSelectedRole = null;
+  document.querySelectorAll('#d-role-chips .role-chip').forEach(c => c.classList.remove('on'));
+  dRenderSoc(D_SOC.filter(x => dSelectedSector && x.sectors.includes(dSelectedSector.roman)), document.getElementById('d-soc-inp').value.toLowerCase());
+  document.querySelectorAll('#d-soc-results .soc-res-item').forEach(el => { el.classList.toggle('on', el.querySelector('.soc-res-code').textContent === code); });
+  state.occ1 = s.title; state.occ1Cat = dSelectedSector ? dSelectedSector.roman : '';
+  document.getElementById('d-second-occ-area').style.display = 'flex';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+
+function dBackToStep1() {
+  document.getElementById('d-b-step-2').style.display = 'none';
+  document.getElementById('d-b-step-1').style.display = 'block';
+  dSelectedRole = null; dSelectedSoc = null;
+  state.occ1 = ''; updatePreview();
+}
+
+// ── AI interpreter ──
+const D_INTERP = {
+  default: {identity:'Licensed Architect & Project Manager',soc:'Primary: SOC 17-1011 Architects · Secondary: SOC 11-9021 Construction Managers',tags:[{l:'Licensed RA',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},{l:'Engineering · Chet',c:'rgba(26,79,160,0.2)',b:'rgba(26,79,160,0.4)',t:'#80b0ff'},{l:'Management',c:'rgba(26,107,53,0.2)',b:'rgba(26,107,53,0.4)',t:'#9FE1CB'}],note:'FORA detected two occupational identities. Your licensed credential (Architecture) appears as your primary civic identity and unlocks the gold ring verification path.',occ:'Licensed Architect'},
+  nurse: {identity:'Registered Nurse (Retired) · Volunteer Clinician',soc:'Primary: SOC 29-1141 Registered Nurses',tags:[{l:'Licensed RN',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'},{l:'Healthcare · Kaph',c:'rgba(139,26,26,0.2)',b:'rgba(139,26,26,0.4)',t:'#ff8080'},{l:'Retired',c:'rgba(90,100,120,0.2)',b:'rgba(90,100,120,0.4)',t:'rgba(255,255,255,0.5)'}],note:'FORA detected a licensed credential (RN) and retired status. Your identity will display as Retired RN.',occ:'Retired RN'},
+  server: {identity:'Food Service Worker · Pursuing Screenwriting',soc:'Primary: SOC 35-3031 Waiters & Waitresses',tags:[{l:'Service industry',c:'rgba(26,107,53,0.2)',b:'rgba(26,107,53,0.4)',t:'#9FE1CB'},{l:'Creative (self-reported)',c:'rgba(74,31,122,0.2)',b:'rgba(74,31,122,0.4)',t:'#c080ff'}],note:'FORA detected a primary income occupation and a pursued creative career. Both are part of your civic identity.',occ:'Food Service Worker'},
+  electrician: {identity:'Union Electrician (IBEW) · Master Electrician',soc:'Primary: SOC 47-2111 Electricians',tags:[{l:'Union IBEW',c:'rgba(26,79,160,0.2)',b:'rgba(26,79,160,0.4)',t:'#80b0ff'},{l:'Licensed ME',c:'rgba(184,134,11,0.2)',b:'rgba(184,134,11,0.4)',t:'#d4a832'}],note:'FORA detected both a union membership (IBEW) and a state license (Master Electrician). Both credentials will be represented.',occ:'Master Electrician'},
+};
+
+function dFillEx(el) {
+  document.getElementById('d-interp-ta').value = el.textContent;
+  dInterpInput();
+}
+
+function dInterpInput() {
+  document.getElementById('d-interp-result').classList.remove('show');
+  dInterpOk = false; updatePreview();
+}
+
+function dRunInterp() {
+  const txt = document.getElementById('d-interp-ta').value.trim();
+  if (!txt) return;
+  document.getElementById('d-interp-result').classList.remove('show');
+  document.getElementById('d-thinking').classList.add('show');
+  dInterpOk = false;
+  setTimeout(() => {
+    document.getElementById('d-thinking').classList.remove('show');
+    const lower = txt.toLowerCase();
+    let data = D_INTERP.default;
+    if ((lower.includes('nurse')||lower.includes(' rn'))&&!lower.includes('architect')) data = D_INTERP.nurse;
+    else if ((lower.includes('server')||lower.includes('waiter')||lower.includes('bartend'))&&!lower.includes('architect')) data = D_INTERP.server;
+    else if (lower.includes('electrician')||lower.includes('ibew')) data = D_INTERP.electrician;
+    document.getElementById('d-ir-identity').textContent = data.identity;
+    document.getElementById('d-ir-soc').textContent = data.soc;
+    document.getElementById('d-ir-tags').innerHTML = data.tags.map(t=>\`<span class="ir-tag" style="background:\${t.c};border:1px solid \${t.b};color:\${t.t};">\${t.l}</span>\`).join('');
+    document.getElementById('d-ir-note').textContent = data.note;
+    document.getElementById('d-interp-result').classList.add('show');
+  }, 1400);
+}
+
+function dConfirmInterp() {
+  dInterpOk = true;
+  const id = document.getElementById('d-ir-identity').textContent;
+  state.occ1 = id;
+  document.getElementById('d-second-occ-area').style.display = 'flex';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+
+function dResetInterp() {
+  document.getElementById('d-interp-result').classList.remove('show');
+  dInterpOk = false; state.occ1 = ''; updatePreview();
+}
+
+// Init sector grid when path B is chosen
+document.getElementById('d-path-b-card').addEventListener('click', () => {
+  setTimeout(dBuildSectorGrid, 0);
+});
+
+</script>
+</body>
+</html>
