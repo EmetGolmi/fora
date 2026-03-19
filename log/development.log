@@ -341,3 +341,29 @@ Completed 200 OK in 1121ms (Views: 7.4ms | ActiveRecord: 5.2ms (2 queries, 0 cac
 [dotenv] Loaded [33m.env[0m
 [dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
 [dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-18 23:51:54 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 3.6ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.1ms | GC: 1.9ms)
+Completed 200 OK in 38ms (Views: 16.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 12.4ms)
+
+
+Started GET "/dashboard?address=916+s+delhi+st%2C+19147&commit=Find+my+representatives" for 127.0.0.1 at 2026-03-18 23:51:57 -0400
+Processing by DashboardController#show as HTML
+  Parameters: {"address"=>"916 s delhi st, 19147", "commit"=>"Find my representatives"}
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  [1m[36mCivicBill Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' LIMIT 1 /*action='show',application='Fora',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/show.html.erb:109
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 5 /*action='show',application='Fora',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/show.html.erb:110
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 13.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 17.2ms | GC: 0.0ms)
+Completed 200 OK in 1775ms (Views: 15.6ms | ActiveRecord: 12.9ms (2 queries, 0 cached) | GC: 2.9ms)
+
+
