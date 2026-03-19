@@ -15,6 +15,7 @@ class OfficialsController < ApplicationController
 
     @member = member_response.parsed_response["member"]
     @social = CongressSocialService.for_bioguide(bioguide_id)
+    @social[:website] ||= @member["officialWebsiteUrl"]
 
     bills_response = self.class.get("/member/#{bioguide_id}/sponsored-legislation", query: {
       api_key: api_key,

@@ -1,4 +1,7 @@
 class CongressSocialService
+MANUAL_OVERRIDES = {
+  "F000479" => { twitter: "JohnFetterman", tiktok: "johnfetterman" }
+}.freeze
   include HTTParty
   base_uri "https://raw.githubusercontent.com"
 
@@ -18,7 +21,7 @@ class CongressSocialService
       instagram: social["instagram"],
       youtube: social["youtube"],
       website: social["website"]
-    }
+    }.merge(MANUAL_OVERRIDES[bioguide_id] || {})
   rescue => e
     Rails.logger.error("CongressSocialService: failed to look up #{bioguide_id}: #{e.message}")
     {}
