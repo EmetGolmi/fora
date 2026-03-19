@@ -21,13 +21,22 @@
     <%
       party_labels = { "D" => "Democratic", "R" => "Republican", "W" => "Working Families", "I" => "Independent" }
       city_offices = %w[mayor city_council city_council_at_large]
+      federal_offices = %w[federal president vice_president us_senate us_house]
+      state_offices = %w[governor lt_governor]
 
       classify_level = ->(official) {
         jur_name = official.dig(:jurisdiction, :name).to_s
+        division_id = official.dig(:jurisdiction, :division_id).to_s
         if city_offices.include?(jur_name)
           "City"
-        elsif %w[upper lower].include?(jur_name)
+        elsif division_id.include?("sldu") || division_id.include?("sldl:")
           "State"
+        elsif federal_offices.include?(jur_name) || division_id.include?("cd:")
+          "Federal"
+        elsif state_offices.include?(jur_name)
+          "State"
+        elsif %w[upper lower].include?(jur_name)
+          "Federal"
         else
           "Federal"
         end
@@ -40,28 +49,17 @@
 
       format_office = ->(official) {
         office = official[:office].to_s
-        jur_name = official.dig(:jurisdiction, :name).to_s
-        division_id = official.dig(:jurisdiction, :division_id).to_s
         district = official.dig(:jurisdiction, :district).to_s.strip
         has_district = district.present? && district != "0"
 
-        case jur_name
-        when "upper"
-          if division_id.include?("sldu")
-            has_district ? "State Senator, District #{district}" : "State Senator"
-          else
-            "U.S. Senator"
-          end
-        when "lower"
-          if division_id.include?("cd:")
-            has_district ? "U.S. Representative, Congressional District #{district}" : "U.S. Representative"
-          elsif division_id.include?("sldl:")
-            has_district ? "State Representative, District #{district}" : "State Representative"
-          else
-            has_district ? "#{office}, District #{district}" : office
-          end
-        when "city_council"
-          has_district ? "#{office}, District #{district}" : office
+        if office.start_with?("U.S. Representative")
+          has_district ? "U.S. Representative, Congressional District #{district}" : office
+        elsif office.start_with?("State Senator")
+          has_district ? "State Senator, District #{district}" : office
+        elsif office.start_with?("State Representative")
+          has_district ? "State Representative, District #{district}" : office
+        elsif office == "City Council" || office.start_with?("City Council,")
+          has_district ? "City Council, District #{district}" : office
         else
           office
         end
