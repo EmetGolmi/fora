@@ -41,8 +41,17 @@ class OpenStatesService
   end
 
   def extract_status(bill)
-    latest_action = bill.dig("latest_action", "description")
-    latest_action || "Unknown"
+    classification = bill.dig("latest_action", "classification")&.to_s&.downcase || ""
+
+    if classification.include?("signed")
+      "Signed into Law"
+    elsif classification.include?("passed")
+      "Passed"
+    elsif classification.include?("failed")
+      "Failed"
+    else
+      bill.dig("latest_action", "description").presence || "In Committee"
+    end
   end
 
   def extract_status_date(bill)
