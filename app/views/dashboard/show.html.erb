@@ -1,156 +1,196 @@
-<div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
-  <h1>FORA</h1>
+<% content_for :head do %>
+<style>
+  .rep-item:hover { background:#edf1fb; margin-left:-12px !important; margin-right:-12px !important; padding-left:12px !important; padding-right:12px !important; border-radius:6px; }
+  .bill-card:hover { box-shadow:0 4px 18px rgba(27,58,107,0.10) !important; }
+  .back-link:hover { color:#1b3a6b !important; }
+</style>
+<% end %>
 
-  <p><%= link_to "← Back", root_path %></p>
+<%
+  party_labels = { "D" => "Democratic", "R" => "Republican", "W" => "Working Families", "I" => "Independent" }
+  city_offices = %w[mayor city_council city_council_at_large]
+  federal_offices = %w[federal president vice_president us_senate us_house]
+  state_offices = %w[governor lt_governor]
+
+  classify_level = ->(official) {
+    jur_name = official.dig(:jurisdiction, :name).to_s
+    division_id = official.dig(:jurisdiction, :division_id).to_s
+    if city_offices.include?(jur_name)
+      "City"
+    elsif division_id.include?("sldu") || division_id.include?("sldl:")
+      "State"
+    elsif federal_offices.include?(jur_name) || division_id.include?("cd:")
+      "Federal"
+    elsif state_offices.include?(jur_name)
+      "State"
+    elsif %w[upper lower].include?(jur_name)
+      "Federal"
+    else
+      "Federal"
+    end
+  }
+
+  format_party = ->(raw) {
+    return raw unless raw
+    party_labels[raw.strip] || raw
+  }
+
+  format_office = ->(official) {
+    office = official[:office].to_s
+    district = official.dig(:jurisdiction, :district).to_s.strip
+    has_district = district.present? && district != "0"
+
+    if office.start_with?("U.S. Representative")
+      has_district ? "U.S. Representative, Congressional District #{district}" : office
+    elsif office.start_with?("State Senator")
+      has_district ? "State Senator, District #{district}" : office
+    elsif office.start_with?("State Representative")
+      has_district ? "State Representative, District #{district}" : office
+    elsif office == "City Council" || office.start_with?("City Council,")
+      has_district ? "City Council, District #{district}" : office
+    else
+      office
+    end
+  }
+
+  level_badge = ->(level) {
+    case level
+    when "Federal" then "background:#dde5f5; color:#1b3a6b; border:1px solid rgba(27,58,107,0.18);"
+    when "State"   then "background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);"
+    when "City"    then "background:#f8f0dc; color:#b8860b; border:1px solid rgba(184,134,11,0.25);"
+    else                "background:#f0f3f8; color:#5a6e8a; border:1px solid rgba(90,110,138,0.18);"
+    end
+  }
+
+  party_color = ->(raw) {
+    case (raw || "").strip
+    when "D" then "#3a6abf"
+    when "R" then "#8b2020"
+    else "#5a6e8a"
+    end
+  }
+%>
+
+<div style="max-width:900px; margin:0 auto; padding:36px 24px 60px;">
 
   <% if @jurisdiction.nil? %>
-    <p>Could not resolve address: <strong><%= @address %></strong></p>
-    <p>Please check the address and try again.</p>
+    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; padding:32px; text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; margin-bottom:12px;">Address Not Found</div>
+      <p style="font-family:'Nunito',sans-serif; font-size:15px; color:#5a6e8a;">Could not resolve: <strong style="color:#0e1a2e;"><%= @address %></strong></p>
+      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; margin-top:8px;">Please check the address and try again.</p>
+    </div>
   <% else %>
-    <h2>Results for <%= @jurisdiction[:normalized_address] %></h2>
-    <p>
-      <%= @jurisdiction[:city] %>,
-      <%= @jurisdiction[:state] %>
-      <%= @jurisdiction[:zip] %>
-    </p>
 
-    <hr>
+    <!-- Address header -->
+    <div style="margin-bottom:28px;">
+      <h1 style="font-family:'Libre Baskerville',serif; font-size:24px; font-weight:700; color:#0e1a2e; line-height:1.2; margin-bottom:4px;">My Reps — <%= @jurisdiction[:normalized_address] %></h1>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:#8a9ab8;"><%= @jurisdiction[:city] %>, <%= @jurisdiction[:state] %> <%= @jurisdiction[:zip] %></span>
+    </div>
 
-    <h3>Your Representatives</h3>
+    <!-- Representatives card -->
+    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; margin-bottom:32px; overflow:hidden;">
+      <div style="padding:12px 20px 11px; border-bottom:1px solid rgba(27,58,107,0.09); display:flex; align-items:center; gap:8px;">
+        <div style="width:6px; height:6px; border-radius:50%; background:#1b3a6b; flex-shrink:0;"></div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#5a6e8a;">My Reps</span>
+      </div>
 
-    <%
-      party_labels = { "D" => "Democratic", "R" => "Republican", "W" => "Working Families", "I" => "Independent" }
-      city_offices = %w[mayor city_council city_council_at_large]
-      federal_offices = %w[federal president vice_president us_senate us_house]
-      state_offices = %w[governor lt_governor]
-
-      classify_level = ->(official) {
-        jur_name = official.dig(:jurisdiction, :name).to_s
-        division_id = official.dig(:jurisdiction, :division_id).to_s
-        if city_offices.include?(jur_name)
-          "City"
-        elsif division_id.include?("sldu") || division_id.include?("sldl:")
-          "State"
-        elsif federal_offices.include?(jur_name) || division_id.include?("cd:")
-          "Federal"
-        elsif state_offices.include?(jur_name)
-          "State"
-        elsif %w[upper lower].include?(jur_name)
-          "Federal"
-        else
-          "Federal"
-        end
-      }
-
-      format_party = ->(raw) {
-        return raw unless raw
-        party_labels[raw.strip] || raw
-      }
-
-      format_office = ->(official) {
-        office = official[:office].to_s
-        district = official.dig(:jurisdiction, :district).to_s.strip
-        has_district = district.present? && district != "0"
-
-        if office.start_with?("U.S. Representative")
-          has_district ? "U.S. Representative, Congressional District #{district}" : office
-        elsif office.start_with?("State Senator")
-          has_district ? "State Senator, District #{district}" : office
-        elsif office.start_with?("State Representative")
-          has_district ? "State Representative, District #{district}" : office
-        elsif office == "City Council" || office.start_with?("City Council,")
-          has_district ? "City Council, District #{district}" : office
-        else
-          office
-        end
-      }
-
-      grouped = @jurisdiction[:officials].group_by { |o| classify_level.call(o) }
-      level_order = %w[Federal State City]
-    %>
-
-    <% if @jurisdiction[:officials].any? %>
-      <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-          <tr>
-            <th style="text-align: left; padding: 8px; border-bottom: 2px solid #333;">Name</th>
-            <th style="text-align: left; padding: 8px; border-bottom: 2px solid #333;">Office</th>
-            <th style="text-align: left; padding: 8px; border-bottom: 2px solid #333;">Party</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div style="padding:4px 20px 14px;">
+        <% if @jurisdiction[:officials].any? %>
+          <%
+            grouped = @jurisdiction[:officials].group_by { |o| classify_level.call(o) }
+            level_order = %w[Federal State City]
+          %>
           <% level_order.each do |level| %>
             <% next unless grouped[level]&.any? %>
-            <tr>
-              <td colspan="3" style="padding: 10px 8px 4px; font-size: 13px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #eee;">
-                <%= level %>
-              </td>
-            </tr>
+
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; padding:12px 0 4px; border-bottom:1px solid rgba(27,58,107,0.06); margin-bottom:2px;"><%= level %></div>
+
             <% grouped[level].each do |official| %>
-              <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">
-                  <% bioguide = official.dig(:jurisdiction, :bioguide_id) %>
+              <% bioguide = official.dig(:jurisdiction, :bioguide_id) %>
+              <div class="rep-item" style="display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.06); cursor:pointer; transition:all 0.12s;">
+                <div style="flex:1; min-width:0;">
                   <% if bioguide.present? %>
-                    <%= link_to official[:name], official_path(bioguide), style: "color: #1b2a4a; text-decoration: underline;" %>
+                    <%= link_to official[:name], official_path(bioguide), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% else %>
-                    <%= official[:name] %>
+                    <span style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; display:block; line-height:1.25;"><%= official[:name] %></span>
                   <% end %>
-                </td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= format_office.call(official) %></td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= format_party.call(official[:party]) %></td>
-              </tr>
+                  <span style="font-family:'Nunito',sans-serif; font-size:11.5px; color:#5a6e8a;"><%= format_office.call(official) %></span>
+                </div>
+                <span style="font-family:'Nunito',sans-serif; font-size:11.5px; color:<%= party_color.call(official[:party].to_s) %>; font-weight:600; flex-shrink:0;"><%= format_party.call(official[:party]) %></span>
+                <span style="font-size:12px; color:#8a9ab8; margin-left:2px; flex-shrink:0;">›</span>
+              </div>
             <% end %>
           <% end %>
-        </tbody>
-      </table>
+        <% else %>
+          <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:20px 0; text-align:center;">No representatives found for this address.</p>
+        <% end %>
+      </div>
+    </div>
+
+  <% end %>
+
+  <!-- Federal Bills -->
+  <div style="margin-bottom:36px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Federal Legislation</div>
+    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">
+      <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;">Recent Federal Bills</h2>
+    </div>
+
+    <% if @federal_bills.any? %>
+      <% @federal_bills.each do |bill| %>
+        <div class="bill-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
+          <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:7px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= bill.identifier %></span>
+            <span style="font-family:'Nunito',sans-serif; font-size:13.5px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill.title %></span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <% if bill.status.present? %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#dde5f5; color:#1b3a6b; border:1px solid rgba(27,58,107,0.15);"><%= bill.status %></span>
+            <% end %>
+            <% if bill.status_date %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8;"><%= bill.status_date.strftime("%b %d, %Y") %></span>
+            <% end %>
+          </div>
+          <% if bill.summary.present? %>
+            <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#5a6e8a; margin-top:8px; line-height:1.55;"><%= truncate(bill.summary, length: 200) %></p>
+          <% end %>
+        </div>
+      <% end %>
     <% else %>
-      <p>No representatives found for this address.</p>
+      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No federal bills synced yet.</p>
     <% end %>
+  </div>
 
-    <hr>
-  <% end %>
+  <!-- State Bills -->
+  <div style="margin-bottom:36px;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ State Legislation</div>
+    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">
+      <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;">Recent Pennsylvania Bills</h2>
+    </div>
 
-  <h3>Recent Federal Bills</h3>
-
-  <% if @federal_bills.any? %>
-    <% @federal_bills.each do |bill| %>
-      <div style="margin-bottom: 1.5em; padding: 12px; border: 1px solid #ddd;">
-        <strong><%= bill.identifier %></strong> — <%= bill.title %>
-        <br>
-        <small>
-          Status: <%= bill.status || "N/A" %>
-          <% if bill.status_date %>
-            | <%= bill.status_date.strftime("%B %d, %Y") %>
+    <% if @state_bills.any? %>
+      <% @state_bills.each do |bill| %>
+        <div class="bill-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
+          <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:7px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= bill.identifier %></span>
+            <span style="font-family:'Nunito',sans-serif; font-size:13.5px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill.title %></span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <% if bill.status.present? %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);"><%= bill.status %></span>
+            <% end %>
+            <% if bill.status_date %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8;"><%= bill.status_date.strftime("%b %d, %Y") %></span>
+            <% end %>
+          </div>
+          <% if bill.summary.present? %>
+            <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#5a6e8a; margin-top:8px; line-height:1.55;"><%= truncate(bill.summary, length: 200) %></p>
           <% end %>
-        </small>
-        <% if bill.summary.present? %>
-          <p style="margin-top: 0.5em; color: #555;"><%= truncate(bill.summary, length: 200) %></p>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No Pennsylvania bills synced yet.</p>
     <% end %>
-  <% else %>
-    <p>No federal bills synced yet.</p>
-  <% end %>
+  </div>
 
-  <h3>Recent Pennsylvania Bills</h3>
-
-  <% if @state_bills.any? %>
-    <% @state_bills.each do |bill| %>
-      <div style="margin-bottom: 1.5em; padding: 12px; border: 1px solid #ddd;">
-        <strong><%= bill.identifier %></strong> — <%= bill.title %>
-        <br>
-        <small>
-          Status: <%= bill.status || "N/A" %>
-          <% if bill.status_date %>
-            | <%= bill.status_date.strftime("%B %d, %Y") %>
-          <% end %>
-        </small>
-        <% if bill.summary.present? %>
-          <p style="margin-top: 0.5em; color: #555;"><%= truncate(bill.summary, length: 200) %></p>
-        <% end %>
-      </div>
-    <% end %>
-  <% else %>
-    <p>No Pennsylvania bills synced yet.</p>
-  <% end %>
 </div>

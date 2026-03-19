@@ -1,21 +1,51 @@
-<div style="max-width: 600px; margin: 120px auto; text-align: center;">
-  <h1>FORA</h1>
-  <p>Find your elected representatives and track legislation in your area.</p>
+<% content_for :head do %>
+<style>
+  .fora-address-input::placeholder { color: rgba(255,255,255,0.3); }
+  .fora-address-input { caret-color: #d4a832; }
+  .fora-submit-btn:hover { background: #d4a832 !important; }
+</style>
+<% end %>
 
-  <% if flash[:alert] %>
-    <p style="color: #c00;"><%= flash[:alert] %></p>
-  <% end %>
+<div style="min-height:calc(100vh - 63px); background:#1b3a6b; display:flex; align-items:center; justify-content:center; padding:60px 24px 80px; position:relative; overflow:hidden;">
 
-  <%= form_tag dashboard_path, method: :get, style: "margin-top: 2em;" do %>
-    <div>
-      <%= text_field_tag :address, nil,
-        placeholder: "Enter your street address",
-        style: "width: 100%; padding: 12px; font-size: 16px; box-sizing: border-box;",
-        autofocus: true %>
-    </div>
-    <div style="margin-top: 1em;">
-      <%= submit_tag "Find my representatives",
-        style: "padding: 12px 24px; font-size: 16px; cursor: pointer;" %>
-    </div>
-  <% end %>
+  <!-- Decorative rings -->
+  <div style="position:absolute; right:-60px; top:-80px; width:440px; height:440px; border-radius:50%; border:44px solid rgba(255,255,255,0.025); pointer-events:none;"></div>
+  <div style="position:absolute; right:60px; top:-20px; width:240px; height:240px; border-radius:50%; border:1px solid rgba(184,134,11,0.12); pointer-events:none;"></div>
+  <div style="position:absolute; left:-40px; bottom:80px; width:200px; height:200px; border-radius:50%; border:1px solid rgba(255,255,255,0.03); pointer-events:none;"></div>
+
+  <!-- Star border -->
+  <div style="position:absolute; bottom:0; left:0; right:0; height:28px; overflow:hidden; display:flex; align-items:center; padding:0 48px; font-size:11px; letter-spacing:0.55em; color:#b8860b; white-space:nowrap; pointer-events:none; -webkit-mask-image:linear-gradient(to right,black 90%,transparent 100%); mask-image:linear-gradient(to right,black 90%,transparent 100%);">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+
+  <div style="text-align:center; max-width:600px; width:100%; position:relative; z-index:1;">
+
+    <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.28); margin-bottom:18px;">Civic Intelligence Platform</div>
+
+    <h1 style="font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:white; line-height:1.1; margin:0 0 16px; letter-spacing:-0.01em;">Know Your Forum.</h1>
+
+    <p style="font-family:'Nunito',sans-serif; font-size:16px; font-weight:300; color:rgba(255,255,255,0.5); margin:0 0 44px; line-height:1.65;">
+      Enter your address to find your elected representatives<br>and track the legislation shaping your community.
+    </p>
+
+    <% if flash[:alert] %>
+      <div style="background:rgba(139,26,26,0.35); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:10px 18px; margin-bottom:20px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#fca5a5; letter-spacing:0.04em;">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <%= form_tag dashboard_path, method: :get do %>
+      <div style="display:flex; border-radius:12px; overflow:hidden; border:1.5px solid rgba(184,134,11,0.45); background:rgba(255,255,255,0.07); box-shadow:0 8px 40px rgba(0,0,0,0.25);">
+        <%= text_field_tag :address, params[:address],
+            placeholder: "123 Main St, Philadelphia, PA",
+            autofocus: true,
+            class: "fora-address-input",
+            style: "flex:1; background:transparent; border:none; outline:none; padding:17px 22px; font-family:'Nunito',sans-serif; font-size:15px; color:white; min-width:0;" %>
+        <%= submit_tag "Find →",
+            class: "fora-submit-btn",
+            style: "background:#b8860b; border:none; padding:17px 30px; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:white; cursor:pointer; font-weight:700; flex-shrink:0; transition:background 0.15s;" %>
+      </div>
+    <% end %>
+
+    <div style="margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.18);">Federal · State · Local · All in one place</div>
+
+  </div>
 </div>
