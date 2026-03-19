@@ -18,6 +18,59 @@
 
     <h3>Your Representatives</h3>
 
+    <%
+      party_labels = { "D" => "Democratic", "R" => "Republican", "W" => "Working Families", "I" => "Independent" }
+      city_offices = %w[mayor city_council city_council_at_large]
+
+      classify_level = ->(official) {
+        jur_name = official.dig(:jurisdiction, :name).to_s
+        if city_offices.include?(jur_name)
+          "City"
+        elsif %w[upper lower].include?(jur_name)
+          "State"
+        else
+          "Federal"
+        end
+      }
+
+      format_party = ->(raw) {
+        return raw unless raw
+        party_labels[raw.strip] || raw
+      }
+
+      format_office = ->(official) {
+        office = official[:office].to_s
+        jur_name = official.dig(:jurisdiction, :name).to_s
+        division_id = official.dig(:jurisdiction, :division_id).to_s
+        district = official.dig(:jurisdiction, :district).to_s.strip
+        has_district = district.present? && district != "0"
+
+        case jur_name
+        when "upper"
+          if division_id.include?("sldu")
+            has_district ? "State Senator, District #{district}" : "State Senator"
+          else
+            "U.S. Senator"
+          end
+        when "lower"
+          if division_id.include?("cd:")
+            has_district ? "U.S. Representative, Congressional District #{district}" : "U.S. Representative"
+          elsif division_id.include?("sldl:")
+            has_district ? "State Representative, District #{district}" : "State Representative"
+          else
+            has_district ? "#{office}, District #{district}" : office
+          end
+        when "city_council"
+          has_district ? "#{office}, District #{district}" : office
+        else
+          office
+        end
+      }
+
+      grouped = @jurisdiction[:officials].group_by { |o| classify_level.call(o) }
+      level_order = %w[Federal State City]
+    %>
+
     <% if @jurisdiction[:officials].any? %>
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
@@ -28,12 +81,20 @@
           </tr>
         </thead>
         <tbody>
-          <% @jurisdiction[:officials].each do |official| %>
+          <% level_order.each do |level| %>
+            <% next unless grouped[level]&.any? %>
             <tr>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:name] %></td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:office] %></td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:party] %></td>
+              <td colspan="3" style="padding: 10px 8px 4px; font-size: 13px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #eee;">
+                <%= level %>
+              </td>
             </tr>
+            <% grouped[level].each do |official| %>
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:name] %></td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= format_office.call(official) %></td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= format_party.call(official[:party]) %></td>
+              </tr>
+            <% end %>
           <% end %>
         </tbody>
       </table>
