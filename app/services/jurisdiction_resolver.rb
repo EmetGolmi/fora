@@ -123,19 +123,21 @@ class JurisdictionResolver
     district = member["district"]
     name = format_congress_name(member["name"])
 
+    bioguide_id = member["bioguideId"]
+
     if chamber == "Senate"
       {
         name: name,
         office: "U.S. Senator",
         party: member["partyName"],
-        jurisdiction: { name: "us_senate", district: nil, division_id: "ocd-division/country:us/state:pa" }
+        jurisdiction: { name: "us_senate", district: nil, division_id: "ocd-division/country:us/state:pa", bioguide_id: bioguide_id }
       }
     else
       {
         name: name,
         office: "U.S. Representative, Congressional District #{district}",
         party: member["partyName"],
-        jurisdiction: { name: "us_house", district: district.to_s, division_id: "ocd-division/country:us/state:pa/cd:#{district}" }
+        jurisdiction: { name: "us_house", district: district.to_s, division_id: "ocd-division/country:us/state:pa/cd:#{district}", bioguide_id: bioguide_id }
       }
     end
   end

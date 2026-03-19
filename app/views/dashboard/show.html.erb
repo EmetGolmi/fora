@@ -88,7 +88,14 @@
             </tr>
             <% grouped[level].each do |official| %>
               <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:name] %></td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                  <% bioguide = official.dig(:jurisdiction, :bioguide_id) %>
+                  <% if bioguide.present? %>
+                    <%= link_to official[:name], official_path(bioguide), style: "color: #1b2a4a; text-decoration: underline;" %>
+                  <% else %>
+                    <%= official[:name] %>
+                  <% end %>
+                </td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= format_office.call(official) %></td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= format_party.call(official[:party]) %></td>
               </tr>

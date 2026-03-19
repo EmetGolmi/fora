@@ -1,0 +1,91 @@
+<% content_for(:title) { "#{@member['directOrderName']} — FORA" } %>
+
+<div style="background: #1b2a4a; color: #fff; padding: 40px 20px;">
+  <div style="max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 24px;">
+    <% if @member.dig("depiction", "imageUrl") %>
+      <img src="<%= @member.dig('depiction', 'imageUrl') %>"
+           alt="<%= @member['directOrderName'] %>"
+           style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #fff;">
+    <% end %>
+    <div>
+      <h1 style="margin: 0 0 8px;"><%= @member["directOrderName"] %></h1>
+      <p style="margin: 0 0 8px; font-size: 18px; opacity: 0.9;">
+        <% last_term = @member.dig("terms")&.last || {} %>
+        <% if last_term["chamber"] == "Senate" %>
+          U.S. Senator, Pennsylvania
+        <% else %>
+          U.S. Representative, Congressional District <%= last_term["district"] %>
+        <% end %>
+      </p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 14px;">
+          <%= @member["partyName"] %>
+        </span>
+        <% if last_term["district"] %>
+          <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 14px;">
+            District <%= last_term["district"] %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <p><%= link_to "← Back to Dashboard", "javascript:history.back()" %></p>
+
+  <% has_social = [@social[:twitter], @social[:facebook], @social[:instagram], @social[:youtube], @social[:website]].any?(&:present?) %>
+  <% if has_social %>
+    <h3>Contact & Social Media</h3>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 2em;">
+      <% if @social[:website].present? %>
+        <a href="<%= @social[:website] %>" target="_blank" rel="noopener" style="color: #1b2a4a;">Website</a>
+      <% end %>
+      <% if @social[:twitter].present? %>
+        <a href="https://twitter.com/<%= @social[:twitter] %>" target="_blank" rel="noopener" style="color: #1b2a4a;">Twitter</a>
+      <% end %>
+      <% if @social[:facebook].present? %>
+        <a href="https://facebook.com/<%= @social[:facebook] %>" target="_blank" rel="noopener" style="color: #1b2a4a;">Facebook</a>
+      <% end %>
+      <% if @social[:instagram].present? %>
+        <a href="https://instagram.com/<%= @social[:instagram] %>" target="_blank" rel="noopener" style="color: #1b2a4a;">Instagram</a>
+      <% end %>
+      <% if @social[:youtube].present? %>
+        <a href="https://youtube.com/<%= @social[:youtube] %>" target="_blank" rel="noopener" style="color: #1b2a4a;">YouTube</a>
+      <% end %>
+    </div>
+  <% end %>
+
+  <h3>Sponsored Legislation</h3>
+
+  <%
+    bill_type_labels = {
+      "HR" => "H.R.", "S" => "S.", "HJRES" => "H.J.Res.", "SJRES" => "S.J.Res.",
+      "HRES" => "H.Res.", "SRES" => "S.Res.", "HCONRES" => "H.Con.Res.", "SCONRES" => "S.Con.Res."
+    }
+    format_bill_id = ->(bill) {
+      type = bill["type"].to_s.upcase
+      prefix = bill_type_labels[type] || type
+      "#{prefix} #{bill['number']}"
+    }
+  %>
+
+  <% if @bills.any? %>
+    <% @bills.each do |bill| %>
+      <div style="margin-bottom: 1.5em; padding: 12px; border: 1px solid #ddd;">
+        <strong><%= format_bill_id.call(bill) %></strong> — <%= bill["title"] %>
+        <br>
+        <small>
+          <% if bill.dig("latestAction", "text") %>
+            <%= bill.dig("latestAction", "text") %>
+          <% end %>
+          <% if bill.dig("latestAction", "actionDate") %>
+            | <%= bill.dig("latestAction", "actionDate") %>
+          <% end %>
+        </small>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No sponsored legislation found.</p>
+  <% end %>
+</div>

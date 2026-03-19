@@ -11,4 +11,5 @@ Rails.application.routes.draw do
 
   root "dashboard#index"
   get "dashboard", to: "dashboard#show"
+  get "officials/:bioguide_id", to: "officials#show", as: :official
 end

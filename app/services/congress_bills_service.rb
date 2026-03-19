@@ -22,19 +22,22 @@ class CongressBillsService
     { synced: synced, failed: failed }
   end
 
+  EXCLUDED_TYPES = %w[HCONRES SCONRES HRES SRES].freeze
+
   def fetch_bills
     response = self.class.get("/bill", query: {
       api_key: api_key,
       limit: 20,
       offset: 0,
       sort: "updateDate+desc",
-      congress: 119
+      fromDateTime: "2025-01-01T00:00:00Z"
     })
 
     return [] unless response.success?
 
     bills = response.parsed_response.dig("bills") || []
-    bills.map { |bill| normalize(bill) }
+    bills.reject { |b| EXCLUDED_TYPES.include?(b["type"].to_s.upcase) }
+         .map { |bill| normalize(bill) }
   end
 
   private
