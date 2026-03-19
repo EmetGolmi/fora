@@ -103,10 +103,10 @@
     <hr>
   <% end %>
 
-  <h3>Recent Pennsylvania Bills</h3>
+  <h3>Recent Federal Bills</h3>
 
-  <% if @recent_bills.any? %>
-    <% @recent_bills.each do |bill| %>
+  <% if @federal_bills.any? %>
+    <% @federal_bills.each do |bill| %>
       <div style="margin-bottom: 1.5em; padding: 12px; border: 1px solid #ddd;">
         <strong><%= bill.identifier %></strong> — <%= bill.title %>
         <br>
@@ -122,6 +122,28 @@
       </div>
     <% end %>
   <% else %>
-    <p>No bills synced yet. Run <code>CivicSyncService.sync_pennsylvania_bills</code> to load data.</p>
+    <p>No federal bills synced yet.</p>
+  <% end %>
+
+  <h3>Recent Pennsylvania Bills</h3>
+
+  <% if @state_bills.any? %>
+    <% @state_bills.each do |bill| %>
+      <div style="margin-bottom: 1.5em; padding: 12px; border: 1px solid #ddd;">
+        <strong><%= bill.identifier %></strong> — <%= bill.title %>
+        <br>
+        <small>
+          Status: <%= bill.status || "N/A" %>
+          <% if bill.status_date %>
+            | <%= bill.status_date.strftime("%B %d, %Y") %>
+          <% end %>
+        </small>
+        <% if bill.summary.present? %>
+          <p style="margin-top: 0.5em; color: #555;"><%= truncate(bill.summary, length: 200) %></p>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No Pennsylvania bills synced yet.</p>
   <% end %>
 </div>
