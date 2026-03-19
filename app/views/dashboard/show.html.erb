@@ -1,0 +1,68 @@
+<div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+  <h1>FORA</h1>
+
+  <p><%= link_to "← Back", root_path %></p>
+
+  <% if @jurisdiction.nil? %>
+    <p>Could not resolve address: <strong><%= @address %></strong></p>
+    <p>Please check the address and try again.</p>
+  <% else %>
+    <h2>Results for <%= @jurisdiction[:normalized_address] %></h2>
+    <p>
+      <%= @jurisdiction[:city] %>,
+      <%= @jurisdiction[:state] %>
+      <%= @jurisdiction[:zip] %>
+    </p>
+
+    <hr>
+
+    <h3>Your Representatives</h3>
+
+    <% if @jurisdiction[:officials].any? %>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 8px; border-bottom: 2px solid #333;">Name</th>
+            <th style="text-align: left; padding: 8px; border-bottom: 2px solid #333;">Office</th>
+            <th style="text-align: left; padding: 8px; border-bottom: 2px solid #333;">Party</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @jurisdiction[:officials].each do |official| %>
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:name] %></td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:office] %></td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;"><%= official[:party] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>No representatives found for this address.</p>
+    <% end %>
+
+    <hr>
+  <% end %>
+
+  <h3>Recent Pennsylvania Bills</h3>
+
+  <% if @recent_bills.any? %>
+    <% @recent_bills.each do |bill| %>
+      <div style="margin-bottom: 1.5em; padding: 12px; border: 1px solid #ddd;">
+        <strong><%= bill.identifier %></strong> — <%= bill.title %>
+        <br>
+        <small>
+          Status: <%= bill.status || "N/A" %>
+          <% if bill.status_date %>
+            | <%= bill.status_date.strftime("%B %d, %Y") %>
+          <% end %>
+        </small>
+        <% if bill.summary.present? %>
+          <p style="margin-top: 0.5em; color: #555;"><%= truncate(bill.summary, length: 200) %></p>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No bills synced yet. Run <code>CivicSyncService.sync_pennsylvania_bills</code> to load data.</p>
+  <% end %>
+</div>

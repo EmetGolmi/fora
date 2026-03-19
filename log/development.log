@@ -79,3 +79,54 @@ Migrating to CreateCivicRepresentatives (20260319011549)
   [1m[36mCivicBill Upsert (76.8ms)[0m  [1m[32mINSERT INTO "civic_bills" ("source","external_id","title","identifier","status","status_date","summary","sponsors","subjects","votes","jurisdiction","created_at","updated_at") VALUES ('openstates', 'ocd-bill/f4b1ce0c-fff9-430f-9a6b-ba88be5cae87', 'An Act amending the act of October 27, 1955 (P.L.744, No.222), known as the Pennsylvania Human Relations Act, further providing for definitions.', 'HB 439', 'Unknown', NULL, NULL, '[]', '[]', '[]', 'pennsylvania', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON CONFLICT ("source","external_id") DO UPDATE SET updated_at=(CASE WHEN ("civic_bills"."title" IS NOT DISTINCT FROM excluded."title" AND "civic_bills"."identifier" IS NOT DISTINCT FROM excluded."identifier" AND "civic_bills"."status" IS NOT DISTINCT FROM excluded."status" AND "civic_bills"."status_date" IS NOT DISTINCT FROM excluded."status_date" AND "civic_bills"."summary" IS NOT DISTINCT FROM excluded."summary" AND "civic_bills"."sponsors" IS NOT DISTINCT FROM excluded."sponsors" AND "civic_bills"."subjects" IS NOT DISTINCT FROM excluded."subjects" AND "civic_bills"."votes" IS NOT DISTINCT FROM excluded."votes" AND "civic_bills"."jurisdiction" IS NOT DISTINCT FROM excluded."jurisdiction") THEN "civic_bills".updated_at ELSE CURRENT_TIMESTAMP END),"title"=excluded."title","identifier"=excluded."identifier","status"=excluded."status","status_date"=excluded."status_date","summary"=excluded."summary","sponsors"=excluded."sponsors","subjects"=excluded."subjects","votes"=excluded."votes","jurisdiction"=excluded."jurisdiction" RETURNING "id" /*application='Fora'*/[0m
   [1m[36mCivicBill Count (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" /*application='Fora'*/[0m
   [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" ORDER BY "civic_bills"."id" DESC LIMIT 1 /*application='Fora'*/[0m
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-18 21:30:53 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 1.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 8.4ms | GC: 0.0ms)
+Completed 200 OK in 29ms (Views: 12.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard?address=916+s+delhi+st&commit=Find+my+representatives" for 127.0.0.1 at 2026-03-18 21:31:06 -0400
+Processing by DashboardController#show as HTML
+  Parameters: {"address"=>"916 s delhi st", "commit"=>"Find my representatives"}
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  [1m[36mCivicBill Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' LIMIT 1 /*action='show',application='Fora',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/show.html.erb:50
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 5 /*action='show',application='Fora',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/show.html.erb:51
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 15.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 23.4ms | GC: 0.0ms)
+Completed 200 OK in 261ms (Views: 21.7ms | ActiveRecord: 7.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-18 21:31:12 -0400
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.3ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 3.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard?address=916+s+delhi+st%2C+19147&commit=Find+my+representatives" for 127.0.0.1 at 2026-03-18 21:31:18 -0400
+Processing by DashboardController#show as HTML
+  Parameters: {"address"=>"916 s delhi st, 19147", "commit"=>"Find my representatives"}
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  [1m[36mCivicBill Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' LIMIT 1 /*action='show',application='Fora',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/show.html.erb:50
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 5 /*action='show',application='Fora',controller='dashboard'*/[0m
+  ↳ app/views/dashboard/show.html.erb:51
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 3.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.6ms | GC: 0.0ms)
+Completed 200 OK in 558ms (Views: 4.3ms | ActiveRecord: 0.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
