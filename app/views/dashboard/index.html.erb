@@ -3,6 +3,65 @@
   .fora-address-input::placeholder { color: rgba(255,255,255,0.3); }
   .fora-address-input { caret-color: #d4a832; }
   .fora-submit-btn:hover { background: #d4a832 !important; }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(184,134,11,0.55); }
+    50%       { box-shadow: 0 0 0 8px rgba(184,134,11,0); }
+  }
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-5px); }
+    40%     { transform: translateX(5px); }
+    60%     { transform: translateX(-4px); }
+    80%     { transform: translateX(4px); }
+  }
+  @keyframes tile-pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(0.88); }
+    100% { transform: scale(1); }
+  }
+  @keyframes ready-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+  }
+
+  .captcha-tile {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700;
+    cursor: pointer; user-select: none;
+    background: rgba(255,255,255,0.1); border: 1.5px solid rgba(184,134,11,0.5);
+    color: white; transition: all 0.15s;
+  }
+  .captcha-tile:hover:not(.used) { background: rgba(184,134,11,0.25); border-color: #d4a832; }
+  .captcha-tile.used {
+    background: rgba(184,134,11,0.18); border-color: rgba(184,134,11,0.3);
+    color: rgba(255,255,255,0.3); cursor: default; text-decoration: line-through;
+    animation: tile-pop 0.18s ease-out;
+  }
+  .captcha-tile.wrong { animation: shake 0.35s ease-out; }
+
+  .progress-slot {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700;
+    color: #d4a832; border: 1.5px solid rgba(184,134,11,0.35);
+    background: rgba(184,134,11,0.08); transition: all 0.2s;
+  }
+  .progress-slot.filled {
+    background: rgba(184,134,11,0.22); border-color: #d4a832;
+    animation: fade-in 0.18s ease-out;
+  }
+
+  #reps-ready-badge { animation: ready-pulse 1.4s ease-in-out infinite; }
+  #captcha-panel    { animation: fade-in 0.3s ease-out; }
 </style>
 <% end %>
 
@@ -32,20 +91,244 @@
       </div>
     <% end %>
 
-    <%= form_tag dashboard_path, method: :get do %>
-      <div style="display:flex; border-radius:12px; overflow:hidden; border:1.5px solid rgba(184,134,11,0.45); background:rgba(255,255,255,0.07); box-shadow:0 8px 40px rgba(0,0,0,0.25);">
-        <%= text_field_tag :address, params[:address],
-            placeholder: "123 Main St, Philadelphia, PA",
-            autofocus: true,
-            class: "fora-address-input",
-            style: "flex:1; background:transparent; border:none; outline:none; padding:17px 22px; font-family:'Nunito',sans-serif; font-size:15px; color:white; min-width:0;" %>
-        <%= submit_tag "Find →",
-            class: "fora-submit-btn",
-            style: "background:#b8860b; border:none; padding:17px 30px; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:white; cursor:pointer; font-weight:700; flex-shrink:0; transition:background 0.15s;" %>
-      </div>
-    <% end %>
+    <!-- Address form -->
+    <div id="search-form">
+      <%= form_tag dashboard_path, method: :get, id: "address-form" do %>
+        <div style="display:flex; border-radius:12px; overflow:hidden; border:1.5px solid rgba(184,134,11,0.45); background:rgba(255,255,255,0.07); box-shadow:0 8px 40px rgba(0,0,0,0.25);">
+          <%= text_field_tag :address, params[:address],
+              placeholder: "123 Main St, Philadelphia, PA",
+              autofocus: true,
+              id: "address-input",
+              class: "fora-address-input",
+              style: "flex:1; background:transparent; border:none; outline:none; padding:17px 22px; font-family:'Nunito',sans-serif; font-size:15px; color:white; min-width:0;" %>
+          <%= submit_tag "Find →",
+              class: "fora-submit-btn",
+              style: "background:#b8860b; border:none; padding:17px 30px; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:white; cursor:pointer; font-weight:700; flex-shrink:0; transition:background 0.15s;" %>
+        </div>
+      <% end %>
+    </div>
 
-    <div style="margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.18);">Federal · State · Local · All in one place</div>
+    <!-- Captcha panel — hidden until form submit -->
+    <div id="captcha-panel" style="display:none;">
+
+      <!-- reCIVIC card -->
+      <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(184,134,11,0.4); border-radius:14px; padding:28px 28px 22px; text-align:left; box-shadow:0 8px 40px rgba(0,0,0,0.3);">
+
+        <!-- Checkbox row -->
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:0; padding-bottom:0;" id="checkbox-row">
+          <div id="captcha-checkbox" onclick="foraHandleCheckbox()" style="width:26px; height:26px; border-radius:5px; border:2px solid rgba(184,134,11,0.6); background:rgba(255,255,255,0.06); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s;">
+            <span id="checkbox-check"   style="display:none; color:#d4a832; font-size:16px; font-weight:700; line-height:1;">✓</span>
+            <div  id="checkbox-spinner" style="display:none; width:14px; height:14px; border:2px solid rgba(184,134,11,0.3); border-top-color:#d4a832; border-radius:50%; animation:spin-slow 0.7s linear infinite;"></div>
+          </div>
+          <span style="font-family:'Nunito',sans-serif; font-size:15px; font-weight:600; color:white;">I'm not a Dallas fan</span>
+          <div style="margin-left:auto; text-align:right; flex-shrink:0;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; color:#d4a832; font-weight:700;">reCIVIC</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:rgba(255,255,255,0.25);">Privacy · Terms</div>
+          </div>
+        </div>
+
+        <!-- Letter challenge (revealed after checkbox) -->
+        <div id="letter-challenge" style="display:none; margin-top:20px; padding-top:18px; border-top:1px solid rgba(184,134,11,0.2);">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:14px;">Prove it. Tap the letters to spell it out:</div>
+
+          <!-- Scrambled tiles -->
+          <div id="tile-row" style="display:flex; gap:8px; justify-content:center; margin-bottom:20px; flex-wrap:wrap;"></div>
+
+          <!-- Progress slots -->
+          <div style="margin-bottom:18px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:8px;">Your answer:</div>
+            <div id="progress-row" style="display:flex; gap:6px; justify-content:center;"></div>
+          </div>
+
+          <!-- Status: job loading (captcha done, job not ready) -->
+          <div id="status-loading" style="display:none; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.45); padding-top:10px; border-top:1px solid rgba(184,134,11,0.15); display:none;">
+            <span style="display:inline-block; width:7px; height:7px; border:1.5px solid rgba(184,134,11,0.4); border-top-color:#d4a832; border-radius:50%; animation:spin-slow 0.8s linear infinite; margin-right:6px; vertical-align:middle;"></span>
+            Loading your reps...
+          </div>
+
+          <!-- Status: captcha solved -->
+          <div id="status-solved" style="display:none; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#d4a832; padding-top:10px; border-top:1px solid rgba(184,134,11,0.15);">
+            ✓ &nbsp;Fly Eagles Fly
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pulsing badge: job ready but captcha not yet solved -->
+      <div id="reps-ready-badge" style="display:none; margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:0.14em; text-transform:uppercase; color:#d4a832; background:rgba(184,134,11,0.12); border:1px solid rgba(184,134,11,0.3); border-radius:20px; padding:7px 16px;">
+        ★ &nbsp;Your reps are ready — finish the check to continue
+      </div>
+
+    </div>
+
+    <div id="tagline" style="margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.18);">Federal · State · Local · All in one place</div>
 
   </div>
 </div>
+
+<script>
+(function () {
+  const TARGET   = ['E','A','G','L','E','S'];
+  const SCRAMBLED = ['S','G','A','E','L','E']; // EAGLES scrambled
+
+  let jobId         = null;
+  let pollTimer     = null;
+  let captchaSolved = false;
+  let jobReady      = false;
+  let redirectUrl   = null;
+  let progress      = 0;
+  let usedTiles     = new Set();
+  let checkboxDone  = false;
+
+  const csrfToken = () =>
+    (document.querySelector('meta[name="csrf-token"]') || {}).content || '';
+
+  const $  = id => document.getElementById(id);
+
+  // ── Build tiles & progress slots ─────────────────────────────────────────
+  function buildCaptcha() {
+    const tileRow     = $('tile-row');
+    const progressRow = $('progress-row');
+    tileRow.innerHTML = '';
+    progressRow.innerHTML = '';
+
+    SCRAMBLED.forEach(function(letter, i) {
+      var tile = document.createElement('div');
+      tile.className = 'captcha-tile';
+      tile.textContent = letter;
+      tile.dataset.idx = i;
+      tile.addEventListener('click', function() { handleTile(i, tile); });
+      tileRow.appendChild(tile);
+    });
+
+    TARGET.forEach(function(_, i) {
+      var slot = document.createElement('div');
+      slot.className = 'progress-slot';
+      slot.id = 'slot-' + i;
+      progressRow.appendChild(slot);
+    });
+  }
+
+  // ── Tile click ────────────────────────────────────────────────────────────
+  function handleTile(index, tile) {
+    if (usedTiles.has(index) || captchaSolved || progress >= TARGET.length) return;
+
+    if (SCRAMBLED[index] === TARGET[progress]) {
+      usedTiles.add(index);
+      tile.classList.add('used');
+
+      var slot = $('slot-' + progress);
+      slot.textContent = SCRAMBLED[index];
+      slot.classList.add('filled');
+      progress++;
+
+      if (progress === TARGET.length) { onCaptchaSolved(); }
+    } else {
+      tile.classList.remove('wrong');
+      void tile.offsetWidth; // restart animation
+      tile.classList.add('wrong');
+    }
+  }
+
+  // ── Checkbox click ────────────────────────────────────────────────────────
+  window.foraHandleCheckbox = function() {
+    if (checkboxDone) return;
+    checkboxDone = true;
+    $('captcha-checkbox').style.pointerEvents = 'none';
+    $('checkbox-spinner').style.display = 'inline-block';
+
+    setTimeout(function() {
+      $('checkbox-spinner').style.display = 'none';
+      $('checkbox-check').style.display   = 'inline';
+      $('captcha-checkbox').style.borderColor = '#d4a832';
+
+      var challenge = $('letter-challenge');
+      challenge.style.display   = 'block';
+      challenge.style.animation = 'fade-in 0.25s ease-out';
+      buildCaptcha();
+
+      // If job already finished while user was reading the checkbox
+      if (jobReady) { $('status-loading').style.display = 'block'; }
+    }, 600);
+  };
+
+  // ── Captcha solved ────────────────────────────────────────────────────────
+  function onCaptchaSolved() {
+    captchaSolved = true;
+    $('reps-ready-badge').style.display = 'none';
+    $('status-loading').style.display   = 'none';
+    $('status-solved').style.display    = 'block';
+
+    if (jobReady && redirectUrl) {
+      setTimeout(function() { window.location.href = redirectUrl; }, 350);
+    } else {
+      $('status-loading').style.display = 'block'; // job still running
+    }
+  }
+
+  // ── Poll ──────────────────────────────────────────────────────────────────
+  function startPolling() {
+    pollTimer = setInterval(function() {
+      fetch('/dashboard/status/' + jobId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.ready) {
+            // Job not done — if captcha already solved, show loading hint
+            if (captchaSolved) { $('status-loading').style.display = 'block'; }
+            return;
+          }
+
+          clearInterval(pollTimer);
+          jobReady    = true;
+          redirectUrl = data.redirect;
+
+          if (captchaSolved) {
+            setTimeout(function() { window.location.href = redirectUrl; }, 200);
+          } else {
+            // Show pulsing badge — captcha not solved yet
+            $('reps-ready-badge').style.display = 'block';
+            // If challenge is open, nudge with loading text too
+            if (checkboxDone && progress < TARGET.length) {
+              $('status-loading').style.display = 'block';
+            }
+          }
+        })
+        .catch(function() { /* network hiccup — keep polling */ });
+    }, 800);
+  }
+
+  // ── Form submit ───────────────────────────────────────────────────────────
+  document.getElementById('address-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var address = ($('address-input') || {}).value;
+    if (!address || !address.trim()) return;
+
+    $('search-form').style.display  = 'none';
+    $('captcha-panel').style.display = 'block';
+    $('tagline').style.display      = 'none';
+
+    fetch('/dashboard/resolve', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken()
+      },
+      body: JSON.stringify({ address: address.trim() })
+    })
+    .then(function(r) {
+      if (!r.ok) { throw new Error('resolve failed'); }
+      return r.json();
+    })
+    .then(function(data) {
+      jobId = data.job_id;
+      startPolling();
+    })
+    .catch(function() {
+      $('search-form').style.display   = 'block';
+      $('captcha-panel').style.display = 'none';
+      $('tagline').style.display       = 'block';
+    });
+  });
+}());
+</script>

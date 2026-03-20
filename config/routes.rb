@@ -11,5 +11,8 @@ Rails.application.routes.draw do
 
   root "dashboard#index"
   get "dashboard", to: "dashboard#show"
+  post "dashboard/resolve", to: "dashboard#resolve"
+  get "dashboard/status/:job_id", to: "dashboard#status"
+  get "dashboard/result/:job_id", to: "dashboard#result"
   get "officials/:bioguide_id", to: "officials#show", as: :official
 end
