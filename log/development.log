@@ -1813,3 +1813,182 @@ Processing by OfficialsController#show as HTML
 Completed 200 OK in 1622ms (Views: 4.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 6.7ms)
 
 
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-20 12:12:34 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 4.1ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.5ms | GC: 0.9ms)
+Completed 200 OK in 19ms (Views: 11.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 5.6ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-20 12:12:37 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 s delhi st, 19147", "dashboard"=>{"address"=>"916 s delhi st, 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 1add584c-d09b-4d34-85ee-8f7533d6cdf1) to Async(default) with arguments: "916 s delhi st, 19147", "dd83e78f-f855-4be4-9645-9a73b0fc651d"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 125ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1] Performing ResolveAddressJob (Job ID: 1add584c-d09b-4d34-85ee-8f7533d6cdf1) from Async(default) enqueued at 2026-03-20T16:12:37.476212574Z with arguments: "916 s delhi st, 19147", "dd83e78f-f855-4be4-9645-9a73b0fc651d"
+Started GET "/dashboard/status/dd83e78f-f855-4be4-9645-9a73b0fc651d" for 127.0.0.1 at 2026-03-20 12:12:38 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"dd83e78f-f855-4be4-9645-9a73b0fc651d"}
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/dd83e78f-f855-4be4-9645-9a73b0fc651d" for 127.0.0.1 at 2026-03-20 12:12:39 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"dd83e78f-f855-4be4-9645-9a73b0fc651d"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1]   [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1]   [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [1add584c-d09b-4d34-85ee-8f7533d6cdf1] Performed ResolveAddressJob (Job ID: 1add584c-d09b-4d34-85ee-8f7533d6cdf1) from Async(default) in 1984.04ms
+Started GET "/dashboard/status/dd83e78f-f855-4be4-9645-9a73b0fc651d" for 127.0.0.1 at 2026-03-20 12:12:39 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"dd83e78f-f855-4be4-9645-9a73b0fc651d"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/dd83e78f-f855-4be4-9645-9a73b0fc651d" for 127.0.0.1 at 2026-03-20 12:12:44 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"dd83e78f-f855-4be4-9645-9a73b0fc651d"}
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 2.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.1ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-20 12:14:23 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 3.5ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.8ms | GC: 0.8ms)
+Completed 200 OK in 16ms (Views: 8.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 6.2ms)
+
+
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-20 12:15:19 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 3.3ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.8ms | GC: 0.9ms)
+Completed 200 OK in 15ms (Views: 7.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 6.0ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-20 12:15:21 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 s delhi st, 19147", "dashboard"=>{"address"=>"916 s delhi st, 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 7c9a0c4f-a620-43d5-bba1-98a43f136a30) to Async(default) with arguments: "916 s delhi st, 19147", "b34fa6a9-0163-44d6-b38c-d936bbb27c4e"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30] Performing ResolveAddressJob (Job ID: 7c9a0c4f-a620-43d5-bba1-98a43f136a30) from Async(default) enqueued at 2026-03-20T16:15:21.172277222Z with arguments: "916 s delhi st, 19147", "b34fa6a9-0163-44d6-b38c-d936bbb27c4e"
+Started GET "/dashboard/status/b34fa6a9-0163-44d6-b38c-d936bbb27c4e" for 127.0.0.1 at 2026-03-20 12:15:21 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"b34fa6a9-0163-44d6-b38c-d936bbb27c4e"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/b34fa6a9-0163-44d6-b38c-d936bbb27c4e" for 127.0.0.1 at 2026-03-20 12:15:22 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"b34fa6a9-0163-44d6-b38c-d936bbb27c4e"}
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30]   [1m[36mCivicBill Load (0.7ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30]   [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [7c9a0c4f-a620-43d5-bba1-98a43f136a30] Performed ResolveAddressJob (Job ID: 7c9a0c4f-a620-43d5-bba1-98a43f136a30) from Async(default) in 2155.33ms
+Started GET "/dashboard/status/b34fa6a9-0163-44d6-b38c-d936bbb27c4e" for 127.0.0.1 at 2026-03-20 12:15:23 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"b34fa6a9-0163-44d6-b38c-d936bbb27c4e"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/b34fa6a9-0163-44d6-b38c-d936bbb27c4e" for 127.0.0.1 at 2026-03-20 12:15:38 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"b34fa6a9-0163-44d6-b38c-d936bbb27c4e"}
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 2.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 4.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/officials/F000479" for 127.0.0.1 at 2026-03-20 12:15:47 -0400
+Processing by OfficialsController#show as HTML
+  Parameters: {"bioguide_id"=>"F000479"}
+  Rendering layout layouts/application.html.erb
+  Rendering officials/show.html.erb within layouts/application
+  Rendered officials/show.html.erb within layouts/application (Duration: 1.3ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.2ms | GC: 0.4ms)
+Completed 200 OK in 1246ms (Views: 2.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 6.1ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 12:16:42 -0400
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.1ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 2.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-20 12:16:45 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 s delhi st, 19147", "dashboard"=>{"address"=>"916 s delhi st, 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 8f2f0636-93a3-4644-85d1-3ea1405d738f) to Async(default) with arguments: "916 s delhi st, 19147", "481cbe31-c8d7-4784-8a4d-f6913a895494"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 2ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f] Performing ResolveAddressJob (Job ID: 8f2f0636-93a3-4644-85d1-3ea1405d738f) from Async(default) enqueued at 2026-03-20T16:16:45.873886485Z with arguments: "916 s delhi st, 19147", "481cbe31-c8d7-4784-8a4d-f6913a895494"
+Started GET "/dashboard/status/481cbe31-c8d7-4784-8a4d-f6913a895494" for 127.0.0.1 at 2026-03-20 12:16:46 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"481cbe31-c8d7-4784-8a4d-f6913a895494"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/481cbe31-c8d7-4784-8a4d-f6913a895494" for 127.0.0.1 at 2026-03-20 12:16:47 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"481cbe31-c8d7-4784-8a4d-f6913a895494"}
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f]   [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f]   [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f]   [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [8f2f0636-93a3-4644-85d1-3ea1405d738f] Performed ResolveAddressJob (Job ID: 8f2f0636-93a3-4644-85d1-3ea1405d738f) from Async(default) in 1894.01ms
+Started GET "/dashboard/status/481cbe31-c8d7-4784-8a4d-f6913a895494" for 127.0.0.1 at 2026-03-20 12:16:48 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"481cbe31-c8d7-4784-8a4d-f6913a895494"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
