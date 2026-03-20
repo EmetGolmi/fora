@@ -3,7 +3,7 @@
 <% content_for :head do %>
 <style>
   .rep-item:hover { background:#edf1fb; margin-left:-12px !important; margin-right:-12px !important; padding-left:12px !important; padding-right:12px !important; border-radius:6px; }
-  .bill-card:hover { box-shadow:0 4px 18px rgba(27,58,107,0.10) !important; }
+  .bill-card:hover { background:#f4f7fc !important; }
   .back-link:hover { color:#1b3a6b !important; }
 </style>
 <% end %>
@@ -131,106 +131,273 @@
 
   <% end %>
 
-  <!-- Federal Bills -->
+  <!-- Legislation Toggle -->
+  <%
+    jur_to_level_rail = ->(jur) {
+      case jur
+      when "federal"      then ["Federal", "#B22234"]
+      when "pennsylvania" then ["State",   "#003087"]
+      when "philadelphia" then ["City",    "#004C54"]
+      else                     ["Other",   "#8a9ab8"]
+      end
+    }
+
+    friendly_status = ->(raw) {
+      return [nil, false] if raw.blank?
+      s = raw.to_s.upcase.strip
+      if    s.include?("REFERRED") || s.include?("READ TWICE") then ["Under Review",   true]
+      elsif s == "IN COMMITTEE"                                 then ["In Committee",   true]
+      elsif s == "IN COUNCIL - FINAL PASSAGE"                   then ["Final Passage",  false]
+      elsif s == "IN COUNCIL"                                   then ["Before Council", true]
+      elsif s == "ADOPTED"                                      then ["Adopted",        false]
+      else  [raw.to_s.split.map(&:capitalize).join(" "), true]
+      end
+    }
+
+    status_color_for = ->(label) {
+      case label
+      when "Under Review"                   then "#b8860b"
+      when "In Committee", "Before Council" then "#185FA5"
+      when "Adopted"                        then "#2d6a2d"
+      when "Final Passage"                  then "#8b1a1a"
+      else                                       "#8a9ab8"
+      end
+    }
+
+    docket_bills_safe = @docket_bills || []
+    record_bills_safe = @record_bills || []
+    docket_total_safe = @docket_total || 0
+    record_total_safe = @record_total || 0
+  %>
+
   <div style="margin-bottom:36px;">
-    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Federal Legislation</div>
-    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">
-      <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;">Recent Federal Bills</h2>
+
+    <!-- Toggle header -->
+    <div style="border-left:2px solid #b8860b; padding-left:10px; margin-bottom:14px; display:flex; align-items:flex-end; justify-content:space-between; gap:12px;">
+      <div>
+        <h2 id="bills-title" style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 4px; line-height:1.2;">On the Docket</h2>
+        <a id="bills-toggle-link" href="javascript:void(0)" onclick="foraBillsToggle()" style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; color:#b8860b; text-decoration:none; cursor:pointer;">switch to The Record →</a>
+      </div>
+      <span id="bills-count" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:#8a9ab8; white-space:nowrap; padding-bottom:2px;"><%= docket_total_safe %> upcoming actions</span>
     </div>
 
-    <% if @federal_bills.any? %>
-      <% @federal_bills.each do |bill| %>
-        <%= link_to bill_path(bill.id), style: "text-decoration:none; display:block; color:inherit;" do %>
-          <div class="bill-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
-            <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:7px;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= bill.identifier %></span>
-              <span style="font-family:'Nunito',sans-serif; font-size:13.5px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill.title %></span>
-            </div>
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <% if bill.status.present? %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#dde5f5; color:#1b3a6b; border:1px solid rgba(27,58,107,0.15);"><%= bill.status %></span>
-              <% end %>
-              <% if bill.status_date %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8;"><%= bill.status_date.strftime("%b %d, %Y") %></span>
-              <% end %>
-            </div>
-            <% if bill.summary.present? %>
-              <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#5a6e8a; margin-top:8px; line-height:1.55;"><%= truncate(bill.summary, length: 200) %></p>
+    <!-- ── Docket panel ── -->
+    <div id="docket-panel">
+      <div id="docket-feed">
+        <% if docket_bills_safe.any? %>
+          <% docket_bills_safe.each do |b| %>
+            <% level, rail = jur_to_level_rail.call(b.jurisdiction) %>
+            <% label, _ongoing = friendly_status.call(b.status) %>
+            <% date_str = b.status_date&.strftime("%b %d, %Y") %>
+            <%= link_to bill_path(b.id), style: "text-decoration:none; display:block; color:inherit;" do %>
+              <div class="bill-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; cursor:pointer;">
+                <div style="width:8px; background:<%= rail %>; flex-shrink:0;"></div>
+                <div style="flex:1; padding:12px 14px;">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= b.title %></div>
+                  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <% if label.present? %>
+                      <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>;"><%= label %></span>
+                    <% end %>
+                    <% if date_str.present? %>
+                      <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#b8860b; background:rgba(184,134,11,0.09); border:0.5px solid rgba(184,134,11,0.3); border-radius:3px; padding:1px 6px;">Upcoming Action · <%= date_str %></span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
             <% end %>
-          </div>
+          <% end %>
+        <% else %>
+          <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No active bills on the docket.</p>
         <% end %>
-      <% end %>
-    <% else %>
-      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No federal bills synced yet.</p>
-    <% end %>
-  </div>
-
-  <!-- State Bills -->
-  <div style="margin-bottom:36px;">
-    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ State Legislation</div>
-    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">
-      <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;">Recent Pennsylvania Bills</h2>
+      </div>
+      <div id="docket-sentinel" style="height:1px;">
+        <% unless @docket_has_more %>
+          <% if docket_bills_safe.any? %>
+            <div style="text-align:center; padding:16px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:#8a9ab8;">★ All bills loaded</div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
 
-    <% if @state_bills.any? %>
-      <% @state_bills.each do |bill| %>
-        <%= link_to bill_path(bill.id), style: "text-decoration:none; display:block; color:inherit;" do %>
-          <div class="bill-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
-            <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:7px;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= bill.identifier %></span>
-              <span style="font-family:'Nunito',sans-serif; font-size:13.5px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill.title %></span>
-            </div>
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <% if bill.status.present? %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);"><%= bill.status %></span>
-              <% end %>
-              <% if bill.status_date %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8;"><%= bill.status_date.strftime("%b %d, %Y") %></span>
-              <% end %>
-            </div>
-            <% if bill.summary.present? %>
-              <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#5a6e8a; margin-top:8px; line-height:1.55;"><%= truncate(bill.summary, length: 200) %></p>
+    <!-- ── Record panel ── -->
+    <div id="record-panel" style="display:none;">
+      <div id="record-feed">
+        <% if record_bills_safe.any? %>
+          <% record_bills_safe.each do |b| %>
+            <% level, rail = jur_to_level_rail.call(b.jurisdiction) %>
+            <% label, ongoing = friendly_status.call(b.status) %>
+            <% date_str = b.status_date&.strftime("%b %d, %Y") %>
+            <%= link_to bill_path(b.id), style: "text-decoration:none; display:block; color:inherit;" do %>
+              <div class="bill-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; cursor:pointer;">
+                <div style="width:8px; background:<%= rail %>; flex-shrink:0;"></div>
+                <div style="flex:1; padding:12px 14px;">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= b.title %></div>
+                  <% if label.present? || date_str.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>;">
+                      <% if label.present? && date_str.present? %>
+                        <%= label %> · <%= ongoing ? "as of #{date_str}" : date_str %>
+                      <% elsif label.present? %>
+                        <%= label %>
+                      <% else %>
+                        <%= date_str %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
             <% end %>
-          </div>
+          <% end %>
+        <% else %>
+          <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No bills in the record.</p>
         <% end %>
-      <% end %>
-    <% else %>
-      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No Pennsylvania bills synced yet.</p>
-    <% end %>
-  </div>
-
-  <!-- Philadelphia Bills -->
-  <div style="margin-bottom:36px;">
-    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ City Legislation</div>
-    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">
-      <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;">Recent Philadelphia Bills</h2>
+      </div>
+      <div id="record-sentinel" style="height:1px;">
+        <% unless @record_has_more %>
+          <% if record_bills_safe.any? %>
+            <div style="text-align:center; padding:16px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:#8a9ab8;">★ All bills loaded</div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
 
-    <% if @philly_bills.any? %>
-      <% @philly_bills.each do |bill| %>
-        <%= link_to bill_path(bill.id), style: "text-decoration:none; display:block; color:inherit;" do %>
-          <div class="bill-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
-            <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:7px;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= bill.identifier %></span>
-              <span style="font-family:'Nunito',sans-serif; font-size:13.5px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill.title %></span>
-            </div>
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <% if bill.status.present? %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#f8f0dc; color:#b8860b; border:1px solid rgba(184,134,11,0.25);"><%= bill.status %></span>
-              <% end %>
-              <% if bill.status_date %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8;"><%= bill.status_date.strftime("%b %d, %Y") %></span>
-              <% end %>
-            </div>
-            <% if bill.summary.present? %>
-              <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#5a6e8a; margin-top:8px; line-height:1.55;"><%= truncate(bill.summary, length: 200) %></p>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
-    <% else %>
-      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No Philadelphia bills synced yet.</p>
-    <% end %>
   </div>
 
 </div>
+
+<script>
+(function () {
+  // ── State ──────────────────────────────────────────────────────────────
+  var state = {
+    docket: { offset: 18, hasMore: <%= @docket_has_more %>, fetching: false, total: <%= docket_total_safe %> },
+    record: { offset: 18, hasMore: <%= @record_has_more %>, fetching: false, total: <%= record_total_safe %> }
+  };
+  var docketActive = true;
+
+  // ── Helpers ────────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function friendlyStatus(raw) {
+    if (!raw) return [null, false];
+    var s = raw.toUpperCase().trim();
+    if (s.indexOf('REFERRED') !== -1 || s.indexOf('READ TWICE') !== -1) return ['Under Review',   true];
+    if (s === 'IN COMMITTEE')               return ['In Committee',   true];
+    if (s === 'IN COUNCIL - FINAL PASSAGE') return ['Final Passage',  false];
+    if (s === 'IN COUNCIL')                 return ['Before Council', true];
+    if (s === 'ADOPTED')                    return ['Adopted',        false];
+    var words = raw.split(' ');
+    return [words.map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' '), true];
+  }
+
+  function statusColor(label) {
+    if (label === 'Under Review')                                 return '#b8860b';
+    if (label === 'In Committee' || label === 'Before Council')   return '#185FA5';
+    if (label === 'Adopted')                                      return '#2d6a2d';
+    if (label === 'Final Passage')                                return '#8b1a1a';
+    return '#8a9ab8';
+  }
+
+  function jurInfo(jur) {
+    if (jur === 'federal')      return ['Federal', '#B22234'];
+    if (jur === 'pennsylvania') return ['State',   '#003087'];
+    if (jur === 'philadelphia') return ['City',    '#004C54'];
+    return ['Other', '#8a9ab8'];
+  }
+
+  function buildCard(b, view) {
+    var info    = jurInfo(b.jurisdiction);
+    var level   = info[0], rail = info[1];
+    var fs      = friendlyStatus(b.status);
+    var label   = fs[0], ongoing = fs[1];
+    var dateStr = b.status_date || '';
+    var metaHtml = '';
+
+    if (view === 'docket') {
+      var parts = [];
+      if (label)   parts.push('<span style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + statusColor(label) + ';">' + esc(label) + '</span>');
+      if (dateStr) parts.push('<span style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:#b8860b;background:rgba(184,134,11,0.09);border:0.5px solid rgba(184,134,11,0.3);border-radius:3px;padding:1px 6px;">Upcoming Action \xB7 ' + esc(dateStr) + '</span>');
+      if (parts.length) metaHtml = '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' + parts.join('') + '</div>';
+    } else {
+      var text = '';
+      if (label && dateStr)  text = esc(label) + ' \xB7 ' + (ongoing ? 'as of ' + esc(dateStr) : esc(dateStr));
+      else if (label)        text = esc(label);
+      else if (dateStr)      text = esc(dateStr);
+      if (text) metaHtml = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + (label ? statusColor(label) : '#8a9ab8') + ';">' + text + '</div>';
+    }
+
+    var idPart = b.identifier ? ' \xB7 ' + esc(b.identifier) : '';
+    var mb     = view === 'docket' ? '6px' : '5px';
+    return '<a href="/bills/' + b.id + '" style="text-decoration:none;display:block;color:inherit;">' +
+      '<div class="bill-card" style="display:flex;align-items:stretch;background:white;border:0.5px solid #dde5f5;border-radius:8px;margin-bottom:8px;overflow:hidden;transition:background 0.12s;cursor:pointer;">' +
+        '<div style="width:8px;background:' + rail + ';flex-shrink:0;"></div>' +
+        '<div style="flex:1;padding:12px 14px;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:' + rail + ';margin-bottom:4px;">' + esc(level) + idPart + '</div>' +
+          '<div style="font-family:\'Nunito\',sans-serif;font-size:11px;font-weight:600;color:#1b3a6b;line-height:1.35;margin-bottom:' + mb + ';">' + esc(b.title || '') + '</div>' +
+          metaHtml +
+        '</div>' +
+      '</div>' +
+    '</a>';
+  }
+
+  // ── Load more ──────────────────────────────────────────────────────────
+  function loadMore(view) {
+    var s = state[view];
+    if (s.fetching || !s.hasMore) return;
+    s.fetching = true;
+
+    var sentinel = document.getElementById(view + '-sentinel');
+    sentinel.innerHTML = '<div style="text-align:center;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#b8860b;">&#9670; Loading...</div>';
+
+    fetch('/dashboard/bills?view=' + view + '&offset=' + s.offset)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var feed = document.getElementById(view + '-feed');
+        data.bills.forEach(function(b) { feed.insertAdjacentHTML('beforeend', buildCard(b, view)); });
+        s.offset  += data.bills.length;
+        s.hasMore  = data.has_more;
+        s.fetching = false;
+        sentinel.innerHTML = s.hasMore
+          ? ''
+          : '<div style="text-align:center;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:#8a9ab8;">&#9733; All bills loaded</div>';
+      })
+      .catch(function() { s.fetching = false; sentinel.innerHTML = ''; });
+  }
+
+  // ── IntersectionObserver ───────────────────────────────────────────────
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        loadMore(entry.target.id.replace('-sentinel', ''));
+      });
+    }, { rootMargin: '300px' });
+    ['docket', 'record'].forEach(function(v) {
+      var el = document.getElementById(v + '-sentinel');
+      if (el) observer.observe(el);
+    });
+  }
+
+  // ── Toggle ─────────────────────────────────────────────────────────────
+  window.foraBillsToggle = function () {
+    docketActive = !docketActive;
+    var view = docketActive ? 'docket' : 'record';
+    document.getElementById('docket-panel').style.display    = docketActive ? 'block' : 'none';
+    document.getElementById('record-panel').style.display    = docketActive ? 'none'  : 'block';
+    document.getElementById('bills-title').textContent       = docketActive ? 'On the Docket' : 'The Record';
+    document.getElementById('bills-toggle-link').textContent = docketActive ? 'switch to The Record \u2192' : '\u2190 switch to On the Docket';
+    document.getElementById('bills-count').textContent       = docketActive
+      ? state.docket.total + ' upcoming actions'
+      : state.record.total + ' bills total';
+
+    // Manually trigger if sentinel already in viewport
+    var sentinel = document.getElementById(view + '-sentinel');
+    if (sentinel) {
+      var rect = sentinel.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 300) loadMore(view);
+    }
+  };
+}());
+</script>

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   post "dashboard/resolve", to: "dashboard#resolve"
   get "dashboard/status/:job_id", to: "dashboard#status"
   get "dashboard/result/:job_id", to: "dashboard#result"
+  get "dashboard/bills", to: "dashboard#bills"
   get "bills/:id", to: "bills#show", as: :bill
   get "officials/:bioguide_id", to: "officials#show", as: :official
 end

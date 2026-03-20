@@ -55,7 +55,46 @@ class DashboardController < ApplicationController
     @federal_bills = bills_from_cache(data[:federal_bills])
     @philly_bills  = bills_from_cache(data[:philly_bills])
 
+    terminal         = ['ADOPTED', 'IN COUNCIL - FINAL PASSAGE']
+    docket_scope     = CivicBill.where("status IS NULL OR UPPER(status) NOT IN (?)", terminal).order(status_date: :desc)
+    record_scope     = CivicBill.order(status_date: :desc)
+    @docket_total    = docket_scope.count
+    @record_total    = record_scope.count
+    @docket_bills    = docket_scope.limit(18).to_a
+    @record_bills    = record_scope.limit(18).to_a
+    @docket_has_more = @docket_total > 18
+    @record_has_more = @record_total > 18
+
     render :show
+  end
+
+  def bills
+    view     = params[:view] == 'record' ? 'record' : 'docket'
+    offset   = [params[:offset].to_i, 0].max
+    terminal = ['ADOPTED', 'IN COUNCIL - FINAL PASSAGE']
+
+    scope = if view == 'record'
+      CivicBill.all
+    else
+      CivicBill.where("status IS NULL OR UPPER(status) NOT IN (?)", terminal)
+    end.order(status_date: :desc)
+
+    bills    = scope.offset(offset).limit(18)
+    has_more = scope.offset(offset + 18).exists?
+
+    render json: {
+      bills: bills.map { |b|
+        {
+          id:           b.id,
+          identifier:   b.identifier,
+          title:        b.title,
+          status:       b.status,
+          status_date:  b.status_date&.strftime('%b %d, %Y'),
+          jurisdiction: b.jurisdiction
+        }
+      },
+      has_more: has_more
+    }
   end
 
   private
