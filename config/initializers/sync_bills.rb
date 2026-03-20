@@ -6,7 +6,8 @@ Rails.application.config.after_initialize do
           CivicSyncService.sync_pennsylvania_bills
         end
 
-        if CivicBill.where(jurisdiction: "federal").count.zero?
+        latest_federal = CivicBill.where(jurisdiction: "federal").order(status_date: :desc).first
+        if latest_federal.nil? || latest_federal.status_date.nil? || latest_federal.status_date < Date.new(2025, 1, 1)
           CongressBillsService.sync_federal_bills
         end
 
