@@ -4,6 +4,7 @@
 <style>
   .social-btn:hover { background:rgba(255,255,255,0.13) !important; border-color:rgba(255,255,255,0.28) !important; }
   .sponsored-card:hover { box-shadow:0 4px 18px rgba(27,58,107,0.10) !important; }
+  @media (max-width: 600px) { .social-links { justify-content:center; } }
   @media (max-width: 600px) {
     .hero-identity { flex-direction:column !important; align-items:center !important; text-align:center !important; }
     .hero-identity .hero-tags { justify-content:center !important; }
@@ -89,9 +90,6 @@
               District <%= last_term['district'] %>
             </span>
           <% end %>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:100px; border:1px solid rgba(140,196,160,0.4); background:rgba(21,92,45,0.2); color:#86efac;">
-            ✓ Verified Official
-          </span>
         </div>
       </div>
     </div>
@@ -99,7 +97,7 @@
     <!-- Social media buttons -->
     <% has_social = [@social[:twitter], @social[:facebook], @social[:instagram], @social[:youtube], @social[:tiktok], @social[:website]].any?(&:present?) %>
     <% if has_social %>
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <div class="social-links" style="display:flex; gap:8px; flex-wrap:wrap;">
 
         <% if @social[:website].present? %>
           <a href="<%= @social[:website] %>" target="_blank" rel="noopener" title="Official Website" class="social-btn"
