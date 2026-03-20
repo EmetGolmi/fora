@@ -14,5 +14,6 @@ class DashboardController < ApplicationController
     @jurisdiction = JurisdictionResolver.resolve(address)
     @state_bills = CivicBill.where(jurisdiction: "pennsylvania").order(created_at: :desc).limit(3)
     @federal_bills = CivicBill.where(jurisdiction: "federal").order(created_at: :desc).limit(3)
+    @philly_bills = CivicBill.where(jurisdiction: "philadelphia").order(created_at: :desc).limit(3)
   end
 end
