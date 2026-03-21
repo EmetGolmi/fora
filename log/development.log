@@ -4478,3 +4478,503 @@ Processing by BillsController#show as HTML
 Completed 200 OK in 5ms (Views: 2.4ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
 
 
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-20 20:10:57 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 3.4ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.8ms | GC: 1.1ms)
+Completed 200 OK in 15ms (Views: 7.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 6.2ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-20 20:11:00 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 s delhi st, 19147", "dashboard"=>{"address"=>"916 s delhi st, 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 45e5679d-ca8e-40ca-bba0-af54463ccbd5) to Async(default) with arguments: "916 s delhi st, 19147", "eac95f34-bd2d-4db1-924d-407e730c42cb"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 14ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5] Performing ResolveAddressJob (Job ID: 45e5679d-ca8e-40ca-bba0-af54463ccbd5) from Async(default) enqueued at 2026-03-21T00:11:00.763863186Z with arguments: "916 s delhi st, 19147", "eac95f34-bd2d-4db1-924d-407e730c42cb"
+Started GET "/dashboard/status/eac95f34-bd2d-4db1-924d-407e730c42cb" for 127.0.0.1 at 2026-03-20 20:11:01 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"eac95f34-bd2d-4db1-924d-407e730c42cb"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/eac95f34-bd2d-4db1-924d-407e730c42cb" for 127.0.0.1 at 2026-03-20 20:11:02 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"eac95f34-bd2d-4db1-924d-407e730c42cb"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/eac95f34-bd2d-4db1-924d-407e730c42cb" for 127.0.0.1 at 2026-03-20 20:11:03 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"eac95f34-bd2d-4db1-924d-407e730c42cb"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5]   [1m[36mCivicBill Load (1.0ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5]   [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [45e5679d-ca8e-40ca-bba0-af54463ccbd5] Performed ResolveAddressJob (Job ID: 45e5679d-ca8e-40ca-bba0-af54463ccbd5) from Async(default) in 2683.13ms
+Started GET "/dashboard/status/eac95f34-bd2d-4db1-924d-407e730c42cb" for 127.0.0.1 at 2026-03-20 20:11:03 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"eac95f34-bd2d-4db1-924d-407e730c42cb"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/eac95f34-bd2d-4db1-924d-407e730c42cb" for 127.0.0.1 at 2026-03-20 20:11:08 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"eac95f34-bd2d-4db1-924d-407e730c42cb"}
+  [1m[36mCivicBill Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 2.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | GC: 0.0ms)
+Completed 200 OK in 7ms (Views: 3.3ms | ActiveRecord: 1.1ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/3" for 127.0.0.1 at 2026-03-20 20:11:10 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 3 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 1.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.4ms | GC: 0.0ms)
+Completed 200 OK in 7ms (Views: 3.3ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-20 20:11:11 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.9ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-20 20:11:12 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 1.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+[dotenv] Set [36mOPENSTATES_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-20 20:15:32 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 3.7ms | GC: 1.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.8ms | GC: 1.6ms)
+Completed 200 OK in 17ms (Views: 9.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 7.2ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-20 20:15:35 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 s delhi st, 19147", "dashboard"=>{"address"=>"916 s delhi st, 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 93f1ac17-c242-49f1-b2e1-04cb85ca03d8) to Async(default) with arguments: "916 s delhi st, 19147", "e0807285-d10d-453b-b94f-eba68b8bd6b7"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 12ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8] Performing ResolveAddressJob (Job ID: 93f1ac17-c242-49f1-b2e1-04cb85ca03d8) from Async(default) enqueued at 2026-03-21T00:15:35.319284480Z with arguments: "916 s delhi st, 19147", "e0807285-d10d-453b-b94f-eba68b8bd6b7"
+Started GET "/dashboard/status/e0807285-d10d-453b-b94f-eba68b8bd6b7" for 127.0.0.1 at 2026-03-20 20:15:36 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"e0807285-d10d-453b-b94f-eba68b8bd6b7"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/e0807285-d10d-453b-b94f-eba68b8bd6b7" for 127.0.0.1 at 2026-03-20 20:15:36 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"e0807285-d10d-453b-b94f-eba68b8bd6b7"}
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8]   [1m[36mCivicBill Load (0.7ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8]   [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [93f1ac17-c242-49f1-b2e1-04cb85ca03d8] Performed ResolveAddressJob (Job ID: 93f1ac17-c242-49f1-b2e1-04cb85ca03d8) from Async(default) in 2189.49ms
+Started GET "/dashboard/status/e0807285-d10d-453b-b94f-eba68b8bd6b7" for 127.0.0.1 at 2026-03-20 20:15:37 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"e0807285-d10d-453b-b94f-eba68b8bd6b7"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/e0807285-d10d-453b-b94f-eba68b8bd6b7" for 127.0.0.1 at 2026-03-20 20:15:43 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"e0807285-d10d-453b-b94f-eba68b8bd6b7"}
+  [1m[36mCivicBill Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 5.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.1ms | GC: 0.0ms)
+Completed 200 OK in 15ms (Views: 7.0ms | ActiveRecord: 1.9ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/4" for 127.0.0.1 at 2026-03-20 20:15:44 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mCivicBill Load (0.6ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 4 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.5ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 3.4ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/11" for 127.0.0.1 at 2026-03-20 20:15:44 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"11"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 11 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.1ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.5ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-20 20:15:45 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.2ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 1.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-20 20:15:59 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.4ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/3" for 127.0.0.1 at 2026-03-20 20:16:07 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 3 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.6ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 2.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/bills?view=record&offset=18" for 127.0.0.1 at 2026-03-20 20:16:08 -0400
+Processing by DashboardController#bills as */*
+  Parameters: {"view"=>"record", "offset"=>"18"}
+  [1m[36mCivicBill Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) LIMIT 1 OFFSET 36 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:85:in `bills'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 OFFSET 18 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:88:in `map'
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.6ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/12" for 127.0.0.1 at 2026-03-20 20:16:08 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"12"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 12 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.5ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/14" for 127.0.0.1 at 2026-03-20 20:16:09 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"14"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 14 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.2ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 1.9ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/22" for 127.0.0.1 at 2026-03-20 20:16:09 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"22"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 22 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.3ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/bills?view=record&offset=36" for 127.0.0.1 at 2026-03-20 20:16:09 -0400
+Processing by DashboardController#bills as */*
+  Parameters: {"view"=>"record", "offset"=>"36"}
+  [1m[36mCivicBill Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) LIMIT 1 OFFSET 54 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:85:in `bills'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 OFFSET 36 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:88:in `map'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.6ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/32" for 127.0.0.1 at 2026-03-20 20:16:09 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"32"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 32 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.4ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 2.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/33" for 127.0.0.1 at 2026-03-20 20:16:09 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"33"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 33 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 1.0ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/1" for 127.0.0.1 at 2026-03-20 20:16:10 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 1 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.3ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/bills?view=record&offset=54" for 127.0.0.1 at 2026-03-20 20:16:10 -0400
+Processing by DashboardController#bills as */*
+  Parameters: {"view"=>"record", "offset"=>"54"}
+  [1m[36mCivicBill Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) LIMIT 1 OFFSET 72 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:85:in `bills'
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 OFFSET 54 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:88:in `map'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/76" for 127.0.0.1 at 2026-03-20 20:16:10 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"76"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 76 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/87" for 127.0.0.1 at 2026-03-20 20:16:10 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"87"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 87 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.7ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 2.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/92" for 127.0.0.1 at 2026-03-20 20:16:11 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"92"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 92 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.1ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/92" for 127.0.0.1 at 2026-03-20 20:16:13 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"92"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 92 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/91" for 127.0.0.1 at 2026-03-20 20:16:13 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"91"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 91 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.3ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/73" for 127.0.0.1 at 2026-03-20 20:16:14 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"73"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 73 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.6ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 2.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/67" for 127.0.0.1 at 2026-03-20 20:16:14 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"67"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 67 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/bills/33" for 127.0.0.1 at 2026-03-20 20:16:14 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"33"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 33 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/bills/22" for 127.0.0.1 at 2026-03-20 20:16:15 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"22"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 22 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.3ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 1.7ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/bills/21" for 127.0.0.1 at 2026-03-20 20:16:15 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"21"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 21 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.6ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/bills/11" for 127.0.0.1 at 2026-03-20 20:16:15 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"11"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 11 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.5ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.7ms | GC: 0.3ms)
+Completed 200 OK in 5ms (Views: 2.5ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-20 20:16:15 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.2ms)
+Completed 200 OK in 2ms (Views: 1.0ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-20 20:16:17 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.6ms | GC: 0.2ms)
+Completed 200 OK in 4ms (Views: 2.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/bills/3" for 127.0.0.1 at 2026-03-20 20:16:18 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 3 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.1ms | GC: 0.1ms)
+Completed 200 OK in 3ms (Views: 1.4ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.1ms)
+
+
