@@ -55,7 +55,21 @@
       <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.28); margin-bottom:22px;"><%= jur_label %></div>
 
       <!-- Title -->
-      <h1 style="font-family:'Libre Baskerville',serif; font-size:clamp(20px,3.2vw,30px); font-weight:700; color:white; line-height:1.25; margin:0 0 28px; max-width:680px;"><%= @bill.title %></h1>
+      <% title_limit = 216 %>
+      <% title_long  = @bill.title.length > title_limit %>
+      <h1 style="font-family:'Libre Baskerville',serif; font-size:clamp(20px,3.2vw,30px); font-weight:700; color:white; line-height:1.25; margin:0 0 <%= title_long ? '10px' : '28px' %>; max-width:680px;">
+        <span id="bill-title-short"><%= title_long ? @bill.title.first(title_limit) + "…" : @bill.title %></span>
+        <% if title_long %>
+          <span id="bill-title-full" style="display:none;"><%= @bill.title %></span>
+        <% end %>
+      </h1>
+      <% if title_long %>
+        <div style="margin-bottom:18px;">
+          <a id="bill-title-expand" href="javascript:void(0)"
+             onclick="document.getElementById('bill-title-short').style.display='none'; document.getElementById('bill-title-full').style.display='inline'; this.parentElement.style.display='none';"
+             style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:#b8860b; text-decoration:none;">Read full title ↓</a>
+        </div>
+      <% end %>
 
       <!-- Introduced date + full text link -->
       <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
