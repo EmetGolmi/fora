@@ -66,4 +66,78 @@ class OfficialsController < ApplicationController
       @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
     end
   end
+
+  def state_show
+    openstates_id = params[:openstates_id]
+    api_key       = ENV["OPENSTATES_API_KEY"]
+
+    person_response = HTTParty.get(
+      "https://v3.openstates.org/people/#{openstates_id}",
+      query: { apikey: api_key }
+    )
+
+    unless person_response.success?
+      render plain: "Official not found", status: :not_found
+      return
+    end
+
+    person       = person_response.parsed_response
+    current_role = person["current_role"] || {}
+    is_senator   = current_role["org_classification"] == "upper"
+    district     = current_role["district"].to_s.presence
+
+    @member = {
+      "name"               => person["name"],
+      "image"              => person["image"],
+      "party"              => person["party"],
+      "title"              => current_role["title"],
+      "district"           => district,
+      "org_classification" => current_role["org_classification"],
+      "division_id"        => current_role["division_id"],
+      "openstates_id"      => openstates_id
+    }
+
+    @office_title = if is_senator
+      district ? "State Senator · District #{district}" : "State Senator · Pennsylvania"
+    else
+      district ? "State Representative · District #{district}" : "State Representative · Pennsylvania"
+    end
+
+    @social = extract_state_social(person["links"] || [])
+
+    bills_response = HTTParty.get(
+      "https://v3.openstates.org/bills",
+      query: { sponsor_id: openstates_id, apikey: api_key, sort: "updated_desc", per_page: 5 }
+    )
+
+    @bills = bills_response.success? ? (bills_response.parsed_response["results"] || []) : []
+
+    identifiers  = @bills.map { |b| b["identifier"] }
+    @bill_id_map = CivicBill.where(identifier: identifiers, jurisdiction: "pennsylvania").pluck(:identifier, :id).to_h
+  end
+
+  private
+
+  def extract_state_social(links)
+    social = {}
+    links.each do |link|
+      url = link["url"].to_s.strip
+      next if url.blank?
+      case url
+      when /(?:twitter|x)\.com\/(?:intent\/user\?screen_name=)?([A-Za-z0-9_]+)/
+        social[:twitter]   ||= $1
+      when /facebook\.com\/([^\/\?]+)/
+        social[:facebook]  ||= $1
+      when /instagram\.com\/([^\/\?]+)/
+        social[:instagram] ||= $1
+      when /youtube\.com/
+        social[:youtube]   ||= url
+      when /tiktok\.com\/@?([^\/\?]+)/
+        social[:tiktok]    ||= $1
+      else
+        social[:website]   ||= url
+      end
+    end
+    social
+  end
 end

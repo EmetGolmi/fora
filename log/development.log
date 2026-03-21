@@ -6783,3 +6783,702 @@ Completed 200 OK in 4ms (Views: 1.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) 
 [dotenv] Loaded [33m.env[0m
 [dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m
 [dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-21 01:45:55 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 6.9ms | GC: 1.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 14.6ms | GC: 1.9ms)
+Completed 200 OK in 31ms (Views: 17.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 8.8ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-21 01:46:00 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 S Delhi St, Philadelphia, PA 19147", "dashboard"=>{"address"=>"916 S Delhi St, Philadelphia, PA 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 6389fd05-6db6-44c5-81ae-e8326c7c7fad) to Async(default) with arguments: "916 S Delhi St, Philadelphia, PA 19147", "49475eb6-3095-4497-83e3-36b96f5e6baa"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 30ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad] Performing ResolveAddressJob (Job ID: 6389fd05-6db6-44c5-81ae-e8326c7c7fad) from Async(default) enqueued at 2026-03-21T05:46:00.089036553Z with arguments: "916 S Delhi St, Philadelphia, PA 19147", "49475eb6-3095-4497-83e3-36b96f5e6baa"
+Started GET "/dashboard/status/49475eb6-3095-4497-83e3-36b96f5e6baa" for 127.0.0.1 at 2026-03-21 01:46:00 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"49475eb6-3095-4497-83e3-36b96f5e6baa"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad]   [1m[36mCivicBill Load (1.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad]   [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [6389fd05-6db6-44c5-81ae-e8326c7c7fad] Performed ResolveAddressJob (Job ID: 6389fd05-6db6-44c5-81ae-e8326c7c7fad) from Async(default) in 1571.02ms
+Started GET "/dashboard/status/49475eb6-3095-4497-83e3-36b96f5e6baa" for 127.0.0.1 at 2026-03-21 01:46:01 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"49475eb6-3095-4497-83e3-36b96f5e6baa"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/49475eb6-3095-4497-83e3-36b96f5e6baa" for 127.0.0.1 at 2026-03-21 01:46:07 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"49475eb6-3095-4497-83e3-36b96f5e6baa"}
+  [1m[36mCivicBill Count (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 4.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.2ms | GC: 0.0ms)
+Completed 200 OK in 15ms (Views: 6.3ms | ActiveRecord: 1.9ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/4" for 127.0.0.1 at 2026-03-21 01:46:14 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 4 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/5" for 127.0.0.1 at 2026-03-21 01:46:14 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"5"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 5 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 1.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.3ms | GC: 0.0ms)
+Completed 200 OK in 4608ms (Views: 3.1ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.5ms | GC: 0.0ms)
+Completed 200 OK in 5807ms (Views: 4.9ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-21 10:25:13 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 4.1ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.0ms | GC: 1.1ms)
+Completed 200 OK in 32ms (Views: 16.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 9.9ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-21 10:25:17 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"1724 Ridge Avenue, Philadelphia, PA 19130", "dashboard"=>{"address"=>"1724 Ridge Avenue, Philadelphia, PA 19130"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 258505e5-da26-4567-9a76-6b8fb5517938) to Async(default) with arguments: "1724 Ridge Avenue, Philadelphia, PA 19130", "21dc1eda-d4f7-461a-9399-f01494a00f70"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 14ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.3ms)
+
+
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938] Performing ResolveAddressJob (Job ID: 258505e5-da26-4567-9a76-6b8fb5517938) from Async(default) enqueued at 2026-03-21T14:25:17.957726657Z with arguments: "1724 Ridge Avenue, Philadelphia, PA 19130", "21dc1eda-d4f7-461a-9399-f01494a00f70"
+Started GET "/dashboard/status/21dc1eda-d4f7-461a-9399-f01494a00f70" for 127.0.0.1 at 2026-03-21 10:25:18 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"21dc1eda-d4f7-461a-9399-f01494a00f70"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/21dc1eda-d4f7-461a-9399-f01494a00f70" for 127.0.0.1 at 2026-03-21 10:25:19 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"21dc1eda-d4f7-461a-9399-f01494a00f70"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938]   [1m[36mCivicBill Load (0.7ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938]   [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [258505e5-da26-4567-9a76-6b8fb5517938] Performed ResolveAddressJob (Job ID: 258505e5-da26-4567-9a76-6b8fb5517938) from Async(default) in 2235.15ms
+Started GET "/dashboard/status/21dc1eda-d4f7-461a-9399-f01494a00f70" for 127.0.0.1 at 2026-03-21 10:25:20 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"21dc1eda-d4f7-461a-9399-f01494a00f70"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/21dc1eda-d4f7-461a-9399-f01494a00f70" for 127.0.0.1 at 2026-03-21 10:25:24 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"21dc1eda-d4f7-461a-9399-f01494a00f70"}
+  [1m[36mCivicBill Count (1.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 2.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.5ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 4.3ms | ActiveRecord: 2.1ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/officials/state/ocd-person%2F96711736-a47d-4bd6-bcc3-92297ec01516" for 127.0.0.1 at 2026-03-21 10:25:25 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/96711736-a47d-4bd6-bcc3-92297ec01516"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/96711736-a47d-4bd6-bcc3-92297ec01516' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-21 10:25:26 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/officials/state/ocd-person%2F96711736-a47d-4bd6-bcc3-92297ec01516" for 127.0.0.1 at 2026-03-21 10:25:29 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/96711736-a47d-4bd6-bcc3-92297ec01516"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/96711736-a47d-4bd6-bcc3-92297ec01516' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 1.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.5ms | GC: 0.0ms)
+Completed 200 OK in 4254ms (Views: 3.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 5.5ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-21 10:25:30 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.9ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.3ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/officials/state/ocd-person%2Fb0d20b05-428a-4e3a-bda1-bbba5c3cfd6a" for 127.0.0.1 at 2026-03-21 10:25:32 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/b0d20b05-428a-4e3a-bda1-bbba5c3cfd6a"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/b0d20b05-428a-4e3a-bda1-bbba5c3cfd6a' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/officials/state/ocd-person%2Fb0d20b05-428a-4e3a-bda1-bbba5c3cfd6a" for 127.0.0.1 at 2026-03-21 10:25:35 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/b0d20b05-428a-4e3a-bda1-bbba5c3cfd6a"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/b0d20b05-428a-4e3a-bda1-bbba5c3cfd6a' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/officials/state/ocd-person%2Fb0d20b05-428a-4e3a-bda1-bbba5c3cfd6a" for 127.0.0.1 at 2026-03-21 10:25:38 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/b0d20b05-428a-4e3a-bda1-bbba5c3cfd6a"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/b0d20b05-428a-4e3a-bda1-bbba5c3cfd6a' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/dashboard/bills?view=record&offset=18" for 127.0.0.1 at 2026-03-21 10:25:47 -0400
+Processing by DashboardController#bills as */*
+  Parameters: {"view"=>"record", "offset"=>"18"}
+  [1m[36mCivicBill Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) LIMIT 1 OFFSET 36 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:85:in `bills'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 OFFSET 18 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:88:in `map'
+Completed 200 OK in 2ms (Views: 0.1ms | ActiveRecord: 0.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/bills?view=record&offset=36" for 127.0.0.1 at 2026-03-21 10:25:49 -0400
+Processing by DashboardController#bills as */*
+  Parameters: {"view"=>"record", "offset"=>"36"}
+  [1m[36mCivicBill Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) LIMIT 1 OFFSET 54 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:85:in `bills'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 OFFSET 36 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:88:in `map'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/39" for 127.0.0.1 at 2026-03-21 10:25:49 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"39"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 39 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/38" for 127.0.0.1 at 2026-03-21 10:25:50 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"38"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 38 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.4ms | GC: 0.0ms)
+Completed 200 OK in 5044ms (Views: 3.4ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/33" for 127.0.0.1 at 2026-03-21 10:25:55 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"33"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 33 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 6280ms (Views: 1.5ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/25" for 127.0.0.1 at 2026-03-21 10:25:57 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"25"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 25 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/20" for 127.0.0.1 at 2026-03-21 10:25:58 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"20"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 20 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.9ms | GC: 0.0ms)
+Completed 200 OK in 5483ms (Views: 1.2ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/14" for 127.0.0.1 at 2026-03-21 10:26:01 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"14"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 14 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.5ms | GC: 0.0ms)
+Completed 200 OK in 4769ms (Views: 2.1ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/10" for 127.0.0.1 at 2026-03-21 10:26:02 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"10"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 10 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.1ms | GC: 0.0ms)
+Completed 200 OK in 5862ms (Views: 1.5ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/2" for 127.0.0.1 at 2026-03-21 10:26:04 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 2 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 0.9ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-21 10:26:04 -0400
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.0ms)
+Completed 200 OK in 4509ms (Views: 1.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 2.3ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.3ms | GC: 0.7ms)
+Completed 200 OK in 5839ms (Views: 4.6ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 2.9ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-21 10:26:07 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 S Delhi St, Philadelphia, PA 19147", "dashboard"=>{"address"=>"916 S Delhi St, Philadelphia, PA 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: e13b21b8-d121-424d-add2-f3b2421774e1) to Async(default) with arguments: "916 S Delhi St, Philadelphia, PA 19147", "27a381d1-2146-4f9d-9244-b11113de054d"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1] Performing ResolveAddressJob (Job ID: e13b21b8-d121-424d-add2-f3b2421774e1) from Async(default) enqueued at 2026-03-21T14:26:07.402546721Z with arguments: "916 S Delhi St, Philadelphia, PA 19147", "27a381d1-2146-4f9d-9244-b11113de054d"
+Started GET "/dashboard/status/27a381d1-2146-4f9d-9244-b11113de054d" for 127.0.0.1 at 2026-03-21 10:26:08 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"27a381d1-2146-4f9d-9244-b11113de054d"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1]   [1m[36mCivicBill Load (0.7ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [e13b21b8-d121-424d-add2-f3b2421774e1] Performed ResolveAddressJob (Job ID: e13b21b8-d121-424d-add2-f3b2421774e1) from Async(default) in 1588.69ms
+Started GET "/dashboard/status/27a381d1-2146-4f9d-9244-b11113de054d" for 127.0.0.1 at 2026-03-21 10:26:09 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"27a381d1-2146-4f9d-9244-b11113de054d"}
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/27a381d1-2146-4f9d-9244-b11113de054d" for 127.0.0.1 at 2026-03-21 10:26:15 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"27a381d1-2146-4f9d-9244-b11113de054d"}
+  [1m[36mCivicBill Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.1ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 1.2ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.8ms | GC: 0.2ms)
+Completed 200 OK in 5ms (Views: 2.1ms | ActiveRecord: 0.6ms (4 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/officials/state/ocd-person%2F6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb" for 127.0.0.1 at 2026-03-21 10:26:18 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2026-03-21 11:07:00 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 4.3ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 10.2ms | GC: 0.8ms)
+Completed 200 OK in 23ms (Views: 13.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 6.1ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-21 11:07:03 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 S Delhi St, Philadelphia, PA 19147", "dashboard"=>{"address"=>"916 S Delhi St, Philadelphia, PA 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 411ea316-da2a-43ee-9f22-a4fbabc5622c) to Async(default) with arguments: "916 S Delhi St, Philadelphia, PA 19147", "7e319fdd-3fe3-4e06-b0df-81962be6d8c3"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 29ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c] Performing ResolveAddressJob (Job ID: 411ea316-da2a-43ee-9f22-a4fbabc5622c) from Async(default) enqueued at 2026-03-21T15:07:03.829591655Z with arguments: "916 S Delhi St, Philadelphia, PA 19147", "7e319fdd-3fe3-4e06-b0df-81962be6d8c3"
+Started GET "/dashboard/status/7e319fdd-3fe3-4e06-b0df-81962be6d8c3" for 127.0.0.1 at 2026-03-21 11:07:04 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"7e319fdd-3fe3-4e06-b0df-81962be6d8c3"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/7e319fdd-3fe3-4e06-b0df-81962be6d8c3" for 127.0.0.1 at 2026-03-21 11:07:05 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"7e319fdd-3fe3-4e06-b0df-81962be6d8c3"}
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c]   [1m[36mCivicBill Load (0.7ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c]   [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c]   [1m[36mCivicBill Load (0.6ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [411ea316-da2a-43ee-9f22-a4fbabc5622c] Performed ResolveAddressJob (Job ID: 411ea316-da2a-43ee-9f22-a4fbabc5622c) from Async(default) in 2094.17ms
+Started GET "/dashboard/status/7e319fdd-3fe3-4e06-b0df-81962be6d8c3" for 127.0.0.1 at 2026-03-21 11:07:06 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"7e319fdd-3fe3-4e06-b0df-81962be6d8c3"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/7e319fdd-3fe3-4e06-b0df-81962be6d8c3" for 127.0.0.1 at 2026-03-21 11:07:11 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"7e319fdd-3fe3-4e06-b0df-81962be6d8c3"}
+  [1m[36mCivicBill Count (1.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.6ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 4.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.8ms | GC: 0.0ms)
+Completed 200 OK in 14ms (Views: 5.8ms | ActiveRecord: 2.4ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/officials/state/ocd-person%2F1f2c3093-8ce7-41f7-8df0-6cd14ddd354b" for 127.0.0.1 at 2026-03-21 11:07:18 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/officials/M001243" for 127.0.0.1 at 2026-03-21 11:07:22 -0400
+Processing by OfficialsController#show as HTML
+  Parameters: {"bioguide_id"=>"M001243"}
+  [1m[36mCivicBill Pluck (0.9ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('S. 3947', 'S. 3900', 'S. 3835', 'S. 3749', 'S. 3662') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:46:in `show'
+  [1m[36mCivicBill Bulk Upsert (4.7ms)[0m  [1m[32mINSERT INTO "civic_bills" ("source","external_id","identifier","title","status","status_date","jurisdiction","created_at","updated_at") VALUES ('congress', 'S-3749', 'S. 3749', 'Expanding WKSI Eligibility Act', 'Read twice and referred to the Committee on Banking, Housing, and Urban Affairs.', '2026-01-29', 'federal', '2026-03-21 15:07:23.390430', '2026-03-21 15:07:23.390430'), ('congress', 'S-3662', 'S. 3662', 'ACCESS Act of 2026', 'Read twice and referred to the Committee on Banking, Housing, and Urban Affairs.', '2026-01-15', 'federal', '2026-03-21 15:07:23.390430', '2026-03-21 15:07:23.390430') ON CONFLICT ("source","external_id") DO UPDATE SET updated_at=(CASE WHEN ("civic_bills"."title" IS NOT DISTINCT FROM excluded."title" AND "civic_bills"."status" IS NOT DISTINCT FROM excluded."status" AND "civic_bills"."status_date" IS NOT DISTINCT FROM excluded."status_date") THEN "civic_bills".updated_at ELSE CURRENT_TIMESTAMP END),"title"=excluded."title","status"=excluded."status","status_date"=excluded."status_date" RETURNING "id" /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:65:in `show'
+  [1m[36mCivicBill Pluck (0.1ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('S. 3947', 'S. 3900', 'S. 3835', 'S. 3749', 'S. 3662') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:66:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering officials/show.html.erb within layouts/application
+  Rendered officials/show.html.erb within layouts/application (Duration: 1.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.6ms | GC: 0.0ms)
+Completed 200 OK in 943ms (Views: 3.5ms | ActiveRecord: 13.7ms (3 queries, 0 cached) | GC: 5.1ms)
+
+
+Started GET "/officials/state/ocd-person%2F6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb" for 127.0.0.1 at 2026-03-21 11:07:26 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.1ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/officials/E000296" for 127.0.0.1 at 2026-03-21 11:07:29 -0400
+Processing by OfficialsController#show as HTML
+  Parameters: {"bioguide_id"=>"E000296"}
+  [1m[36mCivicBill Pluck (0.5ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('H.Res. 1071', 'H.R. 7532', 'H.Res. 898', 'H.R. 5383', 'H.R. 5384') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:46:in `show'
+  [1m[36mCivicBill Bulk Upsert (5.9ms)[0m  [1m[32mINSERT INTO "civic_bills" ("source","external_id","identifier","title","status","status_date","jurisdiction","created_at","updated_at") VALUES ('congress', 'HRES-1071', 'H.Res. 1071', 'Recognizing the desegregation efforts at Girard College in Philadelphia, and the leaders involved in African-American integration and civil rights expansion.', 'Referred to the House Committee on the Judiciary.', '2026-02-23', 'federal', '2026-03-21 15:07:30.693088', '2026-03-21 15:07:30.693088'), ('congress', 'HR-7532', 'H.R. 7532', 'To designate the facility of the United States Postal Service located at 4431 Main Street in Philadelphia, Pennsylvania, as the "Dr. Constance ''Connie'' E. Clayton Post Office".', 'Referred to the House Committee on Oversight and Government Reform.', '2026-02-12', 'federal', '2026-03-21 15:07:30.693088', '2026-03-21 15:07:30.693088'), ('congress', 'HRES-898', 'H.Res. 898', 'Recognizing November 2025 as "National Family Caregivers Month".', 'Referred to the Committee on Education and Workforce, and in addition to the Committees on Energy and Commerce, and Ways and Means, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.', '2025-11-20', 'federal', '2026-03-21 15:07:30.693088', '2026-03-21 15:07:30.693088'), ('congress', 'HR-5383', 'H.R. 5383', 'Mentoring and Supporting Families Act', 'Referred to the House Committee on Ways and Means.', '2025-09-16', 'federal', '2026-03-21 15:07:30.693088', '2026-03-21 15:07:30.693088'), ('congress', 'HR-5384', 'H.R. 5384', 'MORE Act', 'Referred to the House Committee on Ways and Means.', '2025-09-16', 'federal', '2026-03-21 15:07:30.693088', '2026-03-21 15:07:30.693088') ON CONFLICT ("source","external_id") DO UPDATE SET updated_at=(CASE WHEN ("civic_bills"."title" IS NOT DISTINCT FROM excluded."title" AND "civic_bills"."status" IS NOT DISTINCT FROM excluded."status" AND "civic_bills"."status_date" IS NOT DISTINCT FROM excluded."status_date") THEN "civic_bills".updated_at ELSE CURRENT_TIMESTAMP END),"title"=excluded."title","status"=excluded."status","status_date"=excluded."status_date" RETURNING "id" /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:65:in `show'
+  [1m[36mCivicBill Pluck (0.1ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('H.Res. 1071', 'H.R. 7532', 'H.Res. 898', 'H.R. 5383', 'H.R. 5384') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:66:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering officials/show.html.erb within layouts/application
+  Rendered officials/show.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.4ms | GC: 0.0ms)
+Completed 200 OK in 1020ms (Views: 1.8ms | ActiveRecord: 6.6ms (3 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/officials/M001243" for 127.0.0.1 at 2026-03-21 11:07:31 -0400
+Processing by OfficialsController#show as HTML
+  Parameters: {"bioguide_id"=>"M001243"}
+Started GET "/officials/E000296" for 127.0.0.1 at 2026-03-21 11:07:31 -0400
+Processing by OfficialsController#show as HTML
+  Parameters: {"bioguide_id"=>"E000296"}
+  [1m[36mCivicBill Pluck (0.4ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('S. 3947', 'S. 3900', 'S. 3835', 'S. 3749', 'S. 3662') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:46:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering officials/show.html.erb within layouts/application
+  Rendered officials/show.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.3ms | GC: 0.0ms)
+Completed 200 OK in 753ms (Views: 1.8ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+  [1m[36mCivicBill Pluck (0.8ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('H.Res. 1071', 'H.R. 7532', 'H.Res. 898', 'H.R. 5383', 'H.R. 5384') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:46:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering officials/show.html.erb within layouts/application
+  Rendered officials/show.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.5ms | GC: 0.0ms)
+Completed 200 OK in 754ms (Views: 4.1ms | ActiveRecord: 0.8ms (1 query, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/officials/F000479" for 127.0.0.1 at 2026-03-21 11:07:37 -0400
+Processing by OfficialsController#show as HTML
+  Parameters: {"bioguide_id"=>"F000479"}
+  [1m[36mCivicBill Pluck (0.5ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('S. 4045', 'S. 3796', 'S. 3733', 'S. 3660', 'S. 3468') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:46:in `show'
+  [1m[36mCivicBill Bulk Upsert (12.1ms)[0m  [1m[32mINSERT INTO "civic_bills" ("source","external_id","identifier","title","status","status_date","jurisdiction","created_at","updated_at") VALUES ('congress', 'S-3660', 'S. 3660', 'Credit Card Fairness Act', 'Read twice and referred to the Committee on Banking, Housing, and Urban Affairs.', '2026-01-15', 'federal', '2026-03-21 15:07:38.007005', '2026-03-21 15:07:38.007005'), ('congress', 'S-3468', 'S. 3468', 'National Programmable Cloud Laboratories Network Act of 2025', 'Committee on Commerce, Science, and Transportation. Ordered to be reported with an amendment favorably.', '2026-02-12', 'federal', '2026-03-21 15:07:38.007005', '2026-03-21 15:07:38.007005') ON CONFLICT ("source","external_id") DO UPDATE SET updated_at=(CASE WHEN ("civic_bills"."title" IS NOT DISTINCT FROM excluded."title" AND "civic_bills"."status" IS NOT DISTINCT FROM excluded."status" AND "civic_bills"."status_date" IS NOT DISTINCT FROM excluded."status_date") THEN "civic_bills".updated_at ELSE CURRENT_TIMESTAMP END),"title"=excluded."title","status"=excluded."status","status_date"=excluded."status_date" RETURNING "id" /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:65:in `show'
+  [1m[36mCivicBill Pluck (0.2ms)[0m  [1m[34mSELECT "civic_bills"."identifier", "civic_bills"."id" FROM "civic_bills" WHERE "civic_bills"."identifier" IN ('S. 4045', 'S. 3796', 'S. 3733', 'S. 3660', 'S. 3468') /*action='show',application='Fora',controller='officials'*/[0m
+  ↳ app/controllers/officials_controller.rb:66:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering officials/show.html.erb within layouts/application
+  Rendered officials/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.0ms)
+Completed 200 OK in 770ms (Views: 1.0ms | ActiveRecord: 12.7ms (3 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/officials/state/ocd-person%2F1f2c3093-8ce7-41f7-8df0-6cd14ddd354b" for 127.0.0.1 at 2026-03-21 11:07:41 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/dashboard/result/7e319fdd-3fe3-4e06-b0df-81962be6d8c3" for 127.0.0.1 at 2026-03-21 11:07:49 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"7e319fdd-3fe3-4e06-b0df-81962be6d8c3"}
+  [1m[36mCivicBill Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.2ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 4.4ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.0ms | GC: 0.8ms)
+Completed 200 OK in 13ms (Views: 6.7ms | ActiveRecord: 1.1ms (4 queries, 0 cached) | GC: 1.5ms)
+
+
+Started GET "/officials/state/ocd-person%2F6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb" for 127.0.0.1 at 2026-03-21 11:08:00 -0400
+Processing by OfficialsController#state_show as HTML
+  Parameters: {"openstates_id"=>"ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb"}
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+HTTParty::UnsafeURIError (Requested URI 'https://v3.openstates.org/people/ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb' has host 'v3.openstates.org' but the configured base_uri 'https://api.congress.gov/v3' has host 'api.congress.gov'. This request could send credentials to an unintended server.):
+  
+app/controllers/officials_controller.rb:74:in `state_show'
+Started GET "/dashboard/result/7e319fdd-3fe3-4e06-b0df-81962be6d8c3" for 127.0.0.1 at 2026-03-21 11:08:43 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"7e319fdd-3fe3-4e06-b0df-81962be6d8c3"}
+  [1m[36mCivicBill Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 2.2ms | GC: 0.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.1ms | GC: 0.7ms)
+Completed 200 OK in 12ms (Views: 3.5ms | ActiveRecord: 1.9ms (4 queries, 0 cached) | GC: 1.5ms)
+
+
+Started GET "/bills/70" for 127.0.0.1 at 2026-03-21 11:09:45 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"70"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 70 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/71" for 127.0.0.1 at 2026-03-21 11:09:46 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"71"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 71 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 1.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.8ms | GC: 0.3ms)
+Completed 200 OK in 5071ms (Views: 4.1ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.6ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 5766ms (Views: 1.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/dashboard/bills?view=docket&offset=18" for 127.0.0.1 at 2026-03-21 11:09:54 -0400
+Processing by DashboardController#bills as */*
+  Parameters: {"view"=>"docket", "offset"=>"18"}
+  [1m[36mCivicBill Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) LIMIT 1 OFFSET 36 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:85:in `bills'
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 OFFSET 18 /*action='bills',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:88:in `map'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/bills/36" for 127.0.0.1 at 2026-03-21 11:09:54 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"36"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 36 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/20" for 127.0.0.1 at 2026-03-21 11:09:55 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"20"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 20 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/31" for 127.0.0.1 at 2026-03-21 11:09:55 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"31"}
+  [1m[36mCivicBill Load (0.6ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 31 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.2ms | GC: 0.0ms)
+Completed 200 OK in 4244ms (Views: 3.3ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/bills/67" for 127.0.0.1 at 2026-03-21 11:09:58 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"67"}
+  [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 67 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.5ms | GC: 0.3ms)
+Completed 200 OK in 3579ms (Views: 4.7ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.8ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.4ms | GC: 0.2ms)
+Completed 200 OK in 4541ms (Views: 1.8ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.9ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.0ms | GC: 0.0ms)
+Completed 200 OK in 5334ms (Views: 2.9ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.5ms)
+
+

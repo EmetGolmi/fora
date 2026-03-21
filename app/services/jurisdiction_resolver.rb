@@ -177,15 +177,16 @@ class JurisdictionResolver
       name:         person["name"],
       office:       office,
       party:        person["party"],
-      jurisdiction: build_jurisdiction(current_role)
+      jurisdiction: build_jurisdiction(current_role, person["id"])
     }
   end
 
-  def build_jurisdiction(role)
+  def build_jurisdiction(role, openstates_id = nil)
     {
-      name:        role["org_classification"],
-      district:    role["district"],
-      division_id: role["division_id"]
+      name:          role["org_classification"],
+      district:      role["district"],
+      division_id:   role["division_id"],
+      openstates_id: openstates_id
     }
   end
 

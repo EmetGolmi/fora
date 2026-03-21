@@ -108,11 +108,14 @@
             <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; padding:12px 0 4px; border-bottom:1px solid rgba(27,58,107,0.06); margin-bottom:2px;"><%= level %></div>
 
             <% grouped[level].each do |official| %>
-              <% bioguide = official.dig(:jurisdiction, :bioguide_id) %>
+              <% bioguide     = official.dig(:jurisdiction, :bioguide_id) %>
+              <% openstates_id = official.dig(:jurisdiction, :openstates_id) %>
               <div class="rep-item" style="display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.06); cursor:pointer; transition:all 0.12s;">
                 <div style="flex:1; min-width:0;">
                   <% if bioguide.present? %>
                     <%= link_to official[:name], official_path(bioguide), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
+                  <% elsif openstates_id.present? %>
+                    <%= link_to official[:name], state_official_path(openstates_id), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% else %>
                     <span style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; display:block; line-height:1.25;"><%= official[:name] %></span>
                   <% end %>
