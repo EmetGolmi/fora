@@ -7482,3 +7482,105 @@ Completed 200 OK in 4541ms (Views: 1.8ms | ActiveRecord: 0.5ms (1 query, 0 cache
 Completed 200 OK in 5334ms (Views: 2.9ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.5ms)
 
 
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/bills/69" for 127.0.0.1 at 2026-03-21 11:22:13 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Fora'*/[0m
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"69"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 69 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+Started GET "/bills/71" for 127.0.0.1 at 2026-03-21 11:22:13 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"71"}
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 71 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 2.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 14.5ms | GC: 0.7ms)
+Completed 200 OK in 5981ms (Views: 20.8ms | ActiveRecord: 5.2ms (1 query, 0 cached) | GC: 12.9ms)
+
+
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.9ms | GC: 0.0ms)
+Completed 200 OK in 6197ms (Views: 2.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 1.7ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-21 11:22:21 -0400
+Processing by DashboardController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/index.html.erb within layouts/application
+  Rendered dashboard/index.html.erb within layouts/application (Duration: 2.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/dashboard/resolve" for 127.0.0.1 at 2026-03-21 11:22:28 -0400
+Processing by DashboardController#resolve as */*
+  Parameters: {"address"=>"916 S Delhi St, Philadelphia, PA 19147", "dashboard"=>{"address"=>"916 S Delhi St, Philadelphia, PA 19147"}}
+[ActiveJob] Enqueued ResolveAddressJob (Job ID: 7070b3bd-7c96-4642-bef6-ace5cf608ce5) to Async(default) with arguments: "916 S Delhi St, Philadelphia, PA 19147", "56428595-b1d1-48ca-a62c-4000168f8520"
+[ActiveJob] ↳ app/controllers/dashboard_controller.rb:20:in `resolve'
+Completed 200 OK in 122ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5] Performing ResolveAddressJob (Job ID: 7070b3bd-7c96-4642-bef6-ace5cf608ce5) from Async(default) enqueued at 2026-03-21T15:22:28.421026668Z with arguments: "916 S Delhi St, Philadelphia, PA 19147", "56428595-b1d1-48ca-a62c-4000168f8520"
+Started GET "/dashboard/status/56428595-b1d1-48ca-a62c-4000168f8520" for 127.0.0.1 at 2026-03-21 11:22:29 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"56428595-b1d1-48ca-a62c-4000168f8520"}
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/status/56428595-b1d1-48ca-a62c-4000168f8520" for 127.0.0.1 at 2026-03-21 11:22:30 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"56428595-b1d1-48ca-a62c-4000168f8520"}
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5]   [1m[36mCivicBill Load (1.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'pennsylvania' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5]   ↳ app/jobs/resolve_address_job.rb:7:in `perform'
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5]   [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'federal' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5]   ↳ app/jobs/resolve_address_job.rb:8:in `perform'
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5]   [1m[36mCivicBill Load (0.3ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."jurisdiction" = 'philadelphia' ORDER BY "civic_bills"."created_at" DESC LIMIT 3 /*application='Fora',job='ResolveAddressJob'*/[0m
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5]   ↳ app/jobs/resolve_address_job.rb:9:in `perform'
+[ActiveJob] [ResolveAddressJob] [7070b3bd-7c96-4642-bef6-ace5cf608ce5] Performed ResolveAddressJob (Job ID: 7070b3bd-7c96-4642-bef6-ace5cf608ce5) from Async(default) in 1886.74ms
+Started GET "/dashboard/status/56428595-b1d1-48ca-a62c-4000168f8520" for 127.0.0.1 at 2026-03-21 11:22:30 -0400
+Processing by DashboardController#status as */*
+  Parameters: {"job_id"=>"56428595-b1d1-48ca-a62c-4000168f8520"}
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/dashboard/result/56428595-b1d1-48ca-a62c-4000168f8520" for 127.0.0.1 at 2026-03-21 11:22:37 -0400
+Processing by DashboardController#result as HTML
+  Parameters: {"job_id"=>"56428595-b1d1-48ca-a62c-4000168f8520"}
+  [1m[36mCivicBill Count (1.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:62:in `result'
+  [1m[36mCivicBill Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:63:in `result'
+  [1m[36mCivicBill Load (0.9ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status IS NULL OR UPPER(status) NOT IN ('ADOPTED', 'IN COUNCIL - FINAL PASSAGE')) AND (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:64:in `result'
+  [1m[36mCivicBill Load (0.5ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE (status_date >= '2025-01-01' OR status_date IS NULL) ORDER BY "civic_bills"."status_date" DESC LIMIT 18 /*action='result',application='Fora',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:65:in `result'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/show.html.erb within layouts/application
+  Rendered dashboard/show.html.erb within layouts/application (Duration: 5.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.7ms | GC: 0.0ms)
+Completed 200 OK in 22ms (Views: 8.6ms | ActiveRecord: 3.5ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/bills/67" for 127.0.0.1 at 2026-03-21 11:22:44 -0400
+Processing by BillsController#show as HTML
+  Parameters: {"id"=>"67"}
+  [1m[36mCivicBill Load (0.4ms)[0m  [1m[34mSELECT "civic_bills".* FROM "civic_bills" WHERE "civic_bills"."id" = 67 LIMIT 1 /*action='show',application='Fora',controller='bills'*/[0m
+  ↳ app/controllers/bills_controller.rb:3:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering bills/show.html.erb within layouts/application
+  Rendered bills/show.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.3ms | GC: 0.0ms)
+Completed 200 OK in 5804ms (Views: 3.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+[dotenv] Set [36mANTHROPIC_API_KEY[0m, [36mGOOGLE_CIVIC_API_KEY[0m, [36mGOOGLE_GEOCODING_API_KEY[0m, [36mOPENSTATES_API_KEY[0m, [36mCONGRESS_API_KEY[0m
+[dotenv] Loaded [33m.env[0m

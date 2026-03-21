@@ -17,5 +17,5 @@ Rails.application.routes.draw do
   get "dashboard/bills", to: "dashboard#bills"
   get "bills/:id", to: "bills#show", as: :bill
   get "officials/:bioguide_id", to: "officials#show", as: :official
-  get "officials/state/:openstates_id", to: "officials#state_show", as: :state_official
+  get "/officials/state/*openstates_id", to: "officials#state_show", as: :state_official
 end
