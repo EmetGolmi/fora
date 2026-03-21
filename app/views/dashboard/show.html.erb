@@ -195,14 +195,12 @@
                 <div style="flex:1; padding:12px 14px;">
                   <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
                   <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= b.title %></div>
-                  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <% if label.present? %>
-                      <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>;"><%= label %></span>
-                    <% end %>
-                    <% if date_str.present? %>
-                      <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#b8860b; background:rgba(184,134,11,0.09); border:0.5px solid rgba(184,134,11,0.3); border-radius:3px; padding:1px 6px;">Upcoming Action · <%= date_str %></span>
-                    <% end %>
-                  </div>
+                  <% if label.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>; margin-bottom:3px;"><%= label %></div>
+                  <% end %>
+                  <% if date_str.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#b8860b; background:rgba(184,134,11,0.09); border:0.5px solid rgba(184,134,11,0.3); border-radius:3px; padding:1px 6px; display:inline-block;">Upcoming Action · <%= date_str %></div>
+                  <% end %>
                 </div>
               </div>
             <% end %>
@@ -234,16 +232,11 @@
                 <div style="flex:1; padding:12px 14px;">
                   <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
                   <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= b.title %></div>
-                  <% if label.present? || date_str.present? %>
-                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>;">
-                      <% if label.present? && date_str.present? %>
-                        <%= label %> · <%= ongoing ? "as of #{date_str}" : date_str %>
-                      <% elsif label.present? %>
-                        <%= label %>
-                      <% else %>
-                        <%= date_str %>
-                      <% end %>
-                    </div>
+                  <% if label.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>; margin-bottom:3px;"><%= label %></div>
+                  <% end %>
+                  <% if date_str.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#8a9ab8;"><%= ongoing ? "as of #{date_str}" : date_str %></div>
                   <% end %>
                 </div>
               </div>
@@ -316,16 +309,11 @@
     var metaHtml = '';
 
     if (view === 'docket') {
-      var parts = [];
-      if (label)   parts.push('<span style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + statusColor(label) + ';">' + esc(label) + '</span>');
-      if (dateStr) parts.push('<span style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:#b8860b;background:rgba(184,134,11,0.09);border:0.5px solid rgba(184,134,11,0.3);border-radius:3px;padding:1px 6px;">Upcoming Action \xB7 ' + esc(dateStr) + '</span>');
-      if (parts.length) metaHtml = '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' + parts.join('') + '</div>';
+      if (label)   metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + statusColor(label) + ';margin-bottom:3px;">' + esc(label) + '</div>';
+      if (dateStr) metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:#b8860b;background:rgba(184,134,11,0.09);border:0.5px solid rgba(184,134,11,0.3);border-radius:3px;padding:1px 6px;display:inline-block;">Upcoming Action \xB7 ' + esc(dateStr) + '</div>';
     } else {
-      var text = '';
-      if (label && dateStr)  text = esc(label) + ' \xB7 ' + (ongoing ? 'as of ' + esc(dateStr) : esc(dateStr));
-      else if (label)        text = esc(label);
-      else if (dateStr)      text = esc(dateStr);
-      if (text) metaHtml = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + (label ? statusColor(label) : '#8a9ab8') + ';">' + text + '</div>';
+      if (label)   metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + statusColor(label) + ';margin-bottom:3px;">' + esc(label) + '</div>';
+      if (dateStr) metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:#8a9ab8;">' + (ongoing ? 'as of ' + esc(dateStr) : esc(dateStr)) + '</div>';
     }
 
     var idPart = b.identifier ? ' \xB7 ' + esc(b.identifier) : '';

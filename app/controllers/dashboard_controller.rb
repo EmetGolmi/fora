@@ -56,8 +56,9 @@ class DashboardController < ApplicationController
     @philly_bills  = bills_from_cache(data[:philly_bills])
 
     terminal         = ['ADOPTED', 'IN COUNCIL - FINAL PASSAGE']
-    docket_scope     = CivicBill.where("status IS NULL OR UPPER(status) NOT IN (?)", terminal).order(status_date: :desc)
-    record_scope     = CivicBill.order(status_date: :desc)
+    date_filter      = ["status_date >= ? OR status_date IS NULL", Date.new(2025, 1, 1)]
+    docket_scope     = CivicBill.where("status IS NULL OR UPPER(status) NOT IN (?)", terminal).where(date_filter).order(status_date: :desc)
+    record_scope     = CivicBill.where(date_filter).order(status_date: :desc)
     @docket_total    = docket_scope.count
     @record_total    = record_scope.count
     @docket_bills    = docket_scope.limit(18).to_a
@@ -73,10 +74,11 @@ class DashboardController < ApplicationController
     offset   = [params[:offset].to_i, 0].max
     terminal = ['ADOPTED', 'IN COUNCIL - FINAL PASSAGE']
 
+    date_filter = ["status_date >= ? OR status_date IS NULL", Date.new(2025, 1, 1)]
     scope = if view == 'record'
-      CivicBill.all
+      CivicBill.where(date_filter)
     else
-      CivicBill.where("status IS NULL OR UPPER(status) NOT IN (?)", terminal)
+      CivicBill.where("status IS NULL OR UPPER(status) NOT IN (?)", terminal).where(date_filter)
     end.order(status_date: :desc)
 
     bills    = scope.offset(offset).limit(18)
