@@ -62,7 +62,7 @@ class OfficialsController < ApplicationController
           updated_at:   now
         }
       end
-      CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status status_date updated_at])
+      CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status status_date])
       @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
     end
   end
