@@ -28,5 +28,15 @@ class OfficialsController < ApplicationController
     else
       []
     end
+
+    bill_type_labels = {
+      "HR" => "H.R.", "S" => "S.", "HJRES" => "H.J.Res.", "SJRES" => "S.J.Res.",
+      "HRES" => "H.Res.", "SRES" => "S.Res.", "HCONRES" => "H.Con.Res.", "SCONRES" => "S.Con.Res."
+    }
+    identifiers = @bills.map do |bill|
+      prefix = bill_type_labels[bill["type"].to_s.upcase] || bill["type"].to_s.upcase
+      "#{prefix} #{bill['number']}"
+    end
+    @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
   end
 end
