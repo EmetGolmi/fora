@@ -194,7 +194,7 @@
                 <div style="width:8px; background:<%= rail %>; flex-shrink:0;"></div>
                 <div style="flex:1; padding:12px 14px;">
                   <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
-                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= b.title %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= truncate(b.title, length: 216) %></div>
                   <% if label.present? %>
                     <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>; margin-bottom:3px;"><%= label %></div>
                   <% end %>
@@ -231,7 +231,7 @@
                 <div style="width:8px; background:<%= rail %>; flex-shrink:0;"></div>
                 <div style="flex:1; padding:12px 14px;">
                   <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
-                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= b.title %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= truncate(b.title, length: 216) %></div>
                   <% if label.present? %>
                     <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>; margin-bottom:3px;"><%= label %></div>
                   <% end %>
@@ -323,7 +323,7 @@
         '<div style="width:8px;background:' + rail + ';flex-shrink:0;"></div>' +
         '<div style="flex:1;padding:12px 14px;">' +
           '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:' + rail + ';margin-bottom:4px;">' + esc(level) + idPart + '</div>' +
-          '<div style="font-family:\'Nunito\',sans-serif;font-size:11px;font-weight:600;color:#1b3a6b;line-height:1.35;margin-bottom:' + mb + ';">' + esc(b.title || '') + '</div>' +
+          '<div style="font-family:\'Nunito\',sans-serif;font-size:11px;font-weight:600;color:#1b3a6b;line-height:1.35;margin-bottom:' + mb + ';">' + (function(t){ return t.length > 216 ? esc(t.slice(0,216)) + '…' : esc(t); })(b.title || '') + '</div>' +
           metaHtml +
         '</div>' +
       '</div>' +
