@@ -33,7 +33,7 @@ class BillsController < ApplicationController
         messages: [
           {
             role:    "user",
-            content: "For this legislation: '#{@bill.title}' (Status: #{@bill.status}) — respond with exactly two sections separated by || (double pipe). Write in plain prose sentences only — no markdown, no bullet points, no bold text, no labels or headers. Section 1: What this bill does in 2-3 plain English sentences. Section 2: 2-3 possible effects on everyday people written as flowing sentences, using 'may' or 'could', never stating outcomes as certain. Keep each section under 100 words."
+            content: "For this legislation: '#{@bill.title}' (Status: #{@bill.status}) — respond with exactly two paragraphs separated by the exact string ' || ' (space pipe pipe space). First paragraph: what this bill does in 2-3 plain sentences. Second paragraph: 2-3 sentences about possible effects using may/could/might. Do not use any headers, labels, bullet points, or markdown. Example format: This bill does X. It also does Y. || This may affect people by Z. It could also lead to W."
           }
         ]
       }.to_json
@@ -41,7 +41,7 @@ class BillsController < ApplicationController
 
     if response.success?
       text     = response.parsed_response.dig("content", 0, "text").to_s
-      parts    = text.split("||", 2).map(&:strip)
+      parts    = text.split(" || ", 2).map(&:strip)
       @summary = clean_text(parts[0])
       @effects = clean_text(parts[1])
       if @summary || @effects
