@@ -323,7 +323,7 @@
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bills</div>
       </div>
       <div style="flex:1; text-align:center; padding:10px 6px;">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">—</div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= @party_vote_pct ? "#{@party_vote_pct.round(1)}%" : "—" %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Party-Line</div>
       </div>
     </div>
@@ -379,7 +379,7 @@
         <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Attendance</span>
         <button onclick="openModal('modal-attendance')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
-      <% [["Votes Cast", votes_cast], ["Attendance Rate", "—"], ["Missed", "—"], ["#{is_senator ? 'Senate' : 'House'} Avg", "—"]].each do |label, val| %>
+      <% [["Votes Cast", votes_cast], ["Attendance Rate", @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—"], ["Missed", @missed_votes_pct ? "#{@missed_votes_pct.round(1)}%" : "—"], ["#{is_senator ? 'Senate' : 'House'} Avg", "—"]].each do |label, val| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
@@ -393,7 +393,7 @@
         <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Party-Line Voting</span>
         <button onclick="openModal('modal-party')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
-      <% [["With Party", "—"], ["Independent", "—"], ["#{is_senator ? 'Senate' : 'House'} Average", "—"]].each do |label, val| %>
+      <% [["With Party", @party_vote_pct ? "#{@party_vote_pct.round(1)}%" : "—"], ["Independent", @party_vote_pct ? "#{(100 - @party_vote_pct).round(1)}%" : "—"], ["#{is_senator ? 'Senate' : 'House'} Average", "—"]].each do |label, val| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
@@ -475,9 +475,9 @@
       <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Campaign Finance</div>
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Cost of Getting the Message Out</h3>
       <div style="background:white; border-radius:8px; padding:14px 12px; text-align:center; margin-bottom:8px;">
-        <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:#d4d8e0; line-height:1;">$—</div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b0b8c8; margin-top:4px;">Total Raised · 2024 Cycle</div>
-        <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:<%= @fec_total_raised ? '#1b3a6b' : '#d4d8e0' %>; line-height:1;"><%= @fec_total_raised ? "$#{(@fec_total_raised / 1_000_000.0).round(1)}M" : "$—" %></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b0b8c8; margin-top:4px;">Total Raised<%= @fec_cycle ? " · #{@fec_cycle} Cycle" : "" %></div>
+        <% unless @fec_total_raised %><div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div><% end %>
       </div>
       <div style="background:#f0f7f0; border:1px solid rgba(39,80,10,.15); border-radius:8px; padding:10px 12px;">
         <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#27500A; margin-bottom:3px;">◆ No Donations From</div>

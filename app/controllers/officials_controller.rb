@@ -113,7 +113,46 @@ class OfficialsController < ApplicationController
       []
     end
 
-    # TODO: GovTrack integration for attendance and party-line voting
+    Rails.logger.debug "[FORA] @committees for #{bioguide_id}: #{@committees.inspect}"
+    Rails.logger.debug "[FORA] FEC_API_KEY present: #{ENV['FEC_API_KEY'].present?}"
+
+    # FEC campaign finance
+    begin
+      fec_resp = HTTParty.get(
+        "https://api.open.fec.gov/v1/candidates/search/",
+        query: {
+          api_key:  ENV["FEC_API_KEY"],
+          q:        @member["name"],
+          office:   "S",
+          state:    "PA",
+          per_page: 1
+        }
+      )
+      if fec_resp.success?
+        candidate        = fec_resp.parsed_response.dig("results", 0)
+        @fec_total_raised = candidate&.dig("total_receipts")
+        @fec_cycle        = candidate&.[]("election_years")&.last || candidate&.[]("election_year")
+      end
+    rescue
+      @fec_total_raised = nil
+      @fec_cycle        = nil
+    end
+
+    # GovTrack voting stats
+    begin
+      govtrack_resp = HTTParty.get(
+        "https://api.govtrack.us/api/v2/person",
+        query: { name: @member["name"], format: "json" }
+      )
+      if govtrack_resp.success?
+        person            = govtrack_resp.parsed_response.dig("objects", 0)
+        @party_vote_pct   = person&.dig("votes_with_party_pct")
+        @missed_votes_pct = person&.dig("missed_votes_pct")
+      end
+    rescue
+      @party_vote_pct   = nil
+      @missed_votes_pct = nil
+    end
   end
 
   def state_show
