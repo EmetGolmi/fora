@@ -19,10 +19,6 @@
   }
 
   /* ── Mobile animations ── */
-  @keyframes bounce-down {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(3px); }
-  }
   @keyframes foil-shift {
     0%   { background-position: -200% center; }
     100% { background-position:  200% center; }
@@ -38,12 +34,6 @@
     animation: foil-shift 4s ease-in-out infinite;
     pointer-events: none;
   }
-  .bounce-arrow {
-    display: inline-block;
-    animation: bounce-down 1.4s ease-in-out infinite;
-    color: #b8860b;
-  }
-
   /* ── Mobile modals ── */
   .mob-modal {
     display: none;
@@ -143,8 +133,9 @@
 
       <!-- Avatar -->
       <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#254f92,#1b3a6b); border:3px solid rgba(184,134,11,0.5); flex-shrink:0; overflow:hidden; position:relative;">
-        <% if @member.dig("depiction", "imageUrl") %>
-          <img src="<%= @member.dig('depiction', 'imageUrl') %>"
+        <% desk_photo = @wiki_photo.presence || @member.dig("depiction", "imageUrl") %>
+        <% if desk_photo %>
+          <img src="<%= desk_photo %>"
                alt="<%= @member['directOrderName'] %>"
                style="width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:50%;">
         <% else %>
@@ -273,19 +264,39 @@
 ══════════════════════════════════════════ -->
 <div class="mobile-card">
 
+<%
+  party_line_pct = 0.68  # placeholder until real data — Democrat fraction
+  party_raw = (@member["partyName"] || "").strip
+  if party_raw =~ /Democrat/i
+    party_r, party_g, party_b = 0, 48, 135      # #003087
+    opp_r,   opp_g,   opp_b   = 178, 34, 52     # #B22234
+  elsif party_raw =~ /Republican/i
+    party_r, party_g, party_b = 178, 34, 52     # #B22234
+    opp_r,   opp_g,   opp_b   = 0, 48, 135      # #003087
+    party_line_pct = 0.68
+  else
+    party_r, party_g, party_b = 27, 58, 107     # #1b3a6b neutral
+    opp_r,   opp_g,   opp_b   = 27, 58, 107
+  end
+  # blend_color represents the official's actual voting record — party_line_pct fraction toward their party color, remainder toward opposition
+  blend_r = ((party_r * party_line_pct) + (opp_r * (1 - party_line_pct))).round
+  blend_g = ((party_g * party_line_pct) + (opp_g * (1 - party_line_pct))).round
+  blend_b = ((party_b * party_line_pct) + (opp_b * (1 - party_line_pct))).round
+  blend_color = "rgb(#{blend_r},#{blend_g},#{blend_b})"
+  nameplate_color = party_raw =~ /Democrat/i ? "#003087" : (party_raw =~ /Republican/i ? "#8B0000" : "#1b3a6b")
+%>
+
   <!-- ─────────────────────────────────────
        SECTION 1 · CARD FRONT
   ───────────────────────────────────────── -->
   <div style="background:#1b3a6b; position:relative; overflow:hidden;">
 
-    <!-- Party color bar -->
-    <div style="position:absolute; left:0; top:0; bottom:0; width:5px; background:<%= party_bar_color %>; z-index:2;"></div>
-
     <!-- Photo zone -->
     <div style="height:260px; overflow:hidden; position:relative;">
-      <% if @member.dig("depiction", "imageUrl") %>
-        <% full_img = @member["depiction"]["imageUrl"]&.gsub('_200.jpg', '.jpg') || @member.dig("depiction", "imageUrl") %>
-        <img src="<%= full_img %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
+      <% congress_img = @member["depiction"]["imageUrl"]&.gsub('_200.jpg', '.jpg') rescue @member.dig("depiction", "imageUrl") %>
+      <% mob_photo = @wiki_photo.presence || congress_img %>
+      <% if mob_photo %>
+        <img src="<%= mob_photo %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
       <% else %>
         <div style="width:100%; height:100%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:#d4a832;"><%= name_initials %></div>
       <% end %>
@@ -293,21 +304,21 @@
       <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
       <!-- Overlay text (replaces top band) -->
       <div style="position:absolute; top:10px; right:12px; text-align:right; pointer-events:none;">
-        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55); text-shadow:0 1px 4px rgba(0,0,0,.7);">2026 Civic Series</div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.1em; color:rgba(255,255,255,.55); text-shadow:0 1px 4px rgba(0,0,0,.7); margin-top:2px;">United States of America</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#d4a832; text-shadow:0 1px 4px rgba(0,0,0,.7);">2026 CIVIC SERIES</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.1em; color:#d4a832; text-shadow:0 1px 4px rgba(0,0,0,.7); margin-top:2px;">United States</div>
       </div>
       <!-- Foil shimmer -->
       <div class="mob-foil" style="position:absolute; inset:0;"></div>
     </div>
 
     <!-- Nameplate -->
-    <div style="background:#0a1220; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
+    <div style="background:<%= nameplate_color %>; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
       <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:white; line-height:1.2;"><%= @member["directOrderName"] %></div>
       <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.12em; color:#d4a832; margin-top:3px;"><%= office_title %></div>
     </div>
 
     <!-- Quick stats strip -->
-    <div style="background:#0a1220; display:flex;">
+    <div style="background:<%= blend_color %>; display:flex;">
       <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
         <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= votes_cast %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Votes Cast</div>
@@ -323,7 +334,7 @@
     </div>
 
     <!-- Social + Follow row -->
-    <div style="background:#0a1220; padding:8px 14px 8px 21px; display:flex; align-items:center; justify-content:space-between;">
+    <div style="background:<%= blend_color %>; padding:8px 14px 8px 21px; display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
         <% if @social[:website].present? %>
           <a href="<%= @social[:website] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
@@ -356,11 +367,6 @@
       </button>
     </div>
 
-    <!-- Scroll hint -->
-    <div style="background:#0a1220; text-align:center; padding:6px 0 10px;">
-      <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.2);">Scroll for stats <span class="bounce-arrow">↓</span></span>
-    </div>
-
     <!-- Star strip -->
     <div style="background:#1b3a6b; padding:7px 16px; font-size:9px; letter-spacing:.4em; color:#b8860b; white-space:nowrap; overflow:hidden; -webkit-mask-image:linear-gradient(to right,black 90%,transparent); mask-image:linear-gradient(to right,black 90%,transparent);">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
 
@@ -371,12 +377,6 @@
        SECTION 2 · STAT BACK
   ───────────────────────────────────────── -->
   <div style="background:#f2f4f8;">
-
-    <!-- Header band -->
-    <div style="background:#1b3a6b; border-bottom:2px solid #b8860b; padding:8px 14px; display:flex; align-items:center; justify-content:space-between;">
-      <span style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white;">F<span style="color:#d4a832;">O</span>RA</span>
-      <span style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.45);"><%= @member["directOrderName"] %></span>
-    </div>
 
     <!-- Attendance -->
     <div style="padding:10px 14px; border-bottom:1px solid #e8ebf2;">

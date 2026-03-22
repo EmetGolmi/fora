@@ -17,6 +17,20 @@ class OfficialsController < ApplicationController
     @social = CongressSocialService.for_bioguide(bioguide_id)
     @social[:website] ||= @member["officialWebsiteUrl"]
 
+    begin
+      wiki_name = URI.encode_www_form_component(@member["name"].to_s)
+      wiki_resp = HTTParty.get(
+        "https://en.wikipedia.org/api/rest_v1/page/summary/#{wiki_name}",
+        headers: { "User-Agent" => "FORA/1.0 (fora.center)" }
+      )
+      if wiki_resp.success?
+        parsed = wiki_resp.parsed_response
+        @wiki_photo = parsed.dig("originalimage", "source") || parsed.dig("thumbnail", "source")
+      end
+    rescue
+      @wiki_photo = nil
+    end
+
     bills_response = self.class.get("/member/#{bioguide_id}/sponsored-legislation", query: {
       api_key: api_key,
       limit: 5,
