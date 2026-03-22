@@ -281,35 +281,20 @@
     <!-- Party color bar -->
     <div style="position:absolute; left:0; top:0; bottom:0; width:5px; background:<%= party_bar_color %>; z-index:2;"></div>
 
-    <!-- Top band -->
-    <div style="background:#1b3a6b; padding:9px 16px 7px 21px; border-bottom:3px solid #b8860b;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <span style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:white; letter-spacing:.05em;">F<span style="color:#d4a832;">O</span>RA</span>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#d4a832; letter-spacing:.14em; text-transform:uppercase;">Civic Series</span>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:rgba(255,255,255,.4); letter-spacing:.14em; margin-top:2px;">PENNSYLVANIA · FEDERAL · 2026</div>
-    </div>
-
     <!-- Photo zone -->
     <div style="height:260px; overflow:hidden; position:relative;">
       <% if @member.dig("depiction", "imageUrl") %>
-        <img src="<%= @member.dig('depiction', 'imageUrl') %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
+        <% full_img = @member["depiction"]["imageUrl"]&.gsub('_200.jpg', '.jpg') || @member.dig("depiction", "imageUrl") %>
+        <img src="<%= full_img %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
       <% else %>
         <div style="width:100%; height:100%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:#d4a832;"><%= name_initials %></div>
       <% end %>
       <!-- Fade gradient -->
       <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
-      <!-- PA Seal -->
-      <div style="position:absolute; top:8px; right:10px; opacity:.6; pointer-events:none;">
-        <svg viewBox="0 0 70 70" width="62" height="62">
-          <circle cx="35" cy="35" r="32" fill="none" stroke="#b8860b" stroke-width="1.5"/>
-          <circle cx="35" cy="35" r="24" fill="none" stroke="#b8860b" stroke-width=".7"/>
-          <!-- 6-point star (two triangles) -->
-          <polygon points="35,14 40,27 53,27 43,35 47,48 35,41 23,48 27,35 17,27 30,27" fill="none" stroke="#d4a832" stroke-width="1.2"/>
-          <polygon points="35,56 40,43 53,43 43,35 47,22 35,29 23,22 27,35 17,43 30,43" fill="none" stroke="#d4a832" stroke-width="1.2"/>
-          <text x="35" y="9" text-anchor="middle" font-size="5.5" font-family="serif" fill="#d4a832" letter-spacing="1">PENNSYLVANIA</text>
-          <text x="35" y="65" text-anchor="middle" font-size="5" font-family="serif" fill="#d4a832" letter-spacing=".5">EST. 1787</text>
-        </svg>
+      <!-- Overlay text (replaces top band) -->
+      <div style="position:absolute; top:10px; right:12px; text-align:right; pointer-events:none;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55); text-shadow:0 1px 4px rgba(0,0,0,.7);">2026 Civic Series</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.1em; color:rgba(255,255,255,.55); text-shadow:0 1px 4px rgba(0,0,0,.7); margin-top:2px;">United States of America</div>
       </div>
       <!-- Foil shimmer -->
       <div class="mob-foil" style="position:absolute; inset:0;"></div>
@@ -509,13 +494,24 @@
     <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Committees</div>
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Where Bills Live or Die</h3>
-      <% 3.times do %>
-        <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
-          <div style="height:9px; background:#eef0f4; border-radius:3px; width:56%; margin-bottom:5px;"></div>
-          <div style="height:8px; background:#f3f4f7; border-radius:3px; width:30%;"></div>
-        </div>
+      <% if @committees.present? %>
+        <% @committees.each do |committee| %>
+          <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px; display:flex; align-items:baseline; justify-content:space-between; gap:10px;">
+            <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#1b3a6b; line-height:1.35; flex:1;"><%= committee[:name] %></span>
+            <% if committee[:role].present? %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; text-transform:uppercase; color:#5a6e8a; white-space:nowrap; flex-shrink:0;"><%= committee[:role] %></span>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <% 3.times do %>
+          <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
+            <div style="height:9px; background:#eef0f4; border-radius:3px; width:56%; margin-bottom:5px;"></div>
+            <div style="height:8px; background:#f3f4f7; border-radius:3px; width:30%;"></div>
+          </div>
+        <% end %>
+        <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; text-align:center; padding:4px 0;">Committee assignments coming soon.</p>
       <% end %>
-      <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; text-align:center; padding:4px 0;">Committee assignments coming soon.</p>
     </div>
 
     <!-- Reach Out -->

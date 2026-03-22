@@ -68,6 +68,23 @@ class OfficialsController < ApplicationController
 
     @bills_active   = @bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction", "text").to_s)) }
     @bills_resolved = @bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction", "text").to_s)) }
+
+    # Fetch committee memberships
+    committees_response = self.class.get("/member/#{bioguide_id}/committees", query: { api_key: api_key })
+    @committees = if committees_response.success?
+      raw = committees_response.parsed_response["committeeHistory"] ||
+            committees_response.parsed_response["committees"] || []
+      current = raw.select { |c| c["endDate"].nil? }
+      (current.any? ? current : raw).first(4).map do |c|
+        name = c.dig("committee", "name") || c["name"] || c["committeeName"] || "Committee"
+        role = c["memberType"] || c["role"] || ""
+        { name: name, role: role }
+      end
+    else
+      []
+    end
+
+    # TODO: GovTrack integration for attendance and party-line voting
   end
 
   def state_show
