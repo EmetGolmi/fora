@@ -5,7 +5,7 @@ class OfficialsController < ApplicationController
   WIKI_FILENAMES = {
     "F000479" => "John_Fetterman_official_portrait.jpg",
     "M001243" => "McCormick_Portrait_(HR).jpg",
-    "E000296" => "Rep._Dwight_Evans,_official_portrait,_118th_Congress.jpg"
+    "E000296" => "Dwight_Evans_official_photo_(cropped).jpg"
   }.freeze
 
   def show
