@@ -31,6 +31,11 @@ class OfficialsController < ApplicationController
       @wiki_photo = nil
     end
 
+    wiki_photos = {
+      "F000479" => "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/John_Fetterman_official_portrait.jpg/960px-John_Fetterman_official_portrait.jpg"
+    }
+    @wiki_photo = wiki_photos[params[:bioguide_id]] || @wiki_photo
+
     bills_response = self.class.get("/member/#{bioguide_id}/sponsored-legislation", query: {
       api_key: api_key,
       limit: 5,
