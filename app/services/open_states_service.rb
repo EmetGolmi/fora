@@ -7,16 +7,22 @@ class OpenStatesService
   end
 
   def pennsylvania_bills
-    response = self.class.get("/bills", query: {
+    base_query = {
       jurisdiction: "Pennsylvania",
-      per_page: 20,
-      include: %w[sponsorships abstracts votes]
-    }, headers: headers)
+      per_page:     100,
+      sort:         "latest_action_date",
+      include:      %w[sponsorships abstracts votes]
+    }
 
-    return [] unless response.success?
+    (1..3).flat_map do |page|
+      response = self.class.get("/bills", query: base_query.merge(page: page), headers: headers)
+      break unless response.success?
 
-    results = response.parsed_response["results"] || []
-    results.map { |bill| normalize(bill) }
+      results = response.parsed_response["results"] || []
+      break if results.empty?
+
+      results.map { |bill| normalize(bill) }
+    end
   end
 
   private

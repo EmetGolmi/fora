@@ -3,7 +3,7 @@ class PhillyBillsService
 
   BASE_URL = "https://phila.legistar.com"
   CALENDAR_URL = "#{BASE_URL}/Calendar.aspx"
-  BILL_LIMIT = 10
+  BILL_LIMIT = 50
 
   def self.sync_philly_bills
     new.sync_philly_bills
@@ -28,48 +28,51 @@ class PhillyBillsService
   private
 
   def fetch_bills
-    meeting_url = find_latest_council_meeting
-    return [] unless meeting_url
+    meeting_urls = find_recent_council_meetings(5)
+    return [] if meeting_urls.empty?
 
-    legislation_urls = find_legislation_links(meeting_url)
-    return [] if legislation_urls.empty?
+    seen_file_numbers = Set.new
+    bills = []
 
-    legislation_urls.first(BILL_LIMIT).filter_map do |url|
-      fetch_bill_detail(url)
-    rescue => e
-      Rails.logger.error("PhillyBillsService: error fetching #{url}: #{e.message}")
-      nil
+    meeting_urls.each do |meeting_url|
+      legislation_urls = find_legislation_links(meeting_url)
+      legislation_urls.each do |url|
+        break if bills.size >= BILL_LIMIT
+        bill = fetch_bill_detail(url) rescue nil
+        next unless bill
+        next if seen_file_numbers.include?(bill[:external_id])
+        seen_file_numbers << bill[:external_id]
+        bills << bill
+      end
     end
+
+    bills
   end
 
-  # Step 1 — find the most recent City Council meeting (not Committee of the Whole)
+  # Step 1 — find the N most recent City Council meetings (not Committee of the Whole)
 
-  def find_latest_council_meeting
+  def find_recent_council_meetings(limit = 5)
     response = self.class.get(CALENDAR_URL)
     unless response.success?
       Rails.logger.error("PhillyBillsService: Calendar.aspx returned #{response.code}")
-      return nil
+      return []
     end
 
-    doc = Nokogiri::HTML(response.body)
+    doc  = Nokogiri::HTML(response.body)
+    urls = []
 
-    # MeetingDetail links carry the meeting label as nearby text in the row
-    meeting_url = nil
     doc.css("a[href*='MeetingDetail']").each do |link|
+      break if urls.size >= limit
       row_text = link.ancestors("tr").first&.text || ""
       next if row_text.match?(/committee of the whole/i)
       next unless row_text.match?(/city council/i)
 
       href = link["href"]
-      meeting_url = (href.start_with?("http") ? href : "#{BASE_URL}/#{href.sub(/\A\//, '')}").gsub("|", "%7C")
-      break
+      urls << (href.start_with?("http") ? href : "#{BASE_URL}/#{href.sub(/\A\//, '')}").gsub("|", "%7C")
     end
 
-    if meeting_url.nil?
-      Rails.logger.warn("PhillyBillsService: no City Council meeting found on Calendar.aspx")
-    end
-
-    meeting_url
+    Rails.logger.warn("PhillyBillsService: no City Council meetings found on Calendar.aspx") if urls.empty?
+    urls
   end
 
   # Step 2 — collect LegislationDetail links from the meeting page

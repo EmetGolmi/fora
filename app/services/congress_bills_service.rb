@@ -57,7 +57,7 @@ class CongressBillsService
   def fetch_sponsored_bills(bioguide)
     response = self.class.get("/member/#{bioguide}/sponsored-legislation", query: {
       api_key: api_key,
-      limit: 3,
+      limit: 20,
       sort: "introducedDate+desc"
     })
 
