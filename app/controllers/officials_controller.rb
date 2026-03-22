@@ -2,6 +2,12 @@ class OfficialsController < ApplicationController
   include HTTParty
   base_uri "https://api.congress.gov/v3"
 
+  WIKI_FILENAMES = {
+    "F000479" => "John_Fetterman_official_portrait.jpg",
+    "M001243" => "McCormick_Portrait_(HR).jpg",
+    "E000296" => "Rep._Dwight_Evans,_official_portrait,_118th_Congress.jpg"
+  }.freeze
+
   def show
     bioguide_id = params[:bioguide_id]
     api_key = ENV["CONGRESS_API_KEY"]
@@ -17,24 +23,28 @@ class OfficialsController < ApplicationController
     @social = CongressSocialService.for_bioguide(bioguide_id)
     @social[:website] ||= @member["officialWebsiteUrl"]
 
-    begin
-      wiki_name = URI.encode_www_form_component(@member["name"].to_s)
-      wiki_resp = HTTParty.get(
-        "https://en.wikipedia.org/api/rest_v1/page/summary/#{wiki_name}",
-        headers: { "User-Agent" => "FORA/1.0 (fora.center)" }
-      )
-      if wiki_resp.success?
-        parsed = wiki_resp.parsed_response
-        @wiki_photo = parsed.dig("originalimage", "source") || parsed.dig("thumbnail", "source")
+    wiki_filename = WIKI_FILENAMES[bioguide_id]
+    if wiki_filename.present?
+      begin
+        wiki_resp = HTTParty.get(
+          "https://en.wikipedia.org/w/api.php",
+          query: {
+            action:     "query",
+            titles:     "File:#{wiki_filename}",
+            prop:       "imageinfo",
+            iiprop:     "url",
+            iiurlwidth: 960,
+            format:     "json"
+          },
+          headers: { "User-Agent" => "FORA/1.0 (fora.center)" }
+        )
+        if wiki_resp.success?
+          @wiki_photo = wiki_resp.parsed_response.dig("query", "pages")&.values&.first&.dig("imageinfo", 0, "thumburl")
+        end
+      rescue
+        @wiki_photo = nil
       end
-    rescue
-      @wiki_photo = nil
     end
-
-    wiki_photos = {
-      "F000479" => "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/John_Fetterman_official_portrait.jpg/960px-John_Fetterman_official_portrait.jpg"
-    }
-    @wiki_photo = wiki_photos[params[:bioguide_id]] || @wiki_photo
 
     bills_response = self.class.get("/member/#{bioguide_id}/sponsored-legislation", query: {
       api_key: api_key,
