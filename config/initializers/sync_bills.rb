@@ -4,8 +4,9 @@ Rails.application.config.after_initialize do
       sleep 15
       begin
         if ActiveRecord::Base.connection.table_exists?(:civic_bills)
-          if CivicBill.where(jurisdiction: "federal").count < 40
-            Rails.logger.info "[FORA] Federal bill count under 20 — running full federal sync..."
+          newest_federal = CivicBill.where(jurisdiction: "federal").order(created_at: :desc).first
+          if newest_federal.nil? || newest_federal.created_at < 7.days.ago
+            Rails.logger.info "[FORA] Federal bills stale — running full federal sync..."
             CongressBillsService.sync_federal_bills
           end
 
