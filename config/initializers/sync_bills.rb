@@ -1,22 +1,19 @@
 Rails.application.config.after_initialize do
   if Rails.env.production?
-    begin
-      if ActiveRecord::Base.connection.table_exists?(:civic_bills)
-        if CivicBill.where(jurisdiction: "pennsylvania").count.zero?
-          CivicSyncService.sync_pennsylvania_bills
+    Thread.new do
+      sleep 15
+      begin
+        if ActiveRecord::Base.connection.table_exists?(:civic_bills)
+          count = CivicBill.where(jurisdiction: ["pennsylvania", "federal", "philadelphia"]).where(bill_stage: nil).count
+          if count > 0
+            Rails.logger.info "[FORA] Running bill_stage backfill for #{count} bills..."
+            OpenStatesService.backfill_status
+            Rails.logger.info "[FORA] Backfill complete: #{CivicBill.group(:bill_stage).count}"
+          end
         end
-
-        latest_federal = CivicBill.where(jurisdiction: "federal").order(status_date: :desc).first
-        if latest_federal.nil? || latest_federal.status_date.nil? || latest_federal.status_date < Date.new(2025, 1, 1)
-          CongressBillsService.sync_federal_bills
-        end
-
-        if CivicBill.where(jurisdiction: "philadelphia").count.zero?
-          PhillyBillsService.sync_philly_bills
-        end
+      rescue => e
+        Rails.logger.error "[FORA] Backfill failed: #{e.message}"
       end
-    rescue => e
-      Rails.logger.error("sync_bills initializer failed: #{e.message}")
     end
   end
 end
