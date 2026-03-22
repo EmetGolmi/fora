@@ -1,0 +1,29 @@
+<%
+  civic_bill_id = bill_id_map[format_bill_id.call(bill)]
+%>
+<% card_html = capture do %>
+  <div class="sponsored-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:<%= civic_bill_id ? 'pointer' : 'default' %>;">
+    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= format_bill_id.call(bill) %></span>
+      <span style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill["title"] %></span>
+    </div>
+    <% if bill.dig("latestAction", "text").present? || bill.dig("latestAction", "actionDate").present? %>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+        <% if bill.dig("latestAction", "text").present? %>
+          <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.45; flex:1;"><%= bill.dig("latestAction", "text") %></span>
+        <% end %>
+        <% if bill.dig("latestAction", "actionDate").present? %>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8; flex-shrink:0; white-space:nowrap;"><%= bill.dig("latestAction", "actionDate") %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if civic_bill_id %>
+  <%= link_to bill_path(civic_bill_id), style: "text-decoration:none; color:inherit; display:block;" do %>
+    <%= card_html %>
+  <% end %>
+<% else %>
+  <%= card_html %>
+<% end %>

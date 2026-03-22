@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_19_011549) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_22_011724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "civic_bills", force: :cascade do |t|
+    t.string "bill_stage", default: "introduced"
     t.datetime "created_at", null: false
     t.string "external_id", null: false
     t.string "full_text_url"
@@ -30,6 +31,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_011549) do
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.jsonb "votes", default: []
+    t.index ["bill_stage"], name: "index_civic_bills_on_bill_stage"
     t.index ["jurisdiction"], name: "index_civic_bills_on_jurisdiction"
     t.index ["source", "external_id"], name: "index_civic_bills_on_source_and_external_id", unique: true
     t.index ["status_date"], name: "index_civic_bills_on_status_date"

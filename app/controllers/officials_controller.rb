@@ -34,9 +34,8 @@ class OfficialsController < ApplicationController
       "HRES" => "H.Res.", "SRES" => "S.Res.", "HCONRES" => "H.Con.Res.", "SCONRES" => "S.Con.Res."
     }
 
-    # Annotate each bill with its formatted identifier and external_id
     @bills.each do |bill|
-      type   = bill["type"].to_s.upcase
+      type = bill["type"].to_s.upcase
       prefix = bill_type_labels[type] || type
       bill["_identifier"]  = "#{prefix} #{bill['number']}"
       bill["_external_id"] = "#{type}-#{bill['number']}"
@@ -45,26 +44,30 @@ class OfficialsController < ApplicationController
     identifiers  = @bills.map { |b| b["_identifier"] }
     @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
 
-    # Upsert any bills not yet in the database
     unmatched = @bills.reject { |b| @bill_id_map.key?(b["_identifier"]) }
     if unmatched.any?
       now = Time.current
       rows = unmatched.map do |bill|
+        raw_status = bill.dig("latestAction", "text").to_s.presence
         {
           source:       "congress",
           external_id:  bill["_external_id"],
           identifier:   bill["_identifier"],
           title:        bill["title"].to_s,
-          status:       bill.dig("latestAction", "text").to_s.presence,
+          status:       raw_status,
+          bill_stage:   CivicBill.classify_stage(raw_status),
           status_date:  bill.dig("latestAction", "actionDate").then { |d| Date.parse(d) rescue nil },
           jurisdiction: "federal",
           created_at:   now,
           updated_at:   now
         }
       end
-      CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status status_date])
+      CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status bill_stage status_date])
       @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
     end
+
+    @bills_active   = @bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction", "text").to_s)) }
+    @bills_resolved = @bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction", "text").to_s)) }
   end
 
   def state_show
@@ -114,6 +117,9 @@ class OfficialsController < ApplicationController
 
     identifiers  = @bills.map { |b| b["identifier"] }
     @bill_id_map = CivicBill.where(identifier: identifiers, jurisdiction: "pennsylvania").pluck(:identifier, :id).to_h
+
+    @bills_active   = @bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b["latest_action_description"].to_s)) }
+    @bills_resolved = @bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b["latest_action_description"].to_s)) }
   end
 
   private

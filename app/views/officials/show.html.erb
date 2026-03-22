@@ -2,12 +2,78 @@
 
 <% content_for :head do %>
 <style>
-  .social-btn:hover { color:white !important; }
-  .sponsored-card:hover { box-shadow:0 4px 18px rgba(27,58,107,0.10) !important; }
-  @media (max-width: 600px) { .social-links { justify-content:center; } }
+  /* ── Show/hide ── */
+  .mobile-card { display: none; }
+  @media (max-width: 640px) {
+    .desktop-profile { display: none; }
+    .mobile-card { display: block; }
+  }
+
+  /* ── Desktop ── */
+  .social-btn:hover { color: white !important; }
+  .sponsored-card:hover { box-shadow: 0 4px 18px rgba(27,58,107,0.10) !important; }
+  @media (max-width: 600px) { .social-links { justify-content: center; } }
   @media (max-width: 600px) {
-    .hero-identity { flex-direction:column !important; align-items:center !important; text-align:center !important; }
-    .hero-identity .hero-tags { justify-content:center !important; }
+    .hero-identity { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+    .hero-identity .hero-tags { justify-content: center !important; }
+  }
+
+  /* ── Mobile animations ── */
+  @keyframes bounce-down {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(3px); }
+  }
+  @keyframes foil-shift {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+  .mob-foil {
+    background: linear-gradient(105deg,
+      rgba(255,255,255,0)     0%,
+      rgba(184,134,11,.08)   25%,
+      rgba(255,255,255,.14)  50%,
+      rgba(184,134,11,.06)   75%,
+      rgba(255,255,255,0)   100%);
+    background-size: 200% auto;
+    animation: foil-shift 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .bounce-arrow {
+    display: inline-block;
+    animation: bounce-down 1.4s ease-in-out infinite;
+    color: #b8860b;
+  }
+
+  /* ── Mobile modals ── */
+  .mob-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .mob-modal.open { display: flex; }
+  .mob-sheet {
+    background: white;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 18px 32px;
+    width: 100%;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+  .mob-handle {
+    width: 36px; height: 4px;
+    background: rgba(0,0,0,.12);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+  .mob-got-it {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; letter-spacing: .14em; text-transform: uppercase;
+    color: white; background: #1b3a6b; border: none;
+    border-radius: 100px; padding: 12px; cursor: pointer; width: 100%;
   }
 </style>
 <% end %>
@@ -26,7 +92,7 @@
     "HRES" => "H.Res.", "SRES" => "S.Res.", "HCONRES" => "H.Con.Res.", "SCONRES" => "S.Con.Res."
   }
   format_bill_id = ->(bill) {
-    type = bill["type"].to_s.upcase
+    type   = bill["type"].to_s.upcase
     prefix = bill_type_labels[type] || type
     "#{prefix} #{bill['number']}"
   }
@@ -37,7 +103,23 @@
     when /Republican/i then "background:rgba(139,26,26,0.2); border-color:rgba(239,68,68,0.35); color:#fca5a5;"
     else                    "background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.18); color:rgba(255,255,255,0.6);"
     end
+
+  party_bar_color = case party_raw
+    when /Democrat/i   then "#003087"
+    when /Republican/i then "#B22234"
+    else                    "#5a6e8a"
+    end
+
+  bills_count   = @bills.size
+  name_initials = @member['directOrderName'].to_s.split.map(&:first).first(2).join
+  votes_cast    = @member["totalVotingRecords"].presence || "—"
 %>
+
+
+<!-- ══════════════════════════════════════════
+     DESKTOP LAYOUT
+══════════════════════════════════════════ -->
+<div class="desktop-profile">
 
 <!-- HERO -->
 <div style="background:#1b3a6b; padding:44px 48px 52px; position:relative; overflow:hidden;">
@@ -160,35 +242,373 @@
 
   <% if @bills.any? %>
     <% @bills.each do |bill| %>
-      <% civic_bill_id = @bill_id_map[format_bill_id.call(bill)] %>
-      <% card_content = capture do %>
-        <div class="sponsored-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:<%= civic_bill_id ? 'pointer' : 'default' %>;">
-          <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= format_bill_id.call(bill) %></span>
-            <span style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill["title"] %></span>
-          </div>
-          <% if bill.dig("latestAction", "text").present? || bill.dig("latestAction", "actionDate").present? %>
-            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
-              <% if bill.dig("latestAction", "text").present? %>
-                <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.45; flex:1;"><%= bill.dig("latestAction", "text") %></span>
-              <% end %>
-              <% if bill.dig("latestAction", "actionDate").present? %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8; flex-shrink:0; white-space:nowrap;"><%= bill.dig("latestAction", "actionDate") %></span>
-              <% end %>
-            </div>
-          <% end %>
+      <div class="sponsored-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
+        <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= format_bill_id.call(bill) %></span>
+          <span style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill["title"] %></span>
         </div>
-      <% end %>
-      <% if civic_bill_id %>
-        <%= link_to bill_path(civic_bill_id), style: "text-decoration:none; color:inherit; display:block;" do %>
-          <%= card_content %>
+        <% if bill.dig("latestAction", "text").present? || bill.dig("latestAction", "actionDate").present? %>
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+            <% if bill.dig("latestAction", "text").present? %>
+              <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.45; flex:1;"><%= bill.dig("latestAction", "text") %></span>
+            <% end %>
+            <% if bill.dig("latestAction", "actionDate").present? %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8; flex-shrink:0; white-space:nowrap;"><%= bill.dig("latestAction", "actionDate") %></span>
+            <% end %>
+          </div>
         <% end %>
-      <% else %>
-        <%= card_content %>
-      <% end %>
+      </div>
     <% end %>
   <% else %>
     <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:24px 0; text-align:center;">No sponsored legislation found.</p>
   <% end %>
 
 </div>
+
+</div><!-- /desktop-profile -->
+
+
+<!-- ══════════════════════════════════════════
+     MOBILE CARD
+══════════════════════════════════════════ -->
+<div class="mobile-card">
+
+  <!-- ─────────────────────────────────────
+       SECTION 1 · CARD FRONT
+  ───────────────────────────────────────── -->
+  <div style="background:#1b3a6b; position:relative; overflow:hidden;">
+
+    <!-- Party color bar -->
+    <div style="position:absolute; left:0; top:0; bottom:0; width:5px; background:<%= party_bar_color %>; z-index:2;"></div>
+
+    <!-- Top band -->
+    <div style="background:#1b3a6b; padding:9px 16px 7px 21px; border-bottom:3px solid #b8860b;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:white; letter-spacing:.05em;">F<span style="color:#d4a832;">O</span>RA</span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#d4a832; letter-spacing:.14em; text-transform:uppercase;">Civic Series</span>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:rgba(255,255,255,.4); letter-spacing:.14em; margin-top:2px;">PENNSYLVANIA · FEDERAL · 2026</div>
+    </div>
+
+    <!-- Photo zone -->
+    <div style="height:260px; overflow:hidden; position:relative;">
+      <% if @member.dig("depiction", "imageUrl") %>
+        <img src="<%= @member.dig('depiction', 'imageUrl') %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
+      <% else %>
+        <div style="width:100%; height:100%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:#d4a832;"><%= name_initials %></div>
+      <% end %>
+      <!-- Fade gradient -->
+      <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
+      <!-- PA Seal -->
+      <div style="position:absolute; top:8px; right:10px; opacity:.6; pointer-events:none;">
+        <svg viewBox="0 0 70 70" width="62" height="62">
+          <circle cx="35" cy="35" r="32" fill="none" stroke="#b8860b" stroke-width="1.5"/>
+          <circle cx="35" cy="35" r="24" fill="none" stroke="#b8860b" stroke-width=".7"/>
+          <!-- 6-point star (two triangles) -->
+          <polygon points="35,14 40,27 53,27 43,35 47,48 35,41 23,48 27,35 17,27 30,27" fill="none" stroke="#d4a832" stroke-width="1.2"/>
+          <polygon points="35,56 40,43 53,43 43,35 47,22 35,29 23,22 27,35 17,43 30,43" fill="none" stroke="#d4a832" stroke-width="1.2"/>
+          <text x="35" y="9" text-anchor="middle" font-size="5.5" font-family="serif" fill="#d4a832" letter-spacing="1">PENNSYLVANIA</text>
+          <text x="35" y="65" text-anchor="middle" font-size="5" font-family="serif" fill="#d4a832" letter-spacing=".5">EST. 1787</text>
+        </svg>
+      </div>
+      <!-- Foil shimmer -->
+      <div class="mob-foil" style="position:absolute; inset:0;"></div>
+    </div>
+
+    <!-- Nameplate -->
+    <div style="background:#0a1220; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
+      <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:white; line-height:1.2;"><%= @member["directOrderName"] %></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.12em; color:#d4a832; margin-top:3px;"><%= office_title %></div>
+    </div>
+
+    <!-- Quick stats strip -->
+    <div style="background:#0a1220; display:flex;">
+      <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= votes_cast %></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Votes Cast</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= bills_count %></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bills</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:10px 6px;">
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">—</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Party-Line</div>
+      </div>
+    </div>
+
+    <!-- Social + Follow row -->
+    <div style="background:#0a1220; padding:8px 14px 8px 21px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+        <% if @social[:website].present? %>
+          <a href="<%= @social[:website] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        <% end %>
+        <% if @social[:twitter].present? %>
+          <a href="https://x.com/<%= @social[:twitter] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        <% end %>
+        <% if @social[:facebook].present? %>
+          <a href="https://facebook.com/<%= @social[:facebook] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+        <% end %>
+        <% if @social[:instagram].present? %>
+          <a href="https://instagram.com/<%= @social[:instagram] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+        <% end %>
+        <% if @social[:youtube].present? %>
+          <a href="<%= @social[:youtube] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        <% end %>
+      </div>
+      <button onclick="alert('Follow coming soon')" style="background:#b8860b; border:none; border-radius:100px; padding:6px 14px; font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:white; cursor:pointer; display:flex; align-items:center; gap:5px; flex-shrink:0;">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Follow
+      </button>
+    </div>
+
+    <!-- Scroll hint -->
+    <div style="background:#0a1220; text-align:center; padding:6px 0 10px;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.2);">Scroll for stats <span class="bounce-arrow">↓</span></span>
+    </div>
+
+    <!-- Star strip -->
+    <div style="background:#1b3a6b; padding:7px 16px; font-size:9px; letter-spacing:.4em; color:#b8860b; white-space:nowrap; overflow:hidden; -webkit-mask-image:linear-gradient(to right,black 90%,transparent); mask-image:linear-gradient(to right,black 90%,transparent);">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+
+  </div><!-- /card front -->
+
+
+  <!-- ─────────────────────────────────────
+       SECTION 2 · STAT BACK
+  ───────────────────────────────────────── -->
+  <div style="background:#f2f4f8;">
+
+    <!-- Header band -->
+    <div style="background:#1b3a6b; border-bottom:2px solid #b8860b; padding:8px 14px; display:flex; align-items:center; justify-content:space-between;">
+      <span style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white;">F<span style="color:#d4a832;">O</span>RA</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.45);"><%= @member["directOrderName"] %></span>
+    </div>
+
+    <!-- Attendance -->
+    <div style="padding:10px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Attendance</span>
+        <button onclick="openModal('modal-attendance')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
+      </div>
+      <% [["Votes Cast", votes_cast], ["Attendance Rate", "—"], ["Missed", "—"], ["#{is_senator ? 'Senate' : 'House'} Avg", "—"]].each do |label, val| %>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
+          <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Party-Line -->
+    <div style="padding:10px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Party-Line Voting</span>
+        <button onclick="openModal('modal-party')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
+      </div>
+      <% [["With Party", "—"], ["Independent", "—"], ["#{is_senator ? 'Senate' : 'House'} Average", "—"]].each do |label, val| %>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
+          <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Bills -->
+    <div style="padding:10px 14px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Bills Sponsored</span>
+        <button onclick="openModal('modal-committees')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
+      </div>
+      <% [["This Session", bills_count.to_s], ["Passed into Law", "—"], ["In Committee", "—"]].each do |label, val| %>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
+          <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Gilt rule divider -->
+    <div style="height:3px; background:linear-gradient(to right,transparent,#b8860b 30%,#d4a832 50%,#b8860b 70%,transparent);"></div>
+
+  </div><!-- /stat back -->
+
+
+  <!-- ─────────────────────────────────────
+       SECTION 3 · PROFILE SECTIONS
+  ───────────────────────────────────────── -->
+  <div style="background:#f2f4f8;">
+
+    <!-- Active Bills -->
+    <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Sponsored Legislation</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Active Bills</h3>
+      <% if @bills.any? %>
+        <% @bills.each do |bill| %>
+          <% mob_bill_id = @bill_id_map[format_bill_id.call(bill)] %>
+          <% mob_card = capture do %>
+            <div style="background:white; border-radius:8px; border-left:4px solid <%= party_bar_color %>; padding:10px 12px; margin-bottom:8px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.1em; text-transform:uppercase; color:<%= party_bar_color %>; margin-bottom:4px;"><%= format_bill_id.call(bill) %></div>
+              <div style="font-family:'Nunito',sans-serif; font-size:10.5px; font-weight:700; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= truncate(bill["title"], length: 120) %></div>
+              <% if bill.dig("latestAction", "text").present? %>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.06em; color:#633806; background:rgba(184,134,11,.10); border-radius:3px; padding:2px 6px; display:inline-block; line-height:1.5;"><%= truncate(bill.dig("latestAction","text"), length: 80) %></span>
+              <% end %>
+            </div>
+          <% end %>
+          <% if mob_bill_id %>
+            <%= link_to bill_path(mob_bill_id), style:"text-decoration:none; color:inherit; display:block;" do %>
+              <%= mob_card %>
+            <% end %>
+          <% else %>
+            <%= mob_card %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p style="font-family:'Nunito',sans-serif; font-size:12px; color:#8a9ab8; text-align:center; padding:12px 0;">No sponsored legislation found.</p>
+      <% end %>
+    </div>
+
+    <!-- Voting Record -->
+    <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ On the Floor</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Voting Record</h3>
+      <% [["Pandemic Relief Act of 2025","Yea"],["National Defense Authorization","Nay"],["FY2026 Continuing Resolution","Miss"]].each do |title, vote| %>
+        <% pill_color = {"Yea"=>"#27500A","Nay"=>"#7a1515","Miss"=>"#633806"}[vote] || "#5a6e8a" %>
+        <% pill_bg    = {"Yea"=>"rgba(39,80,10,.12)","Nay"=>"rgba(122,21,21,.10)","Miss"=>"rgba(99,56,6,.10)"}[vote] || "rgba(0,0,0,.06)" %>
+        <div style="background:white; border-radius:6px; padding:8px 10px; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#2d3a50; flex:1; line-height:1.3;"><%= title %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:7px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:<%= pill_color %>; background:<%= pill_bg %>; border-radius:100px; padding:3px 8px; white-space:nowrap;"><%= vote %></span>
+        </div>
+      <% end %>
+      <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; text-align:center; padding:4px 0;">Voting history coming soon.</p>
+    </div>
+
+    <!-- Money -->
+    <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Campaign Finance</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Cost of Getting the Message Out</h3>
+      <div style="background:white; border-radius:8px; padding:14px 12px; text-align:center; margin-bottom:8px;">
+        <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:#d4d8e0; line-height:1;">$—</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b0b8c8; margin-top:4px;">Total Raised · 2024 Cycle</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div>
+      </div>
+      <div style="background:#f0f7f0; border:1px solid rgba(39,80,10,.15); border-radius:8px; padding:10px 12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#27500A; margin-bottom:3px;">◆ No Donations From</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#27500A; line-height:1.45;">Corporate PAC tracking coming soon.</div>
+      </div>
+    </div>
+
+    <!-- Committees -->
+    <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Committees</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Where Bills Live or Die</h3>
+      <% 3.times do %>
+        <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
+          <div style="height:9px; background:#eef0f4; border-radius:3px; width:56%; margin-bottom:5px;"></div>
+          <div style="height:8px; background:#f3f4f7; border-radius:3px; width:30%;"></div>
+        </div>
+      <% end %>
+      <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; text-align:center; padding:4px 0;">Committee assignments coming soon.</p>
+    </div>
+
+    <!-- Reach Out -->
+    <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Reach Out</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Contact</h3>
+      <% if @member.dig("addressInformation","officeAddress").present? %>
+        <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a9ab8; margin-bottom:4px;">Office</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#1b3a6b; line-height:1.5;"><%= @member.dig("addressInformation","officeAddress") %></div>
+        </div>
+      <% end %>
+      <% if @member.dig("addressInformation","phoneNumber").present? %>
+        <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a9ab8; margin-bottom:4px;">Phone</div>
+          <a href="tel:<%= @member.dig('addressInformation','phoneNumber') %>" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#1b3a6b; text-decoration:none;"><%= @member.dig("addressInformation","phoneNumber") %></a>
+        </div>
+      <% end %>
+      <% if @social[:website].present? %>
+        <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a9ab8; margin-bottom:4px;">Website</div>
+          <a href="<%= @social[:website] %>" target="_blank" rel="noopener" style="font-family:'Nunito',sans-serif; font-size:11px; color:#1b3a6b; text-decoration:underline; text-underline-offset:2px; word-break:break-all;"><%= @social[:website].gsub(/^https?:\/\//,'').chomp('/') %></a>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Q&A -->
+    <div style="padding:12px 14px 28px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Community</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Q&A</h3>
+      <div style="background:white; border-radius:8px; padding:18px 14px; text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">Coming Soon</div>
+        <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.55; margin:0;">Ask questions about this official's record, votes, and positions.</p>
+      </div>
+    </div>
+
+  </div><!-- /profile sections -->
+
+
+  <!-- ─────────────────────────────────────
+       SECTION 4 · MODALS
+  ───────────────────────────────────────── -->
+
+  <div id="modal-attendance" class="mob-modal" onclick="if(event.target===this)closeModal('modal-attendance')">
+    <div class="mob-sheet">
+      <div class="mob-handle"></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ About This Stat</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 12px;">Attendance</h3>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 10px;">Attendance tracks how often this member participates in floor votes during the current session of Congress.</p>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 22px;">A high vote rate means the member is present and engaged. FORA compares individual rates to the chamber average so you can put the number in context.</p>
+      <button class="mob-got-it" onclick="closeModal('modal-attendance')">Got it</button>
+    </div>
+  </div>
+
+  <div id="modal-party" class="mob-modal" onclick="if(event.target===this)closeModal('modal-party')">
+    <div class="mob-sheet">
+      <div class="mob-handle"></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ About This Stat</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 12px;">Party-Line Voting</h3>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 10px;">Party-line voting measures how often this member votes with the majority of their party on contested votes — votes where the two parties are on opposite sides.</p>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 22px;">A high score means the member closely follows party leadership. A lower score suggests more independent judgment. Knowing the pattern helps you understand who this member actually represents.</p>
+      <button class="mob-got-it" onclick="closeModal('modal-party')">Got it</button>
+    </div>
+  </div>
+
+  <div id="modal-committees" class="mob-modal" onclick="if(event.target===this)closeModal('modal-committees')">
+    <div class="mob-sheet">
+      <div class="mob-handle"></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ About Committees</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 12px;">Where Bills Live or Die</h3>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 10px;">Most bills never reach a floor vote. They're assigned to a committee where they're reviewed, amended, or quietly shelved. Committee members decide what moves forward.</p>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 22px;">Knowing which committees a member sits on tells you where their power is concentrated — and which industries they're positioned to influence most.</p>
+      <button class="mob-got-it" onclick="closeModal('modal-committees')">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.mob-modal.open').forEach(function(m) {
+          m.classList.remove('open');
+        });
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+
+</div><!-- /mobile-card -->
