@@ -34,14 +34,18 @@ class JurisdictionResolver
       }
     end
 
-    # Philadelphia — hardcoded federal officials + best-effort state/city
+    # Philadelphia — hardcoded federal + state officials + best-effort dynamic
     federal_officials = federal_executives + hardcoded_philly_federal_officials(zip)
+    state_hardcoded   = hardcoded_philly_state_officials(zip)
 
-    state_officials = begin
+    state_dynamic = begin
       fetch_state_officials(coords[:lat], coords[:lng]) || []
     rescue StandardError
+      Rails.logger.warn("[JurisdictionResolver] OpenStates failed for #{coords.inspect}: #{$!.message}")
       []
     end
+
+    state_officials = (state_hardcoded + state_dynamic).uniq { |o| o[:name].to_s.downcase.strip }
 
     city_officials = begin
       fetch_philadelphia_officials(coords[:lat], coords[:lng], zip)
@@ -357,6 +361,27 @@ class JurisdictionResolver
     end
 
     rep ? senators + [rep] : senators
+  end
+
+  # Saval (SD-1) and Waxman (HD-182) serve South Philly / Center City — all PA-03 zips.
+  # Hardcoded because OpenStates people.geo returns 429 rate-limit errors in production.
+  def hardcoded_philly_state_officials(zip)
+    return [] unless PHILLY_PA03_ZIPS.include?(zip)
+
+    [
+      { name: "Nikil Saval",
+        office: "State Senator",
+        party: "D",
+        jurisdiction: { name: "upper", district: "1",
+                        division_id: "ocd-division/country:us/state:pa/sldu:1",
+                        openstates_id: "ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb" } },
+      { name: "Ben Waxman",
+        office: "State Representative",
+        party: "D",
+        jurisdiction: { name: "lower", district: "182",
+                        division_id: "ocd-division/country:us/state:pa/sldl:182",
+                        openstates_id: "ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b" } }
+    ]
   end
 
   PHL_ZIP_TO_COUNCIL_DISTRICT = {
