@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_22_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_23_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -41,6 +41,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_22_120000) do
     t.jsonb "contact", default: {}
     t.datetime "created_at", null: false
     t.string "external_id"
+    t.jsonb "external_ids", default: {}
     t.string "jurisdiction"
     t.string "name", null: false
     t.string "ocd_division_id"
@@ -48,7 +49,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_22_120000) do
     t.string "party"
     t.string "source"
     t.datetime "updated_at", null: false
+    t.index ["external_ids"], name: "index_civic_representatives_on_external_ids", using: :gin
     t.index ["ocd_division_id"], name: "index_civic_representatives_on_ocd_division_id"
+  end
+
+  create_table "official_finance_summaries", force: :cascade do |t|
+    t.bigint "candidate_self_fund_cents"
+    t.bigint "cash_on_hand_cents"
+    t.bigint "civic_representative_id", null: false
+    t.date "coverage_through_date"
+    t.datetime "created_at", null: false
+    t.integer "cycle_year", null: false
+    t.string "data_source", default: "fec_weball26"
+    t.bigint "debts_owed_cents"
+    t.string "fec_candidate_id", null: false
+    t.bigint "individual_contrib_cents"
+    t.bigint "pac_contrib_cents"
+    t.bigint "total_raised_cents"
+    t.bigint "total_spent_cents"
+    t.datetime "updated_at", null: false
+    t.index ["civic_representative_id", "cycle_year"], name: "idx_finance_summaries_on_rep_and_cycle", unique: true
+    t.index ["civic_representative_id"], name: "index_official_finance_summaries_on_civic_representative_id"
+    t.index ["fec_candidate_id"], name: "index_official_finance_summaries_on_fec_candidate_id"
   end
 
   create_table "resolved_addresses", force: :cascade do |t|
@@ -60,4 +82,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_22_120000) do
     t.index ["address"], name: "index_resolved_addresses_on_address", unique: true
     t.index ["job_id"], name: "index_resolved_addresses_on_job_id"
   end
+
+  add_foreign_key "official_finance_summaries", "civic_representatives"
 end

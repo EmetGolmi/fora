@@ -1,0 +1,52 @@
+<% if finance.present? %>
+  <div class="finance-panel">
+    <div class="finance-header">
+      <h3 class="finance-title">Campaign Finance</h3>
+      <span class="finance-cycle"><%= finance.cycle_year %> Cycle</span>
+      <a href="https://www.fec.gov/data/candidate/<%= finance.fec_candidate_id %>/"
+         target="_blank" rel="noopener" class="finance-fec-link">FEC filing ↗</a>
+    </div>
+
+    <% if finance.coverage_through_date.present? %>
+      <p class="finance-as-of">As of <%= finance.coverage_through_date.strftime("%B %-d, %Y") %></p>
+    <% end %>
+
+    <div class="finance-stats">
+      <div class="fstat">
+        <span class="fstat-label">Total Raised</span>
+        <span class="fstat-value"><%= number_to_currency(finance.total_raised_cents.to_f / 100, precision: 0) %></span>
+      </div>
+      <div class="fstat">
+        <span class="fstat-label">Cash on Hand</span>
+        <span class="fstat-value"><%= number_to_currency(finance.cash_on_hand_cents.to_f / 100, precision: 0) %></span>
+      </div>
+      <% if finance.debts_owed_cents&.positive? %>
+        <div class="fstat fstat-debt">
+          <span class="fstat-label">Debts Owed</span>
+          <span class="fstat-value fstat-value-debt"><%= number_to_currency(finance.debts_owed_cents.to_f / 100, precision: 0) %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <% if finance.total_raised_cents&.positive? %>
+      <div class="finance-breakdown">
+        <div class="fbar-row">
+          <span class="fbar-label">Individual</span>
+          <div class="fbar-track">
+            <div class="fbar-fill fbar-indv" style="width:<%= [finance.individual_pct.to_f, 100].min %>%"></div>
+          </div>
+          <span class="fbar-pct"><%= finance.individual_pct %>%</span>
+        </div>
+        <div class="fbar-row">
+          <span class="fbar-label">PAC / Committees</span>
+          <div class="fbar-track">
+            <div class="fbar-fill fbar-pac" style="width:<%= [finance.pac_pct.to_f, 100].min %>%"></div>
+          </div>
+          <span class="fbar-pct"><%= finance.pac_pct %>%</span>
+        </div>
+      </div>
+    <% end %>
+
+    <p class="finance-disclaimer">Source: FEC public records. Data reflects current cycle filings.</p>
+  </div>
+<% end %>

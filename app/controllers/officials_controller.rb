@@ -8,6 +8,12 @@ class OfficialsController < ApplicationController
     "E000296" => "Dwight_Evans_official_photo_(cropped).jpg"
   }.freeze
 
+  FEC_IDS = {
+    "F000479" => "S6PA00274",
+    "M001243" => "S2PA00661",
+    "E000296" => "H6PA02171"
+  }.freeze
+
   def show
     bioguide_id = params[:bioguide_id]
     api_key = ENV["CONGRESS_API_KEY"]
@@ -165,6 +171,9 @@ class OfficialsController < ApplicationController
 
     threads.each(&:join)
 
+    fec_cand_id = FEC_IDS[bioguide_id]
+    @finance = OfficialFinanceSummary.where(fec_candidate_id: fec_cand_id).order(cycle_year: :desc).first if fec_cand_id
+
     Rails.logger.debug "[FORA] @committees for #{bioguide_id}: #{@committees.inspect}"
     Rails.logger.debug "[FORA] FEC_API_KEY present: #{ENV['FEC_API_KEY'].present?}"
   end
@@ -219,6 +228,7 @@ class OfficialsController < ApplicationController
 
     @bills_active   = @bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b["latest_action_description"].to_s)) }
     @bills_resolved = @bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b["latest_action_description"].to_s)) }
+    @finance = nil
   end
 
   private
