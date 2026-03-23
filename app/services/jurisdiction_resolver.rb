@@ -16,24 +16,48 @@ class JurisdictionResolver
 
     coords  = geo[:coordinates]
     matched = geo[:matched_address]
+    zip     = matched[:zip].to_s
 
-    state_officials = fetch_state_officials(coords[:lat], coords[:lng])
-    return nil unless state_officials
+    is_philly = matched[:city].to_s.upcase == "PHILADELPHIA" ||
+                PHILLY_PA02_ZIPS.include?(zip) ||
+                PHILLY_PA03_ZIPS.include?(zip)
 
-    federal = federal_executives + fetch_federal_officials(matched[:state], matched[:zip])
-
-    officials = federal + state_officials
-
-    if matched[:city]&.upcase == "PHILADELPHIA"
-      officials += fetch_philadelphia_officials(coords[:lat], coords[:lng], matched[:zip])
+    unless is_philly
+      return {
+        normalized_address: matched[:full],
+        city:               matched[:city],
+        state:              matched[:state],
+        zip:                zip,
+        not_covered:        true,
+        message:            "FORA currently covers Philadelphia, PA. More cities coming soon.",
+        officials:          []
+      }
     end
+
+    # Philadelphia — hardcoded federal officials + best-effort state/city
+    federal_officials = federal_executives + hardcoded_philly_federal_officials(zip)
+
+    state_officials = begin
+      fetch_state_officials(coords[:lat], coords[:lng]) || []
+    rescue StandardError
+      []
+    end
+
+    city_officials = begin
+      fetch_philadelphia_officials(coords[:lat], coords[:lng], zip)
+    rescue StandardError
+      []
+    end
+
+    officials = (federal_officials + state_officials + city_officials)
+                .uniq { |o| o[:name].to_s.downcase.strip }
 
     {
       normalized_address: matched[:full],
       city:               matched[:city],
       state:              matched[:state],
-      zip:                matched[:zip],
-      officials:          officials.uniq { |o| o[:name].to_s.downcase.strip }
+      zip:                zip,
+      officials:          officials
     }
   end
 
@@ -284,6 +308,55 @@ class JurisdictionResolver
         division_id: division_id
       }
     }
+  end
+
+  PHILLY_PA02_ZIPS = %w[
+    19114 19115 19116 19120 19124 19135 19136 19137 19138 19149 19152 19154
+  ].freeze
+
+  PHILLY_PA03_ZIPS = %w[
+    19102 19103 19104 19106 19107 19108 19109 19110 19111 19118 19119
+    19121 19122 19123 19125 19126 19127 19128 19129 19130 19131 19132
+    19133 19134 19139 19140 19141 19142 19143 19144 19145 19146 19147
+    19148 19150 19151 19153
+  ].freeze
+
+  def hardcoded_philly_federal_officials(zip)
+    district = if PHILLY_PA02_ZIPS.include?(zip)
+      "2"
+    elsif PHILLY_PA03_ZIPS.include?(zip)
+      "3"
+    end
+
+    senators = [
+      { name: "John Fetterman", office: "U.S. Senator", party: "Democratic",
+        jurisdiction: { name: "us_senate", district: nil,
+                        division_id: "ocd-division/country:us/state:pa",
+                        bioguide_id: "F000479" } },
+      { name: "Dave McCormick", office: "U.S. Senator", party: "Republican",
+        jurisdiction: { name: "us_senate", district: nil,
+                        division_id: "ocd-division/country:us/state:pa",
+                        bioguide_id: "M001243" } }
+    ]
+
+    rep = case district
+    when "2"
+      { name: "Brendan Boyle",
+        office: "U.S. Representative, Congressional District 2",
+        party: "Democratic",
+        jurisdiction: { name: "us_house", district: "2",
+                        division_id: "ocd-division/country:us/state:pa/cd:2",
+                        bioguide_id: "B001296" } }
+    when "3"
+      { name: "Dwight Evans",
+        office: "U.S. Representative, Congressional District 3",
+        party: "Democratic",
+        jurisdiction: { name: "us_house", district: "3",
+                        division_id: "ocd-division/country:us/state:pa/cd:3",
+                        bioguide_id: "E000296" } }
+    end
+
+    rep ? senators + [rep] : senators
   end
 
   PHL_ZIP_TO_COUNCIL_DISTRICT = {
