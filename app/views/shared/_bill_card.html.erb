@@ -1,7 +1,7 @@
 <%
   b_number   = bill.try(:bill_number)  || bill.try(:[], "bill_number")  || bill.try(:[], :bill_number)  ||
                bill.try(:identifier)   || bill.try(:[], "identifier")   ||
-               (begin; t=bill.try(:[],"type").to_s.strip; n=bill.try(:[],"number").to_s.strip; t.present? && n.present? ? "#{t}. #{n}" : nil; end) ||
+               (begin; t=bill.try(:[],"type").to_s.strip.upcase; n=bill.try(:[],"number").to_s.strip; if t.present? && n.present?; fmt={"HR"=>"H.R.","HRES"=>"H.Res.","HJRES"=>"H.J.Res.","HCONRES"=>"H.Con.Res.","S"=>"S.","SRES"=>"S.Res.","SJRES"=>"S.J.Res.","SCONRES"=>"S.Con.Res."}[t]||t; "#{fmt} #{n}"; end; end) ||
                ""
   b_title    = bill.try(:title)        || bill.try(:[], "title")        || bill.try(:[], :title)        || ""
   b_action   = bill.try(:latest_action_description) || bill.try(:[], "latestAction")&.then{|a| a["text"] || a[:text]} || bill.try(:[], "latest_action_description") ||
