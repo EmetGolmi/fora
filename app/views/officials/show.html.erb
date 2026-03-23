@@ -601,28 +601,55 @@
     <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Campaign Finance</div>
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Cost of Getting the Message Out</h3>
-      <%
-        fec_display = if @fec_total_raised
-          if @fec_total_raised >= 1_000_000
-            "$#{(@fec_total_raised / 1_000_000.0).round(1)}M"
-          elsif @fec_total_raised >= 1_000
-            "$#{(@fec_total_raised / 1_000.0).round(0).to_i}K"
-          else
-            "$#{@fec_total_raised.to_i}"
-          end
-        else
-          "$—"
-        end
-      %>
-      <div style="background:white; border-radius:8px; padding:14px 12px; text-align:center; margin-bottom:8px;">
-        <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:<%= @fec_total_raised ? '#1b3a6b' : '#d4d8e0' %>; line-height:1;"><%= fec_display %></div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b0b8c8; margin-top:4px;">Total Raised<%= @fec_cycle ? " · #{@fec_cycle} Cycle" : "" %></div>
-        <% if @fec_total_raised %>
-          <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a; margin-top:6px; line-height:1.45;">Staff, advertising, travel, and campaign events.</div>
-        <% else %>
+      <% if @finance %>
+        <div style="background:white; border-radius:8px; padding:14px 12px; margin-bottom:8px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">2026 Cycle · As of <%= @finance.coverage_through_date&.strftime("%B %-d, %Y") %></div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8; margin-bottom:2px;">Total Raised</div>
+              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;"><%= number_to_currency(@finance.total_raised_cents.to_f / 100, precision: 0) %></div>
+            </div>
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8; margin-bottom:2px;">Cash on Hand</div>
+              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b;"><%= number_to_currency(@finance.cash_on_hand_cents.to_f / 100, precision: 0) %></div>
+            </div>
+            <% if @finance.debts_owed_cents.to_i > 0 %>
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8; margin-bottom:2px;">Debts Owed</div>
+              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#8b2020;"><%= number_to_currency(@finance.debts_owed_cents.to_f / 100, precision: 0) %></div>
+            </div>
+            <% end %>
+          </div>
+          <% if @finance.total_raised_cents.to_i > 0 %>
+            <% indiv_pct = (@finance.individual_contrib_cents.to_f / @finance.total_raised_cents * 100).round(1) %>
+            <% pac_pct   = (@finance.pac_contrib_cents.to_f      / @finance.total_raised_cents * 100).round(1) %>
+            <div style="margin-bottom:6px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#8a9ab8;">Individual</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#8a9ab8;"><%= indiv_pct %>%</span>
+              </div>
+              <div style="height:4px; background:#eef0f3; border-radius:2px; overflow:hidden;">
+                <div style="width:<%= [indiv_pct, 100].min %>%; height:100%; background:rgba(184,134,11,0.65); border-radius:2px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#8a9ab8;">PAC / Committees</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#8a9ab8;"><%= pac_pct %>%</span>
+              </div>
+              <div style="height:4px; background:#eef0f3; border-radius:2px; overflow:hidden;">
+                <div style="width:<%= [pac_pct, 100].min %>%; height:100%; background:rgba(100,160,220,0.6); border-radius:2px;"></div>
+              </div>
+            </div>
+          <% end %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6px; color:#b0b8c8; margin-top:10px;">Source: FEC public records · <a href="https://www.fec.gov/data/candidate/<%= @finance.fec_candidate_id %>/" target="_blank" style="color:#b0b8c8;">fec.gov ↗</a></div>
+        </div>
+      <% else %>
+        <div style="background:white; border-radius:8px; padding:14px 12px; text-align:center; margin-bottom:8px;">
+          <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:#d4d8e0; line-height:1;">$—</div>
           <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
       <div style="background:#f0f7f0; border:1px solid rgba(39,80,10,.15); border-radius:8px; padding:10px 12px;">
         <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#27500A; margin-bottom:3px;">◆ No Donations From</div>
         <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#27500A; line-height:1.45;">Corporate PAC tracking coming soon.</div>
