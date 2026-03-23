@@ -119,12 +119,15 @@ class PhillyBillsService
       nil
     end
 
+    raw_status = status.presence || "In Council"
+
     {
       source:       "philly_legistar",
       external_id:  file_number,
       identifier:   file_number,
       title:        title,
-      status:       status.presence || "In Council",
+      status:       raw_status,
+      bill_stage:   CivicBill.classify_stage(raw_status),
       status_date:  parsed_date,
       summary:      nil,
       sponsors:     [],

@@ -43,6 +43,11 @@ def self.classify_stage(status_text)
     "committee"
   elsif t.match?(/failed|rejected|tabled|indefinitely postponed|withdrawn/)
     "failed"
+  # City council / Legistar terminal actions
+  elsif t.match?(/signed by (the )?mayor|mayor.*sign/)
+    "became_law"
+  elsif t.match?(/\bpassed\b|\badopted\b/)
+    "became_law"
   else
     "introduced"
   end
