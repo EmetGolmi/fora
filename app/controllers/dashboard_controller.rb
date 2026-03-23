@@ -24,7 +24,8 @@ class DashboardController < ApplicationController
 
   def status
     job_id = params[:job_id]
-    cached = Rails.cache.read("resolve:#{job_id}")
+    cached = Rails.cache.read("resolve:#{job_id}") ||
+             ResolvedAddress.find_by(job_id: job_id)&.result_json
 
     if cached.present?
       render json: { ready: true, redirect: "/dashboard/result/#{job_id}" }
@@ -35,7 +36,8 @@ class DashboardController < ApplicationController
 
   def result
     job_id = params[:job_id]
-    cached = Rails.cache.read("resolve:#{job_id}")
+    cached = Rails.cache.read("resolve:#{job_id}") ||
+             ResolvedAddress.find_by(job_id: job_id)&.result_json
 
     if cached.blank?
       redirect_to root_path, alert: "Session expired. Please search again."

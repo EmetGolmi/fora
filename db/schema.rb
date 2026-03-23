@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_22_011724) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_22_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,5 +49,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_22_011724) do
     t.string "source"
     t.datetime "updated_at", null: false
     t.index ["ocd_division_id"], name: "index_civic_representatives_on_ocd_division_id"
+  end
+
+  create_table "resolved_addresses", force: :cascade do |t|
+    t.string "address", null: false
+    t.datetime "created_at", null: false
+    t.string "job_id", null: false
+    t.text "result_json", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address"], name: "index_resolved_addresses_on_address", unique: true
+    t.index ["job_id"], name: "index_resolved_addresses_on_job_id"
   end
 end

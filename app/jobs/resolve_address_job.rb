@@ -16,7 +16,13 @@ class ResolveAddressJob < ApplicationJob
       philly_bills: philly_bills
     }
 
-    Rails.cache.write("resolve:#{job_id}", result.to_json, expires_in: 10.minutes)
+    result_json = result.to_json
+    Rails.cache.write("resolve:#{job_id}", result_json, expires_in: 10.minutes)
+    ResolvedAddress.upsert(
+      { address: address, job_id: job_id, result_json: result_json, created_at: Time.current, updated_at: Time.current },
+      unique_by: :address,
+      update_only: %i[job_id result_json updated_at]
+    )
   rescue => e
     Rails.cache.write("resolve:#{job_id}", { error: e.message }.to_json, expires_in: 10.minutes)
     raise
