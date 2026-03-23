@@ -3,8 +3,8 @@ class GovtrackService
 
   GOVTRACK_IDS = {
     "F000479" => "john_fetterman/456877",
-    "M001243" => "david_mccormick/456963",
-    "E000296" => "dwight_evans/412612"
+    "M001243" => "dave_mccormick/456968",
+    "E000296" => "dwight_evans/412677"
   }.freeze
 
   BASE_URL = "https://www.govtrack.us/congress/members"

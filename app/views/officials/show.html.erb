@@ -86,6 +86,12 @@
   @bills_resolved ||= []
   @committees     ||= []
   @news_articles  ||= []
+  @wiki_photo     ||= nil
+  @social         ||= {}
+  @fec_total_raised ||= nil
+  @fec_cycle        ||= nil
+  @missed_votes_pct ||= nil
+  @party_vote_pct   ||= nil
 
   last_term = @member.dig("terms")&.last || {}
   is_senator = last_term["chamber"] == "Senate"
@@ -105,7 +111,7 @@
     "#{prefix} #{bill['number']}"
   }
 
-  party_raw = (@member["partyName"] || "").strip
+  party_raw = (@member["partyName"] || @member["partyHistory"]&.last&.dig("partyName") || "").strip
   party_tag_style = case party_raw
     when /Democrat/i   then "background:rgba(29,78,216,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd;"
     when /Republican/i then "background:rgba(139,26,26,0.2); border-color:rgba(239,68,68,0.35); color:#fca5a5;"
@@ -121,6 +127,13 @@
   bills_count   = @bills.size
   name_initials = @member['directOrderName'].to_s.split.map(&:first).first(2).join
   votes_cast    = @member["totalVotingRecords"].presence || "—"
+  estimated_votes = if @member["totalVotingRecords"].present?
+    @member["totalVotingRecords"].to_s
+  elsif @missed_votes_pct && is_senator
+    "~#{((1 - @missed_votes_pct / 100.0) * 1400).round} of ~1,400"
+  else
+    "—"
+  end
 %>
 
 
@@ -284,7 +297,7 @@
 
 <%
   party_line_pct = 0.68  # placeholder until real data — Democrat fraction
-  party_raw = (@member["partyName"] || "").strip
+  party_raw = (@member["partyName"] || @member["partyHistory"]&.last&.dig("partyName") || "").strip
   if party_raw =~ /Democrat/i
     party_r, party_g, party_b = 0, 48, 135      # #003087
     opp_r,   opp_g,   opp_b   = 178, 34, 52     # #B22234
@@ -311,7 +324,7 @@
 
     <!-- Photo zone -->
     <div style="height:260px; overflow:hidden; position:relative;">
-      <% congress_img = @member["depiction"]["imageUrl"]&.gsub('_200.jpg', '.jpg') rescue @member.dig("depiction", "imageUrl") %>
+      <% congress_img = @member.dig("depiction","imageUrl")&.gsub('_200.jpg', '.jpg') %>
       <% mob_photo = @wiki_photo.presence || congress_img %>
       <% if mob_photo %>
         <img src="<%= mob_photo %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
@@ -408,7 +421,7 @@
         <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Attendance</span>
         <button onclick="openModal('modal-attendance')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
-      <% [["Votes Cast", votes_cast], ["Attendance Rate", @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—"], ["Missed", @missed_votes_pct ? "#{@missed_votes_pct.round(1)}%" : "—"], ["#{is_senator ? 'Senate' : 'House'} Avg", "—"]].each do |label, val| %>
+      <% [["Votes Cast", estimated_votes], ["Attendance Rate", @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—"], ["Missed", @missed_votes_pct ? "#{@missed_votes_pct.round(1)}%" : "—"], ["#{is_senator ? 'Senate' : 'House'} Avg", "—"]].each do |label, val| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
@@ -503,10 +516,27 @@
     <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Campaign Finance</div>
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Cost of Getting the Message Out</h3>
+      <%
+        fec_display = if @fec_total_raised
+          if @fec_total_raised >= 1_000_000
+            "$#{(@fec_total_raised / 1_000_000.0).round(1)}M"
+          elsif @fec_total_raised >= 1_000
+            "$#{(@fec_total_raised / 1_000.0).round(0).to_i}K"
+          else
+            "$#{@fec_total_raised.to_i}"
+          end
+        else
+          "$—"
+        end
+      %>
       <div style="background:white; border-radius:8px; padding:14px 12px; text-align:center; margin-bottom:8px;">
-        <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:<%= @fec_total_raised ? '#1b3a6b' : '#d4d8e0' %>; line-height:1;"><%= @fec_total_raised ? "$#{(@fec_total_raised / 1_000_000.0).round(1)}M" : "$—" %></div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:<%= @fec_total_raised ? '#1b3a6b' : '#d4d8e0' %>; line-height:1;"><%= fec_display %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b0b8c8; margin-top:4px;">Total Raised<%= @fec_cycle ? " · #{@fec_cycle} Cycle" : "" %></div>
-        <% unless @fec_total_raised %><div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div><% end %>
+        <% if @fec_total_raised %>
+          <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a; margin-top:6px; line-height:1.45;">Staff, advertising, travel, and campaign events.</div>
+        <% else %>
+          <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div>
+        <% end %>
       </div>
       <div style="background:#f0f7f0; border:1px solid rgba(39,80,10,.15); border-radius:8px; padding:10px 12px;">
         <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#27500A; margin-bottom:3px;">◆ No Donations From</div>

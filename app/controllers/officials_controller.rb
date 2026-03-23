@@ -28,6 +28,7 @@ class OfficialsController < ApplicationController
       "HRES" => "H.Res.", "SRES" => "S.Res.", "HCONRES" => "H.Con.Res.", "SCONRES" => "S.Con.Res."
     }
     member_name = @member["name"].to_s
+    fec_office  = @member.dig("terms")&.last&.fetch("chamber", nil) == "Senate" ? "S" : "H"
 
     mutex   = Mutex.new
     threads = []
@@ -114,13 +115,15 @@ class OfficialsController < ApplicationController
       begin
         step1 = HTTParty.get("https://api.open.fec.gov/v1/candidates/search/",
                              query: { api_key: ENV["FEC_API_KEY"], q: member_name,
-                                      office: "S", state: "PA", per_page: 1 })
+                                      office: fec_office, state: "PA", per_page: 1 })
         candidate_id = step1.success? ? step1.parsed_response.dig("results", 0, "candidate_id") : nil
+        Rails.logger.debug "[FORA] FEC candidate_id for #{member_name} (office=#{fec_office}): #{candidate_id.inspect}"
 
         if candidate_id.present?
           step2  = HTTParty.get("https://api.open.fec.gov/v1/candidate/#{candidate_id}/totals/",
                                 query: { api_key: ENV["FEC_API_KEY"], per_page: 1, sort: "-cycle" })
           result = step2.success? ? step2.parsed_response.dig("results", 0) : nil
+          Rails.logger.debug "[FORA] FEC receipts for #{member_name}: #{result&.dig('receipts').inspect} (cycle #{result&.dig('cycle').inspect})"
           mutex.synchronize do
             @fec_total_raised = result&.dig("receipts")
             @fec_cycle        = result&.dig("cycle")
