@@ -79,6 +79,14 @@
 <% end %>
 
 <%
+  # Nil guards for thread-assigned variables — any thread failure leaves these nil
+  @bills          ||= []
+  @bill_id_map    ||= {}
+  @bills_active   ||= []
+  @bills_resolved ||= []
+  @committees     ||= []
+  @news_articles  ||= []
+
   last_term = @member.dig("terms")&.last || {}
   is_senator = last_term["chamber"] == "Senate"
   office_title = if is_senator
