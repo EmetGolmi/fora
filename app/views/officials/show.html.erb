@@ -251,32 +251,7 @@
           <h2 class="dp-section-title">Bills <span style="font-size:13px; font-weight:400; color:#8a9ab8; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;"><%= bills_count %> total</span></h2>
           <% if @bills.any? %>
             <% @bills.each do |bill| %>
-              <% dp_bill_id = @bill_id_map[format_bill_id.call(bill)] %>
-              <% dp_inner = capture do %>
-                <div class="dp-bill-card">
-                  <div class="dp-bill-header">
-                    <span class="dp-bill-id"><%= format_bill_id.call(bill) %></span>
-                    <span class="dp-bill-title"><%= bill["title"] %></span>
-                  </div>
-                  <% if bill.dig("latestAction","text").present? || bill.dig("latestAction","actionDate").present? %>
-                    <div class="dp-bill-meta">
-                      <% if bill.dig("latestAction","text").present? %>
-                        <span class="dp-bill-action"><%= bill.dig("latestAction","text") %></span>
-                      <% end %>
-                      <% if bill.dig("latestAction","actionDate").present? %>
-                        <span class="dp-bill-date"><%= bill.dig("latestAction","actionDate") %></span>
-                      <% end %>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %>
-              <% if dp_bill_id %>
-                <%= link_to bill_path(dp_bill_id), style: "text-decoration:none; color:inherit; display:block;" do %>
-                  <%= dp_inner %>
-                <% end %>
-              <% else %>
-                <%= dp_inner %>
-              <% end %>
+              <%= render "shared/bill_card", bill: bill, bill_id: @bill_id_map[format_bill_id.call(bill)], show_action_badge: false %>
             <% end %>
           <% else %>
             <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:24px 0; text-align:center;">No sponsored legislation found.</p>
@@ -600,23 +575,7 @@
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Active Bills</h3>
       <% if @bills.any? %>
         <% @bills.each do |bill| %>
-          <% mob_bill_id = @bill_id_map[format_bill_id.call(bill)] %>
-          <% mob_card = capture do %>
-            <div style="background:white; border-radius:8px; border-left:4px solid <%= party_bar_color %>; padding:10px 12px; margin-bottom:8px;">
-              <div style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.1em; text-transform:uppercase; color:<%= party_bar_color %>; margin-bottom:4px;"><%= format_bill_id.call(bill) %></div>
-              <div style="font-family:'Nunito',sans-serif; font-size:10.5px; font-weight:700; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= truncate(bill["title"], length: 120) %></div>
-              <% if bill.dig("latestAction", "text").present? %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.06em; color:#633806; background:rgba(184,134,11,.10); border-radius:3px; padding:2px 6px; display:inline-block; line-height:1.5;"><%= truncate(bill.dig("latestAction","text"), length: 80) %></span>
-              <% end %>
-            </div>
-          <% end %>
-          <% if mob_bill_id %>
-            <%= link_to bill_path(mob_bill_id), style:"text-decoration:none; color:inherit; display:block;" do %>
-              <%= mob_card %>
-            <% end %>
-          <% else %>
-            <%= mob_card %>
-          <% end %>
+          <%= render "shared/bill_card", bill: bill, bill_id: @bill_id_map[format_bill_id.call(bill)], show_action_badge: false %>
         <% end %>
       <% else %>
         <p style="font-family:'Nunito',sans-serif; font-size:12px; color:#8a9ab8; text-align:center; padding:12px 0;">No sponsored legislation found.</p>

@@ -1,0 +1,47 @@
+<%
+  b_number   = bill.try(:bill_number)  || bill.try(:[], "bill_number")  || bill.try(:[], :bill_number)  ||
+               bill.try(:identifier)   || bill.try(:[], "identifier")   || ""
+  b_title    = bill.try(:title)        || bill.try(:[], "title")        || bill.try(:[], :title)        || ""
+  b_action   = bill.try(:latest_action_description) || bill.try(:[], "latestAction")&.then{|a| a["text"] || a[:text]} || bill.try(:[], "latest_action_description") ||
+               bill.try(:status)       || ""
+  b_date_raw = bill.try(:status_date)  || bill.try(:[], "latestAction")&.then{|a| a["actionDate"] || a[:actionDate]} || bill.try(:[], "status_date") || ""
+  b_jur      = bill.try(:jurisdiction) || bill.try(:[], "jurisdiction") || "federal"
+
+  rail_color = case b_jur.to_s
+               when "state"                    then "#003087"
+               when "pennsylvania"             then "#003087"
+               when "philadelphia", "city"     then "#004C54"
+               else "#B22234"
+               end
+
+  jur_label  = case b_jur.to_s
+               when "state", "pennsylvania"    then "State"
+               when "philadelphia", "city"     then "City"
+               else "Federal"
+               end
+
+  b_date_display = begin
+    Date.parse(b_date_raw.to_s).strftime("%b %-d, %Y")
+  rescue
+    b_date_raw.to_s
+  end
+%>
+
+<% tag = bill_id ? :a : :div %>
+<% attrs = bill_id ? { href: bill_path(bill_id), style: "text-decoration:none; display:flex; align-items:stretch; color:inherit;" } : { style: "display:flex; align-items:stretch; cursor:default;" } %>
+
+<%= content_tag tag, **attrs do %>
+  <div class="bill-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; width:100%;">
+    <div style="width:8px; background:<%= rail_color %>; flex-shrink:0;"></div>
+    <div style="flex:1; padding:12px 14px;">
+      <% if show_action_badge && b_date_raw.present? %>
+        <div style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:100px; border:1px solid rgba(184,134,11,0.4); color:#b8860b; background:rgba(184,134,11,0.07); margin-bottom:6px;">Upcoming Action · <%= b_date_display %></div>
+      <% end %>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail_color %>; margin-bottom:4px;"><%= jur_label %> · <%= b_number %></div>
+      <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= truncate(b_title, length: 120) %></div>
+      <% if b_action.present? %>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#185FA5; margin-bottom:3px;"><%= truncate(b_action, length: 100) %></div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

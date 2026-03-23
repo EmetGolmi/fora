@@ -195,24 +195,7 @@
       <div id="docket-feed">
         <% if docket_bills_safe.any? %>
           <% docket_bills_safe.each do |b| %>
-            <% level, rail = jur_to_level_rail.call(b.jurisdiction) %>
-            <% label, _ongoing = friendly_status.call(b.status) %>
-            <% date_str = b.status_date&.strftime("%b %d, %Y") %>
-            <%= link_to bill_path(b.id), style: "text-decoration:none; display:block; color:inherit;" do %>
-              <div class="bill-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; cursor:pointer;">
-                <div style="width:8px; background:<%= rail %>; flex-shrink:0;"></div>
-                <div style="flex:1; padding:12px 14px;">
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
-                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= truncate(b.title, length: 216) %></div>
-                  <% if label.present? %>
-                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>; margin-bottom:3px;"><%= label %></div>
-                  <% end %>
-                  <% if date_str.present? %>
-                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#b8860b; background:rgba(184,134,11,0.09); border:0.5px solid rgba(184,134,11,0.3); border-radius:3px; padding:1px 6px; display:inline-block;">Upcoming Action · <%= date_str %></div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
+            <%= render "shared/bill_card", bill: b, bill_id: b.try(:id), show_action_badge: true %>
           <% end %>
         <% else %>
           <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No active bills on the docket.</p>
@@ -232,24 +215,7 @@
       <div id="record-feed">
         <% if record_bills_safe.any? %>
           <% record_bills_safe.each do |b| %>
-            <% level, rail = jur_to_level_rail.call(b.jurisdiction) %>
-            <% label, ongoing = friendly_status.call(b.status) %>
-            <% date_str = b.status_date&.strftime("%b %d, %Y") %>
-            <%= link_to bill_path(b.id), style: "text-decoration:none; display:block; color:inherit;" do %>
-              <div class="bill-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; cursor:pointer;">
-                <div style="width:8px; background:<%= rail %>; flex-shrink:0;"></div>
-                <div style="flex:1; padding:12px 14px;">
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= rail %>; margin-bottom:4px;"><%= level %><% if b.identifier.present? %> · <%= b.identifier %><% end %></div>
-                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= truncate(b.title, length: 216) %></div>
-                  <% if label.present? %>
-                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:<%= status_color_for.call(label) %>; margin-bottom:3px;"><%= label %></div>
-                  <% end %>
-                  <% if date_str.present? %>
-                    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.06em; color:#8a9ab8;"><%= ongoing ? "as of #{date_str}" : date_str %></div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
+            <%= render "shared/bill_card", bill: b, bill_id: b.try(:id), show_action_badge: false %>
           <% end %>
         <% else %>
           <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No bills in the record.</p>
