@@ -174,6 +174,13 @@ class OfficialsController < ApplicationController
     fec_cand_id = FEC_IDS[bioguide_id]
     @finance = OfficialFinanceSummary.where(fec_candidate_id: fec_cand_id).order(cycle_year: :desc).first if fec_cand_id
 
+    @social_handles = {
+      "F000479" => { x: "SenJohnFetterman", instagram: "senjohnfetterman", youtube: nil,            website: "https://www.fetterman.senate.gov" },
+      "M001243" => { x: "SenMcCormickPA",   instagram: "senmccormickpa",   youtube: "SenMcCormickPA", website: "https://www.mccormick.senate.gov" },
+      "E000296" => { x: "RepDwightEvans",    instagram: "repdwightevans",   youtube: nil,            website: "https://evans.house.gov" },
+      "B001296" => { x: "RepBrendanBoyle",   instagram: nil,                youtube: nil,            website: "https://boyle.house.gov" }
+    }[bioguide_id] || {}
+
     Rails.logger.debug "[FORA] @committees for #{bioguide_id}: #{@committees.inspect}"
     Rails.logger.debug "[FORA] FEC_API_KEY present: #{ENV['FEC_API_KEY'].present?}"
   end

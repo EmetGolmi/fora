@@ -2,22 +2,6 @@
 
 <% content_for :head do %>
 <style>
-  /* ── Show/hide ── */
-  .mobile-card { display: none; }
-  @media (max-width: 640px) {
-    .desktop-profile { display: none; }
-    .mobile-card { display: block; }
-  }
-
-  /* ── Desktop ── */
-  .social-btn:hover { color: white !important; }
-  .sponsored-card:hover { box-shadow: 0 4px 18px rgba(27,58,107,0.10) !important; }
-  @media (max-width: 600px) { .social-links { justify-content: center; } }
-  @media (max-width: 600px) {
-    .hero-identity { flex-direction: column !important; align-items: center !important; text-align: center !important; }
-    .hero-identity .hero-tags { justify-content: center !important; }
-  }
-
   /* ── Mobile animations ── */
   @keyframes foil-shift {
     0%   { background-position: -200% center; }
@@ -142,152 +126,294 @@
 ══════════════════════════════════════════ -->
 <div class="desktop-profile">
 
-<!-- HERO -->
-<div style="background:#1b3a6b; padding:44px 48px 52px; position:relative; overflow:hidden;">
-
-  <!-- Decorative rings -->
-  <div style="position:absolute; right:-40px; top:-60px; width:340px; height:340px; border-radius:50%; border:36px solid rgba(255,255,255,0.025); pointer-events:none;"></div>
-  <div style="position:absolute; right:40px; top:-20px; width:200px; height:200px; border-radius:50%; border:1px solid rgba(184,134,11,0.15); pointer-events:none;"></div>
-
-  <!-- Star row -->
-  <div style="position:absolute; bottom:0; left:0; right:0; height:26px; overflow:hidden; display:flex; align-items:center; padding:0 48px; font-size:11px; letter-spacing:0.55em; color:#b8860b; white-space:nowrap; pointer-events:none; -webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%); mask-image:linear-gradient(to right,black 92%,transparent 100%);">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
-
-  <div style="max-width:1100px; margin:0 auto; position:relative; z-index:1;">
-
-    <!-- Back link -->
-    <div style="margin-bottom:18px;">
-      <a href="javascript:history.back()" style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,255,255,0.35); text-decoration:none;">← My Government</a>
-    </div>
-
-    <!-- Identity -->
-    <div class="hero-identity" style="display:flex; align-items:flex-start; gap:22px; margin-bottom:22px;">
-
-      <!-- Avatar -->
-      <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#254f92,#1b3a6b); border:3px solid rgba(184,134,11,0.5); flex-shrink:0; overflow:hidden; position:relative;">
-        <% desk_photo = @wiki_photo.presence || @member.dig("depiction", "imageUrl") %>
-        <% if desk_photo %>
-          <img src="<%= desk_photo %>"
-               alt="<%= @member['directOrderName'] %>"
-               style="width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:50%;">
-        <% else %>
-          <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:#d4a832;">
-            <%= @member['directOrderName'].to_s.split.map(&:first).first(2).join %>
-          </div>
+  <%# News ticker %>
+  <% if @news_articles.any? %>
+  <div class="dp-ticker">
+    <span class="dp-ticker-label">★ News</span>
+    <div class="dp-ticker-overflow">
+      <div class="dp-ticker-track">
+        <% (@news_articles + @news_articles).each do |a| %>
+          <span class="dp-ticker-item">★ &nbsp;<%= a['title'] %></span>
         <% end %>
-        <div style="position:absolute; bottom:-1px; right:-1px; width:22px; height:22px; border-radius:50%; background:#155c2d; border:2.5px solid #1b3a6b; display:flex; align-items:center; justify-content:center; font-size:10px; color:white;">✓</div>
-      </div>
-
-      <!-- Name block -->
-      <div>
-        <h1 style="font-family:'Libre Baskerville',serif; font-size:36px; font-weight:700; color:white; line-height:1.1; margin:0 0 6px;">
-          <%= @member["directOrderName"] %>
-        </h1>
-        <p style="font-family:'Nunito',sans-serif; font-size:16px; font-weight:300; color:rgba(255,255,255,0.6); margin:0 0 12px;">
-          <%= office_title %>
-        </p>
-        <div class="hero-tags" style="display:flex; gap:6px; flex-wrap:wrap;">
-          <% if @member["partyName"].present? %>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:100px; border:1px solid; <%= party_tag_style %>">
-              <%= @member["partyName"] %>
-            </span>
-          <% end %>
-          <% if !is_senator && last_term["district"].present? %>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:100px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">
-              District <%= last_term['district'] %>
-            </span>
-          <% end %>
-        </div>
       </div>
     </div>
-
-    <!-- Social media buttons -->
-    <% has_social = [@social[:twitter], @social[:facebook], @social[:instagram], @social[:youtube], @social[:tiktok], @social[:website]].any?(&:present?) %>
-    <% if has_social %>
-      <div class="social-links" style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
-
-        <% if @social[:website].present? %>
-          <a href="<%= @social[:website] %>" target="_blank" rel="noopener" title="Official Website" class="social-btn"
-             style="color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.15s; line-height:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </a>
-        <% end %>
-
-        <% if @social[:twitter].present? %>
-          <a href="https://x.com/<%= @social[:twitter] %>" target="_blank" rel="noopener" title="X (Twitter)" class="social-btn"
-             style="color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.15s; line-height:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-        <% end %>
-
-        <% if @social[:facebook].present? %>
-          <a href="https://facebook.com/<%= @social[:facebook] %>" target="_blank" rel="noopener" title="Facebook" class="social-btn"
-             style="color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.15s; line-height:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          </a>
-        <% end %>
-
-        <% if @social[:instagram].present? %>
-          <a href="https://instagram.com/<%= @social[:instagram] %>" target="_blank" rel="noopener" title="Instagram" class="social-btn"
-             style="color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.15s; line-height:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-          </a>
-        <% end %>
-
-        <% if @social[:youtube].present? %>
-          <a href="https://youtube.com/<%= @social[:youtube] %>" target="_blank" rel="noopener" title="YouTube" class="social-btn"
-             style="color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.15s; line-height:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          </a>
-        <% end %>
-
-        <% if @social[:tiktok].present? %>
-          <a href="https://tiktok.com/@<%= @social[:tiktok] %>" target="_blank" rel="noopener" title="TikTok" class="social-btn"
-             style="color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.15s; line-height:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-          </a>
-        <% end %>
-
-      </div>
-    <% end %>
-
   </div>
-</div>
-
-<%= render "officials/finance_summary", finance: @finance %>
-
-<!-- SPONSORED LEGISLATION -->
-<div style="max-width:1100px; margin:0 auto; padding:36px 48px 60px;">
-
-  <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Sponsored Legislation</div>
-  <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid rgba(27,58,107,0.09);">
-    <h2 style="font-family:'Libre Baskerville',serif; font-size:22px; font-weight:700; color:#1b3a6b;">Sponsored Bills</h2>
-    <span style="font-family:'JetBrains Mono',monospace; font-size:8px; color:#8a9ab8; letter-spacing:0.08em;"><%= @bills.size %> bills</span>
-  </div>
-
-  <% if @bills.any? %>
-    <% @bills.each do |bill| %>
-      <div class="sponsored-card" style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow 0.15s; cursor:pointer;">
-        <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;">
-          <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6e8a; padding:3px 8px; background:#f0f3f8; border-radius:3px; border:1px solid rgba(27,58,107,0.09); white-space:nowrap; flex-shrink:0; margin-top:2px;"><%= format_bill_id.call(bill) %></span>
-          <span style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:#1b3a6b; line-height:1.3;"><%= bill["title"] %></span>
-        </div>
-        <% if bill.dig("latestAction", "text").present? || bill.dig("latestAction", "actionDate").present? %>
-          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
-            <% if bill.dig("latestAction", "text").present? %>
-              <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.45; flex:1;"><%= bill.dig("latestAction", "text") %></span>
-            <% end %>
-            <% if bill.dig("latestAction", "actionDate").present? %>
-              <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8; flex-shrink:0; white-space:nowrap;"><%= bill.dig("latestAction", "actionDate") %></span>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  <% else %>
-    <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:24px 0; text-align:center;">No sponsored legislation found.</p>
   <% end %>
 
-</div>
+  <%# Hero %>
+  <div class="dp-hero">
+    <div style="position:absolute; right:-40px; top:-60px; width:340px; height:340px; border-radius:50%; border:36px solid rgba(255,255,255,0.025); pointer-events:none;"></div>
+    <div style="position:absolute; right:40px; top:-20px; width:200px; height:200px; border-radius:50%; border:1px solid rgba(184,134,11,0.15); pointer-events:none;"></div>
+
+    <div class="dp-hero-inner">
+      <div class="dp-hero-toprow">
+        <a href="javascript:history.back()" class="dp-hero-back">← My Government</a>
+        <button class="dp-share-btn" onclick="dpShare()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share
+        </button>
+      </div>
+
+      <div class="dp-hero-identity">
+        <div class="dp-avatar">
+          <% desk_photo = @wiki_photo.presence || @member.dig("depiction", "imageUrl") %>
+          <% if desk_photo %>
+            <img src="<%= desk_photo %>" alt="<%= @member['directOrderName'] %>">
+          <% else %>
+            <div class="dp-avatar-initials"><%= name_initials %></div>
+          <% end %>
+          <div class="dp-avatar-badge">✓</div>
+        </div>
+
+        <div>
+          <h1 class="dp-name"><%= @member["directOrderName"] %></h1>
+          <p class="dp-office-title"><%= office_title %></p>
+          <div class="dp-tags">
+            <% if party_raw.present? %>
+              <span class="dp-tag" style="<%= party_tag_style %>"><%= party_raw %></span>
+            <% end %>
+            <% if !is_senator && last_term["district"].present? %>
+              <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">District <%= last_term['district'] %></span>
+            <% end %>
+          </div>
+          <div class="dp-social">
+            <% if @social_handles[:website].present? %>
+              <a href="<%= @social_handles[:website] %>" target="_blank" rel="noopener" class="dp-social-link" title="Official Website">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+            <% end %>
+            <% if @social_handles[:x].present? %>
+              <a href="https://x.com/<%= @social_handles[:x] %>" target="_blank" rel="noopener" class="dp-social-link" title="X / Twitter">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            <% end %>
+            <% if @social_handles[:instagram].present? %>
+              <a href="https://instagram.com/<%= @social_handles[:instagram] %>" target="_blank" rel="noopener" class="dp-social-link" title="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+              </a>
+            <% end %>
+            <% if @social_handles[:youtube].present? %>
+              <a href="https://youtube.com/<%= @social_handles[:youtube] %>" target="_blank" rel="noopener" class="dp-social-link" title="YouTube">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# Stat bar %>
+      <div class="dp-stat-bar">
+        <div class="dp-stat" onclick="dpOpenModal('attendance')">
+          <span class="dp-stat-info">ⓘ</span>
+          <div class="dp-stat-value"><%= @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—" %></div>
+          <div class="dp-stat-label">Attendance</div>
+        </div>
+        <div class="dp-stat" onclick="dpOpenModal('party')">
+          <span class="dp-stat-info">ⓘ</span>
+          <div class="dp-stat-value"><%= @party_vote_pct ? "#{@party_vote_pct.round(1)}%" : "—" %></div>
+          <div class="dp-stat-label">Party-Line</div>
+        </div>
+        <div class="dp-stat" onclick="dpOpenModal('bills')">
+          <span class="dp-stat-info">ⓘ</span>
+          <div class="dp-stat-value"><%= bills_count %></div>
+          <div class="dp-stat-label">Bills Sponsored</div>
+        </div>
+        <% if @finance %>
+        <div class="dp-stat" onclick="dpOpenModal('finance')">
+          <span class="dp-stat-info">ⓘ</span>
+          <%
+            dp_raised = @finance.total_raised_cents.to_i
+            dp_raised_fmt = dp_raised >= 1_000_000 ? "$#{(dp_raised/1_000_000.0).round(1)}M" :
+                            dp_raised >= 1_000 ? "$#{(dp_raised/1_000.0).round(0).to_i}K" : "$#{dp_raised}"
+          %>
+          <div class="dp-stat-value"><%= dp_raised_fmt %></div>
+          <div class="dp-stat-label">Campaign Raised</div>
+        </div>
+        <% end %>
+        <div class="dp-stat" onclick="dpOpenModal('committees')">
+          <span class="dp-stat-info">ⓘ</span>
+          <div class="dp-stat-value"><%= @committees.size %></div>
+          <div class="dp-stat-label">Committees</div>
+        </div>
+      </div>
+    </div><!-- /dp-hero-inner -->
+
+    <div class="dp-stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div><!-- /dp-hero -->
+
+  <%# Body %>
+  <div style="background:#f2f4f8; padding:1px 0;">
+    <div class="dp-body">
+
+      <%# ── MAIN COLUMN ── %>
+      <div class="dp-main">
+
+        <%# Sponsored Legislation %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Sponsored Legislation</div>
+          <h2 class="dp-section-title">Bills <span style="font-size:13px; font-weight:400; color:#8a9ab8; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;"><%= bills_count %> total</span></h2>
+          <% if @bills.any? %>
+            <% @bills.each do |bill| %>
+              <% dp_bill_id = @bill_id_map[format_bill_id.call(bill)] %>
+              <% dp_inner = capture do %>
+                <div class="dp-bill-card">
+                  <div class="dp-bill-header">
+                    <span class="dp-bill-id"><%= format_bill_id.call(bill) %></span>
+                    <span class="dp-bill-title"><%= bill["title"] %></span>
+                  </div>
+                  <% if bill.dig("latestAction","text").present? || bill.dig("latestAction","actionDate").present? %>
+                    <div class="dp-bill-meta">
+                      <% if bill.dig("latestAction","text").present? %>
+                        <span class="dp-bill-action"><%= bill.dig("latestAction","text") %></span>
+                      <% end %>
+                      <% if bill.dig("latestAction","actionDate").present? %>
+                        <span class="dp-bill-date"><%= bill.dig("latestAction","actionDate") %></span>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <% if dp_bill_id %>
+                <%= link_to bill_path(dp_bill_id), style: "text-decoration:none; color:inherit; display:block;" do %>
+                  <%= dp_inner %>
+                <% end %>
+              <% else %>
+                <%= dp_inner %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:24px 0; text-align:center;">No sponsored legislation found.</p>
+          <% end %>
+        </div>
+
+        <%# Attendance & Voting %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Voting Record</div>
+          <h2 class="dp-section-title">Attendance &amp; Party-Line</h2>
+          <div class="dp-stat-cards">
+            <div class="dp-stat-card">
+              <div class="dp-stat-card-title">Attendance</div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Attendance Rate</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—" %></span>
+              </div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Missed Votes</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= @missed_votes_pct ? "#{@missed_votes_pct.round(1)}%" : "—" %></span>
+              </div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Votes Cast (est.)</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= estimated_votes %></span>
+              </div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Chamber Average</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;">—</span>
+              </div>
+            </div>
+            <div class="dp-stat-card">
+              <div class="dp-stat-card-title">Party-Line Voting</div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">With Party</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= @party_vote_pct ? "#{@party_vote_pct.round(1)}%" : "—" %></span>
+              </div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Independent Votes</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= @party_vote_pct ? "#{(100 - @party_vote_pct).round(1)}%" : "—" %></span>
+              </div>
+              <div class="dp-stat-card-row">
+                <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Chamber Average</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# Campaign Finance %>
+        <% if @finance.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Campaign Finance</div>
+          <h2 class="dp-section-title">Cost of Getting the Message Out</h2>
+          <%= render "officials/finance_summary", finance: @finance %>
+        </div>
+        <% end %>
+
+        <%# Q&A %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Community</div>
+          <h2 class="dp-section-title">Q&amp;A</h2>
+          <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:32px; text-align:center;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">Coming Soon</div>
+            <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#5a6e8a; line-height:1.6; margin:0;">Ask questions about this official's record, votes, and positions.</p>
+          </div>
+        </div>
+
+      </div><!-- /dp-main -->
+
+      <%# ── SIDEBAR ── %>
+      <div class="dp-sidebar">
+
+        <%# Contact %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Contact</div>
+          <% if @member.dig("addressInformation","officeAddress").present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Office</div>
+              <div class="dp-card-text"><%= @member.dig("addressInformation","officeAddress") %></div>
+            </div>
+          <% end %>
+          <% if @member.dig("addressInformation","phoneNumber").present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Phone</div>
+              <a href="tel:<%= @member.dig('addressInformation','phoneNumber') %>" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#1b3a6b; text-decoration:none;"><%= @member.dig("addressInformation","phoneNumber") %></a>
+            </div>
+          <% end %>
+          <% if @social_handles[:website].present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Website</div>
+              <a href="<%= @social_handles[:website] %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px; word-break:break-all;"><%= @social_handles[:website].gsub(/^https?:\/\//, '').chomp('/') %></a>
+            </div>
+          <% end %>
+          <% if [@member.dig("addressInformation","officeAddress"), @member.dig("addressInformation","phoneNumber"), @social_handles[:website]].none?(&:present?) %>
+            <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; margin:0;">Contact info coming soon.</p>
+          <% end %>
+        </div>
+
+        <%# Committees %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Committees</div>
+          <% if @committees.present? %>
+            <% @committees.each do |committee| %>
+              <div class="dp-card-entry">
+                <% if committee[:role].present? %>
+                  <div class="dp-card-sublabel"><%= committee[:role] %></div>
+                <% end %>
+                <div class="dp-card-text"><%= committee[:name] %></div>
+              </div>
+            <% end %>
+          <% else %>
+            <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; margin:0;">Committee assignments coming soon.</p>
+          <% end %>
+        </div>
+
+        <%# Donors & Lobbyists placeholder %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Donors &amp; Lobbyists</div>
+          <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; margin:0; line-height:1.5;">Donor breakdown and registered lobbyist tracking coming soon.</p>
+        </div>
+
+      </div><!-- /dp-sidebar -->
+    </div><!-- /dp-body -->
+  </div>
+
+  <%# Desktop modal overlay %>
+  <div id="dp-modal" class="dp-modal" onclick="if(event.target===this)dpCloseModal()">
+    <div class="dp-modal-box">
+      <button class="dp-modal-close" onclick="dpCloseModal()">×</button>
+      <div class="dp-modal-eyebrow" id="dp-modal-eyebrow"></div>
+      <h3 class="dp-modal-title" id="dp-modal-title"></h3>
+      <div class="dp-modal-body" id="dp-modal-body"></div>
+    </div>
+  </div>
 
 </div><!-- /desktop-profile -->
 
@@ -295,6 +421,7 @@
 <!-- ══════════════════════════════════════════
      MOBILE CARD
 ══════════════════════════════════════════ -->
+<div class="mobile-profile">
 <div class="mobile-card">
 
 <%
@@ -658,3 +785,75 @@
   </script>
 
 </div><!-- /mobile-card -->
+</div><!-- /mobile-profile -->
+
+<script>
+  /* ── Desktop profile JS ── */
+  var DP_MODALS = {
+    attendance: {
+      eyebrow: "◆ About This Stat",
+      title: "Attendance",
+      body: "<p>Attendance tracks how often this member participates in floor votes during the current session of Congress.</p><p>A high vote rate means the member is present and engaged. FORA compares individual rates to the chamber average so you can put the number in context.</p>"
+    },
+    party: {
+      eyebrow: "◆ About This Stat",
+      title: "Party-Line Voting",
+      body: "<p>Party-line voting measures how often this member votes with the majority of their party on contested votes — votes where the two parties are on opposite sides.</p><p>A high score means the member closely follows party leadership. A lower score suggests more independent judgment. Knowing the pattern helps you understand who this member actually represents.</p>"
+    },
+    bills: {
+      eyebrow: "◆ About This Stat",
+      title: "Bills Sponsored",
+      body: "<p>This counts legislation introduced in the current session of Congress by this member as a primary sponsor.</p><p>Sponsoring a bill doesn't mean it will pass — most bills never reach a floor vote. But it does show which issues a member is willing to put their name on.</p>"
+    },
+    finance: {
+      eyebrow: "◆ About This Stat",
+      title: "Campaign Finance",
+      body: "<p>Total funds raised for the most recent election cycle, reported to the Federal Election Commission (FEC).</p><p>This includes individual contributions, PAC money, and self-funding. More money doesn't guarantee a win — but it shapes who gets heard. Source: FEC weball data.</p>"
+    },
+    committees: {
+      eyebrow: "◆ About Committees",
+      title: "Committee Assignments",
+      body: "<p>Most bills never reach a floor vote. They're assigned to a committee where they're reviewed, amended, or quietly shelved. Committee members decide what moves forward.</p><p>Knowing which committees a member sits on tells you where their power is concentrated — and which industries they're positioned to influence most.</p>"
+    }
+  };
+
+  function dpOpenModal(key) {
+    var data = DP_MODALS[key];
+    if (!data) return;
+    document.getElementById('dp-modal-eyebrow').textContent = data.eyebrow;
+    document.getElementById('dp-modal-title').textContent = data.title;
+    document.getElementById('dp-modal-body').innerHTML = data.body;
+    document.getElementById('dp-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function dpCloseModal() {
+    document.getElementById('dp-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function dpShare() {
+    var url = window.location.href;
+    var nameEl = document.querySelector('.dp-name');
+    var title = (nameEl ? nameEl.textContent.trim() : document.title) + ' — FORA';
+    if (navigator.share) {
+      navigator.share({ title: title, url: url }).catch(function() {});
+    } else {
+      navigator.clipboard.writeText(url).then(function() {
+        alert('Link copied to clipboard!');
+      }).catch(function() {
+        prompt('Copy this link:', url);
+      });
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      dpCloseModal();
+      document.querySelectorAll('.mob-modal.open').forEach(function(m) {
+        m.classList.remove('open');
+      });
+      document.body.style.overflow = '';
+    }
+  });
+</script>
