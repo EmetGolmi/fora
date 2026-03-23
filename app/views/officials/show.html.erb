@@ -23,6 +23,16 @@
     0%   { background-position: -200% center; }
     100% { background-position:  200% center; }
   }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .mob-ticker-track {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: ticker-scroll 28s linear infinite;
+  }
+
   .mob-foil {
     background: linear-gradient(105deg,
       rgba(255,255,255,0)     0%,
@@ -304,6 +314,17 @@
       <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
       <!-- Foil shimmer -->
       <div class="mob-foil" style="position:absolute; inset:0;"></div>
+      <% if @news_articles&.any? %>
+        <!-- News ticker -->
+        <div style="position:absolute; bottom:0; left:0; right:0; height:20px; overflow:hidden; background:rgba(0,0,0,.35); z-index:3;">
+          <div class="mob-ticker-track">
+            <% ticker_items = (@news_articles + @news_articles).map { |a| "NEWS · #{a['title']}" } %>
+            <% ticker_items.each do |item| %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; color:#d4a832; padding:0 24px; line-height:20px; display:inline-block;">★ <%= item %></span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <!-- Nameplate -->
