@@ -27,7 +27,7 @@ class BillsController < ApplicationController
         "content-type"      => "application/json"
       },
       body: {
-        model:      "claude-opus-4-5-20251101",
+        model:      "claude-sonnet-4-5",
         max_tokens: 500,
         system:     "You are a nonpartisan civic information assistant for FORA, a Philadelphia civic platform. Explain legislation in plain language for everyday citizens. Be concise, clear, and never use jargon. Never predict outcomes as certain. Always use 'may', 'could', or 'might' when discussing possible effects. Never take political sides. Never use markdown formatting, bullet points, bold text, asterisks, or section labels in your response.",
         messages: [
