@@ -131,18 +131,16 @@ class OfficialsController < ApplicationController
       end
     end
 
-    # GovTrack voting stats
+    # GovTrack voting stats + committees (scraped)
     threads << Thread.new do
-      begin
-        resp = HTTParty.get("https://api.govtrack.us/api/v2/person",
-                            query: { name: member_name, format: "json" })
-        person = resp.success? ? resp.parsed_response.dig("objects", 0) : nil
-        mutex.synchronize do
-          @party_vote_pct   = person&.dig("votes_with_party_pct")
-          @missed_votes_pct = person&.dig("missed_votes_pct")
+      govtrack = GovtrackService.fetch(bioguide_id)
+      mutex.synchronize do
+        @party_vote_pct   = govtrack[:party_vote_pct]
+        @missed_votes_pct = govtrack[:missed_votes_pct]
+        # Use GovTrack committees as fallback if Congress.gov returned none
+        if @committees.blank? && govtrack[:committees].present?
+          @committees = govtrack[:committees].map { |name| { name: name, role: "" } }
         end
-      rescue
-        mutex.synchronize { @party_vote_pct = nil; @missed_votes_pct = nil }
       end
     end
 
