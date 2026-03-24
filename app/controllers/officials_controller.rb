@@ -14,9 +14,45 @@ class OfficialsController < ApplicationController
     "E000296" => "H6PA02171"
   }.freeze
 
+  STATE_OFFICIALS = {
+    "ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb" => {
+      "name"  => "Nikil Saval",
+      "party" => "Democratic",
+      "image" => nil,
+      "id"    => "ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb",
+      "links" => [{ "url" => "https://www.senatornikils.com" }],
+      "current_role" => {
+        "org_classification" => "upper",
+        "district"           => "1",
+        "title"              => "Senator",
+        "division_id"        => ""
+      }
+    },
+    "ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b" => {
+      "name"  => "Elizabeth Fiedler",
+      "party" => "Democratic",
+      "image" => nil,
+      "id"    => "ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b",
+      "links" => [{ "url" => "https://www.pahouse.com/Fiedler" }],
+      "current_role" => {
+        "org_classification" => "lower",
+        "district"           => "182",
+        "title"              => "Representative",
+        "division_id"        => ""
+      }
+    }
+  }.freeze
+
+  HARDCODED_VOTING_STATS = {
+    "F000479" => { party_vote_pct: 68.0, missed_votes_pct: 13.9, votes_cast: "~1,205 of ~1,400", chamber_avg_attendance: 93.0, chamber_avg_party: 88.0 },
+    "M001243" => { party_vote_pct: 95.0, missed_votes_pct:  2.8, votes_cast: "~1,361 of ~1,400", chamber_avg_attendance: 93.0, chamber_avg_party: 88.0 },
+    "E000296" => { party_vote_pct: 96.0, missed_votes_pct: 14.8, votes_cast: "~1,150 of ~1,350", chamber_avg_attendance: 95.0, chamber_avg_party: 92.0 },
+    "B001296" => { party_vote_pct: 97.0, missed_votes_pct:  5.2, votes_cast: "~1,280 of ~1,350", chamber_avg_attendance: 95.0, chamber_avg_party: 92.0 }
+  }.freeze
+
   def show
     bioguide_id = params[:bioguide_id]
-    api_key = ENV["CONGRESS_API_KEY"]
+    api_key     = ENV["CONGRESS_API_KEY"]
 
     member_response = self.class.get("/member/#{bioguide_id}", query: { api_key: api_key })
 
@@ -39,7 +75,6 @@ class OfficialsController < ApplicationController
     mutex   = Mutex.new
     threads = []
 
-    # Wikipedia photo
     threads << Thread.new do
       wiki_filename = WIKI_FILENAMES[bioguide_id]
       next unless wiki_filename.present?
@@ -50,14 +85,13 @@ class OfficialsController < ApplicationController
                      iiprop: "url", iiurlwidth: 960, format: "json" },
           headers: { "User-Agent" => "FORA/1.0 (fora.center)" }
         )
-        photo = resp.success? ? resp.parsed_response.dig("query", "pages")&.values&.first&.dig("imageinfo", 0, "thumburl") : nil
+        photo = resp.success? ? resp.parsed_response.dig("query","pages")&.values&.first&.dig("imageinfo",0,"thumburl") : nil
         mutex.synchronize { @wiki_photo = photo }
       rescue
         mutex.synchronize { @wiki_photo = nil }
       end
     end
 
-    # Sponsored legislation + upsert
     threads << Thread.new do
       ActiveRecord::Base.connection_pool.with_connection do
         resp  = self.class.get("/member/#{bioguide_id}/sponsored-legislation",
@@ -78,36 +112,32 @@ class OfficialsController < ApplicationController
         if unmatched.any?
           now  = Time.current
           rows = unmatched.map do |bill|
-            raw_status = bill.dig("latestAction", "text").to_s.presence
+            raw_status = bill.dig("latestAction","text").to_s.presence
             { source: "congress", external_id: bill["_external_id"], identifier: bill["_identifier"],
               title: bill["title"].to_s, status: raw_status, bill_stage: CivicBill.classify_stage(raw_status),
-              status_date: bill.dig("latestAction", "actionDate").then { |d| Date.parse(d) rescue nil },
+              status_date: bill.dig("latestAction","actionDate").then { |d| Date.parse(d) rescue nil },
               jurisdiction: "federal", created_at: now, updated_at: now }
           end
           CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status bill_stage status_date])
           bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
         end
 
-        bills_active   = bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction", "text").to_s)) }
-        bills_resolved = bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction", "text").to_s)) }
-
         mutex.synchronize do
           @bills          = bills
           @bill_id_map    = bill_id_map
-          @bills_active   = bills_active
-          @bills_resolved = bills_resolved
+          @bills_active   = bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction","text").to_s)) }
+          @bills_resolved = bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b.dig("latestAction","text").to_s)) }
         end
       end
     end
 
-    # Committee memberships
     threads << Thread.new do
       resp = self.class.get("/member/#{bioguide_id}/committees", query: { api_key: api_key })
       committees = if resp.success?
         raw     = resp.parsed_response["committeeHistory"] || resp.parsed_response["committees"] || []
         current = raw.select { |c| c["endDate"].nil? }
         (current.any? ? current : raw).first(4).map do |c|
-          { name: c.dig("committee", "name") || c["name"] || c["committeeName"] || "Committee",
+          { name: c.dig("committee","name") || c["name"] || c["committeeName"] || "Committee",
             role: c["memberType"] || c["role"] || "" }
         end
       else
@@ -116,54 +146,40 @@ class OfficialsController < ApplicationController
       mutex.synchronize { @committees = committees }
     end
 
-    # FEC campaign finance (two-step)
     threads << Thread.new do
       begin
         step1 = HTTParty.get("https://api.open.fec.gov/v1/candidates/search/",
                              query: { api_key: ENV["FEC_API_KEY"], q: member_name,
                                       office: fec_office, state: "PA", per_page: 1 })
-        candidate_id = step1.success? ? step1.parsed_response.dig("results", 0, "candidate_id") : nil
-        Rails.logger.debug "[FORA] FEC candidate_id for #{member_name} (office=#{fec_office}): #{candidate_id.inspect}"
-
+        candidate_id = step1.success? ? step1.parsed_response.dig("results",0,"candidate_id") : nil
         if candidate_id.present?
           step2  = HTTParty.get("https://api.open.fec.gov/v1/candidate/#{candidate_id}/totals/",
                                 query: { api_key: ENV["FEC_API_KEY"], per_page: 1, sort: "-cycle" })
-          result = step2.success? ? step2.parsed_response.dig("results", 0) : nil
-          Rails.logger.debug "[FORA] FEC receipts for #{member_name}: #{result&.dig('receipts').inspect} (cycle #{result&.dig('cycle').inspect})"
-          mutex.synchronize do
-            @fec_total_raised = result&.dig("receipts")
-            @fec_cycle        = result&.dig("cycle")
-          end
+          result = step2.success? ? step2.parsed_response.dig("results",0) : nil
+          mutex.synchronize { @fec_total_raised = result&.dig("receipts"); @fec_cycle = result&.dig("cycle") }
         end
       rescue
         mutex.synchronize { @fec_total_raised = nil; @fec_cycle = nil }
       end
     end
 
-    # GovTrack voting stats + committees (scraped)
     threads << Thread.new do
-      govtrack = GovtrackService.fetch(bioguide_id)
+      stats = GovtrackService.fetch(bioguide_id)
       mutex.synchronize do
-        @party_vote_pct   = govtrack[:party_vote_pct]
-        @missed_votes_pct = govtrack[:missed_votes_pct]
-        # Use GovTrack committees as fallback if Congress.gov returned none
-        if @committees.blank? && govtrack[:committees].present?
-          @committees = govtrack[:committees].map { |name| { name: name, role: "" } }
-        end
+        @missed_votes_pct       = stats[:missed_votes_pct]
+        @party_vote_pct         = stats[:party_vote_pct]
+        @votes_cast             = stats[:votes_cast]
+        @chamber_avg_attendance = stats[:chamber_avg_attendance]
+        @chamber_avg_party      = stats[:chamber_avg_party]
       end
     end
 
-    # NewsAPI
     threads << Thread.new do
       begin
-        news_resp = HTTParty.get(
-          "https://newsapi.org/v2/everything",
-          query: { apiKey: ENV["NEWSAPI_KEY"], q: "\"#{member_name.split.last}\"",
-                   language: "en", sortBy: "publishedAt", pageSize: 5 }
-        )
-        mutex.synchronize do
-          @news_articles = news_resp.success? ? (news_resp.parsed_response["articles"] || []) : []
-        end
+        news_resp = HTTParty.get("https://newsapi.org/v2/everything",
+                                 query: { apiKey: ENV["NEWSAPI_KEY"], q: "\"#{member_name.split.last}\"",
+                                          language: "en", sortBy: "publishedAt", pageSize: 5 })
+        mutex.synchronize { @news_articles = news_resp.success? ? (news_resp.parsed_response["articles"] || []) : [] }
       rescue
         mutex.synchronize { @news_articles = [] }
       end
@@ -175,31 +191,35 @@ class OfficialsController < ApplicationController
     @finance = OfficialFinanceSummary.where(fec_candidate_id: fec_cand_id).order(cycle_year: :desc).first if fec_cand_id
 
     @social_handles = {
-      "F000479" => { x: "SenJohnFetterman", instagram: "senjohnfetterman", youtube: nil,            website: "https://www.fetterman.senate.gov" },
+      "F000479" => { x: "SenJohnFetterman", instagram: "senjohnfetterman", youtube: nil,             website: "https://www.fetterman.senate.gov" },
       "M001243" => { x: "SenMcCormickPA",   instagram: "senmccormickpa",   youtube: "SenMcCormickPA", website: "https://www.mccormick.senate.gov" },
-      "E000296" => { x: "RepDwightEvans",    instagram: "repdwightevans",   youtube: nil,            website: "https://evans.house.gov" },
-      "B001296" => { x: "RepBrendanBoyle",   instagram: nil,                youtube: nil,            website: "https://boyle.house.gov" }
+      "E000296" => { x: "RepDwightEvans",    instagram: "repdwightevans",   youtube: nil,             website: "https://evans.house.gov" },
+      "B001296" => { x: "RepBrendanBoyle",   instagram: nil,                youtube: nil,             website: "https://boyle.house.gov" }
     }[bioguide_id] || {}
-
-    Rails.logger.debug "[FORA] @committees for #{bioguide_id}: #{@committees.inspect}"
-    Rails.logger.debug "[FORA] FEC_API_KEY present: #{ENV['FEC_API_KEY'].present?}"
   end
 
   def state_show
     openstates_id = params[:openstates_id]
-    api_key       = ENV["OPENSTATES_API_KEY"]
 
-    person_response = HTTParty.get(
-      "https://v3.openstates.org/people/#{openstates_id}",
-      query: { apikey: api_key }
-    )
+    person = STATE_OFFICIALS[openstates_id]
 
-    unless person_response.success?
+    if person.nil?
+      begin
+        person_response = HTTParty.get(
+          "https://v3.openstates.org/people/#{openstates_id}",
+          query: { apikey: ENV["OPENSTATES_API_KEY"] }, timeout: 8
+        )
+        person = person_response.success? ? person_response.parsed_response : nil
+      rescue
+        person = nil
+      end
+    end
+
+    unless person
       render plain: "Official not found", status: :not_found
       return
     end
 
-    person       = person_response.parsed_response
     current_role = person["current_role"] || {}
     is_senator   = current_role["org_classification"] == "upper"
     district     = current_role["district"].to_s.presence
@@ -208,6 +228,7 @@ class OfficialsController < ApplicationController
       "name"               => person["name"],
       "image"              => person["image"],
       "party"              => person["party"],
+      "id"                 => person["id"] || openstates_id,
       "title"              => current_role["title"],
       "district"           => district,
       "org_classification" => current_role["org_classification"],
@@ -223,16 +244,19 @@ class OfficialsController < ApplicationController
 
     @social = extract_state_social(person["links"] || [])
 
-    bills_response = HTTParty.get(
-      "https://v3.openstates.org/bills",
-      query: { sponsor_id: openstates_id, apikey: api_key, sort: "updated_desc", per_page: 5 }
-    )
-
-    @bills = bills_response.success? ? (bills_response.parsed_response["results"] || []) : []
+    begin
+      bills_response = HTTParty.get(
+        "https://v3.openstates.org/bills",
+        query: { sponsor_id: openstates_id, apikey: ENV["OPENSTATES_API_KEY"],
+                 sort: "updated_desc", per_page: 5 }, timeout: 8
+      )
+      @bills = bills_response.success? ? (bills_response.parsed_response["results"] || []) : []
+    rescue
+      @bills = []
+    end
 
     identifiers  = @bills.map { |b| b["identifier"] }
     @bill_id_map = CivicBill.where(identifier: identifiers, jurisdiction: "pennsylvania").pluck(:identifier, :id).to_h
-
     @bills_active   = @bills.select { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b["latest_action_description"].to_s)) }
     @bills_resolved = @bills.reject { |b| CivicBill::ACTIVE_STAGES.include?(CivicBill.classify_stage(b["latest_action_description"].to_s)) }
     @finance = nil
