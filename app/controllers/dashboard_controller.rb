@@ -59,7 +59,7 @@ class DashboardController < ApplicationController
 
     date_filter      = ["status_date >= ? OR status_date IS NULL", Date.new(2025, 1, 1)]
     docket_scope     = CivicBill.active.where(date_filter).order(status_date: :desc)
-    record_scope     = CivicBill.resolved.where(date_filter).order(status_date: :desc)
+    record_scope     = CivicBill.resolved.order(status_date: :desc)
     @docket_total    = docket_scope.count
     @record_total    = record_scope.count
     @docket_bills    = docket_scope.limit(18).to_a
