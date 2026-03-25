@@ -1,0 +1,35 @@
+<%# app/views/market/new_llc/_step.html.erb %>
+<%# Locals: number, title, cost (optional), mentor (optional), mentor_id (optional), bullets (array of HTML strings), note (optional) %>
+
+<div class="newllc-step-card">
+  <div class="newllc-step-header">
+    <div class="newllc-step-badge"><%= number %></div>
+    <div class="newllc-step-title-wrap">
+      <div class="newllc-step-title"><%= title.html_safe %></div>
+    </div>
+    <% if local_assigns[:cost] %>
+      <div class="newllc-step-cost"><%= cost %></div>
+    <% end %>
+  </div>
+
+  <% if local_assigns[:mentor] && mentor.present? %>
+    <div class="newllc-mentor-block" <%= mentor_id ? "id=\"#{mentor_id}\"" : "" %>>
+      <%= mentor %>
+    </div>
+  <% elsif local_assigns[:mentor_id] %>
+    <%# Empty block that JS will fill in %>
+    <div class="newllc-mentor-block" id="<%= mentor_id %>"></div>
+  <% end %>
+
+  <% if local_assigns[:bullets] && bullets.any? %>
+    <ul class="newllc-step-bullets">
+      <% bullets.each do |b| %>
+        <li><%= b.html_safe %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if local_assigns[:note] && note.present? %>
+    <div class="newllc-step-note"><%= note %></div>
+  <% end %>
+</div>

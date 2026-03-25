@@ -1,0 +1,493 @@
+<%# app/views/market/new_llc/guide.html.erb %>
+<%# Renders inside your application layout. %>
+<%# All personalization happens in the <script> block below — no server logic needed. %>
+
+<% content_for :title, @page_title %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "market/new_llc" %>
+<% end %>
+
+<%# Pass Rails params to JS safely via data attributes on a single root element %>
+<div class="newllc-page"
+     id="newllc-guide-root"
+     data-name="<%= h(@name) %>"
+     data-work="<%= h(@work) %>"
+     data-location="<%= h(@location) %>"
+     data-bank="<%= h(@bank) %>"
+     data-structure="<%= h(params[:structure]) %>"
+     data-question="<%= h(params[:question].to_s.strip.truncate(400)) %>">
+
+  <%# ── HERO (static shell, JS fills in name + work) ────────────────── %>
+  <div class="newllc-hero">
+    <div class="newllc-hero-inner">
+      <p class="newllc-eyebrow" id="guide-eyebrow">Your FORA Guide</p>
+      <h1 class="newllc-hero-h1" id="guide-headline">
+        Let&rsquo;s get your business up and running.
+      </h1>
+      <p class="newllc-hero-sub" id="guide-intro">Loading your personalized guide&hellip;</p>
+    </div>
+  </div>
+
+  <div class="newllc-body">
+
+    <%# ── WORRY RESPONSE (hidden until JS fills it) ─────────────────── %>
+    <div id="guide-worry" class="newllc-tip-box newllc-tip-worry" style="display:none">
+      <span class="newllc-tip-icon">&#x1F4AC;</span>
+      <div id="worry-text"></div>
+    </div>
+
+    <%# ── PHASE 1 ─────────────────────────────────────────────────────── %>
+    <p class="newllc-phase-label">Phase 1 &middot; Form your LLC</p>
+
+    <%= render "market/new_llc/step", number: 1,
+        title: "Choose your business name and file your LLC",
+        cost: "$125",
+        mentor: nil,
+        mentor_id: "mentor-s1",
+        bullets: [
+          %(<a href="https://apps.dos.pa.gov/CorpSearch" target="_blank" rel="noopener">apps.dos.pa.gov/CorpSearch</a> &mdash; check your name is available here first),
+          "Your name must end in <strong>LLC</strong> or <strong>L.L.C.</strong>",
+          %(File at <a href="https://www.corporations.pa.gov" target="_blank" rel="noopener">corporations.pa.gov</a> &mdash; select Domestic Limited Liability Company),
+          "Pay the $125 filing fee by credit card &mdash; takes about 15 minutes",
+          "Approval arrives in ~1 business day online &mdash; download and print it"
+        ],
+        note: "Need it faster? Same-day processing is available for an extra $100 if submitted before 10 a.m." %>
+
+    <%= render "market/new_llc/step", number: 2,
+        title: "Your registered office &mdash; you already did this",
+        cost: "$0",
+        mentor: "Here\u2019s something that trips people up: when you filled out the LLC form in Step 1, one of the fields asked for your address. That address is your \u201CRegistered Office.\u201D Pennsylvania needs to know where to send official mail. For a solo operator working out of your home, your home address is completely fine and free. The only reason to pay for a service here is if you don\u2019t want your home address in a public database \u2014 a real concern, but not urgent when you\u2019re just getting started.",
+        bullets: [
+          "The address you entered in Step 1 <em>is</em> your Registered Office &mdash; nothing else to file",
+          "Your address will appear in Pennsylvania\u2019s public business database &mdash; that\u2019s normal",
+          "Optional: hire a Commercial Registered Office Provider (CROP) for ~$49\u2013$150/yr if you want privacy"
+        ] %>
+
+    <%= render "market/new_llc/step", number: 3,
+        title: "Write a one-page operating agreement",
+        cost: "Free",
+        mentor: "Don\u2019t let the name intimidate you. For a one-person LLC, an operating agreement is basically a document that says: this is my company, I own it, I run it, profits come to me. Pennsylvania doesn\u2019t legally require it \u2014 but your bank will want to see it, and it\u2019s proof that your LLC is a real, separate entity from you personally. Find a free Pennsylvania single-member LLC operating agreement template online, fill in your name and LLC name, sign it, done.",
+        bullets: [
+          "Search: <em>\u201CPennsylvania single-member LLC operating agreement free template\u201D</em>",
+          "Fill in your name, LLC name, address, and formation date",
+          "Sign and date it \u2014 even though it\u2019s just you, the signature matters",
+          "Keep a digital copy and a printed copy \u2014 your bank will ask for it"
+        ] %>
+
+    <%= render "market/new_llc/step", number: 4,
+        title: "Get your EIN \u2014 your business\u2019s tax ID number",
+        cost: "Free",
+        mentor: "Once your LLC is approved and you have that Certificate in hand, head to the IRS website. An EIN \u2014 Employer Identification Number \u2014 is basically a Social Security number for your business. You\u2019ll use it to open your bank account, file your taxes, and put on invoices. The IRS gives these out free and instantly online. The whole thing takes about 10 minutes. At the end your EIN appears on screen \u2014 screenshot it, print it, save it \u2014 because you can\u2019t get it back from the portal once you close the tab.",
+        bullets: [
+          "Wait until your LLC Certificate is approved before doing this",
+          %(<a href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online" target="_blank" rel="noopener">IRS.gov</a> &mdash; search &ldquo;Apply for an EIN Online&rdquo;),
+          "Select: <em>Limited Liability Company &rarr; Sole Member</em>",
+          "<strong>Print or screenshot your EIN before closing the page &mdash; it only shows once</strong>"
+        ],
+        note: "If you ever lose your EIN, you\u2019ll need to call the IRS Business line to retrieve it. Save yourself the headache \u2014 screenshot it the moment you see it." %>
+
+    <div class="newllc-tip-box">
+      <span class="newllc-tip-icon">&#x2713;</span>
+      <div>
+        <strong>End of Phase 1 checklist:</strong>
+        Certificate of Organization (printed) &middot; EIN letter (saved) &middot;
+        Operating Agreement (signed). These three documents are your foundation.
+        Don&rsquo;t move to Phase 2 without all three.
+      </div>
+    </div>
+
+    <%# ── PHASE 2 ─────────────────────────────────────────────────────── %>
+    <p class="newllc-phase-label">Phase 2 &middot; Open your business bank account</p>
+
+    <%# Step 5 — banking step, JS fills the mentor block and bullets based on bank input %>
+    <div class="newllc-step-card">
+      <div class="newllc-step-header">
+        <div class="newllc-step-badge">5</div>
+        <div class="newllc-step-title-wrap">
+          <div class="newllc-step-title">Gather your documents before you walk in</div>
+        </div>
+        <div class="newllc-step-cost" id="s5-cost">Call ahead</div>
+      </div>
+      <div class="newllc-mentor-block" id="s5-mentor"></div>
+      <ul class="newllc-step-bullets" id="s5-bullets"></ul>
+    </div>
+
+    <%= render "market/new_llc/step", number: 6,
+        title: "Open business checking and savings &mdash; and keep them separate",
+        cost: "Low/no fee",
+        mentor: "Here\u2019s the single most important financial rule for a new business owner: keep your money completely separate. Every dollar a client pays you goes into the business account. Every business expense comes out of it. Your personal account never touches business money. This isn\u2019t just good practice \u2014 it\u2019s what preserves your LLC\u2019s legal protection. If you ever got sued and your personal and business money were mixed, a court could decide your LLC was never really separate from you, and you\u2019d lose the liability shield you paid $125 to create. Open both checking and savings. The savings account is your tax piggy bank \u2014 move 25\u201330% of every payment straight into it.",
+        bullets: [
+          "Open a <strong>Business Checking Account</strong> for all income and expenses",
+          "Open a <strong>Business Savings Account</strong> &mdash; deposit 25\u201330% of every payment here for taxes",
+          "Get a <strong>Business Debit Card</strong> for business purchases",
+          "<strong>Never mix personal and business money</strong> &mdash; this is the rule that protects you"
+        ],
+        note: "Credit unions typically charge lower monthly fees on business accounts than traditional banks. Ask about any transaction limits or minimum balance requirements." %>
+
+    <div class="newllc-tip-box">
+      <span class="newllc-tip-icon">&#x2713;</span>
+      <div>
+        <strong>End of Phase 2:</strong>
+        Business checking open &middot; Business savings open &middot;
+        Debit card in hand &middot; Personal and business money separated from day one.
+      </div>
+    </div>
+
+    <%# ── PHASE 3 — JS renders this entirely based on work type ──────── %>
+    <p class="newllc-phase-label" id="phase3-label">Phase 3 &middot; Licenses and professional requirements</p>
+    <div id="phase3-content"></div>
+
+    <%# ── PHASE 4 ─────────────────────────────────────────────────────── %>
+    <p class="newllc-phase-label">Phase 4 &middot; Keeping your business in good standing</p>
+
+    <div class="newllc-step-card">
+      <div class="newllc-step-header">
+        <div class="newllc-step-badge" id="s-annual-badge">10</div>
+        <div class="newllc-step-title-wrap">
+          <div class="newllc-step-title">File your Pennsylvania annual LLC report every September</div>
+        </div>
+        <div class="newllc-step-cost">$7/year</div>
+      </div>
+      <div class="newllc-mentor-block">
+        Pennsylvania changed the rules in 2025 &mdash; LLCs now have to file a simple annual report every year by September 30th. It&rsquo;s not complicated: log into the state portal, confirm your LLC name, address, and your name as manager, and pay $7. That&rsquo;s it &mdash; five minutes. But if you miss it for six months, the state can dissolve your LLC administratively. Set a phone reminder for September 1st every year and you&rsquo;ll never have to worry about it.
+      </div>
+      <ul class="newllc-step-bullets">
+        <li>File at <a href="https://www.corporations.pa.gov" target="_blank" rel="noopener">corporations.pa.gov</a> by <strong>September 30</strong> each year</li>
+        <li>Confirm your LLC name, address, and manager name &mdash; that&rsquo;s all it asks</li>
+        <li>Cost: $7 per year</li>
+        <li><strong>Set a recurring reminder for September 1st right now</strong></li>
+      </ul>
+    </div>
+
+    <div class="newllc-step-card">
+      <div class="newllc-step-header">
+        <div class="newllc-step-badge" id="s-tax-badge">11</div>
+        <div class="newllc-step-title-wrap">
+          <div class="newllc-step-title">Pay your quarterly estimated taxes</div>
+        </div>
+        <div class="newllc-step-cost">Save 25&ndash;30%</div>
+      </div>
+      <div class="newllc-mentor-block">
+        When you work for yourself, nobody withholds taxes from your paychecks &mdash; because there are no paychecks. Clients pay your LLC, and it&rsquo;s on you to set aside what you owe the IRS and Pennsylvania and send it in four times a year. This catches a lot of new business owners off guard in April. The fix is simple: every time money comes in, move 25&ndash;30% of it into your business savings and leave it there. And seriously consider a local CPA after your first year &mdash; they&rsquo;ll save you more than they cost.
+      </div>
+      <ul class="newllc-step-bullets">
+        <li>Federal estimated taxes due: <strong>Apr&nbsp;15, Jun&nbsp;15, Sep&nbsp;15, Jan&nbsp;15</strong></li>
+        <li>Pennsylvania income tax rate: <strong>3.07%</strong> &mdash; pay quarterly to PA Dept. of Revenue</li>
+        <li>Set aside 25&ndash;30% of every payment in your business savings account</li>
+        <li>File your LLC income on Schedule C with your personal federal return</li>
+        <li>Consider hiring a local CPA after year one &mdash; worth every dollar</li>
+      </ul>
+    </div>
+
+    <div class="newllc-step-card">
+      <div class="newllc-step-header">
+        <div class="newllc-step-badge" id="s-renew-badge">12</div>
+        <div class="newllc-step-title-wrap">
+          <div class="newllc-step-title">Renew your memberships and insurance every year</div>
+        </div>
+        <div class="newllc-step-cost">~$1,000&ndash;$2,500/yr</div>
+      </div>
+      <div class="newllc-mentor-block">
+        Your legal right to operate rests on two things staying current: your professional association membership and your insurance. Let either lapse and you&rsquo;re outside the law. Put both renewal dates in your calendar the day you sign up. Your association will also require continuing education each year &mdash; treat that as professional development, not busywork. It keeps you sharp and keeps your membership active.
+      </div>
+      <ul class="newllc-step-bullets">
+        <li>Keep your professional association membership current &mdash; it&rsquo;s your legal standing to operate</li>
+        <li>Renew your E&amp;O and GL insurance before expiration</li>
+        <li>Complete any continuing education required by your association</li>
+        <li>Put all renewal dates in your calendar the day you first sign up</li>
+      </ul>
+    </div>
+
+    <%# ── COST SUMMARY ────────────────────────────────────────────────── %>
+    <p class="newllc-phase-label">Cost summary</p>
+    <table class="newllc-cost-table">
+      <thead>
+        <tr><th>Item</th><th>Cost</th></tr>
+      </thead>
+      <tbody id="cost-tbody">
+        <%# JS fills this in %>
+      </tbody>
+    </table>
+
+    <%# ── KEY LINKS ───────────────────────────────────────────────────── %>
+    <p class="newllc-phase-label">Key links</p>
+    <div class="newllc-links-grid">
+      <a class="newllc-link-card" href="https://apps.dos.pa.gov/CorpSearch" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">Check name availability</div>
+        <div class="newllc-lc-url">apps.dos.pa.gov/CorpSearch</div>
+      </a>
+      <a class="newllc-link-card" href="https://www.corporations.pa.gov" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">File your LLC / Annual Report</div>
+        <div class="newllc-lc-url">corporations.pa.gov</div>
+      </a>
+      <a class="newllc-link-card"
+         href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online"
+         target="_blank" rel="noopener">
+        <div class="newllc-lc-label">Get your EIN (free, instant)</div>
+        <div class="newllc-lc-url">IRS.gov &mdash; Apply for an EIN Online</div>
+      </a>
+      <a class="newllc-link-card" href="https://www.nachi.org" target="_blank" rel="noopener"
+         id="link-assoc" style="display:none">
+        <div class="newllc-lc-label" id="link-assoc-label">Professional association</div>
+        <div class="newllc-lc-url" id="link-assoc-url">internachi.org</div>
+      </a>
+      <a class="newllc-link-card"
+         href="https://www.dep.pa.gov/Business/RadonDivision/Pages/default.aspx"
+         target="_blank" rel="noopener"
+         id="link-radon" style="display:none">
+        <div class="newllc-lc-label">PA DEP Radon Certification</div>
+        <div class="newllc-lc-url">dep.pa.gov &mdash; radon certification</div>
+      </a>
+      <a class="newllc-link-card" href="https://service1.org" target="_blank" rel="noopener"
+         id="link-bank">
+        <div class="newllc-lc-label" id="link-bank-label">Business banking</div>
+        <div class="newllc-lc-url" id="link-bank-url">service1.org</div>
+      </a>
+      <a class="newllc-link-card" href="https://www.dos.pa.gov" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">PA Department of State</div>
+        <div class="newllc-lc-url">dos.pa.gov</div>
+      </a>
+      <a class="newllc-link-card" href="<%= new_llc_path %>" class="newllc-link-card">
+        <div class="newllc-lc-label">Start over</div>
+        <div class="newllc-lc-url">fora.center/market/newllc</div>
+      </a>
+    </div>
+
+    <%# ── FOOTER ──────────────────────────────────────────────────────── %>
+    <div class="newllc-footer">
+      <div class="newllc-footer-brand">FORA &middot; fora.center</div>
+      <div class="newllc-footer-disc">
+        Informational purposes only. Reflects Pennsylvania requirements as of March 2026.
+        Not legal or financial advice. Verify current fees and requirements with
+        <a href="https://www.dos.pa.gov" target="_blank" rel="noopener">dos.pa.gov</a>,
+        the IRS, and your financial institution before filing.
+      </div>
+    </div>
+
+  </div><%# /newllc-body %>
+</div><%# /newllc-page %>
+
+<%# ── CLIENT-SIDE PERSONALIZATION ─────────────────────────────────────────── %>
+<script>
+(function () {
+  var root = document.getElementById('newllc-guide-root');
+  var name      = root.dataset.name     || '';
+  var work      = root.dataset.work     || '';
+  var location  = root.dataset.location || '';
+  var bank      = root.dataset.bank     || '';
+  var structure = root.dataset.structure|| '';
+  var question  = root.dataset.question || '';
+
+  var firstName = name.split(' ')[0] || 'Friend';
+  var cityMatch = location.match(/^([^,]+)/);
+  var city      = cityMatch ? cityMatch[1].trim() : (location || 'Pennsylvania');
+  var workCap   = work ? (work.charAt(0).toUpperCase() + work.slice(1)) : 'your business';
+  var isHomeInspector = /inspect/i.test(work);
+
+  // ── Hero ───────────────────────────────────────────────────────────────
+  document.getElementById('guide-eyebrow').textContent =
+    firstName + '\u2019s FORA Guide \u00B7 ' + city;
+
+  document.getElementById('guide-headline').textContent =
+    'You\u2019re starting a ' + workCap + ' business. Here\u2019s every step \u2014 plain English.';
+
+  var intro = firstName + ', deciding to start your own business is one of the most courageous things a person can do. ';
+  if (structure === 'solo') {
+    intro += 'You\u2019re doing this solo, which means every decision is yours \u2014 and so is every reward. ';
+  } else if (structure === 'partner') {
+    intro += 'Going in with partners means you have people in your corner from day one. The steps below apply to you too \u2014 just note that a multi-member LLC has some additional considerations around your operating agreement. ';
+  } else {
+    intro += 'You don\u2019t have to have everything figured out right now. The steps below will make it clearer as you go. ';
+  }
+  intro += 'This guide will walk you through forming your LLC, setting up your business bank account' +
+    (bank ? ' at ' + bank : '') +
+    ', and getting the professional credentials you need to operate legally. Follow the steps in order. You\u2019ve got this.';
+  document.getElementById('guide-intro').textContent = intro;
+
+  // ── Worry response ─────────────────────────────────────────────────────
+  var worryMap = {
+    paperwork: firstName + ', paperwork anxiety is one of the most common reasons people put off starting. Here\u2019s the truth: the state forms are simpler than a tax return. If you can fill out an online form and pay with a credit card, you can do this. We\u2019ll tell you exactly what goes in each field.',
+    money: firstName + ', money worry is real \u2014 and it\u2019s smart. The good news: forming an LLC in Pennsylvania costs $125 to the state, and most everything else is free. The bigger ongoing cost is insurance, which you\u2019d want anyway as a professional. We lay out every dollar in the cost summary below.',
+    llc: 'An LLC \u2014 Limited Liability Company \u2014 is a legal structure that separates you personally from your business. If something ever goes wrong with a client or a contract, your personal savings, your home, and your car are protected. It\u2019s not a corporation, it\u2019s not complicated. For a solo operator, it\u2019s the smartest and simplest choice.',
+    alone: firstName + ', you\u2019re not alone in this. Thousands of people in Pennsylvania start their own business every year without a lawyer or an accountant holding their hand. You have FORA. Follow the steps below in order, and reach out to your local Small Business Development Center \u2014 they offer free one-on-one advising.',
+    default: firstName + ', that feeling you\u2019re describing? Completely normal. Every business owner started exactly where you are \u2014 not knowing what they didn\u2019t know. The good news is that forming an LLC in Pennsylvania is genuinely straightforward. It\u2019s a few documents, a few hundred dollars, and a few hours of your time. FORA is here to walk you through every single step.'
+  };
+
+  if (question) {
+    var q = question.toLowerCase();
+    var type = 'default';
+    if (/paperwork|form|filing|wrong|mistake/.test(q))  type = 'paperwork';
+    else if (/money|cost|afford|expens|broke/.test(q))  type = 'money';
+    else if (/llc|what is|don.t know|no idea/.test(q))  type = 'llc';
+    else if (/alone|by myself|no help/.test(q))         type = 'alone';
+
+    var worryEl = document.getElementById('guide-worry');
+    document.getElementById('worry-text').innerHTML =
+      '<strong>You asked:</strong> <em>\u201C' + escHtml(question) + '\u201D</em><br><br>' + worryMap[type];
+    worryEl.style.display = '';
+  }
+
+  // ── Step 5: banking ────────────────────────────────────────────────────
+  var isService1 = /service.?1st|service first/i.test(bank);
+
+  var s5Mentor = 'You\u2019ve got your three documents \u2014 now it\u2019s time to open your business account. ' +
+    (bank ? 'You already know you want to use ' + bank + ', which gives you a head start. ' : '') +
+    'Opening a business account is a formal process \u2014 they need to verify that your LLC is real and that you\u2019re authorized to act on its behalf. Think of it this way: you\u2019re showing up not just as ' + firstName + ' the person, but as the manager of a legal entity. Bring everything on this list in one trip.';
+  document.getElementById('s5-mentor').textContent = s5Mentor;
+
+  if (isService1) {
+    document.getElementById('s5-cost').textContent = '570-522-9710';
+    document.getElementById('link-bank-label').textContent = 'Service 1st FCU \u2014 Milton';
+    document.getElementById('link-bank-url').textContent = '2613 State Rt 45, Milton \u00B7 570-522-9710';
+  } else if (bank) {
+    document.getElementById('link-bank-label').textContent = bank;
+    document.getElementById('link-bank-url').textContent = 'Call ahead for business account requirements';
+    var lb = document.getElementById('link-bank');
+    lb.removeAttribute('href');
+    lb.style.cursor = 'default';
+  }
+
+  var s5Bullets = [
+    'Certificate of Organization \u2014 your approved LLC document from Step 1',
+    'EIN letter from the IRS (printed copy)',
+    'Operating Agreement \u2014 signed copy from Step 3',
+    'Your driver\u2019s license or government-issued photo ID',
+    'Authorized Resolution \u2014 a short letter stating you authorize yourself as sole manager to open accounts' +
+      (bank ? '. Ask ' + bank + ' if they have their own form for this.' : '. Many banks and credit unions have their own template for this.'),
+    'Opening deposit \u2014 ask the branch what minimum is required'
+  ];
+  var s5ul = document.getElementById('s5-bullets');
+  s5Bullets.forEach(function(b) {
+    var li = document.createElement('li');
+    li.textContent = b;
+    s5ul.appendChild(li);
+  });
+
+  // ── Phase 3: home inspector vs generic ────────────────────────────────
+  var p3label  = document.getElementById('phase3-label');
+  var p3content = document.getElementById('phase3-content');
+  var extraSteps = 0;
+
+  if (isHomeInspector) {
+    p3label.textContent = 'Phase 3 \u00B7 PA home inspector requirements';
+
+    p3content.innerHTML = makeStep(7,
+      'Join a qualifying national home inspection association',
+      'Pennsylvania doesn\u2019t issue a state home inspector license \u2014 but that doesn\u2019t mean you can just start inspecting. The law requires you to be a full member in good standing of a recognized national association before you can take a paid job. The two main ones are InterNACHI and ASHI. InterNACHI is generally the faster, more affordable path for new inspectors: they offer free online training and their own exam for members. Either way, full membership requires completing a course, passing an exam, and logging 100 field inspections. Plan this phase over months, not days.',
+      [
+        '<a href="https://www.nachi.org" target="_blank" rel="noopener">InterNACHI</a> (internachi.org) or <a href="https://www.homeinspector.org" target="_blank" rel="noopener">ASHI</a> (homeinspector.org) &mdash; choose your association',
+        'Complete an accredited home inspection course and pass the exam',
+        'The National Home Inspector Exam (NHIE) costs ~$225 per attempt',
+        'Complete 100 field inspections \u2014 ride-alongs or assisted inspections count',
+        'Maintain continuing education annually as a condition of membership'
+      ],
+      '~$200\u2013$500 + dues',
+      'InterNACHI\u2019s own online exam is free for members. NHIE is the nationally recognized alternative at ~$225. Both satisfy Pennsylvania\u2019s requirement.'
+    ) + makeStep(8,
+      'Get your E&amp;O and General Liability insurance',
+      'This one isn\u2019t optional \u2014 Pennsylvania law requires it, and you\u2019d want it anyway. Errors &amp; Omissions (E&amp;O) covers you if a client claims you missed something. General Liability (GL) covers you if something goes wrong physically during an inspection. Your association will have insurance programs built for home inspectors \u2014 start there. Make sure your policy meets Pennsylvania\u2019s minimums.',
+      [
+        'E&amp;O Insurance \u2014 covers you if a client claims you missed something',
+        'General Liability \u2014 covers accidents during inspections',
+        'PA minimum: $100,000 per occurrence / $500,000 aggregate, deductible no more than $2,500',
+        'InterNACHI and ASHI both offer inspector-specific insurance programs for members',
+        'Get a certificate of insurance \u2014 clients and real estate agents will ask for it'
+      ],
+      '~$800\u2013$2,000/year',
+      'Don\u2019t let cost scare you off the higher coverage tiers. One unhappy client with an attorney can exceed minimums quickly.'
+    ) + makeStep(9,
+      'Optional but worth it: Radon certification (PA DEP)',
+      'Central Pennsylvania is one of the highest-radon regions in the country. Clients will ask. Real estate agents will refer you more readily if you can offer it. And it adds $100\u2013$200 per inspection. Pennsylvania DEP requires separate certification before you can legally perform radon testing. InterNACHI offers a free online radon course that\u2019s NRPP-approved. The exam costs money but pays for itself fast.',
+      [
+        'PA DEP requires separate radon certification before you can offer radon testing',
+        'Take an NRPP- or NRSB-approved radon course and pass the exam',
+        'InterNACHI\u2019s free online radon course is NRPP-approved \u2014 start there',
+        '<a href="https://www.dep.pa.gov/Business/RadonDivision/Pages/default.aspx" target="_blank" rel="noopener">dep.pa.gov</a> \u2014 search: radon certification',
+        'Add $100\u2013$200 per inspection once certified \u2014 pays for itself quickly'
+      ],
+      '~$150\u2013$300 exam'
+    ) + '<div class="newllc-tip-box"><span class="newllc-tip-icon">&#x2713;</span><div>PA does NOT issue a state inspector license \u2014 but you MUST have your association membership AND your insurance active before you take your first paid inspection.</div></div>';
+
+    document.getElementById('link-assoc').style.display = '';
+    document.getElementById('link-radon').style.display = '';
+    extraSteps = 3;
+
+  } else {
+    p3label.textContent = 'Phase 3 \u00B7 Licenses and permits';
+    p3content.innerHTML = makeStep(7,
+      'Check what licenses or permits apply to your specific work',
+      'Every trade and profession has its own rules. Some require state licenses, some need local permits, some need both, and some need neither beyond the LLC itself. The smartest move is to search Pennsylvania\u2019s business licensing portal and your local municipality\u2019s website to find out exactly what applies to ' + workCap + '. Your local Small Business Development Center (SBDC) can also help you figure this out for free \u2014 that\u2019s literally what they\u2019re there for.',
+      [
+        'Search Pennsylvania business licensing at <a href="https://www.pa.gov" target="_blank" rel="noopener">pa.gov</a>',
+        'Check your city or county website for local business permits',
+        'Contact your local SBDC (free) at <a href="https://www.pasbdc.org" target="_blank" rel="noopener">pasbdc.org</a>',
+        'If your trade requires a state license, apply before taking paid clients'
+      ],
+      'Varies'
+    );
+    extraSteps = 1;
+  }
+
+  // ── Renumber Phase 4 badges ────────────────────────────────────────────
+  var base = 7 + extraSteps;
+  document.getElementById('s-annual-badge').textContent = base;
+  document.getElementById('s-tax-badge').textContent    = base + 1;
+  document.getElementById('s-renew-badge').textContent  = base + 2;
+
+  // ── Cost summary ───────────────────────────────────────────────────────
+  var costRows = [
+    ['PA Certificate of Organization (LLC filing fee)', '$125', false],
+    ['EIN from IRS',                                    'Free',  true],
+    ['Operating Agreement (DIY template)',               'Free',  true],
+    ['Registered Office (home address)',                 '$0',    true],
+  ];
+  if (isHomeInspector) {
+    costRows.push(['National association membership + exam', '~$200\u2013$500', false]);
+    costRows.push(['E&O + General Liability insurance (annual)', '~$800\u2013$2,000', false]);
+    costRows.push(['Radon certification (optional \u2014 recommended)', '~$150\u2013$300', false]);
+  }
+  costRows.push(['PA Annual LLC Report (due every September)', '$7/yr', false]);
+  costRows.push(['Estimated total to launch', isHomeInspector ? '$350\u2013$600' : '$125\u2013$500', false]);
+
+  var tbody = document.getElementById('cost-tbody');
+  costRows.forEach(function(row, i) {
+    var tr = document.createElement('tr');
+    var isLast = i === costRows.length - 1;
+    var costClass = isLast ? 'newllc-cost-total' : (row[2] ? 'newllc-cost-free' : 'newllc-cost-val');
+    tr.innerHTML = '<td>' + row[0] + '</td><td class="' + costClass + '">' + row[1] + '</td>';
+    tbody.appendChild(tr);
+  });
+
+  // ── Helpers ────────────────────────────────────────────────────────────
+  function makeStep(num, title, mentor, bullets, cost, note) {
+    var bulletHtml = bullets.map(function(b) {
+      return '<li>' + b + '</li>';
+    }).join('');
+    var noteHtml = note
+      ? '<div class="newllc-step-note">' + escHtml(note) + '</div>'
+      : '';
+    var costHtml = cost
+      ? '<div class="newllc-step-cost">' + cost + '</div>'
+      : '';
+    return '<div class="newllc-step-card">' +
+      '<div class="newllc-step-header">' +
+        '<div class="newllc-step-badge">' + num + '</div>' +
+        '<div class="newllc-step-title-wrap"><div class="newllc-step-title">' + escHtml(title) + '</div></div>' +
+        costHtml +
+      '</div>' +
+      '<div class="newllc-mentor-block">' + escHtml(mentor) + '</div>' +
+      '<ul class="newllc-step-bullets">' + bulletHtml + '</ul>' +
+      noteHtml +
+    '</div>';
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,  '&amp;')
+      .replace(/</g,  '&lt;')
+      .replace(/>/g,  '&gt;')
+      .replace(/"/g,  '&quot;');
+  }
+
+})();
+</script>

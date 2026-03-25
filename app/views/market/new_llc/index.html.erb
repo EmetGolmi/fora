@@ -1,0 +1,92 @@
+<%# app/views/market/new_llc/index.html.erb %>
+<%# Renders inside your application layout — no <html>/<body> needed %>
+
+<% content_for :title, "Start Your Business · FORA" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "market/new_llc" %>
+<% end %>
+
+<div class="newllc-page">
+
+  <%# ── HERO ──────────────────────────────────────────────────────────── %>
+  <div class="newllc-hero">
+    <div class="newllc-hero-inner">
+      <p class="newllc-eyebrow">Civic Resource &middot; Business Formation</p>
+      <h1 class="newllc-hero-h1">You&rsquo;ve decided to build something.<br>Let&rsquo;s make it official.</h1>
+      <p class="newllc-hero-sub">
+        Starting a business is one of the most courageous civic acts there is.
+        Tell us a little about what you&rsquo;re doing and where you are &mdash;
+        and FORA will walk you through every step, plain English, no jargon.
+      </p>
+    </div>
+  </div>
+
+  <%# ── INTAKE FORM ────────────────────────────────────────────────────── %>
+  <div class="newllc-body">
+    <div class="newllc-intake-card">
+      <h2 class="newllc-card-title">Tell us about your business</h2>
+      <p class="newllc-card-sub">
+        Answer what you know. Leave blank what you don&rsquo;t &mdash;
+        we&rsquo;ll explain it along the way. There are no wrong answers here.
+      </p>
+
+      <%# GET to /market/newllc/guide with all params in the URL %>
+      <%= form_with url: new_llc_guide_path, method: :get, local: true, class: "newllc-form" do |f| %>
+
+        <div class="newllc-field-row">
+          <div class="newllc-field-group">
+            <%= f.label :name, "Your first name", class: "newllc-label" %>
+            <%= f.text_field :name, placeholder: "e.g. Marcus",
+                class: "newllc-input", autocomplete: "given-name" %>
+          </div>
+          <div class="newllc-field-group">
+            <%= f.label :work, "What kind of work will you do?", class: "newllc-label" %>
+            <%= f.text_field :work, placeholder: "e.g. Home inspector, plumber, baker\u2026",
+                class: "newllc-input" %>
+          </div>
+        </div>
+
+        <div class="newllc-field-row">
+          <div class="newllc-field-group">
+            <%= f.label :location, "What city and state are you in?", class: "newllc-label" %>
+            <%= f.text_field :location, placeholder: "e.g. Milton, PA",
+                class: "newllc-input", autocomplete: "address-level2" %>
+          </div>
+          <div class="newllc-field-group">
+            <%= f.label :bank, "Do you have a bank or credit union in mind?", class: "newllc-label" %>
+            <%= f.text_field :bank, placeholder: "e.g. Service 1st FCU, or leave blank",
+                class: "newllc-input" %>
+          </div>
+        </div>
+
+        <div class="newllc-field-group">
+          <%= f.label :structure, "Will this be just you, or do you have partners?", class: "newllc-label" %>
+          <%= f.select :structure,
+              [
+                ["— Choose one —",                                  ""],
+                ["Just me \u2014 single-member LLC",                 "solo"],
+                ["Me and one or more partners",                     "partner"],
+                ["I\u2019m not sure yet",                           "unsure"]
+              ],
+              {},
+              { class: "newllc-input newllc-select" } %>
+        </div>
+
+        <div class="newllc-field-group">
+          <%= f.label :question,
+              "What\u2019s your biggest question or worry about starting this?",
+              class: "newllc-label" %>
+          <%= f.text_area :question,
+              placeholder: "e.g. I have no idea what an LLC even is. Or: I\u2019m scared I\u2019ll do the paperwork wrong. Anything goes.",
+              class: "newllc-input newllc-textarea", rows: 3 %>
+        </div>
+
+        <div class="newllc-form-footer">
+          <%= f.submit "Build my guide \u2192", class: "newllc-btn newllc-btn-gold" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+
+</div>
