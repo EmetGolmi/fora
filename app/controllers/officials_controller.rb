@@ -29,11 +29,11 @@ class OfficialsController < ApplicationController
       }
     },
     "ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b" => {
-      "name"  => "Elizabeth Fiedler",
+      "name"  => "Ben Waxman",
       "party" => "Democratic",
       "image" => nil,
       "id"    => "ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b",
-      "links" => [{ "url" => "https://www.pahouse.com/Fiedler" }],
+      "links" => [{ "url" => "https://www.pahouse.com/waxman" }],
       "current_role" => {
         "org_classification" => "lower",
         "district"           => "182",
@@ -131,20 +131,27 @@ class OfficialsController < ApplicationController
       end
     end
 
-    threads << Thread.new do
-      resp = self.class.get("/member/#{bioguide_id}/committees", query: { api_key: api_key })
-      committees = if resp.success?
-        raw     = resp.parsed_response["committeeHistory"] || resp.parsed_response["committees"] || []
-        current = raw.select { |c| c["endDate"].nil? }
-        (current.any? ? current : raw).first(4).map do |c|
-          { name: c.dig("committee","name") || c["name"] || c["committeeName"] || "Committee",
-            role: c["memberType"] || c["role"] || "" }
-        end
-      else
-        []
-      end
-      mutex.synchronize { @committees = committees }
+threads << Thread.new do
+  resp = self.class.get("/member/#{bioguide_id}/committees", query: { api_key: api_key })
+  committees = if resp.success?
+    raw     = resp.parsed_response["committeeHistory"] || resp.parsed_response["committees"] || []
+    current = raw.select { |c| c["endDate"].nil? }
+    (current.any? ? current : raw).first(6).map do |c|
+      { name: c.dig("committee","name") || c["name"] || c["committeeName"] || "Committee",
+        role: c["memberType"] || c["role"] || "" }
     end
+  else
+    []
+  end
+  # Fall back to hardcoded GovTrack data if API returns nothing
+  if committees.empty?
+    govtrack = GovtrackService.fetch(bioguide_id)
+    committees = (govtrack[:committees] || []).map do |c|
+      { name: c[:name], role: c[:role] }
+    end
+  end
+  mutex.synchronize { @committees = committees }
+end
 
     threads << Thread.new do
       begin
