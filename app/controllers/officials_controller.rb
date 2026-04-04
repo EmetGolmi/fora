@@ -62,6 +62,10 @@ class OfficialsController < ApplicationController
     end
 
     @member = member_response.parsed_response["member"]
+    if @member.nil?
+      render plain: "Official not found", status: :not_found
+      return
+    end
     @social = CongressSocialService.for_bioguide(bioguide_id)
     @social[:website] ||= @member["officialWebsiteUrl"]
 
