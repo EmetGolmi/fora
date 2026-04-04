@@ -86,6 +86,12 @@ class OfficialsController < ApplicationController
     }
   }.freeze
 
+  COMMITTEE_ISSUE_CODES = {
+    "F000479" => %w[BNK AGR ENV BUD],
+    "M001243" => %w[BNK DEF BUD],
+    "E000296" => %w[HCR TAX SBA]
+  }.freeze
+
   HARDCODED_VOTING_STATS = {
     "F000479" => { party_vote_pct: 68.0, missed_votes_pct: 13.9, votes_cast: "~1,205 of ~1,400", chamber_avg_attendance: 93.0, chamber_avg_party: 88.0 },
     "M001243" => { party_vote_pct: 95.0, missed_votes_pct:  2.8, votes_cast: "~1,361 of ~1,400", chamber_avg_attendance: 93.0, chamber_avg_party: 88.0 },
@@ -239,6 +245,56 @@ end
         mutex.synchronize { @news_articles = news_resp.success? ? (news_resp.parsed_response["articles"] || []) : [] }
       rescue
         mutex.synchronize { @news_articles = [] }
+      end
+    end
+
+    threads << Thread.new do
+      begin
+        fec_cand = FEC_IDS[bioguide_id]
+        next unless fec_cand
+        pacs = Rails.cache.fetch("fec_pacs/#{fec_cand}", expires_in: 6.hours) do
+          cmte_resp = HTTParty.get("https://api.open.fec.gov/v1/candidate/#{fec_cand}/committees/",
+                                   query: { api_key: ENV["FEC_API_KEY"], designation: "P" }, timeout: 8)
+          cmte_id = cmte_resp.success? ? cmte_resp.parsed_response.dig("results", 0, "committee_id") : nil
+          next [] unless cmte_id
+          sched_resp = HTTParty.get("https://api.open.fec.gov/v1/schedules/schedule_a/",
+                                    query: { api_key: ENV["FEC_API_KEY"], committee_id: cmte_id,
+                                             contributor_type: "committee",
+                                             sort: "-contribution_receipt_amount", per_page: 20 }, timeout: 10)
+          rows = sched_resp.success? ? (sched_resp.parsed_response["results"] || []) : []
+          rows.group_by { |r| r["contributor_name"] }
+              .map { |name, recs| { name: name, total: recs.sum { |r| r["contribution_receipt_amount"].to_f } } }
+              .sort_by { |p| -p[:total] }.first(5)
+        end
+        mutex.synchronize { @top_pacs = pacs }
+      rescue
+        mutex.synchronize { @top_pacs = [] }
+      end
+    end
+
+    threads << Thread.new do
+      begin
+        codes = COMMITTEE_ISSUE_CODES[bioguide_id]
+        next unless codes&.any?
+        clients = Rails.cache.fetch("lda_clients/#{bioguide_id}", expires_in: 24.hours) do
+          all = []
+          codes.first(3).each do |code|
+            resp = HTTParty.get("https://lda.senate.gov/api/v1/filings/",
+                                query: { filing_year: 2025, general_issue_code: code,
+                                         ordering: "-income", page_size: 20 }, timeout: 8)
+            all += resp.parsed_response["results"] || [] if resp.success?
+          end
+          by_client = Hash.new(0.0)
+          all.each do |f|
+            name = f.dig("client", "name") || f.dig("client", "client_name")
+            next if name.blank?
+            by_client[name] += f["income"].to_f
+          end
+          by_client.sort_by { |_, v| -v }.first(5).map { |name, total| { name: name, total: total } }
+        end
+        mutex.synchronize { @top_lobby_clients = clients }
+      rescue
+        mutex.synchronize { @top_lobby_clients = [] }
       end
     end
 

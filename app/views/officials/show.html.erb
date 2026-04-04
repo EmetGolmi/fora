@@ -74,8 +74,10 @@
   @social         ||= {}
   @fec_total_raised ||= nil
   @fec_cycle        ||= nil
-  @missed_votes_pct ||= nil
-  @party_vote_pct   ||= nil
+  @missed_votes_pct  ||= nil
+  @party_vote_pct    ||= nil
+  @top_pacs          ||= []
+  @top_lobby_clients ||= []
 
   last_term = @member.dig("terms")&.last || {}
   is_senator = last_term["chamber"] == "Senate"
@@ -367,10 +369,48 @@
           <% end %>
         </div>
 
-        <%# Donors & Lobbyists placeholder %>
+        <%# Donors & Lobbyists card %>
+        <% fmt_money = ->(amt) { amt >= 1_000_000 ? "$#{(amt/1_000_000.0).round(1)}M" : amt >= 1_000 ? "$#{(amt/1_000.0).round(0).to_i}K" : "$#{amt.to_i}" } %>
         <div class="dp-card">
           <div class="dp-card-title">◆ Donors &amp; Lobbyists</div>
-          <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; margin:0; line-height:1.5;">Donor breakdown and registered lobbyist tracking coming soon.</p>
+
+          <%# Top PAC Contributors %>
+          <div style="margin-bottom:14px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.14em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">Top PAC Contributors</div>
+            <% if @top_pacs.any? %>
+              <% pac_max = @top_pacs.first[:total].to_f; pac_max = 1.0 if pac_max.zero? %>
+              <% @top_pacs.each do |pac| %>
+                <div style="margin-bottom:6px;">
+                  <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:2px;">
+                    <span style="font-family:'Nunito',sans-serif; font-size:9.5px; color:#1b3a6b; line-height:1.3; max-width:72%; overflow-wrap:break-word;"><%= pac[:name] %></span>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#b8860b; white-space:nowrap;"><%= fmt_money.call(pac[:total]) %></span>
+                  </div>
+                  <div style="height:3px; background:#eef0f3; border-radius:2px; overflow:hidden;">
+                    <div style="width:<%= [(pac[:total] / pac_max * 100).round, 100].min %>%; height:100%; background:#b8860b; border-radius:2px;"></div>
+                  </div>
+                </div>
+              <% end %>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6px; color:#b0b8c8; margin-top:4px;">Source: FEC · <a href="https://www.fec.gov" target="_blank" rel="noopener" style="color:#b0b8c8;">fec.gov ↗</a></div>
+            <% else %>
+              <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin:0;">Data unavailable · <a href="https://www.fec.gov" target="_blank" rel="noopener" style="color:#8a9ab8;">fec.gov ↗</a></p>
+            <% end %>
+          </div>
+
+          <%# Registered Lobbying Activity %>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.14em; text-transform:uppercase; color:#1b3a6b; margin-bottom:6px;">Registered Lobbying Activity</div>
+            <% if @top_lobby_clients.any? %>
+              <% @top_lobby_clients.each do |client| %>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px;">
+                  <span style="font-family:'Nunito',sans-serif; font-size:9.5px; color:#1b3a6b; line-height:1.3; max-width:72%; overflow-wrap:break-word;"><%= client[:name] %></span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#1b3a6b; white-space:nowrap;"><%= fmt_money.call(client[:total]) %></span>
+                </div>
+              <% end %>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6px; color:#b0b8c8; margin-top:4px;">As of 2025 filings · <a href="https://lda.senate.gov" target="_blank" rel="noopener" style="color:#b0b8c8;">lda.senate.gov ↗</a></div>
+            <% else %>
+              <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin:0;">Data unavailable · <a href="https://lda.senate.gov" target="_blank" rel="noopener" style="color:#8a9ab8;">lda.senate.gov ↗</a></p>
+            <% end %>
+          </div>
         </div>
 
       </div><!-- /dp-sidebar -->
@@ -650,9 +690,32 @@
           <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:6px;">FEC campaign finance data coming soon.</div>
         </div>
       <% end %>
-      <div style="background:#f0f7f0; border:1px solid rgba(39,80,10,.15); border-radius:8px; padding:10px 12px;">
-        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#27500A; margin-bottom:3px;">◆ No Donations From</div>
-        <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#27500A; line-height:1.45;">Corporate PAC tracking coming soon.</div>
+      <div style="background:#f8f9fc; border:1px solid #e0e5ef; border-radius:8px; padding:10px 12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Top PAC Contributors</div>
+        <% if @top_pacs.any? %>
+          <% @top_pacs.each do |pac| %>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="font-family:'Nunito',sans-serif; font-size:9.5px; color:#1b3a6b; max-width:70%; overflow-wrap:break-word;"><%= pac[:name] %></span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#b8860b; white-space:nowrap;"><%= fmt_money.call(pac[:total]) %></span>
+            </div>
+          <% end %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; color:#b0b8c8; margin-top:6px;">Source: FEC · <a href="https://www.fec.gov" target="_blank" rel="noopener" style="color:#b0b8c8;">fec.gov ↗</a></div>
+        <% else %>
+          <p style="font-family:'Nunito',sans-serif; font-size:9.5px; color:#8a9ab8; margin:0 0 6px;">Data unavailable · <a href="https://www.fec.gov" target="_blank" rel="noopener" style="color:#8a9ab8;">fec.gov ↗</a></p>
+        <% end %>
+        <% if @top_lobby_clients.any? %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#1b3a6b; margin:8px 0 4px;">◆ Lobbying Clients</div>
+          <% @top_lobby_clients.each do |client| %>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="font-family:'Nunito',sans-serif; font-size:9.5px; color:#1b3a6b; max-width:70%; overflow-wrap:break-word;"><%= client[:name] %></span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#1b3a6b; white-space:nowrap;"><%= fmt_money.call(client[:total]) %></span>
+            </div>
+          <% end %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; color:#b0b8c8; margin-top:6px;">As of 2025 filings · <a href="https://lda.senate.gov" target="_blank" rel="noopener" style="color:#b0b8c8;">lda.senate.gov ↗</a></div>
+        <% elsif @top_pacs.empty? %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; color:#1b3a6b; margin:8px 0 4px;">◆ Lobbying Clients</div>
+          <p style="font-family:'Nunito',sans-serif; font-size:9.5px; color:#8a9ab8; margin:0;">Data unavailable · <a href="https://lda.senate.gov" target="_blank" rel="noopener" style="color:#8a9ab8;">lda.senate.gov ↗</a></p>
+        <% end %>
       </div>
     </div>
 
