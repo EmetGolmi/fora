@@ -43,6 +43,49 @@ class OfficialsController < ApplicationController
     }
   }.freeze
 
+  HARDCODED_MEMBERS = {
+    "F000479" => {
+      "bioguideId"       => "F000479",
+      "directOrderName"  => "John Fetterman",
+      "name"             => "Fetterman, John",
+      "partyName"        => "Democratic",
+      "officialWebsiteUrl" => "https://www.fetterman.senate.gov",
+      "terms"            => [{ "chamber" => "Senate", "startYear" => 2023 }],
+      "depiction"        => { "imageUrl" => "https://bioguide.congress.gov/bioguide/photo/F/F000479.jpg" },
+      "addressInformation" => { "officeAddress" => "152 Russell Senate Office Building\nWashington, DC 20510", "phoneNumber" => "(202) 224-4254" }
+    },
+    "M001243" => {
+      "bioguideId"       => "M001243",
+      "directOrderName"  => "David McCormick",
+      "name"             => "McCormick, David",
+      "partyName"        => "Republican",
+      "officialWebsiteUrl" => "https://www.mccormick.senate.gov",
+      "terms"            => [{ "chamber" => "Senate", "startYear" => 2025 }],
+      "depiction"        => { "imageUrl" => "https://bioguide.congress.gov/bioguide/photo/M/M001243.jpg" },
+      "addressInformation" => { "officeAddress" => "", "phoneNumber" => "(202) 224-6324" }
+    },
+    "E000296" => {
+      "bioguideId"       => "E000296",
+      "directOrderName"  => "Dwight Evans",
+      "name"             => "Evans, Dwight",
+      "partyName"        => "Democratic",
+      "officialWebsiteUrl" => "https://evans.house.gov",
+      "terms"            => [{ "chamber" => "House", "district" => "3", "startYear" => 2016 }],
+      "depiction"        => { "imageUrl" => "https://bioguide.congress.gov/bioguide/photo/E/E000296.jpg" },
+      "addressInformation" => { "officeAddress" => "2368 Rayburn House Office Building\nWashington, DC 20515", "phoneNumber" => "(202) 225-4001" }
+    },
+    "B001296" => {
+      "bioguideId"       => "B001296",
+      "directOrderName"  => "Brendan Boyle",
+      "name"             => "Boyle, Brendan",
+      "partyName"        => "Democratic",
+      "officialWebsiteUrl" => "https://boyle.house.gov",
+      "terms"            => [{ "chamber" => "House", "district" => "2", "startYear" => 2015 }],
+      "depiction"        => { "imageUrl" => "https://bioguide.congress.gov/bioguide/photo/B/B001296.jpg" },
+      "addressInformation" => { "officeAddress" => "1133 Longworth House Office Building\nWashington, DC 20515", "phoneNumber" => "(202) 225-6111" }
+    }
+  }.freeze
+
   HARDCODED_VOTING_STATS = {
     "F000479" => { party_vote_pct: 68.0, missed_votes_pct: 13.9, votes_cast: "~1,205 of ~1,400", chamber_avg_attendance: 93.0, chamber_avg_party: 88.0 },
     "M001243" => { party_vote_pct: 95.0, missed_votes_pct:  2.8, votes_cast: "~1,361 of ~1,400", chamber_avg_attendance: 93.0, chamber_avg_party: 88.0 },
@@ -54,14 +97,17 @@ class OfficialsController < ApplicationController
     bioguide_id = params[:bioguide_id]
     api_key     = ENV["CONGRESS_API_KEY"]
 
-    member_response = self.class.get("/member/#{bioguide_id}", query: { api_key: api_key })
+    @member = HARDCODED_MEMBERS[bioguide_id]
 
-    unless member_response.success?
-      render plain: "Official not found", status: :not_found
-      return
+    # Try to enrich with live Congress.gov data if available
+    begin
+      member_response = self.class.get("/member/#{bioguide_id}", query: { api_key: api_key })
+      live = member_response.parsed_response["member"] if member_response.success?
+      @member = live if live.present?
+    rescue
+      # API unavailable; fall back to hardcoded
     end
 
-    @member = member_response.parsed_response["member"]
     if @member.nil?
       render plain: "Official not found", status: :not_found
       return
