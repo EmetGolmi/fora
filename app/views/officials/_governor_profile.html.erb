@@ -285,11 +285,12 @@
           <%
             _gap  = 2.8
             _dr   = 40; _dc = (2 * Math::PI * _dr).round(3)
-            _n    = official.budget_breakdown.size
+            _bd   = budget_sorted(official)
+            _n    = _bd.size
             _arc  = _dc - (_n * _gap)
-            _total = official.budget_breakdown.values.sum.to_f
+            _total = _bd.values.sum.to_f
             _cum  = 0.0
-            _segs = official.budget_breakdown.map.with_index do |(cat, pct), i|
+            _segs = _bd.map.with_index do |(cat, pct), i|
               len = ((pct.to_f / _total) * _arc).round(3)
               s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _cum.round(3), idx: i }
               _cum += len + _gap; s
@@ -321,7 +322,13 @@
                   <div style="width:8px; height:8px; border-radius:2px; background:<%= s[:color] %>; flex-shrink:0;"></div>
                   <span class="dp-card-label"><%= s[:cat].capitalize %></span>
                 </div>
-                <span class="dp-card-value"><%= s[:pct] %>%</span>
+                <div style="display:flex; align-items:center; gap:5px;">
+                  <span class="dp-card-value"><%= s[:pct] %>%</span>
+                  <button data-title="<%= h(s[:cat].capitalize) %>" data-pct="<%= s[:pct] %>" data-clr="<%= s[:color] %>" data-desc="<%= h(budget_description(s[:cat])) %>"
+                          onclick="event.stopPropagation(); budModalOpen(this)"
+                          style="background:none; border:none; cursor:pointer; font-size:9px; color:#b0bbd0; padding:0 1px; line-height:1; transition:color 0.12s;"
+                          onmouseenter="this.style.color='#1b3a6b'" onmouseleave="this.style.color='#b0bbd0'">ⓘ</button>
+                </div>
               </div>
             <% end %>
           </div>
@@ -536,11 +543,12 @@
     <%
       _mgap  = 2.8
       _mdr   = 48; _mdc = (2 * Math::PI * _mdr).round(3)
-      _mn    = official.budget_breakdown.size
+      _mbd   = budget_sorted(official)
+      _mn    = _mbd.size
       _marc  = _mdc - (_mn * _mgap)
-      _mt    = official.budget_breakdown.values.sum.to_f
+      _mt    = _mbd.values.sum.to_f
       _mc    = 0.0
-      _msegs = official.budget_breakdown.map.with_index do |(cat, pct), i|
+      _msegs = _mbd.map.with_index do |(cat, pct), i|
         len = ((pct.to_f / _mt) * _marc).round(3)
         s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _mc.round(3), idx: i }
         _mc += len + _mgap; s
@@ -571,7 +579,12 @@
           <div style="width:8px; height:8px; border-radius:2px; background:<%= s[:color] %>;"></div>
           <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= s[:cat].capitalize %></span>
         </div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= s[:pct] %>%</span>
+        <div style="display:flex; align-items:center; gap:5px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= s[:pct] %>%</span>
+          <button data-title="<%= h(s[:cat].capitalize) %>" data-pct="<%= s[:pct] %>" data-clr="<%= s[:color] %>" data-desc="<%= h(budget_description(s[:cat])) %>"
+                  onclick="event.stopPropagation(); budModalOpen(this)"
+                  style="background:none; border:none; cursor:pointer; font-size:11px; color:#b0bbd0; padding:0 1px; line-height:1;">ⓘ</button>
+        </div>
       </div>
     <% end %>
   </div>
@@ -590,7 +603,39 @@
 </div>
 </div>
 
+<div id="bud-modal" onclick="if(event.target===this)budModalClose()" style="display:none; position:fixed; inset:0; background:rgba(14,26,46,0.55); z-index:9000; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#fff; border-radius:14px; max-width:420px; width:100%; padding:24px 24px 20px; position:relative; box-shadow:0 8px 32px rgba(14,26,46,0.18);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+      <div id="bud-modal-dot" style="width:12px; height:12px; border-radius:3px; flex-shrink:0;"></div>
+      <div style="flex:1;">
+        <div id="bud-modal-title" style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:#0e1a2e;"></div>
+        <div id="bud-modal-pct" style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:2px;"></div>
+      </div>
+      <button onclick="budModalClose()" style="background:none; border:none; cursor:pointer; font-size:20px; color:#8a9ab8; padding:0 4px; line-height:1;">×</button>
+    </div>
+    <p id="bud-modal-desc" style="font-family:'Nunito',sans-serif; font-size:13px; color:#3a4e6a; line-height:1.65; margin:0;"></p>
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#b8c0d0; letter-spacing:.08em; margin-top:14px; text-transform:uppercase;">FY 2025–26 · General Fund</div>
+  </div>
+</div>
+
 <script>
+function budModalOpen(el) {
+  var m = document.getElementById('bud-modal');
+  if (!m) return;
+  document.getElementById('bud-modal-title').textContent = el.dataset.title;
+  document.getElementById('bud-modal-pct').textContent   = el.dataset.pct + '% of General Fund';
+  document.getElementById('bud-modal-dot').style.background = el.dataset.clr;
+  document.getElementById('bud-modal-desc').textContent  = el.dataset.desc;
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function budModalClose() {
+  var m = document.getElementById('bud-modal');
+  if (m) m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') budModalClose(); });
+
 function bFocus(ctx, i) {
   var seg = document.getElementById('bseg-'+ctx+'-'+i);
   if (!seg) return;

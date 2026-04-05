@@ -22,7 +22,7 @@ shapiro.assign_attributes(
   approval_rating:    52,
   approval_source:    'Franklin & Marshall · Feb 2026',
   budget_total_billions: 48.3,
-  budget_breakdown: { education: 35, health: 30, transportation: 18, safety: 10, other: 7 },
+  budget_breakdown: { education: 35, health: 18, 'human services': 12, transportation: 18, safety: 10, other: 7 },
   veto_count:         9,
   bills_signed_count: 312,
   lt_governor_name:   'Austin Davis',
