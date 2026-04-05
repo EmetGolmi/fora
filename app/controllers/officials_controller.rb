@@ -99,6 +99,13 @@ class OfficialsController < ApplicationController
     "B001296" => { party_vote_pct: 97.0, missed_votes_pct:  5.2, votes_cast: "~1,280 of ~1,350", chamber_avg_attendance: 95.0, chamber_avg_party: 92.0 }
   }.freeze
 
+  NEWS_QUERIES = {
+    "F000479" => '"John Fetterman" senator Pennsylvania',
+    "M001243" => '"Dave McCormick" senator Pennsylvania',
+    "E000296" => '"Dwight Evans" congressman Philadelphia',
+    "B001296" => '"Brendan Boyle" congressman Pennsylvania'
+  }.freeze
+
   HARDCODED_BILLS = {
     "F000479" => [
       { "type" => "S", "number" => "4045", "title" => "Food and Nutrition Delivery Safety Act of 2026",
@@ -291,8 +298,9 @@ end
 
     threads << Thread.new do
       begin
+        news_q = NEWS_QUERIES[bioguide_id] || "\"#{member_name.split.last}\""
         news_resp = HTTParty.get("https://newsapi.org/v2/everything",
-                                 query: { apiKey: ENV["NEWSAPI_KEY"], q: "\"#{member_name.split.last}\"",
+                                 query: { apiKey: ENV["NEWSAPI_KEY"], q: news_q,
                                           language: "en", sortBy: "publishedAt", pageSize: 5 })
         mutex.synchronize { @news_articles = news_resp.success? ? (news_resp.parsed_response["articles"] || []) : [] }
       rescue
