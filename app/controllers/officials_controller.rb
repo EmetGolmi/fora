@@ -532,6 +532,12 @@ end
     render :show
   end
 
+  def lt_governor
+    @official     = Person.find_by!(slug: 'adavis-pa-ltgov')
+    @profile_type = :lt_governor
+    render :show
+  end
+
   def philly_mayor
     @official     = Person.find_by!(slug: 'cparker-philly-mayor')
     @profile_type = :mayor

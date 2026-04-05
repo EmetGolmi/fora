@@ -17,8 +17,9 @@ Rails.application.routes.draw do
   get "officials/usa/pa/devans",     to: "officials#show", defaults: { bioguide_id: "E000296" }
   get "officials/usa/pa/nsaval",     to: "officials#show", defaults: { bioguide_id: "nsaval" }
   get "officials/usa/pa/bwaxman",    to: "officials#show", defaults: { bioguide_id: "bwaxman" }
-  get "officials/usa/pa/governor",        to: "officials#governor",    as: :pa_governor
-  get "officials/usa/pa/philly/mayor",    to: "officials#philly_mayor", as: :philly_mayor
+  get "officials/usa/pa/governor",        to: "officials#governor",     as: :pa_governor
+  get "officials/usa/pa/lt-governor",     to: "officials#lt_governor",  as: :pa_lt_governor
+  get "officials/usa/pa/philly/mayor",    to: "officials#philly_mayor",  as: :philly_mayor
 
   # Redirect old bioguide URLs to friendly slugs for known officials
   get "officials/F000479", to: redirect("/officials/usa/pa/jfetterman")

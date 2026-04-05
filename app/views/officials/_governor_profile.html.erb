@@ -30,6 +30,23 @@
         evt: "General Election", date: "November 2026",
         badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
     ]
+  when "lt_governor"
+    [
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Elected Lt. Governor", date: "November 2022",
+        badge: { text: "On ticket with Gov. Shapiro", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Sworn in — 34th Lt. Governor", date: "January 17, 2023",
+        badge: { text: "First Black Lt. Governor of Pennsylvania", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.5)", line_color: nil,
+        evt: "General Election", date: "November 2026",
+        badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
+    ]
   when "mayor"
     [
       { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
@@ -106,22 +123,42 @@
 
       <%# Stat bar %>
       <div class="dp-stat-bar">
-        <div class="dp-stat" style="cursor:default;">
-          <div class="dp-stat-value"><%= official.bills_signed_count || '—' %></div>
-          <div class="dp-stat-label">Bills Signed</div>
-        </div>
-        <div class="dp-stat" style="cursor:default;">
-          <div class="dp-stat-value"><%= official.veto_count || '—' %></div>
-          <div class="dp-stat-label">Vetoes</div>
-        </div>
-        <div class="dp-stat" style="cursor:default;">
-          <div class="dp-stat-value"><%= official.executive_orders&.length || '—' %></div>
-          <div class="dp-stat-label">Executive Orders</div>
-        </div>
-        <div class="dp-stat" style="cursor:default;">
-          <div class="dp-stat-value"><%= official.approval_rating ? "#{official.approval_rating}%" : '—' %></div>
-          <div class="dp-stat-label">Approval Rating</div>
-        </div>
+        <% if official.office_type == 'lt_governor' %>
+          <% yr_in_office = ((Date.today - official.term_start) / 365.25).floor + 1 %>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">34th</div>
+            <div class="dp-stat-label">Lt. Governor</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">Yr <%= yr_in_office %></div>
+            <div class="dp-stat-label">of 4-yr Term</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">Senate</div>
+            <div class="dp-stat-label">President</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">2023</div>
+            <div class="dp-stat-label">Since</div>
+          </div>
+        <% else %>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value"><%= official.bills_signed_count || '—' %></div>
+            <div class="dp-stat-label">Bills Signed</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value"><%= official.veto_count || '—' %></div>
+            <div class="dp-stat-label">Vetoes</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value"><%= official.executive_orders&.length || '—' %></div>
+            <div class="dp-stat-label">Executive Orders</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value"><%= official.approval_rating ? "#{official.approval_rating}%" : '—' %></div>
+            <div class="dp-stat-label">Approval Rating</div>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -302,18 +339,21 @@
         </div>
         <% end %>
 
-        <%# Lt. Governor %>
-        <% if official.lt_governor_name.present? %>
-        <div class="dp-card">
+        <%# Lt. Governor — shown on governor/mayor profiles; links to Davis's profile %>
+        <% if official.lt_governor_name.present? && official.office_type != 'lt_governor' %>
+        <a href="<%= pa_lt_governor_path %>" style="text-decoration:none; display:block;">
+        <div class="dp-card eo-card" style="transition:background 0.12s; cursor:pointer;">
           <div class="dp-card-title">◆ Lt. Governor</div>
           <div style="display:flex; align-items:center; gap:12px; padding:4px 0;">
             <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:#d4a832; flex-shrink:0;"><%= official.lt_governor_initials %></div>
-            <div>
-              <div class="dp-card-text" style="font-weight:700;"><%= official.lt_governor_name %></div>
+            <div style="flex:1;">
+              <div class="dp-card-text" style="font-weight:700; color:#1b3a6b;"><%= official.lt_governor_name %></div>
               <div class="dp-card-sublabel" style="margin-top:2px;">Lieutenant Governor of Pennsylvania</div>
             </div>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#b8860b; flex-shrink:0;">→</span>
           </div>
         </div>
+        </a>
         <% end %>
 
         <%# Term & Election %>
@@ -398,18 +438,34 @@
 
     <!-- Quick stats strip -->
     <div style="background:#003087; display:flex;">
-      <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.bills_signed_count %></div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bills Signed</div>
-      </div>
-      <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.veto_count %></div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Vetoes</div>
-      </div>
-      <div style="flex:1; text-align:center; padding:10px 6px;">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.approval_rating %>%</div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Approval</div>
-      </div>
+      <% if official.office_type == 'lt_governor' %>
+        <% yr_mob = ((Date.today - official.term_start) / 365.25).floor + 1 %>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">34th</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Lt. Governor</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">Yr <%= yr_mob %></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">of 4-yr Term</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px;">
+          <div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:white; line-height:1; padding-top:2px;">Senate</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">President</div>
+        </div>
+      <% else %>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.bills_signed_count %></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bills Signed</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.veto_count %></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Vetoes</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px;">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.approval_rating %>%</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Approval</div>
+        </div>
+      <% end %>
     </div>
 
     <!-- Social row -->
