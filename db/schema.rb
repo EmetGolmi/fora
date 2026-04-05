@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_24_000007) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_05_050351) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,6 +71,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_000007) do
     t.index ["civic_representative_id", "cycle_year"], name: "idx_finance_summaries_on_rep_and_cycle", unique: true
     t.index ["civic_representative_id"], name: "index_official_finance_summaries_on_civic_representative_id"
     t.index ["fec_candidate_id"], name: "index_official_finance_summaries_on_fec_candidate_id"
+  end
+
+  create_table "people", force: :cascade do |t|
+    t.integer "approval_rating"
+    t.string "approval_source"
+    t.integer "bills_signed_count"
+    t.jsonb "budget_breakdown", default: {}
+    t.decimal "budget_total_billions", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.string "divided_gov_note"
+    t.boolean "divided_government"
+    t.jsonb "executive_orders", default: []
+    t.string "lt_governor_initials"
+    t.string "lt_governor_name"
+    t.string "name", null: false
+    t.string "office_type"
+    t.string "party"
+    t.jsonb "policy_priorities", default: []
+    t.string "slug", null: false
+    t.string "state", default: "PA"
+    t.datetime "updated_at", null: false
+    t.integer "veto_count"
+    t.jsonb "veto_record", default: []
+    t.index ["office_type"], name: "index_people_on_office_type"
+    t.index ["slug"], name: "index_people_on_slug", unique: true
   end
 
   create_table "resolved_addresses", force: :cascade do |t|
