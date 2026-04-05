@@ -544,6 +544,15 @@ end
     render :show
   end
 
+  def philly_person
+    slug_prefix = params[:slug].to_s.strip
+    @official = Person.where(state: 'PA')
+                      .find_by("slug = ? OR slug LIKE ?", slug_prefix, "#{slug_prefix}-%")
+    render(file: 'public/404.html', status: :not_found, layout: false) and return unless @official
+    @profile_type = @official.office_type.to_sym
+    render :show
+  end
+
   private
 
   def extract_state_social(links)
