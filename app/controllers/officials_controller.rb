@@ -151,7 +151,7 @@ class OfficialsController < ApplicationController
     threads << Thread.new do
       ActiveRecord::Base.connection_pool.with_connection do
         resp  = self.class.get("/member/#{bioguide_id}/sponsored-legislation",
-                               query: { api_key: api_key, limit: 5, sort: "introducedDate+desc" })
+                               query: { api_key: api_key, limit: 10, sort: "introducedDate+desc" })
         bills = resp.success? ? (resp.parsed_response["sponsoredLegislation"] || []) : []
 
         bills.each do |bill|
