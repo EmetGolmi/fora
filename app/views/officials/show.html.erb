@@ -137,6 +137,20 @@
   }[_bioguide] || {}
   _fed_ring_offset = federal_term.any? ? (_ring_circ * (1 - federal_term[:ring_pct])).round(2) : 0
 
+  news_dot_colors = ["#378add", "#639922", "#b8860b", "#e24b4a", "#8a40b4"]
+  news_age = ->(pub) {
+    next "—" unless pub
+    begin
+      diff = (Time.current - Time.zone.parse(pub.to_s)).to_i.abs
+      if    diff < 3600    then "#{diff / 60}m"
+      elsif diff < 86400   then "#{diff / 3600}h"
+      elsif diff < 604800  then "#{diff / 86400}d"
+      else                      "#{diff / 604800}w"
+      end
+    rescue; "—"
+    end
+  }
+
   last_term = @member.dig("terms")&.last || {}
   is_senator = last_term["chamber"] == "Senate"
   office_title = if is_senator
@@ -185,20 +199,6 @@
      DESKTOP LAYOUT
 ══════════════════════════════════════════ -->
 <div class="desktop-profile">
-
-  <%# News ticker %>
-  <% if @news_articles.any? %>
-  <div class="dp-ticker">
-    <span class="dp-ticker-label">★ News</span>
-    <div class="dp-ticker-overflow">
-      <div class="dp-ticker-track">
-        <% (@news_articles + @news_articles).each do |a| %>
-          <span class="dp-ticker-item">★ &nbsp;<%= a['title'] %></span>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <% end %>
 
   <%# Hero %>
   <div class="dp-hero">
@@ -304,6 +304,23 @@
 
       <%# ── MAIN COLUMN ── %>
       <div class="dp-main">
+
+        <%# Recent Coverage %>
+        <% if @news_articles.any? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Recent Coverage</div>
+          <h2 class="dp-section-title">Latest News</h2>
+          <% @news_articles.each_with_index do |a, idx| %>
+            <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+              <div style="width:7px; height:7px; border-radius:50%; background:<%= news_dot_colors[idx % news_dot_colors.size] %>; flex-shrink:0;"></div>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:#8a9ab8; width:60px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><%= a.dig('source','name').to_s.truncate(12) %></span>
+              <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#2d3a50; flex:1; line-height:1.4;"><%= a['title'].to_s.truncate(110) %></span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; flex-shrink:0;"><%= news_age.call(a['publishedAt']) %></span>
+            </div>
+          <% end %>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:#b0b8c8; margin-top:8px;">* News via NewsAPI · fora.center</p>
+        </div>
+        <% end %>
 
         <%# Sponsored Legislation %>
         <div class="dp-section">
@@ -609,17 +626,6 @@
       <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
       <!-- Foil shimmer -->
       <div class="mob-foil" style="position:absolute; inset:0;"></div>
-      <% if @news_articles&.any? %>
-        <!-- News ticker -->
-        <div style="position:absolute; bottom:0; left:0; right:0; height:20px; overflow:hidden; background:rgba(0,0,0,.35); z-index:3;">
-          <div class="mob-ticker-track">
-            <% ticker_items = (@news_articles + @news_articles).map { |a| "NEWS · #{a['title']}" } %>
-            <% ticker_items.each do |item| %>
-              <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; color:#d4a832; padding:0 24px; line-height:20px; display:inline-block;">★ <%= item %></span>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
     </div>
 
     <!-- Nameplate -->
@@ -741,6 +747,23 @@
        SECTION 3 · PROFILE SECTIONS
   ───────────────────────────────────────── -->
   <div style="background:#f2f4f8;">
+
+    <!-- Recent Coverage -->
+    <% if @news_articles.any? %>
+    <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Recent Coverage</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Latest News</h3>
+      <% @news_articles.each_with_index do |a, idx| %>
+        <div style="display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+          <div style="width:6px; height:6px; border-radius:50%; background:<%= news_dot_colors[idx % news_dot_colors.size] %>; flex-shrink:0;"></div>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.1em; text-transform:uppercase; color:#8a9ab8; width:50px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><%= a.dig('source','name').to_s.truncate(10) %></span>
+          <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#2d3a50; flex:1; line-height:1.35;"><%= a['title'].to_s.truncate(90) %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#8a9ab8; flex-shrink:0;"><%= news_age.call(a['publishedAt']) %></span>
+        </div>
+      <% end %>
+      <p style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.08em; text-transform:uppercase; color:#b0b8c8; margin-top:6px;">* News via NewsAPI</p>
+    </div>
+    <% end %>
 
     <!-- Active Bills -->
     <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
