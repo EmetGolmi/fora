@@ -24,7 +24,7 @@ module OfficialsHelper
   }.freeze
 
   BUDGET_DESCRIPTIONS = {
-    "education"            => "Funds K-12 public schools, Pre-K expansion, higher education financial aid, special education programs, and school safety initiatives. The largest single line item in Pennsylvania's budget.",
+    "education"            => "Funds K-12 public schools, Pre-K expansion, higher education financial aid, special education programs, and school safety initiatives.",
     "health"               => "Covers Medical Assistance (Pennsylvania's Medicaid program) and the Children's Health Insurance Program (CHIP), providing health coverage to more than 3 million low-income Pennsylvanians.",
     "human services"       => "Funds the Department of Human Services: disability services, child welfare and foster care, domestic violence programs, SNAP administration, and cash assistance for low-income families.",
     "transportation"       => "Supports PennDOT highway and bridge maintenance, public transit systems (SEPTA, Port Authority, and regional transit), and multi-year infrastructure modernization projects.",
