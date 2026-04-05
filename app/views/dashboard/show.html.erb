@@ -130,7 +130,13 @@
                     <%= link_to official[:name], pa_lt_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif %w[city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
                     <% _district = official.dig(:jurisdiction, :district).to_i %>
-                    <% _cp = Person.find_by(office_type: 'city_council', district_number: _district) %>
+                    <% _cp = if _district > 0
+                                Person.find_by(office_type: 'city_council', district_number: _district)
+                              else
+                                _parts = official[:name].to_s.split(' ')
+                                Person.where(office_type: 'city_council_at_large')
+                                      .find_by("last_name ILIKE ?", _parts.last)
+                              end %>
                     <% if _cp %>
                       <%= link_to official[:name], philly_person_path(slug: _cp.slug.split(/-phl|-philly/).first), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                     <% else %>

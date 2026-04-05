@@ -184,3 +184,669 @@ johnson.assign_attributes(
 )
 johnson.save!
 puts "Seeded: #{johnson.full_name} (#{johnson.office_title})"
+
+# ── Philadelphia City Council — District 1 ──
+squilla = Person.find_or_initialize_by(slug: 'msquilla-phl-d1')
+squilla.assign_attributes(
+  name:                         'Mark Squilla',
+  full_name:                    'Mark Squilla',
+  first_name:                   'Mark',
+  last_name:                    'Squilla',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 1',
+  district_number:              1,
+  district_name:                'Northeast Philadelphia / Riverfront',
+  district_neighborhoods:       ['Old City', 'Society Hill', 'Fishtown', 'Northern Liberties', 'Port Richmond', 'Bridesburg', 'Kensington'],
+  district_population:          161_000,
+  district_neighborhoods_count: 12,
+  district_median_income:       42_000,
+  district_owner_occupancy_pct: 38,
+  district_rco_count:           14,
+  office_phone:                 '(215) 686-3458',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/mark-squilla/',
+  contact_url:                  'https://phlcouncil.com/mark-squilla/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Councilmember-Mark-Squilla.jpg',
+  twitter_handle:               'MarkSquilla',
+  term_start:                   Date.new(2012, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          91,
+  bills_introduced_count:       28,
+  bills_passed_count:           16,
+  party_line_vote_pct:          85,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Commerce & Economic Development',          role: 'chair'  },
+    { name: 'Licenses & Inspections',                   role: 'member' },
+    { name: 'Streets & Services',                       role: 'member' }
+  ]
+)
+squilla.save!
+puts "Seeded: #{squilla.full_name} (#{squilla.office_title})"
+
+# ── Philadelphia City Council — District 3 ──
+gauthier = Person.find_or_initialize_by(slug: 'jgauthier-phl-d3')
+gauthier.assign_attributes(
+  name:                         'Jamie Gauthier',
+  full_name:                    'Jamie Gauthier',
+  first_name:                   'Jamie',
+  last_name:                    'Gauthier',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 3',
+  district_number:              3,
+  district_name:                'West Philadelphia',
+  district_neighborhoods:       ['Cobbs Creek', 'Kingsessing', 'Woodland Terrace', 'Spruce Hill', 'Cedar Park', 'Squirrel Hill', 'Elmwood', 'Paschall'],
+  district_population:          162_000,
+  district_neighborhoods_count: 10,
+  district_median_income:       34_500,
+  district_owner_occupancy_pct: 40,
+  district_rco_count:           11,
+  office_phone:                 '(215) 686-3448',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/jamie-gauthier/',
+  contact_url:                  'https://phlcouncil.com/jamie-gauthier/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Councilmember-Jamie-Gauthier.jpg',
+  twitter_handle:               'JamieGauthier3',
+  term_start:                   Date.new(2020, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          93,
+  bills_introduced_count:       24,
+  bills_passed_count:           13,
+  party_line_vote_pct:          89,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' },
+    { name: 'Public Health & Human Services',                   role: 'member' },
+    { name: 'Finance',                                          role: 'member' }
+  ]
+)
+gauthier.save!
+puts "Seeded: #{gauthier.full_name} (#{gauthier.office_title})"
+
+# ── Philadelphia City Council — District 4 ──
+cjones = Person.find_or_initialize_by(slug: 'cjones-phl-d4')
+cjones.assign_attributes(
+  name:                         'Curtis Jones Jr.',
+  full_name:                    'Curtis Jones Jr.',
+  first_name:                   'Curtis',
+  last_name:                    'Jones',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 4',
+  district_number:              4,
+  district_name:                'Southwest Philadelphia',
+  district_neighborhoods:       ['Overbrook', 'Wynnefield', 'Carroll Park', 'Haddington', 'Mill Creek', 'Mantua', 'Belmont', 'Parkside'],
+  district_population:          158_000,
+  district_neighborhoods_count: 10,
+  district_median_income:       31_000,
+  district_owner_occupancy_pct: 45,
+  district_rco_count:           9,
+  office_phone:                 '(215) 686-3404',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/curtis-jones-jr/',
+  contact_url:                  'https://phlcouncil.com/curtis-jones-jr/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Councilmember-Curtis-Jones-Jr.jpg',
+  twitter_handle:               'CurtisJonesJr',
+  term_start:                   Date.new(2008, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          88,
+  bills_introduced_count:       22,
+  bills_passed_count:           14,
+  party_line_vote_pct:          83,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Transportation & Public Utilities',  role: 'chair'  },
+    { name: 'Streets & Services',                 role: 'member' },
+    { name: 'Public Safety',                      role: 'member' }
+  ]
+)
+cjones.save!
+puts "Seeded: #{cjones.full_name} (#{cjones.office_title})"
+
+# ── Philadelphia City Council — District 5 ──
+jyoung = Person.find_or_initialize_by(slug: 'jyoung-phl-d5')
+jyoung.assign_attributes(
+  name:                         'Jeffery Young Jr.',
+  full_name:                    'Jeffery Young Jr.',
+  first_name:                   'Jeffery',
+  last_name:                    'Young',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 5',
+  district_number:              5,
+  district_name:                'North Philadelphia',
+  district_neighborhoods:       ['Olney', 'Logan', 'Fern Rock', 'Oak Lane', 'Cheltenham Ave corridor', 'Germantown Ave North', 'Crescentville'],
+  district_population:          157_000,
+  district_neighborhoods_count: 9,
+  district_median_income:       30_000,
+  district_owner_occupancy_pct: 44,
+  district_rco_count:           8,
+  office_phone:                 '(215) 686-3406',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/jeffery-young-jr/',
+  contact_url:                  'https://phlcouncil.com/jeffery-young-jr/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2024/11/CM-Young.jpg',
+  twitter_handle:               nil,
+  term_start:                   Date.new(2024, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          90,
+  bills_introduced_count:       8,
+  bills_passed_count:           3,
+  party_line_vote_pct:          88,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Public Safety',                                    role: 'member' },
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' },
+    { name: 'Labor & Civil Service',                            role: 'member' }
+  ]
+)
+jyoung.save!
+puts "Seeded: #{jyoung.full_name} (#{jyoung.office_title})"
+
+# ── Philadelphia City Council — District 6 ──
+driscoll = Person.find_or_initialize_by(slug: 'mdriscoll-phl-d6')
+driscoll.assign_attributes(
+  name:                         'Mike Driscoll',
+  full_name:                    'Michael Driscoll',
+  first_name:                   'Mike',
+  last_name:                    'Driscoll',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 6',
+  district_number:              6,
+  district_name:                'Northeast Philadelphia',
+  district_neighborhoods:       ['Mayfair', 'Holmesburg', 'Torresdale', 'Tacony', 'Wissinoming', 'Frankford', 'Millbrook'],
+  district_population:          160_000,
+  district_neighborhoods_count: 11,
+  district_median_income:       52_000,
+  district_owner_occupancy_pct: 65,
+  district_rco_count:           10,
+  office_phone:                 '(215) 686-3408',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/mike-driscoll/',
+  contact_url:                  'https://phlcouncil.com/mike-driscoll/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2022/06/Councilmember-Mike-Driscoll.jpg',
+  twitter_handle:               'MikeDriscoll6',
+  term_start:                   Date.new(2022, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          92,
+  bills_introduced_count:       18,
+  bills_passed_count:           10,
+  party_line_vote_pct:          86,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Streets & Services',             role: 'chair'  },
+    { name: 'Licenses & Inspections',         role: 'member' },
+    { name: 'Commerce & Economic Development', role: 'member' }
+  ]
+)
+driscoll.save!
+puts "Seeded: #{driscoll.full_name} (#{driscoll.office_title})"
+
+# ── Philadelphia City Council — District 7 ──
+lozada = Person.find_or_initialize_by(slug: 'qlozada-phl-d7')
+lozada.assign_attributes(
+  name:                         'Quetcy Lozada',
+  full_name:                    'Quetcy Lozada',
+  first_name:                   'Quetcy',
+  last_name:                    'Lozada',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 7',
+  district_number:              7,
+  district_name:                'North Philadelphia / Hunting Park',
+  district_neighborhoods:       ['Fairhill', 'Hunting Park', 'Tioga', 'Juniata', 'Norris Square', 'Kensington North', 'Hartranft', 'Glenwood'],
+  district_population:          156_000,
+  district_neighborhoods_count: 10,
+  district_median_income:       26_000,
+  district_owner_occupancy_pct: 32,
+  district_rco_count:           9,
+  office_phone:                 '(215) 686-3410',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/quetcy-lozada/',
+  contact_url:                  'https://phlcouncil.com/quetcy-lozada/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2022/12/Councilmember-Quetcy-Lozada.jpg',
+  twitter_handle:               'QuetcyLozada',
+  term_start:                   Date.new(2022, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          92,
+  bills_introduced_count:       19,
+  bills_passed_count:           11,
+  party_line_vote_pct:          88,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Public Health & Human Services',                   role: 'chair'  },
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' },
+    { name: 'Labor & Civil Service',                            role: 'member' }
+  ]
+)
+lozada.save!
+puts "Seeded: #{lozada.full_name} (#{lozada.office_title})"
+
+# ── Philadelphia City Council — District 8 ──
+bass = Person.find_or_initialize_by(slug: 'cbass-phl-d8')
+bass.assign_attributes(
+  name:                         'Cindy Bass',
+  full_name:                    'Cindy Bass',
+  first_name:                   'Cindy',
+  last_name:                    'Bass',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 8',
+  district_number:              8,
+  district_name:                'Northwest Philadelphia',
+  district_neighborhoods:       ['Mt. Airy', 'Germantown', 'Chestnut Hill', 'West Mt. Airy', 'East Mt. Airy', 'Wyndmoor border'],
+  district_population:          157_000,
+  district_neighborhoods_count: 8,
+  district_median_income:       48_000,
+  district_owner_occupancy_pct: 52,
+  district_rco_count:           10,
+  office_phone:                 '(215) 686-3414',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/cindy-bass/',
+  contact_url:                  'https://phlcouncil.com/cindy-bass/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Cindy-Bass-headshot-Mar25.jpg',
+  twitter_handle:               'CindyBassD8',
+  term_start:                   Date.new(2012, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          87,
+  bills_introduced_count:       26,
+  bills_passed_count:           15,
+  party_line_vote_pct:          84,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Parks, Recreation & Cultural Affairs', role: 'chair'  },
+    { name: 'Public Health & Human Services',       role: 'member' },
+    { name: 'Finance',                              role: 'member' }
+  ]
+)
+bass.save!
+puts "Seeded: #{bass.full_name} (#{bass.office_title})"
+
+# ── Philadelphia City Council — District 9 ──
+phillips = Person.find_or_initialize_by(slug: 'aphillips-phl-d9')
+phillips.assign_attributes(
+  name:                         'Anthony Phillips',
+  full_name:                    'Anthony Phillips',
+  first_name:                   'Anthony',
+  last_name:                    'Phillips',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 9',
+  district_number:              9,
+  district_name:                'North Philadelphia / Logan',
+  district_neighborhoods:       ['Logan', 'Feltonville', 'Fern Rock', 'Ogontz', 'West Oak Lane', 'East Oak Lane', 'Lawndale'],
+  district_population:          158_000,
+  district_neighborhoods_count: 9,
+  district_median_income:       33_000,
+  district_owner_occupancy_pct: 47,
+  district_rco_count:           8,
+  office_phone:                 '(215) 686-3416',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/anthony-phillips/',
+  contact_url:                  'https://phlcouncil.com/anthony-phillips/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2024/11/CM-Phillips.jpg',
+  twitter_handle:               nil,
+  term_start:                   Date.new(2024, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          91,
+  bills_introduced_count:       7,
+  bills_passed_count:           3,
+  party_line_vote_pct:          87,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Public Safety',             role: 'member' },
+    { name: 'Streets & Services',        role: 'member' },
+    { name: 'Labor & Civil Service',     role: 'member' }
+  ]
+)
+phillips.save!
+puts "Seeded: #{phillips.full_name} (#{phillips.office_title})"
+
+# ── Philadelphia City Council — District 10 ──
+oneill = Person.find_or_initialize_by(slug: 'boneill-phl-d10')
+oneill.assign_attributes(
+  name:                         "Brian O'Neill",
+  full_name:                    "Brian J. O'Neill",
+  first_name:                   'Brian',
+  last_name:                    "O'Neill",
+  party:                        'Republican',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 10',
+  district_number:              10,
+  district_name:                'Far Northeast Philadelphia',
+  district_neighborhoods:       ['Somerton', 'Bustleton', 'Modena', 'Rhawnhurst', 'Fox Chase', 'Burholme', 'Pennypack'],
+  district_population:          165_000,
+  district_neighborhoods_count: 10,
+  district_median_income:       62_000,
+  district_owner_occupancy_pct: 72,
+  district_rco_count:           11,
+  office_phone:                 '(215) 686-3418',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  "https://phlcouncil.com/brian-oneill/",
+  contact_url:                  "https://phlcouncil.com/brian-oneill/contact/",
+  photo_url:                    "https://phlcouncil.com/wp-content/uploads/2020/02/Councilmember-Brian-ONeill.jpg",
+  twitter_handle:               'BrianONeillD10',
+  term_start:                   Date.new(1988, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          90,
+  bills_introduced_count:       30,
+  bills_passed_count:           17,
+  party_line_vote_pct:          60,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Judiciary',                       role: 'member' },
+    { name: 'Licenses & Inspections',          role: 'member' },
+    { name: 'Streets & Services',              role: 'member' }
+  ]
+)
+oneill.save!
+puts "Seeded: #{oneill.full_name} (#{oneill.office_title})"
+
+# ── Philadelphia City Council — At-Large ──
+kgr = Person.find_or_initialize_by(slug: 'kgrichardson-phl-al')
+kgr.assign_attributes(
+  name:                         'Katherine Gilmore Richardson',
+  full_name:                    'Katherine Gilmore Richardson',
+  first_name:                   'Katherine',
+  last_name:                    'Gilmore Richardson',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3420',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/katherine-gilmore-richardson/',
+  contact_url:                  'https://phlcouncil.com/katherine-gilmore-richardson/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Katherine-Gilmore-Richardson1.jpg',
+  twitter_handle:               'KGRforPhilly',
+  term_start:                   Date.new(2020, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          94,
+  bills_introduced_count:       22,
+  bills_passed_count:           12,
+  party_line_vote_pct:          90,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Finance',                                          role: 'chair'  },
+    { name: 'Budget & Finance',                                 role: 'member' },
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' }
+  ]
+)
+kgr.save!
+puts "Seeded: #{kgr.full_name} (#{kgr.office_title})"
+
+ithomas = Person.find_or_initialize_by(slug: 'ithomas-phl-al')
+ithomas.assign_attributes(
+  name:                         'Isaiah Thomas',
+  full_name:                    'Isaiah Thomas',
+  first_name:                   'Isaiah',
+  last_name:                    'Thomas',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3422',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/isaiah-thomas/',
+  contact_url:                  'https://phlcouncil.com/isaiah-thomas/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Councilmember-Isaiah-Thomas.jpg',
+  twitter_handle:               'IsaiahThomasPHL',
+  term_start:                   Date.new(2016, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          91,
+  bills_introduced_count:       20,
+  bills_passed_count:           11,
+  party_line_vote_pct:          88,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Public Safety',                  role: 'chair'  },
+    { name: 'Labor & Civil Service',          role: 'member' },
+    { name: 'Commerce & Economic Development', role: 'member' }
+  ]
+)
+ithomas.save!
+puts "Seeded: #{ithomas.full_name} (#{ithomas.office_title})"
+
+jharrity = Person.find_or_initialize_by(slug: 'jharrity-phl-al')
+jharrity.assign_attributes(
+  name:                         'Jim Harrity',
+  full_name:                    'Jim Harrity',
+  first_name:                   'Jim',
+  last_name:                    'Harrity',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3424',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/jim-harrity/',
+  contact_url:                  'https://phlcouncil.com/jim-harrity/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2022/12/Councilmember-Jim-Harrity.jpg',
+  twitter_handle:               nil,
+  term_start:                   Date.new(2022, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          89,
+  bills_introduced_count:       14,
+  bills_passed_count:           7,
+  party_line_vote_pct:          87,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Labor & Civil Service',     role: 'chair'  },
+    { name: 'Public Safety',             role: 'member' },
+    { name: 'Streets & Services',        role: 'member' }
+  ]
+)
+jharrity.save!
+puts "Seeded: #{jharrity.full_name} (#{jharrity.office_title})"
+
+nahmad = Person.find_or_initialize_by(slug: 'nahmad-phl-al')
+nahmad.assign_attributes(
+  name:                         'Nina Ahmad',
+  full_name:                    'Nina Ahmad',
+  first_name:                   'Nina',
+  last_name:                    'Ahmad',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3426',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/nina-ahmad/',
+  contact_url:                  'https://phlcouncil.com/nina-ahmad/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2024/11/CM-Ahmad-.jpg',
+  twitter_handle:               'NinaAhmadPhilly',
+  term_start:                   Date.new(2024, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          93,
+  bills_introduced_count:       9,
+  bills_passed_count:           4,
+  party_line_vote_pct:          91,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Public Health & Human Services',    role: 'member' },
+    { name: 'Commerce & Economic Development',   role: 'member' },
+    { name: 'Judiciary',                         role: 'member' }
+  ]
+)
+nahmad.save!
+puts "Seeded: #{nahmad.full_name} (#{nahmad.office_title})"
+
+rlandau = Person.find_or_initialize_by(slug: 'rlandau-phl-al')
+rlandau.assign_attributes(
+  name:                         'Rue Landau',
+  full_name:                    'Rue Landau',
+  first_name:                   'Rue',
+  last_name:                    'Landau',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3428',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/rue-landau/',
+  contact_url:                  'https://phlcouncil.com/rue-landau/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2024/01/Coucilmember-Rue-Landau.jpg',
+  twitter_handle:               'RueLandau',
+  term_start:                   Date.new(2024, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          95,
+  bills_introduced_count:       10,
+  bills_passed_count:           5,
+  party_line_vote_pct:          92,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Judiciary',                                        role: 'chair'  },
+    { name: 'Public Health & Human Services',                   role: 'member' },
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' }
+  ]
+)
+rlandau.save!
+puts "Seeded: #{rlandau.full_name} (#{rlandau.office_title})"
+
+kbrooks = Person.find_or_initialize_by(slug: 'kbrooks-phl-al')
+kbrooks.assign_attributes(
+  name:                         'Kendra Brooks',
+  full_name:                    'Kendra Brooks',
+  first_name:                   'Kendra',
+  last_name:                    'Brooks',
+  party:                        'Working Families Party',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3430',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  'https://phlcouncil.com/kendra-brooks/',
+  contact_url:                  'https://phlcouncil.com/kendra-brooks/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2023/02/Councilmember-Kendra-Brooks.jpg',
+  twitter_handle:               'KendraBrooksPHL',
+  term_start:                   Date.new(2020, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          96,
+  bills_introduced_count:       25,
+  bills_passed_count:           13,
+  party_line_vote_pct:          72,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' },
+    { name: 'Public Health & Human Services',                   role: 'member' },
+    { name: 'Labor & Civil Service',                            role: 'member' }
+  ]
+)
+kbrooks.save!
+puts "Seeded: #{kbrooks.full_name} (#{kbrooks.office_title})"
+
+norourke = Person.find_or_initialize_by(slug: 'norourke-phl-al')
+norourke.assign_attributes(
+  name:                         "Nicolas O'Rourke",
+  full_name:                    "Nicolas O'Rourke",
+  first_name:                   'Nicolas',
+  last_name:                    "O'Rourke",
+  party:                        'Working Families Party',
+  state:                        'PA',
+  office_type:                  'city_council_at_large',
+  office_title:                 'Philadelphia City Councilmember At-Large',
+  district_number:              nil,
+  district_name:                'Citywide',
+  district_neighborhoods:       [],
+  district_population:          1_567_000,
+  district_neighborhoods_count: nil,
+  district_median_income:       nil,
+  district_owner_occupancy_pct: nil,
+  district_rco_count:           nil,
+  office_phone:                 '(215) 686-3432',
+  office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
+  office_hours:                 'Mon–Fri 9am–5pm',
+  website_url:                  "https://phlcouncil.com/nicolas-orourke/",
+  contact_url:                  "https://phlcouncil.com/nicolas-orourke/contact/",
+  photo_url:                    "https://phlcouncil.com/wp-content/uploads/2024/01/Councilmember-Nick-ORourke.jpg",
+  twitter_handle:               'NickORourkeWFP',
+  term_start:                   Date.new(2024, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          94,
+  bills_introduced_count:       8,
+  bills_passed_count:           3,
+  party_line_vote_pct:          70,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'member' },
+    { name: 'Commerce & Economic Development',                  role: 'member' },
+    { name: 'Streets & Services',                               role: 'member' }
+  ]
+)
+norourke.save!
+puts "Seeded: #{norourke.full_name} (#{norourke.office_title})"

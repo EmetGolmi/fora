@@ -1,4 +1,4 @@
-<% content_for(:title) { [:governor, :lt_governor, :mayor, :city_council].include?(@profile_type) ? "#{@official.full_name} — FORA" : "#{@member['directOrderName']} — FORA" } %>
+<% content_for(:title) { [:governor, :lt_governor, :mayor, :city_council, :city_council_at_large].include?(@profile_type) ? "#{@official.full_name} — FORA" : "#{@member['directOrderName']} — FORA" } %>
 
 <% content_for :head do %>
 <style>
@@ -84,7 +84,7 @@
 
 <% if [:governor, :lt_governor, :mayor].include?(@profile_type) %>
   <%= render 'governor_profile', official: @official %>
-<% elsif @profile_type == :city_council %>
+<% elsif [:city_council, :city_council_at_large].include?(@profile_type) %>
   <%= render 'council_profile', official: @official %>
 <% else %>
 
