@@ -105,6 +105,19 @@ class OfficialsController < ApplicationController
     "E000296" => { sponsored: 10,  cosponsored: 350 }
   }.freeze
 
+  # 119th Congress stats (Jan 2025 – present)
+  BILL_STATS_119 = {
+    "F000479" => { enacted: 0, in_committee: 33, votes_cast_119: "~700 of 733" },
+    "M001243" => { enacted: 2, in_committee: 38, votes_cast_119: "~713 of 733",
+                   enacted_bills: [
+                     { number: "S. 1780", title: "Mexico Security Assistance Accountability Act",
+                       summary: "Establishes accountability and oversight mechanisms for U.S. security assistance funds provided to Mexico, ensuring resources are directed toward combating drug trafficking and cartel violence." },
+                     { number: "S. 1900", title: "Taiwan Non-Discrimination Act of 2025",
+                       summary: "Affirms U.S. policy supporting Taiwan's meaningful participation in international organizations and opposing diplomatic efforts to exclude or diminish Taiwan's international standing." }
+                   ] },
+    "E000296" => { enacted: 0, in_committee: 10, votes_cast_119: "~420 of 430" }
+  }.freeze
+
   NEWS_QUERIES = {
     "F000479" => '"John Fetterman" senator Pennsylvania',
     "M001243" => '"Dave McCormick" senator Pennsylvania',
@@ -372,6 +385,8 @@ end
       @total_bills_sponsored   = bt[:sponsored]
       @total_bills_cosponsored = bt[:cosponsored]
     end
+
+    @bill_stats_119 = BILL_STATS_119[bioguide_id]
 
     fec_cand_id = FEC_IDS[bioguide_id]
     @finance = OfficialFinanceSummary.where(fec_candidate_id: fec_cand_id).order(cycle_year: :desc).first if fec_cand_id

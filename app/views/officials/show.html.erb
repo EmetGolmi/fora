@@ -182,7 +182,11 @@
     else                    "#5a6e8a"
     end
 
-  bills_count   = @total_bills_sponsored || @bills.size
+  bills_count        = @total_bills_sponsored || @bills.size
+  votes_119          = @bill_stats_119&.dig(:votes_cast_119) || estimated_votes
+  enacted_count      = @bill_stats_119&.dig(:enacted)
+  in_committee_count = @bill_stats_119&.dig(:in_committee)
+  enacted_bills      = @bill_stats_119&.dig(:enacted_bills) || []
   bills_cospon_note = @total_bills_cosponsored \
     ? "<p style='margin-top:10px;'><strong>Cosponsored (119th Congress): ~#{@total_bills_cosponsored}</strong> — bills introduced by colleagues this member has formally endorsed.</p>" \
     : ""
@@ -618,7 +622,7 @@
     <!-- Quick stats strip -->
     <div style="background:<%= blend_color %>; display:flex;">
       <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= votes_cast %></div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= votes_119 %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Votes Cast</div>
       </div>
       <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
@@ -682,10 +686,14 @@
         <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Attendance</span>
         <button onclick="openModal('modal-attendance')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
-      <% [["Votes Cast", estimated_votes], ["Attendance Rate", @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—"], ["Missed", @missed_votes_pct ? "#{@missed_votes_pct.round(1)}%" : "—"], ["#{is_senator ? 'Senate' : 'House'} Avg", "—"]].each do |label, val| %>
+      <% [["Votes Cast", votes_119], ["Attendance Rate", @missed_votes_pct ? "#{(100 - @missed_votes_pct).round(1)}%" : "—"], ["Missed", @missed_votes_pct ? "#{@missed_votes_pct.round(1)}%" : "—"], ["Chamber Avg", :coming_soon]].each do |label, val| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+          <% if val == :coming_soon %>
+            <span style="font-family:'Nunito',sans-serif; font-size:9px; font-style:italic; color:#b0b8c8;">coming soon</span>
+          <% else %>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -696,10 +704,14 @@
         <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Party-Line Voting</span>
         <button onclick="openModal('modal-party')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
-      <% [["With Party", @party_vote_pct ? "#{@party_vote_pct.round(1)}%" : "—"], ["Independent", @party_vote_pct ? "#{(100 - @party_vote_pct).round(1)}%" : "—"], ["#{is_senator ? 'Senate' : 'House'} Average", "—"]].each do |label, val| %>
+      <% [["With Party", @party_vote_pct ? "#{@party_vote_pct.round(1)}%" : "—"], ["Independent", @party_vote_pct ? "#{(100 - @party_vote_pct).round(1)}%" : "—"], ["Chamber Average", :coming_soon]].each do |label, val| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+          <% if val == :coming_soon %>
+            <span style="font-family:'Nunito',sans-serif; font-size:9px; font-style:italic; color:#b0b8c8;">coming soon</span>
+          <% else %>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -711,10 +723,17 @@
         <button onclick="openModal('modal-committees')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
       <% cospon_val = @total_bills_cosponsored ? "~#{@total_bills_cosponsored}" : "—" %>
-      <% [["This Session", "~#{bills_count}"], ["Cosponsored", cospon_val], ["Passed into Law", "—"], ["In Committee", "—"]].each do |label, val| %>
+      <% enacted_val      = enacted_count ? enacted_count.to_s : "—" %>
+      <% in_cmte_val      = in_committee_count ? "~#{in_committee_count}" : "—" %>
+      <% enacted_clickable = enacted_count&.> 0 %>
+      <% [["This Session", "~#{bills_count}", false], ["Cosponsored", cospon_val, false], ["Passed into Law", enacted_val, enacted_clickable], ["In Committee", in_cmte_val, false]].each do |label, val, clickable| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+          <% if clickable %>
+            <button onclick="openModal('modal-bills-enacted')" style="background:none; border:none; padding:0; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b; cursor:pointer; text-decoration:underline; text-underline-offset:2px;"><%= val %> ↗</button>
+          <% else %>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -1012,6 +1031,26 @@
       <button class="mob-got-it" onclick="closeModal('modal-committees')">Got it</button>
     </div>
   </div>
+
+  <% if enacted_bills.any? %>
+  <div id="modal-bills-enacted" class="mob-modal" onclick="if(event.target===this)closeModal('modal-bills-enacted')">
+    <div class="mob-sheet" style="overflow-y:auto; max-height:85vh;">
+      <div class="mob-handle"></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ Sponsored Legislation · Enacted</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 4px;">Passed Into Law</h3>
+      <p style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px;">119th Congress · As of <%= Date.today.strftime("%B %-d, %Y") %></p>
+      <% enacted_bills.each_with_index do |bill, i| %>
+        <div style="background:#f7f9fc; border:1px solid #dde5f5; border-radius:8px; padding:12px 14px; margin-bottom:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:.1em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;"><%= bill[:number] %></div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= bill[:title] %></div>
+          <p style="font-family:'Nunito',sans-serif; font-size:11.5px; color:#4a5568; line-height:1.6; margin:0;"><%= bill[:summary] %></p>
+        </div>
+      <% end %>
+      <p style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#b0b8c8; letter-spacing:.06em; margin-top:8px;">* Information current as of <%= Date.today.strftime("%B %-d, %Y") %>.</p>
+      <button class="mob-got-it" onclick="closeModal('modal-bills-enacted')" style="margin-top:12px;">Got it</button>
+    </div>
+  </div>
+  <% end %>
 
   <div id="modal-committee-detail" class="mob-modal" onclick="if(event.target===this)closeModal('modal-committee-detail')">
     <div class="mob-sheet" style="overflow-y:auto; max-height:85vh;">
