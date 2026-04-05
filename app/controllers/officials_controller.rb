@@ -234,6 +234,7 @@ end
         @votes_cast             = stats[:votes_cast]
         @chamber_avg_attendance = stats[:chamber_avg_attendance]
         @chamber_avg_party      = stats[:chamber_avg_party]
+        @recent_votes           = stats[:recent_votes] || []
       end
     end
 

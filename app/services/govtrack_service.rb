@@ -6,6 +6,12 @@ class GovtrackService
       votes_cast:             "~1,205 of ~1,400",
       chamber_avg_attendance: 93.0,
       chamber_avg_party:      88.0,
+      recent_votes: [
+        { bill: "Pete Hegseth — Sec. of Defense confirmation", date: "Jan 25, 2025", position: "Nay" },
+        { bill: "Laken Riley Act (S. 5)",                      date: "Jan 29, 2025", position: "Yea" },
+        { bill: "Kash Patel — FBI Director confirmation",      date: "Feb 20, 2025", position: "Nay" },
+        { bill: "FY2026 Budget Resolution",                    date: "Feb 21, 2025", position: "Nay" },
+      ],
       committees: [
         { name: "Senate Committee on Agriculture, Nutrition, and Forestry",
           subcommittees: ["Commodities, Derivatives, Risk Management, and Trade",
@@ -30,6 +36,12 @@ class GovtrackService
       votes_cast:             "~1,361 of ~1,400",
       chamber_avg_attendance: 93.0,
       chamber_avg_party:      88.0,
+      recent_votes: [
+        { bill: "Pete Hegseth — Sec. of Defense confirmation", date: "Jan 25, 2025", position: "Yea" },
+        { bill: "Laken Riley Act (S. 5)",                      date: "Jan 29, 2025", position: "Yea" },
+        { bill: "FY2026 Budget Resolution",                    date: "Feb 21, 2025", position: "Yea" },
+        { bill: "FY2025 Continuing Resolution",                date: "Mar 14, 2025", position: "Yea" },
+      ],
       committees: [
         { name: "Senate Committee on Banking, Housing, and Urban Affairs",
           subcommittees: [],
@@ -56,6 +68,11 @@ class GovtrackService
       votes_cast:             "~1,150 of ~1,350",
       chamber_avg_attendance: 95.0,
       chamber_avg_party:      92.0,
+      recent_votes: [
+        { bill: "Laken Riley Act (H.R. 535)",                  date: "Jan 22, 2025", position: "Nay" },
+        { bill: "SAVE Act (H.R. 22)",                          date: "Apr 10, 2025", position: "Nay" },
+        { bill: "One Big Beautiful Bill Act (H.R. 1)",         date: "May 22, 2025", position: "Nay" },
+      ],
       committees: [
         { name: "House Committee on Ways and Means",
           subcommittees: ["Work and Welfare"],
