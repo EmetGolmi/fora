@@ -526,6 +526,11 @@ end
     @finance = nil
   end
 
+  def governor
+    @official      = Person.find_by!(slug: 'jshapiro-pa-gov')
+    @profile_type  = :governor
+  end
+
   private
 
   def extract_state_social(links)
