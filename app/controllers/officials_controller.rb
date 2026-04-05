@@ -99,6 +99,57 @@ class OfficialsController < ApplicationController
     "B001296" => { party_vote_pct: 97.0, missed_votes_pct:  5.2, votes_cast: "~1,280 of ~1,350", chamber_avg_attendance: 95.0, chamber_avg_party: 92.0 }
   }.freeze
 
+  HARDCODED_BILLS = {
+    "F000479" => [
+      { "type" => "S", "number" => "4045", "title" => "Food and Nutrition Delivery Safety Act of 2026",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.", "actionDate" => "2026-03-10" } },
+      { "type" => "S", "number" => "3903", "title" => "Railway Safety Act of 2026",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Commerce, Science, and Transportation.", "actionDate" => "2026-02-26" } },
+      { "type" => "S", "number" => "3796", "title" => "Ohio River Restoration Program Act of 2026",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Environment and Public Works.", "actionDate" => "2026-02-05" } },
+      { "type" => "S", "number" => "3733", "title" => "A bill to authorize public libraries to collect and retain a fee for passport application execution",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Foreign Relations.", "actionDate" => "2026-01-29" } },
+      { "type" => "S", "number" => "3660", "title" => "Credit Card Fairness Act",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Banking, Housing, and Urban Affairs.", "actionDate" => "2026-01-15" } },
+      { "type" => "S", "number" => "3468", "title" => "National Programmable Cloud Laboratories Network Act of 2025",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Commerce, Science, and Transportation.", "actionDate" => "2025-12-11" } },
+      { "type" => "S", "number" => "2929", "title" => "Consistent Egg Labels Act of 2025",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Health, Education, Labor, and Pensions.", "actionDate" => "2025-09-29" } }
+    ].freeze,
+    "M001243" => [
+      { "type" => "S", "number" => "4238", "title" => "A bill to designate the Endless Mountains National Heritage Area in Pennsylvania as a component of the National Heritage Area System",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Energy and Natural Resources.", "actionDate" => "2026-03-26" } },
+      { "type" => "S", "number" => "3947", "title" => "Reconductoring Existing Wires for Infrastructure Reliability and Expansion (REWIRE) Act",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Energy and Natural Resources.", "actionDate" => "2026-02-26" } },
+      { "type" => "S", "number" => "3900", "title" => "Iran Human Rights, Internet Freedom, and Accountability Act of 2026",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Foreign Relations.", "actionDate" => "2026-02-24" } },
+      { "type" => "S", "number" => "3835", "title" => "A bill to designate the USPS facility in Mahaffey, Pennsylvania, as the Robert Allen Bishop, Sr., Post Office Building",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Homeland Security and Governmental Affairs.", "actionDate" => "2026-02-11" } },
+      { "type" => "S", "number" => "2626", "title" => "Strengthening United States Leadership at the IDB Act",
+        "latestAction" => { "text" => "Ordered to be reported favorably by the Senate Foreign Relations Committee.", "actionDate" => "2025-10-24" } },
+      { "type" => "S", "number" => "2044", "title" => "Office of Fossil Energy and Carbon Management Relocation Act of 2025",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Energy and Natural Resources.", "actionDate" => "2025-06-12" } },
+      { "type" => "S", "number" => "1739", "title" => "International Nuclear Energy Financing Act of 2025",
+        "latestAction" => { "text" => "Read twice and referred to the Committee on Foreign Relations.", "actionDate" => "2025-05-13" } }
+    ].freeze,
+    "E000296" => [
+      { "type" => "HR",   "number" => "7532", "title" => "To designate the USPS facility at 4431 Main Street in Philadelphia as the Dr. Constance E. Clayton Post Office",
+        "latestAction" => { "text" => "Referred to the House Committee on Oversight and Government Reform.", "actionDate" => "2026-02-12" } },
+      { "type" => "HRES", "number" => "1071", "title" => "Recognizing the desegregation of Girard College in Philadelphia and leaders of the civil rights movement",
+        "latestAction" => { "text" => "Referred to the House Committee on the Judiciary.", "actionDate" => "2026-02-23" } },
+      { "type" => "HRES", "number" => "898",  "title" => "Recognizing November 2025 as National Family Caregivers Month",
+        "latestAction" => { "text" => "Referred to the House Committee on Energy and Commerce.", "actionDate" => "2025-11-05" } },
+      { "type" => "HRES", "number" => "712",  "title" => "Expressing support for the designation of September 14, 2025, as National Food is Medicine Day",
+        "latestAction" => { "text" => "Referred to the Committee on Energy and Commerce, and in addition to the Committee on Agriculture.", "actionDate" => "2025-09-11" } },
+      { "type" => "HR",   "number" => "2764", "title" => "Tax Cut for Workers Act of 2025",
+        "latestAction" => { "text" => "Referred to the House Committee on Ways and Means.", "actionDate" => "2025-04-09" } },
+      { "type" => "HR",   "number" => "5383", "title" => "Mentoring and Supporting Families Act",
+        "latestAction" => { "text" => "Referred to the House Committee on Ways and Means.", "actionDate" => "2025-07-24" } },
+      { "type" => "HR",   "number" => "3681", "title" => "Leveraging Educational Opportunity Networks (LEON) Act",
+        "latestAction" => { "text" => "Referred to the House Committee on Education and Workforce.", "actionDate" => "2025-05-15" } }
+    ].freeze
+  }.freeze
+
   def show
     bioguide_id = params[:bioguide_id]
     api_key     = ENV["CONGRESS_API_KEY"]
@@ -274,6 +325,11 @@ end
     end
 
     threads.each(&:join)
+
+    if HARDCODED_BILLS.key?(bioguide_id)
+      @bills       = HARDCODED_BILLS[bioguide_id]
+      @bill_id_map = {}
+    end
 
     fec_cand_id = FEC_IDS[bioguide_id]
     @finance = OfficialFinanceSummary.where(fec_candidate_id: fec_cand_id).order(cycle_year: :desc).first if fec_cand_id

@@ -493,32 +493,6 @@
           </div>
         </div>
 
-        <%# Recent Legislation %>
-        <div class="dp-card">
-          <div class="dp-card-title">◆ Recent Legislation</div>
-          <% if @bills.any? %>
-            <% @bills.first(10).each do |bill| %>
-              <div class="dp-card-entry">
-                <div class="dp-card-sublabel"><%= format_bill_id.call(bill) %></div>
-                <div class="dp-card-text" style="line-height:1.35;">
-                  <% bill_path = @bill_id_map[format_bill_id.call(bill)] ? bill_path(@bill_id_map[format_bill_id.call(bill)]) : nil %>
-                  <% if bill_path %>
-                    <a href="<%= bill_path %>" style="color:#1b3a6b; text-decoration:underline; text-underline-offset:2px;"><%= bill["title"].to_s.truncate(80) %></a>
-                  <% else %>
-                    <%= bill["title"].to_s.truncate(80) %>
-                  <% end %>
-                </div>
-                <% action_text = bill.dig("latestAction","text").to_s %>
-                <% if action_text.present? %>
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:6px; color:#8a9ab8; margin-top:3px;"><%= action_text.truncate(60) %></div>
-                <% end %>
-              </div>
-            <% end %>
-          <% else %>
-            <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; margin:0;">No sponsored legislation found.</p>
-          <% end %>
-        </div>
-
         <%# Term & Election %>
         <% if federal_term.any? %>
           <div class="dp-card">
