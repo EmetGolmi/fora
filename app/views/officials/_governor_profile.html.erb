@@ -246,35 +246,44 @@
         <div class="dp-card">
           <div class="dp-card-title">◆ FY 2025–26 Budget</div>
           <%
+            _gap = 2.8
             _dr = 40; _dc = (2 * Math::PI * _dr).round(3)
             _total = official.budget_breakdown.values.sum.to_f
             _cum = 0.0
-            _segs = official.budget_breakdown.map do |cat, pct|
-              len = ((pct.to_f / _total) * _dc).round(3)
-              s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _cum }
-              _cum += len; s
+            _segs = official.budget_breakdown.map.with_index do |(cat, pct), i|
+              raw = (pct.to_f / _total) * _dc
+              len = [raw - _gap, 0.5].max.round(3)
+              s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _cum.round(3), idx: i }
+              _cum += raw; s
             end
+            _d_total = "$#{official.budget_total_billions}B"
           %>
-          <svg width="120" height="120" viewBox="0 0 120 120" style="display:block; margin:8px auto 14px;">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="display:block; margin:8px auto 14px; cursor:default;"
+               data-ctx="dsk" data-total="<%= _d_total %>"
+               onclick="bReset('dsk')">
             <circle cx="60" cy="60" r="<%= _dr %>" fill="none" stroke="#e8ecf4" stroke-width="14"/>
             <% _segs.each do |s| %>
-              <circle cx="60" cy="60" r="<%= _dr %>" fill="none"
-                stroke="<%= s[:color] %>" stroke-width="14"
+              <circle id="bseg-dsk-<%= s[:idx] %>" cx="60" cy="60" r="<%= _dr %>" fill="none"
+                stroke="<%= s[:color] %>" stroke-width="14" stroke-linecap="butt"
                 stroke-dasharray="<%= s[:len] %> <%= _dc %>"
                 stroke-dashoffset="<%= (_dc - s[:prior]).round(3) %>"
-                transform="rotate(-90 60 60)"/>
+                transform="rotate(-90 60 60)"
+                style="cursor:pointer; transition:opacity 0.18s;" data-active="0"
+                data-name="<%= h(s[:cat].capitalize) %>" data-pct="<%= s[:pct] %>" data-clr="<%= s[:color] %>"
+                onclick="event.stopPropagation(); bFocus('dsk',<%= s[:idx] %>)"/>
             <% end %>
-            <text x="60" y="57" text-anchor="middle" font-family="'Libre Baskerville',serif" font-size="13" font-weight="700" fill="#1b3a6b">$<%= official.budget_total_billions %>B</text>
-            <text x="60" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="5.5" fill="#8a9ab8" letter-spacing="0.5">GENERAL FUND</text>
+            <text id="bcv-dsk" x="60" y="56" text-anchor="middle" font-family="'Libre Baskerville',serif" font-size="13" font-weight="700" fill="#1b3a6b"><%= _d_total %></text>
+            <text id="bcl-dsk" x="60" y="69" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="5.5" fill="#8a9ab8" letter-spacing="0.5">GENERAL FUND</text>
           </svg>
-          <div style="display:flex; flex-direction:column; gap:4px;">
-            <% official.budget_breakdown.each do |category, pct| %>
-              <div class="dp-card-row">
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <% _segs.each do |s| %>
+              <div id="bleg-dsk-<%= s[:idx] %>" class="dp-card-row" style="border-radius:4px; transition:background 0.15s; cursor:pointer; padding:3px 4px; margin:0 -4px;"
+                   onclick="bFocus('dsk',<%= s[:idx] %>)">
                 <div style="display:flex; align-items:center; gap:7px;">
-                  <div style="width:8px; height:8px; border-radius:2px; background:<%= budget_segment_color(category) %>; flex-shrink:0;"></div>
-                  <span class="dp-card-label"><%= category.capitalize %></span>
+                  <div style="width:8px; height:8px; border-radius:2px; background:<%= s[:color] %>; flex-shrink:0;"></div>
+                  <span class="dp-card-label"><%= s[:cat].capitalize %></span>
                 </div>
-                <span class="dp-card-value"><%= pct %>%</span>
+                <span class="dp-card-value"><%= s[:pct] %>%</span>
               </div>
             <% end %>
           </div>
@@ -468,34 +477,43 @@
   <div style="padding:20px; border-bottom:1px solid rgba(27,58,107,0.06);">
     <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ FY 2025–26 Budget</div>
     <%
+      _mgap = 2.8
       _mdr = 48; _mdc = (2 * Math::PI * _mdr).round(3)
       _mt = official.budget_breakdown.values.sum.to_f
       _mc = 0.0
-      _msegs = official.budget_breakdown.map do |cat, pct|
-        len = ((pct.to_f / _mt) * _mdc).round(3)
-        s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _mc }
-        _mc += len; s
+      _msegs = official.budget_breakdown.map.with_index do |(cat, pct), i|
+        raw = (pct.to_f / _mt) * _mdc
+        len = [raw - _mgap, 0.5].max.round(3)
+        s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _mc.round(3), idx: i }
+        _mc += raw; s
       end
+      _m_total = "$#{official.budget_total_billions}B"
     %>
-    <svg width="140" height="140" viewBox="0 0 140 140" style="display:block; margin:0 auto 14px;">
+    <svg width="140" height="140" viewBox="0 0 140 140" style="display:block; margin:0 auto 14px; cursor:default;"
+         data-ctx="mob" data-total="<%= _m_total %>"
+         onclick="bReset('mob')">
       <circle cx="70" cy="70" r="<%= _mdr %>" fill="none" stroke="#e8ecf4" stroke-width="16"/>
       <% _msegs.each do |s| %>
-        <circle cx="70" cy="70" r="<%= _mdr %>" fill="none"
-          stroke="<%= s[:color] %>" stroke-width="16"
+        <circle id="bseg-mob-<%= s[:idx] %>" cx="70" cy="70" r="<%= _mdr %>" fill="none"
+          stroke="<%= s[:color] %>" stroke-width="16" stroke-linecap="butt"
           stroke-dasharray="<%= s[:len] %> <%= _mdc %>"
           stroke-dashoffset="<%= (_mdc - s[:prior]).round(3) %>"
-          transform="rotate(-90 70 70)"/>
+          transform="rotate(-90 70 70)"
+          style="cursor:pointer; transition:opacity 0.18s;" data-active="0"
+          data-name="<%= h(s[:cat].capitalize) %>" data-pct="<%= s[:pct] %>" data-clr="<%= s[:color] %>"
+          onclick="event.stopPropagation(); bFocus('mob',<%= s[:idx] %>)"/>
       <% end %>
-      <text x="70" y="66" text-anchor="middle" font-family="'Libre Baskerville',serif" font-size="16" font-weight="700" fill="#1b3a6b">$<%= official.budget_total_billions %>B</text>
-      <text x="70" y="82" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="6" fill="#8a9ab8" letter-spacing="0.5">GENERAL FUND</text>
+      <text id="bcv-mob" x="70" y="66" text-anchor="middle" font-family="'Libre Baskerville',serif" font-size="16" font-weight="700" fill="#1b3a6b"><%= _m_total %></text>
+      <text id="bcl-mob" x="70" y="80" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="6" fill="#8a9ab8" letter-spacing="0.5">GENERAL FUND</text>
     </svg>
-    <% official.budget_breakdown.each do |category, pct| %>
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid rgba(27,58,107,0.05);">
+    <% _msegs.each do |s| %>
+      <div id="bleg-mob-<%= s[:idx] %>" style="display:flex; justify-content:space-between; align-items:center; padding:5px 4px; border-bottom:1px solid rgba(27,58,107,0.05); border-radius:4px; transition:background 0.15s; cursor:pointer; margin:0 -4px;"
+           onclick="bFocus('mob',<%= s[:idx] %>)">
         <div style="display:flex; align-items:center; gap:6px;">
-          <div style="width:8px; height:8px; border-radius:2px; background:<%= budget_segment_color(category) %>;"></div>
-          <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= category.capitalize %></span>
+          <div style="width:8px; height:8px; border-radius:2px; background:<%= s[:color] %>;"></div>
+          <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= s[:cat].capitalize %></span>
         </div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= pct %>%</span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= s[:pct] %>%</span>
       </div>
     <% end %>
   </div>
@@ -513,3 +531,41 @@
 
 </div>
 </div>
+
+<script>
+function bFocus(ctx, i) {
+  var seg = document.getElementById('bseg-'+ctx+'-'+i);
+  if (!seg) return;
+  var isOn = seg.dataset.active === '1';
+  bReset(ctx);
+  if (isOn) return;
+  var j = 0, s;
+  while ((s = document.getElementById('bseg-'+ctx+'-'+j))) {
+    s.style.opacity = (j === i) ? '1' : '0.18';
+    j++;
+  }
+  seg.dataset.active = '1';
+  var name = seg.dataset.name, pct = seg.dataset.pct, color = seg.dataset.clr;
+  var cv = document.getElementById('bcv-'+ctx);
+  var cl = document.getElementById('bcl-'+ctx);
+  if (cv) { cv.textContent = pct+'%'; cv.setAttribute('fill', color); }
+  if (cl) { cl.textContent = name.toUpperCase(); cl.setAttribute('fill', color); }
+  var row = document.getElementById('bleg-'+ctx+'-'+i);
+  if (row) row.style.background = 'rgba(0,0,0,0.045)';
+}
+function bReset(ctx) {
+  var j = 0, s;
+  while ((s = document.getElementById('bseg-'+ctx+'-'+j))) {
+    s.style.opacity = '1';
+    s.dataset.active = '0';
+    var r = document.getElementById('bleg-'+ctx+'-'+j);
+    if (r) r.style.background = '';
+    j++;
+  }
+  var svg = document.querySelector('[data-ctx="'+ctx+'"]');
+  var cv = document.getElementById('bcv-'+ctx);
+  var cl = document.getElementById('bcl-'+ctx);
+  if (cv) { cv.textContent = svg ? svg.dataset.total : ''; cv.setAttribute('fill','#1b3a6b'); }
+  if (cl) { cl.textContent = 'GENERAL FUND'; cl.setAttribute('fill','#8a9ab8'); }
+}
+</script>
