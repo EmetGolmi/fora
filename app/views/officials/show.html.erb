@@ -59,6 +59,25 @@
     color: white; background: #1b3a6b; border: none;
     border-radius: 100px; padding: 12px; cursor: pointer; width: 100%;
   }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 4px 1px rgba(184,134,11,0.4); }
+    50%       { box-shadow: 0 0 10px 3px rgba(184,134,11,0.7); }
+  }
+  .tl-badge-glow {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 6.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 100px; margin-top: 3px;
+    background: rgba(184,134,11,0.1); color: #b8860b;
+    border: 1px solid rgba(184,134,11,0.4);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  .tl-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 6.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 100px; margin-top: 3px;
+  }
 </style>
 <% end %>
 
@@ -78,6 +97,45 @@
   @party_vote_pct    ||= nil
   @top_pacs     ||= []
   @recent_votes ||= []
+
+  _bioguide = @member["bioguideId"].to_s
+  _ring_circ = 219.9
+  federal_term = {
+    "F000479" => {
+      ring_pct: 0.54, ring_label: "1/2", ring_sub: "term done",
+      ring_color: "rgb(11,46,130)",
+      term_blurb: "Year 3 of a 6-year Senate term. Fetterman was elected in November 2022. U.S. senators serve staggered 6-year terms — his next race is November 2028.",
+      timeline: [
+        { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)", evt: "Elected to Senate", date: "November 2022",  badge: { text: "Won by 4.9 pts over Oz", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+        { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)", evt: "Sworn in",          date: "January 3, 2023", badge: nil },
+        { dot_color: "#b8860b", line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))", evt: "In office", date: "March 2026", badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" }, now: true },
+        { dot_color: "rgba(139,32,32,0.35)", line_color: nil, evt: "General Election",  date: "November 2028",  badge: { text: "~2.5 years away", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      ]
+    },
+    "M001243" => {
+      ring_pct: 0.21, ring_label: "Yr 1", ring_sub: "of 6 done",
+      ring_color: "rgb(139,26,26)",
+      term_blurb: "Year 2 of a 6-year Senate term. McCormick flipped Pennsylvania's Senate seat Republican in November 2024, defeating incumbent Bob Casey. His term runs through January 2031.",
+      timeline: [
+        { dot_color: "rgb(139,26,26)", line_color: "rgb(139,26,26)", evt: "Elected to Senate", date: "November 2024", badge: { text: "Won by 4 pts over Casey", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+        { dot_color: "rgb(139,26,26)", line_color: "rgb(139,26,26)", evt: "Sworn in",          date: "January 3, 2025", badge: nil },
+        { dot_color: "#b8860b", line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))", evt: "In office", date: "March 2026", badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" }, now: true },
+        { dot_color: "rgba(139,32,32,0.35)", line_color: nil, evt: "General Election",  date: "November 2030",  badge: { text: "~4.5 years away", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      ]
+    },
+    "E000296" => {
+      ring_pct: 0.625, ring_label: "5/8", ring_sub: "term done",
+      ring_color: "rgb(11,46,130)",
+      term_blurb: "Year 2 of a 2-year House term. All House members face voters every two years. Evans is up for re-election in November 2026 — roughly 7 months away. He has held Pennsylvania's 3rd Congressional District since 2016.",
+      timeline: [
+        { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)", evt: "Re-elected (7th term)", date: "November 2024", badge: nil },
+        { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)", evt: "Sworn in",               date: "January 3, 2025", badge: nil },
+        { dot_color: "#b8860b", line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))", evt: "In office", date: "March 2026", badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" }, now: true },
+        { dot_color: "rgba(139,32,32,0.5)", line_color: nil, evt: "General Election",  date: "November 2026",  badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
+      ]
+    }
+  }[_bioguide] || {}
+  _fed_ring_offset = federal_term.any? ? (_ring_circ * (1 - federal_term[:ring_pct])).round(2) : 0
 
   last_term = @member.dig("terms")&.last || {}
   is_senator = last_term["chamber"] == "Senate"
@@ -444,6 +502,50 @@
           <% end %>
         </div>
 
+        <%# Term & Election %>
+        <% if federal_term.any? %>
+          <div class="dp-card">
+            <div class="dp-card-title">◆ Term &amp; Election</div>
+            <div style="text-align:center; margin-bottom:14px;">
+              <div onclick="dpOpenModal('term')" style="display:inline-block; cursor:pointer;" title="Click for context">
+                <svg width="86" height="86" viewBox="0 0 86 86">
+                  <circle cx="43" cy="43" r="35" fill="none" stroke="#e8ecf4" stroke-width="6"/>
+                  <circle cx="43" cy="43" r="35" fill="none" stroke="<%= federal_term[:ring_color] %>" stroke-width="6"
+                    stroke-dasharray="<%= _ring_circ %>" stroke-dashoffset="<%= _fed_ring_offset %>"
+                    stroke-linecap="round" transform="rotate(-90 43 43)"/>
+                  <text x="43" y="39" text-anchor="middle" dominant-baseline="central"
+                    style="font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;fill:#0e1a2e;"><%= federal_term[:ring_label] %></text>
+                  <text x="43" y="57" text-anchor="middle"
+                    style="font-family:'JetBrains Mono',monospace;font-size:7px;fill:#8a9ab8;"><%= federal_term[:ring_sub] %></text>
+                </svg>
+              </div>
+              <div onclick="dpOpenModal('term')" style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#b8860b; margin-top:4px; cursor:pointer;">◆ Click for context</div>
+            </div>
+            <% federal_term[:timeline].each_with_index do |row, i| %>
+              <% tl_last = (i == federal_term[:timeline].size - 1) %>
+              <div style="display:flex; gap:10px;">
+                <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0; width:14px;">
+                  <div style="width:9px; height:9px; border-radius:50%; background:<%= row[:dot_color] %>; flex-shrink:0;<%= row[:now] ? " border:2px solid white; box-shadow:0 0 0 2px #{federal_term[:ring_color]};" : "" %>"></div>
+                  <% unless tl_last %>
+                    <div style="width:1.5px; flex:1; min-height:12px; background:<%= row[:line_color] || "#e8ecf4" %>;"></div>
+                  <% end %>
+                </div>
+                <div style="padding-bottom:<%= tl_last ? '0' : '12px' %>; flex:1;">
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:700; color:#0e1a2e;"><%= row[:evt] %></div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-top:1px;"><%= row[:date] %></div>
+                  <% if row[:badge] %>
+                    <% if row[:badge][:glow] || row[:glow] %>
+                      <span class="tl-badge-glow"><%= row[:badge][:text] %></span>
+                    <% else %>
+                      <span class="tl-badge" style="<%= row[:badge][:style] %>"><%= row[:badge][:text] %></span>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
       </div><!-- /dp-sidebar -->
     </div><!-- /dp-body -->
   </div>
@@ -785,6 +887,55 @@
       <% end %>
     </div>
 
+    <!-- Term & Election -->
+    <% if federal_term.any? %>
+      <div style="padding:12px 14px; border-bottom:1px solid #e8ebf2;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Term &amp; Election</div>
+        <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 14px;">Where We Are</h3>
+        <div style="text-align:center; margin-bottom:16px;">
+          <div onclick="openModal('modal-fed-term')" style="display:inline-block; cursor:pointer;">
+            <%
+              _small_circ   = 188.5
+              _small_offset = (_small_circ * (1 - federal_term[:ring_pct])).round(2)
+            %>
+            <svg width="76" height="76" viewBox="0 0 76 76">
+              <circle cx="38" cy="38" r="30" fill="none" stroke="#e8ecf4" stroke-width="5.5"/>
+              <circle cx="38" cy="38" r="30" fill="none" stroke="<%= federal_term[:ring_color] %>" stroke-width="5.5"
+                stroke-dasharray="<%= _small_circ %>" stroke-dashoffset="<%= _small_offset %>"
+                stroke-linecap="round" transform="rotate(-90 38 38)"/>
+              <text x="38" y="34" text-anchor="middle" dominant-baseline="central"
+                style="font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;fill:#0e1a2e;"><%= federal_term[:ring_label] %></text>
+              <text x="38" y="50" text-anchor="middle"
+                style="font-family:'JetBrains Mono',monospace;font-size:6px;fill:#8a9ab8;"><%= federal_term[:ring_sub] %></text>
+            </svg>
+          </div>
+          <div onclick="openModal('modal-fed-term')" style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#b8860b; margin-top:4px; cursor:pointer;">◆ Tap for context</div>
+        </div>
+        <% federal_term[:timeline].each_with_index do |row, i| %>
+          <% mob_last = (i == federal_term[:timeline].size - 1) %>
+          <div style="display:flex; gap:10px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0; width:14px;">
+              <div style="width:9px; height:9px; border-radius:50%; background:<%= row[:dot_color] %>; flex-shrink:0;<%= row[:now] ? " border:2px solid white; box-shadow:0 0 0 2px #{federal_term[:ring_color]};" : "" %>"></div>
+              <% unless mob_last %>
+                <div style="width:1.5px; flex:1; min-height:12px; background:<%= row[:line_color] || "#e8ecf4" %>;"></div>
+              <% end %>
+            </div>
+            <div style="padding-bottom:<%= mob_last ? '0' : '12px' %>; flex:1;">
+              <div style="font-family:'Nunito',sans-serif; font-size:10px; font-weight:700; color:#0e1a2e;"><%= row[:evt] %></div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; color:#8a9ab8; margin-top:1px;"><%= row[:date] %></div>
+              <% if row[:badge] %>
+                <% if row[:badge][:glow] || row[:glow] %>
+                  <span class="tl-badge-glow"><%= row[:badge][:text] %></span>
+                <% else %>
+                  <span class="tl-badge" style="<%= row[:badge][:style] %>"><%= row[:badge][:text] %></span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
     <!-- Q&A -->
     <div style="padding:12px 14px 28px;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Community</div>
@@ -807,6 +958,18 @@
   <!-- ─────────────────────────────────────
        SECTION 4 · MODALS
   ───────────────────────────────────────── -->
+
+  <% if federal_term.any? %>
+  <div id="modal-fed-term" class="mob-modal" onclick="if(event.target===this)closeModal('modal-fed-term')">
+    <div class="mob-sheet">
+      <div class="mob-handle"></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ Term &amp; Election</div>
+      <h3 style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 12px;">Where We Are</h3>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#4a5568; line-height:1.65; margin:0 0 22px;"><%= federal_term[:term_blurb] %></p>
+      <button class="mob-got-it" onclick="closeModal('modal-fed-term')">Got it</button>
+    </div>
+  </div>
+  <% end %>
 
   <div id="modal-attendance" class="mob-modal" onclick="if(event.target===this)closeModal('modal-attendance')">
     <div class="mob-sheet">
@@ -890,6 +1053,11 @@
       eyebrow: "◆ About Committees",
       title: "Committee Assignments",
       body: "<p>Most bills never reach a floor vote. They're assigned to a committee where they're reviewed, amended, or quietly shelved. Committee members decide what moves forward.</p><p>Knowing which committees a member sits on tells you where their power is concentrated — and which industries they're positioned to influence most.</p>"
+    },
+    term: {
+      eyebrow: "◆ Term & Election",
+      title: "Where We Are",
+      body: "<p><%= j(federal_term[:term_blurb].to_s) %></p>"
     }
   };
 
