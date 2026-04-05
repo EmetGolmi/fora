@@ -83,6 +83,26 @@ class OfficialsController < ApplicationController
       "terms"            => [{ "chamber" => "House", "district" => "2", "startYear" => 2015 }],
       "depiction"        => { "imageUrl" => "https://bioguide.congress.gov/bioguide/photo/B/B001296.jpg" },
       "addressInformation" => { "officeAddress" => "1133 Longworth House Office Building\nWashington, DC 20515", "phoneNumber" => "(202) 225-6111" }
+    },
+    "nsaval" => {
+      "bioguideId"       => "nsaval",
+      "directOrderName"  => "Nikil Saval",
+      "name"             => "Saval, Nikil",
+      "partyName"        => "Democratic",
+      "officialWebsiteUrl" => "https://www.senatornikils.com",
+      "terms"            => [{ "chamber" => "PA Senate", "district" => "1", "startYear" => 2022 }],
+      "depiction"        => { "imageUrl" => nil },
+      "addressInformation" => { "officeAddress" => "Senate Box 203001, Harrisburg PA 17120", "phoneNumber" => "(215) 952-4766" }
+    },
+    "bwaxman" => {
+      "bioguideId"       => "bwaxman",
+      "directOrderName"  => "Ben Waxman",
+      "name"             => "Waxman, Ben",
+      "partyName"        => "Democratic",
+      "officialWebsiteUrl" => "https://www.pahouse.com/waxman",
+      "terms"            => [{ "chamber" => "PA House", "district" => "182", "startYear" => 2023 }],
+      "depiction"        => { "imageUrl" => nil },
+      "addressInformation" => { "officeAddress" => "42B East Wing, Harrisburg PA 17120", "phoneNumber" => "(215) 463-5269" }
     }
   }.freeze
 
@@ -102,7 +122,9 @@ class OfficialsController < ApplicationController
   BILL_TOTALS = {
     "F000479" => { sponsored: 35,  cosponsored: 760 },
     "M001243" => { sponsored: 40,  cosponsored: 170 },
-    "E000296" => { sponsored: 10,  cosponsored: 350 }
+    "E000296" => { sponsored: 10,  cosponsored: 350 },
+    "nsaval"  => { sponsored: 25,  cosponsored: 90 },
+    "bwaxman" => { sponsored: 15,  cosponsored: 55 }
   }.freeze
 
   # 119th Congress stats (Jan 2025 – present)
@@ -115,14 +137,22 @@ class OfficialsController < ApplicationController
                      { number: "S. 1900", title: "Taiwan Non-Discrimination Act of 2025",
                        summary: "Affirms U.S. policy supporting Taiwan's meaningful participation in international organizations and opposing diplomatic efforts to exclude or diminish Taiwan's international standing." }
                    ] },
-    "E000296" => { enacted: 0, in_committee: 10, votes_cast_119: "~420 of 430" }
+    "E000296" => { enacted: 0, in_committee: 10, votes_cast_119: "~420 of 430" },
+    "nsaval"  => { enacted: 1, in_committee: 5, votes_cast_119: "~850 of 890",
+                   enacted_bills: [
+                     { number: "SB 4", title: "Whole-Home Repairs Program",
+                       summary: "Established a $125 million statewide program for home rehabilitation grants and low-interest loans for low-income homeowners — addressing critical repairs including roofing, plumbing, and electrical systems. Enacted 2025." }
+                   ] },
+    "bwaxman" => { enacted: 0, in_committee: 4, votes_cast_119: "~1,100 of 1,150" }
   }.freeze
 
   NEWS_QUERIES = {
     "F000479" => '"John Fetterman" senator Pennsylvania',
     "M001243" => '"Dave McCormick" senator Pennsylvania',
     "E000296" => '"Dwight Evans" congressman Philadelphia',
-    "B001296" => '"Brendan Boyle" congressman Pennsylvania'
+    "B001296" => '"Brendan Boyle" congressman Pennsylvania',
+    "nsaval"  => '"Nikil Saval" senator Philadelphia',
+    "bwaxman" => '"Ben Waxman" representative Philadelphia'
   }.freeze
 
   HARDCODED_BILLS = {
@@ -173,6 +203,28 @@ class OfficialsController < ApplicationController
         "latestAction" => { "text" => "Referred to the House Committee on Ways and Means.", "actionDate" => "2025-07-24" } },
       { "type" => "HR",   "number" => "3681", "title" => "Leveraging Educational Opportunity Networks (LEON) Act",
         "latestAction" => { "text" => "Referred to the House Committee on Education and Workforce.", "actionDate" => "2025-05-15" } }
+    ].freeze,
+    "nsaval" => [
+      { "type" => "SB", "number" => "601",  "title" => "Shelter First Act — bans criminalization of homelessness in Pennsylvania",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Urban Affairs & Housing", "actionDate" => "2026-01-15" } },
+      { "type" => "SB", "number" => "4",    "title" => "Whole-Home Repairs Program — $125M for housing rehabilitation statewide",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "Signed into law — 2025", "actionDate" => "2025-07-01" } },
+      { "type" => "SB", "number" => "900",  "title" => "Tenant Opportunity to Purchase Act — right of first refusal for renters facing sale",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · 2026", "actionDate" => "2026-02-01" } }
+    ].freeze,
+    "bwaxman" => [
+      { "type" => "HB", "number" => "1802", "title" => "Just Cause Eviction Act — requires landlords to cite legal cause for all evictions",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Housing & Community Development", "actionDate" => "2026-01-20" } },
+      { "type" => "HB", "number" => "1420", "title" => "Fair Workweek Act — predictable scheduling for hourly workers in retail and food service",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Labor & Industry", "actionDate" => "2025-09-10" } },
+      { "type" => "HB", "number" => "922",  "title" => "School Infrastructure Repair Fund — dedicated capital for aging school buildings",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Education", "actionDate" => "2025-06-05" } }
     ].freeze
   }.freeze
 
@@ -197,6 +249,8 @@ class OfficialsController < ApplicationController
     end
     @social = CongressSocialService.for_bioguide(bioguide_id)
     @social[:website] ||= @member["officialWebsiteUrl"]
+    state_social = { "nsaval" => { twitter: "NikilSaval", instagram: "nikilsaval" } }[bioguide_id]
+    @social.merge!(state_social) if state_social
 
     bill_type_labels = {
       "HR" => "H.R.", "S" => "S.", "HJRES" => "H.J.Res.", "SJRES" => "S.J.Res.",
@@ -354,7 +408,8 @@ end
     threads.each(&:join)
 
     if HARDCODED_BILLS.key?(bioguide_id)
-      @bills = HARDCODED_BILLS[bioguide_id].map { |b| b.merge("congress" => 119) }
+      is_state_official = %w[nsaval bwaxman].include?(bioguide_id)
+      @bills = HARDCODED_BILLS[bioguide_id].map { |b| is_state_official ? b : b.merge("congress" => 119) }
       @bills.each do |bill|
         type = bill["type"].to_s.upcase
         prefix = bill_type_labels[type] || type
@@ -369,11 +424,15 @@ end
           now  = Time.current
           rows = unmatched.map do |bill|
             raw_status = bill.dig("latestAction", "text").to_s.presence
-            { source: "congress", external_id: bill["_external_id"], identifier: bill["_identifier"],
-              title: bill["title"].to_s, status: raw_status,
-              bill_stage: CivicBill.classify_stage(raw_status),
-              status_date: (Date.parse(bill.dig("latestAction", "actionDate").to_s) rescue nil),
-              jurisdiction: "federal", created_at: now, updated_at: now }
+            { source:       is_state_official ? "pa_legislature" : "congress",
+              external_id:  bill["_external_id"],
+              identifier:   bill["_identifier"],
+              title:        bill["title"].to_s,
+              status:       raw_status,
+              bill_stage:   CivicBill.classify_stage(raw_status),
+              status_date:  (Date.parse(bill.dig("latestAction", "actionDate").to_s) rescue nil),
+              jurisdiction: is_state_official ? "pennsylvania" : "federal",
+              created_at:   now, updated_at: now }
           end
           CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status bill_stage status_date])
         end
@@ -395,7 +454,9 @@ end
       "F000479" => { x: "SenJohnFetterman", instagram: "senjohnfetterman", youtube: nil,             website: "https://www.fetterman.senate.gov" },
       "M001243" => { x: "SenMcCormickPA",   instagram: "senmccormickpa",   youtube: "SenMcCormickPA", website: "https://www.mccormick.senate.gov" },
       "E000296" => { x: "RepDwightEvans",    instagram: "repdwightevans",   youtube: nil,             website: "https://evans.house.gov" },
-      "B001296" => { x: "RepBrendanBoyle",   instagram: nil,                youtube: nil,             website: "https://boyle.house.gov" }
+      "B001296" => { x: "RepBrendanBoyle",   instagram: nil,                youtube: nil,             website: "https://boyle.house.gov" },
+      "nsaval"  => { x: "NikilSaval",        instagram: "nikilsaval",       youtube: nil,             website: "https://www.senatornikils.com" },
+      "bwaxman" => { x: nil,                 instagram: nil,                youtube: nil,             website: "https://www.pahouse.com/waxman" }
     }[bioguide_id] || {}
   end
 

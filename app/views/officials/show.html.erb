@@ -133,6 +133,28 @@
         { dot_color: "#b8860b", line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))", evt: "In office", date: "March 2026", badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" }, now: true },
         { dot_color: "rgba(139,32,32,0.5)", line_color: nil, evt: "General Election",  date: "November 2026",  badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
       ]
+    },
+    "nsaval" => {
+      ring_pct: 0.75, ring_label: "3/4", ring_sub: "years done",
+      ring_color: "rgb(11,46,130)",
+      term_blurb: "Year 3 of a 4-year Senate term. PA state senators serve staggered 4-year cycles. Saval's next election is 2028 — his first full re-election bid since winning District 1 in 2020.",
+      timeline: [
+        { dot_color: "#c8cdd8", line_color: "#e8ecf4", evt: "Larry Farnese — predecessor", date: "2009–2020 · Democrat", badge: { text: "Senator before Saval", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+        { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)", evt: "Saval sworn in", date: "December 2022", badge: nil },
+        { dot_color: "#b8860b", line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))", evt: "In office", date: "April 2026", badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" }, now: true },
+        { dot_color: "rgba(139,32,32,0.35)", line_color: nil, evt: "General Election", date: "November 2028", badge: { text: "~2.5 years away", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      ]
+    },
+    "bwaxman" => {
+      ring_pct: 0.75, ring_label: "3/4", ring_sub: "term done",
+      ring_color: "rgb(16,47,128)",
+      term_blurb: "PA House members serve 2-year terms — the shortest of any statewide office. Waxman faces voters every two years. Her next election is November 2026, now under 8 months away.",
+      timeline: [
+        { dot_color: "#c8cdd8", line_color: "#e8ecf4", evt: "Maria Donatucci — predecessor", date: "1993–2019 · Democrat", badge: { text: "Rep before Waxman", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+        { dot_color: "rgb(16,47,128)", line_color: "rgb(16,47,128)", evt: "Waxman first elected", date: "November 2022", badge: nil },
+        { dot_color: "#b8860b", line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))", evt: "In office", date: "April 2026", badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" }, now: true },
+        { dot_color: "rgba(139,32,32,0.5)", line_color: nil, evt: "General Election", date: "November 2026", badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
+      ]
     }
   }[_bioguide] || {}
   _fed_ring_offset = federal_term.any? ? (_ring_circ * (1 - federal_term[:ring_pct])).round(2) : 0
@@ -153,10 +175,15 @@
 
   last_term = @member.dig("terms")&.last || {}
   is_senator = last_term["chamber"] == "Senate"
-  office_title = if is_senator
-    "U.S. Senator · Pennsylvania"
+  office_title = case _bioguide
+  when "nsaval"  then "PA State Senator · District 1 · South Philadelphia & Center City"
+  when "bwaxman" then "PA State Representative · District 182 · South Philadelphia"
   else
-    "U.S. Representative · Congressional District #{last_term['district']}"
+    if is_senator
+      "U.S. Senator · Pennsylvania"
+    else
+      "U.S. Representative · Congressional District #{last_term['district']}"
+    end
   end
 
   bill_type_labels = {

@@ -93,6 +93,56 @@ class GovtrackService
           subcommittees: [],
           role: "Member" }
       ]
+    },
+    "nsaval" => {
+      party_vote_pct:         95.0,
+      missed_votes_pct:        3.2,
+      votes_cast:             "~850 of ~890",
+      chamber_avg_attendance: 96.0,
+      chamber_avg_party:      94.0,
+      recent_votes: [
+        { bill: "SB 4 — Whole-Home Repairs Program",               date: "Jul 2025",  position: "Yea" },
+        { bill: "PA Fiscal Year 2025-26 Budget",                   date: "Jun 2025",  position: "Yea" },
+        { bill: "PA Clean Slate Expansion (HB 689)",               date: "Apr 2025",  position: "Yea" },
+        { bill: "SB 601 — Shelter First Act (first reading)",      date: "Jan 2026",  position: "Yea" },
+      ],
+      committees: [
+        { name: "PA Senate Urban Affairs & Housing",
+          subcommittees: [],
+          role: "Chair" },
+        { name: "PA Senate Banking & Insurance",
+          subcommittees: [],
+          role: "Member" },
+        { name: "PA Senate Communications & Technology",
+          subcommittees: [],
+          role: "Member" },
+        { name: "PA Senate Environmental Resources & Energy",
+          subcommittees: [],
+          role: "Member" }
+      ]
+    },
+    "bwaxman" => {
+      party_vote_pct:         91.0,
+      missed_votes_pct:        4.8,
+      votes_cast:             "~1,100 of ~1,150",
+      chamber_avg_attendance: 95.0,
+      chamber_avg_party:      93.0,
+      recent_votes: [
+        { bill: "HB 1 — Minimum Wage Increase",                    date: "Mar 2025",  position: "Yea" },
+        { bill: "PA Whole-Home Repairs Program",                   date: "Jul 2025",  position: "Yea" },
+        { bill: "PA FY 2025-26 Budget",                            date: "Jun 2025",  position: "Yea" },
+      ],
+      committees: [
+        { name: "PA House Housing & Community Development",
+          subcommittees: [],
+          role: "Member" },
+        { name: "PA House Labor & Industry",
+          subcommittees: [],
+          role: "Member" },
+        { name: "PA House Education",
+          subcommittees: [],
+          role: "Member" }
+      ]
     }
   }.freeze
 
