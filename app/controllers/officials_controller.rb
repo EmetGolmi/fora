@@ -5,7 +5,9 @@ class OfficialsController < ApplicationController
   WIKI_FILENAMES = {
     "F000479" => "John_Fetterman_official_portrait.jpg",
     "M001243" => "McCormick_Portrait_(HR).jpg",
-    "E000296" => "Dwight_Evans_official_photo_(cropped).jpg"
+    "E000296" => "Dwight_Evans_official_photo_(cropped).jpg",
+    "nsaval"  => "Nikil_Saval_press_conference.jpg",
+    "bwaxman" => "WaxmanSpeaking32BJ_(cropped).jpg"
   }.freeze
 
   FEC_IDS = {
