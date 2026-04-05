@@ -14,7 +14,7 @@ class SeedShapiroPerson < ActiveRecord::Migration[8.1]
       party:              "Democrat",
       term_start:         Date.new(2023, 1, 17),
       term_end:           Date.new(2027, 1, 19),
-      photo_url:          "https://www.governor.pa.gov/wp-content/uploads/2023/01/Shapiro-Official-Portrait.jpg",
+      photo_url:          "https://www.nga.org/wp-content/uploads/2023/01/JDS_headshot.png",
       website_url:        "https://www.governor.pa.gov",
       contact_url:        "https://www.governor.pa.gov/contact",
       twitter_handle:     "GovernorShapiro",
