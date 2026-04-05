@@ -156,17 +156,14 @@
           <div class="budget-total">$<%= official.budget_total_billions %>B</div>
           <div class="budget-sub">General fund proposed</div>
           <div class="budget-seg-wrap">
-            <%
-              seg_colors = { 'education' => '#378add', 'health' => '#1d9e75', 'transportation' => '#ba7517', 'safety' => '#993556', 'other' => '#888780' }
-            %>
             <% official.budget_breakdown.each do |category, pct| %>
-              <div class="budget-seg" style="width: <%= pct %>%; background: <%= seg_colors[category] || '#888780' %>;"></div>
+              <div class="budget-seg" style="width: <%= pct %>%; background: <%= budget_segment_color(category) %>;"></div>
             <% end %>
           </div>
           <div class="budget-legend">
             <% official.budget_breakdown.each do |category, pct| %>
               <div class="budget-leg-item">
-                <div class="budget-dot" style="background: <%= seg_colors[category] || '#888780' %>;"></div>
+                <div class="budget-dot" style="background: <%= budget_segment_color(category) %>;"></div>
                 <%= category.capitalize %> <%= pct %>%
               </div>
             <% end %>
