@@ -51,3 +51,43 @@ shapiro.assign_attributes(
 )
 shapiro.save!
 puts "Seeded: #{shapiro.full_name} (#{shapiro.office_title})"
+
+# ── Pennsylvania Attorney General ──
+sunday = Person.find_or_initialize_by(slug: 'dsunday-pa-ag')
+sunday.assign_attributes(
+  name:                'Dave Sunday',
+  full_name:           'Dave Sunday',
+  first_name:          'Dave',
+  last_name:           'Sunday',
+  party:               'Republican',
+  state:               'PA',
+  office_type:         'attorney_general',
+  office_title:        'Attorney General of Pennsylvania',
+  term_start:          Date.new(2025, 1, 21),
+  term_end:            Date.new(2029, 1, 1),
+  website_url:         'https://www.attorneygeneral.gov',
+  contact_url:         'https://www.attorneygeneral.gov/contact/',
+  twitter_handle:      'PAAttorneyGen',
+  approval_rating:     nil,
+  approval_source:     nil,
+  data_as_of:          'March 2026',
+  divided_government:  true,
+  divided_gov_note:    'Sunday is a Republican AG operating alongside a Democratic governor. His office sets enforcement priorities independently of the Shapiro administration.',
+  policy_priorities: [
+    { name: 'Fentanyl & opioid prosecution',    level: 'high',   color: '#a32d2d' },
+    { name: 'Consumer protection & fraud',       level: 'high',   color: '#378add' },
+    { name: 'Human trafficking enforcement',     level: 'high',   color: '#993556' },
+    { name: 'Election integrity investigations', level: 'medium', color: '#ba7517' },
+    { name: 'Antitrust & corporate accountability', level: 'medium', color: '#534ab7' }
+  ],
+  executive_orders: nil,
+  veto_record:      nil,
+  veto_count:       nil,
+  bills_signed_count: nil,
+  lt_governor_name:   nil,
+  lt_governor_initials: nil,
+  budget_total_billions: 0.15,
+  budget_breakdown: { criminal_prosecution: 42, civil_litigation: 28, consumer_protection: 18, administration: 12 }
+)
+sunday.save!
+puts "Seeded: #{sunday.full_name}"
