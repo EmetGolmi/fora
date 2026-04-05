@@ -13,21 +13,45 @@
 
   gov_initials = "#{official.first_name[0]}#{official.last_name[0]}"
 
-  gov_timeline = [
-    { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
-      evt: "Elected Governor", date: "November 2022",
-      badge: { text: "Won by 14.8 pts over Mastriano", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
-    { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
-      evt: "Sworn in", date: "January 17, 2023", badge: nil },
-    { dot_color: "#b8860b",
-      line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
-      evt: "In office", date: official.data_as_of,
-      badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
-      now: true },
-    { dot_color: "rgba(139,32,32,0.5)", line_color: nil,
-      evt: "General Election", date: "November 2026",
-      badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
-  ]
+  exec_timeline = case official.office_type
+  when "governor"
+    [
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Elected Governor", date: "November 2022",
+        badge: { text: "Won by 14.8 pts over Mastriano", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Sworn in", date: "January 17, 2023", badge: nil },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.5)", line_color: nil,
+        evt: "General Election", date: "November 2026",
+        badge: { text: "⚡ ~7 months away", glow: true }, glow: true },
+    ]
+  when "mayor"
+    [
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Won Democratic primary", date: "May 2023",
+        badge: { text: "47% in crowded primary field", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Elected Mayor", date: "November 2023",
+        badge: { text: "83.8% of the vote", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Sworn in — 100th Mayor of Philadelphia", date: "January 1, 2024", badge: nil },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.35)", line_color: nil,
+        evt: "General Election", date: "November 2027",
+        badge: { text: "~18 months away", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+    ]
+  else
+    []
+  end
 
   news_dot_colors = ["#378add", "#639922", "#b8860b", "#e24b4a", "#8a40b4"]
 %>
@@ -193,12 +217,12 @@
           <div class="dp-card-title">◆ Contact</div>
           <div class="dp-card-entry">
             <div class="dp-card-sublabel">Office</div>
-            <div class="dp-card-text">508 Main Capitol Building · Harrisburg, PA 17120</div>
+            <div class="dp-card-text"><%= official.office_address.presence || "Office address on file" %></div>
           </div>
           <% if official.website_url.present? %>
             <div class="dp-card-entry">
               <div class="dp-card-sublabel">Website</div>
-              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;">governor.pa.gov ↗</a>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;"><%= official.website_url.gsub(/^https?:\/\//, '').split('/').first %> ↗</a>
             </div>
           <% end %>
           <% if official.contact_url.present? %>
@@ -212,7 +236,7 @@
         <%# Budget %>
         <% if official.budget_total_billions.present? && official.budget_breakdown.present? %>
         <div class="dp-card">
-          <div class="dp-card-title">◆ FY 2025–26 Budget Proposal</div>
+          <div class="dp-card-title">◆ FY 2025–26 Budget</div>
           <div style="font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; color:#1b3a6b; line-height:1; margin-bottom:2px;">$<%= official.budget_total_billions %>B</div>
           <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; text-transform:uppercase; letter-spacing:.1em; margin-bottom:14px;">General fund proposed</div>
           <div style="display:flex; height:8px; border-radius:4px; overflow:hidden; margin-bottom:10px;">
@@ -275,8 +299,8 @@
                 style="font-family:'JetBrains Mono',monospace;font-size:7px;fill:#8a9ab8;">of 4 done</text>
             </svg>
           </div>
-          <% gov_timeline.each_with_index do |row, i| %>
-            <% tl_last = (i == gov_timeline.size - 1) %>
+          <% exec_timeline.each_with_index do |row, i| %>
+            <% tl_last = (i == exec_timeline.size - 1) %>
             <div style="display:flex; gap:10px;">
               <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0; width:14px;">
                 <div style="width:9px; height:9px; border-radius:50%; background:<%= row[:dot_color] %>; flex-shrink:0;<%= row[:now] ? " border:2px solid white; box-shadow:0 0 0 2px #{ring_color};" : "" %>"></div>

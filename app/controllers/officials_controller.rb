@@ -532,6 +532,12 @@ end
     render :show
   end
 
+  def philly_mayor
+    @official     = Person.find_by!(slug: 'cparker-philly-mayor')
+    @profile_type = :mayor
+    render :show
+  end
+
   private
 
   def extract_state_social(links)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_05_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_05_155000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,6 +91,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_05_130000) do
     t.string "lt_governor_initials"
     t.string "lt_governor_name"
     t.string "name", null: false
+    t.string "office_address"
     t.string "office_title"
     t.string "office_type"
     t.string "party"
