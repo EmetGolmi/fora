@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_05_050351) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_05_050744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -79,21 +79,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_05_050351) do
     t.integer "bills_signed_count"
     t.jsonb "budget_breakdown", default: {}
     t.decimal "budget_total_billions", precision: 8, scale: 2
+    t.string "contact_url"
     t.datetime "created_at", null: false
+    t.string "data_as_of"
     t.string "divided_gov_note"
     t.boolean "divided_government"
     t.jsonb "executive_orders", default: []
+    t.string "first_name"
+    t.string "full_name"
+    t.string "last_name"
     t.string "lt_governor_initials"
     t.string "lt_governor_name"
     t.string "name", null: false
+    t.string "office_title"
     t.string "office_type"
     t.string "party"
+    t.string "photo_url"
     t.jsonb "policy_priorities", default: []
     t.string "slug", null: false
     t.string "state", default: "PA"
+    t.date "term_end"
+    t.date "term_start"
+    t.string "twitter_handle"
     t.datetime "updated_at", null: false
     t.integer "veto_count"
     t.jsonb "veto_record", default: []
+    t.string "website_url"
     t.index ["office_type"], name: "index_people_on_office_type"
     t.index ["slug"], name: "index_people_on_slug", unique: true
   end
