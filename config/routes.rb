@@ -10,6 +10,16 @@ Rails.application.routes.draw do
 
   get "bills/:id",          to: "bills#show",         as: :bill
 
+  # Friendly slug URLs for specific officials
+  get "officials/usa/pa/jfetterman", to: "officials#show", defaults: { bioguide_id: "F000479" }
+  get "officials/usa/pa/dmccormick", to: "officials#show", defaults: { bioguide_id: "M001243" }
+  get "officials/usa/pa/devans",     to: "officials#show", defaults: { bioguide_id: "E000296" }
+
+  # Redirect old bioguide URLs to friendly slugs for known officials
+  get "officials/F000479", to: redirect("/officials/usa/pa/jfetterman")
+  get "officials/M001243", to: redirect("/officials/usa/pa/dmccormick")
+  get "officials/E000296", to: redirect("/officials/usa/pa/devans")
+
   # Bioguide IDs are always one uppercase letter + six digits (e.g. F000479)
   # Constraint prevents "state" from matching as a bioguide_id
   get "officials/:bioguide_id",
