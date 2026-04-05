@@ -99,6 +99,12 @@ class OfficialsController < ApplicationController
     "B001296" => { party_vote_pct: 97.0, missed_votes_pct:  5.2, votes_cast: "~1,280 of ~1,350", chamber_avg_attendance: 95.0, chamber_avg_party: 92.0 }
   }.freeze
 
+  BILL_TOTALS = {
+    "F000479" => { sponsored: 35,  cosponsored: 760 },
+    "M001243" => { sponsored: 40,  cosponsored: 170 },
+    "E000296" => { sponsored: 10,  cosponsored: 350 }
+  }.freeze
+
   NEWS_QUERIES = {
     "F000479" => '"John Fetterman" senator Pennsylvania',
     "M001243" => '"Dave McCormick" senator Pennsylvania',
@@ -360,6 +366,11 @@ end
         end
         @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
       end
+    end
+
+    if (bt = BILL_TOTALS[bioguide_id])
+      @total_bills_sponsored   = bt[:sponsored]
+      @total_bills_cosponsored = bt[:cosponsored]
     end
 
     fec_cand_id = FEC_IDS[bioguide_id]

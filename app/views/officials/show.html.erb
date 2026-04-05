@@ -182,7 +182,7 @@
     else                    "#5a6e8a"
     end
 
-  bills_count   = @bills.size
+  bills_count   = @total_bills_sponsored || @bills.size
   name_initials = @member['directOrderName'].to_s.split.map(&:first).first(2).join
   votes_cast    = @member["totalVotingRecords"].presence || "—"
   estimated_votes = if @member["totalVotingRecords"].present?
@@ -707,7 +707,8 @@
         <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b;">◆ Bills Sponsored</span>
         <button onclick="openModal('modal-committees')" style="background:none; border:.5px solid #b8860b; border-radius:3px; padding:2px 7px; font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; color:#b8860b; cursor:pointer;">ⓘ info</button>
       </div>
-      <% [["This Session", bills_count.to_s], ["Passed into Law", "—"], ["In Committee", "—"]].each do |label, val| %>
+      <% cospon_val = @total_bills_cosponsored ? "~#{@total_bills_cosponsored}" : "—" %>
+      <% [["This Session", "~#{bills_count}"], ["Cosponsored", cospon_val], ["Passed into Law", "—"], ["In Committee", "—"]].each do |label, val| %>
         <div style="display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid #eef0f3;">
           <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#5a6e8a;"><%= label %></span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#1b3a6b;"><%= val %></span>
@@ -1094,7 +1095,7 @@
     bills: {
       eyebrow: "◆ About This Stat",
       title: "Bills Sponsored",
-      body: "<p>This counts legislation introduced in the current session of Congress by this member as a primary sponsor.</p><p>Sponsoring a bill doesn't mean it will pass — most bills never reach a floor vote. But it does show which issues a member is willing to put their name on.</p>"
+      body: "<p>This counts legislation introduced in the current session of Congress by this member as a primary sponsor.</p><p>Sponsoring a bill doesn't mean it will pass — most bills never reach a floor vote. But it does show which issues a member is willing to put their name on.</p><%= @total_bills_cosponsored ? \"<p style='margin-top:10px;'><strong>Cosponsored bills (119th Congress): ~#{@total_bills_cosponsored}</strong> — bills introduced by colleagues this member has formally endorsed.</p>\" : '' %>"
     },
     finance: {
       eyebrow: "◆ About This Stat",
