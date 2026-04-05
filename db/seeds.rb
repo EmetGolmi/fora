@@ -2,6 +2,38 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
+# ── Shapiro veto bills ────────────────────────────────────────────────────────
+hb1190 = CivicBill.find_or_initialize_by(source: 'pa_legislature', external_id: 'pa-2023-hb1190')
+hb1190.assign_attributes(
+  jurisdiction: 'PA', identifier: 'HB 1190',
+  title:        'An Act amending Title 18 (Crimes and Offenses) of the Pennsylvania Consolidated Statutes, in firearms and other dangerous articles, further providing for persons not to possess, use, manufacture, control, sell or transfer firearms.',
+  status:       'Vetoed', status_date: Date.new(2023, 7, 3),
+  bill_stage:   'Vetoed',
+  full_text_url: 'https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm?syear=2023&sind=0&body=H&type=B&bn=1190'
+)
+hb1190.save!
+
+sb292 = CivicBill.find_or_initialize_by(source: 'pa_legislature', external_id: 'pa-2023-sb292')
+sb292.assign_attributes(
+  jurisdiction: 'PA', identifier: 'SB 292',
+  title:        'An Act amending the act of June 3, 1937 (P.L.1333, No.320), known as the Pennsylvania Election Code, providing for photo identification requirements for voting.',
+  status:       'Vetoed', status_date: Date.new(2024, 6, 28),
+  bill_stage:   'Vetoed',
+  full_text_url: 'https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm?syear=2023&sind=0&body=S&type=B&bn=292'
+)
+sb292.save!
+
+sb1 = CivicBill.find_or_initialize_by(source: 'pa_legislature', external_id: 'pa-2023-sb1')
+sb1.assign_attributes(
+  jurisdiction: 'PA', identifier: 'SB 1',
+  title:        'An Act providing for the Pennsylvania Award for Student Success (PASS) program; establishing the PASS Account and providing for its use; and imposing duties on the Department of Education.',
+  status:       'Vetoed', status_date: Date.new(2023, 6, 30),
+  bill_stage:   'Vetoed',
+  full_text_url: 'https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm?syear=2023&sind=0&body=S&type=B&bn=1'
+)
+sb1.save!
+puts "Seeded: Shapiro veto bills (HB 1190, SB 292, SB 1)"
+
 # ── PA Governor: Josh Shapiro ────────────────────────────────────────────────
 shapiro = Person.find_or_initialize_by(slug: 'jshapiro-pa-gov')
 shapiro.assign_attributes(
@@ -43,9 +75,9 @@ shapiro.assign_attributes(
     { number: 'EO 2023-02', title: 'Reinstating protections against discrimination in state employment for LGBTQ+ workers',   category: 'Civil Rights', date: 'Jan 2023' }
   ],
   veto_record: [
-    { bill: 'HB 1190', title: 'Constitutional carry',    note: 'Permitless concealed carry — vetoed Jul 2023',                         outcome: 'vetoed' },
-    { bill: 'SB 292',  title: 'Voter ID expansion',      note: 'Expanded photo ID requirements — vetoed Jun 2024',                     outcome: 'vetoed' },
-    { bill: 'SB 1',    title: 'School choice vouchers',  note: 'PASS voucher program — vetoed Jun 2023 · Override attempt failed',      outcome: 'vetoed' }
+    { bill: 'HB 1190', title: 'Constitutional carry',    note: 'Permitless concealed carry — vetoed Jul 2023',                         outcome: 'vetoed', bill_id: hb1190.id },
+    { bill: 'SB 292',  title: 'Voter ID expansion',      note: 'Expanded photo ID requirements — vetoed Jun 2024',                     outcome: 'vetoed', bill_id: sb292.id  },
+    { bill: 'SB 1',    title: 'School choice vouchers',  note: 'PASS voucher program — vetoed Jun 2023 · Override attempt failed',      outcome: 'vetoed', bill_id: sb1.id    }
   ],
   data_as_of: 'March 2026'
 )

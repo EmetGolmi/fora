@@ -224,6 +224,9 @@
           <h2 class="dp-section-title">Veto Record <span style="font-size:13px; font-weight:400; color:#8a9ab8; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;"><%= official.veto_count %> this term</span></h2>
           <% official.veto_record.each do |v| %>
             <% rail_color = { "vetoed" => "#7a1515", "signed" => "#27500A", "overridden" => "#633806" }[v['outcome']] || "#5a6e8a" %>
+            <% if v['bill_id'].present? %>
+            <a href="/bills/<%= v['bill_id'] %>" style="text-decoration:none; display:block;">
+            <% end %>
             <div class="eo-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s;">
               <div style="width:8px; background:<%= rail_color %>; flex-shrink:0;"></div>
               <div style="flex:1; padding:11px 14px;">
@@ -232,6 +235,9 @@
                 <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8;"><%= v['note'] %></div>
               </div>
             </div>
+            <% if v['bill_id'].present? %>
+            </a>
+            <% end %>
           <% end %>
         </div>
         <% end %>
