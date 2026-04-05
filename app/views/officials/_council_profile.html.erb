@@ -1,0 +1,513 @@
+<%
+  initials      = "#{official.first_name[0]}#{official.last_name[0]}"
+  term_start    = official.term_start
+  term_end      = official.term_end
+  total_days    = (term_end - term_start).to_i.clamp(1, 99_999)
+  elapsed_days  = [(Date.today - term_start).to_i, total_days].min.clamp(0, total_days)
+  ring_pct      = elapsed_days.to_f / total_days
+  _ring_circ    = 219.9
+  ring_offset   = (_ring_circ * (1 - ring_pct)).round(2)
+  year_num      = (elapsed_days / 365.25).floor + 1
+  ring_color    = "rgb(11,46,130)"
+
+  vote_colors   = { 'yes' => '#155c2d', 'no' => '#7a1515', 'abstain' => '#5a6e8a' }
+  vote_labels   = { 'yes' => 'Yea', 'no' => 'Nay', 'abstain' => 'Abstain' }
+  tag_colors    = { 'green' => '#155c2d', 'blue' => '#1b3a6b', 'amber' => '#b8860b', 'red' => '#7a1515' }
+  tag_bgs       = { 'green' => 'rgba(21,92,45,0.08)', 'blue' => 'rgba(27,58,107,0.08)', 'amber' => 'rgba(184,134,11,0.08)', 'red' => 'rgba(122,21,21,0.08)' }
+%>
+
+<!-- ══════════════════════════════════════════
+     DESKTOP LAYOUT
+══════════════════════════════════════════ -->
+<div class="desktop-profile">
+
+  <%# Hero %>
+  <div class="dp-hero">
+    <div style="position:absolute; right:-40px; top:-60px; width:340px; height:340px; border-radius:50%; border:36px solid rgba(255,255,255,0.025); pointer-events:none;"></div>
+    <div style="position:absolute; right:40px; top:-20px; width:200px; height:200px; border-radius:50%; border:1px solid rgba(184,134,11,0.15); pointer-events:none;"></div>
+
+    <div class="dp-hero-inner">
+      <a href="javascript:history.back()" class="dp-hero-back">← My Government</a>
+
+      <div class="dp-hero-identity">
+        <div class="dp-avatar">
+          <% if official.photo_url.present? %>
+            <img src="<%= official.photo_url %>" alt="<%= official.full_name %>">
+          <% else %>
+            <div class="dp-avatar-initials"><%= initials %></div>
+          <% end %>
+          <div class="dp-avatar-badge">✓</div>
+        </div>
+
+        <div>
+          <h1 class="dp-name"><%= official.full_name %></h1>
+          <p class="dp-office-title"><%= official.office_title %></p>
+          <div class="dp-tags">
+            <span class="dp-tag" style="background:rgba(29,78,216,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd;"><%= official.party %></span>
+            <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">Philadelphia</span>
+            <% if official.district_name.present? %>
+              <span class="dp-tag" style="border-color:rgba(184,134,11,0.4); background:rgba(184,134,11,0.1); color:#d4a832;">District <%= official.district_number %> · <%= official.district_name %></span>
+            <% end %>
+          </div>
+          <div class="dp-social">
+            <% if official.website_url.present? %>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-social-link" title="Official Website">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+            <% end %>
+            <% if official.twitter_handle.present? %>
+              <a href="https://x.com/<%= official.twitter_handle %>" target="_blank" rel="noopener" class="dp-social-link" title="X / Twitter">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            <% end %>
+            <button onclick="navigator.share ? navigator.share({title:'<%= official.full_name %> — FORA', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)" class="dp-social-link" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;" title="Share this profile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:rgba(255,255,255,0.55);"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <%# Stat bar %>
+      <div class="dp-stat-bar">
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.bills_introduced_count || '—' %></div>
+          <div class="dp-stat-label">Bills Introduced</div>
+        </div>
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.bills_passed_count || '—' %></div>
+          <div class="dp-stat-label">Bills Passed</div>
+        </div>
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
+          <div class="dp-stat-label">Attendance</div>
+        </div>
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
+          <div class="dp-stat-label">Party-Line Votes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+
+  <%# Body %>
+  <div style="background:#f2f4f8; padding:1px 0;">
+    <div class="dp-body">
+
+      <%# ── MAIN COLUMN ── %>
+      <div class="dp-main">
+
+        <%# Issue Focus Areas %>
+        <% if official.issue_focus_areas.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Legislative Record</div>
+          <h2 class="dp-section-title">Issue Focus Areas</h2>
+          <% official.issue_focus_areas.each do |area| %>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+              <div style="width:8px; height:8px; border-radius:50%; background:<%= area['color'] %>; flex-shrink:0;"></div>
+              <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#2d3a50; flex:1; line-height:1.4;"><%= area['name'] %></div>
+              <div style="width:100px; height:5px; background:#e8ecf4; border-radius:3px; overflow:hidden; flex-shrink:0;">
+                <div style="width:<%= area['pct'] %>%; height:100%; background:<%= area['color'] %>; border-radius:3px;"></div>
+              </div>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:8px; color:#8a9ab8; width:52px; text-align:right; flex-shrink:0;"><%= area['bills_count'] %> bills</span>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <%# Recent Votes %>
+        <% if official.recent_votes.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Voting Record</div>
+          <h2 class="dp-section-title">Recent Votes</h2>
+          <% official.recent_votes.each do |v| %>
+            <% vc = vote_colors[v['vote']] || '#5a6e8a' %>
+            <div class="eo-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s;">
+              <div style="width:8px; background:<%= vc %>; flex-shrink:0;"></div>
+              <div style="flex:1; padding:11px 14px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:<%= vc %>;">
+                    <%= vote_labels[v['vote']] || v['vote'].capitalize %> · <%= v['bill'] %> · <%= v['date'] %>
+                  </div>
+                  <% if v['tag'].present? %>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:100px; background:#f0f3f8; color:#5a6e8a; border:0.5px solid #dde5f5;"><%= v['tag'] %></span>
+                  <% end %>
+                </div>
+                <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:4px;"><%= v['title'] %></div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8;"><%= v['result'] %></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <%# Committees %>
+        <% if official.committees.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Council Assignments</div>
+          <h2 class="dp-section-title">Committees</h2>
+          <% official.committees.each do |c| %>
+            <% is_chair = c['role'].to_s.downcase == 'chair' %>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+              <div style="width:8px; height:8px; border-radius:2px; background:<%= is_chair ? '#b8860b' : '#e8ecf4' %>; flex-shrink:0;"></div>
+              <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#2d3a50; flex:1; line-height:1.4;"><%= c['name'] %></div>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; padding:3px 9px; border-radius:100px;
+                           background:<%= is_chair ? 'rgba(184,134,11,0.1)' : '#f0f3f8' %>;
+                           color:<%= is_chair ? '#b8860b' : '#5a6e8a' %>;
+                           border:0.5px solid <%= is_chair ? 'rgba(184,134,11,0.3)' : '#dde5f5' %>;"><%= c['role'].capitalize %></span>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <%# Upcoming Events %>
+        <% if official.upcoming_events.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Calendar</div>
+          <h2 class="dp-section-title">Upcoming Events</h2>
+          <% official.upcoming_events.each do |ev| %>
+            <% tc = tag_colors[ev['tag_color']] || '#5a6e8a' %>
+            <% tb = tag_bgs[ev['tag_color']]   || 'rgba(90,110,138,0.08)' %>
+            <div style="display:flex; align-items:stretch; gap:14px; padding:10px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+              <div style="width:42px; flex-shrink:0; background:white; border:1px solid #dde5f5; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 0;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.1em; color:#8a9ab8;"><%= ev['month'] %></div>
+                <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; line-height:1;"><%= ev['day'] %></div>
+              </div>
+              <div style="flex:1;">
+                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:3px;"><%= ev['title'] %></div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8; margin-bottom:5px;"><%= ev['location'] %></div>
+                <% if ev['tag'].present? %>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:<%= tb %>; color:<%= tc %>; border:0.5px solid <%= tc %>33;"><%= ev['tag'] %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <%# Q&A %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Community</div>
+          <h2 class="dp-section-title">Q&amp;A</h2>
+          <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:32px; text-align:center;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">Coming Soon</div>
+            <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#5a6e8a; line-height:1.6; margin:0;">Ask questions about this official's record and positions.</p>
+          </div>
+        </div>
+
+        <%# Data note %>
+        <div style="border-top:1px solid #e0e5ef; padding-top:14px; margin-top:4px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ Data Note</div>
+          <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; line-height:1.6; margin:0;">Data as of <%= official.data_as_of %>. Sources: Philadelphia City Council, Office of the City Clerk, phlcouncil.com.</p>
+        </div>
+
+      </div><!-- /dp-main -->
+
+      <%# ── SIDEBAR ── %>
+      <div class="dp-sidebar">
+
+        <%# Contact %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Contact</div>
+          <% if official.office_address.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">District Office</div>
+              <div class="dp-card-text"><%= official.office_address %></div>
+            </div>
+          <% end %>
+          <% if official.office_phone.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Phone</div>
+              <a href="tel:<%= official.office_phone.gsub(/\D/,'') %>" class="dp-card-text" style="text-decoration:none; color:#1b3a6b;"><%= official.office_phone %></a>
+            </div>
+          <% end %>
+          <% if official.office_hours.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Office Hours</div>
+              <div class="dp-card-text"><%= official.office_hours %></div>
+            </div>
+          <% end %>
+          <% if official.website_url.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Website</div>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;"><%= official.website_url.gsub(/^https?:\/\//, '').split('/').first %> ↗</a>
+            </div>
+          <% end %>
+          <% if official.contact_url.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Constituent Request</div>
+              <a href="<%= official.contact_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;">Submit online ↗</a>
+            </div>
+          <% end %>
+        </div>
+
+        <%# District Info %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ District <%= official.district_number %></div>
+          <% if official.district_population.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">Population</span>
+              <span class="dp-card-value"><%= number_with_delimiter(official.district_population) %></span>
+            </div>
+          <% end %>
+          <% if official.district_median_income.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">Median Income</span>
+              <span class="dp-card-value">$<%= number_with_delimiter(official.district_median_income) %></span>
+            </div>
+          <% end %>
+          <% if official.district_owner_occupancy_pct.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">Owner-Occupied</span>
+              <span class="dp-card-value"><%= official.district_owner_occupancy_pct %>%</span>
+            </div>
+          <% end %>
+          <% if official.district_neighborhoods_count.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">Neighborhoods</span>
+              <span class="dp-card-value"><%= official.district_neighborhoods_count %></span>
+            </div>
+          <% end %>
+          <% if official.district_rco_count.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">RCOs</span>
+              <span class="dp-card-value"><%= official.district_rco_count %></span>
+            </div>
+          <% end %>
+          <% if official.district_neighborhoods.present? %>
+            <div style="margin-top:10px; padding-top:10px; border-top:1px solid #f0f2f7;">
+              <div class="dp-card-sublabel" style="margin-bottom:6px;">Neighborhoods</div>
+              <div style="display:flex; flex-wrap:wrap; gap:4px;">
+                <% official.district_neighborhoods.first(6).each do |n| %>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.06em; padding:2px 7px; border-radius:100px; background:#f0f3f8; color:#5a6e8a; border:0.5px solid #dde5f5;"><%= n %></span>
+                <% end %>
+                <% if official.district_neighborhoods.size > 6 %>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.06em; padding:2px 7px; border-radius:100px; background:#f0f3f8; color:#8a9ab8;">+<%= official.district_neighborhoods.size - 6 %> more</span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Term %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Term &amp; Service</div>
+          <div style="text-align:center; margin-bottom:14px;">
+            <svg width="86" height="86" viewBox="0 0 86 86">
+              <circle cx="43" cy="43" r="35" fill="none" stroke="#e8ecf4" stroke-width="6"/>
+              <circle cx="43" cy="43" r="35" fill="none" stroke="<%= ring_color %>" stroke-width="6"
+                stroke-dasharray="<%= _ring_circ %>" stroke-dashoffset="<%= ring_offset %>"
+                stroke-linecap="round" transform="rotate(-90 43 43)"/>
+              <text x="43" y="39" text-anchor="middle" dominant-baseline="central"
+                style="font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;fill:#0e1a2e;"><%= "Yr #{year_num}" %></text>
+              <text x="43" y="57" text-anchor="middle"
+                style="font-family:'JetBrains Mono',monospace;font-size:7px;fill:#8a9ab8;">of term</text>
+            </svg>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">In office since</span>
+            <span class="dp-card-value"><%= official.term_start.year %></span>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Current term ends</span>
+            <span class="dp-card-value"><%= official.term_end.year %></span>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Years serving</span>
+            <span class="dp-card-value"><%= Date.today.year - official.term_start.year %></span>
+          </div>
+        </div>
+
+        <%# Voting stats %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Legislative Stats</div>
+          <% if official.bills_introduced_count.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">Bills introduced</span>
+              <span class="dp-card-value"><%= official.bills_introduced_count %></span>
+            </div>
+          <% end %>
+          <% if official.bills_passed_count.present? %>
+            <div class="dp-card-row">
+              <span class="dp-card-label">Bills passed</span>
+              <span class="dp-card-value"><%= official.bills_passed_count %></span>
+            </div>
+          <% end %>
+          <% if official.bills_introduced_count.present? && official.bills_passed_count.present? && official.bills_introduced_count > 0 %>
+            <% pass_rate = (official.bills_passed_count.to_f / official.bills_introduced_count * 100).round %>
+            <div style="margin-top:10px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span class="dp-card-label">Pass rate</span>
+                <span class="dp-card-value"><%= pass_rate %>%</span>
+              </div>
+              <div style="height:5px; background:#e8ecf4; border-radius:3px; overflow:hidden;">
+                <div style="width:<%= pass_rate %>%; height:100%; background:#1b3a6b; border-radius:3px;"></div>
+              </div>
+            </div>
+          <% end %>
+          <% if official.attendance_rate_pct.present? %>
+            <div style="margin-top:10px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span class="dp-card-label">Attendance</span>
+                <span class="dp-card-value"><%= official.attendance_rate_pct %>%</span>
+              </div>
+              <div style="height:5px; background:#e8ecf4; border-radius:3px; overflow:hidden;">
+                <div style="width:<%= official.attendance_rate_pct %>%; height:100%; background:<%= official.attendance_rate_pct.to_i >= 90 ? '#155c2d' : official.attendance_rate_pct.to_i >= 75 ? '#b8860b' : '#7a1515' %>; border-radius:3px;"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+      </div><!-- /dp-sidebar -->
+    </div><!-- /dp-body -->
+  </div>
+
+</div><!-- /desktop-profile -->
+
+<!-- ══════════════════════════════════════════
+     MOBILE LAYOUT
+══════════════════════════════════════════ -->
+<div class="mobile-profile">
+  <div style="background:#0a1220; min-height:100vh;">
+
+    <!-- Photo / initials header -->
+    <div style="position:relative; height:200px; overflow:hidden; background:linear-gradient(160deg,#0d1f3c,#0a1220);">
+      <% if official.photo_url.present? %>
+        <img src="<%= official.photo_url %>" alt="<%= official.full_name %>"
+             style="width:100%; height:100%; object-fit:cover; object-position:center top; opacity:0.7;">
+      <% else %>
+        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+          <div style="width:90px; height:90px; border-radius:50%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:32px; font-weight:700; color:#d4a832;"><%= initials %></div>
+        </div>
+      <% end %>
+      <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#003087); pointer-events:none;"></div>
+    </div>
+
+    <!-- Nameplate -->
+    <div style="background:#003087; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
+      <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:white; line-height:1.2;"><%= official.full_name %></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.12em; color:#d4a832; margin-top:3px;"><%= official.office_title %></div>
+    </div>
+
+    <!-- Quick stats strip -->
+    <div style="background:#003087; display:flex;">
+      <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.bills_passed_count || '—' %></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bills Passed</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Attendance</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:10px 6px;">
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Party-Line</div>
+      </div>
+    </div>
+
+    <!-- Social row -->
+    <div style="background:#003087; padding:8px 14px 10px 21px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.06);">
+      <div style="display:flex; gap:14px; align-items:center;">
+        <% if official.website_url.present? %>
+          <a href="<%= official.website_url %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        <% end %>
+        <% if official.twitter_handle.present? %>
+          <a href="https://x.com/<%= official.twitter_handle %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        <% end %>
+      </div>
+      <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none;">Contact ↗</a>
+    </div>
+
+    <!-- Section 1 · Issue Focus Areas -->
+    <% if official.issue_focus_areas.present? %>
+    <div style="padding:20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Issue Focus Areas</div>
+      <% official.issue_focus_areas.each do |area| %>
+        <div style="display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid rgba(27,58,107,0.05);">
+          <div style="width:7px; height:7px; border-radius:50%; background:<%= area['color'] %>; flex-shrink:0;"></div>
+          <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; flex:1;"><%= area['name'] %></span>
+          <div style="width:60px; height:4px; background:#e8ecf4; border-radius:2px; overflow:hidden; flex-shrink:0;">
+            <div style="width:<%= area['pct'] %>%; height:100%; background:<%= area['color'] %>; border-radius:2px;"></div>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:700; color:#1b3a6b; flex-shrink:0;"><%= area['bills_count'] %></span>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <!-- Section 2 · Recent Votes -->
+    <% if official.recent_votes.present? %>
+    <div style="padding:20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Recent Votes</div>
+      <% official.recent_votes.each do |v| %>
+        <% vc = vote_colors[v['vote']] || '#5a6e8a' %>
+        <div style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden;">
+          <div style="width:6px; background:<%= vc %>; flex-shrink:0;"></div>
+          <div style="flex:1; padding:9px 12px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; color:<%= vc %>; margin-bottom:3px;"><%= vote_labels[v['vote']] || v['vote'].capitalize %> · <%= v['date'] %></div>
+            <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.3; margin-bottom:3px;"><%= v['title'] %></div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8;"><%= v['result'] %></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <!-- Section 3 · Upcoming Events -->
+    <% if official.upcoming_events.present? %>
+    <div style="padding:20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Upcoming Events</div>
+      <% official.upcoming_events.each do |ev| %>
+        <% tc = tag_colors[ev['tag_color']] || '#5a6e8a' %>
+        <div style="display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.05);">
+          <div style="width:38px; flex-shrink:0; background:white; border:1px solid #dde5f5; border-radius:7px; text-align:center; padding:5px 0;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; text-transform:uppercase; color:#8a9ab8;"><%= ev['month'] %></div>
+            <div style="font-family:'Libre Baskerville',serif; font-size:17px; font-weight:700; color:#1b3a6b; line-height:1;"><%= ev['day'] %></div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:700; color:#1b3a6b;"><%= ev['title'] %></div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-top:2px;"><%= ev['location'] %></div>
+            <% if ev['tag'].present? %>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:6px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:100px; background:<%= tag_bgs[ev['tag_color']] || 'rgba(90,110,138,0.08)' %>; color:<%= tc %>; border:0.5px solid <%= tc %>33; margin-top:4px; display:inline-block;"><%= ev['tag'] %></span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <!-- Section 4 · District -->
+    <div style="padding:20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ District <%= official.district_number %></div>
+      <% [
+        ['Population', official.district_population ? number_with_delimiter(official.district_population) : nil],
+        ['Median Income', official.district_median_income ? "$#{number_with_delimiter(official.district_median_income)}" : nil],
+        ['Owner-Occupied', official.district_owner_occupancy_pct ? "#{official.district_owner_occupancy_pct}%" : nil],
+        ['Neighborhoods', official.district_neighborhoods_count],
+        ['RCOs', official.district_rco_count]
+      ].each do |label, val| %>
+        <% next unless val.present? %>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(27,58,107,0.05);">
+          <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= label %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:#1b3a6b;"><%= val %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Section 5 · Contact footer -->
+    <div style="padding:16px 20px; display:flex; gap:10px;">
+      <% if official.contact_url.present? %>
+        <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="flex:1; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; text-align:center; padding:10px 8px; background:#1b3a6b; color:white; border-radius:8px; text-decoration:none;">Contact Office</a>
+      <% end %>
+      <% if official.website_url.present? %>
+        <a href="<%= official.website_url %>" target="_blank" rel="noopener" style="flex:1; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; text-align:center; padding:10px 8px; background:white; color:#1b3a6b; border:1px solid rgba(27,58,107,0.2); border-radius:8px; text-decoration:none;">phlcouncil.com ↗</a>
+      <% end %>
+    </div>
+
+  </div>
+</div>
