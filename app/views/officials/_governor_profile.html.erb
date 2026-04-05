@@ -283,15 +283,16 @@
         <div class="dp-card">
           <div class="dp-card-title">◆ FY 2025–26 Budget</div>
           <%
-            _gap = 2.8
-            _dr = 40; _dc = (2 * Math::PI * _dr).round(3)
+            _gap  = 2.8
+            _dr   = 40; _dc = (2 * Math::PI * _dr).round(3)
+            _n    = official.budget_breakdown.size
+            _arc  = _dc - (_n * _gap)
             _total = official.budget_breakdown.values.sum.to_f
-            _cum = 0.0
+            _cum  = 0.0
             _segs = official.budget_breakdown.map.with_index do |(cat, pct), i|
-              raw = (pct.to_f / _total) * _dc
-              len = [raw - _gap, 0.5].max.round(3)
+              len = ((pct.to_f / _total) * _arc).round(3)
               s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _cum.round(3), idx: i }
-              _cum += raw; s
+              _cum += len + _gap; s
             end
             _d_total = "$#{official.budget_total_billions}B"
           %>
@@ -533,15 +534,16 @@
   <div style="padding:20px; border-bottom:1px solid rgba(27,58,107,0.06);">
     <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ FY 2025–26 Budget</div>
     <%
-      _mgap = 2.8
-      _mdr = 48; _mdc = (2 * Math::PI * _mdr).round(3)
-      _mt = official.budget_breakdown.values.sum.to_f
-      _mc = 0.0
+      _mgap  = 2.8
+      _mdr   = 48; _mdc = (2 * Math::PI * _mdr).round(3)
+      _mn    = official.budget_breakdown.size
+      _marc  = _mdc - (_mn * _mgap)
+      _mt    = official.budget_breakdown.values.sum.to_f
+      _mc    = 0.0
       _msegs = official.budget_breakdown.map.with_index do |(cat, pct), i|
-        raw = (pct.to_f / _mt) * _mdc
-        len = [raw - _mgap, 0.5].max.round(3)
+        len = ((pct.to_f / _mt) * _marc).round(3)
         s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _mc.round(3), idx: i }
-        _mc += raw; s
+        _mc += len + _mgap; s
       end
       _m_total = "$#{official.budget_total_billions}B"
     %>
