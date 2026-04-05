@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get  "dashboard/bills",            to: "dashboard#bills"
 
   get "bills/:id",          to: "bills#show",         as: :bill
+  get "eo/:id",             to: "executive_orders#show", as: :executive_order
 
   # Friendly slug URLs for specific officials
   get "officials/usa/pa/jfetterman", to: "officials#show", defaults: { bioguide_id: "F000479" }
