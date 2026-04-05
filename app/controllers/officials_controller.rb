@@ -327,8 +327,31 @@ end
     threads.each(&:join)
 
     if HARDCODED_BILLS.key?(bioguide_id)
-      @bills       = HARDCODED_BILLS[bioguide_id].map { |b| b.merge("congress" => 119) }
-      @bill_id_map = {}
+      @bills = HARDCODED_BILLS[bioguide_id].map { |b| b.merge("congress" => 119) }
+      @bills.each do |bill|
+        type = bill["type"].to_s.upcase
+        prefix = bill_type_labels[type] || type
+        bill["_identifier"]  = "#{prefix} #{bill['number']}"
+        bill["_external_id"] = "#{type}-#{bill['number']}"
+      end
+      ActiveRecord::Base.connection_pool.with_connection do
+        identifiers  = @bills.map { |b| b["_identifier"] }
+        existing_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
+        unmatched    = @bills.reject { |b| existing_map.key?(b["_identifier"]) }
+        if unmatched.any?
+          now  = Time.current
+          rows = unmatched.map do |bill|
+            raw_status = bill.dig("latestAction", "text").to_s.presence
+            { source: "congress", external_id: bill["_external_id"], identifier: bill["_identifier"],
+              title: bill["title"].to_s, status: raw_status,
+              bill_stage: CivicBill.classify_stage(raw_status),
+              status_date: (Date.parse(bill.dig("latestAction", "actionDate").to_s) rescue nil),
+              jurisdiction: "federal", created_at: now, updated_at: now }
+          end
+          CivicBill.upsert_all(rows, unique_by: %i[source external_id], update_only: %i[title status bill_stage status_date])
+        end
+        @bill_id_map = CivicBill.where(identifier: identifiers).pluck(:identifier, :id).to_h
+      end
     end
 
     fec_cand_id = FEC_IDS[bioguide_id]
