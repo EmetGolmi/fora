@@ -148,6 +148,7 @@ johnson.assign_attributes(
   office_hours:                 'Tue & Thu 10am–4pm',
   website_url:                  'https://phlcouncil.com/kenyatta-johnson/',
   contact_url:                  'https://phlcouncil.com/kenyatta-johnson/contact/',
+  photo_url:                    'https://phlcouncil.com/wp-content/uploads/2025/04/CP_Johnson_Close__RED_TIE__up1-e1744149308872.jpg',
   twitter_handle:               'KenyattaJohnson',
   term_start:                   Date.new(2012, 1, 1),
   term_end:                     Date.new(2028, 1, 1),
