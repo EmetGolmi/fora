@@ -123,3 +123,63 @@ sunday.assign_attributes(
 )
 sunday.save!
 puts "Seeded: #{sunday.full_name}"
+
+# ── Philadelphia City Council — District 2 ──
+johnson = Person.find_or_initialize_by(slug: 'kjohnson-phl-d2')
+johnson.assign_attributes(
+  name:                         'Kenyatta Johnson',
+  full_name:                    'Kenyatta Johnson',
+  first_name:                   'Kenyatta',
+  last_name:                    'Johnson',
+  party:                        'Democrat',
+  state:                        'PA',
+  office_type:                  'city_council',
+  office_title:                 'Philadelphia City Councilmember, District 2',
+  district_number:              2,
+  district_name:                'South Philadelphia',
+  district_neighborhoods:       ['Point Breeze', 'Grays Ferry', 'East Passyunk', 'Pennsport', 'Graduate Hospital', 'Newbold', 'Whitman', 'Lower Moyamensing'],
+  district_population:          163_000,
+  district_neighborhoods_count: 14,
+  district_median_income:       38_200,
+  district_owner_occupancy_pct: 43,
+  district_rco_count:           12,
+  office_phone:                 '(215) 686-3412',
+  office_address:               '1501 S Broad St, Philadelphia, PA 19147',
+  office_hours:                 'Tue & Thu 10am–4pm',
+  website_url:                  'https://phlcouncil.com/kenyatta-johnson/',
+  contact_url:                  'https://phlcouncil.com/kenyatta-johnson/contact/',
+  twitter_handle:               'KenyattaJohnson',
+  term_start:                   Date.new(2012, 1, 1),
+  term_end:                     Date.new(2028, 1, 1),
+  attendance_rate_pct:          94,
+  bills_introduced_count:       31,
+  bills_passed_count:           18,
+  party_line_vote_pct:          87,
+  data_as_of:                   'March 2026',
+  committees: [
+    { name: 'Housing, Neighborhood Development & the Homeless', role: 'chair' },
+    { name: 'Streets & Services',                               role: 'member' },
+    { name: 'Licenses & Inspections',                          role: 'member' },
+    { name: 'Budget & Finance',                                role: 'member' }
+  ],
+  issue_focus_areas: [
+    { name: 'Affordable housing',   bills_count: 11, pct: 90, color: '#378add' },
+    { name: 'Zoning & development', bills_count: 8,  pct: 72, color: '#ba7517' },
+    { name: 'Public safety',        bills_count: 6,  pct: 58, color: '#993556' },
+    { name: 'Streets & transit',    bills_count: 4,  pct: 42, color: '#1d9e75' }
+  ],
+  recent_votes: [
+    { vote: 'yes',     bill: 'Bill 240312', title: 'Affordable Housing Preservation Fund — $25M allocation',       result: 'Passed 14–2', date: 'Mar 2024', tag: 'Housing' },
+    { vote: 'no',      bill: 'Bill 230891', title: 'Broadway Market zoning variance (1400 S Broad)',               result: 'Failed 8–9',  date: 'Dec 2023', tag: 'Zoning' },
+    { vote: 'yes',     bill: 'Bill 240088', title: 'Vision Zero — protected bike lane expansion on Passyunk Ave',  result: 'Passed 11–5', date: 'Feb 2024', tag: 'Streets' },
+    { vote: 'abstain', bill: 'Bill 230750', title: 'Police contract ratification — FY 2024 collective bargaining', result: 'Passed 13–1', date: 'Nov 2023', tag: 'Public Safety' },
+    { vote: 'yes',     bill: 'Bill 240201', title: 'Short-term rental density cap — owner-occupied exemption',     result: 'Passed 12–4', date: 'Jan 2024', tag: 'Housing' }
+  ],
+  upcoming_events: [
+    { month: 'Apr', day: 10, title: 'City Council session',      location: 'City Hall · Room 400 · 10am',    tag: 'Public welcome', tag_color: 'green' },
+    { month: 'Apr', day: 15, title: 'District office hours',     location: '1501 S Broad St · 10am–4pm',     tag: 'Walk-ins ok',    tag_color: 'blue'  },
+    { month: 'Apr', day: 22, title: 'Housing Committee hearing', location: '1400 S Broad zoning variance',   tag: 'Testimony open', tag_color: 'amber' }
+  ]
+)
+johnson.save!
+puts "Seeded: #{johnson.full_name} (#{johnson.office_title})"

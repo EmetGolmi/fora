@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_05_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_05_184025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,32 +76,50 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_05_180000) do
   create_table "people", force: :cascade do |t|
     t.integer "approval_rating"
     t.string "approval_source"
+    t.integer "attendance_rate_pct"
+    t.integer "bills_introduced_count"
+    t.integer "bills_passed_count"
     t.integer "bills_signed_count"
     t.jsonb "budget_breakdown", default: {}
     t.decimal "budget_total_billions", precision: 8, scale: 2
+    t.jsonb "committees"
     t.string "contact_url"
     t.datetime "created_at", null: false
     t.string "data_as_of"
+    t.integer "district_median_income"
+    t.string "district_name"
+    t.text "district_neighborhoods", default: [], array: true
+    t.integer "district_neighborhoods_count"
+    t.integer "district_number"
+    t.integer "district_owner_occupancy_pct"
+    t.integer "district_population"
+    t.integer "district_rco_count"
     t.string "divided_gov_note"
     t.boolean "divided_government"
     t.jsonb "executive_orders", default: []
     t.string "first_name"
     t.string "full_name"
+    t.jsonb "issue_focus_areas"
     t.string "last_name"
     t.string "lt_governor_initials"
     t.string "lt_governor_name"
     t.string "name", null: false
     t.string "office_address"
+    t.string "office_hours"
+    t.string "office_phone"
     t.string "office_title"
     t.string "office_type"
     t.string "party"
+    t.integer "party_line_vote_pct"
     t.string "photo_url"
     t.jsonb "policy_priorities", default: []
+    t.jsonb "recent_votes"
     t.string "slug", null: false
     t.string "state", default: "PA"
     t.date "term_end"
     t.date "term_start"
     t.string "twitter_handle"
+    t.jsonb "upcoming_events"
     t.datetime "updated_at", null: false
     t.integer "veto_count"
     t.jsonb "veto_record", default: []
