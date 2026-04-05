@@ -160,27 +160,21 @@
           <div class="dp-section-eyebrow">◆ Executive Action</div>
           <h2 class="dp-section-title">Executive Orders <span style="font-size:13px; font-weight:400; color:#8a9ab8; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;"><%= official.executive_orders.length %> this term</span></h2>
           <% official.executive_orders.each do |eo| %>
-            <% eo_card_base = "background:white; border:1px solid rgba(27,58,107,0.07); border-radius:8px; padding:12px 16px; margin-bottom:8px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px;" %>
             <% if eo['slug'].present? %>
-              <a href="/eo/<%= eo['slug'] %>" style="<%= eo_card_base %> text-decoration:none; cursor:pointer;">
-            <% else %>
-              <div style="<%= eo_card_base %>">
+              <a href="/eo/<%= eo['slug'] %>" style="text-decoration:none; display:flex; align-items:stretch; color:inherit;">
             <% end %>
-              <div style="flex:1;">
-                <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;"><%= eo['number'] %></div>
-                <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#1b3a6b; line-height:1.45;"><%= eo['title'] %></div>
-                <span style="display:inline-block; margin-top:5px; font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:#f0f3f8; color:#5a6e8a; border:0.5px solid #dde5f5;"><%= eo['category'] %></span>
-              </div>
-              <div style="display:flex; align-items:center; gap:6px; flex-shrink:0; margin-top:2px;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; white-space:nowrap;"><%= eo['date'] %></span>
-                <% if eo['slug'].present? %>
-                  <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#b8860b;">→</span>
+            <div class="eo-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; width:100%;">
+              <div style="width:8px; background:#b8860b; flex-shrink:0;"></div>
+              <div style="flex:1; padding:11px 14px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">Executive Order · <%= eo['number'] %> · <%= eo['date'] %></div>
+                <div style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:6px;"><%= eo['title'] %></div>
+                <% if eo['category'].present? %>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:#f0f3f8; color:#5a6e8a; border:0.5px solid #dde5f5;"><%= eo['category'] %></span>
                 <% end %>
               </div>
+            </div>
             <% if eo['slug'].present? %>
               </a>
-            <% else %>
-              </div>
             <% end %>
           <% end %>
         </div>
@@ -446,28 +440,24 @@
 
   <!-- Section 3 · Executive orders -->
   <% if official.executive_orders.present? %>
-  <div style="padding:20px 20px 4px; border-bottom:1px solid rgba(27,58,107,0.06);">
+  <div style="padding:16px 16px 8px; border-bottom:1px solid rgba(27,58,107,0.06);">
     <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Executive Orders</div>
     <% official.executive_orders.each do |eo| %>
       <% if eo['slug'].present? %>
-        <a href="/eo/<%= eo['slug'] %>" style="display:block; padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.06); text-decoration:none;">
-      <% else %>
-        <div style="padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+        <a href="/eo/<%= eo['slug'] %>" style="text-decoration:none; display:flex; align-items:stretch; color:inherit;">
       <% end %>
-        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:3px;">
-          <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; font-weight:700; color:#b8860b;"><%= eo['number'] %></span>
-          <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8;"><%= eo['date'] %></span>
-            <% if eo['slug'].present? %>
-              <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#b8860b;">→</span>
-            <% end %>
-          </div>
+      <div class="eo-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; width:100%;">
+        <div style="width:8px; background:#b8860b; flex-shrink:0;"></div>
+        <div style="flex:1; padding:10px 12px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:#b8860b; margin-bottom:3px;">Executive Order · <%= eo['number'] %> · <%= eo['date'] %></div>
+          <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:#1b3a6b; line-height:1.35; margin-bottom:5px;"><%= eo['title'] %></div>
+          <% if eo['category'].present? %>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:#f0f3f8; color:#5a6e8a; border:0.5px solid #dde5f5;"><%= eo['category'] %></span>
+          <% end %>
         </div>
-        <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#1b3a6b; line-height:1.4;"><%= eo['title'] %></div>
+      </div>
       <% if eo['slug'].present? %>
         </a>
-      <% else %>
-        </div>
       <% end %>
     <% end %>
   </div>
