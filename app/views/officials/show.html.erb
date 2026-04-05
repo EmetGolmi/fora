@@ -454,11 +454,15 @@
           <div class="dp-card-title">◆ Committees</div>
           <% if @committees.present? %>
             <% @committees.each do |committee| %>
-              <div class="dp-card-entry">
+              <% _cmte_slug = CommitteeDataService.slug_for(committee[:name]) %>
+              <div class="dp-card-entry"<%= _cmte_slug ? " style='cursor:pointer;' onclick=\"dpOpenCommitteeModal('#{_cmte_slug}')\"".html_safe : "" %>>
                 <% if committee[:role].present? %>
                   <div class="dp-card-sublabel"><%= committee[:role] %></div>
                 <% end %>
-                <div class="dp-card-text"><%= committee[:name] %></div>
+                <div class="dp-card-text" style="<%= _cmte_slug ? 'text-decoration:underline;text-underline-offset:2px;' : '' %>"><%= committee[:name] %></div>
+                <% if _cmte_slug %>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:#b8860b;margin-top:2px;">◆ view members</div>
+                <% end %>
               </div>
             <% end %>
           <% else %>
@@ -848,11 +852,15 @@
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Where Bills Live or Die</h3>
       <% if @committees.present? %>
         <% @committees.each do |committee| %>
-          <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;">
+          <% _cmte_slug = CommitteeDataService.slug_for(committee[:name]) %>
+          <div style="background:white; border-radius:6px; padding:10px 12px; margin-bottom:6px;<%= _cmte_slug ? ' cursor:pointer;' : '' %>"<%= _cmte_slug ? " onclick=\"openCommitteeModalMobile('#{_cmte_slug}')\"".html_safe : "" %>>
             <% if committee[:role].present? %>
               <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a9ab8; margin-bottom:4px;"><%= committee[:role] %></div>
             <% end %>
-            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#1b3a6b; line-height:1.45;"><%= committee[:name] %></div>
+            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#1b3a6b; line-height:1.45;<%= _cmte_slug ? ' text-decoration:underline;text-underline-offset:2px;' : '' %>"><%= committee[:name] %></div>
+            <% if _cmte_slug %>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:#b8860b;margin-top:2px;">◆ tap for members</div>
+            <% end %>
           </div>
         <% end %>
       <% else %>
@@ -1001,7 +1009,54 @@
     </div>
   </div>
 
+  <div id="modal-committee-detail" class="mob-modal" onclick="if(event.target===this)closeModal('modal-committee-detail')">
+    <div class="mob-sheet" style="overflow-y:auto; max-height:85vh;">
+      <div class="mob-handle"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:#b8860b;margin-bottom:5px;">◆ Committee Detail</div>
+      <h3 id="mob-cmte-title" style="font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:#1b3a6b;margin:0 0 12px;"></h3>
+      <div id="mob-cmte-body"></div>
+      <button class="mob-got-it" onclick="closeModal('modal-committee-detail')" style="margin-top:16px;">Close</button>
+    </div>
+  </div>
+
   <script>
+    var COMMITTEE_DATA = <%= CommitteeDataService.js_data.to_json.html_safe %>;
+
+    function buildCommitteeHtml(cd) {
+      var rs = cd.republicans.map(function(m) { return '<li style="padding:1px 0;">' + m + '</li>'; }).join('');
+      var ds = cd.democrats.map(function(m) { return '<li style="padding:1px 0;">' + m + '</li>'; }).join('');
+      return '<p style="font-family:Nunito,sans-serif;font-size:12px;color:#4a5568;line-height:1.6;margin:0 0 12px;">' + cd.description + '</p>' +
+        '<div style="display:flex;gap:10px;margin:0 0 12px;">' +
+          '<div style="flex:1;background:#f8f9fd;border-radius:6px;padding:8px 10px;">' +
+            '<div style="font-family:JetBrains Mono,monospace;font-size:6px;color:#b8860b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;">Chair</div>' +
+            '<div style="font-family:Nunito,sans-serif;font-size:11px;font-weight:600;color:#1b3a6b;">' + cd.chair + '</div>' +
+          '</div>' +
+          '<div style="flex:1;background:#f8f9fd;border-radius:6px;padding:8px 10px;">' +
+            '<div style="font-family:JetBrains Mono,monospace;font-size:6px;color:#b8860b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;">Ranking Member</div>' +
+            '<div style="font-family:Nunito,sans-serif;font-size:11px;font-weight:600;color:#1b3a6b;">' + cd.rankingMember + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">' +
+          '<div>' +
+            '<div style="font-family:JetBrains Mono,monospace;font-size:6px;color:#B22234;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Republicans</div>' +
+            '<ul style="list-style:none;padding:0;margin:0;font-family:Nunito,sans-serif;font-size:10px;color:#1b3a6b;line-height:1.8;">' + rs + '</ul>' +
+          '</div>' +
+          '<div>' +
+            '<div style="font-family:JetBrains Mono,monospace;font-size:6px;color:#003087;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Democrats</div>' +
+            '<ul style="list-style:none;padding:0;margin:0;font-family:Nunito,sans-serif;font-size:10px;color:#1b3a6b;line-height:1.8;">' + ds + '</ul>' +
+          '</div>' +
+        '</div>' +
+        '<a href="' + cd.url + '" target="_blank" rel="noopener" style="font-family:JetBrains Mono,monospace;font-size:7px;letter-spacing:.06em;color:#b8860b;">View official committee page ↗</a>';
+    }
+
+    function openCommitteeModalMobile(slug) {
+      var cd = COMMITTEE_DATA[slug];
+      if (!cd) return;
+      document.getElementById('mob-cmte-title').textContent = cd.name;
+      document.getElementById('mob-cmte-body').innerHTML = buildCommitteeHtml(cd);
+      openModal('modal-committee-detail');
+    }
+
     function openModal(id) {
       document.getElementById(id).classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -1071,6 +1126,16 @@
   function dpCloseModal() {
     document.getElementById('dp-modal').classList.remove('open');
     document.body.style.overflow = '';
+  }
+
+  function dpOpenCommitteeModal(slug) {
+    var cd = COMMITTEE_DATA[slug];
+    if (!cd) return;
+    document.getElementById('dp-modal-eyebrow').textContent = '◆ Committee Detail';
+    document.getElementById('dp-modal-title').textContent = cd.name;
+    document.getElementById('dp-modal-body').innerHTML = buildCommitteeHtml(cd);
+    document.getElementById('dp-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   function dpShare() {

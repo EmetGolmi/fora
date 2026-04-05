@@ -9,6 +9,15 @@
   b_date_raw = bill.try(:status_date)  || bill.try(:[], "latestAction")&.then{|a| a["actionDate"] || a[:actionDate]} || bill.try(:[], "status_date") || ""
   b_jur      = bill.try(:jurisdiction) || bill.try(:[], "jurisdiction") || "federal"
 
+  _bc_type  = bill.try(:[], "type").to_s.strip.upcase
+  _bc_num   = bill.try(:[], "number").to_s.strip
+  _bc_cong  = bill.try(:[], "congress").to_i
+  _bc_paths = { "S"=>"senate-bill","HR"=>"house-bill","HRES"=>"house-resolution","SRES"=>"senate-resolution",
+                "HJRES"=>"house-joint-resolution","SJRES"=>"senate-joint-resolution",
+                "HCONRES"=>"house-concurrent-resolution","SCONRES"=>"senate-concurrent-resolution" }
+  b_congress_url = (_bc_cong > 0 && _bc_paths[_bc_type] && _bc_num.present?) ?
+    "https://www.congress.gov/bill/#{_bc_cong}th-congress/#{_bc_paths[_bc_type]}/#{_bc_num}" : nil
+
   rail_color = case b_jur.to_s
                when "state"                    then "#003087"
                when "pennsylvania"             then "#003087"
@@ -29,8 +38,15 @@
   end
 %>
 
-<% tag = bill_id ? :a : :div %>
-<% attrs = bill_id ? { href: bill_path(bill_id), style: "text-decoration:none; display:flex; align-items:stretch; color:inherit;" } : { style: "display:flex; align-items:stretch; cursor:default;" } %>
+<% _bill_href = bill_id ? bill_path(bill_id) : b_congress_url %>
+<% tag = _bill_href ? :a : :div %>
+<% if _bill_href
+     _la = { href: _bill_href, style: "text-decoration:none; display:flex; align-items:stretch; color:inherit;" }
+     _la.merge!(target: "_blank", rel: "noopener") unless bill_id
+     attrs = _la
+   else
+     attrs = { style: "display:flex; align-items:stretch; cursor:default;" }
+   end %>
 
 <%= content_tag tag, **attrs do %>
   <div class="bill-card" style="display:flex; align-items:stretch; background:white; border:0.5px solid #dde5f5; border-radius:8px; margin-bottom:8px; overflow:hidden; transition:background 0.12s; width:100%;">

@@ -327,7 +327,7 @@ end
     threads.each(&:join)
 
     if HARDCODED_BILLS.key?(bioguide_id)
-      @bills       = HARDCODED_BILLS[bioguide_id]
+      @bills       = HARDCODED_BILLS[bioguide_id].map { |b| b.merge("congress" => 119) }
       @bill_id_map = {}
     end
 
