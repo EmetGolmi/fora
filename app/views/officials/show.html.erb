@@ -183,6 +183,9 @@
     end
 
   bills_count   = @total_bills_sponsored || @bills.size
+  bills_cospon_note = @total_bills_cosponsored \
+    ? "<p style='margin-top:10px;'><strong>Cosponsored (119th Congress): ~#{@total_bills_cosponsored}</strong> — bills introduced by colleagues this member has formally endorsed.</p>" \
+    : ""
   name_initials = @member['directOrderName'].to_s.split.map(&:first).first(2).join
   votes_cast    = @member["totalVotingRecords"].presence || "—"
   estimated_votes = if @member["totalVotingRecords"].present?
@@ -1095,7 +1098,7 @@
     bills: {
       eyebrow: "◆ About This Stat",
       title: "Bills Sponsored",
-      body: "<p>This counts legislation introduced in the current session of Congress by this member as a primary sponsor.</p><p>Sponsoring a bill doesn't mean it will pass — most bills never reach a floor vote. But it does show which issues a member is willing to put their name on.</p><%= @total_bills_cosponsored ? \"<p style='margin-top:10px;'><strong>Cosponsored bills (119th Congress): ~#{@total_bills_cosponsored}</strong> — bills introduced by colleagues this member has formally endorsed.</p>\" : '' %>"
+      body: "<p>This counts legislation introduced in the current session of Congress by this member as a primary sponsor.</p><p>Sponsoring a bill doesn't mean it will pass — most bills never reach a floor vote. But it does show which issues a member is willing to put their name on.</p><%= j(bills_cospon_note) %>"
     },
     finance: {
       eyebrow: "◆ About This Stat",
