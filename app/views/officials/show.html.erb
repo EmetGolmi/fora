@@ -1,4 +1,4 @@
-<% content_for(:title) { "#{@member['directOrderName']} — FORA" } %>
+<% content_for(:title) { @profile_type == :governor ? "#{@official.full_name} — FORA" : "#{@member['directOrderName']} — FORA" } %>
 
 <% content_for :head do %>
 <style>
@@ -80,6 +80,10 @@
   }
 </style>
 <% end %>
+
+<% if @profile_type == :governor %>
+  <%= render 'governor_profile', official: @official %>
+<% else %>
 
 <%
   # Nil guards for thread-assigned variables — any thread failure leaves these nil
@@ -1233,3 +1237,5 @@
     }
   });
 </script>
+
+<% end %>

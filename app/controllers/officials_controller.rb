@@ -527,8 +527,9 @@ end
   end
 
   def governor
-    @official      = Person.find_by!(slug: 'jshapiro-pa-gov')
-    @profile_type  = :governor
+    @official     = Person.find_by!(slug: 'jshapiro-pa-gov')
+    @profile_type = :governor
+    render :show
   end
 
   private

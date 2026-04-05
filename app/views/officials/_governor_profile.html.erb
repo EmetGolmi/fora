@@ -1,0 +1,203 @@
+<div class="official-profile governor-profile">
+
+  <%# ── HERO ── %>
+  <div class="profile-hero gov-hero">
+    <div class="hero-inner">
+      <% if official.photo_url.present? %>
+        <img src="<%= official.photo_url %>" alt="<%= official.full_name %>" class="hero-photo">
+      <% else %>
+        <div class="hero-photo hero-photo--placeholder"><%= official.first_name[0] %><%= official.last_name[0] %></div>
+      <% end %>
+
+      <div class="hero-info">
+        <div class="hero-office-label"><%= official.office_title %></div>
+        <h1 class="hero-name"><%= official.full_name %></h1>
+        <div class="hero-meta">
+          <span class="party-pill party-pill--<%= official.party.downcase %>"><%= official.party %></span>
+          <span class="hero-stat">Term: <strong><%= official.term_start.strftime('%b %Y') %> – <%= official.term_end.strftime('%b %Y') %></strong></span>
+          <span class="hero-stat">Harrisburg, PA</span>
+          <span class="hero-stat data-stamp">As of <%= official.data_as_of %></span>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <a href="<%= official.contact_url %>" target="_blank" class="btn btn--contact">Contact Office</a>
+        <% if official.twitter_handle.present? %>
+          <a href="https://twitter.com/<%= official.twitter_handle %>" target="_blank" class="btn btn--social">@<%= official.twitter_handle %></a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# ── EXEC STATS BAR ── %>
+  <div class="exec-stats-bar">
+    <div class="exec-stat">
+      <div class="exec-stat__val"><%= official.executive_orders&.length || '—' %></div>
+      <div class="exec-stat__lbl">Executive orders</div>
+      <div class="exec-stat__sub">since <%= official.term_start.strftime('%b %Y') %></div>
+    </div>
+    <div class="exec-stat">
+      <div class="exec-stat__val"><%= official.bills_signed_count || '—' %></div>
+      <div class="exec-stat__lbl">Bills signed</div>
+      <div class="exec-stat__sub">this term</div>
+    </div>
+    <div class="exec-stat">
+      <div class="exec-stat__val"><%= official.veto_count || '—' %></div>
+      <div class="exec-stat__lbl">Vetoes</div>
+      <div class="exec-stat__sub">this term</div>
+    </div>
+    <div class="exec-stat">
+      <div class="exec-stat__val"><%= official.approval_rating ? "#{official.approval_rating}%" : '—' %></div>
+      <div class="exec-stat__lbl">Approval rating</div>
+      <div class="exec-stat__sub"><%= official.approval_source %></div>
+    </div>
+  </div>
+
+  <%# ── BODY: two-column layout ── %>
+  <div class="profile-body">
+    <div class="profile-main">
+
+      <%# Executive notice — explains why this looks different from a legislator %>
+      <div class="exec-notice">
+        Executive office — this profile reflects a governor's powers: executive orders, budget authority, bill signings &amp; vetoes, cabinet appointments, and approval rating. No voting record or party-line % (those are legislative metrics).
+      </div>
+
+      <%# Policy priorities %>
+      <% if official.policy_priorities.present? %>
+        <div class="profile-card">
+          <div class="card-label">Stated policy priorities</div>
+          <div class="priority-list">
+            <% official.policy_priorities.each do |p| %>
+              <% pct = p['level'] == 'high' ? 85 : 55 %>
+              <div class="priority-row">
+                <div class="priority-dot" style="background: <%= p['color'] %>;"></div>
+                <div class="priority-name"><%= p['name'] %></div>
+                <div class="priority-bar-wrap">
+                  <div class="priority-bar" style="width: <%= pct %>%; background: <%= p['color'] %>;"></div>
+                </div>
+                <div class="priority-level"><%= p['level'].capitalize %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Executive orders %>
+      <% if official.executive_orders.present? %>
+        <div class="profile-card">
+          <div class="card-label">Recent executive orders</div>
+          <div class="eo-list">
+            <% official.executive_orders.each do |eo| %>
+              <div class="eo-row">
+                <div class="eo-num"><%= eo['number'] %></div>
+                <div class="eo-body">
+                  <div class="eo-title"><%= eo['title'] %></div>
+                  <span class="eo-tag eo-tag--<%= eo['category'].downcase.gsub(' ', '-') %>"><%= eo['category'] %></span>
+                </div>
+                <div class="eo-date"><%= eo['date'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Veto record %>
+      <% if official.veto_record.present? %>
+        <div class="profile-card">
+          <div class="card-label">Veto record</div>
+          <div class="veto-list">
+            <% official.veto_record.each do |v| %>
+              <div class="veto-row">
+                <div class="veto-info">
+                  <div class="veto-bill"><%= v['bill'] %> — <%= v['title'] %></div>
+                  <div class="veto-note"><%= v['note'] %></div>
+                </div>
+                <div class="veto-outcome veto-outcome--<%= v['outcome'] %>"><%= v['outcome'].capitalize %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+
+    <div class="profile-sidebar">
+
+      <%# Lt. Governor %>
+      <% if official.lt_governor_name.present? %>
+        <div class="profile-card">
+          <div class="card-label">Lt. Governor</div>
+          <div class="lt-gov-row">
+            <div class="lt-gov-avatar"><%= official.lt_governor_initials %></div>
+            <div>
+              <div class="lt-gov-name"><%= official.lt_governor_name %></div>
+              <div class="lt-gov-title">Lieutenant Governor of Pennsylvania</div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Approval rating %>
+      <% if official.approval_rating.present? %>
+        <div class="profile-card">
+          <div class="card-label">Job approval</div>
+          <div class="approval-num"><%= official.approval_rating %>%</div>
+          <div class="approval-bar-bg">
+            <div class="approval-bar-fill" style="width: <%= official.approval_rating %>%;"></div>
+          </div>
+          <div class="approval-source"><%= official.approval_source %></div>
+        </div>
+      <% end %>
+
+      <%# Budget %>
+      <% if official.budget_total_billions.present? && official.budget_breakdown.present? %>
+        <div class="profile-card">
+          <div class="card-label">FY 2025–26 budget proposal</div>
+          <div class="budget-total">$<%= official.budget_total_billions %>B</div>
+          <div class="budget-sub">General fund proposed</div>
+          <div class="budget-seg-wrap">
+            <%
+              seg_colors = { 'education' => '#378add', 'health' => '#1d9e75', 'transportation' => '#ba7517', 'safety' => '#993556', 'other' => '#888780' }
+            %>
+            <% official.budget_breakdown.each do |category, pct| %>
+              <div class="budget-seg" style="width: <%= pct %>%; background: <%= seg_colors[category] || '#888780' %>;"></div>
+            <% end %>
+          </div>
+          <div class="budget-legend">
+            <% official.budget_breakdown.each do |category, pct| %>
+              <div class="budget-leg-item">
+                <div class="budget-dot" style="background: <%= seg_colors[category] || '#888780' %>;"></div>
+                <%= category.capitalize %> <%= pct %>%
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Divided government note %>
+      <% if official.divided_government? && official.divided_gov_note.present? %>
+        <div class="profile-card">
+          <div class="card-label">Legislative context</div>
+          <p class="divided-gov-note"><%= official.divided_gov_note %></p>
+        </div>
+      <% end %>
+
+      <%# Website %>
+      <div class="profile-card">
+        <div class="card-label">Office</div>
+        <div class="contact-links">
+          <% if official.website_url.present? %>
+            <a href="<%= official.website_url %>" target="_blank" class="contact-link">governor.pa.gov ↗</a>
+          <% end %>
+          <% if official.contact_url.present? %>
+            <a href="<%= official.contact_url %>" target="_blank" class="contact-link">Submit a constituent request ↗</a>
+          <% end %>
+          <% if official.twitter_handle.present? %>
+            <a href="https://twitter.com/<%= official.twitter_handle %>" target="_blank" class="contact-link">@<%= official.twitter_handle %> ↗</a>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
