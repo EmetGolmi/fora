@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_05_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_06_031910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -101,6 +101,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_05_190000) do
     t.string "full_name"
     t.jsonb "issue_focus_areas"
     t.string "last_name"
+    t.string "leadership_role"
     t.string "lt_governor_initials"
     t.string "lt_governor_name"
     t.string "name", null: false

@@ -850,3 +850,51 @@ norourke.assign_attributes(
 )
 norourke.save!
 puts "Seeded: #{norourke.full_name} (#{norourke.office_title})"
+
+# ── Philadelphia Managing Director ──
+thiel = Person.find_or_initialize_by(slug: 'athiel-philly-md')
+thiel.assign_attributes(
+  name:         'Adam Thiel',
+  full_name:    'Adam Thiel',
+  first_name:   'Adam',
+  last_name:    'Thiel',
+  party:        nil,
+  state:        'PA',
+  office_type:  'managing_director',
+  office_title: 'Managing Director of Philadelphia',
+  term_start:   Date.new(2024, 1, 1),
+  website_url:  'https://www.phila.gov/departments/office-of-the-managing-director/',
+  data_as_of:   'March 2026',
+  policy_priorities: [
+    { name: 'City operations & service delivery', level: 'high',   color: '#378add' },
+    { name: 'Emergency management',               level: 'high',   color: '#a32d2d' },
+    { name: 'Interdepartmental coordination',     level: 'high',   color: '#1d9e75' },
+    { name: 'Infrastructure & public works',      level: 'medium', color: '#ba7517' }
+  ]
+)
+thiel.save!
+puts "Seeded: #{thiel.full_name} (#{thiel.office_title})"
+
+# ── Philadelphia Director of Finance ──
+dubow = Person.find_or_initialize_by(slug: 'rdubow-philly-finance')
+dubow.assign_attributes(
+  name:         'Rob Dubow',
+  full_name:    'Rob Dubow',
+  first_name:   'Rob',
+  last_name:    'Dubow',
+  party:        nil,
+  state:        'PA',
+  office_type:  'finance_director',
+  office_title: 'Director of Finance, City of Philadelphia',
+  term_start:   Date.new(2008, 1, 1),
+  website_url:  'https://www.phila.gov/departments/department-of-revenue/',
+  data_as_of:   'March 2026',
+  policy_priorities: [
+    { name: 'City budget & fiscal policy',        level: 'high',   color: '#378add' },
+    { name: 'Debt management & bond issuance',    level: 'high',   color: '#534ab7' },
+    { name: 'Revenue forecasting',                level: 'high',   color: '#1d9e75' },
+    { name: 'Pension fund oversight',             level: 'medium', color: '#ba7517' }
+  ]
+)
+dubow.save!
+puts "Seeded: #{dubow.full_name} (#{dubow.office_title})"

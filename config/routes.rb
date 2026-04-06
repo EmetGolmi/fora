@@ -19,8 +19,29 @@ Rails.application.routes.draw do
   get "officials/usa/pa/bwaxman",    to: "officials#show", defaults: { bioguide_id: "bwaxman" }
   get "officials/usa/pa/governor",        to: "officials#governor",     as: :pa_governor
   get "officials/usa/pa/lt-governor",     to: "officials#lt_governor",  as: :pa_lt_governor
-  get "officials/usa/pa/philly/mayor",    to: "officials#philly_mayor",  as: :philly_mayor
-  get "officials/usa/pa/philly/:slug",    to: "officials#philly_person", as: :philly_person
+  get "officials/usa/pa/philly/mayor",                to: "officials#philly_mayor",  as: :philly_mayor
+  get "officials/usa/pa/philly/council-president",    to: "officials#philly_person", defaults: { slug: "kjohnson-phl-d2" },        as: :philly_council_president
+  get "officials/usa/pa/philly/majority-leader",      to: "officials#philly_person", defaults: { slug: "kgrichardson-phl-al" },     as: :philly_majority_leader
+  get "officials/usa/pa/philly/majority-whip",        to: "officials#philly_person", defaults: { slug: "ithomas-phl-al" },          as: :philly_majority_whip
+  get "officials/usa/pa/philly/minority-leader",      to: "officials#philly_person", defaults: { slug: "kbrooks-phl-al" },          as: :philly_minority_leader
+  get "officials/usa/pa/philly/minority-whip",        to: "officials#philly_person", defaults: { slug: "norourke-phl-al" },         as: :philly_minority_whip
+  get "officials/usa/pa/philly/deputy-majority-whip", to: "officials#philly_person", defaults: { slug: "cbass-phl-d8" },            as: :philly_deputy_majority_whip
+  get "officials/usa/pa/philly/managing-director",    to: "officials#philly_person", defaults: { slug: "athiel-philly-md" },        as: :philly_managing_director
+  get "officials/usa/pa/philly/finance-director",     to: "officials#philly_person", defaults: { slug: "rdubow-philly-finance" },   as: :philly_finance_director
+  get "officials/usa/pa/philly/district-1",           to: "officials#philly_person", defaults: { slug: "msquilla-phl-d1" },         as: :philly_district_1
+  get "officials/usa/pa/philly/district-2",           to: "officials#philly_person", defaults: { slug: "kjohnson-phl-d2" },         as: :philly_district_2
+  get "officials/usa/pa/philly/district-3",           to: "officials#philly_person", defaults: { slug: "jgauthier-phl-d3" },        as: :philly_district_3
+  get "officials/usa/pa/philly/district-4",           to: "officials#philly_person", defaults: { slug: "cjones-phl-d4" },           as: :philly_district_4
+  get "officials/usa/pa/philly/district-5",           to: "officials#philly_person", defaults: { slug: "jyoung-phl-d5" },           as: :philly_district_5
+  get "officials/usa/pa/philly/district-6",           to: "officials#philly_person", defaults: { slug: "mdriscoll-phl-d6" },        as: :philly_district_6
+  get "officials/usa/pa/philly/district-7",           to: "officials#philly_person", defaults: { slug: "qlozada-phl-d7" },          as: :philly_district_7
+  get "officials/usa/pa/philly/district-8",           to: "officials#philly_person", defaults: { slug: "cbass-phl-d8" },            as: :philly_district_8
+  get "officials/usa/pa/philly/district-9",           to: "officials#philly_person", defaults: { slug: "aphillips-phl-d9" },        as: :philly_district_9
+  get "officials/usa/pa/philly/district-10",          to: "officials#philly_person", defaults: { slug: "boneill-phl-d10" },         as: :philly_district_10
+  get "officials/usa/pa/philly/at-large-nina-ahmad",  to: "officials#philly_person", defaults: { slug: "nahmad-phl-al" },           as: :philly_al_ahmad
+  get "officials/usa/pa/philly/at-large-jim-harrity", to: "officials#philly_person", defaults: { slug: "jharrity-phl-al" },         as: :philly_al_harrity
+  get "officials/usa/pa/philly/at-large-rue-landau",  to: "officials#philly_person", defaults: { slug: "rlandau-phl-al" },          as: :philly_al_landau
+  get "officials/usa/pa/philly/:slug",                to: "officials#philly_person",                                                as: :philly_person
 
   # Redirect old bioguide URLs to friendly slugs for known officials
   get "officials/F000479", to: redirect("/officials/usa/pa/jfetterman")
