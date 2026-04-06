@@ -1,7 +1,7 @@
 <%
   _ring_circ   = 219.9
-  term_start   = official.term_start
-  term_end     = official.term_end
+  term_start   = official.term_start || Date.new(2024, 1, 1)
+  term_end     = official.term_end   || Date.new(2028, 1, 1)
   total_days   = (term_end - term_start).to_i.clamp(1, 99_999)
   elapsed_days = [(Date.today - term_start).to_i, total_days].min.clamp(0, total_days)
   ring_pct     = elapsed_days.to_f / total_days

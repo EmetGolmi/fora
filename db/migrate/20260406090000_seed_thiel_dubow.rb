@@ -1,7 +1,8 @@
 class SeedThielDubow < ActiveRecord::Migration[8.1]
   def up
     # ── Adam Thiel — Managing Director ──
-    p = Person.find_or_initialize_by(slug: 'athiel-philly-md')
+    Person.find_by(slug: 'athiel-philly-md')&.destroy
+    p = Person.new(slug: 'athiel-philly-md')
     p.assign_attributes(
       name:         'Adam Thiel',
       full_name:    'Adam Thiel',
@@ -40,7 +41,8 @@ class SeedThielDubow < ActiveRecord::Migration[8.1]
     puts "Seeded: #{p.full_name}"
 
     # ── Rob Dubow — Director of Finance ──
-    p = Person.find_or_initialize_by(slug: 'rdubow-philly-finance')
+    Person.find_by(slug: 'rdubow-philly-finance')&.destroy
+    p = Person.new(slug: 'rdubow-philly-finance')
     p.assign_attributes(
       name:         'Rob Dubow',
       full_name:    'Rob Dubow',
