@@ -21,50 +21,74 @@
 ══════════════════════════════════════════ -->
 <div class="desktop-profile">
 
-  <%# Hero — dark, rectangular photo flush-left %>
-  <div style="background:#1a1a2e; display:flex; align-items:flex-end; border-radius:12px 12px 0 0; overflow:hidden; position:relative;">
-    <div style="width:96px; min-height:130px; flex-shrink:0; overflow:hidden; background:#2a2a4a; display:flex; align-items:center; justify-content:center; align-self:stretch;">
-      <% if official.photo_url.present? %>
-        <img src="<%= official.photo_url %>" alt="<%= official.full_name %>" style="width:100%; height:100%; object-fit:cover; object-position:center top;">
-      <% else %>
-        <div style="font-family:'Libre Baskerville',serif; font-size:32px; font-weight:700; color:#8080b0;"><%= initials %></div>
-      <% end %>
-    </div>
-    <div style="flex:1; padding:1.5rem 1.5rem 1.25rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#9b8a5a; margin-bottom:5px;"><%= eyebrow_text %></div>
-        <div style="font-family:'Libre Baskerville',serif; font-size:24px; font-weight:500; color:#f0ebe0; line-height:1.2; margin-bottom:10px;"><%= official.full_name %></div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-          <span style="font-family:'Nunito',sans-serif; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(30,80,160,0.35); color:#90b4f0; border:0.5px solid rgba(80,130,220,0.4);"><%= official.party %></span>
-          <span style="font-family:'Nunito',sans-serif; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(155,138,90,0.2); color:#c4a85a; border:0.5px solid rgba(155,138,90,0.35);"><%= district_label %><%= official.district_name.present? ? " · #{official.district_name}" : '' %></span>
-          <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab0;">In office since <%= term_start.year %></span>
+  <%# Hero %>
+  <div class="dp-hero">
+    <div style="position:absolute; right:-40px; top:-60px; width:340px; height:340px; border-radius:50%; border:36px solid rgba(255,255,255,0.025); pointer-events:none;"></div>
+    <div style="position:absolute; right:40px; top:-20px; width:200px; height:200px; border-radius:50%; border:1px solid rgba(184,134,11,0.15); pointer-events:none;"></div>
+
+    <div class="dp-hero-inner">
+      <a href="javascript:history.back()" class="dp-hero-back">← My Government</a>
+
+      <div class="dp-hero-identity">
+        <div class="dp-avatar">
+          <% if official.photo_url.present? %>
+            <img src="<%= official.photo_url %>" alt="<%= official.full_name %>">
+          <% else %>
+            <div class="dp-avatar-initials"><%= initials %></div>
+          <% end %>
+          <div class="dp-avatar-badge">✓</div>
+        </div>
+
+        <div>
+          <h1 class="dp-name"><%= official.full_name %></h1>
+          <p class="dp-office-title"><%= official.office_title %></p>
+          <div class="dp-tags">
+            <span class="dp-tag" style="background:rgba(29,78,216,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd;"><%= official.party %></span>
+            <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">Philadelphia</span>
+            <% if official.district_name.present? %>
+              <span class="dp-tag" style="border-color:rgba(184,134,11,0.4); background:rgba(184,134,11,0.1); color:#d4a832;"><%= district_label %> · <%= official.district_name %></span>
+            <% end %>
+          </div>
+          <div class="dp-social">
+            <% if official.website_url.present? %>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-social-link" title="Official Website">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+            <% end %>
+            <% if official.twitter_handle.present? %>
+              <a href="https://x.com/<%= official.twitter_handle %>" target="_blank" rel="noopener" class="dp-social-link" title="X / Twitter">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            <% end %>
+            <button onclick="navigator.share ? navigator.share({title:'<%= official.full_name %> — FORA', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)" class="dp-social-link" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;" title="Share this profile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:rgba(255,255,255,0.55);"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
         </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; padding-bottom:2px;">
-        <% if official.contact_url.present? %>
-          <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="font-family:'Nunito',sans-serif; padding:8px 16px; border-radius:6px; font-size:12px; background:#9b8a5a; color:#1a1a2e; font-weight:600; text-decoration:none; white-space:nowrap;">Contact Office</a>
-        <% end %>
-        <% if official.website_url.present? %>
-          <a href="<%= official.website_url %>" target="_blank" rel="noopener" style="font-family:'Nunito',sans-serif; padding:7px 16px; border-radius:6px; font-size:12px; background:transparent; color:#c4a85a; border:0.5px solid #9b8a5a; text-decoration:none; white-space:nowrap;">Website ↗</a>
-        <% end %>
+
+      <%# Stat bar %>
+      <div class="dp-stat-bar">
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.bills_introduced_count || '—' %></div>
+          <div class="dp-stat-label">Bills Introduced</div>
+        </div>
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.bills_passed_count || '—' %></div>
+          <div class="dp-stat-label">Bills Passed</div>
+        </div>
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
+          <div class="dp-stat-label">Attendance</div>
+        </div>
+        <div class="dp-stat" style="cursor:default;">
+          <div class="dp-stat-value"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
+          <div class="dp-stat-label">Party-Line Votes</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <%# Proximity bar %>
-  <div style="background:#0f1020; padding:9px 1.5rem; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-    <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#9b8a5a; font-weight:500; flex-shrink:0;">Your rep</span>
-    <div style="display:flex; align-items:center; gap:5px;">
-      <div style="width:6px; height:6px; border-radius:50%; background:#1d9e75; flex-shrink:0;"></div>
-      <span style="font-family:'Nunito',sans-serif; color:#a0b0c0; font-size:11px;"><%= district_label %><%= official.district_name.present? ? " · #{official.district_name}" : '' %>, Philadelphia</span>
-    </div>
-    <% if official.district_neighborhoods.present? %>
-      <span style="color:#2a3040;">·</span>
-      <span style="font-family:'Nunito',sans-serif; color:#6a7a8a; font-size:11px;">Covers <%= official.district_neighborhoods.first(4).join(', ') %><%= official.district_neighborhoods.size > 4 ? ' & more' : '' %></span>
-    <% end %>
-    <div style="margin-left:auto;">
-      <a href="javascript:history.back()" style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6a7a; text-decoration:none; letter-spacing:.06em;">← My Government</a>
-    </div>
+    <div class="dp-stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
   </div>
 
   <%# Body %>
@@ -308,90 +332,63 @@
      MOBILE LAYOUT
 ══════════════════════════════════════════ -->
 <div class="mobile-profile">
-  <div style="background:#f2f4f8; min-height:100vh;">
+<div class="mobile-card">
 
-    <!-- Photo header -->
-    <div style="position:relative; height:200px; overflow:hidden; background:linear-gradient(160deg,#1a1a2e,#0f1020);">
+  <!-- Section 1 · Card Front -->
+  <div style="background:#1b3a6b; position:relative; overflow:hidden;">
+
+    <!-- Photo zone -->
+    <div style="height:260px; overflow:hidden; position:relative;">
       <% if official.photo_url.present? %>
-        <img src="<%= official.photo_url %>" alt="<%= official.full_name %>"
-             style="width:100%; height:100%; object-fit:cover; object-position:center top; opacity:0.75;">
+        <img src="<%= official.photo_url %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
       <% else %>
-        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-          <div style="width:90px; height:90px; border-radius:50%; background:#2a2a4a; display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:32px; font-weight:700; color:#8080b0;"><%= initials %></div>
-        </div>
+        <div style="width:100%; height:100%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:#d4a832;"><%= initials %></div>
       <% end %>
-      <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#1a1a2e); pointer-events:none;"></div>
+      <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
+      <div class="mob-foil" style="position:absolute; inset:0;"></div>
     </div>
 
     <!-- Nameplate -->
-    <div style="background:#1a1a2e; padding:10px 16px 12px 20px; border-bottom:1.5px solid rgba(155,138,90,.3);">
-      <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:#9b8a5a; margin-bottom:4px;"><%= eyebrow_text %></div>
-      <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:500; color:#f0ebe0; line-height:1.2; margin-bottom:8px;"><%= official.full_name %></div>
-      <div style="display:flex; gap:6px; flex-wrap:wrap;">
-        <span style="font-family:'Nunito',sans-serif; font-size:10px; padding:2px 8px; border-radius:20px; background:rgba(30,80,160,0.35); color:#90b4f0; border:0.5px solid rgba(80,130,220,0.4);"><%= official.party %></span>
-        <span style="font-family:'Nunito',sans-serif; font-size:10px; padding:2px 8px; border-radius:20px; background:rgba(155,138,90,0.2); color:#c4a85a; border:0.5px solid rgba(155,138,90,0.35);"><%= district_label %><%= official.district_name.present? ? " · #{official.district_name}" : '' %></span>
-        <span style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab0;">Since <%= term_start.year %></span>
-      </div>
+    <div style="background:#003087; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
+      <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:white; line-height:1.2;"><%= official.full_name %></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.12em; color:#d4a832; margin-top:3px;"><%= official.office_title %></div>
     </div>
 
     <!-- Quick stats strip -->
-    <div style="background:#0f1020; display:flex;">
+    <div style="background:#003087; display:flex;">
       <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:500; color:white; line-height:1;"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Attendance</div>
       </div>
       <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:500; color:white; line-height:1;"><%= official.bills_passed_count || '—' %></div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.bills_passed_count || '—' %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bills Passed</div>
       </div>
       <div style="flex:1; text-align:center; padding:10px 6px;">
-        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:500; color:white; line-height:1;"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
+        <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Party-Line</div>
       </div>
     </div>
 
-    <!-- Nav / social row -->
-    <div style="background:#1a1a2e; padding:8px 16px 10px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.06);">
+    <!-- Social row -->
+    <div style="background:#003087; padding:8px 14px 8px 21px; display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; gap:14px; align-items:center;">
-        <a href="javascript:history.back()" style="font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,.4); text-decoration:none;">← Back</a>
+        <% if official.website_url.present? %>
+          <a href="<%= official.website_url %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        <% end %>
         <% if official.twitter_handle.present? %>
-          <a href="https://x.com/<%= official.twitter_handle %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <a href="https://x.com/<%= official.twitter_handle %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
         <% end %>
       </div>
       <% if official.contact_url.present? %>
-        <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none; background:rgba(155,138,90,0.15); padding:5px 10px; border-radius:4px; border:0.5px solid rgba(155,138,90,0.3);">Contact ↗</a>
+        <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none;">Contact Office ↗</a>
       <% end %>
     </div>
-
-    <!-- Proximity callout -->
-    <div style="padding:16px 20px; background:white; border-bottom:1px solid #e8ecf4;">
-      <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.6; border-left:3px solid #9b8a5a; padding-left:12px;"><strong style="color:#1b3a6b;">Your most local elected official.</strong> Controls zoning, permits, street repairs, and whether your neighborhood gets a new development.</div>
-    </div>
-
-    <!-- Section 1 · Stats -->
-    <div style="padding:16px 20px; background:white; border-bottom:1px solid #e8ecf4;">
-      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Council Record — This Term</div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <div style="background:#f7f9fc; border-radius:8px; padding:10px; text-align:center;">
-          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
-          <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:3px;">Attendance</div>
-        </div>
-        <div style="background:#f7f9fc; border-radius:8px; padding:10px; text-align:center;">
-          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.bills_introduced_count || '—' %></div>
-          <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:3px;">Bills Introduced</div>
-        </div>
-        <div style="background:#f7f9fc; border-radius:8px; padding:10px; text-align:center;">
-          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.bills_passed_count || '—' %></div>
-          <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:3px;">Bills Passed</div>
-        </div>
-        <div style="background:#f7f9fc; border-radius:8px; padding:10px; text-align:center;">
-          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
-          <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:3px;">Party-Line</div>
-        </div>
-      </div>
-    </div>
+  </div>
 
     <!-- Section 2 · Issue Focus Areas -->
     <% if official.issue_focus_areas.present? %>
@@ -500,5 +497,5 @@
       <% end %>
     </div>
 
-  </div>
+</div>
 </div>
