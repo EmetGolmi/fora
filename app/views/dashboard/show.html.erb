@@ -37,7 +37,7 @@
     party_labels[raw.strip] || raw
   }
 
-  PHILLY_TITLES = {
+  philly_titles = {
     'Cherelle Parker'              => 'Mayor of Philadelphia',
     'Kenyatta Johnson'             => 'Council President, District 2',
     'Katherine Gilmore Richardson' => 'Majority Leader, At-Large',
@@ -60,7 +60,7 @@
     'Rob Dubow'                    => 'Director of Finance'
   }.freeze
 
-  PHILLY_SLUGS = {
+  philly_slugs = {
     'Cherelle Parker'              => 'cparker-philly-mayor',
     'Kenyatta Johnson'             => 'kjohnson-phl-d2',
     'Katherine Gilmore Richardson' => 'kgrichardson-phl-al',
@@ -89,7 +89,7 @@
     district = official.dig(:jurisdiction, :district).to_s.strip
     has_district = district.present? && district != "0"
 
-    return PHILLY_TITLES[name] if PHILLY_TITLES.key?(name)
+    return philly_titles[name] if philly_titles.key?(name)
 
     if office.start_with?("U.S. Representative")
       has_district ? "U.S. Representative, Congressional District #{district}" : office
@@ -178,7 +178,7 @@
                   <% elsif official.dig(:jurisdiction, :name) == 'lt_governor' %>
                     <%= link_to official[:name], pa_lt_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif %w[city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
-                    <% _philly_slug = PHILLY_SLUGS[official[:name].to_s.strip] %>
+                    <% _philly_slug = philly_slugs[official[:name].to_s.strip] %>
                     <% if _philly_slug %>
                       <%= link_to official[:name], philly_person_path(slug: _philly_slug), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                     <% else %>
