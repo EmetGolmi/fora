@@ -9,11 +9,51 @@
   year_num     = (elapsed_days / 365.25).floor + 1
   ring_color   = "rgb(11,46,130)"
 
-  party_tag_style = "background:rgba(29,78,216,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd;"
+  party_tag_style = case official.party
+    when "Republican"          then "background:rgba(220,38,38,0.2); border-color:rgba(239,68,68,0.4); color:#fca5a5;"
+    when "Working Families Party" then "background:rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.4); color:#d8b4fe;"
+    else                            "background:rgba(29,78,216,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd;"
+    end
+
+  geo_tag = %w[president vp].include?(official.office_type) ? "United States" : "Pennsylvania"
 
   gov_initials = "#{official.first_name[0]}#{official.last_name[0]}"
 
   exec_timeline = case official.office_type
+  when "president"
+    [
+      { dot_color: "rgb(178,34,34)", line_color: "rgb(178,34,34)",
+        evt: "Won 2024 Presidential Election", date: "November 5, 2024",
+        badge: { text: "312 electoral votes · 49.9% popular vote", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(178,34,34)", line_color: "rgb(178,34,34)",
+        evt: "Inaugurated — 47th President", date: "January 20, 2025",
+        badge: { text: "Second non-consecutive term in US history", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.5)", line_color: nil,
+        evt: "Term ends", date: "January 20, 2029",
+        badge: { text: "Constitutionally limited to current term", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+    ]
+  when "vp"
+    [
+      { dot_color: "rgb(178,34,34)", line_color: "rgb(178,34,34)",
+        evt: "Won 2024 Election — Vice President", date: "November 5, 2024",
+        badge: { text: "On ticket with President Trump", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(178,34,34)", line_color: "rgb(178,34,34)",
+        evt: "Sworn in — 50th Vice President", date: "January 20, 2025",
+        badge: { text: "President of the United States Senate", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.5)", line_color: nil,
+        evt: "Term ends", date: "January 20, 2029",
+        badge: { text: "Constitutionally limited to current term", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+    ]
   when "governor"
     [
       { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
@@ -101,7 +141,7 @@
           <p class="dp-office-title"><%= official.office_title %></p>
           <div class="dp-tags">
             <span class="dp-tag" style="<%= party_tag_style %>"><%= official.party %></span>
-            <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">Pennsylvania</span>
+            <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);"><%= geo_tag %></span>
           </div>
           <div class="dp-social">
             <% if official.website_url.present? %>
@@ -353,16 +393,19 @@
         </div>
         <% end %>
 
-        <%# Lt. Governor — shown on governor/mayor profiles; links to Davis's profile %>
-        <% if official.lt_governor_name.present? && official.office_type != 'lt_governor' %>
-        <a href="<%= pa_lt_governor_path %>" style="text-decoration:none; display:block;">
+        <%# Lt. Governor / VP — shown on governor/mayor/president profiles %>
+        <% if official.lt_governor_name.present? && !%w[lt_governor vp].include?(official.office_type) %>
+        <%  _lg_path  = official.office_type == 'president' ? us_vp_path : pa_lt_governor_path
+            _lg_title = official.office_type == 'president' ? '◆ Vice President' : '◆ Lt. Governor'
+            _lg_label = official.office_type == 'president' ? 'Vice President of the United States' : 'Lieutenant Governor of Pennsylvania' %>
+        <a href="<%= _lg_path %>" style="text-decoration:none; display:block;">
         <div class="dp-card eo-card" style="transition:background 0.12s; cursor:pointer;">
-          <div class="dp-card-title">◆ Lt. Governor</div>
+          <div class="dp-card-title"><%= _lg_title %></div>
           <div style="display:flex; align-items:center; gap:12px; padding:4px 0;">
             <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:#d4a832; flex-shrink:0;"><%= official.lt_governor_initials %></div>
             <div style="flex:1;">
               <div class="dp-card-text" style="font-weight:700; color:#1b3a6b;"><%= official.lt_governor_name %></div>
-              <div class="dp-card-sublabel" style="margin-top:2px;">Lieutenant Governor of Pennsylvania</div>
+              <div class="dp-card-sublabel" style="margin-top:2px;"><%= _lg_label %></div>
             </div>
             <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#b8860b; flex-shrink:0;">→</span>
           </div>
@@ -410,7 +453,7 @@
         </div>
 
         <%# Divided government %>
-        <% if official.divided_government? && official.divided_gov_note.present? %>
+        <% if official.divided_gov_note.present? %>
         <div class="dp-card">
           <div class="dp-card-title">◆ Legislative Context</div>
           <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.6; margin:0;"><%= official.divided_gov_note %></p>

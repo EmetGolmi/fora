@@ -526,6 +526,18 @@ end
     @finance = nil
   end
 
+  def us_president
+    @official     = Person.find_by!(slug: 'dtrump-us-president')
+    @profile_type = :president
+    render :show
+  end
+
+  def us_vp
+    @official     = Person.find_by!(slug: 'jvance-us-vp')
+    @profile_type = :vp
+    render :show
+  end
+
   def governor
     @official     = Person.find_by!(slug: 'jshapiro-pa-gov')
     @profile_type = :governor
