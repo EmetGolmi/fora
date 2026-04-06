@@ -12,10 +12,17 @@
   party_tag_style = case official.party
     when "Republican"          then "background:rgba(220,38,38,0.2); border-color:rgba(239,68,68,0.4); color:#fca5a5;"
     when "Working Families Party" then "background:rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.4); color:#d8b4fe;"
+    when "Appointed"           then "background:rgba(107,114,128,0.2); border-color:rgba(156,163,175,0.4); color:#d1d5db;"
     else                            "background:rgba(29,78,216,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd;"
     end
 
-  geo_tag = %w[president vp].include?(official.office_type) ? "United States" : "Pennsylvania"
+  geo_tag = if %w[president vp].include?(official.office_type)
+    "United States"
+  elsif %w[managing_director finance_director mayor].include?(official.office_type)
+    "Philadelphia"
+  else
+    "Pennsylvania"
+  end
 
   gov_initials = "#{official.first_name[0]}#{official.last_name[0]}"
 
@@ -106,6 +113,42 @@
         evt: "General Election", date: "November 2027",
         badge: { text: "~18 months away", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
     ]
+  when "managing_director"
+    [
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Served as Philadelphia Fire Commissioner", date: "2015 – January 2024",
+        badge: { text: "Led 5,000-person department through COVID-19 & civil unrest", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Appointed Managing Director by Mayor Parker", date: "January 1, 2024",
+        badge: { text: "Oversees 26 departments & ~26,000 city employees", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.35)", line_color: nil,
+        evt: "Term aligned with Mayor Parker's", date: "January 2028",
+        badge: { text: "Appointed role", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+    ]
+  when "finance_director"
+    [
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Appointed Director of Finance by Mayor Nutter", date: "January 2008",
+        badge: { text: "First appointment — career city finance executive", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Reappointed by Mayor Kenney", date: "January 2016", badge: nil },
+      { dot_color: "rgb(11,46,130)", line_color: "rgb(11,46,130)",
+        evt: "Reappointed by Mayor Parker", date: "January 2024",
+        badge: { text: "Serving across three administrations", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+      { dot_color: "#b8860b",
+        line_color: "linear-gradient(to bottom,#b8860b,rgba(184,134,11,0.12))",
+        evt: "In office", date: official.data_as_of,
+        badge: { text: "Currently serving", style: "background:rgba(184,134,11,0.08); color:#b8860b; border:1px solid rgba(184,134,11,0.3);" },
+        now: true },
+      { dot_color: "rgba(139,32,32,0.35)", line_color: nil,
+        evt: "Term aligned with Mayor Parker's", date: "January 2028",
+        badge: { text: "Appointed role", style: "background:#f0f3f8; color:#8a9ab8; border:0.5px solid #dde5f5;" } },
+    ]
   else
     []
   end
@@ -179,6 +222,40 @@
           </div>
           <div class="dp-stat" style="cursor:default;">
             <div class="dp-stat-value">2023</div>
+            <div class="dp-stat-label">Since</div>
+          </div>
+        <% elsif official.office_type == 'managing_director' %>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">26</div>
+            <div class="dp-stat-label">Departments</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">~26K</div>
+            <div class="dp-stat-label">Employees</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">2024</div>
+            <div class="dp-stat-label">Appointed</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">9 yrs</div>
+            <div class="dp-stat-label">Prior City Svc.</div>
+          </div>
+        <% elsif official.office_type == 'finance_director' %>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">$6.8B</div>
+            <div class="dp-stat-label">Budget</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">18 yrs</div>
+            <div class="dp-stat-label">In Role</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">AA</div>
+            <div class="dp-stat-label">Bond Rating</div>
+          </div>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value">2008</div>
             <div class="dp-stat-label">Since</div>
           </div>
         <% else %>
@@ -508,6 +585,32 @@
         <div style="flex:1; text-align:center; padding:10px 6px;">
           <div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:white; line-height:1; padding-top:2px;">Senate</div>
           <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">President</div>
+        </div>
+      <% elsif official.office_type == 'managing_director' %>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">26</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Departments</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white; line-height:1;">~26K</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Employees</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px;">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">2024</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Since</div>
+        </div>
+      <% elsif official.office_type == 'finance_director' %>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white; line-height:1;">$6.8B</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Budget</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white; line-height:1;">18 yrs</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">In Role</div>
+        </div>
+        <div style="flex:1; text-align:center; padding:10px 6px;">
+          <div style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:white; line-height:1;">AA</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;">Bond Rating</div>
         </div>
       <% else %>
         <div style="flex:1; text-align:center; padding:10px 6px; border-right:1px solid rgba(255,255,255,.06);">
