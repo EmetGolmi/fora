@@ -37,23 +37,59 @@
     party_labels[raw.strip] || raw
   }
 
+  PHILLY_TITLES = {
+    'Cherelle Parker'              => 'Mayor of Philadelphia',
+    'Kenyatta Johnson'             => 'Council President, District 2',
+    'Katherine Gilmore Richardson' => 'Majority Leader, At-Large',
+    'Isaiah Thomas'                => 'Majority Whip, At-Large',
+    'Kendra Brooks'                => 'Minority Leader, At-Large',
+    "Nicolas O'Rourke"             => 'Minority Whip, At-Large',
+    'Cindy Bass'                   => 'Deputy Majority Whip, District 8',
+    'Nina Ahmad'                   => 'Councilmember At-Large',
+    'Jim Harrity'                  => 'Councilmember At-Large',
+    'Rue Landau'                   => 'Councilmember At-Large',
+    'Mark Squilla'                 => 'Councilmember, District 1',
+    'Jamie Gauthier'               => 'Councilmember, District 3',
+    'Curtis Jones, Jr.'            => 'Councilmember, District 4',
+    'Jeffery Young, Jr.'           => 'Councilmember, District 5',
+    'Michael Driscoll'             => 'Councilmember, District 6',
+    'Quetcy Lozada'                => 'Councilmember, District 7',
+    'Anthony Phillips'             => 'Councilmember, District 9',
+    "Brian J. O'Neill"             => 'Councilmember, District 10',
+    'Adam Thiel'                   => 'Managing Director',
+    'Rob Dubow'                    => 'Director of Finance'
+  }.freeze
+
+  PHILLY_SLUGS = {
+    'Cherelle Parker'              => 'cparker-philly-mayor',
+    'Kenyatta Johnson'             => 'kjohnson-phl-d2',
+    'Katherine Gilmore Richardson' => 'kgrichardson-phl-al',
+    'Isaiah Thomas'                => 'ithomas-phl-al',
+    'Kendra Brooks'                => 'kbrooks-phl-al',
+    "Nicolas O'Rourke"             => 'norourke-phl-al',
+    'Cindy Bass'                   => 'cbass-phl-d8',
+    'Nina Ahmad'                   => 'nahmad-phl-al',
+    'Jim Harrity'                  => 'jharrity-phl-al',
+    'Rue Landau'                   => 'rlandau-phl-al',
+    'Mark Squilla'                 => 'msquilla-phl-d1',
+    'Jamie Gauthier'               => 'jgauthier-phl-d3',
+    'Curtis Jones, Jr.'            => 'cjones-phl-d4',
+    'Jeffery Young, Jr.'           => 'jyoung-phl-d5',
+    'Michael Driscoll'             => 'mdriscoll-phl-d6',
+    'Quetcy Lozada'                => 'qlozada-phl-d7',
+    'Anthony Phillips'             => 'aphillips-phl-d9',
+    "Brian J. O'Neill"             => 'boneill-phl-d10',
+    'Adam Thiel'                   => 'athiel-philly-md',
+    'Rob Dubow'                    => 'rdubow-philly-finance'
+  }.freeze
+
   format_office = ->(official) {
+    name     = official[:name].to_s.strip
     office   = official[:office].to_s
     district = official.dig(:jurisdiction, :district).to_s.strip
     has_district = district.present? && district != "0"
 
-    # Check DB first for council/city officials — use our title over Civic API string
-    jur_name = official.dig(:jurisdiction, :name).to_s
-    if %w[city_council city_council_at_large mayor managing_director finance_director].include?(jur_name)
-      _db_person = if has_district && district.to_i > 0
-                     Person.find_by(office_type: 'city_council', district_number: district.to_i)
-                   else
-                     _parts = official[:name].to_s.split(' ')
-                     Person.where(office_type: ['city_council_at_large', 'mayor', 'managing_director', 'finance_director'])
-                           .find_by("last_name ILIKE ?", _parts.last)
-                   end
-      next _db_person.office_title if _db_person&.office_title.present?
-    end
+    return PHILLY_TITLES[name] if PHILLY_TITLES.key?(name)
 
     if office.start_with?("U.S. Representative")
       has_district ? "U.S. Representative, Congressional District #{district}" : office
@@ -142,16 +178,9 @@
                   <% elsif official.dig(:jurisdiction, :name) == 'lt_governor' %>
                     <%= link_to official[:name], pa_lt_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif %w[city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
-                    <% _district = official.dig(:jurisdiction, :district).to_i %>
-                    <% _cp = if _district > 0
-                                Person.find_by(office_type: 'city_council', district_number: _district)
-                              else
-                                _parts = official[:name].to_s.split(' ')
-                                Person.where(office_type: 'city_council_at_large')
-                                      .find_by("last_name ILIKE ?", _parts.last)
-                              end %>
-                    <% if _cp %>
-                      <%= link_to official[:name], philly_person_path(slug: _cp.slug), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
+                    <% _philly_slug = PHILLY_SLUGS[official[:name].to_s.strip] %>
+                    <% if _philly_slug %>
+                      <%= link_to official[:name], philly_person_path(slug: _philly_slug), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                     <% else %>
                       <span style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; display:block; line-height:1.25;"><%= official[:name] %></span>
                     <% end %>
