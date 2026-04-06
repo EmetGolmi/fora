@@ -38,9 +38,22 @@
   }
 
   format_office = ->(official) {
-    office = official[:office].to_s
+    office   = official[:office].to_s
     district = official.dig(:jurisdiction, :district).to_s.strip
     has_district = district.present? && district != "0"
+
+    # Check DB first for council/city officials — use our title over Civic API string
+    jur_name = official.dig(:jurisdiction, :name).to_s
+    if %w[city_council city_council_at_large mayor managing_director finance_director].include?(jur_name)
+      _db_person = if has_district && district.to_i > 0
+                     Person.find_by(office_type: 'city_council', district_number: district.to_i)
+                   else
+                     _parts = official[:name].to_s.split(' ')
+                     Person.where(office_type: ['city_council_at_large', 'mayor', 'managing_director', 'finance_director'])
+                           .find_by("last_name ILIKE ?", _parts.last)
+                   end
+      next _db_person.office_title if _db_person&.office_title.present?
+    end
 
     if office.start_with?("U.S. Representative")
       has_district ? "U.S. Representative, Congressional District #{district}" : office
