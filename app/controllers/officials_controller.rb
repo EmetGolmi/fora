@@ -594,7 +594,7 @@ end
 
   def philly_managing_director
     @official = Person.find_by!(slug: 'athiel-philly-md')
-    @profile_type = :governor
+    @profile_type = :managing_director
     render :show
   end
 
@@ -624,7 +624,9 @@ end
                       .find_by("slug = ? OR slug LIKE ?", slug, "#{slug}-%")
     render(file: 'public/404.html', status: :not_found, layout: false) and return unless @official
     @profile_type = case @official.office_type
-                    when 'governor', 'lt_governor', 'attorney_general', 'managing_director', 'finance_director'
+                    when 'managing_director'
+                      :managing_director
+                    when 'governor', 'lt_governor', 'attorney_general', 'finance_director'
                       :governor
                     when 'city_council', 'city_council_at_large', 'mayor'
                       :city_council

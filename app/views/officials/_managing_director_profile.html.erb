@@ -1,0 +1,389 @@
+<%
+  ed           = official.extra_data || {}
+  initials     = "#{official.first_name&.[](0)}#{official.last_name&.[](0)}"
+  term_start   = official.term_start || Date.new(2024, 1, 1)
+  term_end     = official.term_end   || Date.new(2028, 1, 1)
+  _ring_circ   = 219.9
+  total_days   = (term_end - term_start).to_i.clamp(1, 99_999)
+  elapsed_days = [(Date.today - term_start).to_i, total_days].min.clamp(0, total_days)
+  ring_pct     = elapsed_days.to_f / total_days
+  ring_offset  = (_ring_circ * (1 - ring_pct)).round(2)
+  year_num     = (elapsed_days / 365.25).floor + 1
+
+  tag_colors = { 'Public Safety' => '#993556', 'Infrastructure' => '#378add',
+                 'Emergency' => '#b8860b', 'Health' => '#1d9e75' }
+  badge_colors = { 'acting' => 'background:#7a1515; color:#ffc5c5;',
+                   'key'    => 'background:#0c3a6e; color:#93c5fd;',
+                   'media'  => 'background:#3a2d00; color:#d4a832;' }
+  badge_labels = { 'acting' => 'Acting MD', 'key' => 'Key contact', 'media' => 'Media contact' }
+%>
+
+<!-- ═══════════════════════════════════════
+     DESKTOP
+═══════════════════════════════════════ -->
+<div class="desktop-profile">
+
+  <%# Hero %>
+  <div class="dp-hero">
+    <div class="dp-hero-inner">
+      <a href="javascript:history.back()" class="dp-hero-back">← My Government</a>
+      <div class="dp-hero-identity">
+        <div class="dp-avatar">
+          <% if official.photo_url.present? %>
+            <img src="<%= official.photo_url %>" alt="<%= official.full_name %>" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%;">
+          <% else %>
+            <div class="dp-avatar-initials"><%= initials %></div>
+          <% end %>
+          <div class="dp-avatar-badge">✓</div>
+        </div>
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:4px;">Managing Director · City of Philadelphia</p>
+          <h1 class="dp-name"><%= official.full_name %></h1>
+          <p class="dp-office-title"><%= official.office_title %></p>
+          <div class="dp-tags">
+            <span class="dp-tag" style="background:rgba(107,114,128,0.2); border-color:rgba(156,163,175,0.4); color:#d1d5db;">Appointed — not elected</span>
+            <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">Philadelphia</span>
+            <% if ed['status_alert'].present? %>
+              <span class="dp-tag" style="background:rgba(200,80,80,0.2); border-color:rgba(200,80,80,0.4); color:#e08080;">On military leave</span>
+            <% end %>
+          </div>
+          <div class="dp-social">
+            <% if official.website_url.present? %>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-social-link" title="Official Website">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+            <% end %>
+            <button onclick="navigator.share ? navigator.share({title:'<%= official.full_name %> — FORA', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)" class="dp-social-link" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;" title="Share">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:rgba(255,255,255,0.55);"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dp-stat-bar">
+        <% (ed['stats'] || []).each do |s| %>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value"><%= s['value'] %></div>
+            <div class="dp-stat-label"><%= s['label'] %></div>
+          </div>
+        <% end %>
+        <% if (ed['stats'] || []).empty? %>
+          <div class="dp-stat"><div class="dp-stat-value">~20</div><div class="dp-stat-label">Departments</div></div>
+          <div class="dp-stat"><div class="dp-stat-value">$316K</div><div class="dp-stat-label">Annual Salary</div></div>
+          <div class="dp-stat"><div class="dp-stat-value">33 yrs</div><div class="dp-stat-label">Emergency Mgmt</div></div>
+        <% end %>
+      </div>
+    </div>
+    <div class="dp-stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+
+  <%# Alert bar %>
+  <% if ed['status_alert'].present? %>
+  <div style="background:#2a1a1a; border-bottom:1px solid rgba(200,80,80,0.3); padding:10px 28px; font-family:'Nunito',sans-serif; font-size:12px; color:#e08080; display:flex; align-items:center; gap:10px;">
+    <div style="width:6px; height:6px; border-radius:50%; background:#e08080; flex-shrink:0;"></div>
+    <%= ed['status_alert'] %>
+  </div>
+  <% end %>
+
+  <%# Body %>
+  <div style="background:#f2f4f8; padding:1px 0;">
+    <div class="dp-body">
+
+      <%# ── MAIN COLUMN ── %>
+      <div class="dp-main">
+
+        <%# Role callout %>
+        <% if ed['role_callout'].present? %>
+        <div class="dp-section" style="padding-bottom:0;">
+          <div style="background:white; border-left:3px solid #b8860b; border-radius:0 8px 8px 0; padding:12px 16px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.65; border:0.5px solid #dde5f5; border-left:3px solid #b8860b;">
+            <strong style="color:#1b3a6b; font-weight:700;">The city's chief operating officer.</strong> <%= ed['role_callout'].sub("The city's chief operating officer. ", '') %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Accountability record %>
+        <% acct = ed['accountability'] %>
+        <% if acct.present? %>
+        <div class="dp-section">
+          <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:12px;">
+            <div class="dp-section-eyebrow" style="color:#c85050; margin-bottom:0;">◆ Accountability Record</div>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.08em;">as of <%= acct['as_of'] %></span>
+          </div>
+          <div style="background:white; border:0.5px solid rgba(200,80,80,0.3); border-left:3px solid #c85050; border-radius:8px; overflow:hidden;">
+            <% acct['rows'].each_with_index do |row, i| %>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; padding:9px 14px; <%= i < acct['rows'].length - 1 ? 'border-bottom:0.5px solid #f0f2f7;' : '' %>">
+                <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a;"><%= row['key'] %></span>
+                <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:<%= row['red'] ? '#c85050' : '#1b3a6b' %>; margin-left:16px; text-align:right; flex-shrink:0;"><%= row['value'] %></span>
+              </div>
+            <% end %>
+            <div style="padding:8px 14px; border-top:0.5px solid #f0f2f7; font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.06em;">Source: <%= acct['source'] %></div>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Key departments %>
+        <% if ed['departments'].present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Oversight</div>
+          <h2 class="dp-section-title">Key Departments This Office Oversees</h2>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <% ed['departments'].each do |dept| %>
+              <% tc = tag_colors[dept['tag']] || '#5a6e8a' %>
+              <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; padding:11px 13px;">
+                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:3px;"><%= dept['name'] %></div>
+                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.4; margin-bottom:6px;"><%= dept['why'] %></div>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:100px; background:<%= tc %>22; color:<%= tc %>; border:0.5px solid <%= tc %>55;"><%= dept['tag'] %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Senior staff %>
+        <% if ed['staff'].present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Office Leadership</div>
+          <h2 class="dp-section-title">Senior Staff</h2>
+          <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden;">
+            <% ed['staff'].each_with_index do |s, i| %>
+              <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; <%= i < ed['staff'].length - 1 ? 'border-bottom:0.5px solid #f0f2f7;' : '' %>">
+                <div style="width:34px; height:34px; border-radius:50%; background:#e8ecf4; display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:11px; font-weight:700; color:#1b3a6b; flex-shrink:0;"><%= s['initials'] %></div>
+                <div style="flex:1;">
+                  <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#1b3a6b;"><%= s['name'] %></div>
+                  <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:.06em; color:#8a9ab8; margin-top:1px;"><%= s['title'] %></div>
+                  <% if s['why'].present? %>
+                    <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px; font-style:italic;"><%= s['why'] %></div>
+                  <% end %>
+                  <% if s['badge'].present? %>
+                    <span style="display:inline-block; margin-top:4px; font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:100px; <%= badge_colors[s['badge']] %>"><%= badge_labels[s['badge']] %></span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Q&A placeholder %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Community</div>
+          <h2 class="dp-section-title">Q&amp;A</h2>
+          <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:32px; text-align:center;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">Coming Soon</div>
+            <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#5a6e8a; line-height:1.6; margin:0;">Ask questions about this official's record and positions.</p>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #e0e5ef; padding-top:14px; margin-top:4px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ Data Note</div>
+          <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; line-height:1.6; margin:0;">Data as of <%= official.data_as_of %>. Sources: phila.gov, Philadelphia Inquirer, City payroll records.</p>
+        </div>
+
+      </div><!-- /dp-main -->
+
+      <%# ── SIDEBAR ── %>
+      <div class="dp-sidebar">
+
+        <%# Contact %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Contact</div>
+          <% if ed['status_alert'].present? %>
+            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#c85050; margin-bottom:10px; line-height:1.5;">During Thiel's leave, direct inquiries to Deputy MD Michael Carroll.</div>
+          <% end %>
+          <div class="dp-card-entry">
+            <div class="dp-card-sublabel">Office</div>
+            <div class="dp-card-text"><%= official.office_address.presence || 'Municipal Services Building · 1401 JFK Blvd, 14th Fl · Philadelphia, PA 19102' %></div>
+          </div>
+          <% if official.website_url.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Website</div>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;"><%= official.website_url.gsub(/^https?:\/\//, '').split('/').first %> ↗</a>
+            </div>
+          <% end %>
+          <% if official.contact_url.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Constituent Request</div>
+              <a href="<%= official.contact_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;">Submit online ↗</a>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Career timeline %>
+        <% tl = ed['career_timeline'] %>
+        <% if tl.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Career Timeline</div>
+          <div style="display:flex; flex-direction:column; padding-left:14px; position:relative;">
+            <div style="position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:#e8ecf4;"></div>
+            <% tl.each_with_index do |item, i| %>
+              <%
+                dot_bg = case item['state']
+                  when 'active' then '#b8860b'
+                  when 'flag'   then '#c85050'
+                  else '#c8d0dc'
+                end
+                dot_border = item['state'] == 'active' ? ' border:2px solid white; box-shadow:0 0 0 2px #b8860b;' : ''
+              %>
+              <div style="position:relative; padding:0 0 <%= i < tl.length - 1 ? '12' : '0' %>px 12px;">
+                <div style="position:absolute; left:-12px; top:4px; width:9px; height:9px; border-radius:50%; background:<%= dot_bg %>;<%= dot_border %>"></div>
+                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#0e1a2e;"><%= item['title'] %></div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-top:1px;"><%= item['sub'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Term ring %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Term</div>
+          <div style="text-align:center; margin-bottom:10px;">
+            <svg width="86" height="86" viewBox="0 0 86 86">
+              <circle cx="43" cy="43" r="35" fill="none" stroke="#e8ecf4" stroke-width="6"/>
+              <circle cx="43" cy="43" r="35" fill="none" stroke="rgb(11,46,130)" stroke-width="6"
+                stroke-dasharray="<%= _ring_circ %>" stroke-dashoffset="<%= ring_offset %>"
+                stroke-linecap="round" transform="rotate(-90 43 43)"/>
+              <text x="43" y="39" text-anchor="middle" dominant-baseline="central"
+                style="font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;fill:#0e1a2e;"><%= "Yr #{year_num}" %></text>
+              <text x="43" y="57" text-anchor="middle"
+                style="font-family:'JetBrains Mono',monospace;font-size:7px;fill:#8a9ab8;">appointed</text>
+            </svg>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Appointed by</span>
+            <span class="dp-card-value">Mayor Parker</span>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Start date</span>
+            <span class="dp-card-value">Jan 1, 2024</span>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Term ends</span>
+            <span class="dp-card-value">Jan 2028 (aligned)</span>
+          </div>
+        </div>
+
+        <%# Compensation %>
+        <% comp = ed['compensation'] %>
+        <% if comp.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Compensation (2024)</div>
+          <% comp.each_with_index do |row, i| %>
+            <div class="dp-card-row" style="<%= i == comp.length - 1 ? 'border-top:1px solid #e8ecf4; padding-top:8px; margin-top:4px;' : '' %>">
+              <span class="dp-card-label"><%= row['key'] %></span>
+              <span class="dp-card-value" style="<%= i == comp.length - 1 ? 'font-weight:700; color:#1b3a6b;' : '' %>"><%= row['value'] %></span>
+            </div>
+          <% end %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-top:8px; line-height:1.5;">Source: City payroll records · Ethics disclosure</div>
+        </div>
+        <% end %>
+
+      </div><!-- /dp-sidebar -->
+    </div><!-- /dp-body -->
+  </div>
+
+</div><!-- /desktop-profile -->
+
+
+<!-- ═══════════════════════════════════════
+     MOBILE
+═══════════════════════════════════════ -->
+<div class="mobile-profile">
+<div class="mobile-card">
+
+  <div style="background:#1b3a6b; position:relative; overflow:hidden;">
+    <div style="height:260px; overflow:hidden; position:relative;">
+      <% if official.photo_url.present? %>
+        <img src="<%= official.photo_url %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 15%; display:block;">
+      <% else %>
+        <div style="width:100%; height:100%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:#d4a832;"><%= initials %></div>
+      <% end %>
+      <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
+      <div class="mob-foil" style="position:absolute; inset:0;"></div>
+    </div>
+
+    <div style="background:#003087; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
+      <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:white; line-height:1.2;"><%= official.full_name %></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.12em; color:#d4a832; margin-top:3px;"><%= official.office_title %></div>
+    </div>
+
+    <div style="background:#003087; display:flex;">
+      <% (ed['stats'] || [{ 'value' => '~20', 'label' => 'Departments' }, { 'value' => '$316K', 'label' => 'Salary' }, { 'value' => '33 yrs', 'label' => 'Emergency Exp.' }]).first(3).each_with_index do |s, i| %>
+        <div style="flex:1; text-align:center; padding:10px 6px; <%= i < 2 ? 'border-right:1px solid rgba(255,255,255,.06);' : '' %>">
+          <div style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white; line-height:1;"><%= s['value'] %></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;"><%= s['label'] %></div>
+        </div>
+      <% end %>
+    </div>
+
+    <div style="background:#003087; padding:8px 14px 8px 21px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; gap:14px; align-items:center;">
+        <% if official.website_url.present? %>
+          <a href="<%= official.website_url %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        <% end %>
+      </div>
+      <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none;">Contact Office ↗</a>
+    </div>
+  </div>
+
+  <% if ed['status_alert'].present? %>
+  <div style="background:#2a1a1a; padding:10px 20px; font-family:'Nunito',sans-serif; font-size:12px; color:#e08080; display:flex; align-items:center; gap:8px; border-bottom:1px solid rgba(200,80,80,0.25);">
+    <div style="width:6px; height:6px; border-radius:50%; background:#e08080; flex-shrink:0;"></div>
+    <%= ed['status_alert'] %>
+  </div>
+  <% end %>
+
+  <% if ed['role_callout'].present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06); background:#fafbfd;">
+    <div style="border-left:3px solid #b8860b; padding-left:12px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.65;">
+      <strong style="color:#1b3a6b;">The city's chief operating officer.</strong> <%= ed['role_callout'].sub("The city's chief operating officer. ", '') %>
+    </div>
+  </div>
+  <% end %>
+
+  <% acct = ed['accountability'] %>
+  <% if acct.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#c85050; margin-bottom:10px;">◆ Accountability Record · <%= acct['as_of'] %></div>
+    <% acct['rows'].each_with_index do |row, i| %>
+      <div style="display:flex; justify-content:space-between; padding:7px 0; <%= i < acct['rows'].length - 1 ? 'border-bottom:0.5px solid rgba(27,58,107,0.06);' : '' %>">
+        <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; flex:1; padding-right:12px;"><%= row['key'] %></span>
+        <span style="font-family:'Nunito',sans-serif; font-size:11px; font-weight:700; color:<%= row['red'] ? '#c85050' : '#1b3a6b' %>; flex-shrink:0;"><%= row['value'] %></span>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <% if ed['departments'].present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Key Departments Overseen</div>
+    <% ed['departments'].each do |dept| %>
+      <% tc = tag_colors[dept['tag']] || '#5a6e8a' %>
+      <div style="padding:8px 0; border-bottom:0.5px solid rgba(27,58,107,0.05);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b;"><%= dept['name'] %></span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.06em; text-transform:uppercase; padding:2px 6px; border-radius:100px; background:<%= tc %>22; color:<%= tc %>; border:0.5px solid <%= tc %>55; flex-shrink:0; margin-left:8px;"><%= dept['tag'] %></span>
+        </div>
+        <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:2px;"><%= dept['why'] %></div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <% comp = ed['compensation'] %>
+  <% if comp.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Compensation (2024)</div>
+    <% comp.each_with_index do |row, i| %>
+      <div style="display:flex; justify-content:space-between; padding:6px 0; <%= i < comp.length - 1 ? 'border-bottom:0.5px solid rgba(27,58,107,0.05);' : 'border-top:1px solid rgba(27,58,107,0.06); padding-top:8px; margin-top:2px;' %>">
+        <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a;"><%= row['key'] %></span>
+        <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:<%= i == comp.length - 1 ? '700' : '600' %>; color:#1b3a6b;"><%= row['value'] %></span>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+</div>
+</div>
