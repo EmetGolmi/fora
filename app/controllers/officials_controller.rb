@@ -544,12 +544,81 @@ end
     render :show
   end
 
+  def philly_council_president
+    @official = Person.find_by!(slug: 'kjohnson-phl-d2')
+    @profile_type = :city_council
+    render :show
+  end
+
+  def philly_majority_leader
+    @official = Person.find_by!(slug: 'kgrichardson-phl-al')
+    @profile_type = :city_council
+    render :show
+  end
+
+  def philly_majority_whip
+    @official = Person.find_by!(slug: 'ithomas-phl-al')
+    @profile_type = :city_council
+    render :show
+  end
+
+  def philly_minority_leader
+    @official = Person.find_by!(slug: 'kbrooks-phl-al')
+    @profile_type = :city_council
+    render :show
+  end
+
+  def philly_minority_whip
+    @official = Person.find_by!(slug: 'norourke-phl-al')
+    @profile_type = :city_council
+    render :show
+  end
+
+  def philly_deputy_majority_whip
+    @official = Person.find_by!(slug: 'cbass-phl-d8')
+    @profile_type = :city_council
+    render :show
+  end
+
+  def philly_managing_director
+    @official = Person.find_by!(slug: 'athiel-philly-md')
+    @profile_type = :governor
+    render :show
+  end
+
+  def philly_finance_director
+    @official = Person.find_by!(slug: 'rdubow-philly-finance')
+    @profile_type = :governor
+    render :show
+  end
+
+  def philly_district_1;  @official = Person.find_by!(slug: 'msquilla-phl-d1');  @profile_type = :city_council; render :show; end
+  def philly_district_2;  @official = Person.find_by!(slug: 'kjohnson-phl-d2');  @profile_type = :city_council; render :show; end
+  def philly_district_3;  @official = Person.find_by!(slug: 'jgauthier-phl-d3'); @profile_type = :city_council; render :show; end
+  def philly_district_4;  @official = Person.find_by!(slug: 'cjones-phl-d4');    @profile_type = :city_council; render :show; end
+  def philly_district_5;  @official = Person.find_by!(slug: 'jyoung-phl-d5');    @profile_type = :city_council; render :show; end
+  def philly_district_6;  @official = Person.find_by!(slug: 'mdriscoll-phl-d6'); @profile_type = :city_council; render :show; end
+  def philly_district_7;  @official = Person.find_by!(slug: 'qlozada-phl-d7');   @profile_type = :city_council; render :show; end
+  def philly_district_8;  @official = Person.find_by!(slug: 'cbass-phl-d8');     @profile_type = :city_council; render :show; end
+  def philly_district_9;  @official = Person.find_by!(slug: 'aphillips-phl-d9'); @profile_type = :city_council; render :show; end
+  def philly_district_10; @official = Person.find_by!(slug: 'boneill-phl-d10');  @profile_type = :city_council; render :show; end
+  def philly_al_ahmad;    @official = Person.find_by!(slug: 'nahmad-phl-al');    @profile_type = :city_council; render :show; end
+  def philly_al_harrity;  @official = Person.find_by!(slug: 'jharrity-phl-al');  @profile_type = :city_council; render :show; end
+  def philly_al_landau;   @official = Person.find_by!(slug: 'rlandau-phl-al');   @profile_type = :city_council; render :show; end
+
   def philly_person
-    slug_prefix = params[:slug].to_s.strip
+    slug = params[:slug].to_s.strip
     @official = Person.where(state: 'PA')
-                      .find_by("slug = ? OR slug LIKE ?", slug_prefix, "#{slug_prefix}-%")
+                      .find_by("slug = ? OR slug LIKE ?", slug, "#{slug}-%")
     render(file: 'public/404.html', status: :not_found, layout: false) and return unless @official
-    @profile_type = @official.office_type.to_sym
+    @profile_type = case @official.office_type
+                    when 'governor', 'lt_governor', 'attorney_general', 'managing_director', 'finance_director'
+                      :governor
+                    when 'city_council', 'city_council_at_large', 'mayor'
+                      :city_council
+                    else
+                      @official.office_type.to_sym
+                    end
     render :show
   end
 
