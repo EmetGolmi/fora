@@ -10,7 +10,7 @@
 
 <%
   party_labels = { "D" => "Democratic", "R" => "Republican", "W" => "Working Families", "I" => "Independent" }
-  city_offices = %w[mayor city_council city_council_at_large]
+  city_offices = %w[mayor managing_director finance_director city_council city_council_at_large]
   federal_offices = %w[federal president vice_president us_senate us_house]
   state_offices = %w[governor lt_governor]
 
@@ -177,7 +177,7 @@
                     <%= link_to official[:name], philly_mayor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif official.dig(:jurisdiction, :name) == 'lt_governor' %>
                     <%= link_to official[:name], pa_lt_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif %w[city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
+                  <% elsif %w[managing_director finance_director city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
                     <% _philly_slug = philly_slugs[official[:name].to_s.strip] %>
                     <% if _philly_slug %>
                       <%= link_to official[:name], philly_person_path(slug: _philly_slug), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>

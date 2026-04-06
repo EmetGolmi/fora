@@ -253,14 +253,25 @@ class JurisdictionResolver
     (response.parsed_response["rows"] || []).map { |row| normalize_phl_official(row) }
   end
 
+  PHILLY_APPOINTED = [
+    { name: 'Adam Thiel', office: 'Managing Director', party: nil,
+      jurisdiction: { name: 'managing_director', district: nil,
+                      division_id: 'ocd-division/country:us/state:pa/place:philadelphia' } },
+    { name: 'Rob Dubow',  office: 'Director of Finance', party: nil,
+      jurisdiction: { name: 'finance_director', district: nil,
+                      division_id: 'ocd-division/country:us/state:pa/place:philadelphia' } }
+  ].freeze
+
   def fetch_phl_citywide_officials
     sql = "SELECT first_name, last_name, office, office_label, district, party " \
           "FROM elected_officials WHERE office IN ('mayor', 'city_council_at_large')"
 
     response = self.class.get(PHL_CARTO_URI, query: { q: sql })
-    return [] unless response.success?
+    elected  = response.success? ? (response.parsed_response["rows"] || []).map { |row| normalize_phl_official(row) } : []
 
-    (response.parsed_response["rows"] || []).map { |row| normalize_phl_official(row) }
+    mayor    = elected.select { |o| o[:jurisdiction][:name] == 'mayor' }
+    at_large = elected.reject { |o| o[:jurisdiction][:name] == 'mayor' }
+    mayor + PHILLY_APPOINTED + at_large
   end
 
   def fetch_phl_council_district_official(zip)
