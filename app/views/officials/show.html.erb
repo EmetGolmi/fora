@@ -1,4 +1,4 @@
-<% content_for(:title) { [:president, :vp, :governor, :lt_governor, :mayor, :city_council, :city_council_at_large].include?(@profile_type) ? "#{@official.full_name} — FORA" : "#{@member['directOrderName']} — FORA" } %>
+<% content_for(:title) { @official&.full_name.present? ? "#{@official.full_name} — FORA" : "#{@member&.dig('directOrderName')} — FORA" } %>
 
 <% content_for :head do %>
 <style>
