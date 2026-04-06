@@ -1,0 +1,558 @@
+<%
+  ed           = official.extra_data || {}
+  initials     = "#{official.first_name&.[](0)}#{official.last_name&.[](0)}"
+  term_start   = official.term_start || Date.new(2008, 1, 7)
+  term_end     = official.term_end   || Date.new(2028, 1, 1)
+  _ring_circ   = 219.9
+  total_days   = (term_end - term_start).to_i.clamp(1, 99_999)
+  elapsed_days = [(Date.today - term_start).to_i, total_days].min.clamp(0, total_days)
+  ring_pct     = elapsed_days.to_f / total_days
+  ring_offset  = (_ring_circ * (1 - ring_pct)).round(2)
+  year_num     = (elapsed_days / 365.25).floor + 1
+
+  fmt_amount = ->(n) {
+    n = n.to_f
+    if n >= 1_000_000
+      "$#{(n / 1_000_000).round(1)}M"
+    elsif n >= 1_000
+      "$#{(n / 1_000).round(0)}K"
+    else
+      "$#{n.round(0)}"
+    end
+  }
+
+  risk_colors = {
+    'high' => { bg: '#2a1010', border: 'rgba(200,80,80,0.4)', left: '#c85050', badge_bg: 'rgba(200,80,80,0.15)', badge_color: '#e08080', badge_text: 'High Risk' },
+    'med'  => { bg: '#1e1e0a', border: 'rgba(184,134,11,0.35)', left: '#b8860b', badge_bg: 'rgba(184,134,11,0.12)', badge_color: '#d4a832', badge_text: 'Medium Risk' }
+  }
+%>
+
+<!-- ═══════════════════════════════════════
+     DESKTOP
+═══════════════════════════════════════ -->
+<div class="desktop-profile">
+
+  <%# Hero %>
+  <div class="dp-hero">
+    <div class="dp-hero-inner">
+      <a href="javascript:history.back()" class="dp-hero-back">← My Government</a>
+      <div class="dp-hero-identity">
+        <div class="dp-avatar">
+          <% if official.photo_url.present? %>
+            <img src="<%= official.photo_url %>" alt="<%= official.full_name %>" style="width:100%; height:100%; object-fit:cover; object-position:50% 20%;">
+          <% else %>
+            <div class="dp-avatar-initials"><%= initials %></div>
+          <% end %>
+          <div class="dp-avatar-badge">✓</div>
+        </div>
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:4px;">Director of Finance · City of Philadelphia</p>
+          <h1 class="dp-name"><%= official.full_name %></h1>
+          <p class="dp-office-title"><%= official.office_title %></p>
+          <div class="dp-tags">
+            <span class="dp-tag" style="background:rgba(107,114,128,0.2); border-color:rgba(156,163,175,0.4); color:#d1d5db;">Appointed — not elected</span>
+            <span class="dp-tag" style="border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5);">Philadelphia</span>
+            <span class="dp-tag" style="background:rgba(29,158,117,0.15); border-color:rgba(29,158,117,0.4); color:#4ec9a0;">In office since Jan 2008</span>
+          </div>
+          <div class="dp-social">
+            <% if official.website_url.present? %>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-social-link" title="Official Website">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+            <% end %>
+            <button onclick="navigator.share ? navigator.share({title:'<%= official.full_name %> — FORA', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)" class="dp-social-link" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;" title="Share">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:rgba(255,255,255,0.55);"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dp-stat-bar">
+        <% (ed['stats'] || []).each do |s| %>
+          <div class="dp-stat" style="cursor:default;">
+            <div class="dp-stat-value"><%= s['value'] %></div>
+            <div class="dp-stat-label"><%= s['label'] %></div>
+          </div>
+        <% end %>
+        <% if (ed['stats'] || []).empty? %>
+          <div class="dp-stat"><div class="dp-stat-value">$6.84B</div><div class="dp-stat-label">FY2026 Budget</div></div>
+          <div class="dp-stat"><div class="dp-stat-value">18 yrs</div><div class="dp-stat-label">As City CFO</div></div>
+          <div class="dp-stat"><div class="dp-stat-value">A-range</div><div class="dp-stat-label">Bond Rating</div></div>
+        <% end %>
+      </div>
+    </div>
+    <div class="dp-stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+
+  <%# Tenure highlights bar %>
+  <% th = ed['tenure_highlights'] %>
+  <% if th.present? %>
+  <div style="background:#0d2f1e; border-bottom:1px solid rgba(29,158,117,0.3); padding:8px 28px; display:flex; gap:24px; flex-wrap:wrap;">
+    <% th.each do |item| %>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div style="width:5px; height:5px; border-radius:50%; background:#1d9e75; flex-shrink:0;"></div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:.06em; color:#4ec9a0;">
+          <%= item['label'] %><% if item['value'].present? %>: <strong><%= item['value'] %></strong><% end %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <%# Body %>
+  <div style="background:#f2f4f8; padding:1px 0;">
+    <div class="dp-body">
+
+      <%# ── MAIN COLUMN ── %>
+      <div class="dp-main">
+
+        <%# Role callout %>
+        <% if ed['role_callout'].present? %>
+        <div class="dp-section" style="padding-bottom:0;">
+          <div style="background:white; border-left:3px solid #b8860b; border-radius:0 8px 8px 0; padding:12px 16px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.65; border:0.5px solid #dde5f5; border-left:3px solid #b8860b;">
+            <%= ed['role_callout'] %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# FY2026 Budget %>
+        <% budget = ed['budget'] %>
+        <% if budget.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ City Budget</div>
+          <h2 class="dp-section-title">FY2026 Budget Breakdown</h2>
+          <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; padding:16px 18px;">
+            <div style="font-family:'Libre Baskerville',serif; font-size:28px; font-weight:700; color:#1b3a6b; line-height:1;"><%= budget['total'] %></div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.06em; margin-top:4px; margin-bottom:14px;"><%= budget['subtitle'] %></div>
+            <%# Segmented horizontal bar %>
+            <div style="display:flex; border-radius:4px; overflow:hidden; height:18px; margin-bottom:10px;">
+              <% (budget['segments'] || []).each do |seg| %>
+                <div style="width:<%= seg['pct'] %>%; background:<%= seg['color'] %>; position:relative;" title="<%= seg['label'] %>: <%= seg['pct'] %>%"></div>
+              <% end %>
+            </div>
+            <%# Legend %>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px 16px;">
+              <% (budget['segments'] || []).each do |seg| %>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div style="width:8px; height:8px; border-radius:2px; background:<%= seg['color'] %>; flex-shrink:0;"></div>
+                  <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= seg['label'] %></span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-left:auto;"><%= seg['pct'] %>%</span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Revenue Sources %>
+        <% rev = ed['revenue_sources'] %>
+        <% if rev.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Where the Money Comes From</div>
+          <h2 class="dp-section-title">Revenue Sources</h2>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <% rev.each do |src| %>
+              <div style="background:white; border:0.5px solid #dde5f5; border-left:3px solid <%= src['color'] %>; border-radius:0 8px 8px 0; padding:12px 14px;">
+                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:2px;"><%= src['name'] %></div>
+                <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:6px;">
+                  <span style="font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:#0e1a2e;"><%= src['amount'] %></span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8;"><%= src['pct_label'] %></span>
+                </div>
+                <div style="background:#f0f3f9; border-radius:3px; height:4px; margin-bottom:8px; overflow:hidden;">
+                  <div style="width:<%= src['bar_pct'] %>%; height:100%; background:<%= src['color'] %>; border-radius:3px;"></div>
+                </div>
+                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;"><%= src['explain'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# What this office does %>
+        <% does_list = ed['does'] %>
+        <% if does_list.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Responsibilities</div>
+          <h2 class="dp-section-title">What This Office Does</h2>
+          <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden;">
+            <% does_list.each_with_index do |item, i| %>
+              <div style="padding:12px 16px; <%= i < does_list.length - 1 ? 'border-bottom:0.5px solid #f0f2f7;' : '' %>">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <div style="width:18px; height:18px; border-radius:50%; background:#e8f4ee; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:2px;"><%= item['title'] %></div>
+                    <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;"><%= item['sub'] %></div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# What this office does NOT do %>
+        <% doesnt_list = ed['doesnt'] %>
+        <% if doesnt_list.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow" style="color:#8a9ab8;">◆ Common Misconceptions</div>
+          <h2 class="dp-section-title">What This Office Does NOT Do</h2>
+          <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden;">
+            <% doesnt_list.each_with_index do |item, i| %>
+              <div style="padding:11px 16px; <%= i < doesnt_list.length - 1 ? 'border-bottom:0.5px solid #f0f2f7;' : '' %>">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <div style="width:18px; height:18px; border-radius:50%; background:#f5ecec; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c85050" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:1px;"><%= item['text'] %></div>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; color:#8a9ab8; letter-spacing:.04em;"><%= item['who'] %></div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Fiscal risks %>
+        <% risks = ed['fiscal_risks'] %>
+        <% if risks.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow" style="color:#c85050;">◆ Risk Assessment</div>
+          <h2 class="dp-section-title">Key Fiscal Risks</h2>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <% risks.each do |risk| %>
+              <% rc = risk_colors[risk['level']] || risk_colors['med'] %>
+              <div style="background:white; border:0.5px solid <%= rc[:border] %>; border-left:3px solid <%= rc[:left] %>; border-radius:0 8px 8px 0; padding:12px 14px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:<%= rc[:badge_bg] %>; color:<%= rc[:badge_color] %>;"><%= rc[:badge_text] %></span>
+                  <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#0e1a2e;"><%= risk['title'] %></span>
+                </div>
+                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.55;"><%= risk['sub'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Q&A placeholder %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Community</div>
+          <h2 class="dp-section-title">Q&amp;A</h2>
+          <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:32px; text-align:center;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">Coming Soon</div>
+            <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#5a6e8a; line-height:1.6; margin:0;">Ask questions about this official's record and positions.</p>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #e0e5ef; padding-top:14px; margin-top:4px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ Data Note</div>
+          <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#8a9ab8; line-height:1.6; margin:0;">Data as of <%= official.data_as_of %>. Sources: phila.gov, City of Philadelphia FY2026 Operating Budget, Pew Charitable Trusts.</p>
+        </div>
+
+      </div><!-- /dp-main -->
+
+      <%# ── SIDEBAR ── %>
+      <div class="dp-sidebar">
+
+        <%# Contact %>
+        <% contact = ed['contact'] %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Contact</div>
+          <div class="dp-card-entry">
+            <div class="dp-card-sublabel">Office</div>
+            <div class="dp-card-text"><%= official.office_address.presence || 'Municipal Services Building · 1401 JFK Blvd, 12th Fl · Philadelphia, PA 19102' %></div>
+          </div>
+          <% if contact&.dig('email').present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Email</div>
+              <a href="mailto:<%= contact['email'] %>" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;"><%= contact['email'] %></a>
+            </div>
+          <% end %>
+          <% if contact&.dig('phone').present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Phone</div>
+              <div class="dp-card-text"><%= contact['phone'] %></div>
+            </div>
+          <% end %>
+          <% if official.website_url.present? %>
+            <div class="dp-card-entry">
+              <div class="dp-card-sublabel">Website</div>
+              <a href="<%= official.website_url %>" target="_blank" rel="noopener" class="dp-card-text" style="text-decoration:underline; text-underline-offset:2px;"><%= official.website_url.gsub(/^https?:\/\//, '').split('/').first %> ↗</a>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Career timeline %>
+        <% tl = ed['career_timeline'] %>
+        <% if tl.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Career Timeline</div>
+          <div style="display:flex; flex-direction:column; padding-left:14px; position:relative;">
+            <div style="position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:#e8ecf4;"></div>
+            <% tl.each_with_index do |item, i| %>
+              <%
+                dot_bg = case item['state']
+                  when 'active' then '#b8860b'
+                  when 'flag'   then '#c85050'
+                  else '#c8d0dc'
+                end
+                dot_border = item['state'] == 'active' ? ' border:2px solid white; box-shadow:0 0 0 2px #b8860b;' : ''
+              %>
+              <div style="position:relative; padding:0 0 <%= i < tl.length - 1 ? '12' : '0' %>px 12px;">
+                <div style="position:absolute; left:-12px; top:4px; width:9px; height:9px; border-radius:50%; background:<%= dot_bg %>;<%= dot_border %>"></div>
+                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#0e1a2e;"><%= item['title'] %></div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-top:1px;"><%= item['sub'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Bond credit ratings %>
+        <% ratings = ed['credit_ratings'] %>
+        <% if ratings.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Bond Credit Ratings</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-bottom:10px; line-height:1.5;">Highest ratings in 40+ years. Lower risk = lower borrowing costs for city projects.</div>
+          <div style="display:flex; gap:8px;">
+            <% ratings.each do |r| %>
+              <div style="flex:1; background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:10px; text-align:center;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.08em; margin-bottom:4px;"><%= r['agency'] %></div>
+                <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1d9e75;"><%= r['rating'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+
+        <%# Pension progress %>
+        <% pension = ed['pension'] %>
+        <% if pension.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Pension Fund</div>
+          <div style="margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.06em;">Funded</span>
+              <span style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b;"><%= pension['funded_pct'] %>%</span>
+            </div>
+            <div style="background:#e8ecf4; border-radius:100px; height:8px; overflow:hidden;">
+              <div style="width:<%= pension['funded_pct'] %>%; height:100%; background:linear-gradient(90deg,#1d9e75,#4ec9a0); border-radius:100px;"></div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-top:4px;">Up from <%= pension['from_pct'] %>% in <%= pension['from_year'] %></div>
+          </div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;"><%= pension['savings_note'] %></div>
+        </div>
+        <% end %>
+
+        <%# Tax comparison %>
+        <% tc = ed['tax_comparison'] %>
+        <% if tc.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Tax Burden vs. Peer Cities</div>
+          <% tc.each_with_index do |row, i| %>
+            <div class="dp-card-row" style="<%= i < tc.length - 1 ? '' : '' %>">
+              <span class="dp-card-label"><%= row['label'] %></span>
+              <span class="dp-card-value" style="color:<%= row['red'] ? '#c85050' : '#1d9e75' %>; font-weight:700;"><%= row['value'] %></span>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <%# Term ring %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Tenure</div>
+          <div style="text-align:center; margin-bottom:10px;">
+            <svg width="86" height="86" viewBox="0 0 86 86">
+              <circle cx="43" cy="43" r="35" fill="none" stroke="#e8ecf4" stroke-width="6"/>
+              <circle cx="43" cy="43" r="35" fill="none" stroke="#1d9e75" stroke-width="6"
+                stroke-dasharray="<%= _ring_circ %>" stroke-dashoffset="<%= ring_offset %>"
+                stroke-linecap="round" transform="rotate(-90 43 43)"/>
+              <text x="43" y="39" text-anchor="middle" dominant-baseline="central"
+                style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;fill:#0e1a2e;">Yr <%= year_num %></text>
+              <text x="43" y="57" text-anchor="middle"
+                style="font-family:'JetBrains Mono',monospace;font-size:7px;fill:#8a9ab8;">appointed</text>
+            </svg>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Appointed by</span>
+            <span class="dp-card-value">Mayor Nutter (2008)</span>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">Mayors served</span>
+            <span class="dp-card-value">3 (Nutter, Kenney, Parker)</span>
+          </div>
+          <div class="dp-card-row">
+            <span class="dp-card-label">In office since</span>
+            <span class="dp-card-value">Jan 7, 2008</span>
+          </div>
+        </div>
+
+      </div><!-- /dp-sidebar -->
+    </div><!-- /dp-body -->
+  </div>
+
+</div><!-- /desktop-profile -->
+
+
+<!-- ═══════════════════════════════════════
+     MOBILE
+═══════════════════════════════════════ -->
+<div class="mobile-profile">
+<div class="mobile-card">
+
+  <div style="background:#1b3a6b; position:relative; overflow:hidden;">
+    <div style="height:260px; overflow:hidden; position:relative;">
+      <% if official.photo_url.present? %>
+        <img src="<%= official.photo_url %>" alt="" style="width:100%; height:100%; object-fit:cover; object-position:50% 20%; display:block;">
+      <% else %>
+        <div style="width:100%; height:100%; background:linear-gradient(135deg,#254f92,#1b3a6b); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:52px; font-weight:700; color:#d4a832;"><%= initials %></div>
+      <% end %>
+      <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom,transparent,#0a1220); pointer-events:none;"></div>
+      <div class="mob-foil" style="position:absolute; inset:0;"></div>
+    </div>
+
+    <div style="background:#003087; padding:10px 16px 10px 21px; border-bottom:1.5px solid rgba(184,134,11,.3);">
+      <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:white; line-height:1.2;"><%= official.full_name %></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; text-transform:uppercase; letter-spacing:.12em; color:#d4a832; margin-top:3px;"><%= official.office_title %></div>
+    </div>
+
+    <div style="background:#003087; display:flex;">
+      <% (ed['stats'] || [{ 'value' => '$6.84B', 'label' => 'FY2026 Budget' }, { 'value' => '18 yrs', 'label' => 'As CFO' }, { 'value' => 'A-range', 'label' => 'Bond Rating' }]).first(3).each_with_index do |s, i| %>
+        <div style="flex:1; text-align:center; padding:10px 6px; <%= i < 2 ? 'border-right:1px solid rgba(255,255,255,.06);' : '' %>">
+          <div style="font-family:'Libre Baskerville',serif; font-size:14px; font-weight:700; color:white; line-height:1;"><%= s['value'] %></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:5.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); margin-top:4px;"><%= s['label'] %></div>
+        </div>
+      <% end %>
+    </div>
+
+    <div style="background:#003087; padding:8px 14px 8px 21px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; gap:14px; align-items:center;">
+        <% if official.website_url.present? %>
+          <a href="<%= official.website_url %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        <% end %>
+      </div>
+      <% contact = ed['contact'] %>
+      <% if contact&.dig('email').present? %>
+        <a href="mailto:<%= contact['email'] %>" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none;">Email Office ↗</a>
+      <% end %>
+    </div>
+  </div>
+
+  <% if ed['role_callout'].present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06); background:#fafbfd;">
+    <div style="border-left:3px solid #b8860b; padding-left:12px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.65;">
+      <%= ed['role_callout'] %>
+    </div>
+  </div>
+  <% end %>
+
+  <%# Budget bar (mobile) %>
+  <% budget = ed['budget'] %>
+  <% if budget.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">◆ FY2026 Budget · <%= budget['total'] %></div>
+    <div style="display:flex; border-radius:4px; overflow:hidden; height:14px; margin-bottom:10px;">
+      <% (budget['segments'] || []).each do |seg| %>
+        <div style="width:<%= seg['pct'] %>%; background:<%= seg['color'] %>;" title="<%= seg['label'] %>"></div>
+      <% end %>
+    </div>
+    <% (budget['segments'] || []).each do |seg| %>
+      <div style="display:flex; justify-content:space-between; padding:3px 0;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div style="width:7px; height:7px; border-radius:2px; background:<%= seg['color'] %>; flex-shrink:0;"></div>
+          <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= seg['label'] %></span>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8;"><%= seg['pct'] %>%</span>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <%# Revenue sources (mobile) %>
+  <% rev = ed['revenue_sources'] %>
+  <% if rev.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Revenue Sources</div>
+    <% rev.each_with_index do |src, i| %>
+      <div style="padding:8px 0; <%= i < rev.length - 1 ? 'border-bottom:0.5px solid rgba(27,58,107,0.05);' : '' %>">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:3px;">
+          <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b;"><%= src['name'] %></span>
+          <span style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:#0e1a2e; flex-shrink:0; margin-left:8px;"><%= src['amount'] %></span>
+        </div>
+        <div style="background:#f0f3f9; border-radius:3px; height:3px; margin-bottom:4px; overflow:hidden;">
+          <div style="width:<%= src['bar_pct'] %>%; height:100%; background:<%= src['color'] %>; border-radius:3px;"></div>
+        </div>
+        <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.4;"><%= src['explain'] %></div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <%# Does / Doesn't (mobile) %>
+  <% does_list = ed['does'] %>
+  <% if does_list.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#1d9e75; margin-bottom:10px;">◆ What This Office Does</div>
+    <% does_list.each_with_index do |item, i| %>
+      <div style="padding:6px 0; <%= i < does_list.length - 1 ? 'border-bottom:0.5px solid rgba(27,58,107,0.05);' : '' %>">
+        <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:2px;"><%= item['title'] %></div>
+        <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= item['sub'] %></div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <%# Fiscal risks (mobile) %>
+  <% risks = ed['fiscal_risks'] %>
+  <% if risks.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#c85050; margin-bottom:10px;">◆ Fiscal Risks</div>
+    <% risks.each_with_index do |risk, i| %>
+      <% rc = risk_colors[risk['level']] || risk_colors['med'] %>
+      <div style="padding:8px 0; <%= i < risks.length - 1 ? 'border-bottom:0.5px solid rgba(27,58,107,0.05);' : '' %>">
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.08em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:<%= rc[:badge_bg] %>; color:<%= rc[:badge_color] %>;"><%= rc[:badge_text] %></span>
+          <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b;"><%= risk['title'] %></span>
+        </div>
+        <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.4;"><%= risk['sub'] %></div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <%# Credit ratings (mobile) %>
+  <% ratings = ed['credit_ratings'] %>
+  <% if ratings.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Bond Credit Ratings · Highest in 40+ years</div>
+    <div style="display:flex; gap:8px;">
+      <% ratings.each do |r| %>
+        <div style="flex:1; background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; letter-spacing:.08em; margin-bottom:4px;"><%= r['agency'] %></div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1d9e75;"><%= r['rating'] %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+
+  <%# Pension (mobile) %>
+  <% pension = ed['pension'] %>
+  <% if pension.present? %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">◆ Pension Fund · <%= pension['funded_pct'] %>% funded</div>
+    <div style="background:#e8ecf4; border-radius:100px; height:8px; overflow:hidden; margin-bottom:6px;">
+      <div style="width:<%= pension['funded_pct'] %>%; height:100%; background:linear-gradient(90deg,#1d9e75,#4ec9a0); border-radius:100px;"></div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:#8a9ab8; margin-bottom:8px;">Up from <%= pension['from_pct'] %>% in <%= pension['from_year'] %></div>
+    <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;"><%= pension['savings_note'] %></div>
+  </div>
+  <% end %>
+
+</div>
+</div>

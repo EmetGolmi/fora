@@ -600,7 +600,7 @@ end
 
   def philly_finance_director
     @official = Person.find_by!(slug: 'rdubow-philly-finance')
-    @profile_type = :governor
+    @profile_type = :finance_director
     render :show
   end
 
@@ -626,7 +626,9 @@ end
     @profile_type = case @official.office_type
                     when 'managing_director'
                       :managing_director
-                    when 'governor', 'lt_governor', 'attorney_general', 'finance_director'
+                    when 'finance_director'
+                      :finance_director
+                    when 'governor', 'lt_governor', 'attorney_general'
                       :governor
                     when 'city_council', 'city_council_at_large', 'mayor'
                       :city_council
