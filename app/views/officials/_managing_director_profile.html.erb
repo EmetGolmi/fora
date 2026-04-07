@@ -127,12 +127,20 @@
           <div class="dp-section-eyebrow">◆ Oversight</div>
           <h2 class="dp-section-title">Key Departments This Office Oversees</h2>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <% ed['departments'].each do |dept| %>
+            <% ed['departments'].each_with_index do |dept, di| %>
               <% tc = tag_colors[dept['tag']] || '#5a6e8a' %>
-              <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; padding:11px 13px;">
-                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:3px;"><%= dept['name'] %></div>
-                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.4; margin-bottom:6px;"><%= dept['why'] %></div>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:100px; background:<%= tc %>22; color:<%= tc %>; border:0.5px solid <%= tc %>55;"><%= dept['tag'] %></span>
+              <div onclick="openDeptModal(<%= di %>)" style="background:white; border:0.5px solid #dde5f5; border-radius:8px; padding:11px 13px; cursor:pointer; transition:box-shadow .15s;" onmouseenter="this.style.boxShadow='0 2px 12px rgba(27,58,107,0.1)'" onmouseleave="this.style.boxShadow='none'">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:3px;">
+                  <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b;"><%= dept['name'] %></div>
+                  <button onclick="event.stopPropagation(); shareDept('<%= j dept['name'] %>')" title="Share" style="background:none; border:none; padding:2px; cursor:pointer; color:#b8b8c8; line-height:0; flex-shrink:0; margin-left:6px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                  </button>
+                </div>
+                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.4; margin-bottom:7px;"><%= dept['why'] %></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:100px; background:<%= tc %>22; color:<%= tc %>; border:0.5px solid <%= tc %>55;"><%= dept['tag'] %></span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:<%= tc %>; letter-spacing:.06em;">Details →</span>
+                </div>
               </div>
             <% end %>
           </div>
@@ -359,14 +367,22 @@
   <% if ed['departments'].present? %>
   <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
     <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Key Departments Overseen</div>
-    <% ed['departments'].each do |dept| %>
+    <% ed['departments'].each_with_index do |dept, di| %>
       <% tc = tag_colors[dept['tag']] || '#5a6e8a' %>
-      <div style="padding:8px 0; border-bottom:0.5px solid rgba(27,58,107,0.05);">
+      <div onclick="openDeptModal(<%= di %>)" style="padding:8px 0; border-bottom:0.5px solid rgba(27,58,107,0.05); cursor:pointer;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b;"><%= dept['name'] %></span>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.06em; text-transform:uppercase; padding:2px 6px; border-radius:100px; background:<%= tc %>22; color:<%= tc %>; border:0.5px solid <%= tc %>55; flex-shrink:0; margin-left:8px;"><%= dept['tag'] %></span>
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0; margin-left:8px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.06em; text-transform:uppercase; padding:2px 6px; border-radius:100px; background:<%= tc %>22; color:<%= tc %>; border:0.5px solid <%= tc %>55;"><%= dept['tag'] %></span>
+            <button onclick="event.stopPropagation(); shareDept('<%= j dept['name'] %>')" style="background:none; border:none; padding:0; cursor:pointer; color:#b8b8c8; line-height:0;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
         </div>
-        <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:2px;"><%= dept['why'] %></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= dept['why'] %></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; color:<%= tc %>; letter-spacing:.06em; flex-shrink:0; margin-left:8px;">Tap →</div>
+        </div>
       </div>
     <% end %>
   </div>
@@ -387,3 +403,411 @@
 
 </div>
 </div>
+
+<!-- ═══════════════════════════════════════
+     DEPARTMENT MODALS
+═══════════════════════════════════════ -->
+<style>
+  .dept-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,18,32,.62);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .dept-modal-overlay.open { display: flex; }
+  .dept-modal-box {
+    background: white;
+    border-radius: 14px;
+    max-width: 540px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(10,18,32,.35);
+  }
+  .dept-modal-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    border-radius: 14px 14px 0 0;
+    border-bottom: 1px solid #edf0f8;
+    padding: 16px 18px 14px;
+    z-index: 1;
+  }
+  .dept-modal-body { padding: 18px 18px 24px; }
+  .dept-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 10px;
+    border-bottom: 0.5px solid #f0f3f9;
+    gap: 12px;
+  }
+  .dept-row:last-child { border-bottom: none; }
+  .dept-row-label { font-family: 'Nunito', sans-serif; font-size: 12px; color: #5a6e8a; flex: 1; }
+  .dept-row-value { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: #1b3a6b; text-align: right; flex-shrink: 0; }
+  .dept-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #f4f7fc;
+    border: 0.5px solid #dde5f5;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-bottom: 6px;
+    transition: background .12s;
+  }
+  .dept-link:hover { background: #e8ecf4; }
+  .dept-link-icon { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .dept-link-text { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: #1b3a6b; flex: 1; }
+  .dept-link-sub { font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #8a9ab8; letter-spacing: .05em; margin-top: 1px; }
+</style>
+
+<%# Helper: render a modal header %>
+<%
+  def dept_modal_header_html(title, eyebrow, subtitle, color, index)
+    # rendered inline in each modal block
+  end
+%>
+
+<%# ── Modal 0: Philadelphia Fire Department ── %>
+<div id="dept-modal-0" class="dept-modal-overlay" onclick="if(event.target===this)closeDeptModal()">
+  <div class="dept-modal-box">
+    <div class="dept-modal-header" style="border-left:4px solid #993556;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#993556; margin-bottom:4px;">◆ Public Safety · MD Oversight</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#0e1a2e; line-height:1.2;">Philadelphia Fire Department</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px;">Fire, EMS, and emergency rescue for 1.5 million residents</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; margin-left:12px; align-items:center;">
+          <button onclick="shareDept('Philadelphia Fire Department')" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px; cursor:pointer; line-height:0; color:#5a6e8a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <button onclick="closeDeptModal()" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px 10px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6e8a; line-height:1;">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="dept-modal-body">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">By the Numbers</div>
+      <div style="background:#f4f7fc; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Fire stations</span><span class="dept-row-value">63 across Philadelphia</span></div>
+        <div class="dept-row"><span class="dept-row-label">Uniformed personnel</span><span class="dept-row-value">~4,500 firefighters &amp; medics</span></div>
+        <div class="dept-row"><span class="dept-row-label">EMS calls per year</span><span class="dept-row-value">~300,000</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Annual budget (FY2026)</span><span class="dept-row-value">~$395M</span></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Free Services for Residents</div>
+      <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Home fire safety inspection</span><span class="dept-row-value" style="color:#1d9e75;">Free — request online</span></div>
+        <div class="dept-row"><span class="dept-row-label">Smoke &amp; CO detector installation</span><span class="dept-row-value" style="color:#1d9e75;">Free for qualifying residents</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Fire incident data</span><span class="dept-row-value">Public — searchable by address</span></div>
+      </div>
+      <a href="https://www.phila.gov/departments/philadelphia-fire-department/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#f5e8ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><path d="M12 2c0 0-7 5.37-7 11a7 7 0 0 0 14 0c0-5.63-7-11-7-11z"/><path d="M12 12c-1.5-2-3-3.5-3-5.5a3 3 0 0 1 6 0c0 2-1.5 3.5-3 5.5z"/></svg></div>
+        <div><div class="dept-link-text">Philadelphia Fire Department</div><div class="dept-link-sub">phila.gov · Department overview &amp; resources</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/crime-safety-emergency-services/report-a-problem-or-request-service/request-a-fire-safety-inspection/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#f5e8ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div><div class="dept-link-text">Request a Free Home Safety Inspection</div><div class="dept-link-sub">phila.gov · Smoke detectors, escape plans, hazard checks</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.opendataphilly.org/datasets/fire-incidents" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#f5e8ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><div class="dept-link-text">Fire &amp; EMS Incident Open Data</div><div class="dept-link-sub">opendataphilly.org · Search incidents by address</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<%# ── Modal 1: Streets Department ── %>
+<div id="dept-modal-1" class="dept-modal-overlay" onclick="if(event.target===this)closeDeptModal()">
+  <div class="dept-modal-box">
+    <div class="dept-modal-header" style="border-left:4px solid #378add;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#378add; margin-bottom:4px;">◆ Infrastructure · MD Oversight</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#0e1a2e; line-height:1.2;">Streets Department</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px;">Trash, recycling, snow removal, and road maintenance</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; margin-left:12px; align-items:center;">
+          <button onclick="shareDept('Streets Department')" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px; cursor:pointer; line-height:0; color:#5a6e8a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <button onclick="closeDeptModal()" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px 10px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6e8a; line-height:1;">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="dept-modal-body">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Your Sanitation Schedule</div>
+      <div style="background:#f4f7fc; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Trash pickup</span><span class="dept-row-value">Twice per week (varies by block)</span></div>
+        <div class="dept-row"><span class="dept-row-label">Recycling pickup</span><span class="dept-row-value">Once per week</span></div>
+        <div class="dept-row"><span class="dept-row-label">Bulk trash / large items</span><span class="dept-row-value">Schedule separately — do not put out early</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Annual budget (FY2026)</span><span class="dept-row-value">~$120M</span></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Snow Emergency &amp; Roads</div>
+      <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Snow routes (Level 1)</span><span class="dept-row-value">Major arterials plowed first</span></div>
+        <div class="dept-row"><span class="dept-row-label">Residential streets (Level 3)</span><span class="dept-row-value">Last priority — may take 24-48 hrs after storm</span></div>
+        <div class="dept-row"><span class="dept-row-label">Pothole or road repair</span><span class="dept-row-value">Report via Philly311 (app or 311)</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Illegal dumping</span><span class="dept-row-value">Report via 311 or 215-686-5560</span></div>
+      </div>
+      <a href="https://www.phila.gov/departments/streets-department/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e8f0fb;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div><div class="dept-link-text">Streets Department</div><div class="dept-link-sub">phila.gov · Schedules, snow maps, and service requests</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/trash-recycling-city-upkeep/find-your-trash-and-recycling-collection-day/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e8f0fb;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="dept-link-text">Find Your Trash &amp; Recycling Day</div><div class="dept-link-sub">phila.gov · Enter your address for your schedule</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/311/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e8f0fb;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.69 19 19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><div class="dept-link-text">Philly311 — Report a Problem</div><div class="dept-link-sub">phila.gov · Potholes, illegal dumping, missed pickup</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<%# ── Modal 2: Philadelphia Water Department ── %>
+<div id="dept-modal-2" class="dept-modal-overlay" onclick="if(event.target===this)closeDeptModal()">
+  <div class="dept-modal-box">
+    <div class="dept-modal-header" style="border-left:4px solid #378add;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#378add; margin-bottom:4px;">◆ Infrastructure · MD Oversight</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#0e1a2e; line-height:1.2;">Philadelphia Water Department</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px;">Drinking water, stormwater, and sewer service for 1.6M people</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; margin-left:12px; align-items:center;">
+          <button onclick="shareDept('Philadelphia Water Dept.')" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px; cursor:pointer; line-height:0; color:#5a6e8a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <button onclick="closeDeptModal()" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px 10px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6e8a; line-height:1;">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="dept-modal-body">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">What You Should Know</div>
+      <div style="background:#f4f7fc; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Customers served</span><span class="dept-row-value">1.6M in Philly &amp; suburbs</span></div>
+        <div class="dept-row"><span class="dept-row-label">Water main breaks (emergency)</span><span class="dept-row-value">Call 215-685-6300 — 24/7</span></div>
+        <div class="dept-row"><span class="dept-row-label">Stormwater fee</span><span class="dept-row-value">Billed separately from water — based on impervious surface</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Annual budget (FY2026)</span><span class="dept-row-value">~$850M (water + sewer)</span></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Programs &amp; Actions for Residents</div>
+      <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label"><strong>Lead in your water</strong></span><span class="dept-row-value" style="color:#1d9e75;">Request a free test kit — PWD mails it</span></div>
+        <div class="dept-row"><span class="dept-row-label"><strong>Customer Assistance Program (CAP)</strong></span><span class="dept-row-value" style="color:#1d9e75;">Income-based discount on water bill</span></div>
+        <div class="dept-row"><span class="dept-row-label">Stormwater credit</span><span class="dept-row-value">Reduce fee with rain garden, green roof, or permeable pavement</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Owe back water bills</span><span class="dept-row-value">Payment plan available — avoid shutoff</span></div>
+      </div>
+      <a href="https://www.phillyh2o.org" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e8f0fb;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12a10 10 0 0 1 10-10z"/><path d="M12 6v6l4 2"/></svg></div>
+        <div><div class="dept-link-text">Philadelphia Water Department</div><div class="dept-link-sub">phillyh2o.org · Pay bill, start service, report issues</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/payments-assistance-taxes/utility-assistance/water-assistance/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e8f0fb;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="dept-link-text">Water Bill Assistance (CAP Program)</div><div class="dept-link-sub">phila.gov · Income-based water bill discounts</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/environment-recycling-sustainability/clean-water/test-your-water-for-lead/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e8f0fb;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div><div class="dept-link-text">Request a Free Lead Test Kit</div><div class="dept-link-sub">phila.gov · PWD mails kit — especially for pre-1986 homes</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<%# ── Modal 3: Prisons / Department of Corrections ── %>
+<div id="dept-modal-3" class="dept-modal-overlay" onclick="if(event.target===this)closeDeptModal()">
+  <div class="dept-modal-box">
+    <div class="dept-modal-header" style="border-left:4px solid #993556;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#993556; margin-bottom:4px;">◆ Public Safety · MD Oversight</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#0e1a2e; line-height:1.2;">Prisons / Department of Prisons</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px;">City jail operations — most people held here haven't been convicted</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; margin-left:12px; align-items:center;">
+          <button onclick="shareDept('Prisons / Dept. of Corrections')" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px; cursor:pointer; line-height:0; color:#5a6e8a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <button onclick="closeDeptModal()" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px 10px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6e8a; line-height:1;">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="dept-modal-body">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Key Facts</div>
+      <div style="background:#f4f7fc; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Daily population (approx.)</span><span class="dept-row-value">~4,800 people</span></div>
+        <div class="dept-row"><span class="dept-row-label">Share awaiting trial (pre-trial)</span><span class="dept-row-value" style="color:#c85050;">~75% — not yet convicted</span></div>
+        <div class="dept-row"><span class="dept-row-label">Main facilities</span><span class="dept-row-value">CFCF, PICC, House of Correction</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Annual budget (FY2026)</span><span class="dept-row-value">~$330M</span></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">For Families &amp; Affected Residents</div>
+      <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Find someone incarcerated</span><span class="dept-row-value">Inmate locator on phila.gov/prisons</span></div>
+        <div class="dept-row"><span class="dept-row-label">Visitation</span><span class="dept-row-value">Schedule required — see prisons site for hours</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Reentry support</span><span class="dept-row-value">Philadelphia Reentry Program — housing, jobs, benefits</span></div>
+      </div>
+      <a href="https://www.phila.gov/departments/philadelphia-department-of-prisons/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#f5e8ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div><div class="dept-link-text">Philadelphia Department of Prisons</div><div class="dept-link-sub">phila.gov · Inmate locator, visitation, and programs</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/departments/philadelphia-department-of-prisons/reentry/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#f5e8ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="dept-link-text">Reentry Resources</div><div class="dept-link-sub">phila.gov · Housing, employment, and benefits after release</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<%# ── Modal 4: Office of Emergency Management ── %>
+<div id="dept-modal-4" class="dept-modal-overlay" onclick="if(event.target===this)closeDeptModal()">
+  <div class="dept-modal-box">
+    <div class="dept-modal-header" style="border-left:4px solid #b8860b;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Emergency Management · MD Oversight</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#0e1a2e; line-height:1.2;">Office of Emergency Management</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px;">Disaster preparedness and crisis coordination for Philadelphia</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; margin-left:12px; align-items:center;">
+          <button onclick="shareDept('Office of Emergency Management')" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px; cursor:pointer; line-height:0; color:#5a6e8a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <button onclick="closeDeptModal()" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px 10px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6e8a; line-height:1;">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="dept-modal-body">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">What OEM Does</div>
+      <div style="background:#f4f7fc; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Coordinates all city agencies during declared emergencies</span><span class="dept-row-value">Mayor declares, OEM executes</span></div>
+        <div class="dept-row"><span class="dept-row-label">Runs the Emergency Operations Center (EOC)</span><span class="dept-row-value">Activated during major storms, disasters</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Manages evacuation planning and shelter logistics</span><span class="dept-row-value">Coordinates with Red Cross and PEMA</span></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Actions for Residents</div>
+      <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label"><strong>AlertPhiladelphia</strong></span><span class="dept-row-value" style="color:#1d9e75;">Sign up for free emergency text &amp; email alerts</span></div>
+        <div class="dept-row"><span class="dept-row-label">Heat emergency — cooling centers</span><span class="dept-row-value">Opened automatically during heat advisories — find at ready.philly.gov</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Ready Philly — preparedness kits</span><span class="dept-row-value">Free guides: what to pack, flood zones, shelter locations</span></div>
+      </div>
+      <a href="https://www.phila.gov/departments/office-of-emergency-management/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#fdf0de;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div><div class="dept-link-text">Office of Emergency Management</div><div class="dept-link-sub">phila.gov · Alerts, plans, and preparedness resources</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.ready.philly.gov" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#fdf0de;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div><div class="dept-link-text">Ready Philly — Preparedness Guide</div><div class="dept-link-sub">ready.philly.gov · Kits, evacuation zones, shelter map</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/crime-safety-emergency-services/prepare-for-emergencies/sign-up-for-emergency-alerts/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#fdf0de;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.69 19 19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><div class="dept-link-text">Sign Up for AlertPhiladelphia</div><div class="dept-link-sub">phila.gov · Free emergency text &amp; email alerts</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<%# ── Modal 5: Department of Public Health ── %>
+<div id="dept-modal-5" class="dept-modal-overlay" onclick="if(event.target===this)closeDeptModal()">
+  <div class="dept-modal-box">
+    <div class="dept-modal-header" style="border-left:4px solid #1d9e75;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:#1d9e75; margin-bottom:4px;">◆ Health · MD Oversight</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#0e1a2e; line-height:1.2;">Department of Public Health</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px;">Disease surveillance, free clinics, and the Kensington opioid response</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; margin-left:12px; align-items:center;">
+          <button onclick="shareDept('Dept. of Public Health')" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px; cursor:pointer; line-height:0; color:#5a6e8a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <button onclick="closeDeptModal()" style="background:#f4f7fc; border:0.5px solid #dde5f5; border-radius:8px; padding:7px 10px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:10px; color:#5a6e8a; line-height:1;">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="dept-modal-body">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Free Services Available to All Residents</div>
+      <div style="background:#f4f7fc; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">STI testing &amp; treatment</span><span class="dept-row-value" style="color:#1d9e75;">Free at Sexual Health Clinics — no insurance needed</span></div>
+        <div class="dept-row"><span class="dept-row-label">Vaccines &amp; immunizations</span><span class="dept-row-value" style="color:#1d9e75;">Free — children and adults</span></div>
+        <div class="dept-row"><span class="dept-row-label">TB testing &amp; treatment</span><span class="dept-row-value" style="color:#1d9e75;">Free — walk-in available</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Naloxone (Narcan)</span><span class="dept-row-value" style="color:#1d9e75;">Free at health centers — reverses opioid overdose</span></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Key Issues This Department Manages</div>
+      <div style="background:white; border:0.5px solid #dde5f5; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+        <div class="dept-row"><span class="dept-row-label">Kensington opioid crisis</span><span class="dept-row-value">Overdose prevention, outreach, treatment referrals</span></div>
+        <div class="dept-row"><span class="dept-row-label">Restaurant inspections</span><span class="dept-row-value">Searchable public database — see any restaurant's record</span></div>
+        <div class="dept-row"><span class="dept-row-label">Lead poisoning prevention</span><span class="dept-row-value">Free blood lead testing for children under 6</span></div>
+        <div class="dept-row" style="border-bottom:none;"><span class="dept-row-label">Annual budget (FY2026)</span><span class="dept-row-value">~$500M (heavily federal-funded)</span></div>
+      </div>
+      <a href="https://www.phila.gov/departments/department-of-public-health/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e0f5ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div><div class="dept-link-text">Department of Public Health</div><div class="dept-link-sub">phila.gov · Clinics, programs, and health data</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/mental-physical-health/sexual-health/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e0f5ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div><div class="dept-link-text">Free STI Testing &amp; Sexual Health Clinics</div><div class="dept-link-sub">phila.gov · No insurance required · Confidential</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/mental-physical-health/get-treatment-for-addiction/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e0f5ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div><div class="dept-link-text">Addiction &amp; Overdose Treatment Resources</div><div class="dept-link-sub">phila.gov · Kensington response, Narcan, treatment referrals</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://www.phila.gov/services/permits-violations-licenses/find-a-license-or-permit/food-inspection-records/" target="_blank" rel="noopener" class="dept-link">
+        <div class="dept-link-icon" style="background:#e0f5ee;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div><div class="dept-link-text">Restaurant Inspection Records</div><div class="dept-link-sub">phila.gov · Search any restaurant's health inspection history</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a9ab8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openDeptModal(i) {
+    document.querySelectorAll('.dept-modal-overlay').forEach(function(m){ m.classList.remove('open'); });
+    var el = document.getElementById('dept-modal-' + i);
+    if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  }
+  function closeDeptModal() {
+    document.querySelectorAll('.dept-modal-overlay').forEach(function(m){ m.classList.remove('open'); });
+    document.body.style.overflow = '';
+  }
+  function shareDept(name) {
+    var url = window.location.href.split('#')[0];
+    var text = name + ' — Philadelphia City Government · FORA';
+    if (navigator.share) {
+      navigator.share({ title: text, url: url });
+    } else {
+      navigator.clipboard.writeText(url).then(function() {
+        var btn = event.target.closest('button');
+        if (btn) {
+          var orig = btn.innerHTML;
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+          setTimeout(function(){ btn.innerHTML = orig; }, 1500);
+        }
+      });
+    }
+  }
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeDeptModal(); });
+</script>
