@@ -57,4 +57,16 @@ module OfficialsHelper
     remaining = bd.reject { |k, _| order.include?(k) }.to_a
     (sorted + remaining).to_h
   end
+
+  def fora_share_btn(data_attrs = {}, color: "rgba(255,255,255,0.45)")
+    data_json = data_attrs.to_json.gsub("'", "&#39;")
+    content_tag(:button,
+      raw('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'),
+      onclick: "foraShare({...#{data_json}, _btn: this})",
+      title: "Share this",
+      style: "background:none;border:none;cursor:pointer;padding:4px;line-height:0;color:#{color};flex-shrink:0;opacity:0.7;",
+      onmouseover: "this.style.opacity='1'",
+      onmouseout:  "this.style.opacity='0.7'"
+    )
+  end
 end
