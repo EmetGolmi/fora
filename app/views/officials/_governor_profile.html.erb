@@ -407,6 +407,127 @@
         </div>
         <% end %>
 
+        <%# ── Lt. Governor: Role Callout & Sections ── %>
+        <% if official.office_type == 'lt_governor' %>
+
+        <%# Role Callout %>
+        <div class="dp-section">
+          <div style="background:#f8f6f0; border-left:3px solid #b8860b; border-radius:6px; padding:12px 14px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.6;">
+            <strong style="font-family:'Nunito',sans-serif; color:#1b3a6b; font-weight:700;">Second in command — but what does that mean?</strong> The Lt. Governor's office is constitutionally thin. Davis gets four required duties: presiding over the Senate, chairing the Board of Pardons, and sitting on two state councils. Everything else is what he asked for or built himself. That's the accountability question — is he using the office, or coasting in it?
+          </div>
+        </div>
+
+        <%# Roles Grid %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Roles</div>
+          <h2 class="dp-section-title">What This Office Does — And How Davis Is Using It</h2>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <% [
+              { badge: 'Constitutional', bg: 'rgba(29,78,216,0.1)', color: '#1d4ed8', border: 'rgba(29,78,216,0.3)',
+                name: 'President of the PA Senate',
+                desc: 'Presides over Senate sessions. Casts tie-breaking votes. Largely ceremonial — but the tie-breaker matters in a divided chamber.',
+                impact: nil },
+              { badge: 'Constitutional', bg: 'rgba(29,78,216,0.1)', color: '#1d4ed8', border: 'rgba(29,78,216,0.3)',
+                name: 'Chair, Board of Pardons',
+                desc: 'Reviews cases where people seek pardons or commutation of sentences. Recommends to the Governor. This is where real lives are directly affected.',
+                impact: 'Davis modernized the system — launched online applications, record number of hearings. Most impactful constitutional duty.' },
+              { badge: 'Appointed by Shapiro', bg: 'rgba(245,158,11,0.1)', color: '#92400e', border: 'rgba(245,158,11,0.3)',
+                name: 'Chair, PA Commission on Crime and Delinquency (PCCD)',
+                desc: 'Distributes hundreds of millions annually for gun violence prevention, school safety, and criminal justice. Davis asked for this role — it wasn\'t automatic.',
+                impact: '$85M in Violence Intervention grants distributed to 130+ projects statewide under his leadership.' },
+              { badge: 'Appointed by Shapiro', bg: 'rgba(245,158,11,0.1)', color: '#92400e', border: 'rgba(245,158,11,0.3)',
+                name: 'Chair, Advisory Council for Inclusive Procurement',
+                desc: 'Advises state agencies on diversifying contracting. Davis reports 30% increase in state spending with Black-owned and Latino-owned businesses.',
+                impact: nil },
+              { badge: 'Self-initiated', bg: 'rgba(16,185,129,0.1)', color: '#065f46', border: 'rgba(16,185,129,0.3)',
+                name: 'Chair, Democratic Lt. Governors Association',
+                desc: 'National role fundraising and organizing for Democratic gubernatorial races. Focused on 31 governor\'s races in 2026 midterms including Pennsylvania.',
+                impact: 'This is the role that signals his political ambition — building a national profile while in state office.' }
+            ].each do |role| %>
+              <div style="display:flex; gap:12px; padding:10px 12px; background:white; border:0.5px solid rgba(27,58,107,0.09); border-radius:8px;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:8px; flex-shrink:0; margin-top:2px; font-weight:600; background:<%= role[:bg] %>; color:<%= role[:color] %>; border:0.5px solid <%= role[:border] %>; align-self:flex-start;"><%= role[:badge] %></span>
+                <div style="flex:1;">
+                  <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#1b3a6b;"><%= role[:name] %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px; line-height:1.5;"><%= role[:desc] %></div>
+                  <% if role[:impact] %>
+                    <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#1b3a6b; margin-top:4px; font-style:italic;"><%= role[:impact] %></div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Board of Pardons highlight %>
+        <div class="dp-section">
+          <div style="background:white; border:0.5px solid rgba(184,134,11,0.3); border-left:3px solid #b8860b; border-radius:10px; padding:18px 20px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.16em; text-transform:uppercase; color:#b8860b; margin-bottom:10px; font-weight:500;">◆ Board of Pardons — the most consequential thing he does</div>
+            <p style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; line-height:1.6; margin:0 0 14px;">The Board of Pardons is where people who have served their sentences — or who were wrongly convicted — apply for a second chance. Davis chairs it. The board recommends to the Governor whether to grant or deny. Under Davis, the board has processed more applications faster than any prior Lt. Governor.</p>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px;">
+              <% [{ val: 'Record', lbl: 'Hearings held this term' }, { val: 'Online', lbl: 'Application system launched' }, { val: '↑ Staff', lbl: 'Added to process backlog' }].each do |s| %>
+                <div style="background:#f8f6f0; border-radius:6px; padding:10px; text-align:center;">
+                  <div style="font-family:'Libre Baskerville',serif; font-size:17px; font-weight:700; color:#1b3a6b; line-height:1;"><%= s[:val] %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:9px; color:#8a9ab8; margin-top:3px; line-height:1.3;"><%= s[:lbl] %></div>
+                </div>
+              <% end %>
+            </div>
+            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; border-top:0.5px solid rgba(27,58,107,0.09); padding-top:10px; line-height:1.5;">What FORA will track: pardon application volume, hearing frequency, approval vs. denial rates as data becomes available. Pardons data is public record — this is one of the clearest accountability metrics for this office.</div>
+          </div>
+        </div>
+
+        <%# Recent Activity %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Record</div>
+          <h2 class="dp-section-title">Recent Activity</h2>
+          <div style="background:white; border:0.5px solid rgba(27,58,107,0.09); border-radius:10px; padding:4px 16px;">
+            <% [
+              { date: 'Nov 2025', title: 'Monroe &amp; Pike Counties — state budget highlights tour',
+                sub: 'Traveled to highlight local investments from the state budget — regional outreach is a signature part of his approach', tag: 'Outreach' },
+              { date: 'Nov 2025', title: 'Urged USDA to distribute SNAP funding after Shapiro sues federal government',
+                sub: 'Publicly pushed for food assistance funding for nearly 2 million Pennsylvanians after federal holdback', tag: 'Federal relations' },
+              { date: 'Oct 2025', title: 'Lebanon County — new regional police departments',
+                sub: 'Highlighted administration investments in creating regional police coverage for underserved areas', tag: 'Public safety' },
+              { date: 'Dec 2024', title: 'Named chair of Democratic Lt. Governors Association',
+                sub: 'Took on national party role leading fundraising for 31 governor\'s races in 2026', tag: 'Political' },
+              { date: 'Since 2023', title: '$85M in Violence Intervention &amp; Prevention grants distributed',
+                sub: '130+ projects statewide funded through PCCD under Davis\'s chairmanship', tag: 'Gun violence' }
+            ].each_with_index do |item, i| %>
+              <div style="display:flex; gap:14px; padding:12px 0; <%= i < 4 ? 'border-bottom:0.5px solid rgba(27,58,107,0.07);' : '' %>">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:8px; color:#8a9ab8; min-width:58px; flex-shrink:0; padding-top:2px; line-height:1.4;"><%= item[:date] %></div>
+                <div style="flex:1;">
+                  <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; line-height:1.35;"><%= item[:title].html_safe %></div>
+                  <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:3px; line-height:1.4;"><%= item[:sub] %></div>
+                  <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:8px; margin-top:5px; background:#f0f3f8; color:#5a6e8a; border:0.5px solid #dde5f5;"><%= item[:tag] %></span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Accountability Tracker %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Performance</div>
+          <h2 class="dp-section-title">Accountability Tracker</h2>
+          <div style="background:white; border:0.5px solid rgba(27,58,107,0.09); border-radius:10px; overflow:hidden;">
+            <% [
+              { key: 'Board of Pardons — modernized', val: 'Yes — online system, record hearings', good: true },
+              { key: 'VIP grants distributed', val: '$85M to 130+ projects', good: true },
+              { key: 'Minority business contracting increase', val: '+30% reported', good: true },
+              { key: 'Office of Gun Violence Prevention', val: 'Re-established + $4M DOJ grant', good: true },
+              { key: 'DLGA chair — national political role', val: 'Raises questions about time allocation', good: false },
+              { key: 'Pardons approval/denial rate', val: 'Not yet publicly tracked by FORA', good: false },
+              { key: '2026 governor\'s race', val: 'Running — campaign launched', good: false }
+            ].each_with_index do |row, i| %>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; padding:10px 14px; <%= i < 6 ? 'border-bottom:0.5px solid rgba(27,58,107,0.07);' : '' %> background:<%= row[:good] ? 'rgba(16,185,129,0.03)' : 'rgba(245,158,11,0.03)' %>;">
+                <span style="font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a;"><%= row[:key] %></span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:<%= row[:good] ? '#155c2d' : '#b45309' %>; text-align:right; max-width:48%; line-height:1.4;"><%= row[:val] %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <% end %><%# /lt_governor main %>
+
         <%# Q&A %>
         <div class="dp-section">
           <div class="dp-section-eyebrow">◆ Community</div>
@@ -595,6 +716,54 @@
             </div>
           <% end %>
         </div>
+
+        <%# Lt. Governor sidebar cards %>
+        <% if official.office_type == 'lt_governor' %>
+
+        <%# Succession %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ If Shapiro Leaves Office</div>
+          <div style="background:#f8f6f0; border-radius:6px; padding:10px 12px; margin-bottom:10px;">
+            <div style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:0.5px solid rgba(27,58,107,0.09);">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; min-width:16px;">1</div>
+              <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b;">Josh Shapiro</div>
+              <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-left:auto;">Governor</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; padding:5px 0;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#b8860b; min-width:16px;">2</div>
+              <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#b8860b;">Austin Davis</div>
+              <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#b8860b; margin-left:auto;">becomes Governor</div>
+            </div>
+          </div>
+          <p style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; line-height:1.55; margin:0;">If Shapiro resigned, was removed, or died in office, Davis would become Governor immediately. No special election — he serves the remainder of the term. This is the single most consequential thing about this office.</p>
+        </div>
+
+        <%# 2026 Race %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ 2026 Governor's Race</div>
+          <div style="background:#f8f6f0; border-radius:6px; padding:10px 12px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:5px;">Running for Governor</div>
+            <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#1b3a6b; line-height:1.5;">Shapiro and Davis announced they are running for re-election together. Davis is considered a top Democratic gubernatorial contender regardless.</div>
+            <div style="font-family:'Nunito',sans-serif; font-size:10px; color:#8a9ab8; margin-top:5px; font-style:italic;">The 2026 PA governor's race is one of 31 Davis is organizing as DLGA chair — including his own.</div>
+          </div>
+        </div>
+
+        <%# What he can't do %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ What He Can't Do</div>
+          <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.6;">
+            <% [
+              "Cannot introduce legislation — he's not a senator",
+              'Cannot grant pardons himself — recommends to the Governor only',
+              'Cannot direct state agencies — he has no executive cabinet',
+              'Cannot act independently of Shapiro on budget or policy'
+            ].each_with_index do |item, i| %>
+              <div style="padding:6px 0; <%= i < 3 ? 'border-bottom:0.5px solid rgba(27,58,107,0.08);' : '' %>"><%= item %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <% end %><%# /lt_governor sidebar %>
 
         <%# Budget %>
         <% if official.budget_total_billions.present? && official.budget_breakdown.present? %>
@@ -932,6 +1101,64 @@
                   onclick="event.stopPropagation(); budModalOpen(this)"
                   style="background:none; border:none; cursor:pointer; font-size:11px; color:#b0bbd0; padding:0 1px; line-height:1;">ⓘ</button>
         </div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <!-- Section 5 · Lt. Governor content -->
+  <% if official.office_type == 'lt_governor' %>
+  <div style="padding:16px 20px; border-bottom:1px solid rgba(27,58,107,0.06);">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:12px;">◆ Roles &amp; Record</div>
+
+    <div style="background:#f8f6f0; border-left:3px solid #b8860b; border-radius:6px; padding:10px 12px; font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.55; margin-bottom:14px;">
+      <strong style="color:#1b3a6b;">Second in command</strong> — constitutional duties are thin. Davis chairs the Board of Pardons, presides over the Senate, and runs two Shapiro-appointed councils. Everything else he built himself.
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">5 Roles</div>
+      <% [
+        { badge: 'Constitutional', badge_style: 'background:rgba(29,78,216,0.1); color:#1d4ed8;', name: 'President, PA Senate' },
+        { badge: 'Constitutional', badge_style: 'background:rgba(29,78,216,0.1); color:#1d4ed8;', name: 'Chair, Board of Pardons' },
+        { badge: 'Appointed', badge_style: 'background:rgba(245,158,11,0.1); color:#92400e;', name: 'Chair, PCCD (gun violence)' },
+        { badge: 'Appointed', badge_style: 'background:rgba(245,158,11,0.1); color:#92400e;', name: 'Chair, Inclusive Procurement' },
+        { badge: 'Self-initiated', badge_style: 'background:rgba(16,185,129,0.1); color:#065f46;', name: 'Chair, Dem LG Association' }
+      ].each_with_index do |r, i| %>
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; <%= i < 4 ? 'border-bottom:0.5px solid rgba(27,58,107,0.06);' : '' %>">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:7px; padding:2px 7px; border-radius:6px; flex-shrink:0; <%= r[:badge_style] %>"><%= r[:badge] %></span>
+          <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:#1b3a6b;"><%= r[:name] %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <div style="background:white; border:0.5px solid rgba(184,134,11,0.25); border-left:3px solid #b8860b; border-radius:8px; padding:12px 14px; margin-bottom:14px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">Board of Pardons</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+        <% [{ val: 'Record', lbl: 'Hearings' }, { val: 'Online', lbl: 'Applications' }, { val: '↑ Staff', lbl: 'Backlog' }].each do |s| %>
+          <div style="background:#f8f6f0; border-radius:5px; padding:8px 6px; text-align:center;">
+            <div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:#1b3a6b; line-height:1;"><%= s[:val] %></div>
+            <div style="font-family:'Nunito',sans-serif; font-size:8px; color:#8a9ab8; margin-top:2px;"><%= s[:lbl] %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div style="background:#f8f6f0; border-radius:8px; padding:10px 12px; margin-bottom:14px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:6px;">If Shapiro Leaves Office</div>
+      <div style="font-family:'Nunito',sans-serif; font-size:12px; color:#1b3a6b; line-height:1.5;">Shapiro → <strong style="color:#b8860b;">Davis becomes Governor immediately</strong> — no special election, serves remainder of term.</div>
+    </div>
+
+    <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px;">Accountability Tracker</div>
+    <% [
+      { key: 'Board of Pardons modernized', val: '✓ Record hearings', good: true },
+      { key: '$85M VIP grants', val: '✓ 130+ projects', good: true },
+      { key: '+30% minority contracting', val: '✓ Reported', good: true },
+      { key: 'DLGA national role', val: '⚑ Time allocation', good: false },
+      { key: "2026 governor's race", val: '⚑ Running', good: false }
+    ].each_with_index do |row, i| %>
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; <%= i < 4 ? 'border-bottom:0.5px solid rgba(27,58,107,0.06);' : '' %>">
+        <span style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;"><%= row[:key] %></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:700; color:<%= row[:good] ? '#155c2d' : '#b45309' %>; text-align:right; max-width:45%; line-height:1.3;"><%= row[:val] %></span>
       </div>
     <% end %>
   </div>
