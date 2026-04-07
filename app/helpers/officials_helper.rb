@@ -13,14 +13,19 @@ module OfficialsHelper
     "criminal prosecution" => "#7a1515",
     "civil litigation"     => "#1b5fa8",
     "consumer protection"  => "#1d9e75",
-    "administration"       => "#888780"
+    "administration"       => "#888780",
+    "social security"      => "#2563eb",
+    "defense"              => "#7c3d12",
+    "interest on debt"     => "#6b7fa3",
+    "veterans"             => "#166534"
   }.freeze
 
   # Preferred display order per office type — overrides JSONB key-length sorting
   BUDGET_ORDER = {
     "governor"         => %w[education health] + ["human services"] + %w[transportation safety other],
     "mayor"            => ["public safety", "economic opportunity", "housing", "clean & green", "education"],
-    "attorney_general" => ["criminal prosecution", "civil litigation", "consumer protection", "administration"]
+    "attorney_general" => ["criminal prosecution", "civil litigation", "consumer protection", "administration"],
+    "president"        => ["social security", "health", "defense", "interest on debt", "veterans", "other"]
   }.freeze
 
   BUDGET_DESCRIPTIONS = {
@@ -37,7 +42,11 @@ module OfficialsHelper
     "criminal prosecution" => "Funds prosecutorial divisions, criminal investigation units, and the litigation costs of bringing criminal cases on behalf of the Commonwealth of Pennsylvania.",
     "civil litigation"     => "Covers the AG office's civil divisions, including defense of state agencies in lawsuits and affirmative civil enforcement actions against corporations and bad actors.",
     "consumer protection"  => "Funds the Bureau of Consumer Protection, which investigates fraud, deceptive advertising, predatory lending, and scams targeting Pennsylvania consumers.",
-    "administration"       => "General administration, information technology, human resources, legal counsel, and operational overhead for the Office of Attorney General."
+    "administration"       => "General administration, information technology, human resources, legal counsel, and operational overhead for the Office of Attorney General.",
+    "social security"      => "Funds Social Security retirement, survivor, and disability benefits for more than 70 million Americans. The largest single line item in the federal budget.",
+    "defense"              => "Covers the Department of Defense, military personnel, procurement, research and development, and overseas operations.",
+    "interest on debt"     => "Mandatory payments on the national debt. Not discretionary — the government must pay bondholders regardless of other spending decisions. Growing as rates rise.",
+    "veterans"             => "Funds the Department of Veterans Affairs — healthcare, disability compensation, education benefits, and housing assistance for former service members."
   }.freeze
 
   def budget_segment_color(category)
