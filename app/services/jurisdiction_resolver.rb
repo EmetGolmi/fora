@@ -224,13 +224,13 @@ class JurisdictionResolver
         name:         "Donald Trump",
         office:       "President of the United States",
         party:        "Republican",
-        jurisdiction: { name: "federal", district: nil, division_id: "ocd-division/country:us" }
+        jurisdiction: { name: "president", district: nil, division_id: "ocd-division/country:us" }
       },
       {
         name:         "JD Vance",
         office:       "Vice President of the United States",
         party:        "Republican",
-        jurisdiction: { name: "federal", district: nil, division_id: "ocd-division/country:us" }
+        jurisdiction: { name: "vice_president", district: nil, division_id: "ocd-division/country:us" }
       }
     ]
   end
