@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_06_070000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_06_094000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,6 +97,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_06_070000) do
     t.string "divided_gov_note"
     t.boolean "divided_government"
     t.jsonb "executive_orders", default: []
+    t.jsonb "extra_data", default: {}
     t.string "first_name"
     t.string "full_name"
     t.jsonb "issue_focus_areas"
