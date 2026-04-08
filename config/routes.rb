@@ -65,6 +65,9 @@ Rails.application.routes.draw do
       to:  "officials#state_show",
       as:  :state_official
 
+  # Community organizations
+  get "usa/pa/philly/rco/bvna", to: "orgs#bvna", as: :bvna_rco
+
   # Business formation guide
   get  "market/newllc",       to: "market/new_llc#index", as: :new_llc
   get  "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
