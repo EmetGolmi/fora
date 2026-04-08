@@ -103,36 +103,6 @@
           <strong style="color:#1b3a6b; font-weight:600;">Your most local elected official.</strong> Your city councilmember controls the things you see every day — zoning, permits, street repairs, trash pickup contracts, rec centers, and whether your neighborhood gets a new development or stops one. This is the office that answers the phone.
         </div>
 
-        <%# Council record stat boxes %>
-        <div class="dp-section">
-          <div class="dp-section-eyebrow">◆ Council Record</div>
-          <h2 class="dp-section-title">This Term</h2>
-          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;">
-            <div style="background:#f7f9fc; border-radius:8px; padding:12px 10px; text-align:center;">
-              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.attendance_rate_pct ? "#{official.attendance_rate_pct}%" : '—' %></div>
-              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:4px; letter-spacing:.04em;">Attendance</div>
-              <div style="font-family:'Nunito',sans-serif; font-size:9px; color:#b0bbd0; margin-top:1px;">council sessions</div>
-            </div>
-            <div style="background:#f7f9fc; border-radius:8px; padding:12px 10px; text-align:center;">
-              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.bills_introduced_count || '—' %></div>
-              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:4px; letter-spacing:.04em;">Bills Intro.</div>
-              <div style="font-family:'Nunito',sans-serif; font-size:9px; color:#b0bbd0; margin-top:1px;">this term</div>
-            </div>
-            <div style="background:#f7f9fc; border-radius:8px; padding:12px 10px; text-align:center;">
-              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.bills_passed_count || '—' %></div>
-              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:4px; letter-spacing:.04em;">Bills Passed</div>
-              <% if official.bills_introduced_count.to_i > 0 && official.bills_passed_count.present? %>
-                <div style="font-family:'Nunito',sans-serif; font-size:9px; color:#b0bbd0; margin-top:1px;"><%= (official.bills_passed_count.to_f / official.bills_introduced_count * 100).round %>% rate</div>
-              <% end %>
-            </div>
-            <div style="background:#f7f9fc; border-radius:8px; padding:12px 10px; text-align:center;">
-              <div style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:500; color:#1b3a6b; line-height:1;"><%= official.party_line_vote_pct ? "#{official.party_line_vote_pct}%" : '—' %></div>
-              <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-top:4px; letter-spacing:.04em;">Party-Line</div>
-              <div style="font-family:'Nunito',sans-serif; font-size:9px; color:#b0bbd0; margin-top:1px;">Dem. majority</div>
-            </div>
-          </div>
-        </div>
-
         <%# Recent Votes — pill style %>
         <% if official.recent_votes.present? %>
         <div class="dp-section">
@@ -153,25 +123,6 @@
               <%= fora_share_btn({official: official.full_name, title: v['title'], desc: [v['bill'], v['result'], v['date']].select(&:present?).join(' · ')}, color: 'rgba(27,58,107,0.25)') %>
             </div>
           <% end %>
-        </div>
-        <% end %>
-
-        <%# Issue Focus Areas — 2-col grid %>
-        <% if official.issue_focus_areas.present? %>
-        <div class="dp-section">
-          <div class="dp-section-eyebrow">◆ Legislative Record</div>
-          <h2 class="dp-section-title">Issue Focus Areas</h2>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <% official.issue_focus_areas.each do |area| %>
-              <div style="background:#f7f9fc; border-radius:8px; padding:10px 12px;">
-                <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:#1b3a6b; margin-bottom:2px;"><%= area['name'] %></div>
-                <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#8a9ab8; margin-bottom:6px;"><%= area['bills_count'] %> bills this term</div>
-                <div style="height:3px; background:#e8ecf4; border-radius:2px; overflow:hidden;">
-                  <div style="width:<%= area['pct'] %>%; height:100%; background:<%= area['color'] %>; border-radius:2px;"></div>
-                </div>
-              </div>
-            <% end %>
-          </div>
         </div>
         <% end %>
 
