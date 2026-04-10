@@ -70,8 +70,10 @@ Rails.application.routes.draw do
       as:  :state_official
 
   # Community organizations
-  get "usa/pa/philly/rco/bvna",  to: "orgs#bvna",  as: :bvna_rco
-  get "usa/pa/philly/rco/epca",  to: "orgs#epca",  as: :epca_rco
+  get "usa/pa/philly/rco/bvna",  to: "orgs#bvna",      as: :bvna_rco
+  get "usa/pa/philly/rco/epca",  to: "orgs#epca",      as: :epca_rco
+  get "usa/pa/philly/rco/19wc",  to: "rcos#19wc",      as: :rco_19wc
+  get "usa/pa/philly/rco/nscan", to: "rcos#nscan",     as: :rco_nscan
 
   # Business formation guide
   get  "market/newllc",       to: "market/new_llc#index", as: :new_llc
