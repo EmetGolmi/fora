@@ -50,22 +50,14 @@ class PhillyRcoService
 
   def normalize(attrs)
     {
-      "name"             => attrs["ORGANIZATION_NAME"],
-      "address"          => attrs["ORGANIZATION_ADDRESS"],
-      "meeting_location" => attrs["MEETING_LOCATION"],
-      "primary_name"     => attrs["PRIMARY_NAME"],
-      "primary_email"    => attrs["PRIMARY_EMAIL"],
-      "primary_phone"    => attrs["PRIMARY_PHONE"],
-      "website"          => attrs["WEBSITE"] || attrs["ORGANIZATION_WEBSITE"],
-      "expiration_year"  => extract_year(attrs["EXPIRATION_DATE"])
+      "name"             => attrs["organization_name"],
+      "address"          => attrs["organization_address"],
+      "meeting_location" => attrs["meeting_location_address"],
+      "primary_name"     => attrs["primary_name"],
+      "primary_email"    => attrs["primary_email"],
+      "primary_phone"    => attrs["primary_phone"],
+      "website"          => attrs["websites"],
+      "expiration_year"  => attrs["expirationyear"]
     }
-  end
-
-  def extract_year(val)
-    return nil if val.nil?
-    # ArcGIS date fields are epoch milliseconds
-    Time.at(val.to_i / 1000.0).utc.year
-  rescue
-    nil
   end
 end
