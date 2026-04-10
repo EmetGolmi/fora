@@ -52,9 +52,11 @@ Rails.application.routes.draw do
   get "officials/M001243", to: redirect("/officials/usa/pa/dmccormick")
   get "officials/E000296", to: redirect("/officials/usa/pa/devans")
 
-  # Redirect old OpenStates URLs to friendly slugs for Saval and Waxman
+  # Redirect old OpenStates URLs to friendly slugs for state officials
   get "officials/state/ocd-person/6f172bc8-50b0-4dd3-aed6-b5fd48b70eeb", to: redirect("/officials/usa/pa/nsaval")
   get "officials/state/ocd-person/1f2c3093-8ce7-41f7-8df0-6cd14ddd354b", to: redirect("/officials/usa/pa/bwaxman")
+  get "officials/state/ocd-person/d390f1ac-1f16-478a-9e0d-462c9ed79818", to: redirect("/officials/usa/pa/jgiral")
+  get "officials/state/ocd-person/f3b4fe8c-05f9-4610-81ef-354c0fcb0cdd", to: redirect("/officials/usa/pa/ttartaglione")
 
   # Bioguide IDs are always one uppercase letter + six digits (e.g. F000479)
   # Constraint prevents "state" from matching as a bioguide_id
