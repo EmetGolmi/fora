@@ -15,7 +15,7 @@ class PhillyRcoService
       { address_key: key, rco_data: rcos, fetched_at: Time.current,
         created_at: Time.current, updated_at: Time.current },
       unique_by: :address_key,
-      update_only: %i[rco_data fetched_at updated_at]
+      update_only: %i[rco_data fetched_at]
     )
     rcos
   end
