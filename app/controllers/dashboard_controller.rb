@@ -57,6 +57,18 @@ class DashboardController < ApplicationController
     @federal_bills = bills_from_cache(data[:federal_bills])
     @philly_bills  = bills_from_cache(data[:philly_bills])
 
+    @rcos = begin
+      lat = @jurisdiction[:lat]
+      lng = @jurisdiction[:lng]
+      if lat.present? && lng.present? && @jurisdiction[:city].to_s.upcase == "PHILADELPHIA"
+        PhillyRcoService.for_coordinate(lat, lng)
+      else
+        []
+      end
+    rescue StandardError
+      []
+    end
+
     date_filter      = ["status_date >= ? OR status_date IS NULL", Date.new(2025, 1, 1)]
     docket_scope     = CivicBill.active.where(date_filter).order(status_date: :desc)
     record_scope     = CivicBill.resolved.order(status_date: :desc)

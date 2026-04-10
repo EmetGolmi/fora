@@ -206,59 +206,51 @@
 
   <% end %>
 
-      <!-- RCO Card — hardcoded for Philly/Bella Vista MVP -->
-      <% if @jurisdiction && !@jurisdiction[:not_covered] && @jurisdiction[:city]&.downcase&.include?("philadelphia") %>
-        <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; margin-bottom:32px; overflow:hidden;">
+  <!-- RCO Card — populated from PhillyRcoService via ResolvedAddress lat/lng -->
+  <% if @rcos.present? %>
+    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; margin-bottom:32px; overflow:hidden;">
 
-          <div style="padding:12px 20px 11px; border-bottom:1px solid rgba(27,58,107,0.09); display:flex; align-items:center; gap:8px;">
-            <div style="width:6px; height:6px; border-radius:50%; background:#b8860b; flex-shrink:0;"></div>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#5a6e8a;">Your Neighborhood Organization</span>
-          </div>
+      <div style="padding:12px 20px 11px; border-bottom:1px solid rgba(27,58,107,0.09); display:flex; align-items:center; gap:8px;">
+        <div style="width:6px; height:6px; border-radius:50%; background:#b8860b; flex-shrink:0;"></div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#5a6e8a;">Your Neighborhood Organization</span>
+      </div>
 
-          <div style="padding:16px 20px 6px;">
+      <div style="padding:16px 20px 6px;">
 
-            <!-- What is an RCO explainer -->
-            <div style="background:#edf1fb; border:1px solid rgba(27,58,107,0.1); border-left:3px solid #1b3a6b; border-radius:6px; padding:10px 14px; margin-bottom:16px;">
-              <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ What is an RCO?</div>
-              <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#2c3e5a; line-height:1.6; margin:0;">Your <strong>Registered Community Organization</strong> is your neighborhood's seat at the table. When something is changing on your block — a new building, a bar, a shelter, a parking lot — your RCO is the first place residents gather to respond. It's where you show up, speak up, and vote. The city and your councilmember listen. RCOs also organize cleanups, safety walks, transportation campaigns, and tree plantings. <span style="color:#1b3a6b; font-weight:700;">If something is happening in your neighborhood, this is where neighbors go to do something about it.</span></p>
-            </div>
-
-            <!-- BVNA org row -->
-            <div class="rep-item" style="display:flex; align-items:center; gap:9px; padding:10px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
-              <div style="width:38px; height:38px; border-radius:8px; background:#f8f0dc; border:1px solid rgba(184,134,11,0.25); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:#b8860b; flex-shrink:0;">BV</div>
-              <div style="flex:1; min-width:0;">
-                <%= link_to "Bella Vista Neighbors Association", "/usa/pa/philly/rco/bvna", style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                <span style="font-family:'Nunito',sans-serif; font-size:11.5px; color:#5a6e8a;">Registered Community Organization · Bella Vista · 19147</span>
-              </div>
-              <div style="text-align:right; flex-shrink:0;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);">✓ Verified</span>
-              </div>
-              <span style="font-size:12px; color:#8a9ab8; margin-left:2px; flex-shrink:0;">›</span>
-            </div>
-
-            <!-- Next meeting + active cases -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px 0 6px;">
-              <div style="background:#f4f7fc; border-radius:8px; padding:10px 12px;">
-                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:4px;">Next meeting</div>
-                <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#1b3a6b;">Apr 8, 2026</div>
-                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; margin-top:2px;">Palumbo Rec Center · 7:00 PM</div>
-                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">Open to all residents</div>
-              </div>
-              <div style="background:#f4f7fc; border-radius:8px; padding:10px 12px;">
-                <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:#8a9ab8; margin-bottom:4px;">Active zoning cases</div>
-                <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#1b3a6b;">4 cases pending</div>
-                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#8b2020; margin-top:2px; font-weight:600;">⚠ Deadline Apr 20</div>
-                <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a;">824–830 S 8th St · Variance</div>
-              </div>
-            </div>
-
-            <div style="padding-bottom:10px;">
-              <%= link_to "View BVNA page — meetings, zoning cases, efforts →", "/usa/pa/philly/rco/bvna", style: "font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#3a6abf; text-decoration:none;" %>
-            </div>
-
-          </div>
+        <!-- What is an RCO explainer -->
+        <div style="background:#edf1fb; border:1px solid rgba(27,58,107,0.1); border-left:3px solid #1b3a6b; border-radius:6px; padding:10px 14px; margin-bottom:16px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ What is an RCO?</div>
+          <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#2c3e5a; line-height:1.6; margin:0;">Your <strong>Registered Community Organization</strong> is your neighborhood's seat at the table. When something is changing on your block — a new building, a bar, a shelter, a parking lot — your RCO is the first place residents gather to respond. It's where you show up, speak up, and vote. The city and your councilmember listen. RCOs also organize cleanups, safety walks, transportation campaigns, and tree plantings. <span style="color:#1b3a6b; font-weight:700;">If something is happening in your neighborhood, this is where neighbors go to do something about it.</span></p>
         </div>
-      <% end %>
+
+        <% @rcos.each do |rco| %>
+          <% next if rco["name"].blank? %>
+          <% _rco_initials = rco["name"].split.first(2).map { |w| w[0] }.join %>
+          <div class="rep-item" style="display:flex; align-items:center; gap:9px; padding:10px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
+            <div style="width:38px; height:38px; border-radius:8px; background:#f8f0dc; border:1px solid rgba(184,134,11,0.25); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:11px; font-weight:700; color:#b8860b; flex-shrink:0;"><%= _rco_initials %></div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; line-height:1.25;"><%= rco["name"] %></div>
+              <% if rco["primary_email"].present? %>
+                <a href="mailto:<%= rco["primary_email"] %>" style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#3a6abf; text-decoration:none;"><%= rco["primary_email"] %></a>
+              <% elsif rco["primary_phone"].present? %>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#5a6e8a;"><%= rco["primary_phone"] %></span>
+              <% end %>
+            </div>
+            <% if rco["expiration_year"].present? %>
+              <div style="text-align:right; flex-shrink:0;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);">✓ Active thru <%= rco["expiration_year"] %></span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div style="padding-top:10px; padding-bottom:10px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8;">Source: Philadelphia PCPC · ArcGIS</span>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
 
   <!-- Legislation Toggle -->
   <%
