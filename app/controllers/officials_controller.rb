@@ -105,6 +105,26 @@ class OfficialsController < ApplicationController
       "terms"            => [{ "chamber" => "PA House", "district" => "182", "startYear" => 2023 }],
       "depiction"        => { "imageUrl" => nil },
       "addressInformation" => { "officeAddress" => "42B East Wing, Harrisburg PA 17120", "phoneNumber" => "(215) 463-5269" }
+    },
+    "jgiral" => {
+      "bioguideId"         => "jgiral",
+      "directOrderName"    => "Jose Giral",
+      "name"               => "Giral, Jose",
+      "partyName"          => "Democratic",
+      "officialWebsiteUrl" => "https://www.pahouse.com/Giral",
+      "terms"              => [{ "chamber" => "PA House", "district" => "180", "startYear" => 2025 }],
+      "depiction"          => { "imageUrl" => nil },
+      "addressInformation" => { "officeAddress" => "3503 B Street, Unit 7, Philadelphia, PA 19134", "phoneNumber" => "(215) 291-5643" }
+    },
+    "ttartaglione" => {
+      "bioguideId"         => "ttartaglione",
+      "directOrderName"    => "Christine Tartaglione",
+      "name"               => "Tartaglione, Christine",
+      "partyName"          => "Democratic",
+      "officialWebsiteUrl" => "https://senatortartaglione.com",
+      "terms"              => [{ "chamber" => "PA Senate", "district" => "2", "startYear" => 1994 }],
+      "depiction"          => { "imageUrl" => nil },
+      "addressInformation" => { "officeAddress" => "5321 Oxford Avenue, Philadelphia, PA 19124", "phoneNumber" => "(215) 533-0440" }
     }
   }.freeze
 
@@ -125,8 +145,10 @@ class OfficialsController < ApplicationController
     "F000479" => { sponsored: 35,  cosponsored: 760 },
     "M001243" => { sponsored: 40,  cosponsored: 170 },
     "E000296" => { sponsored: 10,  cosponsored: 350 },
-    "nsaval"  => { sponsored: 25,  cosponsored: 90 },
-    "bwaxman" => { sponsored: 15,  cosponsored: 55 }
+    "nsaval"       => { sponsored: 25, cosponsored: 90 },
+    "bwaxman"      => { sponsored: 15, cosponsored: 55 },
+    "jgiral"       => { sponsored: 8,  cosponsored: 32 },
+    "ttartaglione" => { sponsored: 22, cosponsored: 85 }
   }.freeze
 
   # 119th Congress stats (Jan 2025 – present)
@@ -145,7 +167,9 @@ class OfficialsController < ApplicationController
                      { number: "SB 4", title: "Whole-Home Repairs Program",
                        summary: "Established a $125 million statewide program for home rehabilitation grants and low-interest loans for low-income homeowners — addressing critical repairs including roofing, plumbing, and electrical systems. Enacted 2025." }
                    ] },
-    "bwaxman" => { enacted: 0, in_committee: 4, votes_cast_119: "~1,100 of 1,150" }
+    "bwaxman"      => { enacted: 0, in_committee: 4, votes_cast_119: "~1,100 of 1,150" },
+    "jgiral"       => { enacted: 0, in_committee: 3, votes_cast_119: "~180 of 200" },
+    "ttartaglione" => { enacted: 0, in_committee: 5, votes_cast_119: "~195 of 210" }
   }.freeze
 
   NEWS_QUERIES = {
@@ -153,8 +177,10 @@ class OfficialsController < ApplicationController
     "M001243" => '"Dave McCormick" senator Pennsylvania',
     "E000296" => '"Dwight Evans" congressman Philadelphia',
     "B001296" => '"Brendan Boyle" congressman Pennsylvania',
-    "nsaval"  => '"Nikil Saval" senator Philadelphia',
-    "bwaxman" => '"Ben Waxman" representative Philadelphia'
+    "nsaval"       => '"Nikil Saval" senator Philadelphia',
+    "bwaxman"      => '"Ben Waxman" representative Philadelphia',
+    "jgiral"       => '"Jose Giral" representative Philadelphia',
+    "ttartaglione" => '"Tina Tartaglione" senator Philadelphia'
   }.freeze
 
   HARDCODED_BILLS = {
@@ -227,6 +253,22 @@ class OfficialsController < ApplicationController
       { "type" => "HB", "number" => "922",  "title" => "School Infrastructure Repair Fund — dedicated capital for aging school buildings",
         "jurisdiction" => "pennsylvania",
         "latestAction" => { "text" => "In Committee · Education", "actionDate" => "2025-06-05" } }
+    ].freeze,
+    "jgiral" => [
+      { "type" => "HB", "number" => "877",  "title" => "Safe Patient Handling Act — protects healthcare workers from musculoskeletal injury during patient care",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Labor & Industry", "actionDate" => "2025-03-10" } },
+      { "type" => "HB", "number" => "1788", "title" => "Utility Customer Protection Act — establishes billing transparency and shutoff protections for residential utility customers",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Consumer Affairs", "actionDate" => "2025-09-15" } }
+    ].freeze,
+    "ttartaglione" => [
+      { "type" => "SB", "number" => "908",  "title" => "Prevailing Wage Protection Act — extends prevailing wage requirements to all publicly funded construction projects",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Labor & Industry", "actionDate" => "2025-04-02" } },
+      { "type" => "SB", "number" => "1054", "title" => "Financial Literacy in Schools Act — requires personal finance curriculum in all public high schools",
+        "jurisdiction" => "pennsylvania",
+        "latestAction" => { "text" => "In Committee · Education", "actionDate" => "2025-06-10" } }
     ].freeze
   }.freeze
 
@@ -251,7 +293,10 @@ class OfficialsController < ApplicationController
     end
     @social = CongressSocialService.for_bioguide(bioguide_id)
     @social[:website] ||= @member["officialWebsiteUrl"]
-    state_social = { "nsaval" => { twitter: "NikilSaval", instagram: "nikilsaval" } }[bioguide_id]
+    state_social = {
+      "nsaval"       => { twitter: "NikilSaval",         instagram: "nikilsaval" },
+      "ttartaglione" => { twitter: "senator_tartaglione", instagram: "senator_tartaglione" }
+    }[bioguide_id]
     @social.merge!(state_social) if state_social
 
     bill_type_labels = {
@@ -410,7 +455,7 @@ end
     threads.each(&:join)
 
     if HARDCODED_BILLS.key?(bioguide_id)
-      is_state_official = %w[nsaval bwaxman].include?(bioguide_id)
+      is_state_official = %w[nsaval bwaxman jgiral ttartaglione].include?(bioguide_id)
       @bills = HARDCODED_BILLS[bioguide_id].map { |b| is_state_official ? b : b.merge("congress" => 119) }
       @bills.each do |bill|
         type = bill["type"].to_s.upcase
@@ -457,8 +502,10 @@ end
       "M001243" => { x: "SenMcCormickPA",   instagram: "senmccormickpa",   youtube: "SenMcCormickPA", website: "https://www.mccormick.senate.gov" },
       "E000296" => { x: "RepDwightEvans",    instagram: "repdwightevans",   youtube: nil,             website: "https://evans.house.gov" },
       "B001296" => { x: "RepBrendanBoyle",   instagram: nil,                youtube: nil,             website: "https://boyle.house.gov" },
-      "nsaval"  => { x: "NikilSaval",        instagram: "nikilsaval",       youtube: nil,             website: "https://www.senatornikils.com" },
-      "bwaxman" => { x: nil,                 instagram: nil,                youtube: nil,             website: "https://www.pahouse.com/waxman" }
+      "nsaval"       => { x: "NikilSaval",          instagram: "nikilsaval",          youtube: nil, website: "https://www.senatornikils.com" },
+      "bwaxman"      => { x: nil,                   instagram: nil,                   youtube: nil, website: "https://www.pahouse.com/waxman" },
+      "jgiral"       => { x: nil,                   instagram: nil,                   youtube: nil, website: "https://www.pahouse.com/Giral" },
+      "ttartaglione" => { x: "senator_tartaglione",  instagram: "senator_tartaglione", youtube: nil, website: "https://senatortartaglione.com" }
     }[bioguide_id] || {}
   end
 

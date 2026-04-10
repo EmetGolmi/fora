@@ -15,8 +15,10 @@ Rails.application.routes.draw do
   get "officials/usa/pa/jfetterman", to: "officials#show", defaults: { bioguide_id: "F000479" }
   get "officials/usa/pa/dmccormick", to: "officials#show", defaults: { bioguide_id: "M001243" }
   get "officials/usa/pa/devans",     to: "officials#show", defaults: { bioguide_id: "E000296" }
-  get "officials/usa/pa/nsaval",     to: "officials#show", defaults: { bioguide_id: "nsaval" }
-  get "officials/usa/pa/bwaxman",    to: "officials#show", defaults: { bioguide_id: "bwaxman" }
+  get "officials/usa/pa/nsaval",       to: "officials#show", defaults: { bioguide_id: "nsaval" }
+  get "officials/usa/pa/bwaxman",      to: "officials#show", defaults: { bioguide_id: "bwaxman" }
+  get "officials/usa/pa/jgiral",       to: "officials#show", defaults: { bioguide_id: "jgiral" }
+  get "officials/usa/pa/ttartaglione", to: "officials#show", defaults: { bioguide_id: "ttartaglione" }
   get "officials/usa/president",          to: "officials#us_president", as: :us_president
   get "officials/usa/vp",                to: "officials#us_vp",        as: :us_vp
   get "officials/usa/pa/governor",        to: "officials#governor",     as: :pa_governor
