@@ -113,7 +113,7 @@ class OfficialsController < ApplicationController
       "partyName"          => "Democratic",
       "officialWebsiteUrl" => "https://www.pahouse.com/Giral",
       "terms"              => [{ "chamber" => "PA House", "district" => "180", "startYear" => 2025 }],
-      "depiction"          => { "imageUrl" => nil },
+      "depiction"          => { "imageUrl" => "https://www.palegis.us/resources/images/members/300/1980.jpg" },
       "addressInformation" => { "officeAddress" => "3503 B Street, Unit 7, Philadelphia, PA 19134", "phoneNumber" => "(215) 291-5643" }
     },
     "ttartaglione" => {
@@ -123,7 +123,7 @@ class OfficialsController < ApplicationController
       "partyName"          => "Democratic",
       "officialWebsiteUrl" => "https://senatortartaglione.com",
       "terms"              => [{ "chamber" => "PA Senate", "district" => "2", "startYear" => 1994 }],
-      "depiction"          => { "imageUrl" => nil },
+      "depiction"          => { "imageUrl" => "https://www.palegis.us/resources/images/members/300/277.jpg" },
       "addressInformation" => { "officeAddress" => "5321 Oxford Avenue, Philadelphia, PA 19124", "phoneNumber" => "(215) 533-0440" }
     }
   }.freeze
