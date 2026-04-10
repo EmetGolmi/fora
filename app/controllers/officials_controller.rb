@@ -2,6 +2,8 @@ class OfficialsController < ApplicationController
   include HTTParty
   base_uri "https://api.congress.gov/v3"
 
+  before_action :fetch_philly_rcos, if: :philly_official_action?
+
   WIKI_FILENAMES = {
     "F000479" => "John_Fetterman_official_portrait.jpg",
     "M001243" => "McCormick_Portrait_(HR).jpg",
@@ -686,6 +688,20 @@ end
   end
 
   private
+
+  def philly_official_action?
+    action_name.start_with?("philly_")
+  end
+
+  def fetch_philly_rcos
+    lat = params[:lat].to_f
+    lng = params[:lng].to_f
+    return unless lat.nonzero? && lng.nonzero?
+    @rcos = PhillyRcoService.for_coordinate(lat, lng)
+  rescue => e
+    Rails.logger.warn("[OfficialsController] PhillyRcoService failed: #{e.message}")
+    @rcos = []
+  end
 
   def extract_state_social(links)
     social = {}

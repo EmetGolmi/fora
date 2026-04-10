@@ -218,6 +218,26 @@
           <% end %>
         </div>
 
+        <%# Your Community Organization (RCO) — only when lat/lng was passed %>
+        <% if @rcos.present? %>
+        <div class="dp-card">
+          <div class="dp-card-title">◆ Your Community Organization</div>
+          <% @rcos.each do |rco| %>
+            <% next if rco["name"].blank? %>
+            <div style="padding:8px 10px; background:#f7f9fc; border-radius:6px; margin-bottom:5px;">
+              <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:#1b3a6b; margin-bottom:2px;"><%= rco["name"] %></div>
+              <% if rco["primary_email"].present? %>
+                <a href="mailto:<%= rco["primary_email"] %>" style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#3a6abf; text-decoration:none;"><%= rco["primary_email"] %></a>
+              <% end %>
+              <% if rco["primary_phone"].present? && rco["primary_email"].blank? %>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#5a6e8a;"><%= rco["primary_phone"] %></div>
+              <% end %>
+            </div>
+          <% end %>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8; margin-top:6px;">Source: Philadelphia PCPC · ArcGIS</div>
+        </div>
+        <% end %>
+
         <%# Constituent request types %>
         <div class="dp-card">
           <div class="dp-card-title">◆ Submit a Request</div>
@@ -449,7 +469,27 @@
       <% end %>
     </div>
 
-    <!-- Section 7 · Contact footer -->
+    <!-- Section 7 · Your Community Organization (RCO) -->
+    <% if @rcos.present? %>
+    <div style="padding:16px 20px; background:white; border-bottom:1px solid #e8ecf4;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Your Community Organization</div>
+      <% @rcos.each do |rco| %>
+        <% next if rco["name"].blank? %>
+        <div style="padding:8px 0; border-bottom:0.5px solid #e8ecf4;">
+          <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:#1b3a6b; margin-bottom:2px;"><%= rco["name"] %></div>
+          <% if rco["primary_email"].present? %>
+            <a href="mailto:<%= rco["primary_email"] %>" style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#3a6abf; text-decoration:none;"><%= rco["primary_email"] %></a>
+          <% end %>
+          <% if rco["primary_phone"].present? && rco["primary_email"].blank? %>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#5a6e8a;"><%= rco["primary_phone"] %></div>
+          <% end %>
+        </div>
+      <% end %>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8; margin-top:8px;">Source: Philadelphia PCPC · ArcGIS</div>
+    </div>
+    <% end %>
+
+    <!-- Section 8 · Contact footer -->
     <div style="padding:16px 20px; display:flex; gap:10px; background:white;">
       <% if official.contact_url.present? %>
         <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="flex:1; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; text-align:center; padding:10px 8px; background:#1b3a6b; color:white; border-radius:8px; text-decoration:none;">Contact Office</a>

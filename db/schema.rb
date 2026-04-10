@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_07_025523) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_10_014503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -138,6 +138,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_025523) do
     t.datetime "updated_at", null: false
     t.index ["address"], name: "index_resolved_addresses_on_address", unique: true
     t.index ["job_id"], name: "index_resolved_addresses_on_job_id"
+  end
+
+  create_table "resolved_rcos", force: :cascade do |t|
+    t.string "address_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "fetched_at"
+    t.jsonb "rco_data", default: [], null: false
+    t.datetime "updated_at", null: false
+    t.index ["address_key"], name: "index_resolved_rcos_on_address_key", unique: true
   end
 
   add_foreign_key "official_finance_summaries", "civic_representatives"

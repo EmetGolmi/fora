@@ -174,7 +174,7 @@
                   <% elsif official.dig(:jurisdiction, :name) == 'governor' %>
                     <%= link_to official[:name], pa_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif official.dig(:jurisdiction, :name) == 'mayor' %>
-                    <%= link_to official[:name], philly_mayor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
+                    <%= link_to official[:name], philly_mayor_path(lat: @jurisdiction[:lat], lng: @jurisdiction[:lng]), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif official.dig(:jurisdiction, :name) == 'lt_governor' %>
                     <%= link_to official[:name], pa_lt_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                   <% elsif official.dig(:jurisdiction, :name) == 'president' %>
@@ -184,7 +184,7 @@
                   <% elsif %w[managing_director finance_director city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
                     <% _philly_slug = philly_slugs[official[:name].to_s.strip] %>
                     <% if _philly_slug %>
-                      <%= link_to official[:name], philly_person_path(slug: _philly_slug), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
+                      <%= link_to official[:name], philly_person_path(slug: _philly_slug, lat: @jurisdiction[:lat], lng: @jurisdiction[:lng]), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
                     <% else %>
                       <span style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; display:block; line-height:1.25;"><%= official[:name] %></span>
                     <% end %>

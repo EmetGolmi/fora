@@ -61,6 +61,8 @@ class JurisdictionResolver
       city:               matched[:city],
       state:              matched[:state],
       zip:                zip,
+      lat:                coords[:lat],
+      lng:                coords[:lng],
       officials:          officials
     }
   end
@@ -236,8 +238,8 @@ class JurisdictionResolver
   end
 
   def fetch_philadelphia_officials(lat, lng, zip)
-    statewide       = fetch_phl_statewide_officials
-    citywide        = fetch_phl_citywide_officials
+    statewide        = fetch_phl_statewide_officials
+    citywide         = fetch_phl_citywide_officials
     council_district = fetch_phl_council_district_official(zip)
 
     statewide + citywide + council_district
