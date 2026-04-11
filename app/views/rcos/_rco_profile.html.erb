@@ -130,9 +130,9 @@
 <% end %>
 
 <%
-  initials        = rco[:name].split.first(2).map { |w| w[0] }.join.upcase
+  initials        = rco[:initials].presence || rco[:name].split.first(2).map { |w| w[0] }.join.upcase
   website_url     = rco[:website].present? ? (rco[:website].start_with?('http') ? rco[:website] : "https://#{rco[:website]}") : nil
-  website_display = rco[:website].to_s.gsub(/^https?:\/\//, '').split('/').first
+  website_display = rco[:website_label].presence || rco[:website].to_s.gsub(/^https?:\/\//, '').split('/').first
 %>
 
 <!-- ═══════════ HERO / HEADER CARD ═══════════ -->
@@ -197,9 +197,9 @@
     <% end %>
 
     <!-- Issue tags -->
-    <% if rco[:issues].present? %>
+    <% if rco[:issue_tags].present? %>
       <div class="rco-issues">
-        <% rco[:issues].each do |issue| %>
+        <% rco[:issue_tags].each do |issue| %>
           <span class="rco-issue-pill"><%= issue %></span>
         <% end %>
       </div>
