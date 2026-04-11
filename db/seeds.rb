@@ -898,3 +898,28 @@ dubow.assign_attributes(
 )
 dubow.save!
 puts "Seeded: #{dubow.full_name} (#{dubow.office_title})"
+
+# ── Neighborhood Issues ───────────────────────────────────────────────────────
+if Rails.env.development? || NeighborhoodIssue.count.zero?
+  NeighborhoodIssue.find_or_create_by(
+    rco_slug:             'bvna',
+    body:                 'Human feces on the 1600 block of Sansom every morning this week. The people sleeping here are in crisis — there are no accessible public restrooms within four blocks after 5pm. This is a public health problem and a human dignity problem at the same time. We need bathrooms, not just cleanup.',
+    perspective_type:     'empathy',
+    author_name:          'Sarah M.',
+    location_description: '1600 block of Sansom St',
+    concurrence_count:    7,
+    anonymous:            false
+  )
+
+  NeighborhoodIssue.find_or_create_by(
+    rco_slug:             'bvna',
+    body:                 'The streetlight at 17th and Chestnut has been out for 6 weeks. Filed three 311 requests — all closed as resolved with the light still out. Safety issue at night. Who do I escalate to when 311 fails?',
+    perspective_type:     'accountability',
+    author_name:          'David R.',
+    location_description: '1700 block of Chestnut St',
+    concurrence_count:    3,
+    anonymous:            false
+  )
+
+  puts "Seeded: #{NeighborhoodIssue.where(rco_slug: 'bvna').count} NeighborhoodIssue(s) for bvna"
+end
