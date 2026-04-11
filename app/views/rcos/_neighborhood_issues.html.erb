@@ -228,6 +228,7 @@
     ].map(([label, href]) =>
       '<button class="ni-share-plat" onclick="window.open(' + "'" + href + "'" + ",'_blank','noopener')\">" + esc(label) + '</button>'
     ).join('') +
+    '<button class="ni-share-plat" id="ig-btn-' + uid + '" onclick="niShareInstagram(' + issueId + ',\'ig-btn-' + uid + '\',\'' + enc(t240) + '\')">Instagram</button>' +
     '<button class="ni-share-plat" id="copy-btn-' + uid + '" onclick="niCopyLink(' + issueId + ',\'copy-btn-' + uid + '\')">Copy link</button>';
   }
 
@@ -238,6 +239,16 @@
       '<div class="ni-share-btns">' + btns + '</div>' +
       '</div>';
   }
+
+  // Instagram has no web share URL — copy text then open instagram.com
+  window.niShareInstagram = function(issueId, btnId, encodedText) {
+    var text = decodeURIComponent(encodedText) + ' ' + issueAnchor(issueId);
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById(btnId);
+      if (btn) { var orig = btn.textContent; btn.textContent = 'Copied — paste in IG!'; setTimeout(function() { btn.textContent = orig; }, 2200); }
+      window.open('https://www.instagram.com/', '_blank', 'noopener');
+    });
+  };
 
   window.niCopyLink = function(issueId, btnId) {
     navigator.clipboard.writeText(issueAnchor(issueId)).then(function() {
