@@ -1,0 +1,598 @@
+<%# Locals: rco_slug (String), rco_name (String) %>
+
+<% content_for :head do %>
+<style>
+/* ── NEIGHBORHOOD ISSUES ── */
+.ni-section { margin-bottom: 24px; }
+.ni-eyebrow { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.18em; text-transform:uppercase; color:var(--gilt); margin-bottom:10px; font-weight:700; }
+
+.ni-explainer { border-left:3px solid var(--blue); background:var(--blue-vp); border-radius:0 8px 8px 0; padding:14px 18px; margin-bottom:16px; }
+.ni-explainer p { font-family:'Nunito',sans-serif; font-size:13px; line-height:1.7; color:var(--ink-mid); margin:0 0 4px; }
+.ni-why-link { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:var(--blue-lt); text-decoration:none; cursor:pointer; }
+.ni-why-link:hover { text-decoration:underline; }
+.ni-why-disclosure { background:white; border:1px solid var(--blue-pl); border-radius:6px; padding:12px 16px; margin-top:10px; font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-mid); line-height:1.65; }
+
+/* Form card */
+.ni-form-card { background:white; border-radius:10px; border:0.5px solid var(--blue-pl); padding:20px 22px; margin-bottom:18px; }
+.ni-form-label { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:6px; display:block; }
+.ni-textarea { width:100%; min-height:80px; border:1px solid var(--blue-pl); border-radius:6px; padding:10px 12px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink); resize:vertical; outline:none; box-sizing:border-box; }
+.ni-textarea:focus { border-color:var(--blue-lt); box-shadow:0 0 0 3px rgba(58,106,191,0.12); }
+
+.ni-perspective-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:10px 0 14px; }
+.ni-perspective-btn { padding:8px 10px; border-radius:6px; border:1.5px solid var(--blue-pl); background:white; font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:var(--ink-soft); cursor:pointer; text-align:left; transition:all 0.12s; }
+.ni-perspective-btn:hover { border-color:var(--blue-lt); color:var(--blue); }
+.ni-perspective-btn.active[data-type="empathy"]        { background:#e8f4fd; border-color:#1b3a6b; color:#1b3a6b; }
+.ni-perspective-btn.active[data-type="practical"]      { background:#e5f0e8; border-color:#155c2d; color:#155c2d; }
+.ni-perspective-btn.active[data-type="accountability"] { background:#fff3dc; border-color:#b8860b; color:#b8860b; }
+.ni-perspective-btn.active[data-type="opposition"]     { background:#faeaea; border-color:#8b1a1a; color:#8b1a1a; }
+
+.ni-input { width:100%; border:1px solid var(--blue-pl); border-radius:6px; padding:8px 12px; font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink); outline:none; box-sizing:border-box; }
+.ni-input:focus { border-color:var(--blue-lt); box-shadow:0 0 0 3px rgba(58,106,191,0.12); }
+.ni-form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+.ni-checkbox-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft); }
+.ni-submit-btn { width:100%; padding:11px; background:var(--blue); color:white; border:none; border-radius:7px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; cursor:pointer; }
+.ni-submit-btn:hover { background:var(--blue-md); }
+.ni-submit-btn:disabled { opacity:0.55; cursor:not-allowed; }
+.ni-form-error { font-family:'Nunito',sans-serif; font-size:12px; color:#8b1a1a; margin-top:6px; }
+
+/* Issue cards */
+.ni-issue-card { background:white; border-radius:10px; border:0.5px solid var(--blue-pl); padding:18px 22px; margin-bottom:12px; }
+.ni-issue-header { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:10px; }
+.ni-badge { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 8px; border-radius:3px; font-weight:700; }
+.ni-author { font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:var(--ink); }
+.ni-location { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink-soft); }
+.ni-time { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink-mut); margin-left:auto; }
+.ni-issue-body { font-family:'Nunito',sans-serif; font-size:13.5px; color:var(--ink-mid); line-height:1.65; margin-bottom:14px; }
+
+/* Action strip */
+.ni-action-strip { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; align-items:center; }
+.ni-action-btn { font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:0.08em; padding:5px 12px; border-radius:5px; border:1px solid var(--blue-pl); background:white; color:var(--blue-lt); cursor:pointer; }
+.ni-action-btn:hover { background:var(--blue-vp); }
+.ni-concur-btn { font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:0.08em; padding:5px 12px; border-radius:5px; border:1.5px solid var(--blue); background:var(--blue-vp); color:var(--blue); cursor:pointer; font-weight:700; }
+.ni-concur-btn:hover { background:var(--blue-pl); }
+.ni-concur-btn.concurred { background:var(--gilt-pl); border-color:var(--gilt); color:var(--gilt); }
+.ni-concur-btn:disabled { opacity:0.6; cursor:not-allowed; }
+.ni-recruit-btn { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.06em; padding:5px 12px; border-radius:5px; border:1px solid rgba(184,134,11,0.3); background:rgba(184,134,11,0.06); color:var(--gilt); cursor:pointer; }
+.ni-recruit-btn:hover { background:var(--gilt-pl); }
+.ni-alerted-chip { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.08em; padding:5px 10px; border-radius:5px; background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2); }
+
+/* Share panels */
+.ni-share-panel { background:#f8faff; border:1px solid var(--blue-pl); border-radius:8px; padding:14px 16px; margin-bottom:10px; }
+.ni-share-panel-label { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:6px; }
+.ni-share-copy { font-family:'Nunito',sans-serif; font-size:11.5px; color:var(--ink-mid); line-height:1.55; margin-bottom:10px; padding:8px 10px; background:white; border:1px solid var(--blue-pl); border-radius:5px; }
+.ni-share-btns { display:flex; flex-wrap:wrap; gap:6px; }
+.ni-share-plat { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.07em; padding:5px 10px; border-radius:4px; border:1px solid var(--blue-pl); background:white; color:var(--blue-md); cursor:pointer; }
+.ni-share-plat:hover { background:var(--blue-vp); }
+
+/* Progress */
+.ni-progress-section { margin-bottom:12px; }
+.ni-progress-track { height:5px; background:#e0e8f5; border-radius:3px; overflow:hidden; margin-bottom:5px; }
+.ni-progress-fill { height:100%; background:var(--blue); border-radius:3px; transition:width 0.4s ease; }
+.ni-progress-fill.complete { background:var(--green); }
+.ni-progress-meta { display:flex; align-items:center; justify-content:space-between; }
+.ni-progress-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:var(--ink-soft); }
+
+/* Alerted banner */
+.ni-alerted-banner { background:linear-gradient(135deg,#e5f0e8 0%,#f8f0dc 100%); border:1px solid rgba(21,92,45,0.2); border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+.ni-alerted-banner-title { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:#155c2d; font-weight:700; margin-bottom:6px; }
+.ni-alerted-banner-text { font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-mid); line-height:1.55; margin-bottom:10px; }
+
+/* Responses */
+.ni-responses-section { border-top:1px solid var(--rule); padding-top:12px; margin-top:4px; }
+.ni-responses-label { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:8px; }
+.ni-response-card { padding:10px 12px; background:var(--bg); border-radius:7px; margin-bottom:7px; }
+.ni-response-header { display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-bottom:5px; }
+.ni-official-badge { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.1em; text-transform:uppercase; padding:2px 7px; border-radius:3px; background:#fff3dc; color:var(--gilt); border:1px solid var(--gilt-rul); }
+.ni-response-body { font-family:'Nunito',sans-serif; font-size:12.5px; color:var(--ink-mid); line-height:1.6; }
+.ni-response-actions { display:flex; gap:6px; margin-top:6px; }
+
+/* Response form */
+.ni-response-form { margin-top:12px; border-top:1px solid var(--rule); padding-top:12px; }
+.ni-response-form-toggle { font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:0.1em; color:var(--blue-lt); cursor:pointer; background:none; border:none; padding:0; }
+.ni-response-form-toggle:hover { text-decoration:underline; }
+.ni-response-form-body { display:none; margin-top:10px; }
+.ni-resp-perspective-grid { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:8px; }
+.ni-resp-perspective-btn { padding:6px 8px; border-radius:5px; border:1px solid var(--blue-pl); background:white; font-family:'Nunito',sans-serif; font-size:10px; font-weight:600; color:var(--ink-soft); cursor:pointer; text-align:left; }
+.ni-resp-perspective-btn:hover { border-color:var(--blue-lt); color:var(--blue); }
+.ni-resp-perspective-btn.active[data-type="empathy"]        { background:#e8f4fd; border-color:#1b3a6b; color:#1b3a6b; }
+.ni-resp-perspective-btn.active[data-type="practical"]      { background:#e5f0e8; border-color:#155c2d; color:#155c2d; }
+.ni-resp-perspective-btn.active[data-type="accountability"] { background:#fff3dc; border-color:#b8860b; color:#b8860b; }
+.ni-resp-perspective-btn.active[data-type="opposition"]     { background:#faeaea; border-color:#8b1a1a; color:#8b1a1a; }
+.ni-resp-submit { padding:8px 16px; background:var(--blue); color:white; border:none; border-radius:6px; font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; cursor:pointer; margin-top:6px; }
+.ni-resp-submit:hover { background:var(--blue-md); }
+
+/* States */
+.ni-loading { font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink-mut); padding:24px; text-align:center; }
+.ni-empty { font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink-soft); padding:24px; text-align:center; border:1.5px dashed var(--blue-pl); border-radius:8px; line-height:1.6; }
+
+@media (max-width:600px) {
+  .ni-form-row           { grid-template-columns:1fr; }
+  .ni-perspective-grid   { grid-template-columns:1fr 1fr; }
+  .ni-action-strip       { gap:5px; }
+}
+</style>
+<% end %>
+
+<div class="ni-section">
+  <div class="ni-eyebrow">◆ Neighborhood Issues · <%= rco_name %></div>
+
+  <!-- Threshold explainer -->
+  <div class="ni-explainer">
+    <p>When 10 neighbors Concur on an issue, <strong><%= rco_name %></strong> is automatically alerted to take action and the issue enters their official record. You can Share any issue at any time — including sharing to recruit the Concurrences needed to trigger the alert. We disclose all thresholds and our reasoning publicly.
+      <a href="#" class="ni-why-link" id="why-10-toggle-<%= rco_slug %>">Why 10? ›</a>
+    </p>
+    <div class="ni-why-disclosure" id="why-10-disc-<%= rco_slug %>" hidden>
+      <strong>Why 10 Concurrences?</strong><br><br>
+      RCO volunteer committees can realistically action 3–5 issues per monthly meeting cycle — surfacing everything would dilute focus and overwhelm volunteers. Ten Concurrences in a short window is a meaningful signal: it suggests genuine neighborhood concern rather than a single motivated resident. Any 3 or more issues with the highest Concurrence counts are always surfaced to RCO leadership regardless of whether the threshold is reached. Sharing is the mechanism to recruit Concurrences — which is why we make it easy from the moment an issue is posted.
+    </div>
+  </div>
+
+  <!-- Raise an issue form -->
+  <div class="ni-form-card">
+    <div class="ni-eyebrow" style="margin-bottom:12px;">◆ Raise an issue</div>
+    <form id="ni-form-<%= rco_slug %>" onsubmit="return false;">
+
+      <label class="ni-form-label">Describe the issue</label>
+      <textarea class="ni-textarea" id="ni-body-<%= rco_slug %>"
+        placeholder="What's happening in your neighborhood? Be specific — describe the block, the pattern, the impact." rows="3"></textarea>
+
+      <label class="ni-form-label" style="margin-top:12px;">Your perspective</label>
+      <div class="ni-perspective-grid" id="ni-perspectives-<%= rco_slug %>">
+        <button type="button" class="ni-perspective-btn" data-type="empathy">🤝 With empathy</button>
+        <button type="button" class="ni-perspective-btn" data-type="practical">🔧 Practical fix</button>
+        <button type="button" class="ni-perspective-btn" data-type="accountability">📋 Hold accountable</button>
+        <button type="button" class="ni-perspective-btn" data-type="opposition">↔ Different view</button>
+      </div>
+
+      <div class="ni-form-row">
+        <div>
+          <label class="ni-form-label">Your name <span style="color:var(--ink-mut);">(optional)</span></label>
+          <input class="ni-input" type="text" id="ni-name-<%= rco_slug %>" placeholder="First name or initials">
+        </div>
+        <div>
+          <label class="ni-form-label">Email <span style="color:var(--ink-mut);">(not shown publicly)</span></label>
+          <input class="ni-input" type="email" id="ni-email-<%= rco_slug %>" placeholder="you@example.com">
+        </div>
+      </div>
+
+      <label class="ni-form-label">Location or block <span style="color:var(--ink-mut);">(optional)</span></label>
+      <input class="ni-input" type="text" id="ni-location-<%= rco_slug %>"
+        placeholder="e.g. 2100 block of N Hancock St" style="margin-bottom:10px;">
+
+      <div class="ni-checkbox-row">
+        <input type="checkbox" id="ni-anon-<%= rco_slug %>">
+        <label for="ni-anon-<%= rco_slug %>">Post anonymously</label>
+      </div>
+
+      <button type="submit" class="ni-submit-btn" id="ni-submit-<%= rco_slug %>">Post to neighborhood →</button>
+      <div class="ni-form-error" id="ni-error-<%= rco_slug %>" hidden></div>
+    </form>
+  </div>
+
+  <!-- Issues feed (populated by JS) -->
+  <div id="issues-feed-<%= rco_slug %>">
+    <div class="ni-loading">Loading neighborhood issues…</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const rcoSlug  = '<%= j rco_slug %>';
+  const rcoName  = '<%= j rco_name %>';
+  const baseUrl  = '/usa/pa/philly/rco/' + rcoSlug + '/neighborhood_issues';
+  const csrf     = (document.querySelector('meta[name="csrf-token"]') || {}).content || '';
+
+  const BADGE_STYLES = {
+    empathy:        'background:#e8f4fd; color:#1b3a6b',
+    practical:      'background:#e5f0e8; color:#155c2d',
+    accountability: 'background:#fff3dc; color:#b8860b',
+    opposition:     'background:#faeaea; color:#8b1a1a'
+  };
+
+  const WHY_TEXT =
+    'RCO volunteer committees can realistically action 3\u20135 issues per monthly meeting ' +
+    'cycle. Ten Concurrences signals genuine neighborhood concern, not a single motivated ' +
+    'resident. Any 3+ issues with the most Concurrences are always surfaced to leadership ' +
+    'regardless. Sharing is the mechanism to recruit Concurrences \u2014 which is why we ' +
+    'make it easy from the start.';
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str == null ? '' : String(str);
+    return d.innerHTML;
+  }
+
+  function issueAnchor(id) {
+    return window.location.origin + window.location.pathname + '#issue-' + id;
+  }
+
+  function concurredKey(id) { return 'ni-c-' + rcoSlug + '-' + id; }
+  function hasConcurred(id)  { try { return sessionStorage.getItem(concurredKey(id)) === '1'; } catch(e) { return false; } }
+  function markConcurred(id) { try { sessionStorage.setItem(concurredKey(id), '1'); } catch(e) {} }
+
+  // ── Share panels ─────────────────────────────────────────────────────────
+
+  function sharePlatformBtns(text, issueId, uid) {
+    const url  = issueAnchor(issueId);
+    const enc  = encodeURIComponent;
+    const t240 = text.substring(0, 240);
+    const t300 = text.substring(0, 300) + ' ' + url;
+    const t200 = text.substring(0, 200);
+    return [
+      ['𝕏 / Twitter',  'https://twitter.com/intent/tweet?text=' + enc(t240)],
+      ['Facebook',      'https://www.facebook.com/sharer/sharer.php?u=' + enc(url)],
+      ['WhatsApp',      'https://wa.me/?text=' + enc(t300)],
+      ['LinkedIn',      'https://www.linkedin.com/shareArticle?mini=true&url=' + enc(url) + '&summary=' + enc(t200)],
+    ].map(([label, href]) =>
+      '<button class="ni-share-plat" onclick="window.open(' + "'" + href + "'" + ",'_blank','noopener')\">" + esc(label) + '</button>'
+    ).join('') +
+    '<button class="ni-share-plat" id="copy-btn-' + uid + '" onclick="niCopyLink(' + issueId + ',\'copy-btn-' + uid + '\')">Copy link</button>';
+  }
+
+  function buildSharePanel(panelId, labelText, previewText, btns) {
+    return '<div class="ni-share-panel" id="' + panelId + '" hidden>' +
+      '<div class="ni-share-panel-label">' + esc(labelText) + '</div>' +
+      '<div class="ni-share-copy">' + esc(previewText.substring(0, 180)) + (previewText.length > 180 ? '\u2026' : '') + '</div>' +
+      '<div class="ni-share-btns">' + btns + '</div>' +
+      '</div>';
+  }
+
+  window.niCopyLink = function(issueId, btnId) {
+    navigator.clipboard.writeText(issueAnchor(issueId)).then(function() {
+      var btn = document.getElementById(btnId);
+      if (!btn) return;
+      var orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = orig; }, 1800);
+    });
+  };
+
+  window.niTogglePanel = function(panelId) {
+    var panel = document.getElementById(panelId);
+    if (!panel) return;
+    var wasHidden = panel.hidden;
+    document.querySelectorAll('.ni-share-panel').forEach(function(p) { p.hidden = true; });
+    if (wasHidden) panel.hidden = false;
+  };
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.ni-share-panel') && !e.target.closest('[data-ni-share]')) {
+      document.querySelectorAll('.ni-share-panel').forEach(function(p) { p.hidden = true; });
+    }
+  });
+
+  // ── Why-10 toggles ───────────────────────────────────────────────────────
+
+  (function() {
+    var toggle = document.getElementById('why-10-toggle-' + rcoSlug);
+    var disc   = document.getElementById('why-10-disc-'   + rcoSlug);
+    if (!toggle || !disc) return;
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      disc.hidden = !disc.hidden;
+      toggle.textContent = disc.hidden ? 'Why 10? \u203a' : 'Why 10? \u2191';
+    });
+  })();
+
+  window.niToggleWhy = function(e, discId) {
+    e.preventDefault();
+    var d = document.getElementById(discId);
+    if (d) d.hidden = !d.hidden;
+  };
+
+  // ── Perspective button wiring ─────────────────────────────────────────────
+
+  function wirePerspectives(containerId, defaultType) {
+    var grid = document.getElementById(containerId);
+    if (!grid) return defaultType || 'empathy';
+    var selected = defaultType || 'empathy';
+    grid.querySelectorAll('[data-type]').forEach(function(btn) {
+      if (btn.dataset.type === selected) btn.classList.add('active');
+      btn.addEventListener('click', function() {
+        grid.querySelectorAll('[data-type]').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        selected = btn.dataset.type;
+        grid.dataset.selected = selected;
+      });
+    });
+    grid.dataset.selected = selected;
+    return selected;
+  }
+
+  // ── Render response card ──────────────────────────────────────────────────
+
+  function renderResponse(r, issueId) {
+    var uid = 'rs-' + r.id;
+    var bStyle = BADGE_STYLES[r.perspective_type] || BADGE_STYLES.empathy;
+    var btns = sharePlatformBtns(r.body, issueId, uid);
+    return '<div class="ni-response-card" id="response-' + r.id + '">' +
+      '<div class="ni-response-header">' +
+        '<span class="ni-badge" style="' + bStyle + '; font-size:7px;">' + esc(r.perspective_label) + '</span>' +
+        (r.official ? '<span class="ni-official-badge">Official</span>' : '') +
+        '<span class="ni-author">' + esc(r.display_author) + '</span>' +
+        '<span class="ni-time" style="margin-left:auto;">' + esc(r.created_at) + '</span>' +
+      '</div>' +
+      '<div class="ni-response-body">' + esc(r.body) + '</div>' +
+      '<div class="ni-response-actions">' +
+        '<button class="ni-action-btn" data-ni-share onclick="niTogglePanel(\'rsp-' + uid + '\')" >\u2197 Share</button>' +
+      '</div>' +
+      buildSharePanel('rsp-' + uid, 'Share this response', r.body, btns) +
+    '</div>';
+  }
+
+  // ── Render response form ──────────────────────────────────────────────────
+
+  function renderResponseForm(issueId) {
+    var pid = 'rp-' + issueId;
+    return '<div class="ni-response-form">' +
+      '<button class="ni-response-form-toggle" onclick="niToggleRespForm(\'' + pid + '\')">' +
+        '+ Add your perspective \u2192' +
+      '</button>' +
+      '<div class="ni-response-form-body" id="' + pid + '">' +
+        '<div class="ni-resp-perspective-grid" id="rp-persp-' + issueId + '">' +
+          '<button type="button" class="ni-resp-perspective-btn" data-type="empathy">\uD83E\uDD1D With empathy</button>' +
+          '<button type="button" class="ni-resp-perspective-btn" data-type="practical">\uD83D\uDD27 Practical fix</button>' +
+          '<button type="button" class="ni-resp-perspective-btn" data-type="accountability">\uD83D\uDCCB Hold accountable</button>' +
+          '<button type="button" class="ni-resp-perspective-btn" data-type="opposition">\u2194 Different view</button>' +
+        '</div>' +
+        '<textarea class="ni-textarea" id="rp-body-' + issueId + '" placeholder="Add your perspective\u2026" rows="2" style="margin-bottom:8px;"></textarea>' +
+        '<div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">' +
+          '<input class="ni-input" type="text" id="rp-name-' + issueId + '" placeholder="Your name (optional)" style="margin-bottom:0;">' +
+          '<label style="display:flex; align-items:center; gap:5px; font-family:\'Nunito\',sans-serif; font-size:11px; color:var(--ink-soft); white-space:nowrap;">' +
+            '<input type="checkbox" id="rp-anon-' + issueId + '"> Anonymous' +
+          '</label>' +
+        '</div>' +
+        '<button class="ni-resp-submit" onclick="niSubmitResponse(' + issueId + ')">Post response \u2192</button>' +
+        '<div id="rp-err-' + issueId + '" style="font-family:\'Nunito\',sans-serif; font-size:11px; color:#8b1a1a; margin-top:4px;" hidden></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  window.niToggleRespForm = function(pid) {
+    var el = document.getElementById(pid);
+    if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  };
+
+  window.niSubmitResponse = function(issueId) {
+    var bodyEl  = document.getElementById('rp-body-' + issueId);
+    var nameEl  = document.getElementById('rp-name-' + issueId);
+    var anonEl  = document.getElementById('rp-anon-' + issueId);
+    var perspEl = document.getElementById('rp-persp-' + issueId);
+    var errEl   = document.getElementById('rp-err-' + issueId);
+    var body = bodyEl ? bodyEl.value.trim() : '';
+    if (!body) { if (errEl) { errEl.textContent = 'Please write something.'; errEl.hidden = false; } return; }
+    var perspType = (perspEl && perspEl.dataset.selected) || 'empathy';
+    fetch(baseUrl + '/' + issueId + '/issue_responses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
+      body: JSON.stringify({
+        issue_response: {
+          body: body,
+          perspective_type: perspType,
+          author_name: nameEl ? nameEl.value.trim() : ''
+        },
+        anonymous: (anonEl && anonEl.checked) ? 'true' : 'false'
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.errors) {
+        if (errEl) { errEl.textContent = data.errors.join(', '); errEl.hidden = false; }
+        return;
+      }
+      var section = document.getElementById('responses-' + issueId);
+      if (section) {
+        if (!section.querySelector('.ni-responses-label')) {
+          section.insertAdjacentHTML('afterbegin', '<div class="ni-responses-label">Responses</div>');
+        }
+        section.insertAdjacentHTML('beforeend', renderResponse(data, issueId));
+      }
+      if (bodyEl) bodyEl.value = '';
+      if (nameEl) nameEl.value = '';
+      if (anonEl) anonEl.checked = false;
+      if (errEl)  errEl.hidden = true;
+      var formBody = document.getElementById('rp-' + issueId);
+      if (formBody) formBody.style.display = 'none';
+      // Re-wire new response form perspectives
+      wirePerspectives('rp-persp-' + issueId, 'empathy');
+    })
+    .catch(function() {
+      if (errEl) { errEl.textContent = 'Something went wrong. Please try again.'; errEl.hidden = false; }
+    });
+  };
+
+  // ── Render full issue card ────────────────────────────────────────────────
+
+  function renderIssue(issue) {
+    var id     = issue.id;
+    var bStyle = BADGE_STYLES[issue.perspective_type] || BADGE_STYLES.empathy;
+    var already = hasConcurred(id);
+    var whyId  = 'why-disc-' + rcoSlug + '-' + id;
+
+    var sharePanel   = buildSharePanel('ish-' + id, 'Share this issue', issue.share_text_issue,
+                         sharePlatformBtns(issue.share_text_issue, id, 'ish-' + id));
+    var recruitPanel = buildSharePanel('rec-' + id, 'Recruit Concurrences \u2014 ' + issue.remaining_concurrences + ' needed',
+                         issue.share_text_recruit, sharePlatformBtns(issue.share_text_recruit, id, 'rec-' + id));
+
+    var alertedBanner =
+      '<div class="ni-alerted-banner" id="alerted-banner-' + id + '"' + (issue.ccra_alerted ? '' : ' hidden') + '>' +
+        '<div class="ni-alerted-banner-title">\u2713 ' + esc(rcoName) + ' alerted \u2014 this issue is on the record</div>' +
+        '<div class="ni-alerted-banner-text">' + esc(issue.share_text_alerted) + '</div>' +
+        '<div class="ni-share-btns">' + sharePlatformBtns(issue.share_text_alerted, id, 'alt-' + id) + '</div>' +
+      '</div>';
+
+    var responsesHtml = (issue.responses && issue.responses.length)
+      ? '<div class="ni-responses-label">Responses (' + issue.responses.length + ')</div>' +
+          issue.responses.map(function(r) { return renderResponse(r, id); }).join('')
+      : '';
+
+    var recruitOrAlerted = issue.ccra_alerted
+      ? '<span class="ni-alerted-chip">\u2713 ' + esc(rcoName) + ' alerted \u2014 on the record</span>'
+      : '<button class="ni-recruit-btn" data-ni-share onclick="niTogglePanel(\'rec-' + id + '\')">' +
+          '\uD83D\uDD14 <span id="recruit-label-' + id + '">' + issue.remaining_concurrences + ' more neighbors needed</span> \u2014 share to get there \u2192' +
+        '</button>';
+
+    return '<div class="ni-issue-card" id="issue-' + id + '">' +
+
+      '<div class="ni-issue-header">' +
+        '<span class="ni-badge" style="' + bStyle + '">' + esc(issue.perspective_label) + '</span>' +
+        '<span class="ni-author">' + esc(issue.display_author) + '</span>' +
+        (issue.location_description ? '<span class="ni-location">\uD83D\uDCCD ' + esc(issue.location_description) + '</span>' : '') +
+        '<span class="ni-time">' + esc(issue.created_at) + '</span>' +
+      '</div>' +
+
+      '<div class="ni-issue-body">' + esc(issue.body) + '</div>' +
+
+      '<div class="ni-action-strip">' +
+        '<button class="ni-action-btn" data-ni-share onclick="niTogglePanel(\'ish-' + id + '\')">\u2197 Share</button>' +
+        '<button class="ni-concur-btn' + (already ? ' concurred' : '') + '" id="concur-btn-' + id + '" onclick="niConcur(' + id + ')">' +
+          '\u2713 Concur (<span id="concur-count-' + id + '">' + issue.concurrence_count + '</span>)' +
+        '</button>' +
+        recruitOrAlerted +
+      '</div>' +
+
+      sharePanel +
+      recruitPanel +
+
+      '<div class="ni-progress-section">' +
+        '<div class="ni-progress-track">' +
+          '<div class="ni-progress-fill' + (issue.threshold_reached ? ' complete' : '') + '" id="progress-fill-' + id + '" style="width:' + issue.progress_percent + '%"></div>' +
+        '</div>' +
+        '<div class="ni-progress-meta">' +
+          '<span class="ni-progress-label" id="progress-label-' + id + '">' + issue.concurrence_count + ' of ' + issue.alert_threshold + ' Concurrences</span>' +
+          '<a href="#" class="ni-why-link" onclick="niToggleWhy(event,\'' + whyId + '\')">Why ' + issue.alert_threshold + '? \u203a</a>' +
+        '</div>' +
+        '<div class="ni-why-disclosure" id="' + whyId + '" hidden>' + esc(WHY_TEXT) + '</div>' +
+      '</div>' +
+
+      alertedBanner +
+
+      '<div class="ni-responses-section" id="responses-' + id + '">' + responsesHtml + '</div>' +
+
+      renderResponseForm(id) +
+
+    '</div>';
+  }
+
+  // ── Concur ───────────────────────────────────────────────────────────────
+
+  window.niConcur = function(issueId) {
+    var btn = document.getElementById('concur-btn-' + issueId);
+    if (btn) btn.disabled = true;
+    fetch(baseUrl + '/' + issueId + '/concur', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(issue) {
+      markConcurred(issueId);
+      var countEl = document.getElementById('concur-count-' + issueId);
+      if (countEl) countEl.textContent = issue.concurrence_count;
+      var fill = document.getElementById('progress-fill-' + issueId);
+      if (fill) { fill.style.width = issue.progress_percent + '%'; if (issue.threshold_reached) fill.classList.add('complete'); }
+      var label = document.getElementById('progress-label-' + issueId);
+      if (label) label.textContent = issue.concurrence_count + ' of ' + issue.alert_threshold + ' Concurrences';
+      var rLabel = document.getElementById('recruit-label-' + issueId);
+      if (rLabel) rLabel.textContent = issue.remaining_concurrences + ' more neighbors needed';
+      if (btn) { btn.classList.add('concurred'); btn.disabled = false; }
+      if (issue.ccra_alerted) {
+        var banner = document.getElementById('alerted-banner-' + issueId);
+        if (banner) banner.hidden = false;
+      }
+    })
+    .catch(function() { if (btn) btn.disabled = false; });
+  };
+
+  // ── Issue form submission ─────────────────────────────────────────────────
+
+  (function() {
+    var form    = document.getElementById('ni-form-' + rcoSlug);
+    var submitB = document.getElementById('ni-submit-' + rcoSlug);
+    var errorEl = document.getElementById('ni-error-' + rcoSlug);
+    var grid    = document.getElementById('ni-perspectives-' + rcoSlug);
+    var feed    = document.getElementById('issues-feed-' + rcoSlug);
+
+    wirePerspectives('ni-perspectives-' + rcoSlug, 'empathy');
+
+    if (!form) return;
+    form.addEventListener('submit', function() {
+      var bodyEl     = document.getElementById('ni-body-'     + rcoSlug);
+      var nameEl     = document.getElementById('ni-name-'     + rcoSlug);
+      var emailEl    = document.getElementById('ni-email-'    + rcoSlug);
+      var locationEl = document.getElementById('ni-location-' + rcoSlug);
+      var anonEl     = document.getElementById('ni-anon-'     + rcoSlug);
+      var body = bodyEl ? bodyEl.value.trim() : '';
+      if (!body) {
+        if (errorEl) { errorEl.textContent = 'Please describe the issue.'; errorEl.hidden = false; }
+        return;
+      }
+      var perspType = (grid && grid.dataset.selected) || 'empathy';
+      if (submitB) submitB.disabled = true;
+      fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
+        body: JSON.stringify({
+          neighborhood_issue: {
+            body: body,
+            perspective_type: perspType,
+            author_name:          nameEl     ? nameEl.value.trim()     : '',
+            author_email:         emailEl    ? emailEl.value.trim()    : '',
+            location_description: locationEl ? locationEl.value.trim() : ''
+          },
+          anonymous: (anonEl && anonEl.checked) ? 'true' : 'false'
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.errors) {
+          if (errorEl) { errorEl.textContent = data.errors.join(', '); errorEl.hidden = false; }
+          if (submitB) submitB.disabled = false;
+          return;
+        }
+        if (feed) {
+          var empty = feed.querySelector('.ni-empty, .ni-loading');
+          if (empty) empty.remove();
+          feed.insertAdjacentHTML('afterbegin', renderIssue(data));
+          wirePerspectives('rp-persp-' + data.id, 'empathy');
+        }
+        [bodyEl, nameEl, emailEl, locationEl].forEach(function(el) { if (el) el.value = ''; });
+        if (anonEl) anonEl.checked = false;
+        if (grid) {
+          grid.querySelectorAll('[data-type]').forEach(function(b) { b.classList.remove('active'); });
+          var def = grid.querySelector('[data-type="empathy"]');
+          if (def) { def.classList.add('active'); grid.dataset.selected = 'empathy'; }
+        }
+        if (errorEl) errorEl.hidden = true;
+        if (submitB) submitB.disabled = false;
+      })
+      .catch(function() {
+        if (errorEl) { errorEl.textContent = 'Something went wrong. Please try again.'; errorEl.hidden = false; }
+        if (submitB) submitB.disabled = false;
+      });
+    });
+  })();
+
+  // ── Load feed on page load ────────────────────────────────────────────────
+
+  (function() {
+    var feed = document.getElementById('issues-feed-' + rcoSlug);
+    if (!feed) return;
+    fetch(baseUrl, { headers: { 'Accept': 'application/json' } })
+    .then(function(r) { return r.json(); })
+    .then(function(issues) {
+      if (!issues.length) {
+        feed.innerHTML = '<div class="ni-empty">No issues posted yet for this neighborhood.<br>Be the first to raise one above.</div>';
+        return;
+      }
+      feed.innerHTML = issues.map(renderIssue).join('');
+      issues.forEach(function(issue) { wirePerspectives('rp-persp-' + issue.id, 'empathy'); });
+    })
+    .catch(function() {
+      feed.innerHTML = '<div class="ni-empty">Could not load issues. Please refresh to try again.</div>';
+    });
+  })();
+
+})();
+</script>
