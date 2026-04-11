@@ -125,4 +125,63 @@ class RcosController < ApplicationController
       ],
     }
   end
+
+  def ccra
+    @rco = {
+      name:             "Center City Residents' Association",
+      initials:         "CC",
+      slug:             "ccra",
+      zip:              "19103",
+      neighborhood:     "Center City West",
+      expiration_year:  2026,
+      ward_committee:   false,
+      council_district: 8,
+
+      primary_name:     "CCRA Board",
+      primary_email:    "info@ccraonline.org",
+      primary_phone:    nil,
+      website:          "https://www.ccraonline.org",
+      website_label:    "ccraonline.org",
+
+      address:               "P.O. Box 30355, Philadelphia PA 19103",
+      meeting_location:      "The Rittenhouse Hotel · 210 W Rittenhouse Square, Philadelphia PA 19103",
+      meeting_location_short: "The Rittenhouse Hotel, 210 W Rittenhouse Sq",
+
+      neighborhood_description:
+        "<strong>Center City West</strong> encompasses the Rittenhouse Square and Fitler Square " \
+        "neighborhoods — among Philadelphia's most densely populated and highest-income urban " \
+        "districts. The area is bounded roughly by the Schuylkill River to the west, Broad Street " \
+        "to the east, Market Street to the north, and South Street to the south. Rittenhouse Square " \
+        "itself is one of William Penn's original five public squares and serves as the social anchor " \
+        "for a neighborhood of historic rowhouses, luxury condominiums, and a dense commercial " \
+        "corridor along Walnut and Chestnut Streets. CCRA has advocated for the neighborhood since " \
+        "1946, focusing on zoning integrity, historic preservation, and quality-of-life issues in one " \
+        "of the city's most active development corridors.",
+
+      ward_explainer: nil,
+
+      stats: [
+        { number: "8th",   label: "Council District"    },
+        { number: "1946",  label: "Founded"             },
+        { number: "19103", label: "Zip Code"            },
+      ],
+
+      issue_tags: [
+        "Historic preservation",
+        "Zoning & variance",
+        "Streetscape",
+        "Retail & commercial",
+        "Quality of life",
+        "Parks & open space",
+      ],
+
+      gov_contacts: [
+        { icon: "🏛", name: "Kendra Brooks · City Council, District 8",  detail: "(215) 686-3448 · district8@phila.gov"  },
+        { icon: "📋", name: "Licenses & Inspections",                     detail: "(215) 686-2463 · Zone: Center"         },
+        { icon: "🚔", name: "9th Police District",                        detail: "(215) 686-3090 · 401 N 21st Street"    },
+        { icon: "🌳", name: "Rittenhouse Square Park",                    detail: "Parks & Rec · 18th & Walnut St"        },
+        { icon: "🏗", name: "Philadelphia City Planning Commission",      detail: "RCO Coordinator · (215) 683-4615"      },
+      ],
+    }
+  end
 end
