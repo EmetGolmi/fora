@@ -128,60 +128,60 @@ class RcosController < ApplicationController
 
   def ccra
     @rco = {
-      name:             "Center City Residents' Association",
+      name:             "Center City Residents Association",
       initials:         "CC",
       slug:             "ccra",
       zip:              "19103",
-      neighborhood:     "Center City West",
-      expiration_year:  2026,
+      neighborhood:     "Center City",
+      expiration_year:  2027,
       ward_committee:   false,
-      council_district: 8,
+      council_district: 1,
 
       primary_name:     "CCRA Board",
       primary_email:    "info@ccraonline.org",
-      primary_phone:    nil,
+      primary_phone:    "(215) 557-9280",
       website:          "https://www.ccraonline.org",
       website_label:    "ccraonline.org",
 
-      address:               "P.O. Box 30355, Philadelphia PA 19103",
-      meeting_location:      "The Rittenhouse Hotel · 210 W Rittenhouse Square, Philadelphia PA 19103",
-      meeting_location_short: "The Rittenhouse Hotel, 210 W Rittenhouse Sq",
+      address:               "P.O. Box 58460, Philadelphia PA 19102",
+      meeting_location:      "Various Center City locations — see ccraonline.org",
+      meeting_location_short: "Various Center City locations",
 
       neighborhood_description:
-        "<strong>Center City West</strong> encompasses the Rittenhouse Square and Fitler Square " \
-        "neighborhoods — among Philadelphia's most densely populated and highest-income urban " \
-        "districts. The area is bounded roughly by the Schuylkill River to the west, Broad Street " \
-        "to the east, Market Street to the north, and South Street to the south. Rittenhouse Square " \
-        "itself is one of William Penn's original five public squares and serves as the social anchor " \
-        "for a neighborhood of historic rowhouses, luxury condominiums, and a dense commercial " \
-        "corridor along Walnut and Chestnut Streets. CCRA has advocated for the neighborhood since " \
-        "1946, focusing on zoning integrity, historic preservation, and quality-of-life issues in one " \
-        "of the city's most active development corridors.",
+        "Center City is Philadelphia's central business district and most densely populated " \
+        "residential neighborhood, stretching roughly from the Delaware River to the Schuylkill " \
+        "River, and from South Street to Vine Street. CCRA represents residents of the core downtown " \
+        "area — Rittenhouse Square, Logan Square, and the central business corridors — in zoning and " \
+        "development decisions that shape the city's skyline and street life. Center City is home to " \
+        "major civic institutions, cultural anchors, and the highest concentration of new residential " \
+        "development in the city. CCRA is one of Philadelphia's most active and well-resourced RCOs, " \
+        "with a long track record of negotiating design conditions with developers before ZBA hearings.",
 
       ward_explainer: nil,
 
       stats: [
-        { number: "8th",   label: "Council District"    },
-        { number: "1946",  label: "Founded"             },
-        { number: "19103", label: "Zip Code"            },
+        { number: "~55K",        label: "Residents"       },
+        { number: "1st",         label: "Council District" },
+        { number: "Most active", label: "RCO in Philly"   },
       ],
 
       issue_tags: [
+        "Zoning",
         "Historic preservation",
-        "Zoning & variance",
         "Streetscape",
-        "Retail & commercial",
-        "Quality of life",
-        "Parks & open space",
+        "Transit",
+        "Development review",
+        "Affordable housing",
       ],
 
       gov_contacts: [
-        { icon: "🏛", name: "Kendra Brooks · City Council, District 8",  detail: "(215) 686-3448 · district8@phila.gov"  },
-        { icon: "📋", name: "Licenses & Inspections",                     detail: "(215) 686-2463 · Zone: Center"         },
-        { icon: "🚔", name: "9th Police District",                        detail: "(215) 686-3090 · 401 N 21st Street"    },
-        { icon: "🌳", name: "Rittenhouse Square Park",                    detail: "Parks & Rec · 18th & Walnut St"        },
-        { icon: "🏗", name: "Philadelphia City Planning Commission",      detail: "RCO Coordinator · (215) 683-4615"      },
+        { icon: "🏛", name: "Mark Squilla · City Council, District 1", detail: "(215) 686-3458 · district1@phila.gov" },
+        { icon: "📋", name: "Licenses & Inspections",                   detail: "(215) 686-2463 · Zone: Center South"  },
+        { icon: "🚔", name: "9th Police District",                      detail: "(215) 686-3030 · 401 N 21st Street"   },
+        { icon: "🌳", name: "Rittenhouse Square Park",                  detail: "Parks & Rec · 18th & Walnut"          },
+        { icon: "🏗", name: "Philadelphia City Planning Commission",    detail: "RCO Coordinator · (215) 683-4615"     },
       ],
     }
+    render 'rcos/ccra'
   end
 end
