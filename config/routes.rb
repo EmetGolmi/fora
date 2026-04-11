@@ -76,6 +76,16 @@ Rails.application.routes.draw do
   get "usa/pa/philly/rco/nscan", to: "rcos#nscan",     as: :rco_nscan
   get "usa/pa/philly/rco/ccra",  to: "rcos#ccra",      as: :rco_ccra
 
+  # Neighborhood Issues API (scoped per RCO)
+  scope '/usa/pa/philly/rco/:rco_slug' do
+    resources :neighborhood_issues, only: [:index, :create] do
+      member do
+        post :concur
+      end
+      resources :issue_responses, only: [:create]
+    end
+  end
+
   # Business formation guide
   get  "market/newllc",       to: "market/new_llc#index", as: :new_llc
   get  "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
