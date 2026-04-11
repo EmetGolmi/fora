@@ -65,7 +65,6 @@ class RcosController < ApplicationController
         { icon: "🏗", name: "Philadelphia City Planning Commission",     detail: "RCO Coordinator · (215) 683-4615"             },
       ],
     }
-    render :show
   end
 
   def nscan
@@ -125,6 +124,5 @@ class RcosController < ApplicationController
         { icon: "🏗", name: "Philadelphia City Planning Commission",     detail: "RCO Coordinator · (215) 683-4615"                    },
       ],
     }
-    render :show
   end
 end
