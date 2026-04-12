@@ -207,6 +207,92 @@
     });
   }
 
+  function buildIgCard(perspLabel, bodyText, nameText, contextLabel, shareText) {
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-top:12px;';
+
+    var card = document.createElement('div');
+    card.style.cssText = 'background:#1b3a6b;border-radius:14px;padding:28px 22px 22px;position:relative;overflow:hidden;max-width:440px;margin:0 auto 10px;box-shadow:0 4px 24px rgba(27,58,107,0.2);';
+
+    var stripe = document.createElement('div');
+    stripe.style.cssText = 'position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(to right,#b8860b,#d4a832,#b8860b);';
+    card.appendChild(stripe);
+
+    var starsEl = document.createElement('div');
+    starsEl.style.cssText = 'font-size:7px;color:#b8860b;letter-spacing:0.45em;margin-bottom:18px;overflow:hidden;white-space:nowrap;opacity:0.5;';
+    starsEl.textContent = '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+    card.appendChild(starsEl);
+
+    var badge = document.createElement('div');
+    badge.style.cssText = 'display:inline-block;background:rgba(184,134,11,0.18);border:1px solid rgba(184,134,11,0.45);color:#d4a832;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 11px;border-radius:100px;margin-bottom:16px;';
+    badge.textContent = perspLabel;
+    card.appendChild(badge);
+
+    var quoteEl = document.createElement('p');
+    quoteEl.style.cssText = 'font-family:\'Nunito\',sans-serif;font-size:16px;line-height:1.65;color:rgba(255,255,255,0.9);margin:0 0 14px;';
+    quoteEl.textContent = '\u201c' + bodyText + '\u201d';
+    card.appendChild(quoteEl);
+
+    if (nameText) {
+      var byEl = document.createElement('div');
+      byEl.style.cssText = 'font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:16px;';
+      byEl.textContent = '\u2014 ' + nameText;
+      card.appendChild(byEl);
+    }
+
+    var divEl = document.createElement('div');
+    divEl.style.cssText = 'border-top:1px solid rgba(255,255,255,0.07);margin:14px 0;';
+    card.appendChild(divEl);
+
+    var footerEl = document.createElement('div');
+    footerEl.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
+    var foraEl = document.createElement('span');
+    foraEl.style.cssText = 'font-family:\'Libre Baskerville\',serif;font-size:17px;font-weight:700;color:white;letter-spacing:0.05em;';
+    foraEl.textContent = 'FORA';
+    footerEl.appendChild(foraEl);
+
+    var subEl = document.createElement('span');
+    subEl.style.cssText = 'font-family:\'JetBrains Mono\',monospace;font-size:8px;color:rgba(255,255,255,0.28);letter-spacing:0.09em;';
+    subEl.textContent = '\u00b7 ' + contextLabel + ' \u00b7 fora.center';
+    footerEl.appendChild(subEl);
+
+    card.appendChild(footerEl);
+    wrap.appendChild(card);
+
+    var hint = document.createElement('div');
+    hint.style.cssText = 'text-align:center;font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.1em;color:#8a9ab8;margin-bottom:10px;text-transform:uppercase;';
+    hint.textContent = 'Screenshot this card \u00b7 then post to Instagram';
+    wrap.appendChild(hint);
+
+    var actions = document.createElement('div');
+    actions.style.cssText = 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;';
+
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'bt-share-plat';
+    copyBtn.textContent = 'Copy caption';
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(shareText).then(function() {
+        var o = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(function() { copyBtn.textContent = o; }, 1800);
+      });
+    });
+    actions.appendChild(copyBtn);
+
+    var openBtn = document.createElement('button');
+    openBtn.className = 'bt-share-plat';
+    openBtn.style.cssText = 'background:#1b3a6b;color:white;border-color:#1b3a6b;';
+    openBtn.textContent = 'Open Instagram \u2192';
+    openBtn.addEventListener('click', function() {
+      window.open('https://www.instagram.com/', '_blank', 'noopener');
+    });
+    actions.appendChild(openBtn);
+
+    wrap.appendChild(actions);
+    return wrap;
+  }
+
   window.btOpenShare = function() {
     var bodyEl  = document.getElementById('bt-body');
     var nameEl  = document.getElementById('bt-name');
@@ -221,7 +307,8 @@
     var anon    = anonEl && anonEl.checked;
     var name    = (!anon && nameEl && nameEl.value.trim()) ? nameEl.value.trim() : null;
     var byline  = name ? ' — ' + name : '';
-    var shareText = selectedLabel + ': ' + body + byline + '\n\nvia FORA on ' + billRef + ' — ' + billUrl;
+    var perspLabel = selectedLabel;
+    var shareText = perspLabel + ': ' + body + byline + '\n\nvia FORA on ' + billRef + ' — ' + billUrl;
 
     if (copyEl) copyEl.textContent = shareText;
 
@@ -232,7 +319,13 @@
       ['Facebook',      function() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc(billUrl), '_blank', 'noopener'); }],
       ['WhatsApp',      function() { window.open('https://wa.me/?text=' + enc(shareText.substring(0,300)), '_blank', 'noopener'); }],
       ['LinkedIn',      function() { window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + enc(billUrl) + '&summary=' + enc(shareText.substring(0,200)), '_blank', 'noopener'); }],
-      ['Instagram',     function() { navigator.clipboard.writeText(shareText).then(function() { window.open('https://www.instagram.com/', '_blank', 'noopener'); }); }],
+      ['Instagram', function() {
+        var oldCard = document.getElementById('bt-ig-card');
+        if (oldCard) oldCard.remove();
+        var card = buildIgCard(perspLabel, body, name, billRef, shareText);
+        card.id = 'bt-ig-card';
+        if (panel) { panel.appendChild(card); panel.hidden = false; }
+      }],
       ['Copy text',     function() {
         navigator.clipboard.writeText(shareText).then(function() {
           var btn = btnsEl && btnsEl.querySelector('[data-copy]');
