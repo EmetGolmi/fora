@@ -3,8 +3,39 @@
 <% content_for :head do %>
 <style>
   .bill-full-text-link:hover { background:rgba(255,255,255,0.13) !important; border-color:rgba(255,255,255,0.3) !important; }
-  .share-btn:hover { opacity:0.82 !important; }
   .back-link:hover { color:rgba(255,255,255,0.7) !important; }
+
+  /* ── Your Take ── */
+  .bt-card { background:white; border-radius:10px; border:0.5px solid #dde5f5; padding:22px 26px; }
+  .bt-eyebrow { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.18em; text-transform:uppercase; color:#b8860b; font-weight:700; margin-bottom:12px; }
+  .bt-perspective-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+  .bt-perspective-btn { padding:9px 10px; border-radius:6px; border:1.5px solid #dde5f5; background:white; font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#5a6e8a; cursor:pointer; text-align:left; transition:all 0.12s; }
+  .bt-perspective-btn:hover { border-color:#3a6abf; color:#1b3a6b; }
+  .bt-perspective-btn.active[data-type="empathy"]        { background:#e8f4fd; border-color:#1b3a6b; color:#1b3a6b; }
+  .bt-perspective-btn.active[data-type="practical"]      { background:#e5f0e8; border-color:#155c2d; color:#155c2d; }
+  .bt-perspective-btn.active[data-type="accountability"] { background:#fff3dc; border-color:#b8860b; color:#b8860b; }
+  .bt-perspective-btn.active[data-type="opposition"]     { background:#faeaea; border-color:#8b1a1a; color:#8b1a1a; }
+
+  .bt-textarea { width:100%; min-height:100px; border:1px solid #dde5f5; border-radius:6px; padding:12px 14px; font-family:'Nunito',sans-serif; font-size:14px; color:#0e1a2e; line-height:1.65; resize:vertical; outline:none; box-sizing:border-box; }
+  .bt-textarea:focus { border-color:#3a6abf; box-shadow:0 0 0 3px rgba(58,106,191,0.1); }
+  .bt-form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; margin-bottom:10px; }
+  .bt-input { width:100%; border:1px solid #dde5f5; border-radius:6px; padding:8px 12px; font-family:'Nunito',sans-serif; font-size:12px; color:#0e1a2e; outline:none; box-sizing:border-box; }
+  .bt-input:focus { border-color:#3a6abf; box-shadow:0 0 0 3px rgba(58,106,191,0.1); }
+  .bt-checkbox-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; }
+  .bt-submit { width:100%; padding:11px; background:#1b3a6b; color:white; border:none; border-radius:7px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; cursor:pointer; }
+  .bt-submit:hover { background:#254f92; }
+
+  .bt-share-panel { background:#f8faff; border:1px solid #dde5f5; border-radius:8px; padding:16px 18px; margin-top:14px; }
+  .bt-share-panel-label { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px; }
+  .bt-share-copy { font-family:'Nunito',sans-serif; font-size:12px; color:#2c3e5a; line-height:1.6; padding:10px 12px; background:white; border:1px solid #dde5f5; border-radius:6px; margin-bottom:12px; white-space:pre-wrap; word-break:break-word; }
+  .bt-share-btns { display:flex; flex-wrap:wrap; gap:6px; }
+  .bt-share-plat { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.07em; padding:6px 12px; border-radius:4px; border:1px solid #dde5f5; background:white; color:#254f92; cursor:pointer; }
+  .bt-share-plat:hover { background:#edf1fb; }
+
+  @media (max-width:600px) {
+    .bt-perspective-grid { grid-template-columns:1fr 1fr; }
+    .bt-form-row { grid-template-columns:1fr; }
+  }
 </style>
 <% end %>
 
@@ -17,21 +48,15 @@
     end
 
   share_url  = "https://fora.center/bills/#{@bill.id}"
-  tweet_text = ERB::Util.url_encode("#{@bill.identifier}: #{@bill.title}")
-  x_href     = "https://x.com/intent/tweet?text=#{tweet_text}&url=#{ERB::Util.url_encode(share_url)}"
-  fb_href    = "https://www.facebook.com/sharer/sharer.php?u=#{ERB::Util.url_encode(share_url)}"
+  bill_ref   = @bill.identifier.presence || "This bill"
 %>
 
 <!-- ── HERO ─────────────────────────────────────────────────────────────── -->
 <div style="background:#1b3a6b; padding:36px 48px 52px; position:relative; overflow:hidden;">
 
-  <!-- Decorative ring -->
   <div style="position:absolute; right:-60px; top:-80px; width:400px; height:400px; border-radius:50%; border:44px solid rgba(255,255,255,0.02); pointer-events:none;"></div>
-
-  <!-- Star strip via ::after equivalent -->
   <div style="position:absolute; bottom:0; left:0; right:0; height:26px; display:flex; align-items:center; padding:0 48px; font-size:11px; letter-spacing:0.55em; color:#b8860b; overflow:hidden; white-space:nowrap; pointer-events:none; -webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%); mask-image:linear-gradient(to right,black 92%,transparent 100%);">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
 
-  <!-- Content wrapper — this is what was missing -->
   <div style="max-width:860px; margin:0 auto; position:relative; z-index:1;">
 
     <div style="margin-bottom:18px;">
@@ -121,31 +146,114 @@
   <!-- Your Take -->
   <div>
     <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Civic Voice</div>
-    <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 16px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">Your Take</h2>
+    <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 20px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">Your Take</h2>
 
-    <textarea id="your-take"
-              placeholder="What does this mean for your community?"
-              style="width:100%; min-height:120px; background:white; border:1.5px solid rgba(27,58,107,0.15); border-radius:10px; padding:16px 18px; font-family:'Nunito',sans-serif; font-size:14px; color:#0e1a2e; line-height:1.6; resize:vertical; outline:none; box-sizing:border-box; transition:border-color 0.15s;"
-              onfocus="this.style.borderColor='rgba(27,58,107,0.4)'"
-              onblur="this.style.borderColor='rgba(27,58,107,0.15)'"></textarea>
+    <div class="bt-card">
+      <div class="bt-eyebrow">◆ How do you see it?</div>
 
-    <div style="display:flex; align-items:center; gap:10px; margin-top:14px; flex-wrap:wrap;">
-      <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#8a9ab8;">Share:</span>
+      <div class="bt-perspective-grid" id="bt-perspectives">
+        <button type="button" class="bt-perspective-btn" data-type="empathy"    data-label="🤝 With empathy">🤝 With empathy</button>
+        <button type="button" class="bt-perspective-btn" data-type="practical"  data-label="🔧 Practical fix">🔧 Practical fix</button>
+        <button type="button" class="bt-perspective-btn" data-type="accountability" data-label="📋 Hold accountable">📋 Hold accountable</button>
+        <button type="button" class="bt-perspective-btn" data-type="opposition" data-label="↔ Different view">↔ Different view</button>
+      </div>
 
-      <!-- X / Twitter -->
-      <a href="<%= x_href %>" target="_blank" rel="noopener" class="share-btn"
-         style="display:inline-flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:white; text-decoration:none; padding:8px 16px; background:#0e1a2e; border-radius:6px; transition:opacity 0.15s;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        Post on X
-      </a>
+      <textarea class="bt-textarea" id="bt-body"
+        placeholder="What does <%= bill_ref %> mean for your community? Be specific — your take is more persuasive when it's grounded in real experience." rows="4"></textarea>
 
-      <!-- Facebook -->
-      <a href="<%= fb_href %>" target="_blank" rel="noopener" class="share-btn"
-         style="display:inline-flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:white; text-decoration:none; padding:8px 16px; background:#1877f2; border-radius:6px; transition:opacity 0.15s;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Share on Facebook
-      </a>
+      <div class="bt-form-row">
+        <div>
+          <input class="bt-input" type="text" id="bt-name" placeholder="Your name (optional)">
+        </div>
+        <div style="display:flex; align-items:center;">
+          <div class="bt-checkbox-row" style="margin-bottom:0;">
+            <input type="checkbox" id="bt-anon">
+            <label for="bt-anon">Post anonymously</label>
+          </div>
+        </div>
+      </div>
+
+      <button class="bt-submit" onclick="btOpenShare()">Share your take →</button>
+
+      <div class="bt-share-panel" id="bt-share-panel" hidden>
+        <div class="bt-share-panel-label">Your take — ready to share</div>
+        <div class="bt-share-copy" id="bt-share-copy"></div>
+        <div class="bt-share-btns" id="bt-share-btns"></div>
+      </div>
     </div>
   </div>
 
 </div>
+
+<script>
+(function() {
+  var billRef  = '<%= j bill_ref %>';
+  var billUrl  = '<%= j share_url %>';
+  var selectedType  = 'empathy';
+  var selectedLabel = '🤝 With empathy';
+
+  // Perspective buttons
+  var grid = document.getElementById('bt-perspectives');
+  if (grid) {
+    var defaultBtn = grid.querySelector('[data-type="empathy"]');
+    if (defaultBtn) defaultBtn.classList.add('active');
+    grid.querySelectorAll('.bt-perspective-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        grid.querySelectorAll('.bt-perspective-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        selectedType  = btn.dataset.type;
+        selectedLabel = btn.dataset.label;
+      });
+    });
+  }
+
+  window.btOpenShare = function() {
+    var bodyEl  = document.getElementById('bt-body');
+    var nameEl  = document.getElementById('bt-name');
+    var anonEl  = document.getElementById('bt-anon');
+    var panel   = document.getElementById('bt-share-panel');
+    var copyEl  = document.getElementById('bt-share-copy');
+    var btnsEl  = document.getElementById('bt-share-btns');
+
+    var body = bodyEl ? bodyEl.value.trim() : '';
+    if (!body) { bodyEl && bodyEl.focus(); return; }
+
+    var anon    = anonEl && anonEl.checked;
+    var name    = (!anon && nameEl && nameEl.value.trim()) ? nameEl.value.trim() : null;
+    var byline  = name ? ' — ' + name : '';
+    var shareText = selectedLabel + ': ' + body + byline + '\n\nvia FORA on ' + billRef + ' — ' + billUrl;
+
+    if (copyEl) copyEl.textContent = shareText;
+
+    var enc = encodeURIComponent;
+    var t240 = shareText.substring(0, 240);
+    var platforms = [
+      ['𝕏 / Twitter',  function() { window.open('https://twitter.com/intent/tweet?text=' + enc(t240), '_blank', 'noopener'); }],
+      ['Facebook',      function() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc(billUrl), '_blank', 'noopener'); }],
+      ['WhatsApp',      function() { window.open('https://wa.me/?text=' + enc(shareText.substring(0,300)), '_blank', 'noopener'); }],
+      ['LinkedIn',      function() { window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + enc(billUrl) + '&summary=' + enc(shareText.substring(0,200)), '_blank', 'noopener'); }],
+      ['Instagram',     function() { navigator.clipboard.writeText(shareText).then(function() { window.open('https://www.instagram.com/', '_blank', 'noopener'); }); }],
+      ['Copy text',     function() {
+        navigator.clipboard.writeText(shareText).then(function() {
+          var btn = btnsEl && btnsEl.querySelector('[data-copy]');
+          if (btn) { var o = btn.textContent; btn.textContent = 'Copied!'; setTimeout(function() { btn.textContent = o; }, 1800); }
+        });
+      }],
+    ];
+
+    if (btnsEl) {
+      btnsEl.innerHTML = '';
+      platforms.forEach(function(pair) {
+        var btn = document.createElement('button');
+        btn.className = 'bt-share-plat';
+        btn.textContent = pair[0];
+        if (pair[0] === 'Copy text') btn.dataset.copy = '1';
+        btn.addEventListener('click', pair[1]);
+        btnsEl.appendChild(btn);
+      });
+    }
+
+    if (panel) panel.hidden = false;
+  };
+})();
+</script>
