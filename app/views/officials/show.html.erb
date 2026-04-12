@@ -82,6 +82,36 @@
 </style>
 <% end %>
 
+<% content_for :head do %>
+<style>
+  /* ── Q&A / Your Take ── */
+  .bt-card { background:white; border-radius:10px; border:0.5px solid #dde5f5; padding:22px 26px; }
+  .bt-eyebrow { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.18em; text-transform:uppercase; color:#b8860b; font-weight:700; margin-bottom:12px; }
+  .bt-perspective-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+  .bt-perspective-btn { padding:9px 10px; border-radius:6px; border:1.5px solid #dde5f5; background:white; font-family:'Nunito',sans-serif; font-size:11px; font-weight:600; color:#5a6e8a; cursor:pointer; text-align:left; transition:all 0.12s; }
+  .bt-perspective-btn:hover { border-color:#3a6abf; color:#1b3a6b; }
+  .bt-perspective-btn.active[data-type="empathy"]        { background:#e8f4fd; border-color:#1b3a6b; color:#1b3a6b; }
+  .bt-perspective-btn.active[data-type="practical"]      { background:#e5f0e8; border-color:#155c2d; color:#155c2d; }
+  .bt-perspective-btn.active[data-type="accountability"] { background:#fff3dc; border-color:#b8860b; color:#b8860b; }
+  .bt-perspective-btn.active[data-type="opposition"]     { background:#faeaea; border-color:#8b1a1a; color:#8b1a1a; }
+  .bt-textarea { width:100%; min-height:90px; border:1px solid #dde5f5; border-radius:6px; padding:12px 14px; font-family:'Nunito',sans-serif; font-size:14px; color:#0e1a2e; line-height:1.65; resize:vertical; outline:none; box-sizing:border-box; }
+  .bt-textarea:focus { border-color:#3a6abf; box-shadow:0 0 0 3px rgba(58,106,191,0.1); }
+  .bt-form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; margin-bottom:10px; }
+  .bt-input { width:100%; border:1px solid #dde5f5; border-radius:6px; padding:8px 12px; font-family:'Nunito',sans-serif; font-size:12px; color:#0e1a2e; outline:none; box-sizing:border-box; }
+  .bt-input:focus { border-color:#3a6abf; box-shadow:0 0 0 3px rgba(58,106,191,0.1); }
+  .bt-checkbox-row { display:flex; align-items:center; gap:8px; font-family:'Nunito',sans-serif; font-size:12px; color:#5a6e8a; }
+  .bt-submit { width:100%; padding:11px; background:#1b3a6b; color:white; border:none; border-radius:7px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; cursor:pointer; }
+  .bt-submit:hover { background:#254f92; }
+  .bt-share-panel { background:#f8faff; border:1px solid #dde5f5; border-radius:8px; padding:16px 18px; margin-top:14px; }
+  .bt-share-panel-label { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; margin-bottom:8px; }
+  .bt-share-copy { font-family:'Nunito',sans-serif; font-size:12px; color:#2c3e5a; line-height:1.6; padding:10px 12px; background:white; border:1px solid #dde5f5; border-radius:6px; margin-bottom:12px; white-space:pre-wrap; word-break:break-word; }
+  .bt-share-btns { display:flex; flex-wrap:wrap; gap:6px; }
+  .bt-share-plat { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.07em; padding:6px 12px; border-radius:4px; border:1px solid #dde5f5; background:white; color:#254f92; cursor:pointer; }
+  .bt-share-plat:hover { background:#edf1fb; }
+  @media (max-width:600px) { .bt-form-row { grid-template-columns:1fr; } }
+</style>
+<% end %>
+
 <% if @profile_type == :managing_director %>
   <%= render 'managing_director_profile', official: @official %>
 <% elsif @profile_type == :finance_director %>
@@ -475,9 +505,31 @@
         <div class="dp-section">
           <div class="dp-section-eyebrow">◆ Community</div>
           <h2 class="dp-section-title">Q&amp;A</h2>
-          <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:32px; text-align:center;">
-            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:8px;">Coming Soon</div>
-            <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#5a6e8a; line-height:1.6; margin:0;">Ask questions about this official's record, votes, and positions.</p>
+          <div class="bt-card">
+            <div class="bt-eyebrow">◆ How do you see it?</div>
+            <div class="bt-perspective-grid" id="bt-perspectives-d">
+              <button type="button" class="bt-perspective-btn" data-type="empathy"        data-label="🤝 With empathy">🤝 With empathy</button>
+              <button type="button" class="bt-perspective-btn" data-type="practical"      data-label="🔧 Practical fix">🔧 Practical fix</button>
+              <button type="button" class="bt-perspective-btn" data-type="accountability" data-label="📋 Hold accountable">📋 Hold accountable</button>
+              <button type="button" class="bt-perspective-btn" data-type="opposition"     data-label="↔ Different view">↔ Different view</button>
+            </div>
+            <textarea class="bt-textarea" id="bt-body-d" rows="4"
+              placeholder="What do you think about <%= j @member['directOrderName'] %>'s record, votes, or positions? Be specific — your take is more persuasive when it's grounded in real experience."></textarea>
+            <div class="bt-form-row">
+              <div><input class="bt-input" type="text" id="bt-name-d" placeholder="Your name (optional)"></div>
+              <div style="display:flex; align-items:center;">
+                <div class="bt-checkbox-row">
+                  <input type="checkbox" id="bt-anon-d">
+                  <label for="bt-anon-d">Post anonymously</label>
+                </div>
+              </div>
+            </div>
+            <button class="bt-submit" onclick="ofOpenShare('d')">Share your take →</button>
+            <div class="bt-share-panel" id="bt-share-panel-d" hidden>
+              <div class="bt-share-panel-label">Your take — ready to share</div>
+              <div class="bt-share-copy" id="bt-share-copy-d"></div>
+              <div class="bt-share-btns" id="bt-share-btns-d"></div>
+            </div>
           </div>
         </div>
 
@@ -1030,9 +1082,31 @@
     <div style="padding:12px 14px 28px;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:4px;">◆ Community</div>
       <h3 style="font-family:'Libre Baskerville',serif; font-size:15px; font-weight:700; color:#1b3a6b; margin:0 0 10px;">Q&A</h3>
-      <div style="background:white; border-radius:8px; padding:18px 14px; text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">Coming Soon</div>
-        <p style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.55; margin:0;">Ask questions about this official's record, votes, and positions.</p>
+      <div class="bt-card">
+        <div class="bt-eyebrow">◆ How do you see it?</div>
+        <div class="bt-perspective-grid" id="bt-perspectives-m">
+          <button type="button" class="bt-perspective-btn" data-type="empathy"        data-label="🤝 With empathy">🤝 With empathy</button>
+          <button type="button" class="bt-perspective-btn" data-type="practical"      data-label="🔧 Practical fix">🔧 Practical fix</button>
+          <button type="button" class="bt-perspective-btn" data-type="accountability" data-label="📋 Hold accountable">📋 Hold accountable</button>
+          <button type="button" class="bt-perspective-btn" data-type="opposition"     data-label="↔ Different view">↔ Different view</button>
+        </div>
+        <textarea class="bt-textarea" id="bt-body-m" rows="3"
+          placeholder="What do you think about <%= j @member['directOrderName'] %>'s record, votes, or positions?"></textarea>
+        <div class="bt-form-row">
+          <div><input class="bt-input" type="text" id="bt-name-m" placeholder="Your name (optional)"></div>
+          <div style="display:flex; align-items:center;">
+            <div class="bt-checkbox-row">
+              <input type="checkbox" id="bt-anon-m">
+              <label for="bt-anon-m">Post anonymously</label>
+            </div>
+          </div>
+        </div>
+        <button class="bt-submit" onclick="ofOpenShare('m')">Share your take →</button>
+        <div class="bt-share-panel" id="bt-share-panel-m" hidden>
+          <div class="bt-share-panel-label">Your take — ready to share</div>
+          <div class="bt-share-copy" id="bt-share-copy-m"></div>
+          <div class="bt-share-btns" id="bt-share-btns-m"></div>
+        </div>
       </div>
     </div>
 
@@ -1267,6 +1341,77 @@
       document.body.style.overflow = '';
     }
   });
+
+  /* ── Q&A share ── */
+  (function() {
+    var officialName = '<%= j @member["directOrderName"] %>';
+    var pageUrl      = window.location.href;
+    var state = { d: { type: 'empathy', label: '🤝 With empathy' }, m: { type: 'empathy', label: '🤝 With empathy' } };
+
+    ['d', 'm'].forEach(function(sfx) {
+      var grid = document.getElementById('bt-perspectives-' + sfx);
+      if (!grid) return;
+      var defaultBtn = grid.querySelector('[data-type="empathy"]');
+      if (defaultBtn) defaultBtn.classList.add('active');
+      grid.querySelectorAll('.bt-perspective-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          grid.querySelectorAll('.bt-perspective-btn').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          state[sfx].type  = btn.dataset.type;
+          state[sfx].label = btn.dataset.label;
+        });
+      });
+    });
+
+    window.ofOpenShare = function(sfx) {
+      var bodyEl  = document.getElementById('bt-body-'         + sfx);
+      var nameEl  = document.getElementById('bt-name-'         + sfx);
+      var anonEl  = document.getElementById('bt-anon-'         + sfx);
+      var panel   = document.getElementById('bt-share-panel-'  + sfx);
+      var copyEl  = document.getElementById('bt-share-copy-'   + sfx);
+      var btnsEl  = document.getElementById('bt-share-btns-'   + sfx);
+
+      var body = bodyEl ? bodyEl.value.trim() : '';
+      if (!body) { bodyEl && bodyEl.focus(); return; }
+
+      var anon   = anonEl && anonEl.checked;
+      var name   = (!anon && nameEl && nameEl.value.trim()) ? nameEl.value.trim() : null;
+      var byline = name ? ' — ' + name : '';
+      var shareText = state[sfx].label + ': ' + body + byline + '\n\nvia FORA on ' + officialName + ' — ' + pageUrl;
+
+      if (copyEl) copyEl.textContent = shareText;
+
+      var enc  = encodeURIComponent;
+      var t240 = shareText.substring(0, 240);
+      var platforms = [
+        ['𝕏 / Twitter',  function() { window.open('https://twitter.com/intent/tweet?text=' + enc(t240), '_blank', 'noopener'); }],
+        ['Facebook',      function() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc(pageUrl), '_blank', 'noopener'); }],
+        ['WhatsApp',      function() { window.open('https://wa.me/?text=' + enc(shareText.substring(0, 300)), '_blank', 'noopener'); }],
+        ['LinkedIn',      function() { window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + enc(pageUrl) + '&summary=' + enc(shareText.substring(0, 200)), '_blank', 'noopener'); }],
+        ['Instagram',     function() { navigator.clipboard.writeText(shareText).then(function() { window.open('https://www.instagram.com/', '_blank', 'noopener'); }); }],
+        ['Copy text',     function() {
+          navigator.clipboard.writeText(shareText).then(function() {
+            var btn = btnsEl && btnsEl.querySelector('[data-copy]');
+            if (btn) { var o = btn.textContent; btn.textContent = 'Copied!'; setTimeout(function() { btn.textContent = o; }, 1800); }
+          });
+        }],
+      ];
+
+      if (btnsEl) {
+        btnsEl.innerHTML = '';
+        platforms.forEach(function(pair) {
+          var btn = document.createElement('button');
+          btn.className = 'bt-share-plat';
+          btn.textContent = pair[0];
+          if (pair[0] === 'Copy text') btn.dataset.copy = '1';
+          btn.addEventListener('click', pair[1]);
+          btnsEl.appendChild(btn);
+        });
+      }
+
+      if (panel) panel.hidden = false;
+    };
+  })();
 </script>
 
 <% end %>
