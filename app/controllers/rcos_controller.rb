@@ -126,6 +126,61 @@ class RcosController < ApplicationController
     }
   end
 
+  def epcrossing
+    @rco = {
+      name: "East Passyunk Crossing Civic Association",
+      initials: "EP",
+      slug: "epcrossing",
+      zip: "19148",
+      neighborhood: "East Passyunk",
+      expiration_year: 2027,
+      ward_committee: false,
+      council_district: 2,
+      primary_name: "EPCA Board",
+      primary_email: "info@eastpassyunk.org",
+      primary_phone: nil,
+      website: "https://www.eastpassyunk.org",
+      website_label: "eastpassyunk.org",
+      address: "East Passyunk · Philadelphia PA 19148",
+      meeting_location: "Monthly — see eastpassyunk.org for schedule",
+      meeting_location_short: "Monthly — see eastpassyunk.org",
+      org_type_label: "Civic Association",
+      legal_status: "Registered Community Organization",
+      mission: "Advocate for responsible development and community vitality along East Passyunk Avenue while preserving the character and safety of the surrounding neighborhood.",
+      neighborhood_description:
+        "East Passyunk is one of Philadelphia's most celebrated neighborhood commercial corridors — a " \
+        "curved stretch of restaurants, boutiques, and row homes radiating out from Passyunk Square Park " \
+        "in South Philadelphia. The neighborhood takes its name from a Lenape word for \"low-lying meadow\" " \
+        "and was historically home to Italian, Irish, and Polish immigrant communities. Today it is " \
+        "widely recognized as one of the city's most vibrant dining and small-business destinations, " \
+        "a distinction that has brought both investment and displacement pressure. The East Passyunk " \
+        "Crossing Civic Association serves the blocks surrounding the Avenue corridor and the Italian " \
+        "Market area, sharing boundaries with Bella Vista to the north and Newbold to the west. " \
+        "The RCO has been active on pedestrian safety (Vision Zero corridor designation), " \
+        "zoning and development review, historic preservation, and maintaining the neighborhood's " \
+        "distinctive street character. Bounded roughly by Washington Ave, Broad Street, Morris Street, " \
+        "and 10th Street.",
+      stats: [
+        { number: "2nd",     label: "Council District" },
+        { number: "19148",   label: "ZIP Code"         },
+        { number: "Active",  label: "RCO Status"       }
+      ],
+      issue_tags: [
+        "Vision Zero", "Pedestrian safety", "Slow zones", "Zoning",
+        "Historic preservation", "East Passyunk Ave", "Small business",
+        "Public safety", "Traffic calming", "Parks"
+      ],
+      gov_contacts: [
+        { icon: "🏛", name: "Kenyatta Johnson · City Council, District 2", detail: "(215) 686-3412 · district2@phila.gov" },
+        { icon: "📋", name: "Licenses & Inspections",                      detail: "(215) 686-2463 · Zone: South"         },
+        { icon: "🚔", name: "3rd Police District",                          detail: "(215) 686-3030 · 11th & Wharton"      },
+        { icon: "🌳", name: "Mifflin Square Park",                          detail: "Parks & Rec · 9th & Washington"       },
+        { icon: "🏗", name: "Philadelphia City Planning Commission",        detail: "RCO Coordinator · (215) 683-4615"    }
+      ]
+    }
+    render 'rcos/show'
+  end
+
   def fishtown
     @rco = {
       name: "Fishtown Neighbors Association",
