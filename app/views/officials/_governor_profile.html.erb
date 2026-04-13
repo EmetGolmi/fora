@@ -1154,7 +1154,7 @@
               s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _cum.round(3), idx: i }
               _cum += len + _gap; s
             end
-            _d_total = "$#{official.budget_total_billions}B"
+            _d_total = official.budget_total_billions >= 1000 ? "$#{(official.budget_total_billions / 1000.0).round(1)}T" : "$#{official.budget_total_billions}B"
           %>
           <svg width="120" height="120" viewBox="0 0 120 120" style="display:block; margin:8px auto 14px; cursor:default;"
                data-ctx="dsk" data-total="<%= _d_total %>"
@@ -1487,7 +1487,7 @@
         s = { cat: cat, pct: pct, color: budget_segment_color(cat), len: len, prior: _mc.round(3), idx: i }
         _mc += len + _mgap; s
       end
-      _m_total = "$#{official.budget_total_billions}B"
+      _m_total = official.budget_total_billions >= 1000 ? "$#{(official.budget_total_billions / 1000.0).round(1)}T" : "$#{official.budget_total_billions}B"
     %>
     <svg width="140" height="140" viewBox="0 0 140 140" style="display:block; margin:0 auto 14px; cursor:default;"
          data-ctx="mob" data-total="<%= _m_total %>"
