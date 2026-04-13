@@ -126,6 +126,134 @@ class RcosController < ApplicationController
     }
   end
 
+  def fishtown
+    @rco = {
+      name: "Fishtown Neighbors Association",
+      initials: "FN",
+      slug: "fishtown",
+      zip: "19125",
+      neighborhood: "Fishtown",
+      expiration_year: 2027,
+      ward_committee: false,
+      council_district: 1,
+      primary_name: "Robert Everett",
+      primary_email: "zoning@fishtown.org",
+      primary_phone: nil,
+      website: "https://www.fishtown.org",
+      website_label: "fishtown.org",
+      address: "PO Box 3744, Philadelphia, PA 19125",
+      meeting_location: "Zoom — Tuesdays at 6:30pm · fishtown.org for RSVP link",
+      meeting_location_short: "Zoom — Tuesdays at 6:30pm",
+      org_type_label: "Neighborhood Association",
+      legal_status: "501(c)(3) Nonprofit · All-volunteer",
+      mission: "Connect Fishtown neighbors, preserve Fishtown's unique character, and honor our community's shared vision for its future.",
+      neighborhood_description: "Fishtown is one of Philadelphia's most rapidly changing neighborhoods — a former working-class industrial district along the Delaware River that has become a national model of urban gentrification, for better and worse. Named for the shad fishermen who worked the river in the 18th and 19th centuries, the neighborhood was home to Polish, Irish, and Ukrainian factory workers for most of its history. Deindustrialization hollowed it out in the mid-20th century. Since the 2000s, Fishtown has seen extraordinary investment alongside significant displacement pressure, with longtime residents navigating rapidly rising rents alongside an influx of restaurants, bars, and new construction. FNA is one of Philadelphia's most active RCOs, with a zoning committee that reviews dozens of variance applications per year and a verified voter system that gives residents a formal vote on zoning decisions. Bounded roughly by the Delaware River, Frankford Avenue, Lehigh Avenue, and Front Street.",
+      committees: [
+        { icon: "🏗", name: "Zoning", desc: "Reviews variance applications, holds community zoning meetings via Zoom on Tuesdays at 6:30pm. Residents must register as verified voters to vote on applications. Contact: zoning@fishtown.org" },
+        { icon: "🛡", name: "Safety & Planning", desc: "Neighborhood safety, planning issues, and coordination with the 26th Police District." },
+        { icon: "🌿", name: "Beautification", desc: "Green spaces, streetscape, and neighborhood appearance projects." },
+        { icon: "🎉", name: "Events", desc: "Meet the Neighbors, Music in the Park, Holiday Party, Chili Cookoff, Sidewalk Sale, and Fishtown Neighborhood Scholarship." }
+      ],
+      stats: [
+        { number: "~17K", label: "Residents" },
+        { number: "501(c)(3)", label: "Legal status" },
+        { number: "1st", label: "Council District" }
+      ],
+      issue_tags: ["Zoning", "Development", "Nightlife regulation", "Displacement", "Historic preservation", "Transit", "Safety"],
+      gov_contacts: [
+        { icon: "🏛", name: "Mark Squilla · City Council, District 1", detail: "(215) 686-3458 · district1@phila.gov" },
+        { icon: "📋", name: "Licenses & Inspections", detail: "(215) 686-2463 · Zone: North" },
+        { icon: "🚔", name: "26th Police District", detail: "(215) 686-3190 · E. Sergeant & Trenton Ave" },
+        { icon: "🌳", name: "Fishtown Recreation Center", detail: "(215) 685-9921 · 1202 E Montgomery Ave" },
+        { icon: "🏗", name: "Philadelphia City Planning Commission", detail: "RCO Coordinator · (215) 683-4615" }
+      ]
+    }
+    render 'rcos/show'
+  end
+
+  def fkabid
+    @rco = {
+      name: "Fishtown Kensington Area Business Improvement District",
+      initials: "FK",
+      slug: "fkabid",
+      zip: "19122",
+      neighborhood: "Fishtown · East Kensington",
+      expiration_year: 2026,
+      council_district: 1,
+      primary_name: "Marc Collazzo",
+      primary_email: "marc@fishtownbid.org",
+      primary_phone: "(267) 764-3724",
+      website: "https://fishtowndistrict.com",
+      website_label: "fishtowndistrict.com",
+      address: "1509 N Front Street, Philadelphia PA 19122",
+      meeting_location: "Zoom — see fishtowndistrict.com for schedule",
+      meeting_location_short: "Zoom — see fishtowndistrict.com",
+      org_type_label: "Business Improvement District",
+      legal_status: "Special Services District · RCO",
+      mission: "Support and promote the Fishtown and Kensington commercial corridor through cleaning, safety, beautification, and business development programs.",
+      ward_committee: true,
+      ward_explainer: "A Business Improvement District (BID) is a defined commercial area where property owners vote to assess themselves an additional fee, used collectively for services the city doesn't provide — cleaning, lighting, marketing, and business support. BIDs are eligible to register as RCOs, giving them formal standing in zoning hearings affecting their corridor. The FKABID RCO represents commercial property interests — it is distinct from the residential FNA that represents residents. Both may be notified on the same zoning application in Fishtown. When evaluating a development, residents should be aware that the BID's position may reflect commercial interests that differ from neighborhood residential interests.",
+      neighborhood_description: "The Fishtown Kensington Area Business Improvement District covers the commercial corridors of Frankford Avenue and Girard Avenue through Fishtown and East Kensington — one of the most economically dynamic stretches in Philadelphia. The district runs programming around Clean & Green sanitation services, Safe & Secure safety ambassadors, and Beautification improvements along the corridor. The BID produces a business directory, hosts neighborhood events, and maintains a newsletter for stakeholders and residents. As an RCO, it has formal standing in zoning decisions affecting commercial properties along its service corridor.",
+      committees: [
+        { icon: "🧹", name: "Clean & Green", desc: "Sanitation, sidewalk cleaning, and green space maintenance along the commercial corridor." },
+        { icon: "🛡", name: "Safe & Secure", desc: "Safety ambassadors, coordination with police, and corridor security programs." },
+        { icon: "🌿", name: "Beautification", desc: "Streetscape improvements, lighting, and corridor beautification projects." }
+      ],
+      stats: [
+        { number: "BID", label: "Organization type" },
+        { number: "2026", label: "RCO active thru" },
+        { number: "1st", label: "Council District" }
+      ],
+      issue_tags: ["Commercial corridor", "Nightlife", "Business development", "Outdoor dining", "Signage", "Streetscape", "Safety"],
+      gov_contacts: [
+        { icon: "🏛", name: "Mark Squilla · City Council, District 1", detail: "(215) 686-3458 · district1@phila.gov" },
+        { icon: "📋", name: "Licenses & Inspections", detail: "(215) 686-2463 · Zone: North" },
+        { icon: "🚔", name: "26th Police District", detail: "(215) 686-3190 · E. Sergeant & Trenton Ave" },
+        { icon: "🏗", name: "Philadelphia City Planning Commission", detail: "RCO Coordinator · (215) 683-4615" }
+      ]
+    }
+    render 'rcos/show'
+  end
+
+  def wgirard
+    @rco = {
+      name: "West Girard Progress",
+      initials: "WG",
+      slug: "wgirard",
+      zip: "19123",
+      neighborhood: "West Girard · Francisville",
+      expiration_year: 2027,
+      ward_committee: false,
+      council_district: 5,
+      primary_name: "Barbara Pennock",
+      primary_email: "bjchavous@gmail.com",
+      primary_phone: nil,
+      website: nil,
+      website_label: nil,
+      address: "719 W. Girard Avenue, Philadelphia PA 19123",
+      meeting_location: "719 W. Girard Avenue, Philadelphia PA 19123",
+      meeting_location_short: "719 W. Girard Avenue",
+      org_type_label: "Neighborhood Organization",
+      legal_status: "Registered Community Organization",
+      mission: "Advocate for responsible development along the West Girard Avenue corridor while protecting the interests of existing residents and small businesses in Francisville and the surrounding community.",
+      neighborhood_description: "West Girard Progress serves the West Girard Avenue corridor and the surrounding Francisville neighborhood — a historically African American community in North Central Philadelphia experiencing significant development pressure as investment spreads north from Fairmount and Brewerytown. Girard Avenue is one of Philadelphia's great east-west commercial boulevards. The West Girard stretch has long served as a neighborhood main street anchored by longtime small businesses, churches, and community institutions. West Girard Progress focuses on ensuring that new development along the corridor serves existing residents rather than displacing them. The corridor sits at the intersection of two powerful forces — the southward spread of North Philadelphia's disinvestment legacy and the northward spread of Center City gentrification — making it one of the city's most important civic battlegrounds for equitable development. Bounded roughly by Broad Street to the east, 10th Street to the west, Fairmount Avenue to the south, and Poplar Street to the north.",
+      stats: [
+        { number: "5th", label: "Council District" },
+        { number: "19123", label: "ZIP Code" },
+        { number: "Girard Ave", label: "Primary corridor" }
+      ],
+      issue_tags: ["Commercial corridor", "Development", "Displacement", "Affordable housing", "Small business", "Community ownership", "Equitable development"],
+      gov_contacts: [
+        { icon: "🏛", name: "Jeffery Young Jr. · City Council, District 5", detail: "(215) 686-3412 · district5@phila.gov" },
+        { icon: "📋", name: "Licenses & Inspections", detail: "(215) 686-2463 · Zone: North Central" },
+        { icon: "🚔", name: "22nd Police District", detail: "(215) 686-3220 · 17th & Montgomery Ave" },
+        { icon: "🌳", name: "Francisville Recreation Center", detail: "Parks & Rec · 1737 Francis St" },
+        { icon: "🏗", name: "Philadelphia City Planning Commission", detail: "RCO Coordinator · (215) 683-4615" }
+      ]
+    }
+    render 'rcos/show'
+  end
+
   def ccra
     @rco = {
       name:             "Center City Residents Association",

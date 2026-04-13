@@ -70,11 +70,19 @@ Rails.application.routes.draw do
       as:  :state_official
 
   # Community organizations
-  get "usa/pa/philly/rco/bvna",  to: "orgs#bvna",      as: :bvna_rco
-  get "usa/pa/philly/rco/epca",  to: "orgs#epca",      as: :epca_rco
-  get "usa/pa/philly/rco/19wc",  to: "rcos#19wc",      as: :rco_19wc
-  get "usa/pa/philly/rco/nscan", to: "rcos#nscan",     as: :rco_nscan
-  get "usa/pa/philly/rco/ccra",  to: "rcos#ccra",      as: :rco_ccra
+  get "usa/pa/philly/rco/bvna",     to: "orgs#bvna",       as: :bvna_rco
+  get "usa/pa/philly/rco/epca",     to: "orgs#epca",       as: :epca_rco
+  get "usa/pa/philly/rco/19wc",     to: "rcos#19wc",       as: :rco_19wc
+  get "usa/pa/philly/rco/nscan",    to: "rcos#nscan",      as: :rco_nscan
+  get "usa/pa/philly/rco/ccra",     to: "rcos#ccra",       as: :rco_ccra
+  get "usa/pa/philly/rco/fishtown", to: "rcos#fishtown",   as: :rco_fishtown
+  get "usa/pa/philly/rco/fkabid",   to: "rcos#fkabid",    as: :rco_fkabid
+  get "usa/pa/philly/rco/wgirard",  to: "rcos#wgirard",   as: :rco_wgirard
+
+  # Redirects from old broken slugs
+  get "usa/pa/philly/rco/fishtown-neighbors-association",                          to: redirect("/usa/pa/philly/rco/fishtown")
+  get "usa/pa/philly/rco/fishtown-kensington-area-business-improvement-district",  to: redirect("/usa/pa/philly/rco/fkabid")
+  get "usa/pa/philly/rco/west-girard-progress",                                    to: redirect("/usa/pa/philly/rco/wgirard")
 
   # Neighborhood Issues API (scoped per RCO)
   scope '/usa/pa/philly/rco/:rco_slug' do

@@ -56,6 +56,7 @@
 .org-name    { font-family:'Libre Baskerville',serif; font-size:32px; font-weight:700; color:white; line-height:1.1; margin-bottom:12px; }
 .org-tag     { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.1em; text-transform:uppercase; padding:3px 9px; border-radius:3px; margin:0 5px 5px 0; }
 .org-address { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:rgba(255,255,255,0.35); margin-top:10px; }
+.org-mission { font-family:'Nunito',sans-serif; font-size:12px; font-style:italic; color:rgba(255,255,255,0.45); line-height:1.6; margin-top:10px; padding-top:10px; border-top:0.5px solid rgba(255,255,255,0.1); }
 
 /* ── BODY GRID ── */
 .rco-body {
@@ -101,6 +102,13 @@
   padding:4px 10px; border-radius:3px; margin:0 5px 5px 0;
   background:var(--blue-vp); color:var(--blue-md); border:1px solid var(--blue-pl);
 }
+
+/* ── COMMITTEES ── */
+.section-card  { background:white; border-radius:10px; border:0.5px solid var(--blue-pl); padding:18px 20px; margin-bottom:20px; }
+.section-label { font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gilt); margin-bottom:12px; }
+.gov-row { display:flex; align-items:flex-start; gap:12px; padding:9px 0; border-bottom:1px solid rgba(27,58,107,0.07); }
+.gov-row:last-child { border-bottom:none; }
+.gov-icon { width:32px; height:32px; border-radius:6px; background:var(--bg); border:1px solid var(--blue-pl); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
 
 /* ── PLACEHOLDER BOXES ── */
 .rco-placeholder { border:1.5px dashed var(--blue-pl); border-radius:10px; padding:28px 24px; text-align:center; margin-bottom:20px; }
@@ -167,6 +175,10 @@
     <% if rco[:address].present? %>
       <div class="org-address"><%= rco[:address] %></div>
     <% end %>
+
+    <% if rco[:mission].present? %>
+      <div class="org-mission">"<%= rco[:mission] %>"</div>
+    <% end %>
   </div>
 </div>
 
@@ -175,6 +187,9 @@
 
   <!-- ─── MAIN COLUMN ─── -->
   <div>
+
+    <!-- Neighborhood Issues — leads the page -->
+    <%= render 'rcos/neighborhood_issues', rco_slug: rco[:slug], rco_name: rco[:name] %>
 
     <!-- Neighborhood description -->
     <% if rco[:neighborhood_description].present? %>
@@ -205,6 +220,22 @@
       </div>
     <% end %>
 
+    <!-- Committees -->
+    <% if rco[:committees].present? %>
+      <div class="section-card">
+        <div class="section-label">◆ Committees</div>
+        <% rco[:committees].each do |committee| %>
+          <div class="gov-row">
+            <div class="gov-icon"><%= committee[:icon] %></div>
+            <div>
+              <div style="font-size:13px; font-weight:500; color:var(--ink);"><%= committee[:name] %></div>
+              <div style="font-size:12px; color:var(--ink-soft); line-height:1.5; margin-top:2px;"><%= committee[:desc] %></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
     <!-- Ward committee explainer (conditional) -->
     <% if rco[:ward_committee] && rco[:ward_explainer].present? %>
       <div class="rco-callout-gilt">
@@ -212,8 +243,6 @@
         <p><%= rco[:ward_explainer].html_safe %></p>
       </div>
     <% end %>
-
-    <%= render 'rcos/neighborhood_issues', rco_slug: rco[:slug], rco_name: rco[:name] %>
 
     <!-- Active efforts placeholder -->
     <div class="rco-placeholder">
@@ -361,9 +390,9 @@
     <div class="rco-card">
       <div class="rco-card-title">◆ Resources</div>
       <% [
-        ["ZBA Calendar",             "https://phdcgis.phila.gov/portal/apps/sites/#/zoning",                                                                                       "Search active zoning cases"],
-        ["PCPC RCO Directory",       "https://www.phila.gov/departments/philadelphia-city-planning-commission/registered-community-organizations/", "Full list of registered RCOs"],
-        ["Zoning Board of Adjustment","https://www.phila.gov/departments/zoning-board-of-adjustment/",                                                                             "Submit or track an appeal"],
+        ["ZBA Calendar",              "https://phdcgis.phila.gov/portal/apps/sites/#/zoning",                                                                                        "Search active zoning cases"],
+        ["PCPC RCO Directory",        "https://www.phila.gov/departments/philadelphia-city-planning-commission/registered-community-organizations/", "Full list of registered RCOs"],
+        ["Zoning Board of Adjustment","https://www.phila.gov/departments/zoning-board-of-adjustment/",                                                                              "Submit or track an appeal"],
       ].each do |label, url, desc| %>
         <a href="<%= url %>" target="_blank" rel="noopener" style="display:flex; flex-direction:column; padding:8px 10px; background:var(--bg); border-radius:6px; margin-bottom:5px; text-decoration:none;">
           <span style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:var(--blue-lt);"><%= label %> ›</span>
