@@ -44,7 +44,8 @@ class NeighborhoodIssuesController < ApplicationController
   def issue_params
     params.require(:neighborhood_issue).permit(
       :body, :perspective_type, :author_name,
-      :author_email, :location_description
+      :author_email, :location_description,
+      :photo_data, :photo_url, :photo_filename
     )
   end
 
@@ -69,6 +70,9 @@ class NeighborhoodIssuesController < ApplicationController
       share_text_issue: issue.share_text_issue,
       share_text_recruit: issue.share_text_recruit,
       share_text_alerted: issue.share_text_alerted,
+      photo_src: issue.photo_src,
+      photo_filename: issue.photo_filename,
+      has_photo: issue.has_photo?,
       created_at: issue.created_at.strftime('%B %d at %l:%M %p'),
       responses: issue.issue_responses.order(created_at: :asc).map { |r|
         {
@@ -79,6 +83,9 @@ class NeighborhoodIssuesController < ApplicationController
           display_author: r.display_author,
           official: r.official?,
           concurrence_count: r.concurrence_count,
+          photo_src: r.photo_src,
+          photo_filename: r.photo_filename,
+          has_photo: r.has_photo?,
           created_at: r.created_at.strftime('%B %d at %l:%M %p')
         }
       }

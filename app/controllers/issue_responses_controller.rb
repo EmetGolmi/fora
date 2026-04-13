@@ -12,6 +12,9 @@ class IssueResponsesController < ApplicationController
         display_author: @response.display_author,
         official: @response.official?,
         concurrence_count: 0,
+        photo_src: @response.photo_src,
+        photo_filename: @response.photo_filename,
+        has_photo: @response.has_photo?,
         created_at: 'Just now'
       }, status: :created
     else
@@ -22,6 +25,9 @@ class IssueResponsesController < ApplicationController
   private
 
   def response_params
-    params.require(:issue_response).permit(:body, :perspective_type, :author_name, :author_email)
+    params.require(:issue_response).permit(
+      :body, :perspective_type, :author_name, :author_email,
+      :photo_data, :photo_url, :photo_filename
+    )
   end
 end

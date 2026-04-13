@@ -105,10 +105,41 @@
 .ni-loading { font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink-mut); padding:24px; text-align:center; }
 .ni-empty { font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink-soft); padding:24px; text-align:center; border:1.5px dashed var(--blue-pl); border-radius:8px; line-height:1.6; }
 
+/* Photo attachment */
+.photo-attach-wrap { margin-top: 8px; margin-bottom: 10px; }
+.photo-attach-label { font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:6px; display:block; }
+.photo-attach-options { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.photo-opt-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border:0.5px solid var(--blue-pl); border-radius:6px; font-size:12px; color:var(--blue); background:var(--blue-vp); cursor:pointer; font-family:'Nunito',sans-serif; white-space:nowrap; }
+.photo-opt-btn:hover { background:var(--blue-pl); }
+.photo-opt-divider { font-size:11px; color:var(--ink-mut); }
+.photo-link-input { flex:1; min-width:180px; border:0.5px solid var(--blue-pl); border-radius:6px; padding:6px 10px; font-size:12px; font-family:'Nunito',sans-serif; color:var(--ink); background:white; outline:none; }
+.photo-link-input:focus { border-color:var(--blue-lt); }
+.photo-link-input::placeholder { color:var(--ink-mut); }
+.photo-preview-area { margin-top:8px; background:var(--bg); border:0.5px solid var(--blue-pl); border-radius:6px; padding:8px; }
+.photo-preview-img { max-width:100%; max-height:200px; object-fit:cover; border-radius:4px; display:block; }
+.photo-preview-meta { display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+.photo-preview-name { font-size:10px; color:var(--ink-mut); font-family:'JetBrains Mono',monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px; }
+.photo-remove-btn { font-size:10px; color:#8b1a1a; background:none; border:none; cursor:pointer; font-family:'Nunito',sans-serif; padding:0; }
+
+/* Photo display in cards */
+.issue-photo { padding:0 0 12px; }
+.issue-photo img { max-width:100%; border-radius:6px; border:0.5px solid var(--blue-pl); max-height:360px; object-fit:cover; display:block; cursor:zoom-in; }
+.issue-photo-caption { font-size:10px; color:var(--ink-mut); margin-top:4px; font-family:'JetBrains Mono',monospace; display:flex; align-items:center; gap:8px; }
+.response-photo { margin-top:8px; }
+.response-photo img { max-width:100%; max-height:220px; object-fit:cover; border-radius:6px; border:0.5px solid var(--blue-pl); display:block; cursor:zoom-in; }
+
+/* Lightbox */
+.lightbox-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out; }
+.lightbox-overlay.open { display:flex; }
+.lightbox-overlay img { max-width:92vw; max-height:88vh; object-fit:contain; border-radius:6px; }
+.lightbox-close { position:absolute; top:16px; right:20px; color:white; font-size:28px; cursor:pointer; background:none; border:none; line-height:1; opacity:0.8; }
+
 @media (max-width:600px) {
   .ni-form-row           { grid-template-columns:1fr; }
   .ni-perspective-grid   { grid-template-columns:1fr 1fr; }
   .ni-action-strip       { gap:5px; }
+  .photo-attach-options  { flex-direction:column; align-items:flex-start; }
+  .photo-link-input      { width:100%; }
 }
 </style>
 <% end %>
@@ -159,6 +190,25 @@
       <input class="ni-input" type="text" id="ni-location-<%= rco_slug %>"
         placeholder="e.g. 2100 block of N Hancock St" style="margin-bottom:10px;">
 
+      <div class="photo-attach-wrap" data-mode="none">
+        <span class="photo-attach-label">📷 Add a photo (optional)</span>
+        <div class="photo-attach-options">
+          <label class="photo-opt-btn">
+            <input type="file" accept="image/*" class="photo-file-input" style="display:none;" onchange="handleFileUpload(this, 'new-issue')">
+            📁 Camera roll
+          </label>
+          <span class="photo-opt-divider">or</span>
+          <input type="text" class="photo-link-input" placeholder="🔗 Paste a photo link" oninput="handleLinkInput(this, 'new-issue')">
+        </div>
+        <div class="photo-preview-area" id="preview-new-issue" style="display:none;">
+          <img class="photo-preview-img" id="preview-img-new-issue" src="" alt="Photo preview">
+          <div class="photo-preview-meta">
+            <span class="photo-preview-name" id="preview-name-new-issue"></span>
+            <button class="photo-remove-btn" onclick="clearPhoto('new-issue')">✕ Remove</button>
+          </div>
+        </div>
+      </div>
+
       <div class="ni-checkbox-row">
         <input type="checkbox" id="ni-anon-<%= rco_slug %>">
         <label for="ni-anon-<%= rco_slug %>">Post anonymously</label>
@@ -195,6 +245,88 @@
     'resident. Any 3+ issues with the most Concurrences are always surfaced to leadership ' +
     'regardless. Sharing is the mechanism to recruit Concurrences \u2014 which is why we ' +
     'make it easy from the start.';
+
+  // ── Photo state ───────────────────────────────────────────────────────────
+
+  const photoState = {};
+
+  window.handleFileUpload = function(input, formId) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Photo must be under 2MB. Try a screenshot or a compressed image.');
+      input.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      photoState[formId] = { type: 'data', value: e.target.result, filename: file.name };
+      showPreview(formId, e.target.result, file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.handleLinkInput = function(input, formId) {
+    const url = input.value.trim();
+    if (!url) { clearPhoto(formId); return; }
+    photoState[formId] = { type: 'url', value: url, filename: '' };
+    const img = new Image();
+    img.onload  = () => showPreview(formId, url, url.split('/').pop().substring(0, 40));
+    img.onerror = () => showPreview(formId, url, url.substring(0, 50));
+    img.src = url;
+  };
+
+  function showPreview(formId, src, name) {
+    const area   = document.getElementById('preview-' + formId);
+    const img    = document.getElementById('preview-img-' + formId);
+    const nameEl = document.getElementById('preview-name-' + formId);
+    if (!area) return;
+    img.src     = src;
+    img.onerror = () => { img.style.display = 'none'; };
+    img.onload  = () => { img.style.display = 'block'; };
+    if (nameEl) nameEl.textContent = name || '';
+    area.style.display = 'block';
+  }
+
+  window.clearPhoto = function(formId) {
+    delete photoState[formId];
+    const area = document.getElementById('preview-' + formId);
+    if (area) area.style.display = 'none';
+    const img  = document.getElementById('preview-img-' + formId);
+    if (img)  { img.src = ''; img.style.display = 'block'; }
+  };
+
+  function getPhotoPayload(formId) {
+    const state = photoState[formId];
+    if (!state) return { photo_data: '', photo_url: '', photo_filename: '' };
+    return {
+      photo_data:     state.type === 'data' ? state.value : '',
+      photo_url:      state.type === 'url'  ? state.value : '',
+      photo_filename: state.filename || ''
+    };
+  }
+
+  // ── Lightbox ──────────────────────────────────────────────────────────────
+
+  window.openLightbox = function(src) {
+    let lb = document.getElementById('fora-lightbox');
+    if (!lb) {
+      lb = document.createElement('div');
+      lb.id        = 'fora-lightbox';
+      lb.className = 'lightbox-overlay';
+      lb.innerHTML = '<button class="lightbox-close" onclick="closeLightbox()">\u2715</button>' +
+                     '<img id="fora-lightbox-img" src="" alt="Full size photo">';
+      lb.addEventListener('click', function(e) { if (e.target === lb) closeLightbox(); });
+      document.body.appendChild(lb);
+    }
+    document.getElementById('fora-lightbox-img').src = src;
+    lb.classList.add('open');
+  };
+
+  window.closeLightbox = function() {
+    const lb = document.getElementById('fora-lightbox');
+    if (lb) lb.classList.remove('open');
+  };
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -315,9 +447,9 @@
   // ── Render response card ──────────────────────────────────────────────────
 
   function renderResponse(r, issueId) {
-    var uid = 'rs-' + r.id;
+    var uid    = 'rs-' + r.id;
     var bStyle = BADGE_STYLES[r.perspective_type] || BADGE_STYLES.empathy;
-    var btns = sharePlatformBtns(r.body, issueId, uid);
+    var btns   = sharePlatformBtns(r.body, issueId, uid);
     return '<div class="ni-response-card" id="response-' + r.id + '">' +
       '<div class="ni-response-header">' +
         '<span class="ni-badge" style="' + bStyle + '; font-size:7px;">' + esc(r.perspective_label) + '</span>' +
@@ -326,8 +458,13 @@
         '<span class="ni-time" style="margin-left:auto;">' + esc(r.created_at) + '</span>' +
       '</div>' +
       '<div class="ni-response-body">' + esc(r.body) + '</div>' +
+      (r.has_photo ? (
+        '<div class="response-photo">' +
+          '<img src="' + esc(r.photo_src) + '" alt="Photo attached" onclick="openLightbox(this.src)">' +
+        '</div>'
+      ) : '') +
       '<div class="ni-response-actions">' +
-        '<button class="ni-action-btn" data-ni-share onclick="niTogglePanel(\'rsp-' + uid + '\')" >\u2197 Share</button>' +
+        '<button class="ni-action-btn" data-ni-share onclick="niTogglePanel(\'rsp-' + uid + '\')">\u2197 Share</button>' +
       '</div>' +
       buildSharePanel('rsp-' + uid, 'Share this response', r.body, btns) +
     '</div>';
@@ -336,7 +473,8 @@
   // ── Render response form ──────────────────────────────────────────────────
 
   function renderResponseForm(issueId) {
-    var pid = 'rp-' + issueId;
+    var pid    = 'rp-' + issueId;
+    var formId = 'resp-' + issueId;
     return '<div class="ni-response-form">' +
       '<button class="ni-response-form-toggle" onclick="niToggleRespForm(\'' + pid + '\')">' +
         '+ Add your perspective \u2192' +
@@ -355,6 +493,24 @@
             '<input type="checkbox" id="rp-anon-' + issueId + '"> Anonymous' +
           '</label>' +
         '</div>' +
+        '<div class="photo-attach-wrap">' +
+          '<span class="photo-attach-label">\uD83D\uDCF7 Add a photo (optional)</span>' +
+          '<div class="photo-attach-options">' +
+            '<label class="photo-opt-btn">' +
+              '<input type="file" accept="image/*" class="photo-file-input" style="display:none;" onchange="handleFileUpload(this,\'' + formId + '\')">' +
+              '\uD83D\uDCC1 Camera roll' +
+            '</label>' +
+            '<span class="photo-opt-divider">or</span>' +
+            '<input type="text" class="photo-link-input" placeholder="\uD83D\uDD17 Paste a photo link" oninput="handleLinkInput(this,\'' + formId + '\')">' +
+          '</div>' +
+          '<div class="photo-preview-area" id="preview-' + formId + '" style="display:none;">' +
+            '<img class="photo-preview-img" id="preview-img-' + formId + '" src="" alt="Photo preview">' +
+            '<div class="photo-preview-meta">' +
+              '<span class="photo-preview-name" id="preview-name-' + formId + '"></span>' +
+              '<button class="photo-remove-btn" onclick="clearPhoto(\'' + formId + '\')">\u2715 Remove</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
         '<button class="ni-resp-submit" onclick="niSubmitResponse(' + issueId + ')">Post response \u2192</button>' +
         '<div id="rp-err-' + issueId + '" style="font-family:\'Nunito\',sans-serif; font-size:11px; color:#8b1a1a; margin-top:4px;" hidden></div>' +
       '</div>' +
@@ -367,22 +523,27 @@
   };
 
   window.niSubmitResponse = function(issueId) {
-    var bodyEl  = document.getElementById('rp-body-' + issueId);
-    var nameEl  = document.getElementById('rp-name-' + issueId);
-    var anonEl  = document.getElementById('rp-anon-' + issueId);
+    var bodyEl  = document.getElementById('rp-body-'  + issueId);
+    var nameEl  = document.getElementById('rp-name-'  + issueId);
+    var anonEl  = document.getElementById('rp-anon-'  + issueId);
     var perspEl = document.getElementById('rp-persp-' + issueId);
-    var errEl   = document.getElementById('rp-err-' + issueId);
+    var errEl   = document.getElementById('rp-err-'   + issueId);
     var body = bodyEl ? bodyEl.value.trim() : '';
     if (!body) { if (errEl) { errEl.textContent = 'Please write something.'; errEl.hidden = false; } return; }
     var perspType = (perspEl && perspEl.dataset.selected) || 'empathy';
+    var formId    = 'resp-' + issueId;
+    var photo     = getPhotoPayload(formId);
     fetch(baseUrl + '/' + issueId + '/issue_responses', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
       body: JSON.stringify({
         issue_response: {
-          body: body,
+          body:             body,
           perspective_type: perspType,
-          author_name: nameEl ? nameEl.value.trim() : ''
+          author_name:      nameEl ? nameEl.value.trim() : '',
+          photo_data:       photo.photo_data,
+          photo_url:        photo.photo_url,
+          photo_filename:   photo.photo_filename
         },
         anonymous: (anonEl && anonEl.checked) ? 'true' : 'false'
       })
@@ -404,9 +565,9 @@
       if (nameEl) nameEl.value = '';
       if (anonEl) anonEl.checked = false;
       if (errEl)  errEl.hidden = true;
+      clearPhoto(formId);
       var formBody = document.getElementById('rp-' + issueId);
       if (formBody) formBody.style.display = 'none';
-      // Re-wire new response form perspectives
       wirePerspectives('rp-persp-' + issueId, 'empathy');
     })
     .catch(function() {
@@ -417,10 +578,10 @@
   // ── Render full issue card ────────────────────────────────────────────────
 
   function renderIssue(issue) {
-    var id     = issue.id;
-    var bStyle = BADGE_STYLES[issue.perspective_type] || BADGE_STYLES.empathy;
+    var id      = issue.id;
+    var bStyle  = BADGE_STYLES[issue.perspective_type] || BADGE_STYLES.empathy;
     var already = hasConcurred(id);
-    var whyId  = 'why-disc-' + rcoSlug + '-' + id;
+    var whyId   = 'why-disc-' + rcoSlug + '-' + id;
 
     var sharePanel   = buildSharePanel('ish-' + id, 'Share this issue', issue.share_text_issue,
                          sharePlatformBtns(issue.share_text_issue, id, 'ish-' + id));
@@ -445,6 +606,15 @@
           '\uD83D\uDD14 <span id="recruit-label-' + id + '">' + issue.remaining_concurrences + ' more neighbors needed</span> \u2014 share to get there \u2192' +
         '</button>';
 
+    var photoHtml = issue.has_photo ? (
+      '<div class="issue-photo">' +
+        '<img src="' + esc(issue.photo_src) + '" alt="Photo attached to issue" onclick="openLightbox(this.src)">' +
+        '<div class="issue-photo-caption">\uD83D\uDCF7 ' + esc(issue.photo_filename || 'Photo attached') +
+          (issue.photo_url ? ' <a href="' + esc(issue.photo_url) + '" target="_blank" rel="noopener" style="color:var(--blue-lt);font-size:10px;text-decoration:none;">View source \u203a</a>' : '') +
+        '</div>' +
+      '</div>'
+    ) : '';
+
     return '<div class="ni-issue-card" id="issue-' + id + '">' +
 
       '<div class="ni-issue-header">' +
@@ -455,6 +625,8 @@
       '</div>' +
 
       '<div class="ni-issue-body">' + esc(issue.body) + '</div>' +
+
+      photoHtml +
 
       '<div class="ni-action-strip">' +
         '<button class="ni-action-btn" data-ni-share onclick="niTogglePanel(\'ish-' + id + '\')">\u2197 Share</button>' +
@@ -519,9 +691,9 @@
   // ── Issue form submission ─────────────────────────────────────────────────
 
   (function() {
-    var form    = document.getElementById('ni-form-' + rcoSlug);
-    var submitB = document.getElementById('ni-submit-' + rcoSlug);
-    var errorEl = document.getElementById('ni-error-' + rcoSlug);
+    var form    = document.getElementById('ni-form-'    + rcoSlug);
+    var submitB = document.getElementById('ni-submit-'  + rcoSlug);
+    var errorEl = document.getElementById('ni-error-'   + rcoSlug);
     var grid    = document.getElementById('ni-perspectives-' + rcoSlug);
     var feed    = document.getElementById('issues-feed-' + rcoSlug);
 
@@ -540,17 +712,21 @@
         return;
       }
       var perspType = (grid && grid.dataset.selected) || 'empathy';
+      var photo     = getPhotoPayload('new-issue');
       if (submitB) submitB.disabled = true;
       fetch(baseUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
         body: JSON.stringify({
           neighborhood_issue: {
-            body: body,
-            perspective_type: perspType,
+            body:                 body,
+            perspective_type:     perspType,
             author_name:          nameEl     ? nameEl.value.trim()     : '',
             author_email:         emailEl    ? emailEl.value.trim()    : '',
-            location_description: locationEl ? locationEl.value.trim() : ''
+            location_description: locationEl ? locationEl.value.trim() : '',
+            photo_data:           photo.photo_data,
+            photo_url:            photo.photo_url,
+            photo_filename:       photo.photo_filename
           },
           anonymous: (anonEl && anonEl.checked) ? 'true' : 'false'
         })
@@ -570,6 +746,7 @@
         }
         [bodyEl, nameEl, emailEl, locationEl].forEach(function(el) { if (el) el.value = ''; });
         if (anonEl) anonEl.checked = false;
+        clearPhoto('new-issue');
         if (grid) {
           grid.querySelectorAll('[data-type]').forEach(function(b) { b.classList.remove('active'); });
           var def = grid.querySelector('[data-type="empathy"]');
