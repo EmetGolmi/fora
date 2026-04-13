@@ -32,6 +32,25 @@
   .bt-share-plat { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.07em; padding:6px 12px; border-radius:4px; border:1px solid #dde5f5; background:white; color:#254f92; cursor:pointer; }
   .bt-share-plat:hover { background:#edf1fb; }
 
+  /* ── Photo attach ── */
+  .photo-attach-wrap { margin-bottom:12px; }
+  .photo-attach-label { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:#8a9ab8; display:block; margin-bottom:6px; }
+  .photo-attach-options { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .photo-opt-btn { font-family:'Nunito',sans-serif; font-size:12px; color:#254f92; background:white; border:1px solid #dde5f5; border-radius:5px; padding:6px 12px; cursor:pointer; white-space:nowrap; }
+  .photo-opt-btn:hover { background:#edf1fb; border-color:#3a6abf; }
+  .photo-opt-divider { font-family:'Nunito',sans-serif; font-size:11px; color:#b0b8c8; }
+  .photo-link-input { flex:1; min-width:140px; border:1px solid #dde5f5; border-radius:5px; padding:6px 10px; font-family:'Nunito',sans-serif; font-size:12px; color:#0e1a2e; outline:none; box-sizing:border-box; }
+  .photo-link-input:focus { border-color:#3a6abf; box-shadow:0 0 0 3px rgba(58,106,191,0.1); }
+  .photo-preview-area { display:none; align-items:center; gap:10px; margin-top:8px; background:#f4f7ff; border:1px solid #dde5f5; border-radius:6px; padding:8px 10px; }
+  .photo-preview-img { width:52px; height:52px; object-fit:cover; border-radius:4px; cursor:pointer; flex-shrink:0; }
+  .photo-preview-meta { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+  .photo-preview-name { font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .photo-remove-btn { font-family:'JetBrains Mono',monospace; font-size:8px; color:#8b1a1a; background:none; border:none; cursor:pointer; padding:0; text-align:left; }
+  .lightbox-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; }
+  .lightbox-overlay.open { display:flex; }
+  .lightbox-overlay img { max-width:90vw; max-height:88vh; border-radius:8px; object-fit:contain; }
+  .lightbox-close { position:absolute; top:18px; right:22px; background:none; border:none; color:white; font-size:24px; cursor:pointer; line-height:1; }
+
   @media (max-width:600px) {
     .bt-perspective-grid { grid-template-columns:1fr 1fr; }
     .bt-form-row { grid-template-columns:1fr; }
@@ -173,11 +192,31 @@
         </div>
       </div>
 
+      <div class="photo-attach-wrap">
+        <span class="photo-attach-label">📷 Add a photo (optional)</span>
+        <div class="photo-attach-options">
+          <label class="photo-opt-btn">
+            <input type="file" accept="image/*" style="display:none;" onchange="handleFileUpload(this, 'qa-bill')">
+            📁 Camera roll
+          </label>
+          <span class="photo-opt-divider">or</span>
+          <input type="text" class="photo-link-input" placeholder="🔗 Paste a photo link" oninput="handleLinkInput(this, 'qa-bill')">
+        </div>
+        <div class="photo-preview-area" id="preview-qa-bill" style="display:none;">
+          <img class="photo-preview-img" id="preview-img-qa-bill" src="" alt="Preview" onclick="openLightbox(this.src)">
+          <div class="photo-preview-meta">
+            <span class="photo-preview-name" id="preview-name-qa-bill"></span>
+            <button class="photo-remove-btn" onclick="clearPhoto('qa-bill')">✕ Remove</button>
+          </div>
+        </div>
+      </div>
+
       <button class="bt-submit" onclick="btOpenShare()">Share your take →</button>
 
       <div class="bt-share-panel" id="bt-share-panel" hidden>
         <div class="bt-share-panel-label">Your take — ready to share</div>
         <div class="bt-share-copy" id="bt-share-copy"></div>
+        <div id="bt-share-photo"></div>
         <div class="bt-share-btns" id="bt-share-btns"></div>
       </div>
     </div>
@@ -207,6 +246,60 @@
     });
   }
 
+  // Photo state
+  var photoState = {};
+  window.handleFileUpload = function(input, formId) {
+    var file = input.files && input.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { alert('Please use a photo under 2 MB.'); input.value = ''; return; }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      photoState[formId] = { photo_data: e.target.result, photo_url: null, photo_filename: file.name };
+      showPhotoPreview(formId, e.target.result, file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+  window.handleLinkInput = function(input, formId) {
+    var url = input.value.trim();
+    if (!url) { clearPhoto(formId); return; }
+    var img = new Image();
+    img.onload = function() {
+      photoState[formId] = { photo_data: null, photo_url: url, photo_filename: url.split('/').pop().split('?')[0] || 'photo' };
+      showPhotoPreview(formId, url, photoState[formId].photo_filename);
+    };
+    img.src = url;
+  };
+  function showPhotoPreview(formId, src, name) {
+    var area = document.getElementById('preview-' + formId);
+    var imgEl = document.getElementById('preview-img-' + formId);
+    var nameEl = document.getElementById('preview-name-' + formId);
+    if (area)   area.style.display = 'flex';
+    if (imgEl)  imgEl.src = src;
+    if (nameEl) nameEl.textContent = name || '';
+  }
+  window.clearPhoto = function(formId) {
+    delete photoState[formId];
+    var area = document.getElementById('preview-' + formId);
+    if (area) area.style.display = 'none';
+  };
+  window.openLightbox = function(src) {
+    var lb = document.getElementById('fora-lightbox');
+    if (!lb) {
+      lb = document.createElement('div');
+      lb.id = 'fora-lightbox';
+      lb.className = 'lightbox-overlay';
+      lb.innerHTML = '<button class="lightbox-close" onclick="closeLightbox()">✕</button><img src="" alt="Full photo">';
+      lb.addEventListener('click', function(e) { if (e.target === lb) closeLightbox(); });
+      document.body.appendChild(lb);
+    }
+    lb.querySelector('img').src = src;
+    lb.classList.add('open');
+  };
+  window.closeLightbox = function() {
+    var lb = document.getElementById('fora-lightbox');
+    if (lb) lb.classList.remove('open');
+  };
+
   window.btOpenShare = function() {
     var bodyEl  = document.getElementById('bt-body');
     var nameEl  = document.getElementById('bt-name');
@@ -214,6 +307,7 @@
     var panel   = document.getElementById('bt-share-panel');
     var copyEl  = document.getElementById('bt-share-copy');
     var btnsEl  = document.getElementById('bt-share-btns');
+    var photoEl = document.getElementById('bt-share-photo');
 
     var body = bodyEl ? bodyEl.value.trim() : '';
     if (!body) { bodyEl && bodyEl.focus(); return; }
@@ -224,6 +318,12 @@
     var shareText = selectedLabel + ': ' + body + byline + '\n\nvia FORA on ' + billRef + ' — ' + billUrl;
 
     if (copyEl) copyEl.textContent = shareText;
+
+    var photo = photoState['qa-bill'] || {};
+    if (photoEl) {
+      var src = photo.photo_data || photo.photo_url;
+      photoEl.innerHTML = src ? '<img src="' + src + '" alt="Attached photo" onclick="openLightbox(this.src)" style="max-width:100%; max-height:160px; border-radius:6px; margin-bottom:10px; cursor:pointer; display:block;">' : '';
+    }
 
     var enc = encodeURIComponent;
     var t240 = shareText.substring(0, 240);
