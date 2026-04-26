@@ -454,32 +454,6 @@ end
       end
     end
 
-    threads << Thread.new do
-      begin
-        codes = COMMITTEE_ISSUE_CODES[bioguide_id]
-        next unless codes&.any?
-        clients = Rails.cache.fetch("lda_clients/#{bioguide_id}", expires_in: 24.hours) do
-          all = []
-          codes.first(3).each do |code|
-            resp = HTTParty.get("https://lda.senate.gov/api/v1/filings/",
-                                query: { filing_year: 2025, general_issue_code: code,
-                                         ordering: "-income", page_size: 20 }, timeout: 8)
-            all += resp.parsed_response["results"] || [] if resp.success?
-          end
-          by_client = Hash.new(0.0)
-          all.each do |f|
-            name = f.dig("client", "name") || f.dig("client", "client_name")
-            next if name.blank?
-            by_client[name] += f["income"].to_f
-          end
-          by_client.sort_by { |_, v| -v }.first(5).map { |name, total| { name: name, total: total } }
-        end
-        mutex.synchronize { @top_lobby_clients = clients }
-      rescue
-        mutex.synchronize { @top_lobby_clients = [] }
-      end
-    end
-
     threads.each(&:join)
 
     if HARDCODED_BILLS.key?(bioguide_id)
