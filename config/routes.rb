@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
+  get  "about", to: "pages#about", as: :about
+
   root "dashboard#index"
   get  "dashboard",                  to: "dashboard#show"
   post "dashboard/resolve",          to: "dashboard#resolve"
@@ -79,11 +81,14 @@ Rails.application.routes.draw do
   get "usa/pa/philly/rco/wgirard",      to: "rcos#wgirard",     as: :rco_wgirard
   get "usa/pa/philly/rco/epcrossing",   to: "rcos#epcrossing",  as: :rco_epcrossing
 
-  # Redirects from old broken slugs
+  # Redirects from old broken slugs (must come before the catch-all)
   get "usa/pa/philly/rco/epca",                                                    to: redirect("/usa/pa/philly/rco/epcrossing")
   get "usa/pa/philly/rco/fishtown-neighbors-association",                          to: redirect("/usa/pa/philly/rco/fishtown")
   get "usa/pa/philly/rco/fishtown-kensington-area-business-improvement-district",  to: redirect("/usa/pa/philly/rco/fkabid")
   get "usa/pa/philly/rco/west-girard-progress",                                    to: redirect("/usa/pa/philly/rco/wgirard")
+
+  # Generic fallback for any other RCO slug (must come last)
+  get "usa/pa/philly/rco/:slug", to: "rcos#generic"
 
   # Neighborhood Issues API (scoped per RCO)
   scope '/usa/pa/philly/rco/:rco_slug' do

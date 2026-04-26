@@ -309,6 +309,14 @@ class RcosController < ApplicationController
     render 'rcos/show'
   end
 
+  def generic
+    slug = params[:slug]
+    @rco_data = Rails.cache.fetch("rco_slug/#{slug}", expires_in: 24.hours) do
+      PhillyRcoService.find_by_slug(slug)
+    end
+    return render plain: "RCO not found", status: :not_found if @rco_data.nil?
+  end
+
   def ccra
     @rco = {
       name:             "Center City Residents Association",

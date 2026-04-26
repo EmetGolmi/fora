@@ -1,0 +1,268 @@
+<% content_for(:title) { "#{@rco_data['name']} — FORA" } %>
+
+<% content_for :head do %>
+<style>
+:root {
+  --bg:       #f2f4f8;
+  --white:    #ffffff;
+  --blue:     #1b3a6b;
+  --blue-md:  #254f92;
+  --blue-lt:  #3a6abf;
+  --blue-pl:  #dde5f5;
+  --blue-vp:  #edf1fb;
+  --gilt:     #b8860b;
+  --gilt-lt:  #d4a832;
+  --gilt-pl:  #f8f0dc;
+  --gilt-rul: rgba(184,134,11,0.22);
+  --ink:      #0e1a2e;
+  --ink-mid:  #2c3e5a;
+  --ink-soft: #5a6e8a;
+  --ink-mut:  #8a9ab8;
+  --rule:     rgba(27,58,107,0.1);
+}
+*,*::before,*::after { box-sizing: border-box; }
+
+.rco-hero { background:var(--blue); padding:40px 48px 52px; position:relative; overflow:hidden; }
+.rco-hero::after {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  position:absolute; bottom:0; left:0; right:0; height:26px;
+  display:flex; align-items:center; padding:0 48px;
+  font-size:11px; letter-spacing:0.55em; color:var(--gilt);
+  overflow:hidden; white-space:nowrap;
+  -webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%);
+  mask-image:linear-gradient(to right,black 92%,transparent 100%);
+}
+.hero-ring  { position:absolute; right:-60px; top:-80px; width:400px; height:400px; border-radius:50%; border:44px solid rgba(255,255,255,0.02); pointer-events:none; }
+.hero-ring2 { position:absolute; right:60px;  top:20px;  width:220px; height:220px; border-radius:50%; border:1px solid rgba(184,134,11,0.1); pointer-events:none; }
+
+.hero-bc     { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:18px; }
+.hero-bc a   { color:rgba(255,255,255,0.3); text-decoration:none; }
+.hero-bc a:hover { color:rgba(255,255,255,0.75); }
+.hero-bc .sep { opacity:0.25; margin:0 6px; }
+
+.org-mark {
+  width:64px; height:64px; border-radius:12px;
+  background:var(--gilt-pl); border:2px solid var(--gilt-rul);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:var(--gilt);
+  flex-shrink:0; margin-bottom:18px;
+}
+.org-name    { font-family:'Libre Baskerville',serif; font-size:32px; font-weight:700; color:white; line-height:1.1; margin-bottom:12px; }
+.org-tag     { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.1em; text-transform:uppercase; padding:3px 9px; border-radius:3px; margin:0 5px 5px 0; }
+.org-address { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:rgba(255,255,255,0.35); margin-top:10px; }
+
+.rco-body {
+  max-width:1100px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 300px; gap:28px;
+  padding:32px 48px 60px; background:var(--bg);
+}
+@media (max-width:760px) {
+  .rco-hero { padding:28px 20px 44px; }
+  .org-name { font-size:22px; }
+  .rco-body { grid-template-columns:1fr; padding:20px 16px 48px; gap:16px; }
+  .rco-sidebar { order:-1; }
+}
+
+.rco-callout {
+  border-left:3px solid var(--blue); background:var(--blue-vp);
+  border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:20px;
+}
+.rco-callout-gilt {
+  border-left:3px solid var(--gilt); background:var(--gilt-pl);
+  border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:20px;
+}
+.rco-callout-eyebrow {
+  font-family:'JetBrains Mono',monospace; font-size:7px;
+  letter-spacing:0.18em; text-transform:uppercase; font-weight:700; margin-bottom:8px;
+}
+.rco-callout p { font-family:'Nunito',sans-serif; font-size:13px; line-height:1.72; color:var(--ink-mid); margin:0; }
+
+.section-card  { background:white; border-radius:10px; border:0.5px solid var(--blue-pl); padding:18px 20px; margin-bottom:20px; }
+.section-label { font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gilt); margin-bottom:12px; }
+
+.rco-card       { background:white; border-radius:10px; border:0.5px solid var(--blue-pl); padding:18px 20px; margin-bottom:16px; }
+.rco-card-title { font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gilt); margin-bottom:12px; }
+.rco-row        { display:flex; align-items:flex-start; justify-content:space-between; padding:7px 10px; background:var(--bg); border-radius:6px; margin-bottom:5px; gap:8px; }
+.rco-row-lbl    { font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-mut); margin-bottom:2px; }
+.rco-row-val    { font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:var(--blue); }
+</style>
+<% end %>
+
+<%
+  initials = @rco_data["name"].to_s.split.first(2).map { |w| w[0] }.join.upcase
+  website  = @rco_data["website"].presence
+  website_url = website && !website.start_with?("http") ? "https://#{website}" : website
+%>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="rco-hero">
+  <div class="hero-ring"></div>
+  <div class="hero-ring2"></div>
+
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="hero-bc">
+      <a href="/">FORA</a><span class="sep">/</span>
+      <a href="#">Philadelphia</a><span class="sep">/</span>
+      <a href="#">Community Organizations</a><span class="sep">/</span>
+      <span style="color:var(--gilt-lt); font-weight:600;"><%= @rco_data["name"] %></span>
+    </div>
+
+    <div class="org-mark"><%= initials %></div>
+
+    <div class="org-name"><%= @rco_data["name"] %></div>
+
+    <div>
+      <span class="org-tag" style="background:rgba(184,134,11,0.15); color:var(--gilt-lt); border:1px solid rgba(184,134,11,0.25);">Registered Community Organization</span>
+      <% if @rco_data["expiration_year"].present? %>
+        <span class="org-tag" style="background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.1);">Active thru <%= @rco_data["expiration_year"] %></span>
+      <% end %>
+    </div>
+
+    <% if @rco_data["address"].present? %>
+      <div class="org-address"><%= @rco_data["address"] %></div>
+    <% end %>
+  </div>
+</div>
+
+<!-- ═══════════ BODY ═══════════ -->
+<div class="rco-body">
+
+  <!-- ── MAIN COLUMN ── -->
+  <div>
+
+    <!-- What is an RCO? -->
+    <div class="rco-callout" style="margin-bottom:20px;">
+      <div class="rco-callout-eyebrow" style="color:var(--blue-md);">◆ What is an RCO?</div>
+      <p>Your <strong>Registered Community Organization</strong> is your neighborhood's legal seat at the table. When a developer files for a zoning variance on your block, they are required by law to notify your RCO and hold a community meeting before the city can approve it. Your RCO's letter goes into the official record — the Zoning Board reads it, your councilmember reads it. This is where neighborhood power is real and legally recognized.</p>
+    </div>
+
+    <!-- Coming soon notice -->
+    <div class="rco-callout-gilt" style="margin-bottom:20px;">
+      <div class="rco-callout-eyebrow" style="color:var(--gilt);">◆ Full Profile Coming Soon</div>
+      <p>FORA is building out dedicated profiles for all <%= 239 %> Philadelphia RCOs. This page shows basic contact information from the <strong>Philadelphia City Planning Commission</strong> registry. A full neighborhood profile — including zoning issues, meeting schedule, neighborhood history, and engagement tools — is in progress.</p>
+    </div>
+
+    <!-- Contact info section -->
+    <% if @rco_data["primary_email"].present? || @rco_data["primary_phone"].present? || @rco_data["primary_name"].present? || website_url.present? %>
+    <div class="section-card">
+      <div class="section-label">◆ Contact Information</div>
+
+      <% if @rco_data["primary_name"].present? %>
+      <div style="padding:9px 0; border-bottom:1px solid rgba(27,58,107,0.07);">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:3px;">Primary Contact</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--ink);"><%= @rco_data["primary_name"] %></div>
+      </div>
+      <% end %>
+
+      <% if @rco_data["primary_email"].present? %>
+      <div style="padding:9px 0; border-bottom:1px solid rgba(27,58,107,0.07);">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:3px;">Email</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--blue);">
+          <a href="mailto:<%= @rco_data['primary_email'] %>" style="color:var(--blue); text-decoration:none;"><%= @rco_data["primary_email"] %></a>
+        </div>
+      </div>
+      <% end %>
+
+      <% if @rco_data["primary_phone"].present? %>
+      <div style="padding:9px 0; border-bottom:1px solid rgba(27,58,107,0.07);">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:3px;">Phone</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--ink);"><%= @rco_data["primary_phone"] %></div>
+      </div>
+      <% end %>
+
+      <% if website_url.present? %>
+      <div style="padding:9px 0;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); margin-bottom:3px;">Website</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:600;">
+          <a href="<%= website_url %>" target="_blank" rel="noopener" style="color:var(--blue-lt); text-decoration:none;"><%= @rco_data["website"].to_s.gsub(/^https?:\/\//, '').split('/').first %> ›</a>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <!-- Meeting location -->
+    <% if @rco_data["meeting_location"].present? %>
+    <div class="section-card">
+      <div class="section-label">◆ Meeting Location</div>
+      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink-mid); margin:0; line-height:1.6;"><%= @rco_data["meeting_location"] %></p>
+    </div>
+    <% end %>
+
+    <!-- PCPC link -->
+    <div class="section-card" style="background:var(--blue-vp); border-color:rgba(27,58,107,0.15);">
+      <div class="section-label" style="color:var(--blue-md);">◆ Official City Registry</div>
+      <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:var(--ink-mid); margin:0 0 10px; line-height:1.6;">The Philadelphia City Planning Commission maintains the official registry of all Registered Community Organizations. You can search meeting notices, check RCO boundaries, and find filing documents on the PCPC website.</p>
+      <a href="https://www.phila.gov/departments/philadelphia-city-planning-commission/rcos/" target="_blank" rel="noopener"
+         style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue); border:1px solid var(--blue-pl); padding:6px 12px; border-radius:4px; text-decoration:none;">
+        View PCPC RCO Directory ›
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ── SIDEBAR ── -->
+  <div class="rco-sidebar">
+
+    <!-- RCO facts -->
+    <div class="rco-card">
+      <div class="rco-card-title">◆ RCO Details</div>
+
+      <% if @rco_data["expiration_year"].present? %>
+      <div class="rco-row">
+        <div>
+          <div class="rco-row-lbl">Active Thru</div>
+          <div class="rco-row-val"><%= @rco_data["expiration_year"] %></div>
+        </div>
+      </div>
+      <% end %>
+
+      <% if @rco_data["address"].present? %>
+      <div class="rco-row">
+        <div>
+          <div class="rco-row-lbl">Address</div>
+          <div class="rco-row-val" style="font-size:11px;"><%= @rco_data["address"] %></div>
+        </div>
+      </div>
+      <% end %>
+
+      <div class="rco-row">
+        <div>
+          <div class="rco-row-lbl">City</div>
+          <div class="rco-row-val">Philadelphia, PA</div>
+        </div>
+      </div>
+
+      <div class="rco-row">
+        <div>
+          <div class="rco-row-lbl">Regulated By</div>
+          <div class="rco-row-val" style="font-size:11px;">Philadelphia Zoning Code § 14-303(12)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to engage -->
+    <div class="rco-card">
+      <div class="rco-card-title">◆ How to Engage</div>
+      <div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-mid); line-height:1.65;">
+        <p style="margin:0 0 10px;">Contact your RCO to be notified about zoning variance applications in your neighborhood. You can also submit written comments to the <strong>Zoning Board of Adjustment</strong> directly.</p>
+        <p style="margin:0;">
+          <a href="https://www.phila.gov/departments/zoning-board-of-adjustment/" target="_blank" rel="noopener" style="color:var(--blue-lt); font-weight:600; text-decoration:none;">Zoning Board of Adjustment ›</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- PCPC coordinator -->
+    <div class="rco-card">
+      <div class="rco-card-title">◆ PCPC RCO Coordinator</div>
+      <div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-mid); line-height:1.65;">
+        <p style="margin:0 0 8px;">For questions about RCO registration, meeting notices, or filing requirements:</p>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink-soft);">(215) 683-4615</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink-soft); margin-top:4px;">
+          <a href="https://www.phila.gov/departments/philadelphia-city-planning-commission/rcos/" target="_blank" rel="noopener" style="color:var(--blue-lt); text-decoration:none;">phila.gov/pcpc/rcos ›</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
