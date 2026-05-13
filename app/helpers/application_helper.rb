@@ -1,4 +1,41 @@
 module ApplicationHelper
+  # Renders a clickable phone number: <a href="tel:..." class="phone-link">label</a>
+  # number: digits only or formatted (non-digits stripped for href)
+  # label:  optional display string; defaults to number as passed
+  def phone_link(number, label = nil)
+    href    = "tel:#{number.to_s.gsub(/\D/, '')}"
+    display = label || number.to_s
+    link_to display, href, class: "phone-link"
+  end
+
+  # Renders a tappable address that opens an Apple / Google / Waze picker.
+  # address:      query string sent to all three map services
+  # display_text: visible text (defaults to address)
+  # Requires toggleMap(el, event) defined in the page's script block.
+  def address_link(address, display_text: nil)
+    enc        = CGI.escape(address.to_s)
+    apple_url  = "https://maps.apple.com/?address=#{enc}"
+    google_url = "https://www.google.com/maps/search/?api=1&query=#{enc}"
+    waze_url   = "https://www.waze.com/ul?q=#{enc}"
+    display    = display_text || address
+
+    content_tag(:span, class: "address-wrap", onclick: "toggleMap(this,event)") do
+      safe_join([
+        content_tag(:span, display, class: "address-link"),
+        content_tag(:span, class: "map-menu") {
+          safe_join([
+            link_to(safe_join([content_tag(:span, "📍", class: "map-menu-icon"), "Apple Maps"]),
+                    apple_url, target: "_blank", rel: "noopener"),
+            link_to(safe_join([content_tag(:span, "🌐", class: "map-menu-icon"), "Google Maps"]),
+                    google_url, target: "_blank", rel: "noopener"),
+            link_to(safe_join([content_tag(:span, "🚗", class: "map-menu-icon"), "Waze"]),
+                    waze_url, target: "_blank", rel: "noopener")
+          ])
+        }
+      ])
+    end
+  end
+
   OFFICIAL_SLUG_PATHS = {
     "F000479" => "/officials/usa/pa/jfetterman",
     "M001243" => "/officials/usa/pa/dmccormick",
