@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_12_235335) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pgcrypto"
 
   create_table "civic_bills", force: :cascade do |t|
     t.string "bill_stage", default: "introduced"
@@ -117,6 +118,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_000001) do
     t.index ["civic_representative_id", "cycle_year"], name: "idx_finance_summaries_on_rep_and_cycle", unique: true
     t.index ["civic_representative_id"], name: "index_official_finance_summaries_on_civic_representative_id"
     t.index ["fec_candidate_id"], name: "index_official_finance_summaries_on_fec_candidate_id"
+  end
+
+  create_table "on_this_day_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.integer "day", null: false
+    t.string "entry_type", null: false
+    t.boolean "is_featured", default: false, null: false
+    t.uuid "jurisdiction_id"
+    t.integer "month", null: false
+    t.string "neighborhood"
+    t.text "quote"
+    t.string "quote_attribution"
+    t.jsonb "sources", default: [], null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.string "verified", default: "confirmed", null: false
+    t.integer "year"
+    t.index ["jurisdiction_id"], name: "index_on_this_day_entries_on_jurisdiction_id"
+    t.index ["month", "day"], name: "index_on_this_day_entries_on_month_and_day"
   end
 
   create_table "people", force: :cascade do |t|
