@@ -1,0 +1,16 @@
+<% full_width = local_assigns.fetch(:full_width, false) %>
+<div class="otd-feature <%= 'otd-full-width' if full_width %>">
+  <div class="otd-date-flag">
+    <%= Date::MONTHNAMES[entry.month] %> <%= entry.day %><%= " · #{entry.year}" if entry.year %>
+  </div>
+  <div class="otd-title"><%= entry.title %></div>
+  <div class="otd-body"><%= entry.body %></div>
+  <% if entry.quote.present? %>
+    <div class="otd-quote">
+      "<%= entry.quote %>"
+      <% if entry.quote_attribution.present? %>
+        <span class="otd-quote-attribution">— <%= entry.quote_attribution %></span>
+      <% end %>
+    </div>
+  <% end %>
+</div>

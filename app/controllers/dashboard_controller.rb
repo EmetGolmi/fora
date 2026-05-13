@@ -34,6 +34,10 @@ class DashboardController < ApplicationController
     @jurisdiction = data[:jurisdiction]
     @today        = Date.today
 
+    otd_entries          = OnThisDayEntry.for_today
+    @on_this_day_event   = otd_entries.events.order(is_featured: :desc, year: :desc).first
+    @on_this_day_birth   = otd_entries.births.order(is_featured: :desc, year: :desc).first
+
     @rcos = begin
       lat = @jurisdiction[:lat]
       lng = @jurisdiction[:lng]
