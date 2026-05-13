@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   get  "about", to: "pages#about", as: :about
 
   root "dashboard#index"
-  get  "dashboard",                  to: "dashboard#show"
+  get  "dashboard",                  to: "dashboard#show",   as: :dashboard
+  get  "dashboard/clear",            to: "dashboard#clear",  as: :dashboard_clear
   post "dashboard/resolve",          to: "dashboard#resolve"
   get  "dashboard/status/:job_id",   to: "dashboard#status"
   get  "dashboard/result/:job_id",   to: "dashboard#result"
