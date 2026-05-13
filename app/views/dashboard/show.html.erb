@@ -1,517 +1,171 @@
-<% content_for(:title) { "My Government — FORA" } %>
+<% content_for(:title) { "#{@address} — FORA Philadelphia" } %>
 
 <% content_for :head do %>
-<style>
-  .rep-item:hover { background:#edf1fb; margin-left:-12px !important; margin-right:-12px !important; padding-left:12px !important; padding-right:12px !important; border-radius:6px; }
-  .bill-card:hover { background:#f4f7fc !important; }
-  .back-link:hover { color:#1b3a6b !important; }
-</style>
+  <%= stylesheet_link_tag "dashboard_home" %>
 <% end %>
 
-<%
-  party_labels = { "D" => "Democratic", "R" => "Republican", "W" => "Working Families", "I" => "Independent" }
-  city_offices = %w[mayor managing_director finance_director city_council city_council_at_large]
-  federal_offices = %w[federal president vice_president us_senate us_house]
-  state_offices = %w[governor lt_governor]
+<%= render "dashboard/sections/page_shortcuts" %>
 
-  classify_level = ->(official) {
-    jur_name = official.dig(:jurisdiction, :name).to_s
-    division_id = official.dig(:jurisdiction, :division_id).to_s
-    if city_offices.include?(jur_name)
-      "City"
-    elsif division_id.include?("sldu") || division_id.include?("sldl:")
-      "State"
-    elsif federal_offices.include?(jur_name) || division_id.include?("cd:")
-      "Federal"
-    elsif state_offices.include?(jur_name)
-      "State"
-    elsif %w[upper lower].include?(jur_name)
-      "State"
-    else
-      "Federal"
-    end
-  }
+<div class="dh-main">
 
-  format_party = ->(raw) {
-    return raw unless raw
-    party_labels[raw.strip] || raw
-  }
+  <%= render "dashboard/sections/address_block" %>
 
-  philly_titles = {
-    'Cherelle Parker'              => 'Mayor of Philadelphia',
-    'Kenyatta Johnson'             => 'Council President, District 2',
-    'Katherine Gilmore Richardson' => 'Majority Leader, At-Large',
-    'Isaiah Thomas'                => 'Majority Whip, At-Large',
-    'Kendra Brooks'                => 'Minority Leader, At-Large',
-    "Nicolas O'Rourke"             => 'Minority Whip, At-Large',
-    'Cindy Bass'                   => 'Deputy Majority Whip, District 8',
-    'Nina Ahmad'                   => 'Councilmember At-Large',
-    'Jim Harrity'                  => 'Councilmember At-Large',
-    'Rue Landau'                   => 'Councilmember At-Large',
-    'Mark Squilla'                 => 'Councilmember, District 1',
-    'Jamie Gauthier'               => 'Councilmember, District 3',
-    'Curtis Jones, Jr.'            => 'Councilmember, District 4',
-    'Jeffery Young, Jr.'           => 'Councilmember, District 5',
-    'Michael Driscoll'             => 'Councilmember, District 6',
-    'Quetcy Lozada'                => 'Councilmember, District 7',
-    'Anthony Phillips'             => 'Councilmember, District 9',
-    "Brian J. O'Neill"             => 'Councilmember, District 10',
-    'Adam Thiel'                   => 'Managing Director',
-    'Rob Dubow'                    => 'Director of Finance'
-  }.freeze
+  <%= render "dashboard/sections/on_this_day" %>
 
-  philly_slugs = {
-    'Cherelle Parker'              => 'cparker-philly-mayor',
-    'Kenyatta Johnson'             => 'kjohnson-phl-d2',
-    'Katherine Gilmore Richardson' => 'kgrichardson-phl-al',
-    'Isaiah Thomas'                => 'ithomas-phl-al',
-    'Kendra Brooks'                => 'kbrooks-phl-al',
-    "Nicolas O'Rourke"             => 'norourke-phl-al',
-    'Cindy Bass'                   => 'cbass-phl-d8',
-    'Nina Ahmad'                   => 'nahmad-phl-al',
-    'Jim Harrity'                  => 'jharrity-phl-al',
-    'Rue Landau'                   => 'rlandau-phl-al',
-    'Mark Squilla'                 => 'msquilla-phl-d1',
-    'Jamie Gauthier'               => 'jgauthier-phl-d3',
-    'Curtis Jones, Jr.'            => 'cjones-phl-d4',
-    'Jeffery Young, Jr.'           => 'jyoung-phl-d5',
-    'Michael Driscoll'             => 'mdriscoll-phl-d6',
-    'Quetcy Lozada'                => 'qlozada-phl-d7',
-    'Anthony Phillips'             => 'aphillips-phl-d9',
-    "Brian J. O'Neill"             => 'boneill-phl-d10',
-    'Adam Thiel'                   => 'athiel-philly-md',
-    'Rob Dubow'                    => 'rdubow-philly-finance'
-  }.freeze
+  <%= render "dashboard/sections/quick_reference" %>
 
-  format_office = ->(official) {
-    name     = official[:name].to_s.strip
-    office   = official[:office].to_s
-    district = official.dig(:jurisdiction, :district).to_s.strip
-    has_district = district.present? && district != "0"
+  <%= render "dashboard/sections/officials" %>
 
-    return philly_titles[name] if philly_titles.key?(name)
+  <%= render "dashboard/sections/rco" %>
 
-    if office.start_with?("U.S. Representative")
-      has_district ? "U.S. Representative, Congressional District #{district}" : office
-    elsif office.start_with?("State Senator")
-      has_district ? "State Senator, District #{district}" : office
-    elsif office.start_with?("State Representative")
-      has_district ? "State Representative, District #{district}" : office
-    elsif office == "City Council" || office.start_with?("City Council,")
-      has_district ? "City Council, District #{district}" : office
-    else
-      office
-    end
-  }
+  <%= render "dashboard/sections/legislation" %>
 
-  level_badge = ->(level) {
-    case level
-    when "Federal" then "background:#dde5f5; color:#1b3a6b; border:1px solid rgba(27,58,107,0.18);"
-    when "State"   then "background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);"
-    when "City"    then "background:#f8f0dc; color:#b8860b; border:1px solid rgba(184,134,11,0.25);"
-    else                "background:#f0f3f8; color:#5a6e8a; border:1px solid rgba(90,110,138,0.18);"
-    end
-  }
+  <%= render "dashboard/sections/pathways" %>
 
-  party_color = ->(raw) {
-    case (raw || "").strip
-    when "D" then "#3a6abf"
-    when "R" then "#8b2020"
-    else "#5a6e8a"
-    end
-  }
-%>
+  <%= render "dashboard/sections/care_for_your_home" %>
 
-<div style="max-width:900px; margin:0 auto; padding:36px 24px 60px;">
+  <%= render "dashboard/sections/transportation" %>
 
-  <% if @jurisdiction.nil? %>
-    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; padding:32px; text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; margin-bottom:12px;">Address Not Found</div>
-      <p style="font-family:'Nunito',sans-serif; font-size:15px; color:#5a6e8a;">Could not resolve: <strong style="color:#0e1a2e;"><%= @address %></strong></p>
-      <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; margin-top:8px;">Please check the address and try again.</p>
-    </div>
-  <% elsif @jurisdiction[:not_covered] %>
-    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; padding:36px 32px; text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:14px;">◆ Coming Soon</div>
-      <p style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 10px; line-height:1.3;"><%= @jurisdiction[:message] %></p>
-      <p style="font-family:'Nunito',sans-serif; font-size:13px; color:#8a9ab8; margin:0;">You searched for: <strong style="color:#5a6e8a;"><%= @address %></strong></p>
-    </div>
-  <% else %>
-
-    <!-- Address header -->
-    <div style="margin-bottom:28px;">
-      <h1 style="font-family:'Libre Baskerville',serif; font-size:24px; font-weight:700; color:#0e1a2e; line-height:1.2; margin-bottom:4px;">My Government — <%= @jurisdiction[:normalized_address] %></h1>
-      <span style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:#8a9ab8;"><%= @jurisdiction[:city] %>, <%= @jurisdiction[:state] %> <%= @jurisdiction[:zip] %></span>
-    </div>
-
-    <!-- Representatives card -->
-    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; margin-bottom:32px; overflow:hidden;">
-      <div style="padding:12px 20px 11px; border-bottom:1px solid rgba(27,58,107,0.09); display:flex; align-items:center; gap:8px;">
-        <div style="width:6px; height:6px; border-radius:50%; background:#1b3a6b; flex-shrink:0;"></div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#5a6e8a;">My Government</span>
-      </div>
-
-      <div style="padding:4px 20px 14px;">
-        <% if @jurisdiction[:officials].any? %>
-          <%
-            grouped = @jurisdiction[:officials].group_by { |o| classify_level.call(o) }
-            level_order = %w[Federal State City]
-          %>
-          <% level_order.each do |level| %>
-            <% next unless grouped[level]&.any? %>
-
-            <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.16em; text-transform:uppercase; color:#8a9ab8; padding:12px 0 4px; border-bottom:1px solid rgba(27,58,107,0.06); margin-bottom:2px;"><%= level %></div>
-
-            <% grouped[level].each do |official| %>
-              <% bioguide     = official.dig(:jurisdiction, :bioguide_id) %>
-              <% openstates_id = official.dig(:jurisdiction, :openstates_id) %>
-              <div class="rep-item" style="display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid rgba(27,58,107,0.06); cursor:pointer; transition:all 0.12s;">
-                <div style="flex:1; min-width:0;">
-                  <% if bioguide.present? %>
-                    <%= link_to official[:name], official_url_for(bioguide), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif openstates_id.present? %>
-                    <%= link_to official[:name], state_official_path(openstates_id), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif official.dig(:jurisdiction, :name) == 'governor' %>
-                    <%= link_to official[:name], pa_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif official.dig(:jurisdiction, :name) == 'mayor' %>
-                    <%= link_to official[:name], philly_mayor_path(lat: @jurisdiction[:lat], lng: @jurisdiction[:lng]), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif official.dig(:jurisdiction, :name) == 'lt_governor' %>
-                    <%= link_to official[:name], pa_lt_governor_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif official.dig(:jurisdiction, :name) == 'president' %>
-                    <%= link_to official[:name], us_president_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif official.dig(:jurisdiction, :name) == 'vice_president' %>
-                    <%= link_to official[:name], us_vp_path, style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                  <% elsif %w[managing_director finance_director city_council city_council_at_large].include?(official.dig(:jurisdiction, :name)) %>
-                    <% _philly_slug = philly_slugs[official[:name].to_s.strip] %>
-                    <% if _philly_slug %>
-                      <%= link_to official[:name], philly_person_path(slug: _philly_slug, lat: @jurisdiction[:lat], lng: @jurisdiction[:lng]), style: "font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; display:block; line-height:1.25;" %>
-                    <% else %>
-                      <span style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; display:block; line-height:1.25;"><%= official[:name] %></span>
-                    <% end %>
-                  <% else %>
-                    <span style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; display:block; line-height:1.25;"><%= official[:name] %></span>
-                  <% end %>
-                  <span style="font-family:'Nunito',sans-serif; font-size:11.5px; color:#5a6e8a;"><%= format_office.call(official) %></span>
-                </div>
-                <span style="font-family:'Nunito',sans-serif; font-size:11.5px; color:<%= party_color.call(official[:party].to_s) %>; font-weight:600; flex-shrink:0;"><%= format_party.call(official[:party]) %></span>
-                <span style="font-size:12px; color:#8a9ab8; margin-left:2px; flex-shrink:0;">›</span>
-              </div>
-            <% end %>
-          <% end %>
-        <% else %>
-          <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:20px 0; text-align:center;">No representatives found for this address.</p>
-        <% end %>
-      </div>
-    </div>
-
-  <% end %>
-
-  <!-- RCO Card — populated from PhillyRcoService via ResolvedAddress lat/lng -->
-  <% if @rcos.present? %>
-    <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:12px; margin-bottom:32px; overflow:hidden;">
-
-      <div style="padding:12px 20px 11px; border-bottom:1px solid rgba(27,58,107,0.09); display:flex; align-items:center; gap:8px;">
-        <div style="width:6px; height:6px; border-radius:50%; background:#b8860b; flex-shrink:0;"></div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#5a6e8a;">Your Neighborhood Organization</span>
-      </div>
-
-      <div style="padding:16px 20px 6px;">
-
-        <!-- What is an RCO explainer -->
-        <div style="background:#edf1fb; border:1px solid rgba(27,58,107,0.1); border-left:3px solid #1b3a6b; border-radius:6px; padding:10px 14px; margin-bottom:16px;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ What is an RCO?</div>
-          <p style="font-family:'Nunito',sans-serif; font-size:12.5px; color:#2c3e5a; line-height:1.6; margin:0;">Your <strong>Registered Community Organization</strong> is your neighborhood's legal seat at the table. When a developer files for a zoning variance on your block — a new bar, a shelter, a parking garage, a condo — they are required by law to notify your RCO and hold a community meeting before the city can approve it. Your RCO's letter goes into the official record. The Zoning Board reads it. Your councilmember reads it. You may have more than one — Philadelphia allows overlapping RCOs representing different constituencies at the same address. This is where neighborhood power is real and legally recognized.</p>
-        </div>
-
-        <% if @rcos.length > 1 %>
-          <div style="background:#fff3dc; border:0.5px solid rgba(184,134,11,0.25); border-radius:6px; padding:10px 14px; margin-bottom:12px;">
-            <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.14em; text-transform:uppercase; color:#b8860b; margin-bottom:5px;">◆ You have <%= @rcos.length %> RCOs</div>
-            <p style="font-family:'Nunito',sans-serif; font-size:12px; color:#2c3e5a; line-height:1.6; margin:0;">Philadelphia allows overlapping RCOs at the same address. A <strong>residential association</strong> represents people who live here. A <strong>Business Improvement District</strong> represents commercial property owners on the corridor. A <strong>ward committee</strong> represents the political precinct. All may be notified on the same zoning application — all letters go into the official record. FORA shows you every seat at the table.
-            <a href="https://openmaps.phila.gov/" target="_blank" rel="noopener" style="color:#1b3a6b; font-weight:600; white-space:nowrap;"> See boundary map ›</a></p>
-          </div>
-        <% end %>
-
-        <% @rcos.each do |rco| %>
-          <% next if rco["name"].blank? %>
-          <% _rco_initials = rco["name"].split.first(2).map { |w| w[0] }.join %>
-          <% _rco_slug = case rco["name"]
-             when /19th Ward/i                               then "19wc"
-             when /NSCAN|Norris Square/i                     then "nscan"
-             when /Bella Vista/i                             then "bvna"
-             when /Center City Residents|CCRA/i              then "ccra"
-             when /East Passyunk/i                           then "epcrossing"
-             when /Fishtown Neighbors Association/i          then "fishtown"
-             when /Fishtown Kensington.*Business|FKABID/i   then "fkabid"
-             when /West Girard Progress/i                    then "wgirard"
-             else rco["name"].downcase.gsub(/[^a-z0-9]+/, '-').gsub(/^-|-$/, '')
-             end %>
-          <div class="rep-item" style="display:flex; align-items:center; gap:9px; padding:10px 0; border-bottom:1px solid rgba(27,58,107,0.06);">
-            <div style="width:38px; height:38px; border-radius:8px; background:#f8f0dc; border:1px solid rgba(184,134,11,0.25); display:flex; align-items:center; justify-content:center; font-family:'Libre Baskerville',serif; font-size:11px; font-weight:700; color:#b8860b; flex-shrink:0;"><%= _rco_initials %></div>
-            <div style="flex:1; min-width:0;">
-              <a href="/usa/pa/philly/rco/<%= _rco_slug %>" style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#0e1a2e; text-decoration:none; line-height:1.25; display:block;"><%= rco["name"] %> <span style="color:#8a9ab8; font-weight:400;">›</span></a>
-              <% if rco["primary_email"].present? %>
-                <a href="mailto:<%= rco["primary_email"] %>" style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#3a6abf; text-decoration:none;"><%= rco["primary_email"] %></a>
-              <% elsif rco["primary_phone"].present? %>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#5a6e8a;"><%= rco["primary_phone"] %></span>
-              <% end %>
-            </div>
-            <% if rco["expiration_year"].present? %>
-              <div style="text-align:right; flex-shrink:0;">
-                <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:#e5f0e8; color:#155c2d; border:1px solid rgba(21,92,45,0.2);">✓ Active thru <%= rco["expiration_year"] %></span>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-
-        <!-- Action tiles -->
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:16px; margin-bottom:12px;">
-          <div style="background:#f4f7fc; border-radius:8px; padding:10px 12px;">
-            <div style="font-size:16px; margin-bottom:4px;">📅</div>
-            <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:4px;">Attend a meeting</div>
-            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;">RCO meetings are open to all residents. You don't need to be a member. Show up when a project near you is on the agenda.</div>
-          </div>
-          <div style="background:#f4f7fc; border-radius:8px; padding:10px 12px;">
-            <div style="font-size:16px; margin-bottom:4px;">📋</div>
-            <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:4px;">Submit testimony</div>
-            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;">Can't attend? Send written comments to your RCO chair before the meeting. Your words go into the official record sent to the Zoning Board.</div>
-          </div>
-          <div style="background:#f4f7fc; border-radius:8px; padding:10px 12px;">
-            <div style="font-size:16px; margin-bottom:4px;">🔍</div>
-            <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#1b3a6b; margin-bottom:4px;">Find active cases</div>
-            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; line-height:1.5;">Search the ZBA calendar for pending zoning applications in your neighborhood.</div>
-            <a href="https://phdcgis.phila.gov/portal/apps/sites/#/zoning" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:#3a6abf; text-decoration:none; display:block; margin-top:6px;">Search ZBA Calendar ›</a>
-          </div>
-        </div>
-
-        <div style="padding-top:4px; padding-bottom:10px;">
-          <span style="font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a9ab8;">Source: Philadelphia PCPC · ArcGIS</span>
-        </div>
-
-      </div>
-    </div>
-  <% end %>
-
-  <!-- Legislation Toggle -->
-  <%
-    jur_to_level_rail = ->(jur) {
-      case jur
-      when "federal"      then ["Federal", "#B22234"]
-      when "pennsylvania" then ["State",   "#003087"]
-      when "philadelphia" then ["City",    "#004C54"]
-      else                     ["Other",   "#8a9ab8"]
-      end
-    }
-
-    friendly_status = ->(raw) {
-      return [nil, false] if raw.blank?
-      s = raw.to_s.upcase.strip
-      if    s.include?("REFERRED") || s.include?("READ TWICE") then ["Under Review",   true]
-      elsif s == "IN COMMITTEE"                                 then ["In Committee",   true]
-      elsif s == "IN COUNCIL - FINAL PASSAGE"                   then ["Final Passage",  false]
-      elsif s == "IN COUNCIL"                                   then ["Before Council", true]
-      elsif s == "ADOPTED"                                      then ["Adopted",        false]
-      else  [raw.to_s.split.map(&:capitalize).join(" "), true]
-      end
-    }
-
-    status_color_for = ->(label) {
-      case label
-      when "Under Review"                   then "#b8860b"
-      when "In Committee", "Before Council" then "#185FA5"
-      when "Adopted"                        then "#2d6a2d"
-      when "Final Passage"                  then "#8b1a1a"
-      else                                       "#8a9ab8"
-      end
-    }
-
-    docket_bills_safe = @docket_bills || []
-    record_bills_safe = @record_bills || []
-    docket_total_safe = @docket_total || 0
-    record_total_safe = @record_total || 0
-  %>
-
-  <div style="margin-bottom:36px;">
-
-    <!-- Toggle header -->
-    <div style="border-left:2px solid #b8860b; padding-left:10px; margin-bottom:14px; display:flex; align-items:flex-end; justify-content:space-between; gap:12px;">
-      <div>
-        <h2 id="bills-title" style="font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; color:#1b3a6b; margin:0 0 4px; line-height:1.2;">The Docket</h2>
-        <a id="bills-toggle-link" href="javascript:void(0)" onclick="foraBillsToggle()" style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; color:#b8860b; text-decoration:none; cursor:pointer;">Check The Record →</a>
-      </div>
-      <span id="bills-count" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:#8a9ab8; white-space:nowrap; padding-bottom:2px;"><%= docket_total_safe %> upcoming actions</span>
-    </div>
-
-    <!-- ── Docket panel ── -->
-    <div id="docket-panel">
-      <div id="docket-feed">
-        <% if docket_bills_safe.any? %>
-          <% docket_bills_safe.each do |b| %>
-            <%= render "shared/bill_card", bill: b, bill_id: b.try(:id), show_action_badge: true %>
-          <% end %>
-        <% else %>
-          <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No active bills on the docket.</p>
-        <% end %>
-      </div>
-      <div id="docket-sentinel" style="height:1px;">
-        <% unless @docket_has_more %>
-          <% if docket_bills_safe.any? %>
-            <div style="text-align:center; padding:16px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:#8a9ab8;">★ All bills loaded</div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- ── Record panel ── -->
-    <div id="record-panel" style="display:none;">
-      <div id="record-feed">
-        <% if record_bills_safe.any? %>
-          <% record_bills_safe.each do |b| %>
-            <%= render "shared/bill_card", bill: b, bill_id: b.try(:id), show_action_badge: false %>
-          <% end %>
-        <% else %>
-          <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; padding:16px 0;">No bills in the record.</p>
-        <% end %>
-      </div>
-      <div id="record-sentinel" style="height:1px;">
-        <% unless @record_has_more %>
-          <% if record_bills_safe.any? %>
-            <div style="text-align:center; padding:16px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:#8a9ab8;">★ All bills loaded</div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
+  <div class="foot-note">
+    <strong>FORA · Free forever for citizens, governments, and civic organizations.</strong><br>
+    No login. No tracking. No ads. The information is out there. Here, we curate it — and as a community, we seek to perfect it, fully knowing there's no such thing as perfection. We do so in order to form a more perfect Union.
   </div>
 
 </div>
 
 <script>
-(function () {
-  // ── State ──────────────────────────────────────────────────────────────
-  var state = {
-    docket: { offset: 18, hasMore: <%= @docket_has_more %>, fetching: false, total: <%= docket_total_safe %> },
-    record: { offset: 18, hasMore: <%= @record_has_more %>, fetching: false, total: <%= record_total_safe %> }
-  };
-  var docketActive = true;
+// ── Map picker dropdown ──────────────────────────────────────────────────────
+function toggleMap(el, ev) {
+  ev.stopPropagation();
+  document.querySelectorAll('.address-wrap.open').forEach(function(o) {
+    if (o !== el) o.classList.remove('open');
+  });
+  el.classList.toggle('open');
+}
+document.addEventListener('click', function() {
+  document.querySelectorAll('.address-wrap.open').forEach(function(o) {
+    o.classList.remove('open');
+  });
+});
 
-  // ── Helpers ────────────────────────────────────────────────────────────
+// ── Section shortcut active state (IntersectionObserver) ────────────────────
+(function() {
+  var sections  = document.querySelectorAll('.section-anchor[id]');
+  var shortcuts = document.querySelectorAll('.ps-link');
+  if (!sections.length || !shortcuts.length || !('IntersectionObserver' in window)) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var id    = entry.target.id;
+      shortcuts.forEach(function(s) { s.classList.remove('active'); });
+      var match = document.querySelector('.ps-link[href="#' + id + '"]');
+      if (match) match.classList.add('active');
+    });
+  }, { rootMargin: '-100px 0px -60% 0px' });
+
+  sections.forEach(function(s) { observer.observe(s); });
+})();
+
+// ── Legislation Docket / Record toggle ─────────────────────────────────────
+(function() {
+  var docketActive = true;
+  var state = {
+    docket: { offset: <%= (@docket_bills || []).size %>, hasMore: <%= @docket_has_more %>, fetching: false, total: <%= @docket_total || 0 %> },
+    record: { offset: <%= (@record_bills || []).size %>, hasMore: <%= @record_has_more %>, fetching: false, total: <%= @record_total || 0 %> }
+  };
+
   function esc(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function friendlyStatus(raw) {
-    if (!raw) return [null, false];
-    var s = raw.toUpperCase().trim();
-    if (s.indexOf('REFERRED') !== -1 || s.indexOf('READ TWICE') !== -1) return ['Under Review',   true];
-    if (s === 'IN COMMITTEE')               return ['In Committee',   true];
-    if (s === 'IN COUNCIL - FINAL PASSAGE') return ['Final Passage',  false];
-    if (s === 'IN COUNCIL')                 return ['Before Council', true];
-    if (s === 'ADOPTED')                    return ['Adopted',        false];
-    var words = raw.split(' ');
-    return [words.map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' '), true];
+  function flagClass(jur) {
+    if (jur === 'federal')      return 'fed';
+    if (jur === 'pennsylvania') return 'state';
+    if (jur === 'philadelphia') return 'local';
+    return 'local';
+  }
+  function flagLabel(jur) {
+    if (jur === 'federal')      return 'Federal';
+    if (jur === 'pennsylvania') return 'State';
+    if (jur === 'philadelphia') return 'Local';
+    return jur || 'Local';
   }
 
-  function statusColor(label) {
-    if (label === 'Under Review')                                 return '#b8860b';
-    if (label === 'In Committee' || label === 'Before Council')   return '#185FA5';
-    if (label === 'Adopted')                                      return '#2d6a2d';
-    if (label === 'Final Passage')                                return '#8b1a1a';
-    return '#8a9ab8';
-  }
-
-  function jurInfo(jur) {
-    if (jur === 'federal')      return ['Federal', '#B22234'];
-    if (jur === 'pennsylvania') return ['State',   '#003087'];
-    if (jur === 'philadelphia') return ['City',    '#004C54'];
-    return ['Other', '#8a9ab8'];
-  }
-
-  function buildCard(b, view) {
-    var info    = jurInfo(b.jurisdiction);
-    var level   = info[0], rail = info[1];
-    var fs      = friendlyStatus(b.status);
-    var label   = fs[0], ongoing = fs[1];
-    var dateStr = b.status_date || '';
-    var metaHtml = '';
-
-    if (view === 'docket') {
-      if (label)   metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + statusColor(label) + ';margin-bottom:3px;">' + esc(label) + '</div>';
-      if (dateStr) metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:#b8860b;background:rgba(184,134,11,0.09);border:0.5px solid rgba(184,134,11,0.3);border-radius:3px;padding:1px 6px;display:inline-block;">Upcoming Action \xB7 ' + esc(dateStr) + '</div>';
-    } else {
-      if (label)   metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:' + statusColor(label) + ';margin-bottom:3px;">' + esc(label) + '</div>';
-      if (dateStr) metaHtml += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.06em;color:#8a9ab8;">' + (ongoing ? 'as of ' + esc(dateStr) : esc(dateStr)) + '</div>';
+  function buildRow(b, view) {
+    var fc = flagClass(b.jurisdiction);
+    var fl = flagLabel(b.jurisdiction);
+    var dateHtml = '';
+    if (b.status_date) {
+      dateHtml = view === 'docket'
+        ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--gilt);margin-top:3px;">Upcoming action \xB7 ' + esc(b.status_date) + '</div>'
+        : '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--ink-mut);margin-top:3px;">' + esc(b.status_date) + '</div>';
     }
-
-    var idPart = b.identifier ? ' \xB7 ' + esc(b.identifier) : '';
-    var mb     = view === 'docket' ? '6px' : '5px';
-    return '<a href="/bills/' + b.id + '" style="text-decoration:none;display:block;color:inherit;">' +
-      '<div class="bill-card" style="display:flex;align-items:stretch;background:white;border:0.5px solid #dde5f5;border-radius:8px;margin-bottom:8px;overflow:hidden;transition:background 0.12s;cursor:pointer;">' +
-        '<div style="width:8px;background:' + rail + ';flex-shrink:0;"></div>' +
-        '<div style="flex:1;padding:12px 14px;">' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:' + rail + ';margin-bottom:4px;">' + esc(level) + idPart + '</div>' +
-          '<div style="font-family:\'Nunito\',sans-serif;font-size:11px;font-weight:600;color:#1b3a6b;line-height:1.35;margin-bottom:' + mb + ';">' + (function(t){ return t.length > 216 ? esc(t.slice(0,216)) + '…' : esc(t); })(b.title || '') + '</div>' +
-          metaHtml +
+    var numHtml = b.identifier ? '<span class="leg-bill-number">' + esc(b.identifier) + '</span>' : '';
+    return '<a href="/bills/' + b.id + '" style="text-decoration:none;color:inherit;display:block;">' +
+      '<div class="leg-row">' +
+        '<div class="leg-relevance"><div class="leg-rel-score tier-low" style="color:var(--ink-mut);font-size:16px;">\u2014</div><div class="leg-rel-label">Rank</div></div>' +
+        '<div>' +
+          '<div class="leg-meta-row"><span class="bill-level-flag ' + fc + '">' + fl + '</span>' + numHtml + '</div>' +
+          '<div class="leg-title">' + esc((b.title || '').substring(0, 220)) + ((b.title || '').length > 220 ? '\u2026' : '') + '</div>' +
+          dateHtml +
         '</div>' +
+        '<div class="leg-action"><span class="leg-action-btn">Read bill \u2192</span></div>' +
       '</div>' +
     '</a>';
   }
 
-  // ── Load more ──────────────────────────────────────────────────────────
   function loadMore(view) {
     var s = state[view];
     if (s.fetching || !s.hasMore) return;
     s.fetching = true;
-
     var sentinel = document.getElementById(view + '-sentinel');
-    sentinel.innerHTML = '<div style="text-align:center;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#b8860b;">&#9670; Loading...</div>';
+    sentinel.innerHTML = '<div style="text-align:center;padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt);">&#9670; Loading...</div>';
 
     fetch('/dashboard/bills?view=' + view + '&offset=' + s.offset)
       .then(function(r) { return r.json(); })
       .then(function(data) {
         var feed = document.getElementById(view + '-feed');
-        data.bills.forEach(function(b) { feed.insertAdjacentHTML('beforeend', buildCard(b, view)); });
+        data.bills.forEach(function(b) { feed.insertAdjacentHTML('beforeend', buildRow(b, view)); });
         s.offset  += data.bills.length;
         s.hasMore  = data.has_more;
         s.fetching = false;
         sentinel.innerHTML = s.hasMore
           ? ''
-          : '<div style="text-align:center;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:#8a9ab8;">&#9733; All bills loaded</div>';
+          : '<div style="text-align:center;padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mut);">&#9733; All bills loaded</div>';
       })
       .catch(function() { s.fetching = false; sentinel.innerHTML = ''; });
   }
 
-  // ── IntersectionObserver ───────────────────────────────────────────────
   if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        loadMore(entry.target.id.replace('-sentinel', ''));
+    var scrollObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (!e.isIntersecting) return;
+        loadMore(e.target.id.replace('-sentinel', ''));
       });
     }, { rootMargin: '300px' });
     ['docket', 'record'].forEach(function(v) {
       var el = document.getElementById(v + '-sentinel');
-      if (el) observer.observe(el);
+      if (el) scrollObserver.observe(el);
     });
   }
 
-  // ── Toggle ─────────────────────────────────────────────────────────────
-  window.foraBillsToggle = function () {
+  window.foraLegToggle = function() {
     docketActive = !docketActive;
     var view = docketActive ? 'docket' : 'record';
-    document.getElementById('docket-panel').style.display    = docketActive ? 'block' : 'none';
-    document.getElementById('record-panel').style.display    = docketActive ? 'none'  : 'block';
-    document.getElementById('bills-title').textContent       = docketActive ? 'The Docket' : 'The Record';
-    document.getElementById('bills-toggle-link').textContent = docketActive ? 'Check The Record \u2192' : 'See what\'s on The Docket \u2192';
-    document.getElementById('bills-count').textContent       = docketActive
+    document.getElementById('leg-docket-panel').style.display = docketActive ? 'block' : 'none';
+    document.getElementById('leg-record-panel').style.display = docketActive ? 'none'  : 'block';
+    document.getElementById('leg-title').textContent          = docketActive ? 'The Docket' : 'The Record';
+    document.getElementById('leg-toggle-link').textContent    = docketActive ? 'Check The Record \u2192' : 'See what\u2019s on The Docket \u2192';
+    document.getElementById('leg-count').textContent          = docketActive
       ? state.docket.total + ' upcoming actions'
       : state.record.total + ' recent bills';
 
-    // Manually trigger if sentinel already in viewport
     var sentinel = document.getElementById(view + '-sentinel');
     if (sentinel) {
       var rect = sentinel.getBoundingClientRect();
       if (rect.top < window.innerHeight + 300) loadMore(view);
     }
   };
-}());
+})();
 </script>

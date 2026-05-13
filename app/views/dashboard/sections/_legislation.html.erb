@@ -1,0 +1,172 @@
+<%
+  # Helpers for the Priority Feed display
+
+  jur_flag_class = ->(jur) {
+    case jur.to_s
+    when "federal"      then "fed"
+    when "pennsylvania" then "state"
+    when "philadelphia" then "local"
+    else "local"
+    end
+  }
+
+  jur_label = ->(jur) {
+    case jur.to_s
+    when "federal"      then "Federal"
+    when "pennsylvania" then "State"
+    when "philadelphia" then "Local"
+    else jur.to_s.capitalize
+    end
+  }
+
+  bill_status_class = ->(stage) {
+    case stage.to_s
+    when "committee"                              then "in-committee"
+    when "became_law"                             then "passed"
+    when "introduced"                             then "intro"
+    when "failed", "withdrawn"                    then "recommit"
+    when "vetoed"                                 then "overturned"
+    when "passed_chamber", "resolving_differences",
+         "to_president"                           then "passed"
+    else "intro"
+    end
+  }
+
+  bill_status_label = ->(b) {
+    # Use human-readable status if present, otherwise derive from stage
+    return "In Committee"     if b.bill_stage == "committee"
+    return "Became Law"       if b.bill_stage == "became_law"
+    return "Passed Chamber"   if b.bill_stage == "passed_chamber"
+    return "Vetoed"           if b.bill_stage == "vetoed"
+    return "Failed"           if b.bill_stage == "failed"
+    return "Withdrawn"        if b.bill_stage == "withdrawn"
+    return "To President"     if b.bill_stage == "to_president"
+    b.status.to_s.split.map(&:capitalize).join(" ")
+  }
+
+  docket_bills_safe = @docket_bills || []
+  record_bills_safe = @record_bills || []
+  docket_total_safe = @docket_total || 0
+  record_total_safe = @record_total || 0
+%>
+
+<section class="section-anchor" id="legislation">
+  <div class="section-eyebrow">★ Active legislation · <%= @address %></div>
+  <div class="section-heading">What's moving through your government</div>
+  <div class="section-sub"><strong style="color:var(--fed);">Federal</strong> · <strong style="color:var(--state);">State</strong> · <strong style="color:var(--local);">Local</strong> — sorted by how directly they affect your address. <em>The closer to your block, the higher it ranks.</em></div>
+  <div class="gilt-rule"></div>
+
+  <!-- Toggle header -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px;border-left:2px solid var(--gilt);padding-left:10px;">
+    <div>
+      <h2 id="leg-title" style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--blue);margin:0 0 4px;line-height:1.2;">The Docket</h2>
+      <a id="leg-toggle-link" href="javascript:void(0)" onclick="foraLegToggle()" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--gilt);text-decoration:none;cursor:pointer;font-weight:700;">Check The Record →</a>
+    </div>
+    <span id="leg-count" style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);white-space:nowrap;padding-bottom:2px;"><%= docket_total_safe %> upcoming actions</span>
+  </div>
+
+  <!-- Docket panel -->
+  <div id="leg-docket-panel">
+    <div class="leg-card" id="docket-feed-container">
+      <div id="docket-feed">
+        <% if docket_bills_safe.any? %>
+          <% docket_bills_safe.each do |b| %>
+            <% flag  = jur_flag_class.call(b.jurisdiction) %>
+            <% label = jur_label.call(b.jurisdiction) %>
+            <% sc    = bill_status_class.call(b.bill_stage) %>
+            <% sl    = bill_status_label.call(b) %>
+            <%= link_to bill_path(b.id), style: "text-decoration:none;color:inherit;display:block;" do %>
+              <div class="leg-row">
+                <div class="leg-relevance">
+                  <div class="leg-rel-score tier-low" style="color:var(--ink-mut);font-size:16px;">—</div>
+                  <div class="leg-rel-label">Rank</div>
+                </div>
+                <div>
+                  <div class="leg-meta-row">
+                    <span class="bill-level-flag <%= flag %>"><%= label %></span>
+                    <% if b.identifier.present? %>
+                      <span class="leg-bill-number"><%= b.identifier %></span>
+                    <% end %>
+                    <span class="bill-status <%= sc %>"><%= sl %></span>
+                  </div>
+                  <div class="leg-title"><%= b.title.to_s.truncate(220) %></div>
+                  <% if b.status_date.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--gilt);margin-top:3px;">Upcoming action · <%= b.status_date.strftime('%b %-d, %Y') %></div>
+                  <% end %>
+                </div>
+                <div class="leg-action">
+                  <span class="leg-action-btn">Read bill →</span>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% else %>
+          <p style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink-soft);padding:20px 18px;">No active bills on the docket.</p>
+        <% end %>
+      </div>
+      <div id="docket-sentinel" style="height:1px;">
+        <% unless @docket_has_more %>
+          <% if docket_bills_safe.any? %>
+            <div style="text-align:center;padding:14px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mut);">★ All bills loaded</div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="leg-footer">
+        <div class="leg-footer-text">Relevance ranking comes in Phase 3. <em>See the Legislation tab for the full feed.</em></div>
+        <a href="/dashboard/bills" class="leg-footer-link">All bills →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Record panel -->
+  <div id="leg-record-panel" style="display:none;">
+    <div class="leg-card" id="record-feed-container">
+      <div id="record-feed">
+        <% if record_bills_safe.any? %>
+          <% record_bills_safe.each do |b| %>
+            <% flag  = jur_flag_class.call(b.jurisdiction) %>
+            <% label = jur_label.call(b.jurisdiction) %>
+            <% sc    = bill_status_class.call(b.bill_stage) %>
+            <% sl    = bill_status_label.call(b) %>
+            <%= link_to bill_path(b.id), style: "text-decoration:none;color:inherit;display:block;" do %>
+              <div class="leg-row">
+                <div class="leg-relevance">
+                  <div class="leg-rel-score tier-low" style="color:var(--ink-mut);font-size:16px;">—</div>
+                  <div class="leg-rel-label">Rank</div>
+                </div>
+                <div>
+                  <div class="leg-meta-row">
+                    <span class="bill-level-flag <%= flag %>"><%= label %></span>
+                    <% if b.identifier.present? %>
+                      <span class="leg-bill-number"><%= b.identifier %></span>
+                    <% end %>
+                    <span class="bill-status <%= sc %>"><%= sl %></span>
+                  </div>
+                  <div class="leg-title"><%= b.title.to_s.truncate(220) %></div>
+                  <% if b.status_date.present? %>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--ink-mut);margin-top:3px;"><%= b.status_date.strftime('%b %-d, %Y') %></div>
+                  <% end %>
+                </div>
+                <div class="leg-action">
+                  <span class="leg-action-btn">Read bill →</span>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% else %>
+          <p style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink-soft);padding:20px 18px;">No bills in the record.</p>
+        <% end %>
+      </div>
+      <div id="record-sentinel" style="height:1px;">
+        <% unless @record_has_more %>
+          <% if record_bills_safe.any? %>
+            <div style="text-align:center;padding:14px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mut);">★ All bills loaded</div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="leg-footer">
+        <div class="leg-footer-text">Past legislation, vetoes, and signed bills. <em>The full record is in the Legislation tab.</em></div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,76 @@
+<section class="section-anchor" id="rco">
+  <div class="section-eyebrow">★ Your neighborhood's legal seat at the table</div>
+  <div class="section-heading">Your Registered Community Organization</div>
+  <div class="section-sub">When something on your block is up for a zoning variance — a new bar, a shelter, a parking garage, a condo — your RCO's letter goes into the official record. The Zoning Board reads it. Your councilmember reads it.</div>
+  <div class="gilt-rule"></div>
+
+  <% if @rcos.present? %>
+    <% @rcos.each do |rco| %>
+      <% next if rco["name"].blank? %>
+      <%
+        rco_slug = case rco["name"]
+          when /19th Ward/i                                then "19wc"
+          when /NSCAN|Norris Square/i                      then "nscan"
+          when /Bella Vista/i                              then "bvna"
+          when /Center City Residents|CCRA/i               then "ccra"
+          when /East Passyunk/i                            then "epcrossing"
+          when /Fishtown Neighbors Association/i           then "fishtown"
+          when /Fishtown Kensington.*Business|FKABID/i    then "fkabid"
+          when /West Girard Progress/i                     then "wgirard"
+          else rco["name"].downcase.gsub(/[^a-z0-9]+/, '-').gsub(/^-|-$/, '')
+          end
+      %>
+      <div class="rco-card">
+        <div class="rco-flex">
+          <div>
+            <div class="rco-eyebrow">Active for <%= @address %></div>
+            <div class="rco-name"><%= rco["name"] %></div>
+            <% if rco["expiration_year"].present? %>
+              <div class="rco-tag">✓ Active RCO · expires <%= rco["expiration_year"] %></div>
+            <% end %>
+            <div class="rco-body">
+              <p>Your <strong>Registered Community Organization</strong> is your neighborhood's legal seat at the table. When a developer files for a zoning variance on your block — a new bar, a shelter, a parking garage, a condo — they are required by law to notify your RCO and hold a community meeting before the city can approve it. Your RCO's letter goes into the official record. <strong>The Zoning Board reads it. Your councilmember reads it.</strong></p>
+              <% if rco["primary_email"].present? || rco["primary_phone"].present? || rco["primary_name"].present? %>
+                <p style="margin-top:10px;">
+                  <% if rco["primary_name"].present? %>Contact: <strong><%= rco["primary_name"] %></strong>&ensp;<% end %>
+                  <% if rco["primary_email"].present? %><a href="mailto:<%= rco["primary_email"] %>" style="color:var(--blue-lt);"><%= rco["primary_email"] %></a>&ensp;<% end %>
+                  <% if rco["primary_phone"].present? %><%= phone_link(rco["primary_phone"].gsub(/\D/, ''), rco["primary_phone"]) %><% end %>
+                </p>
+              <% end %>
+            </div>
+            <% if rco["website"].present? %>
+              <p style="margin-top:12px;"><a href="<%= rco["website"] %>" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);font-weight:700;">Visit RCO website →</a></p>
+            <% end %>
+          </div>
+
+          <div class="rco-next">
+            <div class="rco-next-label">★ Get involved</div>
+            <div class="rco-next-when"><%= link_to "/usa/pa/philly/rco/#{rco_slug}", style: "color:var(--blue);" do %>View <%= rco["name"] %> page →<% end %></div>
+            <div class="rco-next-where" style="margin-top:8px;font-size:12px;color:var(--ink-soft);line-height:1.55;">
+              Attend a meeting, submit testimony, or read past zoning letters — all without registering with FORA. Your civic seat is already yours. Check your RCO's page for the current meeting schedule.
+            </div>
+            <div class="rco-next-cases" style="margin-top:12px;border-top:1px solid var(--rule);padding-top:10px;">
+              <a href="https://phdcgis.phila.gov/portal/apps/sites/#/zoning" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);font-weight:700;display:block;margin-bottom:6px;">Search ZBA Calendar →</a>
+              <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--ink-soft);">Check for pending zoning applications in your neighborhood on the ZBA calendar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @rcos.length > 1 %>
+      <div style="background:var(--gilt-pl);border:0.5px solid rgba(184,134,11,0.25);border-radius:6px;padding:12px 16px;margin-top:-16px;margin-bottom:24px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px;font-weight:700;">◆ You have <%= @rcos.size %> RCOs</div>
+        <p style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink);line-height:1.6;margin:0;">Philadelphia allows overlapping RCOs at the same address. All may be notified on the same zoning application — all letters go into the official record. FORA shows you every seat at the table.</p>
+      </div>
+    <% end %>
+
+  <% else %>
+    <div class="rco-card">
+      <div style="font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink-soft);line-height:1.65;">
+        <p>No Registered Community Organization found for this address. This may be outside Philadelphia, or your address may fall in a gap in the RCO map.</p>
+        <p style="margin-top:10px;"><a href="https://openmaps.phila.gov/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Check the RCO boundary map →</a></p>
+      </div>
+    </div>
+  <% end %>
+</section>

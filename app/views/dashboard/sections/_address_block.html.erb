@@ -1,0 +1,16 @@
+<div class="address-block">
+  <div class="ab-label">Showing for</div>
+  <div class="ab-text">
+    <div class="ab-line"><%= @address %></div>
+    <% if @jurisdiction %>
+      <div class="ab-sub">
+        <%= @jurisdiction[:neighborhood].presence || @jurisdiction[:city] %>
+        <% if @jurisdiction[:district].present? && @jurisdiction[:district].to_s != "0" %>
+          &nbsp;·&nbsp; District <%= @jurisdiction[:district] %>
+        <% end %>
+        &nbsp;·&nbsp; <%= @jurisdiction[:zip] %>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to "↻ Change address", dashboard_clear_path, class: "ab-change" %>
+</div>

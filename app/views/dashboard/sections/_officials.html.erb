@@ -1,0 +1,181 @@
+<%
+  # Officials come from the resolved address JSON — @jurisdiction[:officials]
+  # No photos in the resolved JSON; use initials avatars.
+
+  city_offices    = %w[mayor managing_director finance_director city_council city_council_at_large]
+  federal_offices = %w[federal president vice_president us_senate us_house]
+  state_offices   = %w[governor lt_governor]
+
+  classify_level = ->(o) {
+    jur_name    = o.dig(:jurisdiction, :name).to_s
+    division_id = o.dig(:jurisdiction, :division_id).to_s
+    if city_offices.include?(jur_name)
+      "City"
+    elsif federal_offices.include?(jur_name) || division_id.include?("cd:")
+      "Federal"
+    elsif state_offices.include?(jur_name) || division_id.include?("sldu") || division_id.include?("sldl:")
+      "State"
+    elsif %w[upper lower].include?(jur_name)
+      "State"
+    else
+      "Federal"
+    end
+  }
+
+  level_label = { "Federal" => "Federal", "State" => "Pennsylvania", "City" => "Philadelphia" }
+
+  format_office_short = ->(o) {
+    name     = o[:name].to_s.strip
+    office   = o[:office].to_s
+    district = o.dig(:jurisdiction, :district).to_s.strip
+    has_d    = district.present? && district != "0"
+    jur_name = o.dig(:jurisdiction, :name).to_s
+    case jur_name
+    when "president"       then "President"
+    when "vice_president"  then "Vice President"
+    when "governor"        then "Governor"
+    when "lt_governor"     then "Lt. Governor"
+    when "mayor"           then "Mayor"
+    when "managing_director"    then "Managing Dir."
+    when "finance_director"     then "Finance Dir."
+    when "us_senate"       then "U.S. Senate"
+    when "us_house"        then has_d ? "US House PA-#{district}" : "U.S. House"
+    when "city_council"    then has_d ? "Council D#{district}" : "City Council"
+    when "city_council_at_large" then "Council At-Large"
+    when "council_president"     then "Council Pres D#{district}"
+    when "majority_leader"       then "Maj. Leader"
+    when "majority_whip"         then "Maj. Whip"
+    when "minority_leader"       then "Min. Leader"
+    when "minority_whip"         then "Min. Whip"
+    when "deputy_majority_whip"  then "Dep. Maj. Whip"
+    else
+      if office.start_with?("State Senator")
+        has_d ? "PA Senate D-#{district}" : "PA Senate"
+      elsif office.start_with?("State Representative")
+        has_d ? "PA House D-#{district}" : "PA House"
+      else
+        office.split.first(4).join(" ")
+      end
+    end
+  }
+
+  philly_slugs = {
+    'Cherelle Parker'              => 'cparker-philly-mayor',
+    'Kenyatta Johnson'             => 'kjohnson-phl-d2',
+    'Katherine Gilmore Richardson' => 'kgrichardson-phl-al',
+    'Isaiah Thomas'                => 'ithomas-phl-al',
+    'Kendra Brooks'                => 'kbrooks-phl-al',
+    "Nicolas O'Rourke"             => 'norourke-phl-al',
+    'Cindy Bass'                   => 'cbass-phl-d8',
+    'Nina Ahmad'                   => 'nahmad-phl-al',
+    'Jim Harrity'                  => 'jharrity-phl-al',
+    'Rue Landau'                   => 'rlandau-phl-al',
+    'Mark Squilla'                 => 'msquilla-phl-d1',
+    'Jamie Gauthier'               => 'jgauthier-phl-d3',
+    'Curtis Jones, Jr.'            => 'cjones-phl-d4',
+    'Jeffery Young, Jr.'           => 'jyoung-phl-d5',
+    'Michael Driscoll'             => 'mdriscoll-phl-d6',
+    'Quetcy Lozada'                => 'qlozada-phl-d7',
+    'Anthony Phillips'             => 'aphillips-phl-d9',
+    "Brian J. O'Neill"             => 'boneill-phl-d10',
+    'Adam Thiel'                   => 'athiel-philly-md',
+    'Rob Dubow'                    => 'rdubow-philly-finance'
+  }.freeze
+
+  official_link_for = ->(o) {
+    bioguide    = o.dig(:jurisdiction, :bioguide_id)
+    openstates  = o.dig(:jurisdiction, :openstates_id)
+    jur_name    = o.dig(:jurisdiction, :name).to_s
+    name        = o[:name].to_s.strip
+    philly_slug = philly_slugs[name]
+
+    if bioguide.present?
+      official_url_for(bioguide)
+    elsif openstates.present?
+      state_official_path(openstates)
+    elsif jur_name == "governor"
+      pa_governor_path
+    elsif jur_name == "lt_governor"
+      pa_lt_governor_path
+    elsif jur_name == "president"
+      us_president_path
+    elsif jur_name == "vice_president"
+      us_vp_path
+    elsif jur_name == "mayor"
+      philly_mayor_path(lat: @jurisdiction[:lat], lng: @jurisdiction[:lng])
+    elsif philly_slug
+      philly_person_path(slug: philly_slug, lat: @jurisdiction[:lat], lng: @jurisdiction[:lng])
+    else
+      nil
+    end
+  }
+
+  party_dot_class = ->(raw) {
+    case raw.to_s.strip
+    when "D" then "party-d"
+    when "R" then "party-r"
+    when "W" then "party-wf"
+    else nil
+    end
+  }
+
+  initials_for = ->(name) {
+    parts = name.to_s.split
+    return "?" if parts.empty?
+    [parts.first[0], parts.last[0]].join.upcase
+  }
+
+  officials = (@jurisdiction[:officials] || [])
+  grouped   = officials.group_by { |o| classify_level.call(o) }
+  level_order = %w[Federal State City]
+%>
+
+<section class="section-anchor" id="officials">
+  <div class="section-eyebrow">★ Who speaks for this address</div>
+  <div class="section-heading">Your officials</div>
+  <div class="section-sub">Every elected official from your front door up to the White House. Tap any to see their full profile — sponsored bills, voting record, contact, social.</div>
+  <div class="gilt-rule"></div>
+
+  <div class="off-card">
+    <% level_order.each do |level| %>
+      <% next unless grouped[level]&.any? %>
+      <% level_officials = grouped[level] %>
+      <div class="off-level">
+        <div class="off-level-header">
+          <div class="off-level-name"><%= level_label[level] || level %></div>
+          <div class="off-level-count"><%= level_officials.size %> official<%= level_officials.size == 1 ? "" : "s" %></div>
+        </div>
+        <div class="off-grid">
+          <% level_officials.each do |o| %>
+            <% url  = official_link_for.call(o) %>
+            <% dot  = party_dot_class.call(o[:party]) %>
+            <% role = format_office_short.call(o) %>
+            <% ini  = initials_for.call(o[:name]) %>
+            <% if url %>
+              <%= link_to url, class: "off-tile" do %>
+                <div class="off-photo"><%= ini %></div>
+                <div class="off-name"><%= o[:name] %></div>
+                <div class="off-role">
+                  <% if dot %><span class="off-party-dot <%= dot %>"></span><% end %>
+                  <%= role %>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="off-tile">
+                <div class="off-photo"><%= ini %></div>
+                <div class="off-name"><%= o[:name] %></div>
+                <div class="off-role">
+                  <% if dot %><span class="off-party-dot <%= dot %>"></span><% end %>
+                  <%= role %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <% if officials.empty? %>
+      <p style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink-soft);padding:20px 0;text-align:center;">No officials found for this address.</p>
+    <% end %>
+  </div>
+</section>
