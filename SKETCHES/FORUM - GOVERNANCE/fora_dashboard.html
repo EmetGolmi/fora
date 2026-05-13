@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#edf1fb;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f0f3f8;--white:#ffffff;--rule:rgba(27,58,107,0.09);
+  --green:#155c2d;--green-p:#e5f0e8;
+  --scarlet:#8b1a1a;--scarlet-p:#faeaea;
+  --purple:#2d1a4a;--purple-p:#ede6f7;
+  --amber:#c47f00;
+  --field:#080f1e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;}
+
+/* ═══════════════════════════════════════════════════════
+   TOP NAV
+═══════════════════════════════════════════════════════ */
+.top-nav{height:52px;background:var(--blue);border-bottom:3px solid var(--gilt);display:flex;align-items:stretch;padding:0 20px;flex-shrink:0;z-index:100;}
+.tn-logo{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;letter-spacing:0.1em;display:flex;align-items:center;margin-right:28px;}
+.tn-logo span{color:var(--gilt-lt);}
+.tn-tabs{display:flex;align-items:stretch;gap:2px;}
+.tn-tab{display:flex;align-items:center;padding:0 15px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;transition:all 0.12s;white-space:nowrap;}
+.tn-tab:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.05);}
+.tn-tab.active{color:white;border-bottom-color:var(--gilt-lt);}
+.tn-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.tn-search{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);width:180px;outline:none;transition:all 0.15s;}
+.tn-search:focus{background:rgba(255,255,255,0.16);border-color:rgba(184,134,11,0.5);color:white;}
+.tn-search::placeholder{color:rgba(255,255,255,0.28);}
+.tn-notif{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all 0.12s;}
+.tn-notif:hover{background:rgba(255,255,255,0.15);}
+.tn-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--scarlet);border:1.5px solid var(--blue);}
+.tn-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--gilt);cursor:pointer;overflow:hidden;flex-shrink:0;}
+
+/* ═══════════════════════════════════════════════════════
+   BODY — SIDEBAR + MAIN
+═══════════════════════════════════════════════════════ */
+.body-wrap{display:flex;flex:1;overflow:hidden;}
+
+/* ═══════════════════════════════════════════════════════
+   LEFT SIDEBAR
+═══════════════════════════════════════════════════════ */
+.sidebar{width:200px;flex-shrink:0;background:white;border-right:1px solid var(--rule);display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--rule) transparent;}
+
+.sb-identity{padding:14px 14px 12px;border-bottom:1px solid var(--rule);cursor:pointer;transition:background 0.12s;}
+.sb-identity:hover{background:var(--blue-vp);}
+.sb-id-inner{display:flex;align-items:center;gap:10px;}
+.sb-id-text{}
+.sb-id-name{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.2;}
+.sb-id-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:3px;}
+.sb-id-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;background:var(--gilt-pl);color:var(--gilt);padding:2px 7px;border-radius:100px;margin-top:4px;border:1px solid rgba(184,134,11,0.3);}
+
+.sb-section{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);padding:10px 14px 4px;}
+.sb-link{display:flex;align-items:center;gap:9px;padding:7px 14px;color:var(--ink-soft);font-size:12px;cursor:pointer;transition:all 0.12s;border-right:2px solid transparent;}
+.sb-link:hover{background:var(--blue-vp);color:var(--blue);}
+.sb-link.active{color:var(--blue);background:var(--blue-pl);border-right-color:var(--blue);font-weight:600;}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--rule);flex-shrink:0;transition:background 0.12s;}
+.sb-link.active .sb-dot{background:var(--blue);}
+.sb-link:hover .sb-dot{background:var(--blue-lt);}
+.sb-badge{font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--scarlet-p);color:var(--scarlet);padding:1px 6px;border-radius:100px;margin-left:auto;}
+.sb-badge.blue{background:var(--blue-pl);color:var(--blue);}
+
+.sb-following{padding:4px 0 8px;}
+.sb-follow-item{display:flex;align-items:center;gap:8px;padding:5px 14px;font-size:11.5px;color:var(--ink-soft);cursor:pointer;transition:all 0.12s;}
+.sb-follow-item:hover{background:var(--blue-vp);color:var(--blue);}
+.sb-flag{width:18px;height:13px;border-radius:2px;flex-shrink:0;background:var(--rule);}
+.sb-follow-subsection{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);padding:5px 14px 2px;}
+.sb-follow-icon{width:18px;height:13px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:var(--ink-soft);}
+
+.sb-divider{height:1px;background:var(--rule);margin:4px 14px;}
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD MAIN
+═══════════════════════════════════════════════════════ */
+.dashboard{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+.dash-header{padding:14px 20px 12px;background:white;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.dh-title{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--ink);}
+.dh-sub{font-size:11.5px;color:var(--ink-soft);margin-left:2px;}
+.dh-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.dh-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid var(--rule);color:var(--ink-soft);background:var(--bg);cursor:pointer;transition:all 0.12s;}
+.dh-btn:hover{border-color:var(--blue-lt);color:var(--blue);background:var(--blue-vp);}
+.dh-btn.primary{background:var(--gilt);border-color:var(--gilt);color:white;}
+.dh-btn.primary:hover{opacity:0.88;}
+
+/* ── GRID CANVAS ──────────────────────────────────────── */
+.grid-canvas{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 20px 32px;scrollbar-width:thin;scrollbar-color:var(--rule) transparent;}
+
+/* ── GRID ─────────────────────────────────────────────── */
+.widget-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:60px;gap:10px;min-height:600px;position:relative;}
+
+/* ── WIDGET BASE ──────────────────────────────────────── */
+.widget{background:white;border:1px solid var(--rule);border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column;transition:box-shadow 0.15s,transform 0.15s;cursor:grab;}
+.widget:active{cursor:grabbing;}
+.widget.dragging{box-shadow:0 20px 48px rgba(0,0,0,0.15);transform:scale(1.02);z-index:200;opacity:0.95;}
+.widget.drag-over{border:2px dashed var(--blue-lt);background:var(--blue-vp);}
+.widget-handle{position:absolute;top:8px;right:8px;width:18px;height:18px;display:flex;align-items:center;justify-content:center;cursor:grab;opacity:0;transition:opacity 0.12s;z-index:10;}
+.widget:hover .widget-handle{opacity:0.5;}
+.widget-handle:hover{opacity:1!important;}
+.handle-dots{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.hd{width:3px;height:3px;border-radius:50%;background:var(--ink-mut);}
+
+/* ── WIDGET HEADER ────────────────────────────────────── */
+.wh{padding:9px 12px 8px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.wh-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.wh-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);flex:1;}
+.wh-action{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue-lt);cursor:pointer;padding:2px 6px;border-radius:4px;transition:background 0.1s;}
+.wh-action:hover{background:var(--blue-pl);}
+
+/* ── WIDGET BODY ──────────────────────────────────────── */
+.wb{flex:1;overflow:hidden;padding:10px 12px;}
+.wb.nop{padding:0;}
+
+/* ── FEED ITEMS ───────────────────────────────────────── */
+.feed-item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--rule);transition:background 0.1s;cursor:pointer;}
+.feed-item:last-child{border-bottom:none;padding-bottom:0;}
+.feed-item:hover{background:var(--blue-vp);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.fi-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.fi-content{}
+.fi-title{font-size:12px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:2px;}
+.fi-meta{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--ink-mut);letter-spacing:0.04em;}
+.fi-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:1px 6px;border-radius:100px;margin-right:5px;}
+
+/* ── REPS ─────────────────────────────────────────────── */
+.rep-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all 0.1s;}
+.rep-item:last-child{border-bottom:none;}
+.rep-item:hover{background:var(--blue-vp);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.rep-level{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:2px 7px;border-radius:100px;flex-shrink:0;white-space:nowrap;}
+.rep-name{font-size:12px;font-weight:600;color:var(--ink);}
+.rep-party{font-size:10.5px;color:var(--ink-soft);}
+.rep-arrow{margin-left:auto;font-size:10px;color:var(--ink-mut);}
+
+/* ── BILLS ────────────────────────────────────────────── */
+.bill-item{padding:7px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all 0.1s;}
+.bill-item:last-child{border-bottom:none;}
+.bill-item:hover{background:var(--blue-vp);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.bill-id{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--blue);letter-spacing:0.06em;margin-bottom:2px;}
+.bill-title{font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:3px;}
+.bill-status{display:inline-flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:2px 7px;border-radius:100px;}
+
+/* ── DELIBERATIONS ────────────────────────────────────── */
+.delib-item{padding:7px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all 0.1s;}
+.delib-item:last-child{border-bottom:none;}
+.delib-item:hover{background:var(--purple-p);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.delib-page{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--purple);letter-spacing:0.06em;margin-bottom:2px;}
+.delib-title{font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:4px;}
+.delib-meta{display:flex;align-items:center;gap:8px;}
+.delib-round{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:2px 7px;border-radius:100px;background:var(--purple-p);color:var(--purple);}
+.delib-timer{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--amber);}
+
+/* ── STATS ────────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.stat-cell{background:var(--bg);border-radius:8px;padding:10px 12px;text-align:center;}
+.stat-num{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:3px;}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);}
+.ring-progress{margin-top:10px;background:var(--bg);border-radius:8px;padding:10px 12px;}
+.rp-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+.rp-bar{height:6px;background:var(--rule);border-radius:3px;overflow:hidden;}
+.rp-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--blue-lt));transition:width 0.5s ease;}
+.rp-meta{display:flex;justify-content:space-between;margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+
+/* ── TRENDING ─────────────────────────────────────────── */
+.trending-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all 0.1s;}
+.trending-item:last-child{border-bottom:none;}
+.trending-item:hover{background:var(--green-p);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.tr-rank{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--rule);flex-shrink:0;width:20px;line-height:1.4;}
+.tr-content{}
+.tr-title{font-size:12px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:2px;}
+.tr-meta{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+
+/* ── JURISDICTIONS ────────────────────────────────────── */
+.juris-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.juris-item{background:var(--bg);border-radius:7px;padding:8px 10px;cursor:pointer;transition:all 0.12s;border:1px solid transparent;}
+.juris-item:hover{border-color:var(--blue-lt);background:var(--blue-vp);}
+.ji-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.ji-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-soft);}
+.ji-stat{display:flex;align-items:center;gap:4px;margin-top:4px;}
+.ji-pip{width:6px;height:6px;border-radius:50%;}
+
+/* ═══════════════════════════════════════════════════════
+   CIVIC MARKER — 3 SCALES
+═══════════════════════════════════════════════════════ */
+.marker-widget{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:0;padding:8px 12px;}
+
+/* Scale selector */
+.scale-selector{display:flex;gap:5px;margin-bottom:8px;}
+.scale-btn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-soft);transition:all 0.12s;font-weight:700;}
+.scale-btn:hover{border-color:var(--blue-lt);color:var(--blue);}
+.scale-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
+
+/* Scale: Small */
+.marker-scale-small{display:flex;align-items:center;gap:12px;width:100%;}
+.mss-info{}
+.mss-name{font-size:13px;font-weight:700;color:var(--ink);}
+.mss-occ{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gilt);margin-top:2px;}
+.mss-loc{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+.mss-tag{display:inline-block;margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;background:var(--gilt-pl);color:var(--gilt);padding:2px 8px;border-radius:100px;border:1px solid rgba(184,134,11,0.3);}
+
+/* Scale: Medium */
+.marker-scale-medium{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;}
+.msm-info{text-align:center;}
+.msm-name{font-size:13.5px;font-weight:700;color:var(--ink);}
+.msm-occ{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gilt);margin-top:2px;}
+.msm-loc{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+.msm-stats{display:flex;gap:12px;margin-top:6px;}
+.msm-stat{text-align:center;}
+.msm-stat-n{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--blue);line-height:1;}
+.msm-stat-l{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:1px;}
+
+/* Scale: Large */
+.marker-scale-large{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;}
+.msl-card{background:var(--blue);border-radius:10px;padding:16px;width:100%;text-align:center;}
+.msl-card-name{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:white;margin-bottom:2px;}
+.msl-card-occ{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gilt-lt);}
+.msl-card-loc{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
+.msl-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;}
+.msl-stat{background:white;border-radius:7px;padding:8px;text-align:center;}
+.msl-stat-n{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--blue);line-height:1;}
+.msl-stat-l{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;}
+.msl-motto{font-size:11px;color:var(--ink-soft);font-style:italic;text-align:center;padding:4px 8px;border-top:1px solid var(--rule);}
+
+/* ═══════════════════════════════════════════════════════
+   EDIT MODE
+═══════════════════════════════════════════════════════ */
+.edit-mode .widget{border:1.5px dashed var(--blue-lt);cursor:grab;}
+.edit-mode .widget-handle{opacity:0.6!important;}
+.edit-mode .widget:hover{border-color:var(--blue);background:var(--blue-vp);}
+
+.add-widget-zone{border:2px dashed var(--rule);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;grid-column:span 4;grid-row:span 2;}
+.add-widget-zone:hover{border-color:var(--blue-lt);background:var(--blue-vp);}
+.awz-inner{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-mut);}
+.awz-icon{font-size:22px;opacity:0.4;}
+.awz-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;}
+
+/* ── Widget Picker ────────────────────────────────────── */
+.widget-picker{position:fixed;top:0;right:0;bottom:0;width:280px;background:white;border-left:1px solid var(--rule);box-shadow:-8px 0 32px rgba(0,0,0,0.1);z-index:500;display:none;flex-direction:column;}
+.widget-picker.show{display:flex;}
+.wp-header{padding:16px 18px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;}
+.wp-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);}
+.wp-close{width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--rule);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-soft);}
+.wp-list{flex:1;overflow-y:auto;padding:12px;}
+.wp-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all 0.12s;}
+.wp-item:hover{border-color:var(--blue-lt);background:var(--blue-vp);}
+.wp-icon{width:32px;height:32px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.wp-info{}
+.wp-name{font-size:12.5px;font-weight:700;color:var(--ink);}
+.wp-desc{font-size:11px;color:var(--ink-soft);margin-top:1px;line-height:1.4;}
+
+/* ── Notification dot svg ─────────────────────────────── */
+.bell-icon{font-size:14px;color:rgba(255,255,255,0.7);}
+/* ── NOTES WIDGET ─────────────────────────────────────────── */
+.notes-body{display:flex;flex-direction:column;height:100%;padding:8px 12px 10px;}
+.notes-toolbar{display:flex;gap:4px;margin-bottom:7px;flex-shrink:0;}
+.nt-btn{width:22px;height:22px;border-radius:4px;border:1px solid var(--rule);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;transition:all 0.1s;color:var(--ink-soft);}
+.nt-btn:hover{background:var(--blue-pl);border-color:var(--blue-lt);color:var(--blue);}
+.nt-btn.active{background:var(--blue);color:white;border-color:var(--blue);}
+.nt-divider{width:1px;background:var(--rule);margin:0 2px;}
+.notes-area{flex:1;border:1px solid var(--rule);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--ink);line-height:1.65;resize:none;outline:none;font-family:'Nunito',sans-serif;background:white;transition:border-color 0.12s;min-height:80px;}
+.notes-area:focus{border-color:var(--blue-lt);}
+.notes-area::placeholder{color:var(--ink-mut);}
+.notes-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px;flex-shrink:0;}
+.nf-char{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+.nf-share{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue-lt);cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid var(--blue-pl);transition:all 0.12s;}
+.nf-share:hover{background:var(--blue-pl);}
+
+/* ── RESIZE HANDLES ──────────────────────────────────────── */
+.resize-handle{position:absolute;z-index:50;}
+.resize-handle.right{top:20%;right:-4px;width:8px;height:60%;cursor:ew-resize;border-radius:4px;}
+.resize-handle.bottom{bottom:-4px;left:20%;height:8px;width:60%;cursor:ns-resize;border-radius:4px;}
+.resize-handle.corner{bottom:-4px;right:-4px;width:12px;height:12px;cursor:nwse-resize;border-radius:3px;}
+.resize-handle::after{content:'';position:absolute;inset:2px;border-radius:inherit;background:var(--rule);transition:background 0.12s;}
+.widget:hover .resize-handle::after{background:var(--blue-lt);}
+.resize-handle:hover::after,.resize-handle:active::after{background:var(--blue);}
+/* ── FREEDOM & HAPPINESS WIDGET ───────────────────────────── */
+.fh-stack{display:flex;flex-direction:column;gap:6px;}
+.fh-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule);}
+.fh-row:last-child{border-bottom:none;}
+.fh-place{flex:1;}
+.fh-name{font-size:12px;font-weight:600;color:var(--ink);}
+.fh-level{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--ink-mut);}
+.fh-scores{display:flex;gap:10px;}
+.fh-score{text-align:center;}
+.fh-num{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;line-height:1;}
+.fh-lbl{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:1px;}
+.fh-bar-wrap{margin-top:3px;}
+.fh-bar{height:3px;border-radius:2px;background:var(--rule);overflow:hidden;}
+.fh-fill{height:100%;border-radius:2px;}
+
+/* ── REP ACTIVITY WIDGET ──────────────────────────────────── */
+.repact-item{padding:7px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all 0.1s;}
+.repact-item:last-child{border-bottom:none;}
+.repact-item:hover{background:var(--blue-vp);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.ra-header{display:flex;align-items:center;gap:8px;margin-bottom:3px;}
+.ra-name{font-size:12px;font-weight:600;color:var(--ink);}
+.ra-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:2px 6px;border-radius:100px;}
+.ra-action{font-size:11.5px;color:var(--ink-soft);line-height:1.4;}
+.ra-meta{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:3px;}
+
+/* ── DUEL ARENA WIDGET ────────────────────────────────────── */
+.duel-item{padding:8px;background:var(--bg);border-radius:8px;margin-bottom:8px;border:1px solid var(--rule);cursor:pointer;transition:all 0.12s;}
+.duel-item:last-child{margin-bottom:0;}
+.duel-item:hover{border-color:var(--purple);background:var(--purple-p);}
+.duel-proposition{font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:8px;}
+.duel-combatants{display:flex;align-items:center;gap:6px;}
+.duel-side{flex:1;text-align:center;}
+.duel-avatar{width:32px;height:32px;border-radius:50%;margin:0 auto 4px;overflow:hidden;border:2px solid var(--rule);}
+.duel-handle{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-soft);letter-spacing:0.04em;}
+.duel-score{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--purple);}
+.duel-vs{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--ink-mut);padding:0 4px;}
+.duel-meta{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+.duel-round{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:2px 7px;border-radius:100px;background:var(--purple-p);color:var(--purple);}
+.duel-timer{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--amber);}
+.duel-status-live{display:inline-flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--scarlet);}
+.duel-live-dot{width:6px;height:6px;border-radius:50%;background:var(--scarlet);animation:pulse-dot 1.4s ease-in-out infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+
+/* ── PEOPLE I FOLLOW WIDGET ───────────────────────────────── */
+.follow-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all 0.1s;}
+.follow-item:last-child{border-bottom:none;}
+.follow-item:hover{background:var(--blue-vp);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+.follow-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;overflow:hidden;border:1.5px solid var(--rule);}
+.follow-info{flex:1;}
+.follow-name{font-size:12px;font-weight:600;color:var(--ink);}
+.follow-role{font-size:10.5px;color:var(--ink-soft);}
+.follow-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 7px;border-radius:100px;}
+.follow-activity{font-size:10.5px;color:var(--ink-mut);margin-top:2px;}
+.living-divider{display:flex;align-items:center;gap:8px;padding:6px 0;margin:2px 0;}
+.ld-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);white-space:nowrap;}
+.ld-line{flex:1;height:1px;background:var(--rule);}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ TOP NAV ═══════════════════════════════ -->
+<nav class="top-nav">
+  <div class="tn-logo">F<span>O</span>RA</div>
+  <div class="tn-tabs">
+    <div class="tn-tab active">Dashboard</div>
+    <div class="tn-tab">Feed</div>
+    <div class="tn-tab">Legislation</div>
+    <div class="tn-tab">Issues</div>
+    <div class="tn-tab">Events</div>
+  </div>
+  <div class="tn-right">
+    <input class="tn-search" type="text" placeholder="Search FORA…">
+    <div class="tn-notif">
+      <span class="bell-icon">🔔</span>
+      <div class="tn-notif-dot"></div>
+    </div>
+    <div class="tn-avatar">
+      <svg width="30" height="30" viewBox="0 0 30 30">
+        <defs><clipPath id="cpnav"><circle cx="15" cy="15" r="13"/></clipPath></defs>
+        <circle cx="15" cy="15" r="14" fill="none" stroke="#b8860b" stroke-width="2"/>
+        <circle cx="15" cy="15" r="13" fill="#254f92" clip-path="url(#cpnav)"/>
+        <circle cx="15" cy="11" r="5" fill="#6a9ab8" clip-path="url(#cpnav)"/>
+        <ellipse cx="15" cy="23" rx="8" ry="5.5" fill="#6a9ab8" clip-path="url(#cpnav)"/>
+        <rect x="5" y="24" width="20" height="7" rx="3.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.2"/>
+        <text x="15" y="29" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="700" fill="#8b6914">PE</text>
+      </svg>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ BODY ════════════════════════════════== -->
+<div class="body-wrap">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+
+    <!-- Identity -->
+    <div class="sb-identity">
+      <div class="sb-id-inner">
+        <svg width="42" height="50" viewBox="0 0 42 50" style="flex-shrink:0;">
+          <defs>
+            <clipPath id="cpsb"><circle cx="21" cy="20" r="14"/></clipPath>
+            <radialGradient id="phsb" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient>
+          </defs>
+          <circle cx="21" cy="20" r="18" fill="none" stroke="rgba(184,134,11,0.2)" stroke-width="5"/>
+          <circle cx="21" cy="20" r="16" fill="none" stroke="#b8860b" stroke-width="1.8"/>
+          <circle cx="21" cy="20" r="14" fill="url(#phsb)" clip-path="url(#cpsb)"/>
+          <circle cx="21" cy="15" r="5.5" fill="#5a8aaa" clip-path="url(#cpsb)"/>
+          <ellipse cx="21" cy="30" rx="9" ry="6" fill="#5a8aaa" clip-path="url(#cpsb)"/>
+          <rect x="11" y="33" width="20" height="8" rx="4" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.3"/>
+          <text x="21" y="39.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="#8b6914">PE</text>
+          <rect x="5" y="44" width="32" height="5" rx="2" fill="#1a1a1a"/>
+          <rect x="11" y="44" width="9" height="5" fill="#c9a84c"/>
+          <rect x="20" y="44" width="7" height="5" fill="#1a1a1a"/>
+        </svg>
+        <div class="sb-id-text">
+          <div class="sb-id-name">Noah G.</div>
+          <div class="sb-id-sub">PE · Alexandria VA</div>
+          <div class="sb-id-tag">Gold ring · Verified</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My FORA -->
+    <div class="sb-section">My FORA</div>
+    <div class="sb-link active"><div class="sb-dot"></div>Dashboard</div>
+    <div class="sb-link"><div class="sb-dot"></div>My Profile</div>
+    <div class="sb-link"><div class="sb-dot"></div>Deliberations <span class="sb-badge">3</span></div>
+    <div class="sb-link"><div class="sb-dot"></div>Bills Tracking <span class="sb-badge blue">7</span></div>
+    <div class="sb-link"><div class="sb-dot"></div>Civic Stats</div>
+
+    <div class="sb-divider"></div>
+
+    <!-- Following -->
+    <div class="sb-section">Following</div>
+    <div class="sb-following">
+
+      <div class="sb-follow-subsection">Places</div>
+      <div class="sb-follow-item">
+        <div class="sb-flag" style="background:#b22234;"></div>
+        <span>United States</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-flag" style="background:#003366;"></div>
+        <span>Virginia</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-flag" style="background:#1b3a6b;"></div>
+        <span>Alexandria</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-flag" style="background:#239f40;"></div>
+        <span>Iran</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-flag" style="background:#000000;"></div>
+        <span>Gaza Strip</span>
+      </div>
+
+      <div class="sb-follow-subsection">Topics</div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon">◎</div>
+        <span>Women's Rights</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon">◎</div>
+        <span>Infrastructure</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon">◎</div>
+        <span>Labor &amp; Economy</span>
+      </div>
+
+      <div class="sb-follow-subsection">Organizations</div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon" style="color:#2d1a4a;">◈</div>
+        <span>Hamas</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon" style="color:#2d1a4a;">◈</div>
+        <span>Hezbollah</span>
+      </div>
+
+      <div class="sb-follow-subsection">People</div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon" style="color:var(--blue);">◉</div>
+        <span>Don Beyer</span>
+      </div>
+      <div class="sb-follow-item">
+        <div class="sb-follow-icon" style="color:var(--ink-soft);">◉</div>
+        <span>@civicengineer_dc</span>
+      </div>
+
+      <div class="sb-follow-item" style="color:var(--blue-lt);font-size:11px;padding-left:14px;padding-top:6px;cursor:pointer;">
+        + Follow
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section">Settings</div>
+    <div class="sb-link"><div class="sb-dot"></div>Account</div>
+    <div class="sb-link"><div class="sb-dot"></div>Notifications</div>
+    <div class="sb-link"><div class="sb-dot"></div>Privacy</div>
+
+  </aside>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div class="dashboard">
+
+    <!-- Header -->
+    <div class="dash-header">
+      <div>
+        <div class="dh-title">My Dashboard</div>
+        <div class="dh-sub" id="dash-sub">Tuesday, March 17, 2026 · Alexandria, VA</div>
+      </div>
+      <div class="dh-right">
+        <button class="dh-btn" id="edit-btn" onclick="toggleEdit()">✦ Customize</button>
+        <button class="dh-btn primary" id="add-btn" onclick="openPicker()" style="display:none;">+ Add widget</button>
+      </div>
+    </div>
+
+    <!-- Grid canvas -->
+    <div class="grid-canvas">
+      <div class="widget-grid" id="grid">
+
+        <!-- CIVIC FEED — col 1–5, row 1–4 -->
+        <div class="widget" id="w-feed" style="grid-column:1/6;grid-row:1/5;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--scarlet);"></div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-label">Civic Feed · Mid-Atlantic</div><div class="wh-action">Filter ↓</div></div>
+          <div class="wb">
+            <div class="feed-item">
+              <div class="fi-pip" style="background:var(--scarlet);"></div>
+              <div class="fi-content">
+                <div class="fi-title">Senate Appropriations votes on FY2027 infrastructure package — VA delegation split</div>
+                <div class="fi-meta"><span class="fi-tag" style="background:var(--scarlet-p);color:var(--scarlet);">Legislation</span>Reuters · 2h ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-pip" style="background:var(--blue);"></div>
+              <div class="fi-content">
+                <div class="fi-title">Alexandria City Council passes zoning amendment for Potomac Yard transit corridor</div>
+                <div class="fi-meta"><span class="fi-tag" style="background:var(--blue-pl);color:var(--blue);">Local</span>WaPo · 4h ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-pip" style="background:var(--gilt);"></div>
+              <div class="fi-content">
+                <div class="fi-title">NCEES releases updated FE exam competency standards for civil engineering track</div>
+                <div class="fi-meta"><span class="fi-tag" style="background:var(--gilt-pl);color:var(--gilt);">Your field</span>NCEES · 6h ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-pip" style="background:var(--green);"></div>
+              <div class="fi-content">
+                <div class="fi-title">Virginia SB 1204 — Public Works Procurement Reform passes committee 8–3</div>
+                <div class="fi-meta"><span class="fi-tag" style="background:var(--green-p);color:var(--green);">Virginia</span>Richmond TD · 8h ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-pip" style="background:var(--purple);"></div>
+              <div class="fi-content">
+                <div class="fi-title">FORA discourse: Amendment ratified on Gaza displacement modal — new methodology acknowledged</div>
+                <div class="fi-meta"><span class="fi-tag" style="background:var(--purple-p);color:var(--purple);">FORA</span>Platform · 10h ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY REPRESENTATIVES — col 6–9, row 1–3 -->
+        <div class="widget" id="w-reps" style="grid-column:6/10;grid-row:1/4;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--blue);"></div><div class="wh-label">My Representatives</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-action">Full stack →</div></div>
+          <div class="wb">
+            <div class="rep-item">
+              <div class="rep-level" style="background:var(--blue-pl);color:var(--blue);">US Sen</div>
+              <div><div class="rep-name">Tim Kaine</div><div class="rep-party">D · Virginia</div></div>
+              <div class="rep-arrow">›</div>
+            </div>
+            <div class="rep-item">
+              <div class="rep-level" style="background:var(--blue-pl);color:var(--blue);">US Sen</div>
+              <div><div class="rep-name">Mark Warner</div><div class="rep-party">D · Virginia</div></div>
+              <div class="rep-arrow">›</div>
+            </div>
+            <div class="rep-item">
+              <div class="rep-level" style="background:var(--blue-pl);color:var(--blue);">US Rep</div>
+              <div><div class="rep-name">Don Beyer</div><div class="rep-party">D · VA-08</div></div>
+              <div class="rep-arrow">›</div>
+            </div>
+            <div class="rep-item">
+              <div class="rep-level" style="background:var(--green-p);color:var(--green);">VA Sen</div>
+              <div><div class="rep-name">Adam Ebbin</div><div class="rep-party">D · SD-30</div></div>
+              <div class="rep-arrow">›</div>
+            </div>
+            <div class="rep-item">
+              <div class="rep-level" style="background:var(--green-p);color:var(--green);">VA Del</div>
+              <div><div class="rep-name">Charniele Herring</div><div class="rep-party">D · HD-046</div></div>
+              <div class="rep-arrow">›</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CIVIC MARKER — col 10–12, row 1–4 -->
+        <div class="widget" id="w-marker" style="grid-column:10/13;grid-row:1/5;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--gilt);"></div><div class="wh-label">Civic Identity</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div></div>
+          <div class="wb" style="padding:10px 10px 8px;">
+            <!-- Scale selector -->
+            <div style="display:flex;justify-content:center;gap:6px;margin-bottom:10px;">
+              <button class="scale-btn" onclick="setScale('small')" title="Compact">S</button>
+              <button class="scale-btn active" onclick="setScale('medium')" title="Standard">M</button>
+              <button class="scale-btn" onclick="setScale('large')" title="Full card">L</button>
+            </div>
+
+            <!-- SCALE: SMALL -->
+            <div id="scale-small" class="marker-scale-small" style="display:none;">
+              <svg width="48" height="58" viewBox="0 0 48 58" style="flex-shrink:0;">
+                <defs><clipPath id="cps"><circle cx="24" cy="22" r="16"/></clipPath><radialGradient id="phs" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient></defs>
+                <circle cx="24" cy="22" r="21" fill="none" stroke="rgba(184,134,11,0.18)" stroke-width="6"/>
+                <circle cx="24" cy="22" r="18" fill="none" stroke="#b8860b" stroke-width="2"/>
+                <circle cx="24" cy="22" r="16" fill="url(#phs)" clip-path="url(#cps)"/>
+                <circle cx="24" cy="16" r="6" fill="#5a8aaa" clip-path="url(#cps)"/>
+                <ellipse cx="24" cy="33" rx="10" ry="7" fill="#5a8aaa" clip-path="url(#cps)"/>
+                <rect x="12" y="37" width="24" height="9" rx="4.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.4"/>
+                <text x="24" y="43.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#8b6914">PE</text>
+                <rect x="6" y="49" width="36" height="7" rx="2.5" fill="#1a1a1a"/>
+                <rect x="12" y="49" width="10" height="7" fill="#c9a84c"/>
+                <rect x="22" y="49" width="8" height="7" fill="#1a1a1a"/>
+              </svg>
+              <div class="mss-info">
+                <div class="mss-name">Noah G.</div>
+                <div class="mss-occ">Licensed PE</div>
+                <div class="mss-loc">Alexandria VA · 35–44</div>
+                <div class="mss-tag">Gold ring · Verified</div>
+              </div>
+            </div>
+
+            <!-- SCALE: MEDIUM -->
+            <div id="scale-medium" class="marker-scale-medium">
+              <svg width="88" height="106" viewBox="0 0 88 106">
+                <defs><clipPath id="cpm"><circle cx="44" cy="40" r="30"/></clipPath><radialGradient id="phm" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient></defs>
+                <circle cx="44" cy="40" r="39" fill="none" stroke="rgba(184,134,11,0.18)" stroke-width="10"/>
+                <circle cx="44" cy="40" r="34" fill="none" stroke="rgba(184,134,11,0.3)" stroke-width="8"/>
+                <circle cx="44" cy="40" r="32" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+                <circle cx="44" cy="40" r="34" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+                <circle cx="44" cy="40" r="30" fill="url(#phm)" clip-path="url(#cpm)"/>
+                <circle cx="44" cy="31" r="11" fill="#5a8aaa" clip-path="url(#cpm)"/>
+                <ellipse cx="44" cy="58" rx="18" ry="12" fill="#5a8aaa" clip-path="url(#cpm)"/>
+                <rect x="26" y="70" width="36" height="14" rx="7" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.8"/>
+                <text x="44" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#8b6914">PE</text>
+                <rect x="12" y="88" width="64" height="10" rx="3.5" fill="#1a1a1a"/>
+                <rect x="22" y="88" width="18" height="10" fill="#c9a84c"/>
+                <rect x="40" y="88" width="13" height="10" fill="#1a1a1a"/>
+              </svg>
+              <div class="msm-info">
+                <div class="msm-name">Noah G.</div>
+                <div class="msm-occ">Licensed PE · Project Manager</div>
+                <div class="msm-loc">Alexandria, VA · 35–44 · U.S. Army Veteran</div>
+              </div>
+              <div class="msm-stats">
+                <div class="msm-stat"><div class="msm-stat-n" style="color:#9FE1CB;">247</div><div class="msm-stat-l">Contribs</div></div>
+                <div class="msm-stat"><div class="msm-stat-n" style="color:var(--gilt);">14</div><div class="msm-stat-l">Sectors</div></div>
+                <div class="msm-stat"><div class="msm-stat-n" style="color:#80b0ff;">3</div><div class="msm-stat-l">Amends</div></div>
+              </div>
+            </div>
+
+            <!-- SCALE: LARGE -->
+            <div id="scale-large" class="marker-scale-large" style="display:none;">
+              <svg width="110" height="130" viewBox="0 0 110 130">
+                <defs><clipPath id="cpl"><circle cx="55" cy="50" r="38"/></clipPath><radialGradient id="phl" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient></defs>
+                <circle cx="55" cy="50" r="52" fill="none" stroke="rgba(184,134,11,0.12)" stroke-width="12"/>
+                <circle cx="55" cy="50" r="46" fill="none" stroke="rgba(184,134,11,0.24)" stroke-width="10"/>
+                <circle cx="55" cy="50" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+                <circle cx="55" cy="50" r="44" fill="none" stroke="#e8c84a" stroke-width="2"/>
+                <circle cx="55" cy="50" r="38" fill="url(#phl)" clip-path="url(#cpl)"/>
+                <circle cx="55" cy="40" r="14" fill="#5a8aaa" clip-path="url(#cpl)"/>
+                <ellipse cx="55" cy="72" rx="22" ry="15" fill="#5a8aaa" clip-path="url(#cpl)"/>
+                <rect x="34" y="88" width="42" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="2"/>
+                <text x="55" y="98.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#8b6914">PE</text>
+                <rect x="15" y="108" width="80" height="11" rx="4" fill="#1a1a1a"/>
+                <rect x="27" y="108" width="22" height="11" fill="#c9a84c"/>
+                <rect x="49" y="108" width="15" height="11" fill="#1a1a1a"/>
+              </svg>
+              <div class="msl-card">
+                <div class="msl-card-name">Noah Golmi</div>
+                <div class="msl-card-occ">Licensed PE · Project Manager</div>
+                <div class="msl-card-loc">Alexandria, VA · 35–44 · Army Veteran · Founding Member 2026</div>
+              </div>
+              <div class="msl-stats">
+                <div class="msl-stat"><div class="msl-stat-n" style="color:#9FE1CB;">247</div><div class="msl-stat-l">Contribs</div></div>
+                <div class="msl-stat"><div class="msl-stat-n" style="color:var(--gilt);">14</div><div class="msl-stat-l">Sectors</div></div>
+                <div class="msl-stat"><div class="msl-stat-n" style="color:#80b0ff;">3</div><div class="msl-stat-l">Amends</div></div>
+              </div>
+              <div class="msl-motto">"Good cities don't happen by accident. They happen by argument."</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BILLS TRACKING — col 6–9, row 4–6 -->
+        <div class="widget" id="w-bills" style="grid-column:6/10;grid-row:4/7;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--blue-md);"></div><div class="wh-label">Bills I'm Tracking</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-action">All bills →</div></div>
+          <div class="wb">
+            <div class="bill-item" style="display:flex;align-items:flex-start;gap:8px;">
+              <span style="font-size:18px;line-height:1.5;flex-shrink:0;" title="United States">🇺🇸</span>
+              <div style="flex:1;">
+                <div class="bill-id">HR 4782 · 119th Congress</div>
+                <div class="bill-title">Infrastructure Investment and Reform Act</div>
+                <div class="bill-status" style="background:var(--amber);color:white;opacity:0.85;">● Committee</div>
+              </div>
+            </div>
+            <div class="bill-item" style="display:flex;align-items:flex-start;gap:8px;">
+              <span style="font-size:18px;line-height:1.5;flex-shrink:0;" title="United States · Virginia">🇺🇸</span>
+              <div style="flex:1;">
+                <div class="bill-id">SB 1204 · Virginia 2026</div>
+                <div class="bill-title">Public Works Procurement Reform Act</div>
+                <div class="bill-status" style="background:var(--green-p);color:var(--green);">● Passed Committee</div>
+              </div>
+            </div>
+            <div class="bill-item" style="display:flex;align-items:flex-start;gap:8px;">
+              <span style="font-size:18px;line-height:1.5;flex-shrink:0;" title="United States">🇺🇸</span>
+              <div style="flex:1;">
+                <div class="bill-id">HR 5091 · 119th Congress</div>
+                <div class="bill-title">Professional Engineering Licensure Reciprocity Act</div>
+                <div class="bill-status" style="background:var(--blue-pl);color:var(--blue);">● Introduced</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CIVIC FEED continued — col 1–5, row 5–7 -->
+        <!-- ACTIVE DELIBERATIONS — col 1–5, row 5–7 -->
+        <div class="widget" id="w-delib" style="grid-column:1/6;grid-row:5/8;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--purple);"></div><div class="wh-label">Active Deliberations</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-action">All →</div></div>
+          <div class="wb">
+            <div class="delib-item">
+              <div class="delib-page">Gaza Strip · Displacement modal</div>
+              <div class="delib-title">Amendment: Update UNRWA displacement figure to reflect March 2026 count</div>
+              <div class="delib-meta"><div class="delib-round">Round 2 of 3</div><div class="delib-timer">⏱ 41h remaining</div></div>
+            </div>
+            <div class="delib-item">
+              <div class="delib-page">Iran · GDP modal</div>
+              <div class="delib-title">Amendment: Add IMF 2025 shadow economy estimate to context note</div>
+              <div class="delib-meta"><div class="delib-round">Vote open</div><div class="delib-timer" style="color:var(--scarlet);">⏱ 6h remaining</div></div>
+            </div>
+            <div class="delib-item">
+              <div class="delib-page">HR 4782 · Stats bar</div>
+              <div class="delib-title">Amendment: Correct $42B figure — Congressional Budget Office revised to $38.7B</div>
+              <div class="delib-meta"><div class="delib-round">Round 1 of 3</div><div class="delib-timer">⏱ 68h remaining</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CIVIC STATS — col 6–9, row 7–9 -->
+        <div class="widget" id="w-stats" style="grid-column:6/10;grid-row:7/10;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--gilt);"></div><div class="wh-label">My Civic Stats</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div></div>
+          <div class="wb">
+            <div class="stats-grid">
+              <div class="stat-cell"><div class="stat-num" style="color:#9FE1CB;">247</div><div class="stat-label">Contributions</div></div>
+              <div class="stat-cell"><div class="stat-num" style="color:var(--gilt);">14</div><div class="stat-label">Sectors engaged</div></div>
+              <div class="stat-cell"><div class="stat-num" style="color:#80b0ff;">3</div><div class="stat-label">Amendments</div></div>
+              <div class="stat-cell"><div class="stat-num" style="color:var(--green);">89%</div><div class="stat-label">Signal quality</div></div>
+            </div>
+            <div class="ring-progress">
+              <div class="rp-label">Engineering sector ring · Progress to Silver</div>
+              <div class="rp-bar"><div class="rp-fill" style="width:68%;"></div></div>
+              <div class="rp-meta"><span>68% · 147 pts</span><span>Need 2nd sector</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRENDING — col 1–5, row 8–10 -->
+        <div class="widget" id="w-trending" style="grid-column:1/6;grid-row:8/11;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--green);"></div><div class="wh-label">Trending in FORA</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-action">See all →</div></div>
+          <div class="wb">
+            <div class="trending-item">
+              <div class="tr-rank">1</div>
+              <div class="tr-content"><div class="tr-title">Gaza · Ceasefire modal — 847 new contributions this week</div><div class="tr-meta">Discourse · 847 contribs · +312 this week</div></div>
+            </div>
+            <div class="trending-item">
+              <div class="tr-rank">2</div>
+              <div class="tr-content"><div class="tr-title">HR 4782 Infrastructure Bill — amendment vote closes in 6 hours</div><div class="tr-meta">Legislation · 312 engaged · Vote open</div></div>
+            </div>
+            <div class="trending-item">
+              <div class="tr-rank">3</div>
+              <div class="tr-content"><div class="tr-title">Iran · Freedom score modal — new Freedom House data disputed</div><div class="tr-meta">Discourse · 204 contribs · Round 2</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY JURISDICTIONS — col 6–12, row 10–12 -->
+        <div class="widget" id="w-juris" style="grid-column:6/13;grid-row:10/12;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--ink-soft);"></div><div class="wh-label">My Jurisdictions</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-action">Follow more →</div></div>
+          <div class="wb">
+            <div class="juris-grid">
+              <div class="juris-item">
+                <div class="ji-name">Alexandria, VA</div>
+                <div class="ji-meta">City · Your home</div>
+                <div class="ji-stat"><div class="ji-pip" style="background:var(--green);"></div><span style="font-size:10px;color:var(--ink-soft);">Freedom 72 · Happiness 68</span></div>
+              </div>
+              <div class="juris-item">
+                <div class="ji-name">Virginia</div>
+                <div class="ji-meta">State · Following</div>
+                <div class="ji-stat"><div class="ji-pip" style="background:var(--green);"></div><span style="font-size:10px;color:var(--ink-soft);">Freedom 74 · Happiness 71</span></div>
+              </div>
+              <div class="juris-item">
+                <div class="ji-name">Iran</div>
+                <div class="ji-meta">Jurisdiction · Following</div>
+                <div class="ji-stat"><div class="ji-pip" style="background:var(--scarlet);"></div><span style="font-size:10px;color:var(--ink-soft);">Freedom 14 · War ticker active</span></div>
+              </div>
+              <div class="juris-item">
+                <div class="ji-name">Gaza Strip</div>
+                <div class="ji-meta">Jurisdiction · Following</div>
+                <div class="ji-stat"><div class="ji-pip" style="background:var(--scarlet);"></div><span style="font-size:10px;color:var(--ink-soft);">Freedom 15 · Crisis active</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MARKER LARGE filler row -->
+        <div class="widget" id="w-marker-bottom" style="grid-column:10/13;grid-row:5/10;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--amber);"></div><div class="wh-label">Avatar Card</div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div><div class="wh-action">Edit card →</div></div>
+          <div class="wb" style="display:flex;align-items:center;justify-content:center;padding:14px 10px;">
+            <!-- Mini franchise card -->
+            <div style="width:196px;border-radius:10px;overflow:hidden;background:#0a1628;border:2px solid #1b3a6b;font-family:'Nunito',sans-serif;">
+              <div style="background:linear-gradient(135deg,#1b3a6b 0%,#0d1f3d 100%);height:130px;position:relative;overflow:hidden;">
+                <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,0.012) 14px,rgba(255,255,255,0.012) 15px);"></div>
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#b8860b,#d4a832,#b8860b);"></div>
+                <div style="position:absolute;top:8px;left:10px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(184,134,11,0.7);">Founding Member · 2026</div>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                  <svg width="80" height="96" viewBox="0 0 80 96">
+                    <defs><clipPath id="cpfc"><circle cx="40" cy="37" r="26"/></clipPath><radialGradient id="phfc" cx="40%" cy="32%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#6a9ab8"/></radialGradient></defs>
+                    <circle cx="40" cy="37" r="33" fill="none" stroke="rgba(184,134,11,0.18)" stroke-width="8"/>
+                    <circle cx="40" cy="37" r="29" fill="none" stroke="#b8860b" stroke-width="2"/>
+                    <circle cx="40" cy="37" r="31" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+                    <circle cx="40" cy="37" r="26" fill="url(#phfc)" clip-path="url(#cpfc)"/>
+                    <circle cx="40" cy="30" r="9" fill="#5a8aaa" clip-path="url(#cpfc)"/>
+                    <ellipse cx="40" cy="51" rx="14" ry="10" fill="#5a8aaa" clip-path="url(#cpfc)"/>
+                    <rect x="23" y="62" width="34" height="12" rx="6" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+                    <text x="40" y="71" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#8b6914">PE</text>
+                    <rect x="10" y="80" width="60" height="9" rx="3" fill="#1a1a1a"/>
+                    <rect x="18" y="80" width="14" height="9" fill="#c9a84c"/>
+                    <rect x="32" y="80" width="11" height="9" fill="#1a1a1a"/>
+                  </svg>
+                </div>
+              </div>
+              <div style="padding:8px 10px 10px;">
+                <div style="font-family:'Libre Baskerville',serif;font-size:11px;font-weight:700;color:white;margin-bottom:2px;">Licensed Engineer</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.08em;color:#d4a832;margin-bottom:8px;">PE · Project Manager</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+                  <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#9FE1CB;line-height:1;">247</div><div style="font-family:'JetBrains Mono',monospace;font-size:6px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.3);margin-top:1px;">Contribs</div></div>
+                  <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#d4a832;line-height:1;">14</div><div style="font-family:'JetBrains Mono',monospace;font-size:6px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.3);margin-top:1px;">Sectors</div></div>
+                  <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#80b0ff;line-height:1;">3</div><div style="font-family:'JetBrains Mono',monospace;font-size:6px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.3);margin-top:1px;">Amends</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTES — col 1–4, row 11–14 -->
+        <div class="widget" id="w-notes" style="grid-column:1/5;grid-row:11/15;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="resize-handle right"></div>
+          <div class="resize-handle bottom"></div>
+          <div class="resize-handle corner"></div>
+          <div class="wh"><div class="wh-dot" style="background:#5a6e8a;"></div><div class="wh-label">Notes</div><div class="wh-action">New note +</div></div>
+          <div class="notes-body">
+            <div class="notes-toolbar">
+              <div class="nt-btn active" title="Bold"><b>B</b></div>
+              <div class="nt-btn" title="Italic"><i>I</i></div>
+              <div class="nt-btn" title="Underline"><u>U</u></div>
+              <div class="nt-divider"></div>
+              <div class="nt-btn" title="Bullet list">≡</div>
+              <div class="nt-btn" title="Link">⌁</div>
+              <div class="nt-divider"></div>
+              <div class="nt-btn" title="Tag page">@</div>
+              <div class="nt-btn" title="Cite source">&ldquo;</div>
+            </div>
+            <textarea class="notes-area" id="notes-text" placeholder="Start typing… use @ to link a page, use &#34; to cite a source.">Gaza displacement figures — cross-referencing UNRWA vs IOM methodology
+
+Key difference: UNRWA counts registered refugees displaced from their homes. IOM counts people currently sheltering outside their pre-Oct 7 residence. Overlap ~80% but IOM figure is ~140K higher.
+
+Amendment proposal drafted — need to cite both methodologies rather than picking one.
+
+See: Iran freedom score discrepancy as parallel case.</textarea>
+            <div class="notes-footer">
+              <div class="nf-char" id="notes-char">0 chars</div>
+              <div class="nf-share" onclick="shareNote()">Share with community ↗</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end widget-grid -->
+
+        <!-- FREEDOM & HAPPINESS — col 5–8, row 11–13 -->
+        <div class="widget" id="w-fh" style="grid-column:5/9;grid-row:11/14;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--green);"></div><div class="wh-label">Freedom &amp; Happiness</div><div class="wh-action">Methodology →</div></div>
+          <div class="wb">
+            <div class="fh-stack">
+              <div class="fh-row">
+                <div class="fh-place"><div class="fh-name">Alexandria, VA</div><div class="fh-level">City · Your home</div></div>
+                <div class="fh-scores">
+                  <div class="fh-score"><div class="fh-num" style="color:var(--green);">72</div><div class="fh-lbl">Freedom</div></div>
+                  <div class="fh-score"><div class="fh-num" style="color:#4a90d9;">68</div><div class="fh-lbl">Happiness</div></div>
+                </div>
+              </div>
+              <div class="fh-row">
+                <div class="fh-place"><div class="fh-name">Virginia</div><div class="fh-level">State</div></div>
+                <div class="fh-scores">
+                  <div class="fh-score"><div class="fh-num" style="color:var(--green);">74</div><div class="fh-lbl">Freedom</div></div>
+                  <div class="fh-score"><div class="fh-num" style="color:#4a90d9;">71</div><div class="fh-lbl">Happiness</div></div>
+                </div>
+              </div>
+              <div class="fh-row">
+                <div class="fh-place"><div class="fh-name">United States</div><div class="fh-level">Federal</div></div>
+                <div class="fh-scores">
+                  <div class="fh-score"><div class="fh-num" style="color:var(--amber);">83</div><div class="fh-lbl">Freedom</div></div>
+                  <div class="fh-score"><div class="fh-num" style="color:#4a90d9;">68</div><div class="fh-lbl">Happiness</div></div>
+                </div>
+              </div>
+              <div class="fh-row">
+                <div class="fh-place"><div class="fh-name">Iran</div><div class="fh-level">Following</div></div>
+                <div class="fh-scores">
+                  <div class="fh-score"><div class="fh-num" style="color:var(--scarlet);">14</div><div class="fh-lbl">Freedom</div></div>
+                  <div class="fh-score"><div class="fh-num" style="color:var(--ink-mut);">—</div><div class="fh-lbl">Happiness</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REPRESENTATIVE ACTIVITY — col 9–13, row 11–14 -->
+        <div class="widget" id="w-repact" style="grid-column:9/13;grid-row:11/14;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--blue-md);"></div><div class="wh-label">Representative Activity</div><div class="wh-action">All activity →</div></div>
+          <div class="wb">
+            <div class="repact-item">
+              <div class="ra-header">
+                <div class="ra-name">Don Beyer</div>
+                <div class="ra-type" style="background:var(--scarlet-p);color:var(--scarlet);">Voted</div>
+              </div>
+              <div class="ra-action">Voted <strong>Yea</strong> on HR 4782 — Infrastructure Investment and Reform Act</div>
+              <div class="ra-meta">US Rep VA-08 · 3h ago</div>
+            </div>
+            <div class="repact-item">
+              <div class="ra-header">
+                <div class="ra-name">Tim Kaine</div>
+                <div class="ra-type" style="background:var(--blue-pl);color:var(--blue);">Sponsored</div>
+              </div>
+              <div class="ra-action">Co-sponsored SB 441 — Clean Energy Infrastructure Bonds Act</div>
+              <div class="ra-meta">US Senator VA · 1d ago</div>
+            </div>
+            <div class="repact-item">
+              <div class="ra-header">
+                <div class="ra-name">Adam Ebbin</div>
+                <div class="ra-type" style="background:var(--green-p);color:var(--green);">Statement</div>
+              </div>
+              <div class="ra-action">Released floor statement on SB 1204 Public Works procurement reform</div>
+              <div class="ra-meta">VA Senator SD-30 · 2d ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DUEL ARENA — col 1–5, row 15–18 -->
+        <div class="widget" id="w-duel" style="grid-column:1/6;grid-row:15/19;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--purple);"></div><div class="wh-label">The Duel Arena</div><div class="wh-action">All duels →</div></div>
+          <div class="wb">
+            <!-- Active duel -->
+            <div class="duel-item">
+              <div class="duel-proposition">"The displacement figure on FORA's Gaza page should cite IOM methodology, not UNRWA"</div>
+              <div class="duel-combatants">
+                <div class="duel-side">
+                  <div class="duel-avatar">
+                    <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#254f92"/><circle cx="16" cy="12" r="5" fill="#6a9ab8"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#6a9ab8"/></svg>
+                  </div>
+                  <div class="duel-handle">@noahg_pe</div>
+                  <div class="duel-score">3</div>
+                </div>
+                <div class="duel-vs">vs</div>
+                <div class="duel-side">
+                  <div class="duel-avatar">
+                    <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#5c3800"/><circle cx="16" cy="12" r="5" fill="#a07850"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#a07850"/></svg>
+                  </div>
+                  <div class="duel-handle">@mideast_analyst</div>
+                  <div class="duel-score">2</div>
+                </div>
+              </div>
+              <div class="duel-meta">
+                <div class="duel-round">Round 2 · Rebuttal</div>
+                <div class="duel-status-live"><div class="duel-live-dot"></div>Live · 22h left</div>
+              </div>
+            </div>
+            <!-- Watching duel -->
+            <div class="duel-item" style="opacity:0.8;">
+              <div class="duel-proposition">"Iran's hybrid governance model is structurally more stable than Western analysts claim"</div>
+              <div class="duel-combatants">
+                <div class="duel-side">
+                  <div class="duel-avatar"><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#1a5c30"/><circle cx="16" cy="12" r="5" fill="#5aaa70"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#5aaa70"/></svg></div>
+                  <div class="duel-handle">@iran_watcher</div>
+                  <div class="duel-score">5</div>
+                </div>
+                <div class="duel-vs">vs</div>
+                <div class="duel-side">
+                  <div class="duel-avatar"><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#8b1a1a"/><circle cx="16" cy="12" r="5" fill="#c08080"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#c08080"/></svg></div>
+                  <div class="duel-handle">@dc_policy_lab</div>
+                  <div class="duel-score">4</div>
+                </div>
+              </div>
+              <div class="duel-meta">
+                <div class="duel-round">Round 3 · Closing</div>
+                <div class="duel-timer">⏱ 8h left · Watching</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PEOPLE I FOLLOW / THE LIVING — col 6–10, row 15–18 -->
+        <div class="widget" id="w-people" style="grid-column:6/10;grid-row:15/19;" draggable="true">
+          <div class="widget-handle"><div class="handle-dots"><div class="hd"></div><div class="hd"></div><div class="hd"></div><div class="hd"></div></div></div>
+          <div class="resize-handle right"></div><div class="resize-handle bottom"></div><div class="resize-handle corner"></div>
+          <div class="wh"><div class="wh-dot" style="background:var(--ink-soft);"></div><div class="wh-label">People</div><div class="wh-action">Find people →</div></div>
+          <div class="wb">
+            <!-- Official -->
+            <div class="follow-item">
+              <div class="follow-avatar"><svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#1b3a6b"/><circle cx="15" cy="11" r="5" fill="#6a9ab8"/><ellipse cx="15" cy="23" rx="8" ry="5" fill="#6a9ab8"/></svg></div>
+              <div class="follow-info">
+                <div class="follow-name">Don Beyer</div>
+                <div class="follow-role">US Representative · VA-08</div>
+                <div class="follow-activity">Voted Yea on HR 4782 · 3h ago</div>
+              </div>
+              <div class="follow-badge" style="background:var(--blue-pl);color:var(--blue);">Official</div>
+            </div>
+            <!-- Civic user -->
+            <div class="follow-item">
+              <div class="follow-avatar"><svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#254f92"/><circle cx="15" cy="11" r="5" fill="#9ab8d0"/><ellipse cx="15" cy="23" rx="8" ry="5" fill="#9ab8d0"/></svg></div>
+              <div class="follow-info">
+                <div class="follow-name">@civicengineer_dc</div>
+                <div class="follow-role">Licensed PE · Alexandria VA</div>
+                <div class="follow-activity">Proposed amendment on SB 1204 · 1d ago</div>
+              </div>
+              <div class="follow-badge" style="background:var(--gilt-pl);color:var(--gilt);">Gold ring</div>
+            </div>
+            <!-- Another civic user -->
+            <div class="follow-item">
+              <div class="follow-avatar"><svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#1a5c30"/><circle cx="15" cy="11" r="5" fill="#5aaa70"/><ellipse cx="15" cy="23" rx="8" ry="5" fill="#5aaa70"/></svg></div>
+              <div class="follow-info">
+                <div class="follow-name">@mideast_analyst</div>
+                <div class="follow-role">Researcher · Mid-Atlantic</div>
+                <div class="follow-activity">In a Duel on Gaza displacement · Live</div>
+              </div>
+              <div class="follow-badge" style="background:var(--blue-pl);color:var(--blue-md);">Verified</div>
+            </div>
+            <!-- The Living divider — appears when first animal is followed -->
+            <div class="living-divider" title="This section appears when you follow your first animal">
+              <div class="ld-line"></div>
+              <div class="ld-label" style="color:var(--green);opacity:0.6;">The Living</div>
+              <div class="ld-line"></div>
+            </div>
+            <!-- Placeholder animal entry — shown greyed -->
+            <div class="follow-item" style="opacity:0.4;cursor:default;" title="Follow an animal with a FORA page to see them here">
+              <div class="follow-avatar" style="background:var(--bg);border:1.5px dashed var(--rule);display:flex;align-items:center;justify-content:center;font-size:16px;">🐾</div>
+              <div class="follow-info">
+                <div class="follow-name" style="color:var(--ink-mut);">No animals followed yet</div>
+                <div class="follow-role">Zoo and sanctuary residents with FORA pages will appear here</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    </div><!-- end grid-canvas -->
+  </div><!-- end dashboard -->
+</div><!-- end body-wrap -->
+
+<!-- ══ WIDGET PICKER ══ -->
+<div class="widget-picker" id="widget-picker">
+  <div class="wp-header">
+    <div class="wp-title">Add a widget</div>
+    <div class="wp-close" onclick="closePicker()">×</div>
+  </div>
+  <div class="wp-list">
+    <div class="wp-item"><div class="wp-icon" style="background:#8b1a1a;">📰</div><div class="wp-info"><div class="wp-name">Civic Feed</div><div class="wp-desc">News and legislation filtered to your jurisdictions</div></div></div>
+    <div class="wp-item"><div class="wp-icon">🏛</div><div class="wp-info"><div class="wp-name">My Representatives</div><div class="wp-desc">Your full government stack — federal to local</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--blue-md);">🏃</div><div class="wp-info"><div class="wp-name">Representative Activity</div><div class="wp-desc">Recent votes, sponsorships, and statements from your reps</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:#2d1a4a;">⚖️</div><div class="wp-info"><div class="wp-name">Active Deliberations</div><div class="wp-desc">Amendments you've engaged with and their status</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:#2d1a4a;">🤺</div><div class="wp-info"><div class="wp-name">The Duel Arena</div><div class="wp-desc">Live and recent duels — yours and ones you're watching</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--blue-md);">📋</div><div class="wp-info"><div class="wp-name">Bills I'm Tracking</div><div class="wp-desc">Live status of legislation you're following, with country flags</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--gilt);">🪪</div><div class="wp-info"><div class="wp-name">Civic Marker</div><div class="wp-desc">Your identity card — small, medium, or large scale</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--amber);">🃏</div><div class="wp-info"><div class="wp-name">Avatar Card</div><div class="wp-desc">Your collectible civic card — Franchise, Tome, Field Guide, Blueprint</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--gilt);">📈</div><div class="wp-info"><div class="wp-name">Civic Stats</div><div class="wp-desc">Contributions, sectors engaged, ring progress</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--green);">🌱</div><div class="wp-info"><div class="wp-name">Freedom &amp; Happiness</div><div class="wp-desc">Your jurisdiction stack's Freedom and Happiness scores — FORA's original data</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--green);">🔥</div><div class="wp-info"><div class="wp-name">Trending in FORA</div><div class="wp-desc">What's active platform-wide right now</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--ink-soft);">🌍</div><div class="wp-info"><div class="wp-name">My Jurisdictions</div><div class="wp-desc">Quick links to places, topics, and organizations you follow</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--ink-soft);">👥</div><div class="wp-info"><div class="wp-name">People</div><div class="wp-desc">Officials and users you follow — and The Living when you're ready</div></div></div>
+    <div class="wp-item"><div class="wp-icon" style="background:var(--ink-soft);">📝</div><div class="wp-info"><div class="wp-name">Notes</div><div class="wp-desc">Private research notes — link pages, cite sources, share with the community</div></div></div>
+  </div>
+</div>
+
+<script>
+// ── ADD RESIZE HANDLES TO ALL WIDGETS ─────────────────────
+function addResizeHandles() {
+  document.querySelectorAll('.widget').forEach(w => {
+    if (w.querySelector('.resize-handle')) return; // already has them
+    ['right','bottom','corner'].forEach(dir => {
+      const h = document.createElement('div');
+      h.className = `resize-handle ${dir}`;
+      w.appendChild(h);
+    });
+  });
+}
+addResizeHandles();
+
+// ── RESIZE LOGIC ───────────────────────────────────────────
+const GRID_COL = 12;
+const GAP = 10;
+
+function getGridMetrics() {
+  const grid = document.getElementById('grid');
+  const gridRect = grid.getBoundingClientRect();
+  const colW = (gridRect.width - GAP * (GRID_COL - 1)) / GRID_COL;
+  return { colW, rowH: 60, gap: GAP, gridRect };
+}
+
+function snapToGrid(px, unitSize, gap, min = 1) {
+  const snapped = Math.max(min, Math.round((px + gap / 2) / (unitSize + gap)));
+  return snapped;
+}
+
+document.addEventListener('mousedown', e => {
+  const handle = e.target.closest('.resize-handle');
+  if (!handle) return;
+  e.preventDefault();
+  e.stopPropagation();
+
+  const widget = handle.closest('.widget');
+  const dir = handle.classList.contains('right') ? 'right'
+            : handle.classList.contains('bottom') ? 'bottom' : 'corner';
+
+  const { colW, rowH, gap } = getGridMetrics();
+  const gridRect = document.getElementById('grid').getBoundingClientRect();
+
+  // Parse current grid position
+  const colStyle = widget.style.gridColumn; // e.g. "1/6"
+  const rowStyle = widget.style.gridRow;     // e.g. "1/5"
+  const [colStart] = colStyle.split('/').map(Number);
+  const [rowStart] = rowStyle.split('/').map(Number);
+
+  const startX = e.clientX;
+  const startY = e.clientY;
+  const startColEnd = parseInt(colStyle.split('/')[1]);
+  const startRowEnd = parseInt(rowStyle.split('/')[1]);
+
+  widget.style.cursor = dir === 'right' ? 'ew-resize' : dir === 'bottom' ? 'ns-resize' : 'nwse-resize';
+  document.body.style.cursor = widget.style.cursor;
+  document.body.style.userSelect = 'none';
+
+  const onMove = ev => {
+    const dx = ev.clientX - startX;
+    const dy = ev.clientY - startY;
+
+    if (dir === 'right' || dir === 'corner') {
+      const newColEnd = Math.min(GRID_COL + 1,
+        colStart + snapToGrid((startColEnd - colStart) * (colW + gap) + dx, colW, gap, 2));
+      widget.style.gridColumn = `${colStart}/${newColEnd}`;
+    }
+    if (dir === 'bottom' || dir === 'corner') {
+      const newRowEnd = Math.max(rowStart + 1,
+        rowStart + snapToGrid((startRowEnd - rowStart) * (rowH + gap) + dy, rowH, gap, 1));
+      widget.style.gridRow = `${rowStart}/${newRowEnd}`;
+    }
+  };
+
+  const onUp = () => {
+    widget.style.cursor = '';
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  };
+
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
+
+// ── SCALE SWITCHER ─────────────────────────────────────────
+function setScale(s) {
+  ['small','medium','large'].forEach(sc => {
+    const el = document.getElementById('scale-'+sc);
+    if (el) el.style.display = sc === s ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.scale-btn').forEach((btn,i) => {
+    btn.classList.toggle('active', ['small','medium','large'][i] === s);
+  });
+}
+
+// ── EDIT MODE ──────────────────────────────────────────────
+let editMode = false;
+function toggleEdit() {
+  editMode = !editMode;
+  const grid = document.getElementById('grid');
+  const btn  = document.getElementById('edit-btn');
+  const addBtn = document.getElementById('add-btn');
+  grid.classList.toggle('edit-mode', editMode);
+  btn.textContent = editMode ? '✓ Done' : '✦ Customize';
+  btn.classList.toggle('primary', editMode);
+  addBtn.style.display = editMode ? 'block' : 'none';
+  document.querySelectorAll('.widget').forEach(w => {
+    w.setAttribute('draggable', editMode ? 'true' : 'false');
+  });
+}
+
+// ── DRAG AND DROP ──────────────────────────────────────────
+let dragSrc = null;
+
+document.querySelectorAll('.widget').forEach(w => {
+  w.addEventListener('dragstart', e => {
+    if (!editMode || e.target.closest('.resize-handle')) { e.preventDefault(); return; }
+    dragSrc = w;
+    w.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  w.addEventListener('dragend', () => {
+    w.classList.remove('dragging');
+    document.querySelectorAll('.widget').forEach(x => x.classList.remove('drag-over'));
+  });
+  w.addEventListener('dragover', e => {
+    if (!editMode || w === dragSrc) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    document.querySelectorAll('.widget').forEach(x => x.classList.remove('drag-over'));
+    w.classList.add('drag-over');
+  });
+  w.addEventListener('dragleave', () => w.classList.remove('drag-over'));
+  w.addEventListener('drop', e => {
+    if (!editMode || w === dragSrc) return;
+    e.preventDefault();
+    w.classList.remove('drag-over');
+    const srcCol = dragSrc.style.gridColumn;
+    const srcRow = dragSrc.style.gridRow;
+    dragSrc.style.gridColumn = w.style.gridColumn;
+    dragSrc.style.gridRow    = w.style.gridRow;
+    w.style.gridColumn = srcCol;
+    w.style.gridRow    = srcRow;
+  });
+});
+
+// ── WIDGET PICKER ──────────────────────────────────────────
+function openPicker()  { document.getElementById('widget-picker').classList.add('show'); }
+function closePicker() { document.getElementById('widget-picker').classList.remove('show'); }
+
+// ── NAV TABS ───────────────────────────────────────────────
+document.querySelectorAll('.tn-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tn-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// ── SIDEBAR LINKS ──────────────────────────────────────────
+document.querySelectorAll('.sb-link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+
+// ── NOTES ──────────────────────────────────────────────────
+const notesArea = document.getElementById('notes-text');
+const notesChar = document.getElementById('notes-char');
+if (notesArea && notesChar) {
+  const updateCount = () => {
+    const n = notesArea.value.length;
+    notesChar.textContent = n.toLocaleString() + ' char' + (n !== 1 ? 's' : '');
+  };
+  notesArea.addEventListener('input', updateCount);
+  updateCount();
+}
+
+function shareNote() {
+  const txt = document.getElementById('notes-text').value.trim();
+  if (!txt) return;
+  // In production this opens the discourse contribution flow
+  alert('Share with community — this will open the discourse contribution flow, letting you attach this note to a specific page section or start a new thread.');
+}
+
+// ── TOOLBAR BUTTONS ────────────────────────────────────────
+document.querySelectorAll('.nt-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+  });
+});
+</script>
+</body>
+</html>

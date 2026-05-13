@@ -1,0 +1,360 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.p { max-width: 920px; margin: 0 auto; padding-bottom: 2rem; }
+
+.hero { background: #0b1f3a; color: #f0ebe0; padding: 1.5rem 2rem 0; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; display: flex; gap: 1.5rem; align-items: flex-end; }
+.hero-photo { width: 96px; height: 114px; border-radius: 4px; background: #1a3050; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 36px; color: #4a7090; margin-bottom: -1px; }
+.hero-left { flex: 1; padding-bottom: 1.25rem; }
+.eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7a9ab0; margin-bottom: 5px; font-weight: 500; }
+.hero-name { font-size: 24px; font-weight: 500; color: #f0ebe0; margin-bottom: 8px; }
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.chip-party { background: rgba(30,80,160,0.35); color: #90b4f0; border: 0.5px solid rgba(80,130,220,0.4); }
+.chip-hist { background: rgba(184,134,11,0.2); color: #d4a832; border: 0.5px solid rgba(184,134,11,0.35); }
+.hero-stat { font-size: 11px; color: #6a8a9a; }
+.hero-actions { padding-bottom: 1.25rem; display: flex; flex-direction: column; gap: 6px; }
+.btn-p { padding: 8px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: #b8860b; color: #0b1f3a; border: none; cursor: pointer; font-weight: 500; }
+.btn-s { padding: 7px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: transparent; color: #d4a832; border: 0.5px solid #b8860b; cursor: pointer; }
+
+.succession-bar { background: #081428; padding: 9px 2rem; font-size: 11px; color: #4a6a7a; display: flex; align-items: center; gap: 8px; }
+.succ-arrow { color: #b8860b; }
+.succ-label { color: #7a9ab0; font-weight: 500; }
+
+.tab-row { background: #091628; display: flex; padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.tab { font-size: 11px; padding: 11px 12px; color: #4a6070; cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; white-space: nowrap; }
+.tab.active { color: #d4a832; border-bottom-color: #b8860b; }
+
+.body { display: grid; grid-template-columns: 1fr 268px; gap: 1.25rem; padding: 1.25rem 0 0; }
+.main { display: flex; flex-direction: column; gap: 1rem; }
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; }
+.card-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: .9rem; font-weight: 500; }
+
+.role-callout { background: var(--color-background-secondary); border-left: 3px solid #b8860b; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.6; }
+.role-callout strong { color: var(--color-text-primary); font-weight: 500; }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 11px 10px; text-align: center; }
+.stat-val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.stat-lbl { font-size: 10px; color: var(--color-text-secondary); margin-top: 3px; }
+.stat-sub { font-size: 10px; color: var(--color-text-secondary); margin-top: 1px; opacity: 0.7; }
+
+.role-grid { display: flex; flex-direction: column; gap: 8px; }
+.role-row { display: flex; gap: 12px; padding: 10px 12px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); align-items: flex-start; }
+.role-type { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 2px 7px; border-radius: 8px; flex-shrink: 0; margin-top: 2px; font-weight: 500; }
+.type-const { background: #e6f1fb; color: #185fa5; }
+.type-appt { background: #faeeda; color: #633806; }
+.type-elect { background: #eaf3de; color: #3b6d11; }
+@media (prefers-color-scheme: dark) {
+  .type-const { background: #042c53; color: #85b7eb; }
+  .type-appt { background: #412402; color: #fac775; }
+  .type-elect { background: #173404; color: #c0dd97; }
+}
+.role-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.role-desc { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.4; }
+.role-impact { font-size: 11px; color: var(--color-text-primary); margin-top: 4px; font-style: italic; }
+
+.pardons-highlight { background: var(--color-background-primary); border: 0.5px solid rgba(180,134,11,0.3); border-left: 3px solid #b8860b; border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; }
+.pardons-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #b8860b; margin-bottom: .9rem; font-weight: 500; }
+.pardons-explainer { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 12px; }
+.pardons-stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.pardons-stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; text-align: center; }
+.pardons-val { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+.pardons-lbl { font-size: 10px; color: var(--color-text-secondary); margin-top: 2px; }
+.pardons-note { font-size: 11px; color: var(--color-text-secondary); border-top: 0.5px solid var(--color-border-tertiary); padding-top: 8px; line-height: 1.5; }
+
+.record-list { display: flex; flex-direction: column; gap: 8px; }
+.record-row { display: flex; gap: 12px; padding: 9px 0; border-bottom: 0.5px solid var(--color-border-tertiary); align-items: flex-start; }
+.record-row:last-child { border-bottom: none; }
+.record-date { font-size: 11px; color: var(--color-text-secondary); min-width: 70px; flex-shrink: 0; margin-top: 1px; }
+.record-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.record-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.4; }
+.record-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-top: 3px; background: var(--color-background-secondary); color: var(--color-text-secondary); }
+
+.accountability-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.accountability-row:last-child { border-bottom: none; }
+.acct-key { color: var(--color-text-secondary); }
+.acct-val { font-weight: 500; color: var(--color-text-primary); }
+.acct-val.good { color: #3b6d11; }
+.acct-val.flag { color: #ba7517; }
+
+.timeline { padding-left: 16px; position: relative; }
+.tl-line { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--color-border-tertiary); }
+.tl-item { position: relative; padding: 0 0 10px 12px; }
+.tl-dot { position: absolute; left: -12px; top: 4px; width: 8px; height: 8px; border-radius: 50%; background: #378add; }
+.tl-dot.current { background: #b8860b; }
+.tl-dot.future { background: var(--color-border-tertiary); }
+.tl-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.tl-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+
+.succession-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; }
+.succ-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12px; }
+.succ-num { font-size: 10px; color: var(--color-text-secondary); min-width: 16px; }
+.succ-name { color: var(--color-text-primary); font-weight: 500; }
+.succ-name.current { color: #b8860b; }
+.succ-arrow-sm { font-size: 10px; color: var(--color-text-secondary); }
+.succ-note { font-size: 10px; color: var(--color-text-secondary); margin-top: 8px; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 6px; line-height: 1.5; }
+
+.contact-link { display: block; font-size: 12px; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); color: var(--color-text-primary); text-decoration: none; margin-bottom: 6px; }
+
+.governor-race { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.race-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); margin-bottom: 5px; font-weight: 500; }
+.race-text { font-size: 12px; color: var(--color-text-primary); line-height: 1.5; }
+.race-note { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; font-style: italic; }
+</style>
+
+<div class="p">
+  <div class="hero">
+    <div class="hero-photo">AD</div>
+    <div class="hero-left">
+      <div class="eyebrow">Lieutenant Governor · Commonwealth of Pennsylvania</div>
+      <div class="hero-name">Austin Davis</div>
+      <div class="hero-chips">
+        <span class="chip chip-party">Democrat</span>
+        <span class="chip chip-hist">First Black Lt. Governor of PA</span>
+        <span class="chip chip-hist">Youngest LG in the country</span>
+      </div>
+      <div class="hero-stat" style="margin-top:6px;">In office since Jan 2023 · Elected with Shapiro Nov 2022 · Age 35</div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-p">Contact Office</button>
+      <button class="btn-s">+ Follow</button>
+    </div>
+  </div>
+
+  <div class="succession-bar">
+    <span class="succ-label">Succession:</span>
+    <span>Shapiro (Governor)</span>
+    <span class="succ-arrow">→</span>
+    <span style="color:#d4a832; font-weight:500;">Davis becomes Governor if Shapiro leaves office</span>
+    <span class="succ-arrow">→</span>
+    <span style="color:#6a8a9a; font-size:11px;">No Lt. Governor would be named until next election</span>
+  </div>
+
+  <div class="tab-row">
+    <div class="tab active">Overview</div>
+    <div class="tab">Board of Pardons</div>
+    <div class="tab">Gun Violence</div>
+    <div class="tab">Record</div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <div class="role-callout">
+        <strong>Second in command — but what does that mean?</strong> The Lt. Governor's office is constitutionally thin. Davis gets four required duties: presiding over the Senate, chairing the Board of Pardons, and sitting on two state councils. Everything else is what he asked for or built himself. That's the accountability question — is he using the office, or coasting in it?
+      </div>
+
+      <div class="card">
+        <div class="card-label">What this office does — and how Davis is using it</div>
+        <div class="role-grid">
+          <div class="role-row">
+            <span class="role-type type-const">Constitutional</span>
+            <div>
+              <div class="role-name">President of the PA Senate</div>
+              <div class="role-desc">Presides over Senate sessions. Casts tie-breaking votes. Largely ceremonial — but the tie-breaker matters in a divided chamber.</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <span class="role-type type-const">Constitutional</span>
+            <div>
+              <div class="role-name">Chair, Board of Pardons</div>
+              <div class="role-desc">Reviews cases where people seek pardons or commutation of sentences. Recommends to the Governor. This is where real lives are directly affected.</div>
+              <div class="role-impact">Davis modernized the system — launched online applications, record number of hearings. Most impactful constitutional duty.</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <span class="role-type type-appt">Appointed by Shapiro</span>
+            <div>
+              <div class="role-name">Chair, PA Commission on Crime and Delinquency (PCCD)</div>
+              <div class="role-desc">Distributes hundreds of millions annually for gun violence prevention, school safety, and criminal justice. Davis asked for this role — it wasn't automatic.</div>
+              <div class="role-impact">$85M in Violence Intervention grants distributed to 130+ projects statewide under his leadership.</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <span class="role-type type-appt">Appointed by Shapiro</span>
+            <div>
+              <div class="role-name">Chair, Advisory Council for Inclusive Procurement</div>
+              <div class="role-desc">Advises state agencies on diversifying contracting. Davis reports 30% increase in state spending with Black-owned and Latino-owned businesses.</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <span class="role-type type-elect">Self-initiated</span>
+            <div>
+              <div class="role-name">Chair, Democratic Lt. Governors Association</div>
+              <div class="role-desc">National role fundraising and organizing for Democratic gubernatorial races. Focused on 31 governor's races in 2026 midterms including Pennsylvania.</div>
+              <div class="role-impact">This is the role that signals his political ambition — building a national profile while in state office.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pardons-highlight">
+        <div class="pardons-label">Board of Pardons — the most consequential thing he does</div>
+        <div class="pardons-explainer">The Board of Pardons is where people who have served their sentences — or who were wrongly convicted — apply for a second chance. Davis chairs it. The board recommends to the Governor whether to grant or deny. Under Davis, the board has processed more applications faster than any prior Lt. Governor.</div>
+        <div class="pardons-stat-row">
+          <div class="pardons-stat">
+            <div class="pardons-val">Record</div>
+            <div class="pardons-lbl">Hearings held this term</div>
+          </div>
+          <div class="pardons-stat">
+            <div class="pardons-val">Online</div>
+            <div class="pardons-lbl">Application system launched</div>
+          </div>
+          <div class="pardons-stat">
+            <div class="pardons-val">↑ Staff</div>
+            <div class="pardons-lbl">Added to process backlog</div>
+          </div>
+        </div>
+        <div class="pardons-note">What FORA will track: pardon application volume, hearing frequency, approval vs. denial rates as data becomes available. Pardons data is public record — this is one of the clearest accountability metrics for this office.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Recent activity — as of March 2026</div>
+        <div class="record-list">
+          <div class="record-row">
+            <div class="record-date">Nov 2025</div>
+            <div>
+              <div class="record-title">Monroe & Pike Counties — state budget highlights tour</div>
+              <div class="record-sub">Traveled to highlight local investments from the state budget — regional outreach is a signature part of his approach</div>
+              <span class="record-tag">Outreach</span>
+            </div>
+          </div>
+          <div class="record-row">
+            <div class="record-date">Nov 2025</div>
+            <div>
+              <div class="record-title">Urged USDA to distribute SNAP funding after Shapiro sues federal government</div>
+              <div class="record-sub">Publicly pushed for food assistance funding for nearly 2 million Pennsylvanians after federal holdback</div>
+              <span class="record-tag">Federal relations</span>
+            </div>
+          </div>
+          <div class="record-row">
+            <div class="record-date">Oct 2025</div>
+            <div>
+              <div class="record-title">Lebanon County — new regional police departments</div>
+              <div class="record-sub">Highlighted administration investments in creating regional police coverage for underserved areas</div>
+              <span class="record-tag">Public safety</span>
+            </div>
+          </div>
+          <div class="record-row">
+            <div class="record-date">Dec 2024</div>
+            <div>
+              <div class="record-title">Named chair of Democratic Lt. Governors Association</div>
+              <div class="record-sub">Took on national party role leading fundraising for 31 governor's races in 2026</div>
+              <span class="record-tag">Political</span>
+            </div>
+          </div>
+          <div class="record-row">
+            <div class="record-date">Since 2023</div>
+            <div>
+              <div class="record-title">$85M in Violence Intervention & Prevention grants distributed</div>
+              <div class="record-sub">130+ projects statewide funded through PCCD under Davis's chairmanship</div>
+              <span class="record-tag">Gun violence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Accountability tracker</div>
+        <div class="accountability-row">
+          <div class="acct-key">Board of Pardons — modernized</div>
+          <div class="acct-val good">Yes — online system, record hearings</div>
+        </div>
+        <div class="accountability-row">
+          <div class="acct-key">VIP grants distributed</div>
+          <div class="acct-val good">$85M to 130+ projects</div>
+        </div>
+        <div class="accountability-row">
+          <div class="acct-key">Minority business contracting increase</div>
+          <div class="acct-val good">+30% reported</div>
+        </div>
+        <div class="accountability-row">
+          <div class="acct-key">Office of Gun Violence Prevention</div>
+          <div class="acct-val good">Re-established + $4M DOJ grant</div>
+        </div>
+        <div class="accountability-row">
+          <div class="acct-key">DLGA chair — national political role</div>
+          <div class="acct-val flag">Raises questions about time allocation</div>
+        </div>
+        <div class="accountability-row">
+          <div class="acct-key">Pardons approval/denial rate</div>
+          <div class="acct-val flag">Not yet publicly tracked by FORA</div>
+        </div>
+        <div class="accountability-row">
+          <div class="acct-key">2026 governor's race</div>
+          <div class="acct-val flag">Running — campaign launched</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+
+      <div class="card">
+        <div class="card-label">If Shapiro leaves office</div>
+        <div class="succession-card">
+          <div class="succ-row"><div class="succ-num">1</div><div class="succ-name">Josh Shapiro</div><div style="font-size:10px;color:var(--color-text-secondary);">Governor</div></div>
+          <div class="succ-row"><div class="succ-num" style="color:#b8860b;">2</div><div class="succ-name current">Austin Davis</div><div style="font-size:10px;color:#b8860b;">becomes Governor</div></div>
+        </div>
+        <div class="succ-note">If Shapiro resigned, was removed, or died in office, Davis would become Governor immediately. No special election — he serves the remainder of the term. This is the single most consequential thing about this office.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">2026 governor's race</div>
+        <div class="governor-race">
+          <div class="race-label">Running for Governor</div>
+          <div class="race-text">Shapiro and Davis announced they are running for re-election together. Davis is considered a top Democratic gubernatorial contender regardless.</div>
+          <div class="race-note">The 2026 PA governor's race is one of 31 Davis is organizing as DLGA chair — including his own.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Career path</div>
+        <div class="timeline">
+          <div class="tl-line"></div>
+          <div class="tl-item">
+            <div class="tl-dot current"></div>
+            <div class="tl-title">Lt. Governor of PA</div>
+            <div class="tl-sub">Jan 2023 – present</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">PA House — District 35</div>
+            <div class="tl-sub">2019 – 2022 · McKeesport area</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Community organizer</div>
+            <div class="tl-sub">Youth gun violence prevention · McKeesport</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot future"></div>
+            <div class="tl-title">Governor's race</div>
+            <div class="tl-sub">Nov 2026 · Running with Shapiro</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What he can't do</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;">
+          <div style="padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Cannot introduce legislation — he's not a senator</div>
+          <div style="padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Cannot grant pardons himself — recommends to the Governor only</div>
+          <div style="padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Cannot direct state agencies — he has no executive cabinet</div>
+          <div style="padding:5px 0;">Cannot act independently of Shapiro on budget or policy</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Contact</div>
+        <a class="contact-link" href="https://www.pa.gov/ltgovernor">pa.gov/ltgovernor ↗</a>
+        <a class="contact-link" href="#">@LGAustinDavis ↗</a>
+      </div>
+
+    </div>
+  </div>
+</div>

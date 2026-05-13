@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Dashboard Direction — Three Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#edf1fb;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f0f3f8;--white:#ffffff;--rule:rgba(27,58,107,0.09);
+  --green:#155c2d;--green-p:#e5f0e8;
+  --scarlet:#8b1a1a;--scarlet-p:#faeaea;
+  --purple:#2d1a4a;--purple-p:#ede6f7;
+  --amber:#c47f00;
+  --brick:#7d2a1f;--brick-p:#f4e3df;
+  --field:#080f1e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#1a1a1a;color:var(--ink);}
+
+/* ═══════════════════════════════════════════════════════
+   CONCEPT SWITCHER
+═══════════════════════════════════════════════════════ */
+.switcher{
+  position:sticky;top:0;z-index:9999;
+  background:#0e1a2e;border-bottom:3px solid var(--gilt);
+  padding:12px 20px;display:flex;gap:8px;align-items:center;
+}
+.sw-label{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--gilt-lt);margin-right:16px;
+}
+.sw-btn{
+  padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:transparent;color:rgba(255,255,255,0.45);
+  border:1px solid rgba(255,255,255,0.15);border-radius:4px;
+  cursor:pointer;transition:all 0.15s;
+}
+.sw-btn:hover{color:rgba(255,255,255,0.85);border-color:rgba(255,255,255,0.4);}
+.sw-btn.active{background:var(--gilt);color:#0e1a2e;border-color:var(--gilt);font-weight:700;}
+.sw-meta{
+  margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);
+}
+
+/* ═══════════════════════════════════════════════════════
+   CONCEPT WRAPPER
+═══════════════════════════════════════════════════════ */
+.concept{display:none;background:var(--bg);min-height:calc(100vh - 49px);}
+.concept.active{display:block;}
+
+.verdict{
+  padding:20px 32px;background:#0e1a2e;color:white;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.v-tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  padding:3px 10px;border-radius:100px;margin-bottom:10px;
+}
+.v-tag.opt1{background:var(--blue-pl);color:var(--blue);}
+.v-tag.opt2{background:var(--gilt-pl);color:var(--gilt);}
+.v-tag.opt3{background:var(--scarlet-p);color:var(--scarlet);}
+.v-title{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.v-sub{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:900px;}
+
+/* ═══════════════════════════════════════════════════════
+   SHARED — TOP NAV
+═══════════════════════════════════════════════════════ */
+.top-nav{height:52px;background:var(--blue);border-bottom:3px solid var(--gilt);display:flex;align-items:stretch;padding:0 20px;}
+.tn-logo{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;letter-spacing:0.1em;display:flex;align-items:center;margin-right:28px;}
+.tn-logo span{color:var(--gilt-lt);}
+.tn-tabs{display:flex;align-items:stretch;gap:2px;}
+.tn-tab{display:flex;align-items:center;padding:0 15px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;transition:all 0.12s;white-space:nowrap;}
+.tn-tab:hover{color:rgba(255,255,255,0.8);}
+.tn-tab.active{color:white;border-bottom-color:var(--gilt-lt);}
+.tn-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.tn-search{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.5);width:180px;}
+.tn-mode{display:flex;background:rgba(255,255,255,0.08);border-radius:6px;padding:2px;border:1px solid rgba(255,255,255,0.12);}
+.tn-mode-btn{padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:4px;transition:all 0.12s;}
+.tn-mode-btn.active{background:var(--gilt);color:#0e1a2e;font-weight:700;}
+.tn-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--gilt);background:var(--blue-md);align-self:center;}
+
+/* ═══════════════════════════════════════════════════════
+   SHARED — SIDEBAR
+═══════════════════════════════════════════════════════ */
+.body-wrap{display:flex;}
+.sidebar{width:200px;flex-shrink:0;background:white;border-right:1px solid var(--rule);min-height:calc(100vh - 49px - 52px - 100px);}
+.sb-identity{padding:14px;border-bottom:1px solid var(--rule);}
+.sb-id-name{font-size:12.5px;font-weight:700;color:var(--ink);}
+.sb-id-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:3px;}
+.sb-id-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:7.5px;background:var(--gilt-pl);color:var(--gilt);padding:2px 7px;border-radius:100px;margin-top:5px;border:1px solid rgba(184,134,11,0.3);}
+.sb-section{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);padding:10px 14px 4px;}
+.sb-link{display:flex;align-items:center;gap:9px;padding:7px 14px;color:var(--ink-soft);font-size:12px;cursor:pointer;border-right:2px solid transparent;}
+.sb-link:hover{background:var(--blue-vp);color:var(--blue);}
+.sb-link.active{color:var(--blue);background:var(--blue-pl);border-right-color:var(--blue);font-weight:600;}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--rule);}
+.sb-link.active .sb-dot{background:var(--blue);}
+.sb-badge{font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--scarlet-p);color:var(--scarlet);padding:1px 6px;border-radius:100px;margin-left:auto;}
+.sb-badge.blue{background:var(--blue-pl);color:var(--blue);}
+.sb-badge.gilt{background:var(--gilt-pl);color:var(--gilt);}
+.sb-divider{height:1px;background:var(--rule);margin:4px 14px;}
+
+/* ═══════════════════════════════════════════════════════
+   SHARED — MAIN AREA
+═══════════════════════════════════════════════════════ */
+.main{flex:1;padding:24px 28px;overflow-x:hidden;}
+.page-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:6px;}
+.page-title{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:var(--blue);line-height:1.1;margin-bottom:5px;}
+.page-sub{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-bottom:22px;max-width:760px;}
+
+/* ═══════════════════════════════════════════════════════
+   SHARED — CARD PRIMITIVES (dp-*)
+═══════════════════════════════════════════════════════ */
+.dp-card{background:white;border:1px solid var(--rule);border-radius:8px;padding:16px;}
+.dp-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--rule);}
+.dp-icon{width:22px;height:22px;border-radius:5px;background:var(--blue-pl);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.dp-card-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);flex:1;}
+.dp-card-action{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt);cursor:pointer;}
+
+.dp-rule-gilt{height:2px;background:linear-gradient(90deg,var(--gilt) 0%,transparent 100%);margin:14px 0;}
+
+/* ═══════════════════════════════════════════════════════
+   ═══════════════════════════════════════════════════════
+   OPTION 1 — AUGMENT v13
+   Same 14-widget grid; add 3 new widget types to picker
+   ═══════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════ */
+#opt1 .o1-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;}
+
+.o1-widget{background:white;border:1px solid var(--rule);border-radius:8px;padding:14px;min-height:160px;position:relative;}
+.o1-widget.new{border-color:var(--gilt);background:linear-gradient(135deg,#fffdf5 0%,white 60%);}
+.o1-widget.new::before{content:'NEW';position:absolute;top:-8px;left:14px;background:var(--gilt);color:white;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;padding:3px 8px;border-radius:4px;font-weight:700;}
+.o1-w-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule);}
+.o1-w-icon{width:18px;height:18px;border-radius:4px;background:var(--blue-pl);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.o1-widget.new .o1-w-icon{background:var(--gilt-pl);color:var(--gilt);}
+.o1-w-title{font-family:'Libre Baskerville',serif;font-size:12px;font-weight:700;color:var(--blue);flex:1;}
+.o1-w-handle{display:flex;flex-direction:column;gap:2px;cursor:grab;}
+.o1-w-handle div{width:3px;height:3px;background:var(--ink-mut);border-radius:50%;}
+
+.o1-item{padding:7px 0;border-bottom:1px solid var(--rule);font-size:11.5px;color:var(--ink);}
+.o1-item:last-child{border-bottom:none;}
+.o1-item-meta{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+
+/* widget picker preview */
+.o1-picker{background:white;border:2px dashed var(--gilt);border-radius:10px;padding:22px;margin-top:30px;}
+.o1-picker-title{font-family:'Libre Baskerville',serif;font-size:16px;color:var(--blue);margin-bottom:6px;font-weight:700;}
+.o1-picker-sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px;}
+.o1-picker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.o1-pick{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:14px;cursor:pointer;transition:all 0.15s;}
+.o1-pick:hover{border-color:var(--blue);background:white;}
+.o1-pick.new-pick{border:2px solid var(--gilt);background:#fffdf5;}
+.o1-pick-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt);font-weight:700;margin-bottom:4px;}
+.o1-pick-name{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+.o1-pick-desc{font-size:11px;color:var(--ink-soft);line-height:1.45;}
+
+/* ═══════════════════════════════════════════════════════
+   ═══════════════════════════════════════════════════════
+   OPTION 2 — HOME / WORKSPACE MODE TOGGLE
+   New default Home view; v13 dashboard becomes Workspace
+   ═══════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════ */
+#opt2 .o2-hero{
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-md) 100%);
+  color:white;border-radius:10px;padding:24px 28px;margin-bottom:22px;
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.1);
+}
+#opt2 .o2-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gilt);
+}
+.o2-hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:6px;}
+.o2-hero-title{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;margin-bottom:4px;}
+.o2-hero-date{font-family:'Libre Baskerville',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.7);}
+.o2-hero-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px;}
+.o2-hero-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:14px;}
+.o2-hc-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:6px;}
+.o2-hc-title{font-size:13px;font-weight:600;color:white;line-height:1.4;margin-bottom:4px;}
+.o2-hc-sub{font-size:11px;color:rgba(255,255,255,0.65);}
+
+#opt2 .o2-row{display:grid;gap:18px;margin-bottom:22px;}
+#opt2 .o2-row-2{grid-template-columns:1fr 1fr;}
+#opt2 .o2-row-3{grid-template-columns:1fr 1fr 1fr;}
+#opt2 .o2-row-asym{grid-template-columns:2fr 1fr;}
+
+.o2-card{background:white;border:1px solid var(--rule);border-radius:8px;padding:18px;}
+.o2-card-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:4px;}
+.o2-card-title{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--blue);margin-bottom:3px;line-height:1.2;}
+.o2-card-sub{font-size:12px;color:var(--ink-soft);margin-bottom:14px;line-height:1.5;}
+
+.o2-howto-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.o2-howto-item{background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:6px;padding:11px 12px;cursor:pointer;transition:all 0.15s;}
+.o2-howto-item:hover{background:var(--blue-pl);border-color:var(--blue-lt);}
+.o2-ht-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-md);margin-bottom:3px;font-weight:700;}
+.o2-ht-name{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.3;}
+.o2-ht-meta{font-size:10px;color:var(--ink-soft);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+
+.o2-care-stack{display:flex;flex-direction:column;gap:9px;}
+.o2-care-item{display:flex;gap:11px;padding:10px;background:#faf6ed;border-left:3px solid var(--gilt);border-radius:0 5px 5px 0;}
+.o2-care-icon{width:28px;height:28px;border-radius:5px;background:var(--brick);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.o2-care-body{flex:1;}
+.o2-care-title{font-size:12px;font-weight:700;color:var(--ink);}
+.o2-care-desc{font-size:11px;color:var(--ink-soft);line-height:1.45;margin-top:2px;}
+
+.o2-officials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.o2-off-card{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:10px;text-align:center;}
+.o2-off-photo{width:38px;height:38px;border-radius:50%;background:var(--blue-md);margin:0 auto 6px;border:2px solid var(--gilt);}
+.o2-off-name{font-size:11px;font-weight:700;color:var(--ink);line-height:1.2;}
+.o2-off-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:3px;}
+
+.o2-rco-card{background:linear-gradient(135deg,#faf6ed 0%,white 100%);border:1px solid var(--gilt-pl);}
+.o2-rco-name{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--gilt);margin-bottom:3px;}
+.o2-rco-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
+.o2-rco-next{background:white;border:1px dashed var(--gilt);padding:10px;border-radius:5px;font-size:11.5px;color:var(--ink);}
+.o2-rco-next strong{color:var(--gilt);}
+
+.o2-lore-item{padding:11px 0;border-bottom:1px solid var(--rule);}
+.o2-lore-item:last-child{border-bottom:none;}
+.o2-lore-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;background:var(--purple-p);color:var(--purple);padding:2px 7px;border-radius:100px;margin-bottom:4px;font-weight:700;}
+.o2-lore-title{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.35;}
+.o2-lore-meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);margin-top:3px;}
+
+.o2-history-card{background:#2d1a4a;color:white;border-radius:8px;padding:18px;position:relative;overflow:hidden;}
+.o2-history-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gilt);}
+.o2-hist-date{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:6px;}
+.o2-hist-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.25;}
+.o2-hist-body{font-size:12px;color:rgba(255,255,255,0.78);line-height:1.55;}
+.o2-hist-quote{font-family:'Libre Baskerville',serif;font-style:italic;color:var(--gilt-lt);font-size:12.5px;margin-top:10px;padding-left:10px;border-left:2px solid var(--gilt);}
+
+/* ═══════════════════════════════════════════════════════
+   ═══════════════════════════════════════════════════════
+   OPTION 3 — REPLACE v13 ENTIRELY
+   No widget grid. Editorial Philly home.
+   ═══════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════ */
+#opt3 .o3-banner{
+  background:#0e1a2e;color:white;padding:36px 40px;margin:-24px -28px 28px;
+  border-bottom:3px solid var(--gilt);position:relative;overflow:hidden;
+}
+#opt3 .o3-banner::after{
+  content:'';position:absolute;right:-100px;top:-50px;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(184,134,11,0.12) 0%,transparent 70%);
+}
+.o3-banner-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:8px;}
+.o3-banner-title{font-family:'Libre Baskerville',serif;font-size:38px;font-weight:700;line-height:1.05;margin-bottom:10px;}
+.o3-banner-title em{color:var(--gilt-lt);font-style:italic;}
+.o3-banner-sub{font-family:'Libre Baskerville',serif;font-style:italic;font-size:15px;color:rgba(255,255,255,0.75);max-width:680px;line-height:1.55;}
+.o3-banner-meta{position:relative;z-index:2;display:flex;gap:24px;margin-top:18px;}
+.o3-bm-item{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.o3-bm-item strong{color:var(--gilt-lt);}
+
+#opt3 .o3-mosaic{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-bottom:24px;}
+
+.o3-tile{background:white;border:1px solid var(--rule);border-radius:6px;padding:18px;position:relative;}
+.o3-tile-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:6px;}
+.o3-tile-title{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--blue);line-height:1.2;margin-bottom:8px;}
+.o3-tile-body{font-size:12px;color:var(--ink-soft);line-height:1.55;}
+
+.o3-tile.feature{
+  background:linear-gradient(180deg,#fffdf5 0%,white 100%);
+  border-color:var(--gilt-pl);
+}
+.o3-tile.dark{background:#0e1a2e;color:white;border-color:#0e1a2e;}
+.o3-tile.dark .o3-tile-title{color:white;}
+.o3-tile.dark .o3-tile-eyebrow{color:var(--gilt-lt);}
+.o3-tile.dark .o3-tile-body{color:rgba(255,255,255,0.7);}
+.o3-tile.brick{background:linear-gradient(135deg,var(--brick) 0%,#5e1f17 100%);color:white;border-color:var(--brick);}
+.o3-tile.brick .o3-tile-title{color:white;}
+.o3-tile.brick .o3-tile-eyebrow{color:#f4e3df;}
+.o3-tile.brick .o3-tile-body{color:rgba(255,255,255,0.8);}
+
+.o3-pull{font-family:'Libre Baskerville',serif;font-style:italic;font-size:15px;line-height:1.5;color:var(--ink);padding-left:14px;border-left:3px solid var(--gilt);margin-top:10px;}
+
+.o3-list-tight{margin-top:8px;}
+.o3-list-tight li{list-style:none;padding:7px 0;border-bottom:1px solid var(--rule);font-size:11.5px;color:var(--ink);display:flex;justify-content:space-between;align-items:center;}
+.o3-list-tight li:last-child{border-bottom:none;}
+.o3-list-tight .num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gilt);font-weight:700;}
+
+.o3-tile.dark .o3-list-tight li{border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85);}
+.o3-tile.dark .o3-list-tight .num{color:var(--gilt-lt);}
+
+.o3-action-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.o3-chip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border-radius:100px;background:var(--blue-pl);color:var(--blue);font-weight:700;cursor:pointer;border:1px solid transparent;}
+.o3-chip:hover{border-color:var(--blue);}
+.o3-chip.gilt{background:var(--gilt-pl);color:var(--gilt);}
+.o3-chip.green{background:var(--green-p);color:var(--green);}
+.o3-chip.brick{background:var(--brick-p);color:var(--brick);}
+
+.o3-section-rule{display:flex;align-items:center;gap:14px;margin:28px 0 16px;}
+.o3-section-rule::before,.o3-section-rule::after{content:'';flex:1;height:1px;background:var(--rule);}
+.o3-sr-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gilt);font-weight:700;}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ CONCEPT SWITCHER ═══════════════ -->
+<div class="switcher">
+  <div class="sw-label">FORA · Dashboard Direction</div>
+  <button class="sw-btn active" data-opt="1" onclick="show(1)">Option 1 · Augment v13</button>
+  <button class="sw-btn" data-opt="2" onclick="show(2)">Option 2 · Home / Workspace</button>
+  <button class="sw-btn" data-opt="3" onclick="show(3)">Option 3 · Replace</button>
+  <div class="sw-meta">Philadelphia MVP · 916 S Delhi St 19147</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     OPTION 1 — AUGMENT v13
+═══════════════════════════════════════════════════════ -->
+<div class="concept active" id="opt1">
+  <div class="verdict">
+    <div class="v-tag opt1">Option 1 · Augment</div>
+    <div class="v-title">Keep the v13 widget grid. Add three new widget types to the picker.</div>
+    <div class="v-sub">Lowest disruption. Nothing locked gets unlocked. Three new widgets — <strong>How-To Philly</strong>, <strong>Care for Your Home</strong>, <strong>This Day in Philly</strong> — appear in the widget picker alongside the existing 14. Power users get more choice; new users still land on whatever the default widget set is. If we don't change defaults, most people won't discover these.</div>
+  </div>
+
+  <nav class="top-nav">
+    <div class="tn-logo">F<span>O</span>RA</div>
+    <div class="tn-tabs">
+      <div class="tn-tab active">Dashboard</div>
+      <div class="tn-tab">Legislation</div>
+      <div class="tn-tab">Issues</div>
+      <div class="tn-tab">Events</div>
+      <div class="tn-tab">Discourse</div>
+    </div>
+    <div class="tn-right">
+      <input class="tn-search" type="text" placeholder="Search FORA…">
+      <div class="tn-avatar"></div>
+    </div>
+  </nav>
+
+  <div class="body-wrap">
+    <aside class="sidebar">
+      <div class="sb-identity">
+        <div class="sb-id-name">Noah G.</div>
+        <div class="sb-id-sub">PE · Philadelphia PA</div>
+        <div class="sb-id-tag">Gold ring · Verified</div>
+      </div>
+      <div class="sb-section">My FORA</div>
+      <div class="sb-link active"><div class="sb-dot"></div>Dashboard</div>
+      <div class="sb-link"><div class="sb-dot"></div>My Profile</div>
+      <div class="sb-link"><div class="sb-dot"></div>Deliberations <span class="sb-badge">3</span></div>
+      <div class="sb-link"><div class="sb-dot"></div>Bills Tracking <span class="sb-badge blue">7</span></div>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Following</div>
+      <div class="sb-link"><div class="sb-dot"></div>Philadelphia</div>
+      <div class="sb-link"><div class="sb-dot"></div>Pennsylvania</div>
+      <div class="sb-link"><div class="sb-dot"></div>United States</div>
+    </aside>
+
+    <div class="main">
+      <div class="page-eyebrow">Your dashboard</div>
+      <div class="page-title">Customizable workspace</div>
+      <div class="page-sub">Same 14-widget grid as v13. Same drag-to-move, edge-drag resize, widget picker. Three new widget types now available in the picker — flagged below in gold.</div>
+
+      <div class="o1-grid">
+        <!-- Civic Feed (existing) -->
+        <div class="o1-widget" style="grid-column:1/7;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">📰</div>
+            <div class="o1-w-title">Civic Feed</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item"><div>Philadelphia City Council passes property tax relief bill 13-3</div><div class="o1-item-meta">★ 2hr ago · Local</div></div>
+          <div class="o1-item"><div>PA Senate debates SB-162 Workmen's Compensation appropriations</div><div class="o1-item-meta">★ 5hr ago · State</div></div>
+          <div class="o1-item"><div>Federal SNAP funding negotiations stall in House Appropriations</div><div class="o1-item-meta">★ 8hr ago · Federal</div></div>
+        </div>
+
+        <!-- My Reps (existing) -->
+        <div class="o1-widget" style="grid-column:7/10;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">⚖</div>
+            <div class="o1-w-title">My Representatives</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item">Cherelle Parker · Mayor</div>
+          <div class="o1-item">Kenyatta Johnson · Council Pres</div>
+          <div class="o1-item">Nikil Saval · State Sen D-1</div>
+          <div class="o1-item">Dwight Evans · US House PA-3</div>
+        </div>
+
+        <!-- Civic Marker (existing) -->
+        <div class="o1-widget" style="grid-column:10/13;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">◎</div>
+            <div class="o1-w-title">Civic Marker</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item"><div style="font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--blue);">Bella Vista</div><div class="o1-item-meta">Your RCO · Active 2027</div></div>
+          <div class="o1-item"><div>Philadelphia · 19147</div><div class="o1-item-meta">District 2 · Johnson</div></div>
+        </div>
+
+        <!-- ✨ NEW WIDGET 1: How-To Philly -->
+        <div class="o1-widget new" style="grid-column:1/5;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">🗺</div>
+            <div class="o1-w-title">How-To Philly</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item"><div>Start a business in Philadelphia</div><div class="o1-item-meta">12 steps · L&I · Revenue · DOR</div></div>
+          <div class="o1-item"><div>Get a building permit</div><div class="o1-item-meta">8 steps · L&I eCLIPSE</div></div>
+          <div class="o1-item"><div>Apply for a contractor license</div><div class="o1-item-meta">5 steps · BBL</div></div>
+          <div class="o1-item"><div>Register a vacant lot for community use</div><div class="o1-item-meta">9 steps · Land Bank</div></div>
+        </div>
+
+        <!-- ✨ NEW WIDGET 2: Care for Your Home -->
+        <div class="o1-widget new" style="grid-column:5/9;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">🏛</div>
+            <div class="o1-w-title">Care for Your Home</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item"><div>Sodium silicate water service lines</div><div class="o1-item-meta">★ NACE 30-yr study · 1920s rowhomes</div></div>
+          <div class="o1-item"><div>Repointing brick · party walls</div><div class="o1-item-meta">Best practices · 1900-1940 stock</div></div>
+          <div class="o1-item"><div>Mansard roof slate replacement</div><div class="o1-item-meta">Verified contractor list</div></div>
+        </div>
+
+        <!-- ✨ NEW WIDGET 3: This Day in Philly -->
+        <div class="o1-widget new" style="grid-column:9/13;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">★</div>
+            <div class="o1-w-title">This Day in Philly</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item">
+            <div style="font-family:'Libre Baskerville',serif;font-style:italic;font-size:11px;color:var(--gilt);">May 11 · 1880</div>
+            <div style="margin-top:3px;">The Free Library of Philadelphia is founded by Dr. William Pepper</div>
+          </div>
+          <div class="o1-item">
+            <div style="font-family:'Libre Baskerville',serif;font-style:italic;font-size:11px;color:var(--gilt);">Born today</div>
+            <div style="margin-top:3px;">Marian Anderson · 1897 · South Philadelphia</div>
+          </div>
+        </div>
+
+        <!-- Bills Tracking (existing) -->
+        <div class="o1-widget" style="grid-column:1/7;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">§</div>
+            <div class="o1-w-title">Bills Tracking</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item">🇺🇸 HR 1234 · Veterans Healthcare Reform</div>
+          <div class="o1-item">PA SB 162 · Workmen's Comp Appropriations</div>
+          <div class="o1-item">Philly 260241 · Title 9 amendments</div>
+        </div>
+
+        <!-- Active Deliberations (existing) -->
+        <div class="o1-widget" style="grid-column:7/13;">
+          <div class="o1-w-header">
+            <div class="o1-w-icon">⚔</div>
+            <div class="o1-w-title">Active Deliberations</div>
+            <div class="o1-w-handle"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="o1-item">Round 3 · Should Philly raise the wage tax? · 4d left</div>
+          <div class="o1-item">Round 2 · ZBA Variance — 1234 S 8th · 12hr left</div>
+        </div>
+      </div>
+
+      <!-- Widget picker preview -->
+      <div class="o1-picker">
+        <div class="o1-picker-title">Widget Picker · Three new options</div>
+        <div class="o1-picker-sub">Click "+ Add Widget" in customize mode. Existing 14 widgets unchanged. Three new types flagged in gold.</div>
+        <div class="o1-picker-grid">
+          <div class="o1-pick">
+            <div class="o1-pick-tag">Existing</div>
+            <div class="o1-pick-name">Civic Feed</div>
+            <div class="o1-pick-desc">Headlines across federal, state, city</div>
+          </div>
+          <div class="o1-pick">
+            <div class="o1-pick-tag">Existing</div>
+            <div class="o1-pick-name">My Representatives</div>
+            <div class="o1-pick-desc">All your elected officials</div>
+          </div>
+          <div class="o1-pick">
+            <div class="o1-pick-tag">Existing</div>
+            <div class="o1-pick-name">Duel Arena</div>
+            <div class="o1-pick-desc">Watch & join civic debates</div>
+          </div>
+          <div class="o1-pick new-pick">
+            <div class="o1-pick-tag">NEW · v14</div>
+            <div class="o1-pick-name">How-To Philly</div>
+            <div class="o1-pick-desc">Curated guides for licensing, permitting, registering — the labyrinth, mapped</div>
+          </div>
+          <div class="o1-pick new-pick">
+            <div class="o1-pick-tag">NEW · v14</div>
+            <div class="o1-pick-name">Care for Your Home</div>
+            <div class="o1-pick-desc">Rowhome-specific care · pipes, brick, roofs, lead, party walls</div>
+          </div>
+          <div class="o1-pick new-pick">
+            <div class="o1-pick-tag">NEW · v14</div>
+            <div class="o1-pick-name">This Day in Philly</div>
+            <div class="o1-pick-desc">History, anniversaries, famous Philadelphians born today</div>
+          </div>
+          <div class="o1-pick">
+            <div class="o1-pick-tag">Existing</div>
+            <div class="o1-pick-name">Civic Marker</div>
+            <div class="o1-pick-desc">Your jurisdictions at 3 scales</div>
+          </div>
+          <div class="o1-pick">
+            <div class="o1-pick-tag">Existing</div>
+            <div class="o1-pick-name">Notes</div>
+            <div class="o1-pick-desc">Research workspace</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     OPTION 2 — HOME / WORKSPACE MODE TOGGLE
+═══════════════════════════════════════════════════════ -->
+<div class="concept" id="opt2">
+  <div class="verdict">
+    <div class="v-tag opt2">Option 2 · Home / Workspace · Recommended</div>
+    <div class="v-title">Two dashboard modes. New users land on Home. Power users live in Workspace.</div>
+    <div class="v-sub">Home is a curated Philadelphia surface: your officials, your RCO, headlines, how-to library, home care, community lore, this day in history. Workspace is the v13 14-widget grid, unchanged. Toggle in the top right. <strong>Respects everything locked in v13. Solves the actual mission problem you described.</strong></div>
+  </div>
+
+  <nav class="top-nav">
+    <div class="tn-logo">F<span>O</span>RA</div>
+    <div class="tn-tabs">
+      <div class="tn-tab active">Dashboard</div>
+      <div class="tn-tab">Legislation</div>
+      <div class="tn-tab">Issues</div>
+      <div class="tn-tab">Events</div>
+      <div class="tn-tab">Discourse</div>
+    </div>
+    <div class="tn-right">
+      <input class="tn-search" type="text" placeholder="Search FORA…">
+      <div class="tn-mode">
+        <div class="tn-mode-btn active">🏠 Home</div>
+        <div class="tn-mode-btn">⌘ Workspace</div>
+      </div>
+      <div class="tn-avatar"></div>
+    </div>
+  </nav>
+
+  <div class="body-wrap">
+    <aside class="sidebar">
+      <div class="sb-identity">
+        <div class="sb-id-name">Noah G.</div>
+        <div class="sb-id-sub">PE · Philadelphia PA</div>
+        <div class="sb-id-tag">Gold ring · Verified</div>
+      </div>
+      <div class="sb-section">My FORA</div>
+      <div class="sb-link active"><div class="sb-dot"></div>Home</div>
+      <div class="sb-link"><div class="sb-dot"></div>My Profile</div>
+      <div class="sb-link"><div class="sb-dot"></div>Saved Guides <span class="sb-badge gilt">4</span></div>
+      <div class="sb-link"><div class="sb-dot"></div>Bills Tracking <span class="sb-badge blue">7</span></div>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Philadelphia</div>
+      <div class="sb-link"><div class="sb-dot"></div>My RCO · BVNA</div>
+      <div class="sb-link"><div class="sb-dot"></div>How-To Library</div>
+      <div class="sb-link"><div class="sb-dot"></div>Home Care</div>
+      <div class="sb-link"><div class="sb-dot"></div>Cultural Institutions</div>
+      <div class="sb-link"><div class="sb-dot"></div>Philly History</div>
+    </aside>
+
+    <div class="main">
+      <!-- Hero strip -->
+      <div class="o2-hero">
+        <div class="o2-hero-eyebrow">Your Philadelphia · Monday</div>
+        <div class="o2-hero-title">Good morning, Noah.</div>
+        <div class="o2-hero-date">May 11, 2026 · 19147 · Bella Vista</div>
+        <div class="o2-hero-row">
+          <div class="o2-hero-card">
+            <div class="o2-hc-label">Headline · 2hr ago</div>
+            <div class="o2-hc-title">Council passes property tax relief 13-3</div>
+            <div class="o2-hc-sub">Johnson's bill survives final reading</div>
+          </div>
+          <div class="o2-hero-card">
+            <div class="o2-hc-label">Near you · Thu 7pm</div>
+            <div class="o2-hc-title">BVNA zoning meeting — Bainbridge</div>
+            <div class="o2-hc-sub">3 ZBA cases on the agenda</div>
+          </div>
+          <div class="o2-hero-card">
+            <div class="o2-hc-label">Bill near you</div>
+            <div class="o2-hc-title">Philly 260241 · Title 9 amendments</div>
+            <div class="o2-hc-sub">Affects D2 businesses · In Council</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Officials + RCO row -->
+      <div class="o2-row o2-row-asym">
+        <div class="o2-card">
+          <div class="o2-card-eyebrow">Your representatives</div>
+          <div class="o2-card-title">Who speaks for you</div>
+          <div class="o2-card-sub">Compressed view. Tap any to see their full profile, sponsored bills, and contact.</div>
+          <div class="o2-officials-grid">
+            <div class="o2-off-card"><div class="o2-off-photo"></div><div class="o2-off-name">Cherelle Parker</div><div class="o2-off-role">Mayor</div></div>
+            <div class="o2-off-card"><div class="o2-off-photo"></div><div class="o2-off-name">Kenyatta Johnson</div><div class="o2-off-role">Council Pres · D2</div></div>
+            <div class="o2-off-card"><div class="o2-off-photo"></div><div class="o2-off-name">Nikil Saval</div><div class="o2-off-role">PA Senate D-1</div></div>
+            <div class="o2-off-card"><div class="o2-off-photo"></div><div class="o2-off-name">Ben Waxman</div><div class="o2-off-role">PA House D-182</div></div>
+            <div class="o2-off-card"><div class="o2-off-photo"></div><div class="o2-off-name">Dwight Evans</div><div class="o2-off-role">US House PA-3</div></div>
+            <div class="o2-off-card"><div class="o2-off-photo"></div><div class="o2-off-name">John Fetterman</div><div class="o2-off-role">US Senate</div></div>
+          </div>
+        </div>
+        <div class="o2-card o2-rco-card">
+          <div class="o2-card-eyebrow">Your seat at the table</div>
+          <div class="o2-rco-name">Bella Vista Neighbors</div>
+          <div class="o2-rco-tag">✓ Active RCO · expires 2027</div>
+          <div class="o2-card-sub" style="margin-bottom:10px;">Your neighborhood's legally recognized voice in zoning. When something changes on your block, BVNA's letter goes into the official record.</div>
+          <div class="o2-rco-next">
+            <strong>Next meeting · Thursday May 14, 7pm</strong><br>
+            Palumbo Recreation Center · 3 ZBA cases on agenda
+          </div>
+        </div>
+      </div>
+
+      <!-- How-To Library -->
+      <div class="o2-card">
+        <div class="o2-card-eyebrow">Figure it out · How-to library</div>
+        <div class="o2-card-title">Most Philadelphians do this once. We did it for you.</div>
+        <div class="o2-card-sub" style="font-family:'Libre Baskerville',serif;font-style:italic;color:var(--gilt);">"The information is out there. Here, we curate it — and as a community, we seek to perfect it, fully knowing there's no such thing as perfection. We do so in order to form a more perfect Union."</div>
+        <div class="o2-howto-list">
+          <div class="o2-howto-item">
+            <div class="o2-ht-tag">Commerce · Most asked</div>
+            <div class="o2-ht-name">Start a business in Philadelphia</div>
+            <div class="o2-ht-meta">12 steps · L&I · Revenue · IRS · 6 sites</div>
+          </div>
+          <div class="o2-howto-item">
+            <div class="o2-ht-tag">Commerce</div>
+            <div class="o2-ht-name">Apply for a contractor license</div>
+            <div class="o2-ht-meta">5 steps · BBL · Insurance · Bond</div>
+          </div>
+          <div class="o2-howto-item">
+            <div class="o2-ht-tag">Property</div>
+            <div class="o2-ht-name">Get a building permit (eCLIPSE)</div>
+            <div class="o2-ht-meta">8 steps · L&I · zoning lookup first</div>
+          </div>
+          <div class="o2-howto-item">
+            <div class="o2-ht-tag">Property</div>
+            <div class="o2-ht-name">Transfer a deed (inherited rowhome)</div>
+            <div class="o2-ht-meta">11 steps · Recorder · DOR · Estate</div>
+          </div>
+          <div class="o2-howto-item">
+            <div class="o2-ht-tag">Civic</div>
+            <div class="o2-ht-name">Register a vacant lot for community use</div>
+            <div class="o2-ht-meta">9 steps · Land Bank · Side Yard</div>
+          </div>
+          <div class="o2-howto-item">
+            <div class="o2-ht-tag">Civic</div>
+            <div class="o2-ht-name">File a 311 service request (correctly)</div>
+            <div class="o2-ht-meta">Which code · which agency · escalation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Home Care + Community Lore -->
+      <div class="o2-row o2-row-2" style="margin-top:18px;">
+        <div class="o2-card">
+          <div class="o2-card-eyebrow">Care for your home</div>
+          <div class="o2-card-title">Our houses are built the same way.</div>
+          <div class="o2-card-sub">Rowhome care is a shared inheritance. What works on your block works on mine. Verified guidance, neighborhood-specific.</div>
+          <div class="o2-care-stack">
+            <div class="o2-care-item">
+              <div class="o2-care-icon">⚠</div>
+              <div class="o2-care-body">
+                <div class="o2-care-title">Sodium silicate water service lines</div>
+                <div class="o2-care-desc">If your home was built 1920–1940, your service line may be sodium silicate. NACE's 30-year study covers failure rates, replacement timing, and PWD's lead service line replacement program. Read the curated summary.</div>
+              </div>
+            </div>
+            <div class="o2-care-item">
+              <div class="o2-care-icon">🧱</div>
+              <div class="o2-care-body">
+                <div class="o2-care-title">Repointing brick & party wall responsibilities</div>
+                <div class="o2-care-desc">Your party wall is shared with your neighbor — legally. What you can do alone, what requires their sign-off, and what the city requires permits for.</div>
+              </div>
+            </div>
+            <div class="o2-care-item">
+              <div class="o2-care-icon">🏠</div>
+              <div class="o2-care-body">
+                <div class="o2-care-title">Lead paint testing — pre-1978 stock</div>
+                <div class="o2-care-desc">Free testing programs, certified inspectors, and the city's lead disclosure law. Required if you're renting or selling.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="o2-card">
+          <div class="o2-card-eyebrow">Philly knows · Community curated</div>
+          <div class="o2-card-title">Lore we share, so no one figures it out alone.</div>
+          <div class="o2-card-sub">A curated, moderated, source-verified library of the things Philadelphians learn one at a time. Like a Facebook group — but ordered, sourced, and built to help.</div>
+          <div class="o2-lore-item">
+            <div class="o2-lore-tag">Featured · Verified</div>
+            <div class="o2-lore-title">The NACE 30-year sodium silicate pipe study</div>
+            <div class="o2-lore-meta">Sourced 18 times · 312 citizens reviewed</div>
+          </div>
+          <div class="o2-lore-item">
+            <div class="o2-lore-tag">Process</div>
+            <div class="o2-lore-title">How to actually get a stop sign installed on your block</div>
+            <div class="o2-lore-meta">Streets Dept · 6-step path · 247 readers</div>
+          </div>
+          <div class="o2-lore-item">
+            <div class="o2-lore-tag">Tradespeople</div>
+            <div class="o2-lore-title">Verified slate roofers serving South Philly</div>
+            <div class="o2-lore-meta">8 contractors · neighbor-reviewed</div>
+          </div>
+          <div class="o2-lore-item">
+            <div class="o2-lore-tag">Civic</div>
+            <div class="o2-lore-title">When your trash actually gets picked up (vs. the schedule)</div>
+            <div class="o2-lore-meta">Crowdsourced by zone · refreshed weekly</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- History card -->
+      <div class="o2-row o2-row-2" style="margin-top:18px;">
+        <div class="o2-history-card">
+          <div class="o2-hist-date">★ This day in Philadelphia · May 11</div>
+          <div class="o2-hist-title">1880 — The Free Library of Philadelphia is founded</div>
+          <div class="o2-hist-body">Dr. William Pepper convinces City Councils to charter a free public library — one of the first in the United States. The Parkway Central building wouldn't open until 1927, but Pepper's argument anchored the idea: <em>knowledge belongs to the commons.</em></div>
+          <div class="o2-hist-quote">"A library is the people's university." — William Pepper, 1880</div>
+        </div>
+        <div class="o2-card">
+          <div class="o2-card-eyebrow">Famous Philadelphians · Born today</div>
+          <div class="o2-card-title">Marian Anderson · 1897</div>
+          <div class="o2-card-sub">Contralto, civil rights pioneer, born in South Philadelphia. In 1939, after the Daughters of the American Revolution refused her Constitution Hall, she sang from the steps of the Lincoln Memorial to 75,000 people — and a radio audience of millions. First Black soloist at the Met.</div>
+          <div class="dp-rule-gilt"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);">Also born May 11 · Philadelphia</div>
+          <div style="margin-top:6px;font-size:12px;color:var(--ink);">Salvador Dalí (visited 1965 retrospective at PMA) · 2 more →</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     OPTION 3 — REPLACE v13 ENTIRELY
+═══════════════════════════════════════════════════════ -->
+<div class="concept" id="opt3">
+  <div class="verdict">
+    <div class="v-tag opt3">Option 3 · Replace</div>
+    <div class="v-title">No widget grid. The dashboard is a structured Philadelphia editorial home.</div>
+    <div class="v-sub">Cleanest visually. The dashboard becomes a single curated newspaper-front for Philadelphia. The Legislation / Issues / Events / Discourse tabs absorb everything the widgets used to do. <strong>Throws away v13 customizability, the duel widget, the notes widget, and weeks of locked decisions.</strong> Strongest editorial voice but the highest cost.</div>
+  </div>
+
+  <nav class="top-nav">
+    <div class="tn-logo">F<span>O</span>RA</div>
+    <div class="tn-tabs">
+      <div class="tn-tab active">Dashboard</div>
+      <div class="tn-tab">Legislation</div>
+      <div class="tn-tab">Issues</div>
+      <div class="tn-tab">Events</div>
+      <div class="tn-tab">Discourse</div>
+    </div>
+    <div class="tn-right">
+      <input class="tn-search" type="text" placeholder="Search FORA…">
+      <div class="tn-avatar"></div>
+    </div>
+  </nav>
+
+  <div class="body-wrap">
+    <aside class="sidebar">
+      <div class="sb-identity">
+        <div class="sb-id-name">Noah G.</div>
+        <div class="sb-id-sub">PE · Philadelphia PA</div>
+        <div class="sb-id-tag">Gold ring · Verified</div>
+      </div>
+      <div class="sb-section">Sections</div>
+      <div class="sb-link active"><div class="sb-dot"></div>Today</div>
+      <div class="sb-link"><div class="sb-dot"></div>Government</div>
+      <div class="sb-link"><div class="sb-dot"></div>How-To</div>
+      <div class="sb-link"><div class="sb-dot"></div>Home Care</div>
+      <div class="sb-link"><div class="sb-dot"></div>History</div>
+      <div class="sb-link"><div class="sb-dot"></div>Culture</div>
+      <div class="sb-link"><div class="sb-dot"></div>Discourse</div>
+    </aside>
+
+    <div class="main">
+      <!-- Editorial banner -->
+      <div class="o3-banner">
+        <div class="o3-banner-eyebrow">Vol. I · No. 132 · Monday, May 11, 2026</div>
+        <div class="o3-banner-title">The <em>Philadelphia</em> Daily</div>
+        <div class="o3-banner-sub">Your civic picture. Your home. Your block. Your city. We curate what you need to know — and what you'd otherwise figure out alone.</div>
+        <div class="o3-banner-meta">
+          <div class="o3-bm-item">Reading time · <strong>9 min</strong></div>
+          <div class="o3-bm-item">For · <strong>19147 · D2</strong></div>
+          <div class="o3-bm-item">RCO · <strong>BVNA</strong></div>
+          <div class="o3-bm-item">Bills near you · <strong>3 active</strong></div>
+        </div>
+      </div>
+
+      <!-- Top mosaic: lead story + 2 secondary -->
+      <div class="o3-mosaic">
+        <div class="o3-tile feature" style="grid-column:1/8;">
+          <div class="o3-tile-eyebrow">Lead · Affects your block</div>
+          <div class="o3-tile-title" style="font-size:24px;">Council passes property tax relief 13-3 — and what it means for Bella Vista</div>
+          <div class="o3-tile-body">Council President Johnson's bill carves a 15% deduction for owner-occupiers in homestead-eligible neighborhoods. Bella Vista qualifies. The mechanism is identical to the 2024 version that died in committee, but Brooks (WF) flipped after Title 9 negotiations.</div>
+          <div class="o3-pull">"The wage tax is regressive. The property tax doesn't have to be." — Johnson, floor remarks</div>
+          <div class="o3-action-row">
+            <div class="o3-chip">Read the bill</div>
+            <div class="o3-chip green">Join discourse · 47 active</div>
+            <div class="o3-chip gilt">Email your councilmember</div>
+          </div>
+        </div>
+
+        <div class="o3-tile dark" style="grid-column:8/13;">
+          <div class="o3-tile-eyebrow">Tonight · Your RCO</div>
+          <div class="o3-tile-title">Bella Vista Neighbors meets Thursday 7pm</div>
+          <div class="o3-tile-body">Three ZBA cases on the agenda — including a 1234 S 8th variance that's been bouncing for six months. The RCO's letter goes into the official record before the Zoning Board votes.</div>
+          <ul class="o3-list-tight">
+            <li><span>1234 S 8th · variance</span><span class="num">CASE 3</span></li>
+            <li><span>808 Christian · use</span><span class="num">CASE 2</span></li>
+            <li><span>1100 Bainbridge · special</span><span class="num">CASE 1</span></li>
+          </ul>
+          <div class="o3-action-row">
+            <div class="o3-chip gilt">Add to calendar</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How-To section divider -->
+      <div class="o3-section-rule">
+        <div class="o3-sr-label">★ Figure it out — How-To Philadelphia</div>
+      </div>
+
+      <div class="o3-mosaic">
+        <div class="o3-tile feature" style="grid-column:1/6;">
+          <div class="o3-tile-eyebrow">Most asked · Commerce</div>
+          <div class="o3-tile-title">Start a business in Philadelphia — 12 steps, 6 city websites, one map</div>
+          <div class="o3-tile-body">Every Philadelphian who's ever opened a shop has had to figure this out the same way: trial, error, three trips to the Municipal Services Building, and one CPA. We map the whole thing.</div>
+          <div class="o3-pull">"They tell you the information is out there. I'm exhausted from looking."</div>
+        </div>
+
+        <div class="o3-tile" style="grid-column:6/9;">
+          <div class="o3-tile-eyebrow">Property</div>
+          <div class="o3-tile-title">Get a building permit (eCLIPSE)</div>
+          <div class="o3-tile-body">L&I's online portal. 8 steps. We tell you which zoning lookup to run first so you don't waste $187 on the wrong application.</div>
+          <div class="o3-action-row"><div class="o3-chip">Start guide</div></div>
+        </div>
+
+        <div class="o3-tile" style="grid-column:9/13;">
+          <div class="o3-tile-eyebrow">Commerce</div>
+          <div class="o3-tile-title">Contractor license · BBL</div>
+          <div class="o3-tile-body">5 steps · insurance threshold · bond requirements · what counts as a "specialty" trade. Updated for 2026.</div>
+          <div class="o3-action-row"><div class="o3-chip">Start guide</div></div>
+        </div>
+      </div>
+
+      <!-- Home care -->
+      <div class="o3-section-rule">
+        <div class="o3-sr-label">★ Care for your home — Inherited Wealth</div>
+      </div>
+
+      <div class="o3-mosaic">
+        <div class="o3-tile brick" style="grid-column:1/7;">
+          <div class="o3-tile-eyebrow">★ Featured · 312 reviewed</div>
+          <div class="o3-tile-title">The sodium silicate problem — what your service line says about 1920s Philadelphia</div>
+          <div class="o3-tile-body">If your home was built between 1920 and 1940, there's a real chance your water service line is sodium silicate — a material now linked, through NACE's 30-year study, to faster degradation and lead leaching. PWD has a replacement program. Most homeowners don't know about it.</div>
+          <div class="o3-pull" style="border-color:var(--gilt-lt);color:white;">Our houses are built the same way. The information should be shared the same way.</div>
+        </div>
+
+        <div class="o3-tile" style="grid-column:7/10;">
+          <div class="o3-tile-eyebrow">Party walls</div>
+          <div class="o3-tile-title">Repointing brick — what you can do alone</div>
+          <div class="o3-tile-body">Your party wall is legally shared with your neighbor. What requires their sign-off, what requires a permit, and which mortars actually work in our freeze-thaw climate.</div>
+        </div>
+
+        <div class="o3-tile" style="grid-column:10/13;">
+          <div class="o3-tile-eyebrow">Health</div>
+          <div class="o3-tile-title">Lead paint · pre-1978</div>
+          <div class="o3-tile-body">Free testing. Required disclosure if you sell or rent. Certified inspectors in District 2.</div>
+        </div>
+      </div>
+
+      <!-- History + Culture -->
+      <div class="o3-section-rule">
+        <div class="o3-sr-label">★ This day · Philadelphia history</div>
+      </div>
+
+      <div class="o3-mosaic">
+        <div class="o3-tile dark" style="grid-column:1/6;">
+          <div class="o3-tile-eyebrow">★ May 11, 1880</div>
+          <div class="o3-tile-title">The Free Library of Philadelphia is founded</div>
+          <div class="o3-tile-body">Dr. William Pepper convinces City Councils to charter a free public library — one of the first in the United States. The Parkway Central building wouldn't open until 1927.</div>
+          <div class="o3-pull" style="color:var(--gilt-lt);border-color:var(--gilt-lt);">"A library is the people's university." — Pepper, 1880</div>
+        </div>
+
+        <div class="o3-tile" style="grid-column:6/9;">
+          <div class="o3-tile-eyebrow">Born today · Philadelphia</div>
+          <div class="o3-tile-title">Marian Anderson · 1897</div>
+          <div class="o3-tile-body">Contralto and civil rights pioneer. Born in South Philadelphia. First Black soloist at the Met.</div>
+        </div>
+
+        <div class="o3-tile" style="grid-column:9/13;">
+          <div class="o3-tile-eyebrow">Cultural institution</div>
+          <div class="o3-tile-title">Free Library · how to use it</div>
+          <div class="o3-tile-body">Card, room booking, the archive, the music dept, the rare book room. The full picture.</div>
+          <div class="o3-action-row"><div class="o3-chip brick">Visit guide</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function show(n){
+  document.querySelectorAll('.concept').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('opt'+n).classList.add('active');
+  document.querySelector('.sw-btn[data-opt="'+n+'"]').classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+
+</body>
+</html>

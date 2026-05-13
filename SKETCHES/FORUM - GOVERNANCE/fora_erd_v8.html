@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FORA — ERD v8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0e11;
+    --surface: #141518;
+    --border: rgba(255,255,255,0.07);
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --text: rgba(244,237,224,0.88);
+    --muted: rgba(244,237,224,0.38);
+    --new-badge: rgba(45,90,61,0.75);
+    --new-text: #7fd4a0;
+    --lang-color: #7ab8df;
+    --lang-surface: rgba(122,184,223,0.08);
+    --lang-border: rgba(122,184,223,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 32px 24px 80px;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+  }
+  .page-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .version-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+  }
+
+  /* CARE Principles banner */
+  .care-banner {
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    background: rgba(122,184,223,0.07);
+    border: 1px solid var(--lang-border);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .care-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--lang-color);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .care-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .care-item {
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 10px 12px;
+  }
+  .care-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--lang-color);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .care-word {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(244,237,224,0.5);
+    margin-bottom: 5px;
+  }
+  .care-desc {
+    font-size: 10px;
+    color: rgba(244,237,224,0.55);
+    line-height: 1.5;
+  }
+
+  .changelog {
+    max-width: 1100px;
+    margin: 0 auto 48px;
+    background: rgba(45,90,61,0.12);
+    border: 1px solid rgba(45,90,61,0.3);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .changelog-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--new-text);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 12px;
+  }
+  .changelog-title:first-child { margin-top: 0; }
+  .changelog-item {
+    font-size: 11px;
+    color: rgba(244,237,224,0.65);
+    margin-bottom: 5px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0.5px;
+  }
+  .crit { background: rgba(200,60,60,0.3); color: #f09090; }
+  .sem  { background: rgba(60,100,180,0.3); color: #90b0f0; }
+  .hyg  { background: rgba(60,60,60,0.4);   color: #a0a0a0; }
+  .brk  { background: rgba(200,100,0,0.35); color: #f0b060; }
+  .new-tag { background: rgba(45,90,61,0.6); color: #7fd4a0; }
+
+  /* ERD grid */
+  .erd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    grid-column: 1 / -1;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 0 4px;
+    border-bottom: 1px solid var(--border);
+    margin-top: 12px;
+  }
+  .section-label.lang-section {
+    color: var(--lang-color);
+    border-bottom-color: var(--lang-border);
+  }
+
+  .entity {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .entity.geo      { border-top: 2px solid #7ab0df; }
+  .entity.core     { border-top: 2px solid #c9a84c; }
+  .entity.election { border-top: 2px solid #8fbf8f; }
+  .entity.identity { border-top: 2px solid #b07adf; }
+  .entity.discourse{ border-top: 2px solid #dfaa7a; }
+  .entity.harm     { border-top: 2px solid #df7a7a; }
+  .entity.civic    { border-top: 2px solid #c0c070; }
+  .entity.ops      { border-top: 2px solid #9ab0c0; }
+  .entity.lang     { border-top: 2px solid #7ab8df; background: rgba(122,184,223,0.04); }
+
+  .entity-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .entity-icon { font-size: 14px; }
+  .entity-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+  }
+  .entity.lang .entity-name { color: var(--lang-color); }
+
+  .entity-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .entity-tag.new-entity  { background: rgba(45,90,61,0.6);  color: #7fd4a0; }
+  .entity-tag.updated     { background: rgba(90,60,20,0.6);  color: #dfaa60; }
+  .entity-tag.breaking    { background: rgba(180,50,50,0.6); color: #f09090; }
+  .entity-tag.lang-new    { background: rgba(122,184,223,0.2); color: #7ab8df; }
+
+  .entity-fields { padding: 6px 0 8px; }
+
+  .field {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 3px 12px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .field:hover { background: rgba(255,255,255,0.03); }
+
+  .field-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    min-width: 30px;
+    text-align: center;
+  }
+  .pk  { background: rgba(201,168,76,0.25);  color: var(--gold-light); }
+  .fk  { background: rgba(90,140,190,0.25);  color: #9ac0e8; }
+  .idx { background: rgba(90,170,110,0.2);   color: #9adf9a; }
+  .new { background: rgba(45,90,61,0.65);    color: #7fd4a0; font-weight: 700; }
+  .lnw { background: rgba(122,184,223,0.25); color: #7ab8df; font-weight: 700; }
+  .fix { background: rgba(90,60,20,0.65);    color: #dfaa60; font-weight: 700; }
+  .brk-badge { background: rgba(180,50,50,0.55); color: #f09090; font-weight: 700; }
+  .dash { color: var(--muted); font-size: 10px; min-width: 30px; text-align: center; }
+
+  .field-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(244,237,224,0.85);
+    flex: 1;
+  }
+  .field-name.renamed { color: #dfaa60; }
+  .field-type {
+    font-size: 10px;
+    color: rgba(244,237,224,0.32);
+    text-align: right;
+    flex-shrink: 0;
+    max-width: 150px;
+  }
+  .note-row {
+    font-size: 9.5px;
+    opacity: 0.6;
+    padding: 1px 12px 3px 48px;
+    font-style: italic;
+    color: rgba(244,237,224,0.55);
+    line-height: 1.4;
+  }
+  .note-row.care-note {
+    color: rgba(122,184,223,0.7);
+    opacity: 1;
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3px;
+  }
+
+  .divider-row {
+    border-top: 1px solid rgba(255,255,255,0.04);
+    margin: 4px 0;
+  }
+
+  .legend {
+    max-width: 1100px;
+    margin: 48px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .legend-title {
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .legend-item {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* entity count badge */
+  .count-strip {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .count-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(244,237,224,0.45);
+  }
+  .count-chip.highlight {
+    border-color: var(--lang-border);
+    background: rgba(122,184,223,0.07);
+    color: var(--lang-color);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">FORA — Entity Relationship Diagram</div>
+  <div class="page-subtitle">Civic Intelligence Platform · Full Schema Reference</div>
+  <div class="version-badge">v8 · 2026-03-12 · Language, Translation &amp; Indigenous Civic Infrastructure — 7 new entities, 2 updated</div>
+</div>
+
+<!-- CARE Principles Banner -->
+<div class="care-banner">
+  <div class="care-title">⚖ CARE Principles — Indigenous Data Sovereignty (applied to §9 Language &amp; Recording)</div>
+  <div class="care-grid">
+    <div class="care-item">
+      <div class="care-letter">C</div>
+      <div class="care-word">Collective Benefit</div>
+      <div class="care-desc">Data ecosystems must serve the collective needs of Indigenous communities. Tribal language data benefits the community, not only researchers or the platform.</div>
+    </div>
+    <div class="care-item">
+      <div class="care-letter">A</div>
+      <div class="care-word">Authority to Control</div>
+      <div class="care-desc">Tribes govern their own data. LanguageSteward role = formal tribal appointment. Tribes can withdraw all data at any time. FORA is custodian, not owner.</div>
+    </div>
+    <div class="care-item">
+      <div class="care-letter">R</div>
+      <div class="care-word">Responsibility</div>
+      <div class="care-desc">FORA has a responsibility to share data in ways that strengthen tribal sovereignty. Recordings of elders are treated as irreplaceable archival heritage.</div>
+    </div>
+    <div class="care-item">
+      <div class="care-letter">E</div>
+      <div class="care-word">Ethics</div>
+      <div class="care-desc">Minimizing harm to Indigenous peoples. access_level on CivicRecording is set by the tribe. Critically endangered language recordings have heightened access controls.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Changelog -->
+<div class="changelog">
+  <div class="changelog-title">v8 Changes — Language, Translation &amp; Indigenous Civic Infrastructure</div>
+
+  <div class="changelog-item"><span class="tag new-tag">NEW</span> <strong>§9 Language &amp; Recording</strong> — 7 new entities: CivicLanguage, Translation, TranslationVote, CivicRecording, CivicTranscript, TranscriptSegment, LanguageSteward.</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> <strong>Jurisdiction</strong>: +<code>civic_languages</code> string[] — ordered pair of ISO 639-3 codes defining the display language pair for this jurisdiction. Index 0 is always the primary civic language; index 1 is the paired secondary. EN omitted for jurisdictions where EN is primary; always present as index 0 for US/UK/CA/AU. Examples: <code>["en","es"]</code> Cuba · <code>["en","de"]</code> Germany · <code>["en","fr"]</code> Canada · <code>["en","ar"]</code> UAE · <code>["en","nav"]</code> Navajo Nation.</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> <strong>Jurisdiction</strong>: +<code>data_sovereignty_tier</code> enum — <code>standard · indigenous_care · watch · restricted</code>. indigenous_care tier activates CARE principles enforcement: withdrawal rights, steward-gated translations, heightened recording access controls.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> <strong>CivicLanguage</strong>: master registry. <code>rtl</code> boolean drives layout flip for Arabic (UAE). <code>endangerment_status</code> (UNESCO scale) gates public crowdsourcing — critically_endangered languages require LanguageSteward approval for all contributions.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> <strong>Translation</strong>: every user-facing string in the platform is translatable. <code>source</code> enum: <code>ai_generated · community_submitted · steward_approved · official</code>. AI ships first; community replaces; steward approves for indigenous_care jurisdictions.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> <strong>CivicRecording</strong>: audio record of tribal gatherings. <code>access_level</code> set by tribe — not FORA. <code>pipeline_stage</code> tracks recording → transcription → transliteration → structured civic items. Audio is the primary record; text is derived.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> <strong>CivicTranscript + TranscriptSegment</strong>: time-aligned transcript. Click any segment line → audio jumps to that moment. Speaker identification (elder vs council member vs public) stored per segment. Segment confidence score for AI-generated segments.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> <strong>LanguageSteward</strong>: formal role appointed by tribal government. Scope controls what they can approve: translations · recordings · both. Required for any indigenous_care jurisdiction before language content goes live.</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> Translation crowdsourcing for tribal languages is <em>not</em> public. <code>CivicLanguage.public_crowdsource_enabled</code> boolean. Set false by default for all languages with endangerment_status endangered or worse. FORA surfaces contribution UI only to authenticated users with tribal affiliation signal or steward role.</div>
+
+  <div class="changelog-title">v7 Changes (carried forward)</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Jurisdiction: +government_type +status +suspended_since +suspension_reason · Office: +concurrent_holders_required +holder_balance_rule +investiture_dates +role_derived_from_office_id +living_regency · Person: +community_designation · CivicBody: jurisdiction_id→jurisdiction_ids (BREAKING) · Action: +territorial_scope</div>
+</div>
+
+<!-- Entity count -->
+<div class="count-strip">
+  <div class="count-chip">v7: 26 entities</div>
+  <div class="count-chip highlight">v8: 33 entities (+7)</div>
+  <div class="count-chip">2 updated (Jurisdiction)</div>
+  <div class="count-chip highlight">§9 Language &amp; Recording: 7 new</div>
+  <div class="count-chip">CARE Principles: enforced at schema level</div>
+  <div class="count-chip">RTL support: flag on CivicLanguage</div>
+</div>
+
+<div class="erd-grid">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §1 GEOGRAPHIC FOUNDATION                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 1 — Geographic Foundation</div>
+
+<!-- Jurisdiction -->
+<div class="entity geo">
+  <div class="entity-header">
+    <div class="entity-icon">🌐</div>
+    <div class="entity-name">Jurisdiction</div>
+    <span class="entity-tag updated">updated v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">system_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">federal_democratic_republic · constitutional_monarchy · single_party_state · theocracy · crown_dependency · tribal_sovereign_government · +others</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">government_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">full_government · geographic_only · devolved · federal_constituent · territory · special_administrative_region · indigenous_self_governing</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum default active</span></div>
+    <div class="note-row">active · suspended · dissolved · pending</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">suspended_since</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">suspension_reason</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="field-badge lnw">NEW</span><span class="field-name">civic_languages</span><span class="field-type">string[] (ISO 639-3)</span></div>
+    <div class="note-row">Ordered pair. Index 0 = primary civic language. Index 1 = secondary. ["en","es"] Cuba · ["en","de"] Germany · ["en","fr"] Canada · ["en","ar"] UAE · ["en","nav"] Navajo Nation · ["en","chr"] Cherokee Nation</div>
+    <div class="field"><span class="field-badge lnw">NEW</span><span class="field-name">data_sovereignty_tier</span><span class="field-type">enum</span></div>
+    <div class="note-row">standard · indigenous_care · watch · restricted</div>
+    <div class="note-row care-note">⚖ indigenous_care → CARE principles active: withdrawal rights enabled, steward-gated contributions, heightened recording access controls, tribal council opt-in required before any data goes live.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_id</span><span class="field-type">→ self (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">country_code</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">hardcoded_config</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exceptions_notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- District -->
+<div class="entity geo">
+  <div class="entity-header">
+    <div class="entity-icon">📍</div>
+    <div class="entity-name">District</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundary_polygon</span><span class="field-type">geometry (multi-polygon)</span></div>
+    <div class="note-row">Multi-polygon required for non-contiguous tribal checkerboard land parcels (e.g. Navajo Nation sections interspersed with state land).</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">census_geoid</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">population</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- AddressLookup -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔑</div>
+    <div class="entity-name">AddressLookup</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">address_hash</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">lat</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">lng</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">district_ids</span><span class="field-type">uuid[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_body_ids</span><span class="field-type">uuid[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cached_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §2 GOVERNMENT STRUCTURE                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 2 — Government Structure</div>
+
+<!-- Office -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">🏛</div>
+    <div class="entity-name">Office</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">branch</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">term_length_years</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">term_limit</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_elected</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">seats</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">concurrent_holders_required</span><span class="field-type">integer default 1</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">holder_balance_rule</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">investiture_dates</span><span class="field-type">date[] (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">role_derived_from_office_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">living_regency</span><span class="field-type">boolean default false</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_active</span><span class="field-type">boolean default true</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">abolished_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Person -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">👤</div>
+    <div class="entity-name">Person</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">full_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">photo_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">bio</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">contact_info</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_ids</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_proceedings</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exile_location</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">claimed_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_designation</span><span class="field-type">enum (nullable)</span></div>
+    <div class="note-row">unionist · nationalist · other · not_applicable. NI constitutional category only.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_spotlight_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Term -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">📜</div>
+    <div class="entity-name">Term (Incumbency)</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">civic_body_id</span><span class="field-type">→ CivicBody (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">election_id</span><span class="field-type">→ Election (nullable)</span></div>
+    <div class="note-row">⚠ CHECK: exactly one of office_id / civic_body_id NOT NULL</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">role</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_current</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">start_date / end_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legitimacy_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recognized_by</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- PersonStatus -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">⚖️</div>
+    <div class="entity-name">PersonStatus</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">mandate_source</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recognized_by</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_proceedings</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_support_score</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">valid_from / valid_until</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exalted_elder</span><span class="field-type">boolean default false</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">notes</span><span class="field-type">text</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §3 ELECTIONS & CANDIDACY                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 3 — Elections &amp; Candidacy</div>
+
+<!-- Election -->
+<div class="entity election">
+  <div class="entity-header">
+    <div class="entity-icon">🗳</div>
+    <div class="entity-name">Election</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">result_summary</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Candidacy -->
+<div class="entity election">
+  <div class="entity-header">
+    <div class="entity-icon">🙋</div>
+    <div class="entity-name">Candidacy</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">election_id</span><span class="field-type">→ Election</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">declared_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote_count / vote_pct</span><span class="field-type">integer / decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §4 CIVIC IDENTITY & CLAIMS                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 4 — Civic Identity &amp; Claims</div>
+
+<!-- User -->
+<div class="entity identity">
+  <div class="entity-header">
+    <div class="entity-icon">🪪</div>
+    <div class="entity-name">User</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">email_hash</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_occupation</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_age_range</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_region</span><span class="field-type">string</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">anonymity_level</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_profile</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">ui_language</span><span class="field-type">string (ISO 639-3)</span></div>
+    <div class="note-row">User's preferred display language. Overrides jurisdiction pair's secondary language for UI chrome; does not change civic content language pair.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficialClaim -->
+<div class="entity identity">
+  <div class="entity-header">
+    <div class="entity-icon">✅</div>
+    <div class="entity-name">OfficialClaim</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">term_id</span><span class="field-type">→ Term</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">verification_layer</span><span class="field-type">integer (1–3)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">evidence_url / notes</span><span class="field-type">string / text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">reviewed_by</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficeCreationRequest -->
+<div class="entity identity">
+  <div class="entity-header">
+    <div class="entity-icon">📝</div>
+    <div class="entity-name">OfficeCreationRequest</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">submitted_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">proposed_title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">proposed_jurisdiction</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">evidence_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_by</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §5 CIVIC ACTIONS & DISCOURSE               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 5 — Civic Actions &amp; Discourse</div>
+
+<!-- Action -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">⚡</div>
+    <div class="entity-name">Action</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">action_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">territorial_scope</span><span class="field-type">enum</span></div>
+    <div class="note-row">uk_wide · england_only · england_wales · scotland_only · devolved_varies · national · tribal_jurisdiction</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">source_recording_id</span><span class="field-type">→ CivicRecording (nullable)</span></div>
+    <div class="note-row">Pipeline link: tribal gathering recording → structured civic action. Preserves provenance from oral record to legislative item.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">introduced_at / resolved_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ActionPerson, Source, Contribution, ContentFlag, SentimentSnapshot — condensed -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">🔗</div>
+    <div class="entity-name">ActionPerson</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">role</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote</span><span class="field-type">enum (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">📰</div>
+    <div class="entity-name">Source</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">url / title / publisher</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">quality_tier</span><span class="field-type">enum (S/A/B/C/D/⚠)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">submitted_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">💬</div>
+    <div class="entity-name">Contribution</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">content_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">body</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">steel_man_score</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">📊</div>
+    <div class="entity-name">SentimentSnapshot</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_filter</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">support_pct / oppose_pct / neutral_pct</span><span class="field-type">decimal</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">sample_size</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">snapshotted_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">🚩</div>
+    <div class="entity-name">ContentFlag</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">contribution_id</span><span class="field-type">→ Contribution</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">flagged_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">reason</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §6 HARM & WELLBEING                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 6 — Harm &amp; Wellbeing</div>
+
+<div class="entity harm">
+  <div class="entity-header">
+    <div class="entity-icon">⚠️</div>
+    <div class="entity-name">HarmClaim</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">harm_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity harm">
+  <div class="entity-header">
+    <div class="entity-icon">🧠</div>
+    <div class="entity-name">PsychologicalLog</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">signal_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">session_duration_seconds</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">engagement_score</span><span class="field-type">decimal</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">intervention_shown</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">logged_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §7 CIVIC BODIES                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 7 — Civic Bodies</div>
+
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🏢</div>
+    <div class="entity-name">CivicBody</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">jurisdiction_ids</span><span class="field-type">uuid[] (BREAKING v6)</span></div>
+    <div class="note-row">Array enables cross-border bodies (GFA North/South bodies, US interstate compacts, inter-tribal councils like NCAI).</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">body_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">parent_body_id</span><span class="field-type">→ self (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">mandate</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">established_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_active</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">activation_trigger</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">budget</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">website_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🏷</div>
+    <div class="entity-name">CivicBodyTag</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">civic_body_id</span><span class="field-type">→ CivicBody</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">tag</span><span class="field-type">enum</span></div>
+    <div class="note-row">housing · environment · transit · education · health · cultural · zoning · economic_development · language_preservation · +others</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">tagged_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="note-row">UNIQUE(civic_body_id, tag)</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §8 DATA QUALITY & OPS                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 8 — Data Quality &amp; Operations</div>
+
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔔</div>
+    <div class="entity-name">DataAlert</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type / entity_id</span><span class="field-type">enum / uuid (polymorphic)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">alert_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">holder_investiture_due · jurisdiction_suspended · derived_role_source_ended · concurrent_holder_vacant · cross_border_body_status_change · steward_approval_pending · recording_pipeline_stalled</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">severity</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_a / source_a_url</span><span class="field-type">text / string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_b / source_b_url</span><span class="field-type">text / string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_flags</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">auto_resolvable / assigned_to</span><span class="field-type">boolean / string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolution_notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / resolved_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🟢</div>
+    <div class="entity-name">OfficeStatus</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">active_alert_id</span><span class="field-type">→ DataAlert (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_verified_at / last_verified_source</span><span class="field-type">timestamp / string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_date / updated_at</span><span class="field-type">date / timestamp</span></div>
+  </div>
+</div>
+
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔄</div>
+    <div class="entity-name">ApiSync</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_synced_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">records_processed / records_failed</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">error_log</span><span class="field-type">text</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §9 LANGUAGE & RECORDING  ★ NEW IN v8       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label lang-section">§ 9 — Language &amp; Recording ★ New in v8</div>
+
+<!-- CivicLanguage -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">🗣</div>
+    <div class="entity-name">CivicLanguage</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">iso_639_3</span><span class="field-type">string (nullable)</span></div>
+    <div class="note-row">Standard code where it exists. Nullable — some tribal languages lack assigned ISO codes. Non-standard codes use fora_{name} prefix e.g. fora_lakota.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">endonym</span><span class="field-type">string</span></div>
+    <div class="note-row">Name in the language itself. "Diné Bizaad" not "Navajo". "Deutsch" not "German". "Gaeilge" not "Irish". "ᏣᎳᎩ" for Cherokee (syllabary script).</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exonym_en</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">script</span><span class="field-type">enum</span></div>
+    <div class="note-row">latin · cherokee_syllabary · arabic · devanagari · cyrillic · han · hebrew · georgian · armenian · latin_romanized · other</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">rtl</span><span class="field-type">boolean default false</span></div>
+    <div class="note-row">⚠ RTL = true for Arabic (UAE), Hebrew, Urdu. Drives full layout mirror on bilingual display. Must be in design system from day one — retrofit is painful.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">endangerment_status</span><span class="field-type">enum</span></div>
+    <div class="note-row">UNESCO scale: safe · vulnerable · definitely_endangered · severely_endangered · critically_endangered · dormant · awakening</div>
+    <div class="note-row care-note">⚖ critically_endangered → public_crowdsource_enabled forced false. All contributions require LanguageSteward approval regardless of user affiliation.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_crowdsource_enabled</span><span class="field-type">boolean default true</span></div>
+    <div class="note-row">Set false by default for endangered, severely_endangered, critically_endangered. Contribution UI hidden from public; visible only to authenticated users with tribal affiliation signal or steward role.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">has_standard_orthography</span><span class="field-type">boolean</span></div>
+    <div class="note-row">Some tribal languages have contested or multiple orthographies. When false, CivicTranscript.orthography_notes field becomes required.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">jurisdiction_ids</span><span class="field-type">uuid[] (→ Jurisdiction)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">notes</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- LanguageSteward -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">🛡</div>
+    <div class="entity-name">LanguageSteward</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="note-row care-note">⚖ CARE/A: Steward is appointed by the tribal government — not self-nominated, not FORA-appointed. Appointment document required before role activates.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">language_id</span><span class="field-type">→ CivicLanguage</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">appointed_by_civic_body_id</span><span class="field-type">→ CivicBody</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">appointed_at</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">appointment_document_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">scope</span><span class="field-type">enum</span></div>
+    <div class="note-row">translations_only · recordings_only · translations_and_recordings · all</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_active</span><span class="field-type">boolean default true</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">revoked_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="note-row care-note">⚖ CARE/A: Tribe can revoke steward appointment at any time. On revoke → all pending approvals return to unreviewed state. Content does not auto-unpublish but DataAlert fires for admin review.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Translation -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">🔤</div>
+    <div class="entity-name">Translation</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">enum (polymorphic)</span></div>
+    <div class="note-row">action · office · person · civic_body · jurisdiction · term — any entity with user-facing text.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_id</span><span class="field-type">uuid (polymorphic)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">field_name</span><span class="field-type">string</span></div>
+    <div class="note-row">e.g. "title", "description", "bio", "mandate" — the specific field being translated.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">language_id</span><span class="field-type">→ CivicLanguage</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">text</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source</span><span class="field-type">enum</span></div>
+    <div class="note-row">ai_generated · community_submitted · steward_approved · official</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_active</span><span class="field-type">boolean default false</span></div>
+    <div class="note-row">Only one active Translation per (entity_type, entity_id, field_name, language_id). AI ships first as active. Community submission sets is_active=false until vote threshold or steward approval.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote_score</span><span class="field-type">integer default 0</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">auto_promote_threshold</span><span class="field-type">integer default 10</span></div>
+    <div class="note-row">When vote_score ≥ threshold AND jurisdiction.data_sovereignty_tier ≠ indigenous_care → auto-promote to active. indigenous_care always requires steward_approved source.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">submitted_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">approved_by_steward_id</span><span class="field-type">→ LanguageSteward (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">steward_note</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+    <div class="note-row">UNIQUE(entity_type, entity_id, field_name, language_id) WHERE is_active = true</div>
+  </div>
+</div>
+
+<!-- TranslationVote -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">👍</div>
+    <div class="entity-name">TranslationVote</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">translation_id</span><span class="field-type">→ Translation</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote</span><span class="field-type">enum</span></div>
+    <div class="note-row">up · down. Net score aggregated on Translation.vote_score. One vote per user per translation.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="note-row">UNIQUE(translation_id, user_id)</div>
+  </div>
+</div>
+
+<!-- CivicRecording -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">🎙</div>
+    <div class="entity-name">CivicRecording</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="note-row care-note">⚖ CARE/A: jurisdiction.data_sovereignty_tier must be indigenous_care for recording pipeline to be available. Opt-in at tribal government level required.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">language_id</span><span class="field-type">→ CivicLanguage</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recorded_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">location_name</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">gathering_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">council_meeting · general_assembly · committee · ceremonial · elder_session · public_comment · informal</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">duration_seconds</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">storage_url</span><span class="field-type">string (encrypted)</span></div>
+    <div class="note-row care-note">⚖ CARE/R: Encrypted at rest. Backup policy treated as archival heritage — not standard media storage. Recordings of elders flagged for heightened retention protection.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">access_level</span><span class="field-type">enum</span></div>
+    <div class="note-row">public · tribal_members · council_only · archived_restricted</div>
+    <div class="note-row care-note">⚖ CARE/A: access_level is SET BY THE TRIBE. FORA cannot override. Default: tribal_members until tribe explicitly sets public.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">pipeline_stage</span><span class="field-type">enum</span></div>
+    <div class="note-row">uploaded · transcribing · transcribed · transliterating · transliterated · structuring → structured_items</div>
+    <div class="note-row">Pipeline: audio → AI transcription → human correction → transliteration → civic item extraction → published to jurisdiction page.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">contributed_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">steward_approved_by_id</span><span class="field-type">→ LanguageSteward (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">steward_approved_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">elder_present</span><span class="field-type">boolean default false</span></div>
+    <div class="note-row care-note">⚖ CARE/E: elder_present = true → heightened access controls activated automatically, regardless of access_level setting. Elders may not have consented to public archiving.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">withdrawal_requested_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="note-row care-note">⚖ CARE/A: Tribe can withdraw any recording. Triggers full deletion pipeline: audio + all transcripts + derived civic items marked withdrawn. Irreversible.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- CivicTranscript -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">📄</div>
+    <div class="entity-name">CivicTranscript</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">recording_id</span><span class="field-type">→ CivicRecording</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">language_id</span><span class="field-type">→ CivicLanguage</span></div>
+    <div class="note-row">A recording can have multiple transcripts: one in the tribal language (original), one in English (translation). Both stored.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">transcript_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">original · transliteration · translation_en · translation_other</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">script</span><span class="field-type">enum (→ CivicLanguage.script)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">orthography_notes</span><span class="field-type">text (nullable)</span></div>
+    <div class="note-row">Required when CivicLanguage.has_standard_orthography = false. Documents which spelling conventions were applied and by whom.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source</span><span class="field-type">enum</span></div>
+    <div class="note-row">ai_generated · human_corrected · human_authored · steward_verified</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">overall_confidence</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="note-row">0.0–1.0. AI-generated transcripts only. Displayed to user: "AI transcript · 87% confidence · click to correct"</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">reviewed_by_steward_id</span><span class="field-type">→ LanguageSteward (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at / updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- TranscriptSegment -->
+<div class="entity lang">
+  <div class="entity-header">
+    <div class="entity-icon">⏱</div>
+    <div class="entity-name">TranscriptSegment</div>
+    <span class="entity-tag lang-new">new v8</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">transcript_id</span><span class="field-type">→ CivicTranscript</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">sequence_index</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">start_seconds / end_seconds</span><span class="field-type">decimal</span></div>
+    <div class="note-row">Time alignment. UI: click segment → audio player jumps to start_seconds. Enables "read along" mode.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">text</span><span class="field-type">text</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">speaker_person_id</span><span class="field-type">→ Person (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">speaker_role</span><span class="field-type">enum (nullable)</span></div>
+    <div class="note-row">elder · council_member · chief · chair · public_commenter · interpreter · unknown</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">confidence</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="note-row">Per-segment AI confidence. Low-confidence segments flagged in UI for human review. Below 0.6 → "needs review" badge shown to community.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">human_corrected</span><span class="field-type">boolean default false</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">corrected_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_item_flag</span><span class="field-type">boolean default false</span></div>
+    <div class="note-row">true → this segment contains a motion, resolution, vote, or action item. Feeds the structured pipeline: flagged segments → reviewed → Action record created.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">derived_action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="note-row">Set when segment has been structured into a formal civic item. Completes the pipeline provenance chain: audio moment → transcript segment → civic action.</div>
+  </div>
+</div>
+
+</div><!-- /erd-grid -->
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-title">Entity Domain Key</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ab0df"></div> Geographic Foundation</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c9a84c"></div> Government Structure / Core</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8fbf8f"></div> Elections &amp; Candidacy</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#b07adf"></div> Civic Identity</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dfaa7a"></div> Discourse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#df7a7a"></div> Harm &amp; Wellbeing</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c0c070"></div> Civic Bodies</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9ab0c0"></div> Operations</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ab8df"></div> Language &amp; Recording ★ New</div>
+  <div class="legend-title" style="margin-top:8px">Field Badge Key</div>
+  <div class="legend-item"><span class="field-badge pk" style="font-size:9px">PK</span> Primary Key</div>
+  <div class="legend-item"><span class="field-badge fk" style="font-size:9px">FK</span> Foreign Key</div>
+  <div class="legend-item"><span class="field-badge idx" style="font-size:9px">IDX</span> Indexed</div>
+  <div class="legend-item"><span class="field-badge new" style="font-size:9px">NEW</span> Added in v8</div>
+  <div class="legend-item"><span class="field-badge lnw" style="font-size:9px">NEW</span> Added in v8 (Language section)</div>
+  <div class="legend-item"><span class="field-badge brk-badge" style="font-size:9px">BRK</span> Breaking change (migration required)</div>
+  <div class="legend-title" style="margin-top:8px">v8 Change Summary — 7 new entities, 2 field additions to Jurisdiction</div>
+  <div class="legend-item" style="width:100%;flex-wrap:wrap;gap:6px;line-height:1.8;font-size:10.5px;color:rgba(244,237,224,0.6)">
+    <strong style="color:rgba(122,184,223,0.9)">§9 NEW:</strong>
+    CivicLanguage (master language registry, RTL flag, endangerment status, UNESCO scale) ·
+    LanguageSteward (tribal appointment, CARE/A gatekeeping, scope control) ·
+    Translation (polymorphic, AI→community→steward pipeline, vote threshold, indigenous_care hard gate) ·
+    TranslationVote (community validation) ·
+    CivicRecording (gathering audio, access_level tribe-controlled, elder flag, withdrawal pipeline) ·
+    CivicTranscript (original + transliteration + EN translation, orthography notes) ·
+    TranscriptSegment (time-aligned, click-to-audio, civic_item_flag → Action provenance chain)
+    <br>
+    <strong style="color:rgba(244,237,224,0.5)">Jurisdiction:</strong> +civic_languages string[] · +data_sovereignty_tier enum ·
+    <strong style="color:rgba(244,237,224,0.5)">Action:</strong> +source_recording_id FK (pipeline provenance) ·
+    <strong style="color:rgba(244,237,224,0.5)">User:</strong> +ui_language ·
+    <strong style="color:rgba(244,237,224,0.5)">CivicBodyTag:</strong> +language_preservation tag ·
+    <strong style="color:rgba(244,237,224,0.5)">DataAlert:</strong> +steward_approval_pending +recording_pipeline_stalled alert types
+  </div>
+  <div class="legend-title" style="margin-top:8px">Pipeline Provenance Chain</div>
+  <div class="legend-item" style="width:100%;font-size:10.5px;color:rgba(122,184,223,0.7);font-family:'JetBrains Mono',monospace;line-height:2">
+    CivicRecording → CivicTranscript → TranscriptSegment [civic_item_flag=true] → review → Action [source_recording_id] → published to Jurisdiction page
+  </div>
+  <div class="legend-title" style="margin-top:8px">Language Pair Configuration (v8 Canonical)</div>
+  <div class="legend-item" style="width:100%;font-size:10.5px;color:rgba(244,237,224,0.55);font-family:'JetBrains Mono',monospace;line-height:2">
+    🇺🇸 United States: ["en"] · 🇨🇺 Cuba: ["en","es"] · 🇩🇪 Germany: ["en","de"] ·
+    🇦🇪 UAE: ["en","ar"] rtl=true · 🇨🇦 Canada: ["en","fr"] ·
+    Navajo Nation: ["en","nav"] indigenous_care · Cherokee Nation: ["en","chr"] cherokee_syllabary indigenous_care ·
+    574 federally recognized tribes: ["en", fora_{tribe_language}] indigenous_care
+  </div>
+</div>
+
+</body>
+</html>

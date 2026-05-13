@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Forum Americanum — ERD v6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0e11;
+    --surface: #141518;
+    --border: rgba(255,255,255,0.07);
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --text: rgba(244,237,224,0.88);
+    --muted: rgba(244,237,224,0.38);
+    --new-badge: rgba(45,90,61,0.75);
+    --new-text: #7fd4a0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 32px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+  }
+  .page-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── Version badge ── */
+  .version-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+  }
+
+  /* ── Change log ── */
+  .changelog {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    background: rgba(45,90,61,0.12);
+    border: 1px solid rgba(45,90,61,0.3);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .changelog-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--new-text);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .changelog-item {
+    font-size: 11px;
+    color: rgba(244,237,224,0.65);
+    padding: 2px 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .changelog-item .tag { color: var(--new-text); margin-right: 6px; }
+  .changelog-item .crit { color: #f07070; }
+  .changelog-item .sem { color: #f0c070; }
+  .changelog-item .hyg { color: #70b0f0; }
+
+  /* ── Grid layout ── */
+  .erd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* ── Section labels ── */
+  .section-label {
+    grid-column: 1 / -1;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 8px 4px 4px;
+    border-bottom: 1px solid var(--border);
+    margin-top: 12px;
+  }
+
+  /* ── Entity cards ── */
+  .entity {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .entity:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.5); }
+
+  .entity-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Color themes per domain */
+  .entity.core   .entity-header { background: rgba(90,60,30,0.4); }
+  .entity.geo    .entity-header { background: rgba(30,60,100,0.4); }
+  .entity.civic  .entity-header { background: rgba(30,80,50,0.4); }
+  .entity.discourse .entity-header { background: rgba(100,60,20,0.35); }
+  .entity.user   .entity-header { background: rgba(74,45,107,0.4); }
+  .entity.ops    .entity-header { background: rgba(40,40,60,0.5); }
+  .entity.harm   .entity-header { background: rgba(90,20,20,0.45); }
+  .entity.psych  .entity-header { background: rgba(20,60,80,0.4); }
+  .entity.pending .entity-header { background: rgba(50,50,30,0.4); }
+
+  .entity-icon { font-size: 16px; width: 24px; text-align: center; }
+
+  .entity-name {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .entity.core    .entity-name { color: var(--gold); }
+  .entity.geo     .entity-name { color: #7ab0df; }
+  .entity.civic   .entity-name { color: #7acf8e; }
+  .entity.discourse .entity-name { color: #dfaa7a; }
+  .entity.user    .entity-name { color: #b07adf; }
+  .entity.ops     .entity-name { color: #9ab0c0; }
+  .entity.harm    .entity-name { color: #df7a7a; }
+  .entity.psych   .entity-name { color: #7ac0df; }
+  .entity.pending .entity-name { color: #c0c070; }
+
+  /* CivicBody field section dividers */
+  .section-divider-field {
+    background: rgba(255,255,255,0.05) !important;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 3px 10px !important;
+    margin-top: 2px;
+  }
+  .field-section {
+    font-size: 0.7em;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+
+  .entity-fields {
+    padding: 8px 0;
+    background: rgba(0,0,0,0.28);
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    padding: 4px 12px;
+    gap: 7px;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.035);
+  }
+  .field:last-child { border-bottom: none; }
+  .field:hover { background: rgba(255,255,255,0.035); }
+
+  .field-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    min-width: 30px;
+    text-align: center;
+  }
+  .pk  { background: rgba(201,168,76,0.25); color: var(--gold-light); }
+  .fk  { background: rgba(90,140,190,0.25); color: #9ac0e8; }
+  .idx { background: rgba(90,170,110,0.2);  color: #9adf9a; }
+  .new { background: rgba(45,90,61,0.65);   color: #7fd4a0; font-weight: 700; }
+  .fix { background: rgba(90,60,20,0.65);   color: #dfaa60; font-weight: 700; }
+  .dash { color: var(--muted); font-size: 10px; min-width: 30px; text-align: center; }
+
+  .field-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(244,237,224,0.85);
+    flex: 1;
+  }
+  .field-name.renamed { color: #dfaa60; }
+
+  .field-type {
+    font-size: 10px;
+    color: rgba(244,237,224,0.32);
+    text-align: right;
+    flex-shrink: 0;
+    max-width: 120px;
+  }
+
+  /* entity-level new/changed badge */
+  .entity-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .entity-tag.new-entity { background: rgba(45,90,61,0.6); color: #7fd4a0; }
+  .entity-tag.updated    { background: rgba(90,60,20,0.6); color: #dfaa60; }
+  .entity-tag.pending    { background: rgba(80,80,20,0.6); color: #c0c070; }
+
+  /* ── Relationship lines legend ── */
+  .legend {
+    max-width: 900px;
+    margin: 48px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .legend-title {
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .legend-item {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">Forum Americanum — Entity Relationship Diagram</div>
+  <div class="page-subtitle">Civic Intelligence Platform · Full Schema Reference</div>
+  <div class="version-badge">v6 · 2026-03-12 · CivicBody Full Spec + Term dual-FK + NY State / Chicago / Houston</div>
+</div>
+
+<!-- Changelog -->
+<div class="changelog">
+  <div class="changelog-title">v6 Changes — CivicBody Full Spec</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> CivicBody fully specced — replaces placeholder. 20 fields. Two new join tables: CivicBodyMember, CivicBodyTag.</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Term: office_id made nullable + civic_body_id FK added (nullable). CHECK: exactly one of office_id / civic_body_id must be set. Enables Person+Term pattern for civic body members/chairs.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> AddressLookup: civic_body_ids uuid[] promoted from (pending) to active field.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> §7 section label updated — no longer "pending spec".</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> NY State, Chicago, Houston government mappings added to reference spreadsheet (v14).</div>
+  <div class="changelog-title" style="margin-top:10px">v5 Changes from Audit (carried forward)</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Candidacy.declared_by_user_id added — required for OfficialClaim Layer 1 verification</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Person.user_id renamed → claimed_by_user_id (disambiguates FK intent)</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> HarmClaim entity added (was specced in v7+ spreadsheet, never in ERD)</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> civic_spotlight_at moved to Person (canonical human record); removed from PersonStatus</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Office: added selection_method, is_active, abolished_date, term_limit</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Term: added election_id FK (links term to the election that produced it)</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Flag renamed → ContentFlag (disambiguates from community_flags integer pattern)</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Election: added district_id FK</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Contribution: added is_structural_annotation flag</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> OfficialClaim: added notes field for manual_review cases</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> OfficeCreationRequest: added resolved_by field</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> DataAlert: added source_a_url (source_b had URL, source_a did not)</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> PsychologicalLog entity added (cohort-level, no user FK)</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> PKs added to ContentFlag, SentimentSnapshot, AddressLookup, ApiSync, OfficeStatus</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> created_at / updated_at added to all entities missing them</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> ApiSync: added records_processed, records_failed</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> CivicBody placeholder added — to be fully spec'd next session</div>
+</div>
+
+<div class="erd-grid">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: GEOGRAPHIC FOUNDATION             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 1 — Geographic Foundation</div>
+
+<!-- Jurisdiction -->
+<div class="entity geo">
+  <div class="entity-header">
+    <div class="entity-icon">🌐</div>
+    <div class="entity-name">Jurisdiction</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">system_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_id</span><span class="field-type">→ self</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">country_code</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">hardcoded_config</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exceptions_notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- District -->
+<div class="entity geo">
+  <div class="entity-header">
+    <div class="entity-icon">📍</div>
+    <div class="entity-name">District</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundary_polygon</span><span class="field-type">geometry</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">census_geoid</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">population</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- AddressLookup -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔑</div>
+    <div class="entity-name">AddressLookup</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">address_hash</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">lat</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">lng</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">district_ids</span><span class="field-type">uuid[]</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">civic_body_ids</span><span class="field-type">uuid[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cached_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: GOVERNMENT STRUCTURE              -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 2 — Government Structure</div>
+
+<!-- Office -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">🏛</div>
+    <div class="entity-name">Office</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">branch</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">term_length_years</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">term_limit</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_elected</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">seats</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">is_active</span><span class="field-type">boolean default true</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">abolished_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">abolished_notes</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Person -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">👤</div>
+    <div class="entity-name">Person</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">full_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">photo_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">bio</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">contact_info</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_ids</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_proceedings</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exile_location</span><span class="field-type">string</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name renamed">claimed_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">civic_spotlight_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Term -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">📜</div>
+    <div class="entity-name">Term (Incumbency)</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="field-badge fk new">NEW</span><span class="field-name">civic_body_id</span><span class="field-type">→ CivicBody (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">election_id</span><span class="field-type">→ Election (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">⚠</span><span class="field-name" style="font-style:italic">CHECK: exactly one of office_id / civic_body_id NOT NULL</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">role</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_current</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">start_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">end_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legitimacy_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recognized_by</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- PersonStatus -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">⚖️</div>
+    <div class="entity-name">PersonStatus</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">mandate_source</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recognized_by</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_proceedings</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_support_score</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_support_note</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">valid_from</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">valid_until</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exalted_elder</span><span class="field-type">boolean default false</span></div>
+    <div class="field" style="opacity:0.45"><span class="field-badge fix">FIX</span><span class="field-name" style="text-decoration:line-through">civic_spotlight_at</span><span class="field-type">→ moved to Person</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: ELECTIONS & CANDIDACY             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 3 — Elections & Candidacy</div>
+
+<!-- Election -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">🗳</div>
+    <div class="entity-name">Election</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk new">NEW</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">result_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">turnout_pct</span><span class="field-type">decimal</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">observer_assessment</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Candidacy -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">🎗</div>
+    <div class="entity-name">Candidacy</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">election_id</span><span class="field-type">→ Election</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk new">NEW</span><span class="field-name">declared_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">candidacy_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote_share</span><span class="field-type">decimal</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">votes_received</span><span class="field-type">bigint</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">ballot_position</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">disqualification_reason</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: CIVIC IDENTITY                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 4 — Civic Identity & Claims</div>
+
+<!-- User -->
+<div class="entity user">
+  <div class="entity-header">
+    <div class="entity-icon">🔐</div>
+    <div class="entity-name">User</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">verified_identity</span><span class="field-type">encrypted</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_occupation</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_age_range</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_region</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">trust_level</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">friction_exempt</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">home_address_hash</span><span class="field-type">string</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">district_ids</span><span class="field-type">uuid[] (cached)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">anonymity_level</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">official_profile_id</span><span class="field-type">→ Person (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">claim_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficialClaim -->
+<div class="entity user">
+  <div class="entity-header">
+    <div class="entity-icon">✅</div>
+    <div class="entity-name">OfficialClaim</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">candidacy_id</span><span class="field-type">→ Candidacy (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">verification_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_flags</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">challenge_window_closes</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">notes</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">submitted_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_by</span><span class="field-type">string</span></div>
+  </div>
+</div>
+
+<!-- OfficeCreationRequest -->
+<div class="entity user">
+  <div class="entity-header">
+    <div class="entity-icon">🗺</div>
+    <div class="entity-name">OfficeCreationRequest</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">requested_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">office_name_proposed</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">office_level_proposed</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">evidence_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">verified_office_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_spotlight_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">submitted_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">resolved_by</span><span class="field-type">string (nullable)</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: CIVIC ACTIONS & DISCOURSE         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 5 — Civic Actions & Discourse</div>
+
+<!-- Action -->
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">⚡</div>
+    <div class="entity-name">Action</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">full_text_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">introduced_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">chamber</span><span class="field-type">enum (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">vote_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">enacted_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_briefing</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_id</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_api</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">tags</span><span class="field-type">string[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ActionPerson -->
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🔗</div>
+    <div class="entity-name">ActionPerson</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">role</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote_position</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">date</span><span class="field-type">date</span></div>
+  </div>
+</div>
+
+<!-- Source -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">📰</div>
+    <div class="entity-name">Source</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">publication</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">quality_tier</span><span class="field-type">enum (S→D + ⚠)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">political_lean</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">country_restrictions</span><span class="field-type">string[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_flagged</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Contribution -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">💬</div>
+    <div class="entity-name">Contribution</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_id</span><span class="field-type">uuid (polymorphic)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">body</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">position</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">source_id</span><span class="field-type">→ Source</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">tone_score</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_tier</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_tags</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_id</span><span class="field-type">→ self</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">steelman_seen</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_pinned_official</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">is_structural_annotation</span><span class="field-type">boolean default false</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ContentFlag (formerly Flag) -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">🚩</div>
+    <div class="entity-name">ContentFlag</div>
+    <span class="entity-tag updated">renamed</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk new">NEW</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">contribution_id</span><span class="field-type">→ Contribution</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">reason</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- SentimentSnapshot -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">📊</div>
+    <div class="entity-name">SentimentSnapshot</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk new">NEW</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_key</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_value</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">for_count</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">against_count</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">computed_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">UNIQUE</span><span class="field-type">(action_id, cohort_key, cohort_value)</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: HARM & WELLBEING                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 6 — Harm & Community Wellbeing</div>
+
+<!-- HarmClaim -->
+<div class="entity harm">
+  <div class="entity-header">
+    <div class="entity-icon">⚠️</div>
+    <div class="entity-name">HarmClaim</div>
+    <span class="entity-tag new-entity">new entity</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">submitted_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">source_primary_id</span><span class="field-type">→ Source</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">harm_type</span><span class="field-type">enum[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">severity</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">affected_population</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">precedent_cases</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_corroborations</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">mitigation_record</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">disputed_by</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- PsychologicalLog -->
+<div class="entity psych">
+  <div class="entity-header">
+    <div class="entity-icon">🧠</div>
+    <div class="entity-name">PsychologicalLog</div>
+    <span class="entity-tag new-entity">new entity</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_hash</span><span class="field-type">string (NOT user_id)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">log_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">feeling_emoji</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">feeling_wheel_selection</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: CIVIC BODIES                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 7 — Civic Bodies (RCOs · Community Boards · Neighborhood Councils · TIRZs)</div>
+
+<!-- CivicBody -->
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🏘</div>
+    <div class="entity-name">CivicBody</div>
+    <span class="entity-tag updated">v6 full spec</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+
+    <div class="field section-divider-field"><span class="field-section">IDENTITY</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">short_name</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">body_type</span><span class="field-type">enum</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">neighborhood_council · community_board · registered_community_org · civic_association · block_club · tax_increment_zone · special_improvement_district · watershed_council · other</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">TIER & AUTHORITY</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_tier</span><span class="field-type">integer (1–4)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">1=charter-created + process rights · 2=formally registered + process rights · 3=officially recognized, no rights · 4=informal only</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">binding_authority</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">process_rights</span><span class="field-type">enum[] (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">advance_notice · required_community_meeting · position_letter · zoning_variance_review · budget_advisory · land_use_review · environmental_review. Derived from civic_tier by default; this field overrides.</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">LEGAL BASIS</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_basis_type</span><span class="field-type">enum</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">city_charter · zoning_code · municipal_ordinance · state_statute · informal · federal_statute</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_basis_citation</span><span class="field-type">string (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">e.g. "NYC Charter §2800" · "PHL Zoning Code §14-300" · "LA City Charter Art. IX §900"</span><span class="field-type"></span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">registrar_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">The government office responsible for the registry. PCPC for PHL RCOs · Borough Presidents for NYC CBs · DONE/EmpowerLA for LA NCs. NULL for informal bodies.</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">GEOGRAPHY</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundary_polygon</span><span class="field-type">geometry (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundaries_may_overlap</span><span class="field-type">boolean</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">true for PHL RCOs and LA NCs (many-to-many address coverage). false for NYC CBs (non-overlapping). Used to drive address lookup behavior.</span><span class="field-type"></span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">The electoral/administrative district this body is nested within. NYC CB → borough district. LA NC → city council district (approx). NULL if no clean parent district.</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">MEMBERSHIP</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">member_count</span><span class="field-type">integer (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">member_selection_method</span><span class="field-type">enum (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">elected · appointed_by_office · self_selected · mixed. Individual members tracked via Term.civic_body_id (Person + Term pattern — same as elected officials).</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">STATUS & LIFECYCLE</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">active · inactive · pending_registration · suspended · dissolved. pending_registration: applied but not yet approved (e.g. RCO awaiting PCPC). suspended: registered but non-compliant (e.g. missed annual renewal).</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">registered_at</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">registration_expires_at</span><span class="field-type">date (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">Used for annual-renewal bodies (PHL RCOs: June window). NULL for charter-created bodies with no expiry. Auto-expire logic: operational fields not updated in 18mo → DataAlert amber.</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">activation_trigger</span><span class="field-type">date (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">For future-state bodies: date when this body becomes active. Chicago CPS Board → Jan 2027. LA Measure G County Executive → 2028. Enables pre-loading known future bodies.</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">dissolved_at</span><span class="field-type">date (nullable)</span></div>
+
+    <div class="field section-divider-field"><span class="field-section">OPERATIONAL DATA (rep-editable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">website_url</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">contact_email</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">meeting_schedule</span><span class="field-type">string (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">Free-text meeting cadence (e.g. "2nd Tuesday of each month, 7pm"). Not parsed — display only.</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">annual_budget_cents</span><span class="field-type">integer (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">City-allocated budget where applicable. LA NCs: $3.2M–$4.2M range. NYC CBs: ~$175K/yr staff budget. NULL for informal bodies.</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">oversight_body_id</span><span class="field-type">FK → Office (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">The office that oversees this body operationally. LA NCs → DONE (EmpowerLA). NYC CBs → Borough President. PHL RCOs → PCPC. Distinct from registrar_id (registrar = registry admin; oversight = ongoing governance).</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">DATA MAINTENANCE</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_registrar_sync_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">Structural fields (tier, legal_basis, boundary, status) overwritten on registrar sync. Operational fields (website, contact, meeting_schedule) protected from overwrite.</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">rep_claim_user_id</span><span class="field-type">FK → User (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">User who has claimed rep status and has edit rights to operational fields. Verified via email match or 3 community corroborations.</span><span class="field-type"></span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_id</span><span class="field-type">string (nullable)</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">ID from authoritative external registry (e.g. PCPC RCO ID, LA GeoHub NC ID, NYC CB number).</span><span class="field-type"></span></div>
+
+    <div class="field section-divider-field"><span class="field-section">TIMESTAMPS</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- CivicBodyMember (join: Person ↔ CivicBody via Term) -->
+<div class="entity civic" style="border-style: dashed; opacity: 0.85;">
+  <div class="entity-header">
+    <div class="entity-icon">👥</div>
+    <div class="entity-name">CivicBodyMember</div>
+    <span class="entity-tag">note</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field" style="font-size:0.82em;color:#555;padding:4px 8px;font-style:italic">Not a separate table. Civic body membership is tracked via <strong>Term.civic_body_id</strong> — the same Person + Term pattern used for elected officials. Term.role stores the member's role (e.g. "Chair", "Board Member", "Treasurer"). Term.selection_method distinguishes elected vs. appointed members.</div>
+    <div class="field" style="margin-top:6px"><span class="dash">·</span><span class="field-name">Term.civic_body_id</span><span class="field-type">→ CivicBody</span></div>
+    <div class="field"><span class="dash">·</span><span class="field-name">Term.office_id</span><span class="field-type">NULL (mutually exclusive)</span></div>
+    <div class="field"><span class="dash">·</span><span class="field-name">Term.role</span><span class="field-type">"Chair" · "Board Member" · etc.</span></div>
+    <div class="field"><span class="dash">·</span><span class="field-name">Term.selection_method</span><span class="field-type">elected · appointed_by_office · etc.</span></div>
+  </div>
+</div>
+
+<!-- CivicBodyTag (community tags for discovery) -->
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🏷</div>
+    <div class="entity-name">CivicBodyTag</div>
+    <span class="entity-tag updated">v6 new</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field" style="font-size:0.82em;color:#555;padding:4px 8px;font-style:italic">Join table enabling many-to-many tagging of CivicBodies for neighborhood/interest discovery. A body can have multiple tags; a tag can apply to many bodies.</div>
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">civic_body_id</span><span class="field-type">→ CivicBody</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">tag</span><span class="field-type">enum</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">housing · environment · transit · public_safety · education · parks · zoning · economic_development · cultural · health · seniors · youth · accessibility</span><span class="field-type"></span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">tagged_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field" style="font-size:0.78em;opacity:0.75;padding-left:8px"><span class="dash">·</span><span class="field-name" style="font-style:italic">UNIQUE(civic_body_id, tag)</span><span class="field-type"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION: DATA QUALITY & OPS                -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 8 — Data Quality & Operations</div>
+
+<!-- DataAlert -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔔</div>
+    <div class="entity-name">DataAlert</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_id</span><span class="field-type">uuid (polymorphic)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">alert_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">severity</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_a</span><span class="field-type">text</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">source_a_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_b</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_b_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_flags</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">auto_resolvable</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">assigned_to</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolution_notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficeStatus -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🟢</div>
+    <div class="entity-name">OfficeStatus</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk new">NEW</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">active_alert_id</span><span class="field-type">→ DataAlert (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_verified_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_verified_source</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ApiSync -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔄</div>
+    <div class="entity-name">ApiSync</div>
+    <span class="entity-tag updated">updated</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk new">NEW</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_synced_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">records_processed</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">records_failed</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">error_log</span><span class="field-type">text</span></div>
+  </div>
+</div>
+
+</div><!-- /erd-grid -->
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-title">Entity Domain Key</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ab0df"></div> Geographic Foundation</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c9a84c"></div> Government Structure / Core</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7acf8e"></div> Civic Actions</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dfaa7a"></div> Discourse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#b07adf"></div> User Identity</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#df7a7a"></div> Harm &amp; Wellbeing</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ac0df"></div> Psychological</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9ab0c0"></div> Operations</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c0c070"></div> Pending Spec</div>
+  <div class="legend-title" style="margin-top:8px">Field Badge Key</div>
+  <div class="legend-item"><span class="field-badge pk" style="font-size:9px">PK</span> Primary Key</div>
+  <div class="legend-item"><span class="field-badge fk" style="font-size:9px">FK</span> Foreign Key</div>
+  <div class="legend-item"><span class="field-badge idx" style="font-size:9px">IDX</span> Indexed</div>
+  <div class="legend-item"><span class="field-badge new" style="font-size:9px">NEW</span> Added in v5</div>
+  <div class="legend-item"><span class="field-badge fix" style="font-size:9px">FIX</span> Renamed / corrected</div>
+</div>
+
+</body>
+</html>

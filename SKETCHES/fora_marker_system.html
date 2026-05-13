@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Civic Identity Marker System</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f2f4f8;
+  --bg2:       #e8ebf2;
+  --white:     #ffffff;
+  --blue:      #1b3a6b;
+  --blue-md:   #254f92;
+  --blue-lt:   #3a6abf;
+  --blue-pl:   #dde5f5;
+  --blue-vp:   #edf1fb;
+  --gilt:      #b8860b;
+  --gilt-lt:   #d4a832;
+  --gilt-pl:   #f8f0dc;
+  --gilt-rul:  rgba(184,134,11,0.25);
+  --ink:       #0e1a2e;
+  --ink-mid:   #2c3e5a;
+  --ink-soft:  #5a6e8a;
+  --ink-mut:   #8a9ab8;
+  --rule:      rgba(27,58,107,0.1);
+  --rule-lt:   rgba(27,58,107,0.05);
+  --green:     #155c2d;
+  --green-p:   #e5f0e8;
+  --green-r:   #8cc4a0;
+  --red:       #8b2020;
+  --red-p:     #f7eaea;
+  --purple:    #4a1f6e;
+  --purp-p:    #f0eaf7;
+  --purp-r:    #c8a8e8;
+  --amber:     #c47f00;
+  --amber-p:   #fdf3dc;
+  --scarlet:   #b84a00;
+  --scarlet-p: #fdeee6;
+
+  /* ── SERVICE DISTINGUISHER COLOURS ── */
+  --vet-red:     #8b1a1a;   /* military — deep crimson ribbon */
+  --vet-gold:    #c9a84c;   /* military — aged brass */
+  --judge-slate: #2c3e5a;   /* judiciary — slate blue */
+  --judge-scale: #8a9ab8;   /* scales accent */
+  --fire-red:    #c0392b;   /* fire · thin red line */
+  --ems-white:   #e8f0fe;   /* EMS · star of life */
+  --leo-blue:    #1a3a5c;   /* law enforcement · thin blue line */
+  --elected-gold:#b8860b;   /* former elected · star */
+  --civic-oak:   #5c4a1e;   /* civic body · gavel · oak brown */
+  --civic-oak-p: #f5efe0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--ink); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--gilt-rul); border-radius: 10px; }
+
+/* ══ NAV ══ */
+nav { background: var(--blue); padding: 0 48px; display: flex; align-items: center; height: 60px; position: sticky; top: 0; z-index: 200; border-bottom: 4px solid var(--gilt); }
+.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: white; letter-spacing: 0.1em; margin-right: 24px; }
+.nav-logo span { color: var(--gilt-lt); }
+.nav-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.28); border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px; }
+.nav-badge { margin-left: auto; background: var(--gilt); color: white; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; }
+
+/* ══ HERO ══ */
+.hero { background: var(--blue); padding: 52px 48px 52px; position: relative; overflow: hidden; }
+.hero::after {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 26px;
+  display: flex; align-items: center; padding: 0 48px;
+  font-size: 11px; letter-spacing: 0.55em; color: var(--gilt);
+  overflow: hidden; white-space: nowrap;
+  -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, black 92%, transparent 100%);
+}
+.hero-ring { position: absolute; right: -40px; top: -60px; width: 340px; height: 340px; border-radius: 50%; border: 36px solid rgba(255,255,255,0.025); pointer-events: none; }
+.hero-ring2 { position: absolute; right: 40px; top: -20px; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(184,134,11,0.18); pointer-events: none; }
+.h-num { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gilt); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.h-num::before { content: '◆'; font-size: 8px; }
+.h-title { font-family: 'Libre Baskerville', serif; font-size: 48px; font-weight: 700; color: white; line-height: 1.1; margin-bottom: 12px; }
+.h-title em { font-style: italic; color: var(--gilt-lt); }
+.h-sub { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.48); max-width: 580px; line-height: 1.65; }
+
+/* ══ SECTION ══ */
+.section { padding: 52px 48px; border-bottom: 1px solid var(--rule); }
+.section.on-white { background: var(--white); }
+.section.on-cream { background: var(--gilt-pl); }
+.section.on-dark { background: var(--ink); }
+.sec-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gilt); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.sec-eyebrow::before { content: '◆'; font-size: 7px; }
+.sec-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+.sec-title.on-white-text { color: white; }
+.sec-desc { font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--ink-soft); max-width: 620px; line-height: 1.7; margin-bottom: 36px; }
+.sec-desc.light { color: rgba(255,255,255,0.45); }
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 14px; border-bottom: 2px solid var(--blue-pl); margin-bottom: 28px; }
+.sec-head.on-dark-rule { border-bottom-color: rgba(255,255,255,0.08); }
+.sec-head-right { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); }
+.sec-head-right.light { color: rgba(255,255,255,0.28); }
+.comp-note { font-family: 'Nunito', sans-serif; font-size: 12.5px; color: var(--ink-mut); line-height: 1.6; padding: 12px 16px; background: var(--bg); border-left: 3px solid var(--blue-pl); border-radius: 0 6px 6px 0; margin-top: 20px; }
+.comp-note.light { background: rgba(255,255,255,0.04); border-left-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.35); }
+
+/* ══ COMP DISPLAY ══ */
+.comp-display { background: var(--white); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+.comp-display.dark { background: #141d2e; border-color: rgba(255,255,255,0.06); }
+.comp-label { padding: 10px 20px; background: var(--bg); border-bottom: 1px solid var(--rule); font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mut); }
+.comp-label span { color: var(--gilt); }
+.comp-label.dark { background: rgba(255,255,255,0.03); border-bottom-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+.comp-body { padding: 32px 28px; }
+.comp-body.dark { background: #141d2e; }
+.comp-body.tight { padding: 20px 24px; }
+
+/* ══════════════════════════════════════════════════════
+   THE CIVIC IDENTITY MARKER
+   
+   Structure (outermost → innermost):
+   1. Sponsor ring      — outermost, thin colored arc (optional)
+   2. Credential ring   — gold (verified) · silver (self-reported) · none
+   3. Service badges    — absolute-positioned icons around the circle
+   4. Avatar face       — emoji, generated caricature, or abbreviation
+   5. Credential badge  — pill pinned to bottom of circle
+   6. Ribbon bar        — horizontal band beneath (veterans only)
+══════════════════════════════════════════════════════ */
+
+.marker-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── SPONSOR RING (outermost) ── */
+.marker-sponsor-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  background: transparent;
+  pointer-events: none;
+  z-index: 1;
+}
+/* sponsor ring colors set inline per sponsor */
+
+/* ── CREDENTIAL RING ── */
+.marker {
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Sizes */
+.marker-lg { width: 72px; height: 72px; }
+.marker-md { width: 52px; height: 52px; }
+.marker-sm { width: 36px; height: 36px; }
+.marker-xs { width: 28px; height: 28px; }
+
+/* Verified credential ring — gold, beveled */
+.ring-verified {
+  box-shadow:
+    0 0 0 3px #b8860b,
+    0 0 0 4.5px #e8c84a,
+    0 0 0 6px #b8860b,
+    0 2px 8px rgba(184,134,11,0.35);
+}
+/* Self-reported ring — silver */
+.ring-self {
+  box-shadow:
+    0 0 0 3px #8a9ab8,
+    0 0 0 4.5px #c0cce0,
+    0 0 0 6px #8a9ab8;
+}
+/* Anonymous — no ring */
+.ring-anon {
+  box-shadow: 0 0 0 2px var(--rule);
+}
+
+/* ── AVATAR FACE ── */
+.marker-face {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+/* Face backgrounds by credential tier */
+.face-verified { background: linear-gradient(135deg, #1b3a6b 0%, #254f92 100%); }
+.face-self     { background: linear-gradient(135deg, #3a4a6a 0%, #4a5a7a 100%); }
+.face-anon     { background: linear-gradient(135deg, #4a5568 0%, #5a6578 100%); }
+
+.marker-lg .marker-face { font-size: 20px; }
+.marker-md .marker-face { font-size: 14px; }
+.marker-sm .marker-face { font-size: 11px; }
+.marker-xs .marker-face { font-size: 9px; }
+
+/* Emoji face */
+.face-emoji { font-family: 'Nunito', sans-serif; }
+.marker-lg .face-emoji { font-size: 32px; }
+.marker-md .face-emoji { font-size: 24px; }
+.marker-sm .face-emoji { font-size: 16px; }
+
+/* Text abbreviation color */
+.face-abbr { color: white; letter-spacing: 0.05em; }
+/* Verified credential abbr — uppercase, gilt tinted */
+.face-abbr-verified { color: var(--gilt-lt); }
+/* Self-reported abbr — lowercase, muted */
+.face-abbr-self { color: rgba(255,255,255,0.65); font-size: 0.85em; }
+
+/* ── CREDENTIAL BADGE (pinned bottom) ── */
+.marker-cred {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 100px;
+  border: 1.5px solid;
+  line-height: 1.4;
+}
+.marker-lg .marker-cred { font-size: 8.5px; padding: 2px 8px; bottom: -9px; }
+.marker-md .marker-cred { font-size: 7.5px; padding: 2px 6px; bottom: -8px; }
+.marker-sm .marker-cred { font-size: 6.5px; padding: 1.5px 5px; bottom: -7px; }
+
+/* Credential badge — verified (uppercase, gold) */
+.cred-verified { background: var(--gilt-pl); color: var(--gilt); border-color: var(--gilt); }
+/* Credential badge — self-reported (lowercase, silver) */
+.cred-self { background: var(--bg2); color: var(--ink-soft); border-color: var(--ink-mut); }
+/* Credential badge — emoji label */
+.cred-emoji { background: var(--bg2); color: var(--ink-soft); border-color: var(--ink-mut); font-family: 'Nunito', sans-serif; font-size: 11px; padding: 1px 5px; }
+
+/* ══════════════════════════════════════════════════════
+   SERVICE DISTINGUISHERS
+   Positioned as absolute badges around the marker circle
+══════════════════════════════════════════════════════ */
+
+/* Base service badge */
+.svc-badge {
+  position: absolute;
+  z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid white;
+}
+.marker-lg .svc-badge { width: 20px; height: 20px; font-size: 10px; }
+.marker-md .svc-badge { width: 16px; height: 16px; font-size: 8px; }
+.marker-sm .svc-badge { width: 13px; height: 13px; font-size: 7px; }
+
+/* Position — top-right by default, stack leftward for multiples */
+.svc-pos-1 { top: -2px; right: -2px; }
+.svc-pos-2 { top: -2px; right: 16px; }
+.svc-pos-3 { top: -2px; right: 34px; }
+
+/* ── MILITARY VETERAN ── */
+/* Ribbon bar beneath marker instead of a badge */
+.marker-ribbon {
+  width: 100%;
+  height: 5px;
+  border-radius: 2px;
+  margin-top: 2px;
+  background: linear-gradient(to right,
+    var(--vet-red) 0%, var(--vet-red) 33%,
+    var(--vet-gold) 33%, var(--vet-gold) 66%,
+    var(--vet-red) 66%, var(--vet-red) 100%
+  );
+  box-shadow: 0 1px 3px rgba(139,26,26,0.3);
+}
+.ribbon-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--vet-red); margin-top: 3px; text-align: center;
+}
+
+/* ── JUDICIARY ── */
+.svc-judge { background: var(--judge-slate); }
+/* scales emoji renders fine at small size */
+
+/* ── FIRE ── */
+.svc-fire { background: var(--fire-red); }
+
+/* ── LAW ENFORCEMENT ── */
+.svc-leo { background: var(--leo-blue); }
+
+/* ── EMS ── */
+.svc-ems { background: #1a3a5c; }
+
+/* ── FORMER ELECTED — star(s) ── */
+.elected-stars {
+  position: absolute;
+  bottom: 12px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex; gap: 2px;
+}
+.elected-star {
+  font-size: 8px;
+  color: var(--elected-gold);
+  filter: drop-shadow(0 0 2px rgba(184,134,11,0.6));
+  line-height: 1;
+}
+
+/* ── CIVIC BODY — gavel badge ── */
+.svc-civic { background: var(--civic-oak); }
+
+/* ══════════════════════════════════════════════════════
+   SPONSOR RING TREATMENT
+   Thin dashed arc, outermost layer
+   Color = sponsor brand color (passed inline)
+══════════════════════════════════════════════════════ */
+.sponsor-ring-wrap {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+.sponsor-arc {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2.5px dashed;
+  opacity: 0.7;
+}
+.sponsor-label {
+  position: absolute;
+  bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6px; letter-spacing: 0.12em; text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-mut);
+}
+.sponsor-dot {
+  display: inline-block; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--amber);
+  margin-right: 3px; vertical-align: middle;
+}
+
+/* ══════════════════════════════════════════════════════
+   CONTRIBUTION SCORE BAR
+══════════════════════════════════════════════════════ */
+.score-wrap {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.score-bar-outer {
+  width: 100%; height: 5px;
+  background: var(--bg2); border-radius: 100px; overflow: hidden;
+}
+.score-bar-inner {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(to right, var(--blue-lt), var(--gilt));
+}
+.score-labels {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace; font-size: 7px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.score-val { color: var(--blue); font-weight: 700; }
+.score-max { color: var(--ink-mut); }
+
+/* ══════════════════════════════════════════════════════
+   IDENTITY CARD — full marker in context
+══════════════════════════════════════════════════════ */
+.id-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex; align-items: flex-start; gap: 18px;
+}
+.id-card.dark { background: #141d2e; border-color: rgba(255,255,255,0.07); }
+.id-body { flex: 1; min-width: 0; }
+.id-handle { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+.id-handle.light { color: white; }
+.id-anon { font-family: 'Nunito', sans-serif; font-size: 11.5px; color: var(--ink-soft); margin-bottom: 10px; }
+.id-anon.light { color: rgba(255,255,255,0.4); }
+.id-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.id-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 7.5px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px;
+}
+.id-tag-cred { background: var(--gilt-pl); color: var(--gilt); border: 1px solid var(--gilt-rul); }
+.id-tag-svc  { background: var(--blue-vp); color: var(--blue); border: 1px solid var(--blue-pl); }
+.id-tag-self { background: var(--bg2); color: var(--ink-soft); border: 1px solid var(--rule); }
+.id-sponsor-note {
+  font-family: 'JetBrains Mono', monospace; font-size: 7px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-mut); display: flex; align-items: center; gap: 4px;
+  margin-top: 8px;
+}
+
+/* ══════════════════════════════════════════════════════
+   GRID LAYOUTS
+══════════════════════════════════════════════════════ */
+.marker-grid {
+  display: flex; flex-wrap: wrap;
+  gap: 40px 48px;
+  align-items: flex-end;
+  padding: 12px 0;
+}
+.marker-col {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 14px;
+}
+.marker-col-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 8px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-mut); text-align: center; max-width: 80px;
+  line-height: 1.5;
+}
+.marker-col-label.gilt { color: var(--gilt); }
+.marker-col-label.light { color: rgba(255,255,255,0.35); }
+
+.size-row {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+
+/* svc distinguisher description rows */
+.svc-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 0; border-bottom: 1px solid var(--rule);
+}
+.svc-row:last-child { border-bottom: none; }
+.svc-row-body { flex: 1; }
+.svc-row-name { font-family: 'Libre Baskerville', serif; font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.svc-row-desc { font-family: 'Nunito', sans-serif; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.svc-row-verify { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mut); margin-top: 4px; }
+
+/* tier table */
+.tier-table { width: 100%; border-collapse: collapse; }
+.tier-table th { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); padding: 8px 12px; text-align: left; border-bottom: 2px solid var(--blue-pl); }
+.tier-table td { font-family: 'Nunito', sans-serif; font-size: 13px; color: var(--ink); padding: 10px 12px; border-bottom: 1px solid var(--rule-lt); vertical-align: middle; }
+.tier-table tr:last-child td { border-bottom: none; }
+.tier-table td:nth-child(3) { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); }
+.tier-name { font-weight: 700; }
+.tier-range { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-tag">Civic Identity Marker System</div>
+  <div class="nav-badge">Component Ref</div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-ring"></div><div class="hero-ring2"></div>
+  <div class="h-num">Component System · Civic Identity</div>
+  <div class="h-title">The Civic<br><em>Identity Marker</em></div>
+  <div class="h-sub">A layered token carrying credential, service record, contribution score, expressive identity, and sponsorship — all simultaneously legible, none overriding the others.</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     01. ANATOMY
+══════════════════════════════════════════ -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">01 · Anatomy</div>
+      <div class="sec-title">Five concentric layers</div>
+    </div>
+    <div class="sec-head-right">Outermost → innermost</div>
+  </div>
+  <div class="sec-desc">Every layer is independently readable. The sponsor ring can be absent. The service badges can be absent. The credential badge is always present. The avatar face is always present. The ribbon bar appears only for veterans.</div>
+
+  <div class="comp-display">
+    <div class="comp-label">Anatomy · <span>Fully-loaded marker — all layers present</span></div>
+    <div class="comp-body" style="display:flex; gap:60px; align-items:flex-start; flex-wrap:wrap;">
+
+      <!-- Fully loaded marker -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:28px; padding-top:16px;">
+        <div class="marker-wrap">
+          <!-- Sponsor ring -->
+          <div class="sponsor-ring-wrap">
+            <div class="sponsor-arc" style="border-color:#1a6b3a;"></div>
+          </div>
+          <!-- Marker body -->
+          <div class="marker marker-lg ring-verified">
+            <div class="marker-face face-verified face-emoji">🦅</div>
+            <!-- Service badges -->
+            <div class="svc-badge svc-pos-1 svc-judge" title="Active Judge · State verified">⚖️</div>
+            <div class="svc-badge svc-pos-2 svc-civic" title="Civic Body Member">🔨</div>
+            <!-- Elected stars -->
+            <div class="elected-stars"><span class="elected-star">★</span><span class="elected-star">★</span></div>
+            <!-- Credential badge -->
+            <div class="marker-cred cred-verified">ESQ</div>
+          </div>
+          <!-- Ribbon bar — veteran -->
+          <div class="marker-ribbon"></div>
+          <div class="ribbon-label">Veteran · DD-214</div>
+          <!-- Sponsor label -->
+          <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); text-align:center;">
+            <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#1a6b3a; vertical-align:middle; margin-right:3px;"></span>Sponsored · VA Bar Assn
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer key -->
+      <div style="flex:1; min-width:260px;">
+        <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px;">
+          <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; border-left:3px solid #1a6b3a;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#1a6b3a; width:80px; flex-shrink:0; padding-top:1px;">Layer 1</div>
+            <div><div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px;">Sponsor ring</div><div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">Dashed arc in sponsor's brand color. Absent if no sponsor. Labeled below with "Sponsored · [Org]".</div></div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; border-left:3px solid var(--gilt);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--gilt); width:80px; flex-shrink:0; padding-top:1px;">Layer 2</div>
+            <div><div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px;">Credential ring</div><div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">Gold double-ring = state-verified license (PE, ESQ, MD…). Silver = self-reported. None = anonymous.</div></div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; border-left:3px solid var(--blue);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue); width:80px; flex-shrink:0; padding-top:1px;">Layer 3</div>
+            <div><div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px;">Service badges</div><div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">Small icon badges at top-right. Judge ⚖️, civic body 🔨, first responders. Stack left for multiples.</div></div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; border-left:3px solid var(--ink-soft);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); width:80px; flex-shrink:0; padding-top:1px;">Layer 4</div>
+            <div><div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px;">Avatar face</div><div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">Occupation abbreviation, emoji, or AI-generated patriot caricature. User-chosen. Always a mask, never a photo.</div></div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; border-left:3px solid var(--vet-red);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--vet-red); width:80px; flex-shrink:0; padding-top:1px;">Layer 5</div>
+            <div><div style="font-family:'Libre Baskerville',serif; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px;">Ribbon bar</div><div style="font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">Veterans only. Crimson/gold horizontal band beneath the marker. DD-214 verified. No ribbon for non-veterans.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-note">The credential badge (ESQ, PE, eng, 🍺) is pinned to the bottom of the circle and is always visible regardless of which layers are present. It is the one non-negotiable readable element at every size.</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     02. CREDENTIAL TIERS
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">02 · Credential Tiers</div>
+      <div class="sec-title">Verified · Self-reported · Anonymous</div>
+    </div>
+    <div class="sec-head-right">Ring weight = epistemic weight</div>
+  </div>
+  <div class="sec-desc">The ring communicates how the credential was established — not whether the person is trustworthy, but what kind of claim is being made. Uppercase abbreviation = state-verified. Lowercase = self-reported. Emoji = expressive category.</div>
+
+  <div class="comp-display">
+    <div class="comp-label">Credential tiers · <span>All three rings at large, medium, small</span></div>
+    <div class="comp-body">
+      <div class="marker-grid">
+
+        <!-- VERIFIED — PE -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified"><span class="face-abbr face-abbr-verified">ENG</span></div>
+              <div class="marker-cred cred-verified">PE</div>
+            </div>
+          </div>
+          <div class="marker-col-label gilt">State-verified<br>Professional Engineer</div>
+        </div>
+
+        <!-- VERIFIED — ESQ -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified"><span class="face-abbr face-abbr-verified">LAW</span></div>
+              <div class="marker-cred cred-verified">ESQ</div>
+            </div>
+          </div>
+          <div class="marker-col-label gilt">State-verified<br>Attorney</div>
+        </div>
+
+        <!-- VERIFIED — MD -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified face-emoji">🩺</div>
+              <div class="marker-cred cred-verified">MD</div>
+            </div>
+          </div>
+          <div class="marker-col-label gilt">State-verified<br>Physician</div>
+        </div>
+
+        <!-- VERIFIED — RN -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified face-emoji">💉</div>
+              <div class="marker-cred cred-verified">RN</div>
+            </div>
+          </div>
+          <div class="marker-col-label gilt">State-verified<br>Registered Nurse</div>
+        </div>
+
+        <!-- SELF-REPORTED — eng -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self"><span class="face-abbr face-abbr-self">eng</span></div>
+              <div class="marker-cred cred-self">eng</div>
+            </div>
+          </div>
+          <div class="marker-col-label">Self-reported<br>Engineer</div>
+        </div>
+
+        <!-- EMOJI — bartender -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🍺</div>
+              <div class="marker-cred cred-emoji">🍺</div>
+            </div>
+          </div>
+          <div class="marker-col-label">Self-reported<br>Bartender</div>
+        </div>
+
+        <!-- EMOJI — farmer -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🌾</div>
+              <div class="marker-cred cred-emoji">🌾</div>
+            </div>
+          </div>
+          <div class="marker-col-label">Self-reported<br>Farmer</div>
+        </div>
+
+        <!-- ANONYMOUS -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-anon">
+              <div class="marker-face face-anon face-emoji">🦅</div>
+              <div class="marker-cred cred-self" style="font-size:6.5px;">citizen</div>
+            </div>
+          </div>
+          <div class="marker-col-label">Anonymous<br>Citizen</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Size scale -->
+  <div class="comp-display">
+    <div class="comp-label">Size scale · <span>lg · md · sm · xs — in-feed usage</span></div>
+    <div class="comp-body tight">
+      <div class="size-row" style="align-items:center;">
+        <div class="marker-wrap">
+          <div class="marker marker-lg ring-verified">
+            <div class="marker-face face-verified"><span class="face-abbr face-abbr-verified">ENG</span></div>
+            <div class="marker-cred cred-verified">PE</div>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--ink-mut);">lg · 72px<br>Profile page</div>
+
+        <div class="marker-wrap">
+          <div class="marker marker-md ring-verified">
+            <div class="marker-face face-verified"><span class="face-abbr face-abbr-verified" style="font-size:11px;">ENG</span></div>
+            <div class="marker-cred cred-verified">PE</div>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--ink-mut);">md · 52px<br>Feed card header</div>
+
+        <div class="marker-wrap">
+          <div class="marker marker-sm ring-verified">
+            <div class="marker-face face-verified"><span class="face-abbr face-abbr-verified" style="font-size:9px;">PE</span></div>
+            <div class="marker-cred cred-verified" style="font-size:6px; padding:1px 4px; bottom:-6px;">PE</div>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--ink-mut);">sm · 36px<br>Discourse thread</div>
+
+        <div class="marker-wrap">
+          <div class="marker marker-xs ring-verified">
+            <div class="marker-face face-verified" style="font-size:8px;"><span class="face-abbr face-abbr-verified" style="font-size:7px;">PE</span></div>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--ink-mut);">xs · 28px<br>Nav / inline ref</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     03. SERVICE DISTINGUISHERS
+══════════════════════════════════════════ -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">03 · Service Distinguishers</div>
+      <div class="sec-title">Five categories. Each exalted differently.</div>
+    </div>
+    <div class="sec-head-right">Service record · not professional credential</div>
+  </div>
+  <div class="sec-desc">These are not credentials — they are records of service to the republic. Each has its own visual grammar. They stack with credential rings. They stack with each other. The marker accumulates honestly.</div>
+
+  <div class="comp-display">
+    <div class="comp-label">Service distinguishers · <span>All five · large marker</span></div>
+    <div class="comp-body">
+      <div class="marker-grid" style="gap:48px 56px;">
+
+        <!-- MILITARY VETERAN -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified face-emoji">🦅</div>
+              <div class="marker-cred cred-self">vet</div>
+            </div>
+            <div class="marker-ribbon"></div>
+            <div class="ribbon-label">Veteran · DD-214</div>
+          </div>
+          <div class="marker-col-label" style="color:var(--vet-red); max-width:100px;">Crimson · Gold ribbon bar beneath. DD-214 verified. Absent for non-veterans.</div>
+        </div>
+
+        <!-- JUDGE -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified face-emoji">⚖️</div>
+              <div class="marker-cred cred-verified">JD</div>
+              <div class="svc-badge svc-pos-1 svc-judge" title="Active Judge">⚖️</div>
+            </div>
+          </div>
+          <div class="marker-col-label" style="color:var(--judge-slate); max-width:100px;">Scales badge · top-right. Active state court roster. Not retired.</div>
+        </div>
+
+        <!-- FIRE -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🔥</div>
+              <div class="marker-cred cred-emoji">🔥</div>
+              <div class="svc-badge svc-pos-1 svc-fire" title="Active Firefighter">🚒</div>
+            </div>
+          </div>
+          <div class="marker-col-label" style="color:var(--fire-red); max-width:100px;">Red badge · Fire · Active credential.</div>
+        </div>
+
+        <!-- LAW ENFORCEMENT -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🛡️</div>
+              <div class="marker-cred cred-emoji">LEO</div>
+              <div class="svc-badge svc-pos-1 svc-leo" title="Law Enforcement">🛡️</div>
+            </div>
+          </div>
+          <div class="marker-col-label" style="color:var(--leo-blue); max-width:100px;">Navy badge · Law enforcement. Active credential.</div>
+        </div>
+
+        <!-- EMS -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">⭐</div>
+              <div class="marker-cred cred-emoji">EMS</div>
+              <div class="svc-badge svc-pos-1 svc-ems" title="EMS / Paramedic">⭐</div>
+            </div>
+          </div>
+          <div class="marker-col-label" style="color:#1a3a5c; max-width:100px;">Star of life · EMS / Paramedic. Active certification.</div>
+        </div>
+
+        <!-- FORMER ELECTED -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🏛️</div>
+              <div class="marker-cred cred-self">fmr</div>
+              <div class="elected-stars">
+                <span class="elected-star">★</span>
+                <span class="elected-star">★</span>
+              </div>
+            </div>
+          </div>
+          <div class="marker-col-label" style="color:var(--elected-gold); max-width:100px;">Gold stars inside circle. One per office held, max three. Public record.</div>
+        </div>
+
+        <!-- CIVIC BODY -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🏘️</div>
+              <div class="marker-cred cred-self">bd</div>
+              <div class="svc-badge svc-pos-1 svc-civic" title="Civic Body Member">🔨</div>
+            </div>
+          </div>
+          <div class="marker-col-label" style="color:var(--civic-oak); max-width:100px;">Oak gavel badge. School board, planning, zoning. Active appointment.</div>
+        </div>
+
+        <!-- STACKED — veteran + judge + civic body -->
+        <div class="marker-col">
+          <div class="marker-wrap">
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified face-emoji">🦅</div>
+              <div class="marker-cred cred-verified">ESQ</div>
+              <div class="svc-badge svc-pos-1 svc-judge">⚖️</div>
+              <div class="svc-badge svc-pos-2 svc-civic">🔨</div>
+              <div class="elected-stars"><span class="elected-star">★</span></div>
+            </div>
+            <div class="marker-ribbon"></div>
+            <div class="ribbon-label">Veteran · DD-214</div>
+          </div>
+          <div class="marker-col-label gilt" style="max-width:110px;">Stacked · ESQ + judge + civic body + elected star + veteran ribbon</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Service row descriptions -->
+  <div class="comp-display">
+    <div class="comp-label">Verification method · <span>per service category</span></div>
+    <div class="comp-body tight" style="padding:16px 24px;">
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-self">
+            <div class="marker-face face-self face-emoji">🦅</div>
+            <div class="marker-cred cred-self" style="font-size:6.5px;">vet</div>
+            <div style="position:absolute; bottom:-9px; left:0; right:0; height:4px; border-radius:2px; background:linear-gradient(to right, var(--vet-red) 0%, var(--vet-red) 33%, var(--vet-gold) 33%, var(--vet-gold) 66%, var(--vet-red) 66%);"></div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">Military Veteran</div>
+          <div class="svc-row-desc">Crimson and gold ribbon bar beneath the marker. No badge on the circle — the ribbon speaks for itself. Earns its own visual register separate from the circle entirely.</div>
+          <div class="svc-row-verify">DD-214 upload → National Personnel Records Center API verification</div>
+        </div>
+      </div>
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-verified">
+            <div class="marker-face face-verified face-emoji" style="font-size:18px;">⚖️</div>
+            <div class="marker-cred cred-verified" style="font-size:6.5px;">JD</div>
+            <div class="svc-badge svc-pos-1 svc-judge" style="width:14px; height:14px; font-size:7px;">⚖️</div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">Active Judge</div>
+          <div class="svc-row-desc">Scales badge, top-right position. Slate blue. Active status only — if a judge retires, the badge is removed. The judicial record is present tense.</div>
+          <div class="svc-row-verify">State court roster API · Active status checked quarterly</div>
+        </div>
+      </div>
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-self">
+            <div class="marker-face face-self face-emoji" style="font-size:18px;">🔥</div>
+            <div class="marker-cred cred-emoji" style="font-size:8px;">🔥</div>
+            <div class="svc-badge svc-pos-1 svc-fire" style="width:14px; height:14px; font-size:7px;">🚒</div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">First Responder — Fire</div>
+          <div class="svc-row-desc">Red badge. Applies to active career and volunteer firefighters with valid state certification. Badge is removed when certification lapses.</div>
+          <div class="svc-row-verify">State fire marshal certification database · Annual renewal check</div>
+        </div>
+      </div>
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-self">
+            <div class="marker-face face-self face-emoji" style="font-size:18px;">🛡️</div>
+            <div class="marker-cred cred-emoji" style="font-size:6.5px;">LEO</div>
+            <div class="svc-badge svc-pos-1 svc-leo" style="width:14px; height:14px; font-size:7px;">🛡️</div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">First Responder — Law Enforcement</div>
+          <div class="svc-row-desc">Navy badge. Active sworn officers. Separate from judicial — a police officer and a judge serving the same community carry different roles and should be visually distinct.</div>
+          <div class="svc-row-verify">POST certification database · Active status · Annual check</div>
+        </div>
+      </div>
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-self">
+            <div class="marker-face face-self face-emoji" style="font-size:18px;">⭐</div>
+            <div class="marker-cred cred-emoji" style="font-size:6.5px;">EMS</div>
+            <div class="svc-badge svc-pos-1 svc-ems" style="width:14px; height:14px; font-size:7px;">⭐</div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">First Responder — EMS / Paramedic</div>
+          <div class="svc-row-desc">Star of life badge, deep navy. EMT-Basic through Paramedic. Active NREMT or state certification required.</div>
+          <div class="svc-row-verify">NREMT certification API + state EMS office · Active status</div>
+        </div>
+      </div>
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-self">
+            <div class="marker-face face-self face-emoji" style="font-size:18px;">🏛️</div>
+            <div class="marker-cred cred-self" style="font-size:6.5px;">fmr</div>
+            <div class="elected-stars" style="bottom:8px;"><span class="elected-star">★</span><span class="elected-star">★</span></div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">Former Elected Official</div>
+          <div class="svc-row-desc">Gold stars inside the circle, bottom center. One per office held, maximum three. Stars remain permanently — service in the past is still service. Active officials get the verified badge through their official account.</div>
+          <div class="svc-row-verify">Public election records · Ballotpedia · State legislature archives</div>
+        </div>
+      </div>
+      <div class="svc-row">
+        <div class="marker-wrap" style="flex-shrink:0; width:52px;">
+          <div class="marker marker-md ring-self">
+            <div class="marker-face face-self face-emoji" style="font-size:18px;">🏘️</div>
+            <div class="marker-cred cred-self" style="font-size:6.5px;">bd</div>
+            <div class="svc-badge svc-pos-1 svc-civic" style="width:14px; height:14px; font-size:7px;">🔨</div>
+          </div>
+        </div>
+        <div class="svc-row-body">
+          <div class="svc-row-name">Civic Body Member</div>
+          <div class="svc-row-desc">Oak gavel badge. School board, planning commission, zoning board, water authority, transit authority. The most undervalued form of civic service — it gets its own mark.</div>
+          <div class="svc-row-verify">Municipal public records · Active appointment confirmed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     04. CONTRIBUTION SCORE
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">04 · Contribution Score</div>
+      <div class="sec-title">Independent of credential. Always visible.</div>
+    </div>
+    <div class="sec-head-right">Quality · not volume</div>
+  </div>
+  <div class="sec-desc">The score runs 0–1000. It is calculated from quality signals — source tier, steel-man completion, position change over time, discourse contributions rated useful by peers. Volume cannot game it. A non-licensed engineer with a score of 820 outranks a PE with a score of 140 in every sponsorship tier and in the civic record's sorting logic.</div>
+
+  <div class="comp-display">
+    <div class="comp-label">Score display · <span>on identity card and profile</span></div>
+    <div class="comp-body" style="display:flex; flex-direction:column; gap:14px; max-width:420px;">
+      <div>
+        <div class="score-wrap">
+          <div class="score-labels"><span class="score-val">847 / 1000</span><span class="score-max">Distinguished</span></div>
+          <div class="score-bar-outer"><div class="score-bar-inner" style="width:84.7%;"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="score-wrap">
+          <div class="score-labels"><span class="score-val">512 / 1000</span><span class="score-max">Verified Tier</span></div>
+          <div class="score-bar-outer"><div class="score-bar-inner" style="width:51.2%;"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="score-wrap">
+          <div class="score-labels"><span class="score-val">203 / 1000</span><span class="score-max">Civic Tier</span></div>
+          <div class="score-bar-outer"><div class="score-bar-inner" style="width:20.3%;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-display">
+    <div class="comp-label">Sponsorship tiers · <span>score × credential × contribution</span></div>
+    <div class="comp-body tight" style="padding:16px 24px;">
+      <table class="tier-table">
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Score range</th>
+            <th>Monthly range</th>
+            <th>Requirement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="tier-name">Civic</span></td><td><span class="tier-range">100–399</span></td><td>$5 – $50</td><td>Active, self-reported, consistent contributor</td></tr>
+          <tr><td><span class="tier-name">Verified</span></td><td><span class="tier-range">400–649</span></td><td>$50 – $300</td><td>State-verified credential + regular engagement</td></tr>
+          <tr><td><span class="tier-name">Laurel</span></td><td><span class="tier-range">650–849</span></td><td>$300 – $1,500</td><td>Service record + high contribution score</td></tr>
+          <tr><td><span class="tier-name">Distinguished</span></td><td><span class="tier-range">850–1000</span></td><td>$1,500 – no cap</td><td>Exceptional record, significant civic reach</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="comp-note">The cap debate belongs on FORA. Distinguished tier has no ceiling by design — the community sees every sponsorship relationship in full. Transparency is the regulator, not an arbitrary number. FORA's cut: 18%.</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     05. SPONSORSHIP RING
+══════════════════════════════════════════ -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">05 · Sponsorship Ring</div>
+      <div class="sec-title">Ambient. Disclosed. Never vocal.</div>
+    </div>
+    <div class="sec-head-right">Sadie Hawkins · user approaches sponsor</div>
+  </div>
+  <div class="sec-desc">The sponsor ring is a dashed arc in the sponsor's brand color, outermost layer, labeled below with "Sponsored · [Org]" in 6px JetBrains Mono. The sponsored user speaks. The sponsor is present. Like a jersey sponsor — visible but not playing.</div>
+
+  <div class="comp-display">
+    <div class="comp-label">Sponsor ring · <span>three examples · different sponsor categories</span></div>
+    <div class="comp-body">
+      <div class="marker-grid">
+
+        <!-- Civic institution sponsor — VA Bar Association -->
+        <div class="marker-col">
+          <div class="marker-wrap" style="padding-bottom:22px;">
+            <div class="sponsor-ring-wrap"><div class="sponsor-arc" style="border-color:#1a5c3a;"></div></div>
+            <div class="marker marker-lg ring-verified">
+              <div class="marker-face face-verified"><span class="face-abbr face-abbr-verified">LAW</span></div>
+              <div class="marker-cred cred-verified">ESQ</div>
+            </div>
+            <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); text-align:center;"><span style="display:inline-block; width:4px; height:4px; border-radius:50%; background:#1a5c3a; vertical-align:middle; margin-right:3px;"></span>Civic · VA Bar Assn</div>
+          </div>
+          <div class="marker-col-label">Civic institution<br>No platform fee</div>
+        </div>
+
+        <!-- Union sponsor -->
+        <div class="marker-col">
+          <div class="marker-wrap" style="padding-bottom:22px;">
+            <div class="sponsor-ring-wrap"><div class="sponsor-arc" style="border-color:#8b1a1a;"></div></div>
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🔧</div>
+              <div class="marker-cred cred-emoji">🔧</div>
+            </div>
+            <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); text-align:center;"><span style="display:inline-block; width:4px; height:4px; border-radius:50%; background:#8b1a1a; vertical-align:middle; margin-right:3px;"></span>Union · IBEW Local 26</div>
+          </div>
+          <div class="marker-col-label">Labor union<br>No platform fee</div>
+        </div>
+
+        <!-- Commercial sponsor — disclosed -->
+        <div class="marker-col">
+          <div class="marker-wrap" style="padding-bottom:22px;">
+            <div class="sponsor-ring-wrap"><div class="sponsor-arc" style="border-color:#c47f00;"></div></div>
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🍺</div>
+              <div class="marker-cred cred-emoji">🍺</div>
+            </div>
+            <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); text-align:center;"><span style="display:inline-block; width:4px; height:4px; border-radius:50%; background:var(--amber); vertical-align:middle; margin-right:3px;"></span>Sponsored · Craft Union</div>
+          </div>
+          <div class="marker-col-label">Commercial · platform<br>fee applies · disclosed</div>
+        </div>
+
+        <!-- No sponsor -->
+        <div class="marker-col">
+          <div class="marker-wrap" style="padding-bottom:22px;">
+            <div class="marker marker-lg ring-self">
+              <div class="marker-face face-self face-emoji">🌾</div>
+              <div class="marker-cred cred-emoji">🌾</div>
+            </div>
+            <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:6.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-mut); text-align:center;">No sponsor · no ring</div>
+          </div>
+          <div class="marker-col-label">Unsponsored<br>Default state</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-note">Civic institutions (bar associations, unions, veterans organizations, professional associations) pay no platform fee — their offering is aligned with the mission. Commercial sponsors pay a platform fee that is disclosed in the picker. The user sees what their marker will look like before accepting. They can switch or drop a sponsor any month with no penalty to their score.</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     06. IDENTITY CARD IN CONTEXT
+══════════════════════════════════════════ -->
+<div class="section on-dark">
+  <div class="sec-head on-dark-rule">
+    <div>
+      <div class="sec-eyebrow">06 · Identity Card in Context</div>
+      <div class="sec-title on-white-text">How the marker reads in the feed</div>
+    </div>
+    <div class="sec-head-right light">Full card · discourse · nav</div>
+  </div>
+  <div class="sec-desc light">The marker sits in the top-left of any identity card. At a glance: what kind of voice is this, what have they served, are they sponsored, how engaged are they. All readable without opening a profile.</div>
+
+  <div style="display:flex; flex-direction:column; gap:16px; max-width:560px;">
+
+    <!-- Full identity card — verified PE + veteran -->
+    <div class="id-card dark">
+      <div class="marker-wrap" style="flex-shrink:0; padding-bottom:14px;">
+        <div class="sponsor-ring-wrap"><div class="sponsor-arc" style="border-color:#1a5c3a;"></div></div>
+        <div class="marker marker-md ring-verified">
+          <div class="marker-face face-verified" style="font-size:11px;"><span class="face-abbr face-abbr-verified" style="font-size:10px;">ENG</span></div>
+          <div class="marker-cred cred-verified" style="font-size:7px;">PE</div>
+        </div>
+        <div style="height:4px; border-radius:2px; margin-top:6px; background:linear-gradient(to right, var(--vet-red) 0%, var(--vet-red) 33%, var(--vet-gold) 33%, var(--vet-gold) 66%, var(--vet-red) 66%);"></div>
+      </div>
+      <div class="id-body">
+        <div class="id-handle light">Engineer · 35–44 · Alexandria VA</div>
+        <div class="id-anon light">Semi-anonymous · identity verified</div>
+        <div class="id-tags">
+          <span class="id-tag id-tag-cred">PE · Virginia</span>
+          <span class="id-tag id-tag-svc">Veteran</span>
+          <span class="id-tag id-tag-svc">Civic Body</span>
+        </div>
+        <div class="score-wrap" style="max-width:200px;">
+          <div class="score-labels" style="color:rgba(255,255,255,0.35);"><span style="color:var(--gilt-lt); font-family:'JetBrains Mono',monospace; font-size:7px;">Score 847 · Distinguished</span><span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:rgba(255,255,255,0.2);">1000</span></div>
+          <div class="score-bar-outer" style="background:rgba(255,255,255,0.06);"><div class="score-bar-inner" style="width:84.7%;"></div></div>
+        </div>
+        <div class="id-sponsor-note"><span style="display:inline-block; width:4px; height:4px; border-radius:50%; background:#1a5c3a;"></span>Sponsored · VA Society of Professional Engineers</div>
+      </div>
+    </div>
+
+    <!-- Simpler card — bartender, no sponsor -->
+    <div class="id-card dark">
+      <div class="marker-wrap" style="flex-shrink:0;">
+        <div class="marker marker-md ring-self">
+          <div class="marker-face face-self face-emoji" style="font-size:20px;">🍺</div>
+          <div class="marker-cred cred-emoji" style="font-size:8.5px; bottom:-8px;">🍺</div>
+        </div>
+      </div>
+      <div class="id-body">
+        <div class="id-handle light">Bartender · 25–34 · Miami FL</div>
+        <div class="id-anon light">Semi-anonymous · identity verified</div>
+        <div class="id-tags">
+          <span class="id-tag id-tag-self">Hospitality</span>
+        </div>
+        <div class="score-wrap" style="max-width:200px;">
+          <div class="score-labels"><span style="color:var(--gilt-lt); font-family:'JetBrains Mono',monospace; font-size:7px;">Score 312 · Civic Tier</span><span style="font-family:'JetBrains Mono',monospace; font-size:7px; color:rgba(255,255,255,0.2);">1000</span></div>
+          <div class="score-bar-outer" style="background:rgba(255,255,255,0.06);"><div class="score-bar-inner" style="width:31.2%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="comp-note light">The dark background here is for contrast testing. The identity card renders on both light and dark surfaces. All text remains legible. The marker rings hold at both md and sm sizes.</div>
+</div>
+
+</body>
+</html>

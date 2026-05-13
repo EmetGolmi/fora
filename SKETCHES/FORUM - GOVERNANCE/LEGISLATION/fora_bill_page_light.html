@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA — Bill Page · Light</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:          #f0f2f0;
+  --sidebar-bg:  #ffffff;
+  --card:        #ffffff;
+  --card-hover:  #f8faf8;
+  --green-dark:  #1a4731;
+  --green-mid:   #2d6a4f;
+  --green-main:  #2e7d52;
+  --green-soft:  #52b788;
+  --green-pale:  #d8f3dc;
+  --green-pale2: #b7e4c7;
+  --green-tint:  #f0faf4;
+  --ink:         #1a1f1c;
+  --ink-mid:     #3d4840;
+  --ink-soft:    #6b7c72;
+  --ink-muted:   #9aab9e;
+  --border:      #e4ece6;
+  --border-soft: #eef4ef;
+  --shadow:      0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-md:   0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  --radius:      14px;
+  --radius-sm:   8px;
+  --radius-pill: 100px;
+
+  --blue:        #2563eb;
+  --blue-pale:   #eff6ff;
+  --blue-border: #bfdbfe;
+  --purple:      #7c3aed;
+  --purple-pale: #f5f3ff;
+  --purple-border: #ddd6fe;
+  --orange:      #ea580c;
+  --orange-pale: #fff7ed;
+  --orange-border: #fed7aa;
+  --red:         #dc2626;
+  --red-pale:    #fef2f2;
+  --red-border:  #fecaca;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  display: flex;
+  height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 16px;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 8px;
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+.logo-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.sidebar-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 12px 20px 6px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.12s;
+  position: relative;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.sidebar-item:hover { background: var(--green-tint); color: var(--green-mid); }
+.sidebar-item.active {
+  background: var(--green-tint);
+  color: var(--green-dark);
+  font-weight: 600;
+}
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  background: var(--green-dark);
+  border-radius: 0 3px 3px 0;
+}
+.sidebar-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--green-pale);
+  color: var(--green-mid);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 16px 16px 0;
+}
+.sidebar-app-card {
+  background: var(--green-dark);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  color: white;
+}
+.app-card-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.app-card-sub { font-size: 11px; opacity: 0.65; margin-bottom: 12px; line-height: 1.4; }
+.app-card-btn {
+  width: 100%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  border-radius: var(--radius-pill);
+  padding: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.app-card-btn:hover { background: rgba(255,255,255,0.25); }
+
+/* ── MAIN AREA ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* top bar */
+.topbar {
+  height: 60px;
+  background: var(--sidebar-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 7px 14px;
+  flex: 1;
+  max-width: 320px;
+}
+.search-icon { color: var(--ink-muted); font-size: 13px; }
+.search-input {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  flex: 1;
+}
+.search-input::placeholder { color: var(--ink-muted); }
+.search-kbd {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  background: var(--border);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.topbar-icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--ink-soft);
+  transition: background 0.12s;
+}
+.topbar-icon-btn:hover { background: var(--bg); }
+.user-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.user-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--green-pale2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green-dark);
+  border: 2px solid var(--green-pale);
+}
+.user-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.user-email { font-size: 11px; color: var(--ink-muted); }
+
+/* page header */
+.page-header {
+  padding: 20px 24px 14px;
+  background: var(--sidebar-bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.page-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.bill-meta { flex-shrink: 0; }
+.bill-id-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--green-pale);
+  color: var(--green-mid);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.bill-chamber-tag {
+  font-size: 11px;
+  color: var(--ink-muted);
+  display: block;
+}
+.bill-titles { flex: 1; }
+.bill-title-en {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  margin-bottom: 3px;
+  letter-spacing: -0.02em;
+}
+.bill-title-es {
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+.bill-actions { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; }
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--green-mid); }
+.btn-outline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--ink-mid);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-outline:hover { border-color: var(--green-soft); color: var(--green-mid); }
+
+/* status + progress */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+.status-committee { background: var(--orange-pale); color: var(--orange); border: 1px solid var(--orange-border); }
+.bill-date-txt { font-size: 12px; color: var(--ink-muted); }
+.progress-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: auto;
+}
+.prog-step { display: flex; align-items: center; gap: 0; }
+.prog-node {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: white;
+  flex-shrink: 0;
+}
+.prog-node.done { background: var(--green-soft); border-color: var(--green-soft); }
+.prog-node.current { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.15); }
+.prog-line { width: 28px; height: 2px; background: var(--border); }
+.prog-line.done { background: var(--green-soft); }
+.prog-label {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin: 0 4px;
+  white-space: nowrap;
+}
+.prog-label.done { color: var(--green-soft); }
+.prog-label.current { color: var(--orange); font-weight: 600; }
+
+/* bilingual bar */
+.bilingual-bar {
+  background: #fffdf5;
+  border-bottom: 1px solid #f0e8c8;
+  padding: 6px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.bil-flags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff8e0;
+  border: 1px solid #f0d060;
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+}
+.bil-flag-item { font-size: 12px; }
+.bil-lang-label { font-size: 10px; font-weight: 600; color: #a07020; letter-spacing: 0.08em; }
+.bil-sep-dot { color: #d0b040; font-size: 8px; }
+.bil-note { font-size: 11px; color: #9a8040; }
+.bil-note span { color: #c9a84c; font-weight: 500; cursor: pointer; }
+.bil-note span:hover { text-decoration: underline; }
+.bil-spacer { flex: 1; }
+
+/* ── BODY SPLIT ── */
+.body-split {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+  gap: 0;
+  padding: 20px 24px 20px;
+  background: var(--bg);
+  gap: 16px;
+}
+
+/* ── LEFT COLUMN ── */
+.col-left {
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding-right: 4px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.card-title-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-blue   { background: #3b82f6; }
+.dot-purple { background: #8b5cf6; }
+.dot-orange { background: #f97316; }
+.dot-green  { background: var(--green-soft); }
+.dot-gold   { background: #c9a84c; }
+
+.card-collapse-btn {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-collapse-btn:hover { border-color: var(--green-soft); color: var(--green-mid); }
+.carr { transition: transform 0.2s; }
+.carr.open { transform: rotate(180deg); }
+
+/* scaffold grid */
+.scaffold-grid {
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.scaffold-cell {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  border: 1px solid var(--border-soft);
+}
+.scaffold-cell.full { grid-column: 1 / -1; }
+.scaffold-cell.best { background: #f0faf4; border-color: #b7e4c7; }
+.scaffold-cell.worst { background: var(--red-pale); border-color: var(--red-border); }
+.scaffold-cell.prec { background: #fafaf8; border-color: var(--border); }
+
+.sc-tag {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 5px;
+}
+.sc-tag.blue   { color: var(--blue); }
+.sc-tag.green  { color: var(--green-mid); }
+.sc-tag.red    { color: var(--red); }
+.sc-tag.muted  { color: var(--ink-muted); }
+
+.sc-tag-es {
+  font-size: 9px;
+  font-style: italic;
+  color: #c9a84c;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+.sc-en {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+}
+.sc-es {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  font-style: italic;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* sources */
+.sources-list {
+  padding: 10px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.source-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 11px;
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.source-row:hover { background: var(--green-tint); border-color: var(--green-pale2); }
+.tier-badge {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.t-s { background: #dcfce7; color: #16a34a; }
+.t-a { background: #dbeafe; color: #2563eb; }
+.t-b { background: #fef9c3; color: #ca8a04; }
+.t-c { background: #ffedd5; color: #ea580c; }
+.t-w { background: #fee2e2; color: #dc2626; }
+.source-name { flex: 1; font-size: 12.5px; color: var(--ink-mid); font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.source-date { font-size: 11px; color: var(--ink-muted); flex-shrink: 0; }
+.source-ext { font-size: 11px; color: var(--ink-muted); }
+
+.legitimacy-row {
+  margin: 0 18px 14px;
+  background: var(--blue-pale);
+  border: 1px solid var(--blue-border);
+  border-radius: var(--radius-sm);
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.leg-label { font-size: 11px; font-weight: 600; color: var(--blue); white-space: nowrap; }
+.leg-track { flex: 1; height: 5px; background: #bfdbfe; border-radius: 3px; overflow: hidden; }
+.leg-fill { height: 100%; background: linear-gradient(to right, #2563eb, #60a5fa); border-radius: 3px; width: 71%; }
+.leg-score { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: var(--blue); }
+.leg-sub { font-size: 10.5px; color: #93c5fd; }
+
+/* sentiment */
+.sentiment-body { padding: 12px 18px 14px; }
+.cohort-chips {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.cohort-chip {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  color: var(--ink-soft);
+  background: white;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.cohort-chip:hover { border-color: var(--green-soft); color: var(--green-mid); }
+.cohort-chip.active { background: var(--green-dark); border-color: var(--green-dark); color: white; }
+
+.sent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.sent-label { font-size: 12px; font-weight: 500; color: var(--ink-soft); width: 58px; flex-shrink: 0; }
+.sent-track { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.sent-fill { height: 100%; border-radius: 4px; }
+.fill-support { background: linear-gradient(to right, #22c55e, #86efac); }
+.fill-oppose  { background: linear-gradient(to right, #ef4444, #fca5a5); }
+.fill-neutral { background: linear-gradient(to right, #d1d5db, #e5e7eb); }
+.sent-pct { font-size: 13px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
+.pct-s { color: #16a34a; }
+.pct-o { color: #dc2626; }
+.pct-n { color: var(--ink-muted); }
+.sent-n { font-size: 11px; color: var(--ink-muted); text-align: right; margin-top: 4px; }
+.cohort-note { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; margin-top: 8px; font-style: italic; background: var(--bg); border-radius: var(--radius-sm); padding: 8px 10px; }
+
+/* sponsors */
+.sponsors-body { padding: 12px 18px 14px; }
+.sponsor-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.sponsor-row:hover { background: var(--green-tint); }
+.s-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green-dark);
+  flex-shrink: 0;
+}
+.s-name { font-size: 12.5px; font-weight: 600; color: var(--ink); flex: 1; }
+.s-role { font-size: 11px; color: var(--ink-muted); }
+
+.vote-tally {
+  display: flex;
+  gap: 0;
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.tally-cell {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  border-right: 1px solid var(--border-soft);
+}
+.tally-cell:last-child { border-right: none; }
+.tally-n { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 3px; }
+.tally-n.yea { color: #16a34a; }
+.tally-n.nay { color: var(--red); }
+.tally-n.pend { font-size: 12px; color: var(--ink-muted); margin-top: 4px; }
+.tally-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+
+/* ── RIGHT COLUMN: DISCOURSE ── */
+.col-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.disc-header {
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.disc-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.disc-count-badge {
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--green-pale);
+  color: var(--green-mid);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+.disc-sort { margin-left: auto; display: flex; gap: 4px; }
+.disc-sort-btn {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.disc-sort-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: white; }
+.disc-sort-btn:hover:not(.active) { border-color: var(--green-soft); color: var(--green-mid); }
+
+/* steel man prompt */
+.steelman-banner {
+  margin: 10px 14px 0;
+  background: var(--purple-pale);
+  border: 1px solid var(--purple-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.sm-icon { font-size: 16px; flex-shrink: 0; }
+.sm-body { flex: 1; }
+.sm-title { font-size: 12px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+.sm-sub { font-size: 11px; color: #7c3aed99; line-height: 1.4; }
+.sm-btn {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--purple);
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 6px 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.sm-btn:hover { opacity: 0.88; }
+
+/* contributions */
+.contributions {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.contrib-card {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  padding: 12px 13px;
+  transition: border-color 0.12s;
+}
+.contrib-card:hover { border-color: var(--border); }
+.contrib-card.steelman { border-left: 3px solid var(--purple); }
+
+.contrib-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+.contrib-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--green-dark);
+  flex-shrink: 0;
+}
+.contrib-identity { font-size: 12px; font-weight: 600; color: var(--ink); flex: 1; }
+.contrib-identity span { font-weight: 400; color: var(--ink-muted); }
+.contrib-time { font-size: 11px; color: var(--ink-muted); }
+.sm-pill {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--purple-pale);
+  color: var(--purple);
+  border: 1px solid var(--purple-border);
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+}
+
+.contrib-en { font-size: 12.5px; line-height: 1.65; color: var(--ink-mid); margin-bottom: 7px; }
+.contrib-es-block {
+  background: #fffdf5;
+  border: 1px solid #f0e8c8;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-top: 6px;
+}
+.contrib-es-tag { font-size: 9px; font-weight: 600; color: #c9a84c; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.contrib-es { font-size: 11.5px; line-height: 1.55; color: #8a7050; font-style: italic; }
+
+.contrib-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 9px;
+}
+.contrib-act {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.contrib-act:hover { border-color: var(--green-soft); color: var(--green-mid); }
+.contrib-act.up:hover { border-color: #86efac; color: #16a34a; background: #f0fdf4; }
+.contrib-act.down:hover { border-color: #fca5a5; color: #dc2626; background: #fef2f2; }
+.contrib-act.flag:hover { border-color: #fdba74; color: #ea580c; background: #fff7ed; }
+.vote-score { font-weight: 700; }
+
+/* tone intercept */
+.tone-banner {
+  margin: 0 14px 10px;
+  background: var(--orange-pale);
+  border: 1px solid var(--orange-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.tone-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.tone-body { flex: 1; }
+.tone-title { font-size: 12px; font-weight: 700; color: var(--orange); margin-bottom: 2px; }
+.tone-sub { font-size: 11px; color: #9a4020; line-height: 1.45; }
+.tone-btns { display: flex; gap: 6px; margin-top: 8px; }
+.tone-revise {
+  font-size: 11px; font-weight: 600;
+  background: var(--orange); color: white; border: none;
+  border-radius: var(--radius-pill); padding: 5px 13px; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.tone-revise:hover { opacity: 0.88; }
+.tone-proceed {
+  font-size: 11px; font-weight: 500;
+  background: white; color: var(--ink-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill); padding: 5px 13px; cursor: pointer;
+  transition: all 0.15s;
+}
+.tone-proceed:hover { border-color: var(--ink-muted); color: var(--ink); }
+
+/* compose */
+.compose-area {
+  border-top: 1px solid var(--border-soft);
+  padding: 12px 14px;
+  flex-shrink: 0;
+}
+.compose-box {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color 0.2s;
+  background: white;
+}
+.compose-box:focus-within { border-color: var(--green-soft); box-shadow: 0 0 0 3px rgba(82,183,136,0.12); }
+.compose-ta {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px 13px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  resize: none;
+  min-height: 56px;
+  line-height: 1.5;
+  background: transparent;
+}
+.compose-ta::placeholder { color: var(--ink-muted); }
+.compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 13px 9px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg);
+}
+.compose-hints { display: flex; gap: 10px; }
+.compose-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.hint-dot { width: 6px; height: 6px; border-radius: 50%; }
+.anon-note {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-align: center;
+  margin-top: 7px;
+}
+.anon-note span { color: var(--green-mid); font-weight: 500; cursor: pointer; }
+.anon-note span:hover { text-decoration: underline; }
+
+/* collapsible */
+.collapsible { overflow: hidden; transition: max-height 0.3s ease, opacity 0.25s ease; }
+.collapsible.collapsed { max-height: 0 !important; opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">F</div>
+    <div class="logo-name">FORA</div>
+  </div>
+
+  <div class="sidebar-section-label">Menu</div>
+  <div class="sidebar-item"><span class="sidebar-icon">⊞</span> Dashboard</div>
+  <div class="sidebar-item active"><span class="sidebar-icon">📋</span> Bills <span class="sidebar-badge">12+</span></div>
+  <div class="sidebar-item"><span class="sidebar-icon">👤</span> Officials</div>
+  <div class="sidebar-item"><span class="sidebar-icon">🗳</span> Elections</div>
+  <div class="sidebar-item"><span class="sidebar-icon">📊</span> Sentiment</div>
+
+  <div class="sidebar-section-label">My FORA</div>
+  <div class="sidebar-item"><span class="sidebar-icon">⭐</span> Following</div>
+  <div class="sidebar-item"><span class="sidebar-icon">🪪</span> Civic Resume</div>
+  <div class="sidebar-item"><span class="sidebar-icon">💬</span> My Contributions</div>
+
+  <div class="sidebar-section-label">General</div>
+  <div class="sidebar-item"><span class="sidebar-icon">⚙</span> Settings</div>
+  <div class="sidebar-item"><span class="sidebar-icon">❓</span> Help</div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-app-card">
+      <div class="app-card-title">FORA Mobile</div>
+      <div class="app-card-sub">Civic intelligence in your pocket</div>
+      <button class="app-card-btn">Download App</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN AREA ── -->
+<div class="main">
+
+  <!-- top bar -->
+  <div class="topbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" placeholder="Search bills, officials, topics…">
+      <span class="search-kbd">⌘F</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn">✉</button>
+      <button class="topbar-icon-btn">🔔</button>
+      <div class="user-block">
+        <div class="user-avatar">N</div>
+        <div>
+          <div class="user-name">Noah</div>
+          <div class="user-email">Alexandria, VA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bill header -->
+  <div class="page-header">
+    <div class="page-header-top">
+      <div class="bill-meta">
+        <span class="bill-id-tag">Ley No. 148 / 2025</span>
+        <span class="bill-chamber-tag">Asamblea Nacional · Cuba</span>
+      </div>
+      <div class="bill-titles">
+        <div class="bill-title-en">Housing Allocation and Cooperative Reform Act</div>
+        <div class="bill-title-es">Ley de Asignación de Vivienda y Reforma de Cooperativas</div>
+      </div>
+      <div class="bill-actions">
+        <button class="btn-primary">☆ Follow Bill</button>
+        <button class="btn-outline">↗ Share</button>
+      </div>
+    </div>
+    <div class="status-row">
+      <span class="status-pill status-committee">In Committee</span>
+      <span class="bill-date-txt">Introduced Mar 4, 2025</span>
+      <div class="progress-track">
+        <div class="prog-step"><div class="prog-node done"></div><div class="prog-label done">Introduced</div></div>
+        <div class="prog-line done"></div>
+        <div class="prog-step"><div class="prog-node done"></div><div class="prog-label done">1st Reading</div></div>
+        <div class="prog-line done"></div>
+        <div class="prog-step"><div class="prog-node current"></div><div class="prog-label current">Committee</div></div>
+        <div class="prog-line"></div>
+        <div class="prog-step"><div class="prog-node"></div><div class="prog-label">2nd Reading</div></div>
+        <div class="prog-line"></div>
+        <div class="prog-step"><div class="prog-node"></div><div class="prog-label">Floor Vote</div></div>
+        <div class="prog-line"></div>
+        <div class="prog-step"><div class="prog-node"></div><div class="prog-label">Enacted</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bilingual bar -->
+  <div class="bilingual-bar">
+    <div class="bil-flags">
+      <span class="bil-flag-item">🇺🇸</span>
+      <span class="bil-lang-label">EN</span>
+      <span class="bil-sep-dot">·</span>
+      <span class="bil-flag-item">🇨🇺</span>
+      <span class="bil-lang-label">ES</span>
+    </div>
+    <span class="bil-note">Bilingual display active · Spanish translations: AI-generated · <span>Improve a translation ↗</span></span>
+    <div class="bil-spacer"></div>
+  </div>
+
+  <!-- body split -->
+  <div class="body-split">
+
+    <!-- ═══ LEFT ═══ -->
+    <div class="col-left">
+
+      <!-- Civic Scaffold -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="card-title-dot dot-blue"></div> Civic Scaffold</div>
+          <button class="card-collapse-btn" onclick="toggleCard('scaffold-body', this)">
+            Collapse <span class="carr open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="scaffold-body" style="max-height:1200px;">
+          <div class="scaffold-grid">
+            <div class="scaffold-cell full">
+              <div class="sc-tag blue">What it does</div>
+              <div class="sc-tag-es">¿Qué hace?</div>
+              <div class="sc-en">Restructures how residential housing is allocated in urban centers, shifting from state-directed assignment to cooperative ownership models. Grants existing tenants legal purchase rights on units occupied for 10+ years.</div>
+              <div class="sc-es">Reestructura cómo se asigna la vivienda residencial en centros urbanos, pasando de la asignación estatal a modelos de propiedad cooperativa. Otorga a los inquilinos derechos de compra en unidades ocupadas por más de 10 años.</div>
+            </div>
+            <div class="scaffold-cell">
+              <div class="sc-tag blue">Who it affects</div>
+              <div class="sc-tag-es">¿A quién afecta?</div>
+              <div class="sc-en">~2.4M urban households in state-assigned housing. Municipal housing authorities. Construction cooperatives.</div>
+              <div class="sc-es">~2.4M hogares urbanos en vivienda estatal. Autoridades municipales. Cooperativas de construcción.</div>
+            </div>
+            <div class="scaffold-cell">
+              <div class="sc-tag blue">Fiscal note</div>
+              <div class="sc-tag-es">Nota fiscal</div>
+              <div class="sc-en">Est. ₱840M revenue from title transfers over 5 years. Implementation cost ~₱120M.</div>
+              <div class="sc-es">Ingresos estimados de ₱840M por transferencias de título en 5 años. Costo de implementación ~₱120M.</div>
+            </div>
+            <div class="scaffold-cell best">
+              <div class="sc-tag green">Best case</div>
+              <div class="sc-tag-es">Mejor escenario</div>
+              <div class="sc-en">Builds a generation of property owners. Incentivizes maintenance. Reduces state administrative burden ~30%.</div>
+              <div class="sc-es">Construye propietarios. Incentiva el mantenimiento. Reduce carga administrativa estatal ~30%.</div>
+            </div>
+            <div class="scaffold-cell worst">
+              <div class="sc-tag red">Worst case</div>
+              <div class="sc-tag-es">Peor escenario</div>
+              <div class="sc-en">Wealthier residents consolidate holdings. Poorer tenants priced out of cooperatives. Housing inequality accelerates.</div>
+              <div class="sc-es">Los ricos consolidan propiedades. Inquilinos pobres excluidos. La desigualdad habitacional se acelera.</div>
+            </div>
+            <div class="scaffold-cell prec full">
+              <div class="sc-tag muted">Historical precedent</div>
+              <div class="sc-tag-es">Precedente histórico</div>
+              <div class="sc-en">Similar to Vietnam's 1993 Land Law, which generated $12B in private investment within a decade. Cuba passed a partial version in 2011 (Ley No. 65) covering rural land only.</div>
+              <div class="sc-es">Similar a la Ley de Tierras de Vietnam de 1993. Cuba aprobó una versión parcial en 2011 (Ley No. 65) cubriendo solo tierras rurales.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sources -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="card-title-dot dot-orange"></div> Sources</div>
+          <button class="card-collapse-btn" onclick="toggleCard('sources-body', this)">
+            Collapse <span class="carr open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="sources-body" style="max-height:500px;">
+          <div class="sources-list">
+            <div class="source-row"><div class="tier-badge t-s">S</div><div class="source-name">Gaceta Oficial de Cuba — Full bill text</div><div class="source-date">Mar 4 2025</div><div class="source-ext">↗</div></div>
+            <div class="source-row"><div class="tier-badge t-a">A</div><div class="source-name">Reuters — Cuba housing reform signals economic shift</div><div class="source-date">Mar 6</div><div class="source-ext">↗</div></div>
+            <div class="source-row"><div class="tier-badge t-b">B</div><div class="source-name">14ymedio — Análisis: ¿reforma real o cosmética?</div><div class="source-date">Mar 8</div><div class="source-ext">↗</div></div>
+            <div class="source-row"><div class="tier-badge t-w">⚠</div><div class="source-name">Miami Herald Op-Ed — Regime uses law to consolidate</div><div class="source-date">Mar 9</div><div class="source-ext">↗</div></div>
+          </div>
+          <div class="legitimacy-row">
+            <div class="leg-label">Legitimacy Score</div>
+            <div class="leg-track"><div class="leg-fill"></div></div>
+            <div class="leg-score">71</div>
+            <div class="leg-sub">/ 100 · scores citations, not claims</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sentiment -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="card-title-dot dot-purple"></div> Cohort Sentiment</div>
+          <button class="card-collapse-btn" onclick="toggleCard('sentiment-body', this)">
+            Collapse <span class="carr open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="sentiment-body" style="max-height:400px;">
+          <div class="sentiment-body">
+            <div class="cohort-chips">
+              <button class="cohort-chip active">All users</button>
+              <button class="cohort-chip">Cuban diaspora</button>
+              <button class="cohort-chip">Age 25–44</button>
+              <button class="cohort-chip">Homeowners</button>
+              <button class="cohort-chip">Urban</button>
+            </div>
+            <div class="sent-row"><div class="sent-label">Support</div><div class="sent-track"><div class="sent-fill fill-support" style="width:58%"></div></div><div class="sent-pct pct-s">58%</div></div>
+            <div class="sent-row"><div class="sent-label">Oppose</div><div class="sent-track"><div class="sent-fill fill-oppose" style="width:27%"></div></div><div class="sent-pct pct-o">27%</div></div>
+            <div class="sent-row"><div class="sent-label">Neutral</div><div class="sent-track"><div class="sent-fill fill-neutral" style="width:15%"></div></div><div class="sent-pct pct-n">15%</div></div>
+            <div class="sent-n">n = 1,847 users · Semi-anonymous cohort display</div>
+            <div class="cohort-note">Cuban diaspora cohort shows higher opposition (41%) vs. Cuban residents (19%). Select a cohort above to filter.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sponsors -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="card-title-dot dot-green"></div> Sponsors &amp; Record</div>
+          <button class="card-collapse-btn" onclick="toggleCard('sponsors-body', this)">
+            Collapse <span class="carr open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="sponsors-body" style="max-height:400px;">
+          <div class="sponsors-body">
+            <div class="sponsor-row"><div class="s-avatar">MD</div><div class="s-name">Miguel Díaz-Canel Bermúdez</div><div class="s-role">Sponsor · President</div></div>
+            <div class="sponsor-row"><div class="s-avatar">EL</div><div class="s-name">Esteban Lazo Hernández</div><div class="s-role">Co-sponsor · Asamblea Chair</div></div>
+            <div class="vote-tally">
+              <div class="tally-cell"><div class="tally-n yea">—</div><div class="tally-lbl">Yea</div></div>
+              <div class="tally-cell"><div class="tally-n nay">—</div><div class="tally-lbl">Nay</div></div>
+              <div class="tally-cell"><div class="tally-n pend">In Committee</div><div class="tally-lbl">Floor vote pending</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /col-left -->
+
+    <!-- ═══ RIGHT: DISCOURSE ═══ -->
+    <div class="col-right">
+
+      <div class="disc-header">
+        <div class="disc-title">
+          Discourse
+          <span class="disc-count-badge">84 contributions</span>
+        </div>
+        <div class="disc-sort">
+          <button class="disc-sort-btn active">Top</button>
+          <button class="disc-sort-btn">Recent</button>
+          <button class="disc-sort-btn">Steel-man</button>
+        </div>
+      </div>
+
+      <div class="steelman-banner">
+        <div class="sm-icon">⚖️</div>
+        <div class="sm-body">
+          <div class="sm-title">Steel-man challenge</div>
+          <div class="sm-sub">Before posting, can you make the strongest case for the opposing view?</div>
+        </div>
+        <button class="sm-btn">Try it</button>
+      </div>
+
+      <div class="contributions">
+
+        <div class="contrib-card steelman">
+          <div class="contrib-meta">
+            <div class="contrib-avatar">T</div>
+            <div class="contrib-identity">Teacher <span>· 30s · Havana</span></div>
+            <span class="sm-pill">Steel-man</span>
+            <div class="contrib-time">2h ago</div>
+          </div>
+          <div class="contrib-en">Even if I oppose this law, the strongest case for it is that state-managed housing has produced a maintenance crisis. Buildings collapse every year. Cooperative ownership creates personal incentive to maintain what you live in. That's a real argument worth taking seriously.</div>
+          <div class="contrib-es-block">
+            <div class="contrib-es-tag">ES · AI translation</div>
+            <div class="contrib-es">Aunque me opongo a esta ley, el argumento más sólido a su favor es que la vivienda administrada por el estado ha producido una crisis de mantenimiento. Los edificios se derrumban cada año.</div>
+          </div>
+          <div class="contrib-actions">
+            <button class="contrib-act up">▲ <span class="vote-score">142</span></button>
+            <button class="contrib-act down">▼</button>
+            <button class="contrib-act">↩ Reply</button>
+            <button class="contrib-act flag">⚑ Flag</button>
+          </div>
+        </div>
+
+        <div class="contrib-card">
+          <div class="contrib-meta">
+            <div class="contrib-avatar">E</div>
+            <div class="contrib-identity">Engineer <span>· 40s · Santiago</span></div>
+            <div class="contrib-time">5h ago</div>
+          </div>
+          <div class="contrib-en">The 10-year occupancy requirement is the critical detail. Most Havana tenants have lived in their units for 20+ years. The question is whether the cooperative pricing mechanism is set at market rate or subsidized.</div>
+          <div class="contrib-es-block">
+            <div class="contrib-es-tag">ES · AI translation</div>
+            <div class="contrib-es">El requisito de 10 años de ocupación es el detalle crítico. La pregunta es si el mecanismo de precios cooperativos se fija a tasa de mercado o subsidiado.</div>
+          </div>
+          <div class="contrib-actions">
+            <button class="contrib-act up">▲ <span class="vote-score">89</span></button>
+            <button class="contrib-act down">▼</button>
+            <button class="contrib-act">↩ Reply</button>
+            <button class="contrib-act flag">⚑ Flag</button>
+          </div>
+        </div>
+
+        <div class="contrib-card">
+          <div class="contrib-meta">
+            <div class="contrib-avatar">J</div>
+            <div class="contrib-identity">Journalist <span>· 50s · Miami</span></div>
+            <div class="contrib-time">8h ago</div>
+          </div>
+          <div class="contrib-en">The Vietnam precedent is misleading. Vietnam's reforms happened alongside market liberalization. Without price signals, cooperative ownership may replicate the same allocation problems with different paperwork.</div>
+          <div class="contrib-es-block">
+            <div class="contrib-es-tag">ES · Community translation · <span style="color:#16a34a;font-weight:600;">+31 votes</span></div>
+            <div class="contrib-es">El precedente de Vietnam es engañoso. Sin señales de precios, la propiedad cooperativa puede replicar los mismos problemas de asignación con papeleo diferente.</div>
+          </div>
+          <div class="contrib-actions">
+            <button class="contrib-act up">▲ <span class="vote-score">67</span></button>
+            <button class="contrib-act down">▼</button>
+            <button class="contrib-act">↩ Reply</button>
+            <button class="contrib-act flag">⚑ Flag</button>
+          </div>
+        </div>
+
+        <div class="contrib-card">
+          <div class="contrib-meta">
+            <div class="contrib-avatar">S</div>
+            <div class="contrib-identity">Student <span>· 20s · Camagüey</span></div>
+            <div class="contrib-time">12h ago</div>
+          </div>
+          <div class="contrib-en">My family has lived in the same apartment for 34 years. This law would let us own it. That changes everything — for the first time we'd have something to pass down.</div>
+          <div class="contrib-es-block">
+            <div class="contrib-es-tag">ES · AI translation</div>
+            <div class="contrib-es">Mi familia ha vivido en el mismo apartamento por 34 años. Esta ley nos permitiría ser dueños. Por primera vez tendríamos algo para heredar.</div>
+          </div>
+          <div class="contrib-actions">
+            <button class="contrib-act up">▲ <span class="vote-score">54</span></button>
+            <button class="contrib-act down">▼</button>
+            <button class="contrib-act">↩ Reply</button>
+            <button class="contrib-act flag">⚑ Flag</button>
+          </div>
+        </div>
+
+      </div><!-- /contributions -->
+
+      <!-- tone intercept -->
+      <div class="tone-banner" id="tone-banner">
+        <div class="tone-icon">🌡</div>
+        <div class="tone-body">
+          <div class="tone-title">Tone check</div>
+          <div class="tone-sub">Your draft may read as dismissive of diaspora perspectives. Consider whether this strengthens or weakens your argument.</div>
+          <div class="tone-btns">
+            <button class="tone-revise" onclick="document.getElementById('tone-banner').style.display='none';document.querySelector('.compose-ta').focus()">Revise draft</button>
+            <button class="tone-proceed" onclick="document.getElementById('tone-banner').style.display='none'">Post anyway</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- compose -->
+      <div class="compose-area">
+        <div class="compose-box">
+          <textarea class="compose-ta" placeholder="Add your perspective on Ley No. 148…"></textarea>
+          <div class="compose-footer">
+            <div class="compose-hints">
+              <div class="compose-hint"><div class="hint-dot" style="background:#3b82f6"></div>Add a source</div>
+              <div class="compose-hint"><div class="hint-dot" style="background:#8b5cf6"></div>Steel-man first</div>
+            </div>
+            <button class="btn-primary" style="padding:6px 16px;font-size:12px;">Post →</button>
+          </div>
+        </div>
+        <div class="anon-note">Posting as: <span>Teacher · 30s · Havana</span> · <span>Change</span></div>
+      </div>
+
+    </div><!-- /col-right -->
+  </div><!-- /body-split -->
+</div><!-- /main -->
+
+<script>
+function toggleCard(id, btn) {
+  const el = document.getElementById(id);
+  const arr = btn.querySelector('.carr');
+  const lbl = btn.childNodes[0];
+  if (el.classList.contains('collapsed')) {
+    el.classList.remove('collapsed');
+    arr.classList.add('open');
+    lbl.textContent = 'Collapse ';
+  } else {
+    el.classList.add('collapsed');
+    arr.classList.remove('open');
+    lbl.textContent = 'Expand ';
+  }
+}
+document.querySelectorAll('.cohort-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.cohort-chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+document.querySelectorAll('.disc-sort-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.disc-sort-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

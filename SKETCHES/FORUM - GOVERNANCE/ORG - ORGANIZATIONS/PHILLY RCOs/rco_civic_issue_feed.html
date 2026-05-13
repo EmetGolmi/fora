@@ -1,0 +1,329 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.feed-wrap { max-width: 720px; margin: 0 auto; padding: 1rem 0; }
+
+.section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #b8860b; margin-bottom: 10px; }
+
+.raise-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 16px; }
+
+.raise-prompt { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 12px; line-height: 1.5; }
+
+.raise-prompt strong { color: var(--color-text-primary); }
+
+textarea { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 13px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); resize: none; min-height: 80px; line-height: 1.6; }
+textarea:focus { outline: none; border-color: #1b3a6b; }
+textarea::placeholder { color: var(--color-text-tertiary); }
+
+.meta-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.meta-input { flex: 1; min-width: 140px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 7px 10px; font-size: 12px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); }
+.meta-input:focus { outline: none; border-color: #1b3a6b; }
+.meta-input::placeholder { color: var(--color-text-tertiary); }
+
+.anon-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); cursor: pointer; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); white-space: nowrap; }
+.anon-toggle input { margin: 0; cursor: pointer; }
+
+.type-select-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.type-btn { flex: 1; min-width: 100px; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 11px; font-weight: 500; background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; text-align: center; transition: all 0.12s; }
+.type-btn:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+.type-btn.active-empathy { background: #e8f4fd; border-color: #1b3a6b; color: #1b3a6b; }
+.type-btn.active-practical { background: #e5f0e8; border-color: #155c2d; color: #155c2d; }
+.type-btn.active-accountability { background: #fff3dc; border-color: #b8860b; color: #b8860b; }
+.type-btn.active-opposition { background: #faeaea; border-color: #8b1a1a; color: #8b1a1a; }
+
+.submit-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+.submit-btn { padding: 8px 20px; background: #1b3a6b; color: white; border: none; border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); }
+.submit-btn:hover { background: #254f92; }
+
+.issue-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 16px; overflow: hidden; }
+
+.issue-header { padding: 1rem 1.25rem 0.75rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+
+.issue-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.issue-type-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+.badge-empathy { background: #e8f4fd; color: #1b3a6b; }
+.badge-practical { background: #e5f0e8; color: #155c2d; }
+.badge-accountability { background: #fff3dc; color: #b8860b; }
+.badge-opposition { background: #faeaea; color: #8b1a1a; }
+
+.issue-author { font-size: 11px; color: var(--color-text-secondary); }
+.issue-author strong { color: var(--color-text-primary); font-weight: 500; }
+.issue-location { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+
+.issue-body { font-size: 13px; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 10px; }
+
+.issue-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.action-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 11px; color: var(--color-text-secondary); background: var(--color-background-secondary); cursor: pointer; font-family: var(--font-sans); transition: all 0.12s; }
+.action-btn:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+.action-btn.share-btn { color: #1b3a6b; border-color: rgba(27,58,107,0.3); background: #edf1fb; }
+.action-btn.effort-btn { color: #155c2d; border-color: rgba(21,92,45,0.3); background: #e5f0e8; }
+
+.responses-section { background: var(--color-background-secondary); }
+
+.response-item { padding: 12px 1.25rem; border-top: 0.5px solid var(--color-border-tertiary); }
+.response-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.response-body { font-size: 13px; color: var(--color-text-primary); line-height: 1.6; }
+.response-actions { display: flex; gap: 6px; margin-top: 8px; }
+.response-action { font-size: 10px; color: var(--color-text-tertiary); cursor: pointer; padding: 3px 8px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; background: var(--color-background-primary); font-family: var(--font-sans); }
+.response-action:hover { color: var(--color-text-secondary); }
+.response-action.share-small { color: #1b3a6b; border-color: rgba(27,58,107,0.25); background: #edf1fb; }
+
+.add-response { padding: 10px 1.25rem 12px; border-top: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+.add-response-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; }
+.add-response-types { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.mini-type { padding: 4px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; font-size: 11px; color: var(--color-text-secondary); cursor: pointer; background: var(--color-background-primary); font-family: var(--font-sans); }
+.mini-type:hover { border-color: var(--color-border-primary); }
+.mini-type.selected { background: #edf1fb; color: #1b3a6b; border-color: rgba(27,58,107,0.3); }
+.response-input-row { display: flex; gap: 8px; }
+.response-input-row textarea { min-height: 52px; font-size: 12px; }
+.response-submit { padding: 0 14px; background: #1b3a6b; color: white; border: none; border-radius: var(--border-radius-md); font-size: 12px; cursor: pointer; font-family: var(--font-sans); white-space: nowrap; }
+
+.effort-prompt { margin: 0 1.25rem 1rem; padding: 10px 14px; background: #e5f0e8; border: 0.5px solid rgba(21,92,45,0.2); border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.effort-prompt-text { font-size: 12px; color: #155c2d; line-height: 1.5; }
+.effort-cta { padding: 6px 14px; background: #155c2d; color: white; border: none; border-radius: var(--border-radius-md); font-size: 11px; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: var(--font-sans); }
+
+.share-modal { display: none; position: absolute; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 14px; z-index: 10; box-shadow: 0 4px 16px rgba(0,0,0,0.1); width: 240px; }
+.share-modal.open { display: block; }
+.share-modal-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+.share-option { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; color: var(--color-text-primary); cursor: pointer; }
+.share-option:last-child { border-bottom: none; }
+.share-option:hover { color: #1b3a6b; }
+.share-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.si-x { background: #000; color: white; }
+.si-fb { background: #1877f2; color: white; font-weight: 700; font-size: 11px; }
+.si-li { background: #0077b5; color: white; font-size: 10px; }
+.si-wa { background: #25d366; color: white; }
+.si-copy { background: var(--color-background-secondary); color: var(--color-text-primary); font-size: 11px; }
+
+.issue-count { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 12px; font-family: var(--font-mono); }
+</style>
+
+<div class="feed-wrap">
+
+<div class="section-eyebrow">◆ Neighborhood Issues · Center City · CCRA</div>
+<div class="issue-count">4 active issues · 12 responses · Last activity 2 hours ago</div>
+
+<div class="raise-card">
+  <div class="raise-prompt"><strong>What's happening on your block?</strong> Raise an issue for your neighborhood and RCO to see. Be specific — block, intersection, or address helps.</div>
+  <textarea id="new-issue-text" placeholder="Describe the issue. What did you see? Where? What do you think should happen?"></textarea>
+  <div class="type-select-row">
+    <div class="type-btn" onclick="selectType(this,'active-empathy')" data-type="empathy">🤝 With empathy</div>
+    <div class="type-btn" onclick="selectType(this,'active-practical')" data-type="practical">🔧 Practical fix</div>
+    <div class="type-btn" onclick="selectType(this,'active-accountability')" data-type="accountability">📋 Hold accountable</div>
+    <div class="type-btn" onclick="selectType(this,'active-opposition')" data-type="opposition">↔ Different view</div>
+  </div>
+  <div class="meta-row">
+    <input class="meta-input" id="new-name" placeholder="Your name (optional)">
+    <input class="meta-input" id="new-email" placeholder="Email (optional, not shown publicly)">
+    <input class="meta-input" id="new-location" placeholder="Block or intersection">
+    <label class="anon-toggle"><input type="checkbox" id="anon-check"> Post anonymously</label>
+  </div>
+  <div class="submit-row">
+    <button class="submit-btn" onclick="submitIssue()">Post to neighborhood →</button>
+  </div>
+</div>
+
+<div id="issues-feed">
+
+<div class="issue-card" id="issue-1">
+  <div class="issue-header">
+    <div class="issue-meta">
+      <span class="issue-type-badge badge-empathy">🤝 With empathy</span>
+      <span class="issue-author"><strong>Sarah M.</strong> · Verified Resident</span>
+      <span class="issue-location">1600 block of Sansom St · 3 hours ago</span>
+    </div>
+    <div class="issue-body">Human feces on the 1600 block of Sansom every morning this week. I want to be clear — the people sleeping here are in crisis. There are no accessible public restrooms within four blocks after 5pm. This is a public health problem and a human dignity problem at the same time. We need bathrooms, not just cleanup.</div>
+    <div class="issue-actions">
+      <button class="action-btn share-btn" onclick="toggleShare('share-1')">↗ Share this issue</button>
+      <button class="action-btn">👍 I've seen this too (7)</button>
+      <button class="action-btn effort-btn" onclick="showEffortPrompt('effort-1')">⚡ Start an Effort</button>
+    </div>
+    <div class="share-modal" id="share-1" style="position:relative;">
+      <div class="share-modal-title">Share this issue</div>
+      <div class="share-option"><span class="share-icon si-x">𝕏</span> Post on X</div>
+      <div class="share-option"><span class="share-icon si-fb">f</span> Share on Facebook</div>
+      <div class="share-option"><span class="share-icon si-li">in</span> Share on LinkedIn</div>
+      <div class="share-option"><span class="share-icon si-wa">💬</span> Send via WhatsApp</div>
+      <div class="share-option"><span class="share-icon si-copy">🔗</span> Copy link</div>
+    </div>
+  </div>
+
+  <div id="effort-1" style="display:none;" class="effort-prompt">
+    <div class="effort-prompt-text"><strong>7 neighbors have seen this too.</strong> CCRA can formally submit this to Streets Dept, Office of Homeless Services, and District 1. Start an Effort to organize a neighborhood position.</div>
+    <button class="effort-cta">Start Effort →</button>
+  </div>
+
+  <div class="responses-section">
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-practical">🔧 Practical fix</span>
+        <span class="issue-author"><strong>James K.</strong></span>
+        <span class="issue-location">1 hour ago</span>
+      </div>
+      <div class="response-body">The Dilworth Park restroom is the nearest public option — it's locked at 9pm and has security. Jefferson Station has a restroom accessible to ticketholders. There is literally nowhere for someone without money to use the bathroom between Broad and 19th after 5pm. Streets Department could unlock the Suburban Station public restroom — it was closed "temporarily" in 2019 and never reopened.</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (4)</button>
+        <button class="response-action share-small" onclick="toggleShare('share-r1')">↗ Share</button>
+        <div class="share-modal" id="share-r1" style="position:relative; display:none;">
+          <div class="share-modal-title">Share this response</div>
+          <div class="share-option"><span class="share-icon si-x">𝕏</span> Post on X</div>
+          <div class="share-option"><span class="share-icon si-fb">f</span> Share on Facebook</div>
+          <div class="share-option"><span class="share-icon si-copy">🔗</span> Copy link</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-accountability">📋 Hold accountable</span>
+        <span class="issue-author"><strong>Anonymous</strong> · Resident</span>
+        <span class="issue-location">45 min ago</span>
+      </div>
+      <div class="response-body">This block has had 22 311 calls in the last 60 days — all marked "resolved" with no action taken. Office of Homeless Services has an outreach team assigned to this corridor. They have not been seen here in three weeks. I'm attaching a 311 call log. Someone needs to ask Squilla's office why the agency response is failing.</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (9)</button>
+        <button class="response-action share-small" onclick="toggleShare('share-r2')">↗ Share</button>
+        <div class="share-modal" id="share-r2" style="position:relative; display:none;">
+          <div class="share-modal-title">Share this response</div>
+          <div class="share-option"><span class="share-icon si-x">𝕏</span> Post on X</div>
+          <div class="share-option"><span class="share-icon si-fb">f</span> Share on Facebook</div>
+          <div class="share-option"><span class="share-icon si-copy">🔗</span> Copy link</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge" style="background:#ede6f7;color:#2d1a4a;">↔ Different view</span>
+        <span class="issue-author"><strong>Patricia W.</strong></span>
+        <span class="issue-location">20 min ago</span>
+      </div>
+      <div class="response-body">I hear the empathy argument and I share it — but bathrooms alone won't solve this. The encampment at 16th and Sansom has grown because outreach has failed to connect people to shelter. Project HOME has beds available right now. The problem is refusal, not just lack of options. CCRA should be asking the Office of Homeless Services why outreach conversion rates are so low, not just requesting more bathrooms.</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (3)</button>
+        <button class="response-action share-small">↗ Share</button>
+      </div>
+    </div>
+
+    <div class="add-response">
+      <div class="add-response-label">Add your perspective</div>
+      <div class="add-response-types">
+        <div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div>
+        <div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div>
+        <div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div>
+        <div class="mini-type" onclick="selectMini(this)">↔ Different view</div>
+      </div>
+      <div class="response-input-row">
+        <textarea placeholder="Add your perspective — name optional below…"></textarea>
+        <button class="response-submit">Post →</button>
+      </div>
+      <div class="meta-row" style="margin-top:6px;">
+        <input class="meta-input" placeholder="Your name (optional)" style="font-size:11px; padding:5px 8px;">
+        <label class="anon-toggle" style="font-size:11px;"><input type="checkbox"> Anonymous</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="issue-card" id="issue-2">
+  <div class="issue-header">
+    <div class="issue-meta">
+      <span class="issue-type-badge badge-accountability">📋 Hold accountable</span>
+      <span class="issue-author"><strong>David R.</strong> · Verified Resident</span>
+      <span class="issue-location">1700 block of Chestnut St · Yesterday</span>
+    </div>
+    <div class="issue-body">The streetlight at 17th and Chestnut has been out for 6 weeks. I've filed three 311 requests — all closed as "resolved" with the light still out. This is a safety issue at night. Who do I escalate to when 311 fails?</div>
+    <div class="issue-actions">
+      <button class="action-btn share-btn" onclick="toggleShare('share-2')">↗ Share this issue</button>
+      <button class="action-btn">👍 I've seen this too (3)</button>
+      <button class="action-btn effort-btn">⚡ Start an Effort</button>
+    </div>
+    <div class="share-modal" id="share-2" style="position:relative; display:none;">
+      <div class="share-modal-title">Share this issue</div>
+      <div class="share-option"><span class="share-icon si-x">𝕏</span> Post on X</div>
+      <div class="share-option"><span class="share-icon si-fb">f</span> Share on Facebook</div>
+      <div class="share-option"><span class="share-icon si-copy">🔗</span> Copy link</div>
+    </div>
+  </div>
+  <div class="responses-section">
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-practical">🔧 Practical fix</span>
+        <span class="issue-author"><strong>CCRA Zoning Committee</strong> · Official</span>
+        <span class="issue-location">18 hours ago</span>
+      </div>
+      <div class="response-body">When 311 fails, the next step is a direct email to the Streets Department Deputy Commissioner for Infrastructure — cc your Council District 1 liaison. CCRA has the contact. We're adding this to our next meeting agenda under agency accountability. Can you share your 311 reference numbers?</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (5)</button>
+        <button class="response-action share-small">↗ Share</button>
+      </div>
+    </div>
+    <div class="add-response">
+      <div class="add-response-label">Add your perspective</div>
+      <div class="add-response-types">
+        <div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div>
+        <div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div>
+        <div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div>
+        <div class="mini-type" onclick="selectMini(this)">↔ Different view</div>
+      </div>
+      <div class="response-input-row">
+        <textarea placeholder="Add your perspective…"></textarea>
+        <button class="response-submit">Post →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+function selectType(el, cls) {
+  document.querySelectorAll('.type-btn').forEach(b => b.className = 'type-btn');
+  el.classList.add(cls);
+}
+function selectMini(el) {
+  el.closest('.add-response-types').querySelectorAll('.mini-type').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleShare(id) {
+  const m = document.getElementById(id);
+  if (!m) return;
+  const isOpen = m.classList.contains('open');
+  document.querySelectorAll('.share-modal').forEach(x => x.classList.remove('open'));
+  if (!isOpen) m.classList.add('open');
+}
+function showEffortPrompt(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+}
+function submitIssue() {
+  const text = document.getElementById('new-issue-text').value.trim();
+  if (!text) return;
+  const name = document.getElementById('new-name').value.trim() || 'Anonymous';
+  const loc = document.getElementById('new-location').value.trim() || 'Center City';
+  const anon = document.getElementById('anon-check').checked;
+  const displayName = anon ? 'Anonymous' : name;
+  const activeType = document.querySelector('.type-btn.active-empathy, .type-btn.active-practical, .type-btn.active-accountability, .type-btn.active-opposition');
+  const typeName = activeType ? activeType.dataset.type : 'empathy';
+  const badges = { empathy: ['badge-empathy','🤝 With empathy'], practical: ['badge-practical','🔧 Practical fix'], accountability: ['badge-accountability','📋 Hold accountable'], opposition: ['','↔ Different view'] };
+  const [badgeClass, badgeLabel] = badges[typeName] || badges.empathy;
+  const card = document.createElement('div');
+  card.className = 'issue-card';
+  card.innerHTML = `<div class="issue-header"><div class="issue-meta"><span class="issue-type-badge ${badgeClass}">${badgeLabel}</span><span class="issue-author"><strong>${displayName}</strong></span><span class="issue-location">${loc} · Just now</span></div><div class="issue-body">${text}</div><div class="issue-actions"><button class="action-btn share-btn">↗ Share this issue</button><button class="action-btn">👍 I've seen this too (0)</button><button class="action-btn effort-btn">⚡ Start an Effort</button></div></div><div class="responses-section"><div class="add-response"><div class="add-response-label">Add your perspective</div><div class="add-response-types"><div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div><div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div><div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div><div class="mini-type" onclick="selectMini(this)">↔ Different view</div></div><div class="response-input-row"><textarea placeholder="Add your perspective…"></textarea><button class="response-submit">Post →</button></div></div></div>`;
+  document.getElementById('issues-feed').prepend(card);
+  document.getElementById('new-issue-text').value = '';
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-location').value = '';
+  document.getElementById('new-email').value = '';
+  document.getElementById('anon-check').checked = false;
+  document.querySelectorAll('.type-btn').forEach(b => b.className = 'type-btn');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.share-btn') && !e.target.closest('.share-small') && !e.target.closest('.share-modal')) {
+    document.querySelectorAll('.share-modal').forEach(x => x.classList.remove('open'));
+  }
+});
+</script>

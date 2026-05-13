@@ -1,0 +1,360 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .profile { max-width: 900px; margin: 0 auto; padding: 0 0 2rem; }
+
+  .hero { background: #0a1f44; color: #f4edd0; padding: 2rem 2rem 0; display: flex; gap: 2rem; align-items: flex-end; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; position: relative; }
+  .hero-photo { width: 110px; height: 130px; border-radius: 4px; object-fit: cover; background: #1a3565; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: -1px; }
+  .hero-info { flex: 1; padding-bottom: 1.25rem; }
+  .hero-office { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #b8a060; font-weight: 500; margin-bottom: 6px; }
+  .hero-name { font-size: 28px; font-weight: 500; color: #f4edd0; line-height: 1.1; margin-bottom: 8px; }
+  .hero-meta { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .party-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; padding: 3px 10px; border-radius: 20px; background: rgba(30,90,180,0.35); color: #90b4f0; border: 0.5px solid rgba(90,140,220,0.4); }
+  .hero-stat { font-size: 12px; color: #9aacbe; }
+  .hero-stat strong { color: #d4c48a; font-weight: 500; }
+
+  .hero-actions { display: flex; gap: 8px; padding-bottom: 1.25rem; align-items: flex-end; }
+  .btn-follow { padding: 8px 18px; border-radius: var(--border-radius-md); font-size: 13px; border: 0.5px solid #b8a060; background: transparent; color: #d4c48a; cursor: pointer; font-weight: 500; }
+  .btn-contact { padding: 8px 18px; border-radius: var(--border-radius-md); font-size: 13px; background: #b8a060; color: #0a1f44; border: none; cursor: pointer; font-weight: 500; }
+
+  .tabs { display: flex; gap: 0; background: #0d2550; padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .tab { font-size: 12px; padding: 12px 14px; color: #7a8fa8; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 500; }
+  .tab.active { color: #d4c48a; border-bottom-color: #b8a060; }
+  .tab-note { font-size: 10px; color: #b8a060; padding: 14px 0 14px 6px; display: flex; align-items: center; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .body { padding: 1.5rem 0 0; display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; }
+  .main { display: flex; flex-direction: column; gap: 1rem; }
+  .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; }
+  .card-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 1rem; font-weight: 500; }
+
+  .exec-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .exec-stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; text-align: center; }
+  .exec-stat-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1; margin-bottom: 4px; }
+  .exec-stat-lbl { font-size: 11px; color: var(--color-text-secondary); }
+  .exec-stat-sub { font-size: 10px; color: var(--color-text-secondary); margin-top: 2px; opacity: 0.7; }
+
+  .diff-banner { background: #f0f6ff; border: 0.5px solid #b5d4f4; border-left: 3px solid #378add; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: #185fa5; margin-bottom: 1rem; }
+  @media (prefers-color-scheme: dark) {
+    .diff-banner { background: #042c53; border-color: #185fa5; color: #85b7eb; }
+  }
+
+  .priority-list { display: flex; flex-direction: column; gap: 8px; }
+  .priority-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .priority-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .priority-name { flex: 1; color: var(--color-text-primary); }
+  .priority-bar-wrap { width: 100px; height: 5px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
+  .priority-bar { height: 100%; border-radius: 3px; }
+  .priority-pct { font-size: 11px; color: var(--color-text-secondary); min-width: 32px; text-align: right; }
+
+  .eo-list { display: flex; flex-direction: column; gap: 10px; }
+  .eo-row { display: flex; gap: 12px; align-items: flex-start; }
+  .eo-num { font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-mono); min-width: 54px; margin-top: 2px; }
+  .eo-text { font-size: 13px; color: var(--color-text-primary); flex: 1; }
+  .eo-date { font-size: 11px; color: var(--color-text-secondary); white-space: nowrap; }
+  .eo-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-top: 3px; }
+
+  .veto-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .veto-row:last-child { border-bottom: none; }
+  .veto-label { color: var(--color-text-primary); }
+  .veto-val { font-weight: 500; color: var(--color-text-primary); }
+  .veto-sub { font-size: 11px; color: var(--color-text-secondary); }
+
+  .cabinet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cabinet-item { font-size: 12px; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); }
+  .cabinet-role { color: var(--color-text-secondary); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .cabinet-name { color: var(--color-text-primary); font-weight: 500; }
+
+  .budget-bar-wrap { margin: 12px 0 6px; }
+  .budget-total { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .budget-sub { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 12px; }
+  .budget-seg-wrap { display: flex; height: 10px; border-radius: 5px; overflow: hidden; gap: 1px; margin-bottom: 8px; }
+  .budget-seg { height: 100%; }
+  .budget-legend { display: flex; flex-wrap: wrap; gap: 8px; }
+  .budget-leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+  .budget-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .lt-gov-card { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 8px; }
+  .lt-gov-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--color-background-info); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: var(--color-text-info); flex-shrink: 0; }
+  .lt-gov-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .lt-gov-title { font-size: 11px; color: var(--color-text-secondary); }
+
+  .term-timeline { position: relative; padding-left: 16px; }
+  .tl-line { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--color-border-tertiary); }
+  .tl-item { position: relative; margin-bottom: 12px; }
+  .tl-dot { position: absolute; left: -12px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: #378add; }
+  .tl-dot.current { background: #1d9e75; }
+  .tl-item-label { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .tl-item-sub { font-size: 11px; color: var(--color-text-secondary); }
+
+  .approval-wrap { margin: 8px 0; }
+  .approval-num { font-size: 28px; font-weight: 500; color: var(--color-text-primary); }
+  .approval-lbl { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; }
+  .approval-bar-bg { height: 6px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
+  .approval-bar-fill { height: 100%; border-radius: 3px; background: #1d9e75; width: 52%; }
+  .approval-source { font-size: 10px; color: var(--color-text-secondary); margin-top: 5px; }
+
+  .vs-senator { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; font-size: 12px; }
+  .vs-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .vs-row:last-child { border-bottom: none; }
+  .vs-attr { color: var(--color-text-secondary); }
+  .vs-gov { color: var(--color-text-primary); font-weight: 500; }
+  .vs-sen { color: var(--color-text-secondary); }
+  .vs-header { display: flex; justify-content: flex-end; gap: 40px; margin-bottom: 6px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text-secondary); }
+
+  .contact-links { display: flex; flex-direction: column; gap: 6px; }
+  .contact-link { font-size: 13px; color: #185fa5; text-decoration: none; padding: 6px 8px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); display: flex; justify-content: space-between; align-items: center; }
+  @media (prefers-color-scheme: dark) {
+    .contact-link { color: #85b7eb; }
+  }
+
+  .mismatch-note { font-size: 11px; color: var(--color-text-secondary); background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 10px; margin-top: 8px; border-left: 2px solid #ef9f27; }
+</style>
+
+<div class="profile">
+  <div class="hero">
+    <div class="hero-photo">👤</div>
+    <div class="hero-info">
+      <div class="hero-office">Governor · Commonwealth of Pennsylvania</div>
+      <div class="hero-name">Josh Shapiro</div>
+      <div class="hero-meta">
+        <span class="party-pill">Democrat</span>
+        <span class="hero-stat">Term: <strong>Jan 2023 – Jan 2027</strong></span>
+        <span class="hero-stat">Elected: <strong>Nov 2022</strong></span>
+        <span class="hero-stat">Harrisburg, PA</span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-follow">+ Follow</button>
+      <button class="btn-contact">Contact</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Overview</div>
+    <div class="tab">Executive Orders</div>
+    <div class="tab">Budget</div>
+    <div class="tab">Cabinet</div>
+    <div class="tab">Legislation Signed</div>
+    <div class="tab">Record</div>
+    <div class="tab-note">As of March 2026</div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <div class="diff-banner">
+        Executive office — this profile reflects a governor's powers: executive orders, budget authority, bill signings &amp; vetoes, cabinet appointments, and approval rating. No voting record or party-line % (those are legislative metrics).
+      </div>
+
+      <div class="card">
+        <div class="card-label">Executive snapshot</div>
+        <div class="exec-stats">
+          <div class="exec-stat">
+            <div class="exec-stat-val">47</div>
+            <div class="exec-stat-lbl">Executive orders</div>
+            <div class="exec-stat-sub">since Jan 2023</div>
+          </div>
+          <div class="exec-stat">
+            <div class="exec-stat-val">312</div>
+            <div class="exec-stat-lbl">Bills signed</div>
+            <div class="exec-stat-sub">this term</div>
+          </div>
+          <div class="exec-stat">
+            <div class="exec-stat-val">9</div>
+            <div class="exec-stat-lbl">Vetoes</div>
+            <div class="exec-stat-sub">2 overridden</div>
+          </div>
+          <div class="exec-stat">
+            <div class="exec-stat-val">52%</div>
+            <div class="exec-stat-lbl">Approval rating</div>
+            <div class="exec-stat-sub">Franklin & Marshall</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Stated policy priorities</div>
+        <div class="priority-list">
+          <div class="priority-row">
+            <div class="priority-dot" style="background:#378add;"></div>
+            <div class="priority-name">Education funding &amp; school safety</div>
+            <div class="priority-bar-wrap"><div class="priority-bar" style="width:88%;background:#378add;"></div></div>
+            <div class="priority-pct">High</div>
+          </div>
+          <div class="priority-row">
+            <div class="priority-dot" style="background:#1d9e75;"></div>
+            <div class="priority-name">Economic development &amp; permitting reform</div>
+            <div class="priority-bar-wrap"><div class="priority-bar" style="width:80%;background:#1d9e75;"></div></div>
+            <div class="priority-pct">High</div>
+          </div>
+          <div class="priority-row">
+            <div class="priority-dot" style="background:#ba7517;"></div>
+            <div class="priority-name">Energy transition &amp; environment</div>
+            <div class="priority-bar-wrap"><div class="priority-bar" style="width:65%;background:#ba7517;"></div></div>
+            <div class="priority-pct">Med</div>
+          </div>
+          <div class="priority-row">
+            <div class="priority-dot" style="background:#993556;"></div>
+            <div class="priority-name">Public safety &amp; criminal justice</div>
+            <div class="priority-bar-wrap"><div class="priority-bar" style="width:60%;background:#993556;"></div></div>
+            <div class="priority-pct">Med</div>
+          </div>
+          <div class="priority-row">
+            <div class="priority-dot" style="background:#534ab7;"></div>
+            <div class="priority-name">Housing &amp; infrastructure</div>
+            <div class="priority-bar-wrap"><div class="priority-bar" style="width:50%;background:#534ab7;"></div></div>
+            <div class="priority-pct">Med</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Recent executive orders</div>
+        <div class="eo-list">
+          <div class="eo-row">
+            <div class="eo-num">EO 2024-09</div>
+            <div>
+              <div class="eo-text">Establishing the PA Office of Economic Opportunity to streamline business permitting</div>
+              <span class="eo-tag" style="background:#eaf3de;color:#3b6d11;font-size:10px;padding:2px 7px;border-radius:10px;">Commerce</span>
+            </div>
+            <div class="eo-date">Oct 2024</div>
+          </div>
+          <div class="eo-row">
+            <div class="eo-num">EO 2024-06</div>
+            <div>
+              <div class="eo-text">Directing state agencies to adopt AI use policies protecting workers and student data</div>
+              <span class="eo-tag" style="background:#eeedfe;color:#534ab7;font-size:10px;padding:2px 7px;border-radius:10px;">Technology</span>
+            </div>
+            <div class="eo-date">Jun 2024</div>
+          </div>
+          <div class="eo-row">
+            <div class="eo-num">EO 2023-14</div>
+            <div>
+              <div class="eo-text">Joining the Regional Greenhouse Gas Initiative (RGGI) pending final rulemaking</div>
+              <span class="eo-tag" style="background:#e1f5ee;color:#0f6e56;font-size:10px;padding:2px 7px;border-radius:10px;">Environment</span>
+            </div>
+            <div class="eo-date">Nov 2023</div>
+          </div>
+          <div class="eo-row">
+            <div class="eo-num">EO 2023-02</div>
+            <div>
+              <div class="eo-text">Reinstating protections against discrimination in state employment for LGBTQ+ workers</div>
+              <span class="eo-tag" style="background:#fbeaf0;color:#993556;font-size:10px;padding:2px 7px;border-radius:10px;">Civil rights</span>
+            </div>
+            <div class="eo-date">Jan 2023</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Veto record</div>
+        <div class="veto-row">
+          <div><div class="veto-label">Constitutional carry (HB 1190)</div><div class="veto-sub">Permitless concealed carry — vetoed Jul 2023</div></div>
+          <div class="veto-val" style="color:#a32d2d;">Vetoed</div>
+        </div>
+        <div class="veto-row">
+          <div><div class="veto-label">Voter ID expansion (SB 292)</div><div class="veto-sub">Expanded photo ID requirements — vetoed Jun 2024</div></div>
+          <div class="veto-val" style="color:#a32d2d;">Vetoed</div>
+        </div>
+        <div class="veto-row">
+          <div><div class="veto-label">School choice vouchers (SB 1)</div><div class="veto-sub">PASS voucher program — vetoed Jun 2023 · Override attempt failed</div></div>
+          <div class="veto-val" style="color:#a32d2d;">Vetoed</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+
+      <div class="card">
+        <div class="card-label">Lt. Governor</div>
+        <div class="lt-gov-card">
+          <div class="lt-gov-avatar">AD</div>
+          <div>
+            <div class="lt-gov-name">Austin Davis</div>
+            <div class="lt-gov-title">Lieutenant Governor of Pennsylvania</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--color-text-secondary);">Davis is the first Black Lt. Governor in PA history. He presides over the State Senate and leads the Governor's Action Team.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Approval</div>
+        <div class="approval-wrap">
+          <div class="approval-num">52%</div>
+          <div class="approval-lbl">Overall job approval</div>
+          <div class="approval-bar-bg"><div class="approval-bar-fill"></div></div>
+          <div class="approval-source">Franklin &amp; Marshall · Feb 2026 · as of March 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">FY 2025–26 budget</div>
+        <div class="budget-total">$48.3B</div>
+        <div class="budget-sub">General fund proposed</div>
+        <div class="budget-seg-wrap">
+          <div class="budget-seg" style="width:35%;background:#378add;"></div>
+          <div class="budget-seg" style="width:30%;background:#1d9e75;"></div>
+          <div class="budget-seg" style="width:18%;background:#ba7517;"></div>
+          <div class="budget-seg" style="width:10%;background:#993556;"></div>
+          <div class="budget-seg" style="width:7%;background:#888780;"></div>
+        </div>
+        <div class="budget-legend">
+          <div class="budget-leg-item"><div class="budget-dot" style="background:#378add;"></div>Education 35%</div>
+          <div class="budget-leg-item"><div class="budget-dot" style="background:#1d9e75;"></div>Health 30%</div>
+          <div class="budget-leg-item"><div class="budget-dot" style="background:#ba7517;"></div>Transportation 18%</div>
+          <div class="budget-leg-item"><div class="budget-dot" style="background:#993556;"></div>Safety 10%</div>
+          <div class="budget-leg-item"><div class="budget-dot" style="background:#888780;"></div>Other 7%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Term history</div>
+        <div class="term-timeline">
+          <div class="tl-line"></div>
+          <div class="tl-item">
+            <div class="tl-dot current"></div>
+            <div class="tl-item-label">Governor — Term 1</div>
+            <div class="tl-item-sub">Jan 2023 – Jan 2027</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-item-label">PA Attorney General</div>
+            <div class="tl-item-sub">Jan 2017 – Jan 2023 · 2 terms</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-item-label">PA House of Representatives</div>
+            <div class="tl-item-sub">2005 – 2012 · District 153</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Contact &amp; office</div>
+        <div class="contact-links">
+          <a class="contact-link" href="#">governor.pa.gov ↗</a>
+          <a class="contact-link" href="#">Submit a constituent request ↗</a>
+          <a class="contact-link" href="#">@GovernorShapiro ↗</a>
+        </div>
+        <div class="mismatch-note">Pennsylvania has a divided government — Republican-controlled General Assembly. Bills Shapiro signs often reflect negotiated compromise.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">How this differs from a senator profile</div>
+        <div class="vs-senator">
+          <div class="vs-header"><span>Governor</span><span>Senator</span></div>
+          <div class="vs-row"><div class="vs-attr">Represents</div><div class="vs-gov">All PA residents</div><div class="vs-sen">Constituents</div></div>
+          <div class="vs-row"><div class="vs-attr">Votes</div><div class="vs-gov">No floor votes</div><div class="vs-sen">Yes — on record</div></div>
+          <div class="vs-row"><div class="vs-attr">Key metric</div><div class="vs-gov">Approval rating</div><div class="vs-sen">Party-line %</div></div>
+          <div class="vs-row"><div class="vs-attr">Legislation</div><div class="vs-gov">Signs / vetoes</div><div class="vs-sen">Sponsors / votes</div></div>
+          <div class="vs-row"><div class="vs-attr">Unique to</div><div class="vs-gov">EOs · Budget · Cabinet</div><div class="vs-sen">Committee work</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

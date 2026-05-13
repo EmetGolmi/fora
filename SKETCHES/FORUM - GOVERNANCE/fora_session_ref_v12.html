@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Session Reference v12</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f2f4f8;--white:#ffffff;--rule:rgba(27,58,107,0.1);
+  --green:#155c2d;--green-p:#e5f0e8;
+  --purple:#2d1a4a;--red:#8b1a1a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh;}
+
+/* ── SIDENAV ──────────────────────────────────────────────── */
+.sidenav{width:220px;flex-shrink:0;background:var(--blue);min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+.sn-logo{padding:20px 20px 12px;border-bottom:2px solid rgba(255,255,255,0.08);}
+.sn-fora{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;letter-spacing:0.1em;}
+.sn-fora span{color:var(--gilt-lt);}
+.sn-ver{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:4px;}
+.sn-links{padding:12px 0;flex:1;}
+.sn-group{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:10px 20px 4px;}
+.sn-link{display:flex;align-items:center;gap:8px;padding:7px 20px;color:rgba(255,255,255,0.55);font-size:12px;text-decoration:none;transition:all 0.12s;cursor:pointer;}
+.sn-link:hover{background:rgba(255,255,255,0.07);color:white;}
+.sn-link.active{background:rgba(184,134,11,0.18);color:var(--gilt-lt);border-right:2px solid var(--gilt);}
+.sn-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;}
+.sn-new{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;background:var(--gilt);color:white;padding:1px 5px;border-radius:3px;}
+.sn-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.3);line-height:1.8;}
+
+/* ── MAIN ─────────────────────────────────────────────────── */
+.main{flex:1;max-width:900px;padding:40px 48px 80px;}
+
+/* ── VERSION BANNER ──────────────────────────────────────── */
+.version-banner{background:var(--blue);border-radius:12px;padding:28px 32px;margin-bottom:36px;display:flex;align-items:flex-start;justify-content:space-between;gap:32px;}
+.vb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}
+.vb-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;}
+.vb-sub{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:480px;}
+.vb-stats{display:flex;gap:20px;flex-shrink:0;}
+.vbs{text-align:center;background:rgba(255,255,255,0.08);border-radius:8px;padding:12px 16px;min-width:70px;}
+.vbs-n{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--gilt-lt);line-height:1;}
+.vbs-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:4px;}
+
+/* ── SECTIONS ────────────────────────────────────────────── */
+.doc-section{background:white;border-radius:12px;padding:28px 32px;margin-bottom:24px;border:1px solid var(--rule);}
+.doc-section.bg-grey{background:var(--bg);}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;}
+.ew-gold{color:var(--gilt);}
+.ew-blue{color:var(--blue);}
+.ew-purple{color:var(--purple);}
+.ew-green{color:var(--green);}
+.ew-red{color:var(--red);}
+.section-title{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.section-desc{font-size:13px;color:var(--ink-soft);line-height:1.65;margin-bottom:20px;max-width:640px;}
+
+/* ── DECISION TABLE ──────────────────────────────────────── */
+.decision-table{width:100%;border-collapse:collapse;font-size:12px;}
+.decision-table th{text-align:left;padding:8px 12px;background:var(--blue);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;}
+.decision-table td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.55;}
+.decision-table tr:last-child td{border-bottom:none;}
+.decision-table tr:nth-child(even) td{background:var(--bg);}
+.dt-key{font-weight:600;color:var(--ink);margin-bottom:2px;}
+.dt-new{font-family:'JetBrains Mono',monospace;font-size:7.5px;background:var(--gilt);color:white;padding:1px 5px;border-radius:3px;margin-right:5px;}
+.status-done{font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--green-p);color:var(--green);padding:2px 7px;border-radius:100px;white-space:nowrap;}
+.status-new{font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--blue-pl);color:var(--blue);padding:2px 7px;border-radius:100px;white-space:nowrap;}
+
+/* ── COMPONENT / SCREEN TABLE ────────────────────────────── */
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.comp-table th{text-align:left;padding:8px 12px;background:var(--blue-md);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;}
+.comp-table td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.55;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table tr:nth-child(even) td{background:var(--bg);}
+.comp-name{font-weight:700;color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:10px;}
+.comp-note{font-size:10px;color:var(--ink-soft);margin-top:2px;}
+.comp-desc{font-size:12px;color:var(--ink);line-height:1.55;}
+
+/* ── FILE TABLE ──────────────────────────────────────────── */
+.file-table-wrap{border:1px solid var(--rule);border-radius:8px;overflow:hidden;}
+.ft-header{display:grid;grid-template-columns:260px 1fr 110px;background:var(--blue);padding:8px 14px;gap:12px;}
+.ft-header-cell{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.7);}
+.ft-group{background:var(--blue-pl);padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);border-top:1px solid var(--rule);}
+.ft-row{display:grid;grid-template-columns:260px 1fr 110px;padding:9px 14px;gap:12px;border-top:1px solid var(--rule);align-items:start;}
+.ft-row.ft-new{background:rgba(93,66,154,0.04);}
+.ft-row.ft-arch{background:var(--bg);opacity:0.6;}
+.ft-file{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:600;word-break:break-all;}
+.ft-desc{font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+.ft-status{font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.s-new{color:var(--purple);}
+.s-current{color:var(--green);}
+.s-arch{color:var(--ink-mut);}
+
+/* ── TOKEN / TYPE GRIDS ──────────────────────────────────── */
+.token-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.token-card{background:var(--bg);border:1px solid var(--rule);border-radius:8px;overflow:hidden;}
+.tc-swatch{height:40px;}
+.tc-body{padding:8px 10px;}
+.tc-name{font-weight:600;font-size:12px;color:var(--ink);}
+.tc-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);}
+.tc-use{font-size:10px;color:var(--ink-mut);margin-top:2px;}
+.type-row{display:flex;align-items:center;gap:20px;padding:10px 0;border-bottom:1px solid var(--rule);}
+.tr-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);width:180px;flex-shrink:0;}
+
+/* ── OPEN ITEMS ──────────────────────────────────────────── */
+.open-list{display:flex;flex-direction:column;gap:10px;}
+.open-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;}
+.oi-priority{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;flex-shrink:0;margin-top:2px;}
+.p-blocking{background:#faeaea;color:var(--red);}
+.p-dev{background:var(--blue-pl);color:var(--blue);}
+.p-design{background:var(--gilt-pl);color:var(--gilt);}
+.p-org{background:var(--green-p);color:var(--green);}
+.oi-body{}
+.oi-title{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:3px;}
+.oi-desc{font-size:12px;color:var(--ink-soft);line-height:1.55;}
+</style>
+</head>
+<body>
+
+<nav class="sidenav">
+  <div class="sn-logo">
+    <div class="sn-fora">F<span>O</span>RA</div>
+    <div class="sn-ver">Session Reference · v12</div>
+  </div>
+  <div class="sn-links">
+    <div class="sn-group">Design System</div>
+    <a href="#colors" class="sn-link"><div class="sn-dot"></div>Color palette</a>
+    <a href="#type" class="sn-link"><div class="sn-dot"></div>Typography</a>
+    <div class="sn-group">Session v12</div>
+    <a href="#decisions" class="sn-link active"><div class="sn-dot"></div>Locked decisions <span class="sn-new">v12</span></a>
+    <a href="#screens" class="sn-link"><div class="sn-dot"></div>Screen status</a>
+    <a href="#open" class="sn-link"><div class="sn-dot"></div>Open items</a>
+    <a href="#files" class="sn-link"><div class="sn-dot"></div>All output files</a>
+  </div>
+  <div class="sn-footer">
+    ERD: v15 · 93 entities<br>
+    Spreadsheet: v30<br>
+    Session: v12 · March 2026
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- BANNER -->
+<div class="version-banner">
+  <div class="vb-left">
+    <div class="vb-eyebrow">Forum Americanum · Session Reference</div>
+    <div class="vb-title">Session v12</div>
+    <div class="vb-sub">Occupation section D rebuilt as dual-path (AI interpreter + 22-sector / BLS SOC). Avatar card system — four templates (Franchise, Tome, Field Guide, Blueprint), four-dot carousel, live preview in right panel. Legal trilogy completed: Privacy Policy v1, Community Standards & Editorial Policy v1, Terms of Service v1. Occupation sections on ERD and spreadsheet fully specced (§17 Occupation, §18 Avatar Card, §19 Legal Documents).</div>
+  </div>
+  <div class="vb-stats">
+    <div class="vbs"><div class="vbs-n">93</div><div class="vbs-l">ERD entities</div></div>
+    <div class="vbs"><div class="vbs-n">4</div><div class="vbs-l">Card templates</div></div>
+    <div class="vbs"><div class="vbs-n">3</div><div class="vbs-l">Legal docs</div></div>
+    <div class="vbs"><div class="vbs-n">v30</div><div class="vbs-l">Spreadsheet</div></div>
+  </div>
+</div>
+
+<!-- COLORS -->
+<div id="colors" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-gold">Design System</div>
+  <div class="section-title">Color Palette — Unchanged</div>
+  <div class="section-desc">All color tokens from v8 remain canonical. No changes this session.</div>
+  <div class="token-grid">
+    <div class="token-card"><div class="tc-swatch" style="background:#1b3a6b;"></div><div class="tc-body"><div class="tc-name">Blue</div><div class="tc-val">#1b3a6b</div><div class="tc-use">Nav, hero, primary UI</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#b8860b;"></div><div class="tc-body"><div class="tc-name">Gilt</div><div class="tc-val">#b8860b</div><div class="tc-use">Active tab, accents, CTA</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#8b1a1a;"></div><div class="tc-body"><div class="tc-name">Scarlet</div><div class="tc-val">#8b1a1a</div><div class="tc-use">War alert, crisis, NGE threat</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#c47f00;"></div><div class="tc-body"><div class="tc-name">Amber</div><div class="tc-val">#c47f00</div><div class="tc-use">Degraded status, pending, donors</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#2d1a4a;"></div><div class="tc-body"><div class="tc-name">NGE Purple</div><div class="tc-val">#2d1a4a</div><div class="tc-use">NGE entity headers</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#155c2d;"></div><div class="tc-body"><div class="tc-name">Green</div><div class="tc-val">#155c2d</div><div class="tc-use">Active status, confirmed, done</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#f2f4f8;"></div><div class="tc-body"><div class="tc-name">BG</div><div class="tc-val">#f2f4f8</div><div class="tc-use">Page background</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#0a0f1a;"></div><div class="tc-body"><div class="tc-name">Ticker BG</div><div class="tc-val">#0a0f1a</div><div class="tc-use">Scrolling ticker bar background</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#080f1e;"></div><div class="tc-body"><div class="tc-name">Field</div><div class="tc-val">#080f1e</div><div class="tc-use">Onboarding dark panel background</div></div></div>
+  </div>
+</div>
+
+<!-- TYPOGRAPHY -->
+<div id="type" class="doc-section">
+  <div class="section-eyebrow ew-gold">Design System</div>
+  <div class="section-title">Typography — Unchanged</div>
+  <div class="section-desc">All type tokens from v8 remain canonical.</div>
+  <div class="type-row"><div class="tr-label">Display · Hero name</div><div style="font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:#1b3a6b;">Libre Baskerville 700</div></div>
+  <div class="type-row"><div class="tr-label">UI labels · mono</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5a6e8a;letter-spacing:0.12em;text-transform:uppercase;">JetBrains Mono · Uppercase</div></div>
+  <div class="type-row"><div class="tr-label">Body · UI text</div><div style="font-family:'Nunito',sans-serif;font-size:14px;color:#0e1a2e;">Nunito 400 / 600 · Body and UI text</div></div>
+  <div class="type-row" style="border-bottom:none;"><div class="tr-label">Italic accent</div><div style="font-family:'Libre Baskerville',serif;font-size:14px;font-style:italic;color:#b8860b;">Libre Baskerville Italic · Gilt accent</div></div>
+</div>
+
+<!-- LOCKED DECISIONS -->
+<div id="decisions" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-purple">Session v12</div>
+  <div class="section-title">Locked Decisions</div>
+  <div class="section-desc">All decisions from sessions v8–v11 remain locked. New decisions from this session are marked NEW below.</div>
+  <table class="decision-table">
+    <thead><tr><th style="width:220px;">Decision</th><th>What was decided</th><th style="width:80px;">Status</th></tr></thead>
+    <tbody>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Section D dual-path occupation</div></td><td>Section D of the desktop identity builder now offers two paths: (A) AI Interpreter — user types a plain-English description, FORA proposes a civic identity with SOC codes and tags, user confirms or adjusts; (B) 22-Sector + BLS SOC — 4-column card grid of 22 civilizational sectors, click to advance to step 2 where curated role chips (above) and BLS SOC search (below, 2-column grid) appear. Both paths resolve to occupation_primary and optionally soc_code on CivicProfile. Dual occupation toggle and retired checkbox appear after selection from either path.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>22-sector system — Hebrew letter framework</div></td><td>The 22 sectors of the onboarding grid are derived from the Hebrew alphabet civilizational framework. Each letter maps to a civilizational sector (e.g. Chet = Law & Boundaries, Yod = Labor & Craft, Kaph = Care & Welfare). Hebrew letters are NOT displayed in the onboarding UI — only sector names, function descriptions, and civilization layer color tags. The letter system operates as the classification engine on the backend via CivilizationSector entity. Four civilization layers: Physical survival (red), Systems & infrastructure (blue), Knowledge & culture (green), Order & governance (amber).</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>BLS SOC integration in onboarding</div></td><td>Path B step 2 includes a live SOC search against BLS Standard Occupational Classification 2018 (867 occupations). Results are pre-filtered by the selected sector's SOC code array. Search expands to full database if no sector match. Each result shows SOC code, full title, and US worker count. Selected SOC code stored in OccupationPath.soc_code and denormalized to CivicProfile.soc_code. Source attributed to BLS with link in the UI.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Union credential moved from Section G to Section F</div></td><td>Union credentials are not government-issued licenses and do not belong in Section G (Professional License). Section G is exclusively for state and federally issued professional licenses. Union membership belongs in Section F (Professional Organizations & Union Membership). Union verification fields (local + member ID) in Section F appear automatically when a union-affiliated tag is selected (IBEW, UAW, SEIU, Teamsters). Section G no longer has a union path or a "no license to verify" button — users without licenses simply leave Section G blank.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Avatar card — four templates</div></td><td>The right panel of the desktop identity builder shows a live avatar card carousel instead of the old checklist. Four templates: The Franchise (sports card — navy/gilt, stats block, motto, edition number), The Tome (Magic: The Gathering — amber/parchment, type line, flavor text, rarity pip), The Field Guide (Pokémon/naturalist — deep green, Civic HP, civic moves, type tags), The Blueprint (engineering drawing — navy/cyan, grid background, spec block). Four dots below the card toggle between templates. All four cards update live as the user fills in the form. Career cards cannot use licensed IP (NFL teams, Pokémon, etc.) at launch — FORA-original designs only. Licensing deals noted as future possibility.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Avatar card share tiers</div></td><td>Three share tiers control what is visible on exported cards. Tier 1 (Public): occupation, region, credential ring type only. Tier 2 (Extended): adds age range, credential type, military branch, edition number, series. Tier 3 (Full card): everything including stats, motto, rarity indicator, founding edition. Each tier produces a visually distinct export so the tier is apparent from the image. Tier system is set per-export, not per-account.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Privacy Policy — 72-hour session window</div></td><td>Session records (IP address, linkable identifiers) are retained for 72 hours then permanently deleted. This window exists to enable Tier 3 safety actions (imminent threats, child safety, ongoing crimes). After 72 hours, FORA cannot reconstruct identity even under legal compulsion. The 72-hour window is not extendable by law enforcement request. This is a data architecture decision, not just a policy decision — the data genuinely does not exist after the window closes.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Privacy Policy — three-tier law enforcement</div></td><td>Tier 1: FORA does not comply (foreign govts, no legal process, political orgs, data brokers, intelligence contractors). Tier 2: FORA evaluates and notifies where legally permitted (valid US subpoenas — reviews validity, notifies user if no gag order, produces minimum data, warrant canary). Tier 3: FORA acts immediately (imminent threats to identifiable persons, child safety violations, ongoing crimes with current victims). Past crime confessions = Tier 2, not Tier 3.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Community Standards — contested ideology principle</div></td><td>FORA describes what organizations do. It does not decree what they are. Presents factual record without resolving contested ideological characterizations. Hamas is the worked example in the document: terrorist designations presented with attribution, non-designations equally, governing authority of Gaza noted, October 7 factual record not contested, ideological characterization subject to discourse system. The distinction between contested fact and contested ideology is explicit.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Community Standards — Editorial Board governance tier</div></td><td>Community Standards are NOT subject to the standard amendment process. They are a separate governance tier controlled by FORA's Editorial Board during the formative period. Changes require Board approval. Supermajority override available: 75%+ of eligible pool on a second vote overrides an Editorial Board veto of a community-ratified amendment automatically. Editorial Board composition published in Transparency Report.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Terms of Service — dispute resolution</div></td><td>Arbitration first (AAA Consumer Arbitration Rules) with class action waiver. Litigation fallback: Court of Chancery of Delaware (or Wilmington federal/state courts if Court of Chancery lacks jurisdiction). Delaware law governs. FAA governs arbitration interpretation. One-year limitations period. Four exceptions to mandatory arbitration: injunctive IP relief, small claims, DMCA, cases where arbitration is unenforceable.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Terms of Service — user content license</div></td><td>User retains ownership of contributions. FORA receives worldwide, royalty-free, irrevocable, perpetual, non-exclusive license to display and preserve. License survives account deletion for non-removed contributions. License is necessary for civic record integrity — the deliberation system cannot function as a durable civic record if contributions can be retroactively erased. The four deletion options in the Privacy Policy represent user choices within this framework.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Terms of Service — termination at will</div></td><td>FORA may terminate accounts at any time, for any reason, without notice. Hardcoded violations result in immediate permanent termination with no appeal. Non-hardcoded violations may have a 72-hour cooling-off period. Non-hardcoded terminations may be appealed to the Editorial Board within 14 days.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key">Discourse tab system</div></td><td>Comments anchored to section keys. 3-round deliberation (72h each). Vote threshold: 60% of eligible pool (modal view count). Last editor right of first response in Round 2. Psych mirror before posting. Moderator veto as final circuit breaker. Gold ring on confirmed credential only.</td><td><span class="status-done">Locked v11</span></td></tr>
+
+      <tr><td><div class="dt-key">ERD v15 — §15 + §16 entities</div></td><td>§15 Discourse Layer: DiscourseThread, DiscourseComment, PsychAnalysis (comment), AmendmentProposal, DeliberationRound. §16 Civic Identity: CivicProfile, CivicCredential, OrgMembership, MilitaryRibbon, RingProgression. 93 total entities.</td><td><span class="status-done">Locked v11</span></td></tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- SCREEN STATUS -->
+<div id="screens" class="doc-section">
+  <div class="section-eyebrow ew-blue">Session v12</div>
+  <div class="section-title">Screen Status — v12 Updates</div>
+  <div class="section-desc">Files updated or created this session.</div>
+  <table class="comp-table">
+    <thead><tr><th>Page / File</th><th>v12 Changes</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><div class="comp-name">fora_identity_builder_desktop.html</div><div class="comp-note">Section D rebuilt · Avatar card in right panel</div></td><td><div class="comp-desc">Section D now has dual-path occupation selector: path chooser (AI Interpreter vs 22-Sector + BLS SOC), Path A (AI interpreter with 4 example pills, thinking animation, confirmation), Path B (22-sector 4-col card grid → step 2: curated role chips above, BLS SOC 2-column search below). Section G cleaned: union credential removed, "no license to verify" button removed, license fields always visible. Section F renamed to "Professional organizations & union membership" with union verification fields that appear when union tag selected. Right panel: old checklist removed, replaced with 4-template avatar card carousel. All four cards update live as user fills in form. Dots toggle between Franchise, Tome, Field Guide, Blueprint. Section D why-callout preserved throughout.</div></td><td><span class="status-new">Updated v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_avatar_card.html</div><div class="comp-note">Standalone card page · All 4 templates · Share tier toggle</div></td><td><div class="comp-desc">Dedicated avatar card page. Four template sections each with a rendered card, share tier toggle (Tier 1/2/3), and export/copy/download buttons. Tier toggle blurs/reveals fields across all four cards simultaneously. Sample user: Licensed Engineer · PE & Project Manager · Mid-Atlantic · 35–44 · Army Veteran. Cards fully built with live SVG markers including gold ring, Army ribbon, credential pill.</div></td><td><span class="status-new">New v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_occupation_options.html</div><div class="comp-note">Five occupation input options reference page</div></td><td><div class="comp-desc">Reference/exploration page showing five occupation input patterns: (1) Free text, (2) Employment status first, (3) Category drill-down, (4) BLS SOC typeahead, (5) AI interpreter. All five are interactive. Option 4 includes real BLS SOC data subset. Option 5 handles architect/PM split, server/screenwriter, IBEW electrician scenarios.</div></td><td><span class="status-new">New v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_occ_dual_path.html</div><div class="comp-note">Dual-path standalone mockup</div></td><td><div class="comp-desc">Standalone version of the dual-path occupation screen. Path A: AI interpreter with example pills. Path B: 22-sector 4-column card grid (no Hebrew, layer-color-coded) → step 2 stacked (curated role chips above, BLS SOC 2-column search below). Footer shows selected identity. Continue button enables on selection. Used as reference for integration into fora_identity_builder_desktop.html.</div></td><td><span class="status-new">New v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_privacy_policy_v1.docx</div></td><td><div class="comp-desc">Privacy Policy v1.0 — 248 paragraphs. 10 sections: preamble, what we collect, data minimization (72h window), user rights (4 deletion options), research partnerships (application model), law enforcement (3-tier), data retention, children's privacy, Transparency Report, changes. Confidential draft — not reviewed by legal counsel.</div></td><td><span class="status-new">New v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_community_standards_v1.docx</div></td><td><div class="comp-desc">Community Standards & Editorial Policy v1.0 — 166 paragraphs. Two parts: Part One (editorial authority, 3-tier sourcing, contested empirical claims, contested ideology + Hamas worked example, amendment as dispute resolution, hardcoded limits). Part Two (civic discourse standard, permitted/not-permitted conduct, 3-layer moderation, civic identity integrity, transparency, governing law). Confidential draft.</div></td><td><span class="status-new">New v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_tos_v1.docx</div></td><td><div class="comp-desc">Terms of Service v1.0 — 171 paragraphs. 14 sections including plain English summary, eligibility (13+), accounts (one person/one identity), user content ownership (user retains, FORA gets irrevocable perpetual license), prohibited conduct (hardcoded violations in red), termination (at will, no notice), IP (DMCA), disclaimers, limitation of liability ($100 cap), indemnification, dispute resolution (arbitration first → Delaware Court of Chancery fallback), Section 230 analysis, modifications, general provisions. Confidential draft.</div></td><td><span class="status-new">New v12</span></td></tr>
+      <tr><td><div class="comp-name">fora_erd_v15.html</div></td><td><div class="comp-desc">ERD v15 — 93 entities, 14 sections. Added §15 Discourse Layer (5 entities: DiscourseThread, DiscourseComment, PsychAnalysis/comment, AmendmentProposal, DeliberationRound) and §16 Civic Identity (5 entities: CivicProfile, CivicCredential, OrgMembership, MilitaryRibbon, RingProgression).</div></td><td><span class="status-new">Updated v11 →</span></td></tr>
+      <tr><td><div class="comp-name">forum_americanum_governance_v30.xlsx</div></td><td><div class="comp-desc">Spreadsheet v30 — 49 sheets. Added §17 Occupation (OccupationPath, CivilizationSector, SOCOccupation entities), §18 Avatar Card (AvatarCard entity, CardTemplate reference, ShareTier reference), §19 Legal Documents (key decisions from all three legal documents as structured reference for developers).</div></td><td><span class="status-new">New v12</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- OPEN ITEMS -->
+<div id="open" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-red">Session v12</div>
+  <div class="section-title">Open Items</div>
+  <div class="section-desc">In priority order. Blocking items first.</div>
+  <div class="open-list">
+    <div class="open-item">
+      <span class="oi-priority p-org">Org</span>
+      <div class="oi-body">
+        <div class="oi-title">Editorial Board composition — publish before Gaza / Iran go live</div>
+        <div class="oi-desc">The Community Standards references the Editorial Board 11 times. The Board needs to exist on paper with its composition published in the first Transparency Report before any contested jurisdiction pages go live. The document is written, the structure is defined — it needs to be staffed.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-org">Org</span>
+      <div class="oi-body">
+        <div class="oi-title">Legal review — all three documents before any user sees them</div>
+        <div class="oi-desc">Privacy Policy, Community Standards, and Terms of Service are confidential drafts not reviewed by legal counsel. All three must be reviewed before publication. Key areas: Delaware corporate law, Section 230 platform liability, AAA arbitration enforceability, COPPA compliance, DMCA designated agent designation, registered agent in Delaware.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-dev">Dev</span>
+      <div class="oi-body">
+        <div class="oi-title">Credential verification backend — NCEES, state bar, NPI, AFL-CIO</div>
+        <div class="oi-desc">Entry flow wireframe complete, ERD specced (CivicCredential entity), UX built. Actual connections to licensing board registries not yet built. Gold ring cannot function without this. Can launch with graceful degradation (credential submitted, verification pending) but gold ring is a core trust signal.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-dev">Dev</span>
+      <div class="oi-body">
+        <div class="oi-title">Address-to-representative assignment — Google Civic Information API</div>
+        <div class="oi-desc">Entry flow collects address with full explanation (HAVA/NVRA cites). Connection to Google Civic Information API (or equivalent) to resolve address to government stack not built. User completes onboarding and representative stack is empty without this.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-dev">Dev</span>
+      <div class="oi-body">
+        <div class="oi-title">BLS SOC data seed — 867 occupations import</div>
+        <div class="oi-desc">The onboarding SOC search currently uses a ~35-entry subset embedded in the HTML. Production requires importing the full BLS SOC 2018 dataset (867 occupations) into the SOCOccupation table, mapped to CivilizationSector IDs, with US worker counts from OEWS. Static dataset — seed once, update on BLS SOC revision cycle.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div class="oi-body">
+        <div class="oi-title">Lebanon jurisdiction page</div>
+        <div class="oi-desc">Cross-links to Iran, Hezbollah, and Quds Force all exist. Structurally identical to Iran — same layout, same tab system, same trajectory mechanic. Most ready next jurisdiction build. Hezbollah-Lebanon relationship is the primary civic complexity.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div class="oi-body">
+        <div class="oi-title">Houthis NGE page</div>
+        <div class="oi-desc">Referenced in tickers on Iran, Gaza, and Hamas pages. No destination page. Every tick is a broken link promise. Yemen jurisdiction page would be the companion.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div class="oi-body">
+        <div class="oi-title">The Duel — structured debate wireframe</div>
+        <div class="oi-desc">All discourse system decisions are locked. The Duel is a distinct feature: two users, a formal proposition, AI fact-checking in real time, structured argument format (opening · rebuttal · cross · closing). Lives in the discourse tab but is its own experience. The most civic-forward feature on the product roadmap. No wireframe exists yet.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div class="oi-body">
+        <div class="oi-title">Mobile entry flow — Option A (one question per screen)</div>
+        <div class="oi-desc">The 12-stage mobile flow (fora_entry_flow.html) predates the dual-path occupation system. Section D on mobile still uses the old 10-category grid. Needs to be updated with the dual-path system adapted for single-column mobile layout.</div>
+      </div>
+    </div>
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div class="oi-body">
+        <div class="oi-title">Cookie policy / consent banner</div>
+        <div class="oi-desc">Minor but required. If FORA uses any tracking, analytics, or session cookies, a cookie disclosure and consent mechanism is needed. Even a minimal one. Needs to be drafted and reviewed before any analytics are added to the platform.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FILES -->
+<div id="files" class="doc-section">
+  <div class="section-eyebrow ew-blue">Session v12</div>
+  <div class="section-title">All Output Files</div>
+  <div class="section-desc">Complete file inventory. New or updated files this session in purple. Canonical files in green. Archived files in gray.</div>
+
+  <div class="file-table-wrap">
+    <div class="ft-header"><div class="ft-header-cell">File</div><div class="ft-header-cell">Description</div><div class="ft-header-cell">Status</div></div>
+
+    <div class="ft-group">Jurisdiction Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_jurisdiction_iran.html</div><div class="ft-desc">Iran · CANONICAL · War ticker · Pop/Freedom/Happiness/GDP/IRR stats · Affiliates panel (Axis of Resistance + IRGC commands) · 7 tabs · IRR chart · Freedom + Happiness modals</div><div class="ft-status s-current">✓ Canonical</div></div>
+    <div class="ft-row"><div class="ft-file">fora_iran_gov_philosophy.html</div><div class="ft-desc">Governing Philosophy + Trajectory + Religion/Law · VEF modal · IRR chart · Trajectory above Religion section</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_jurisdiction_iran_toggle.html</div><div class="ft-desc">Archived — use fora_jurisdiction_iran.html</div><div class="ft-status s-arch">Archived</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_jurisdiction_iran_newspaper.html</div><div class="ft-desc">Newspaper layout exploration — archived for reference</div><div class="ft-status s-arch">Archived</div></div>
+    <div class="ft-row"><div class="ft-file">fora_jurisdiction_gaza.html</div><div class="ft-desc">Gaza · War ticker · 9 stat modals · 21 hover terms · Sovereignty contest modal · Deaths modal (6 sources) · Displacement · Infrastructure · Ceasefire</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">NGE Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_nge_hamas.html</div><div class="ft-desc">Hamas · Breadcrumb canonical · 7 tabs · Hamas paradox framing · Leadership cards · Timeline · Relationships · Designations split-world table · Cross-link to Gaza</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_nge_hezbollah.html</div><div class="ft-desc">Hezbollah · Active ticker (blue) · Flag in identity slot · Relationships + FTO panels</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_nge_quds_force.html</div><div class="ft-desc">IRGC Quds Force · War ticker (crisis red) · Flag in identity slot · 4 regional commands + proxy network panel</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">Community & Official Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_org_bvna.html</div><div class="ft-desc">BVNA community org · Quiet ticker · Wellbeing "Rate it ›" prompts</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_official_profile.html</div><div class="ft-desc">Don Beyer VA-08 · Official profile page</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">Bill Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_bill_us.html</div><div class="ft-desc">US bill page · Blue hero · Canonical FORA nav · 6 tabs with hover questions · Stats bar · Star divider</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_bill_cuba.html</div><div class="ft-desc">Cuba bill page · Same rebuild · Authors & Interests tab · EN·ES language chip</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">Onboarding & Identity — Session v12</div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_identity_builder_desktop.html</div><div class="ft-desc">Full desktop onboarding · Section D dual-path (AI interpreter + 22-sector + BLS SOC) · Section F union verification · Section G license-only · Section G why-callout with 7 hover terms · Section G licensed professional callout · Avatar card carousel in right panel (4 templates, live update, dot toggle)</div><div class="ft-status s-new">Updated v12</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_avatar_card.html</div><div class="ft-desc">Standalone avatar card page · 4 templates fully rendered · Share tier toggle (Tier 1/2/3) across all cards · Export/copy/download buttons</div><div class="ft-status s-new">New v12</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_occupation_options.html</div><div class="ft-desc">Five occupation input patterns reference page · All interactive · Options 4 (BLS SOC typeahead) and 5 (AI interpreter) fully wired</div><div class="ft-status s-new">New v12</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_occ_dual_path.html</div><div class="ft-desc">Standalone dual-path occupation mockup · 22-sector grid (no Hebrew) → stacked step 2 (chips above, BLS search below)</div><div class="ft-status s-new">New v12</div></div>
+    <div class="ft-row"><div class="ft-file">fora_entry_flow.html</div><div class="ft-desc">Mobile 12-stage onboarding · Section D still uses old 10-category grid — update pending</div><div class="ft-status s-current">Current (D needs update)</div></div>
+    <div class="ft-row"><div class="ft-file">fora_ring_taxonomy.html</div><div class="ft-desc">Ring taxonomy v2 · All 6 military branches · Sector rings · Merge logic</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_marker_options.html</div><div class="ft-desc">Canonical marker options · Rings · Military ribbons · Sponsor center</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">Legal Documents — Session v12</div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_privacy_policy_v1.docx</div><div class="ft-desc">Privacy Policy v1.0 · 248 paragraphs · 10 sections · Confidential draft · Not reviewed by legal counsel</div><div class="ft-status s-new">New v12</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_community_standards_v1.docx</div><div class="ft-desc">Community Standards & Editorial Policy v1.0 · 166 paragraphs · 12 sections · Hamas worked example · Confidential draft</div><div class="ft-status s-new">New v12</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_tos_v1.docx</div><div class="ft-desc">Terms of Service v1.0 · 171 paragraphs · 14 sections · Delaware arbitration · Irrevocable perpetual license · Confidential draft</div><div class="ft-status s-new">New v12</div></div>
+
+    <div class="ft-group">ERD & Governance</div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_erd_v15.html</div><div class="ft-desc">ERD v15 · 93 entities · 14 sections · §15 Discourse Layer + §16 Civic Identity added this session</div><div class="ft-status s-new">Updated v11 → v12 ref</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">forum_americanum_governance_v30.xlsx</div><div class="ft-desc">Spreadsheet v30 · 49 sheets · Added §17 Occupation · §18 Avatar Card · §19 Legal Documents</div><div class="ft-status s-new">New v12</div></div>
+
+    <div class="ft-group">Session References</div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_session_ref_v12.html</div><div class="ft-desc">This document</div><div class="ft-status s-new">New v12</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_session_ref_v11.html</div><div class="ft-desc">Previous session reference — superseded</div><div class="ft-status s-arch">Superseded</div></div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</body>
+</html>

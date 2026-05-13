@@ -1,0 +1,332 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.section-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: .9rem; font-weight: 500; }
+
+/* ── Table ── */
+.issues-table { width: 100%; border-collapse: collapse; }
+.issues-table thead tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+.issues-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); padding: 0 12px 8px; text-align: left; font-weight: 500; }
+.issues-table th:last-child { text-align: right; }
+.issues-table tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: background 0.1s; }
+.issues-table tbody tr:last-child { border-bottom: none; }
+.issues-table tbody tr:hover { background: var(--color-background-secondary); }
+.issues-table td { padding: 11px 12px; vertical-align: middle; }
+
+.issue-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.issue-summary { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.4; }
+.stance-pill { display: inline-block; font-size: 10px; padding: 3px 9px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+.stance-enforcing   { background: #e6f1fb; color: #185fa5; }
+.stance-maintaining { background: #faeeda; color: #633806; }
+.stance-piloting    { background: #eaf3de; color: #3b6d11; }
+@media (prefers-color-scheme: dark) {
+  .stance-enforcing   { background: #042c53; color: #85b7eb; }
+  .stance-maintaining { background: #412402; color: #fac775; }
+  .stance-piloting    { background: #173404; color: #c0dd97; }
+}
+.heat-chip { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; }
+.heat-high   { background: #fcebeb; color: #791f1f; }
+.heat-active { background: #faeeda; color: #633806; }
+@media (prefers-color-scheme: dark) {
+  .heat-high   { background: #501313; color: #f09595; }
+  .heat-active { background: #412402; color: #fac775; }
+}
+.detail-btn { font-size: 11px; color: var(--color-text-secondary); text-align: right; }
+.detail-arrow { font-size: 14px; color: var(--color-text-secondary); }
+
+/* ── Modal overlay ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--color-background-primary);
+  border-radius: 12px;
+  border: 0.5px solid var(--color-border-tertiary);
+  max-width: 580px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-header {
+  padding: 16px 20px 14px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: var(--color-background-primary);
+  border-radius: 12px 12px 0 0;
+  z-index: 1;
+}
+.modal-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.modal-close { font-size: 20px; color: var(--color-text-secondary); cursor: pointer; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+.modal-close:hover { color: var(--color-text-primary); }
+.modal-body { padding: 16px 20px 20px; }
+
+.tension-wrap { margin-bottom: 14px; }
+.tension-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; overflow: hidden; }
+.tension-side { padding: 12px 14px; }
+.tension-side.left { border-right: 0.5px solid var(--color-border-tertiary); }
+.tension-side-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); margin-bottom: 5px; font-weight: 500; }
+.tension-side-text { font-size: 12px; color: var(--color-text-primary); line-height: 1.5; }
+.tension-vs-col { display: flex; align-items: center; padding: 0 8px; background: var(--color-background-secondary); }
+.tension-vs { font-size: 10px; color: var(--color-text-secondary); font-weight: 500; }
+
+.position-block { background: var(--color-background-secondary); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+.position-block-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); margin-bottom: 6px; font-weight: 500; }
+.position-block-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.5; }
+
+.what-happened { margin-bottom: 12px; }
+.what-happened-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); margin-bottom: 6px; font-weight: 500; }
+.timeline-item { display: flex; gap: 10px; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); align-items: flex-start; font-size: 12px; }
+.timeline-item:last-child { border-bottom: none; }
+.timeline-date { color: var(--color-text-secondary); min-width: 70px; flex-shrink: 0; }
+.timeline-event { color: var(--color-text-primary); line-height: 1.4; }
+
+.critics-block { margin-bottom: 12px; }
+.critics-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); margin-bottom: 6px; font-weight: 500; }
+.critic-row { font-size: 12px; color: var(--color-text-secondary); padding: 4px 0; line-height: 1.4; }
+.critic-row::before { content: "· "; }
+
+.source-row { font-size: 10px; color: var(--color-text-secondary); padding-top: 10px; border-top: 0.5px solid var(--color-border-tertiary); line-height: 1.5; }
+.source-link { color: #185fa5; text-decoration: none; }
+@media (prefers-color-scheme: dark) { .source-link { color: #85b7eb; } }
+</style>
+
+<div>
+  <div class="section-label">Issues & positions — Mayor Cherelle Parker</div>
+
+  <table class="issues-table">
+    <thead>
+      <tr>
+        <th style="width:36%;">Issue</th>
+        <th style="width:28%;">Parker's stance</th>
+        <th style="width:14%;">Tension level</th>
+        <th style="width:22%;text-align:right;">Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr onclick="openModal('kensington')">
+        <td>
+          <div class="issue-name">Kensington drug crisis</div>
+          <div class="issue-summary">Encampment sweeps, police presence, treatment expansion</div>
+        </td>
+        <td><span class="stance-pill stance-enforcing">Enforcement + treatment</span></td>
+        <td><span class="heat-chip heat-high">High</span></td>
+        <td class="detail-btn">Full breakdown <span class="detail-arrow">›</span></td>
+      </tr>
+      <tr onclick="openModal('ice')">
+        <td>
+          <div class="issue-name">ICE & immigration</div>
+          <div class="issue-summary">"Welcoming city" posture, resisting federal pressure</div>
+        </td>
+        <td><span class="stance-pill stance-maintaining">Maintaining 2016 policy</span></td>
+        <td><span class="heat-chip heat-high">High</span></td>
+        <td class="detail-btn">Full breakdown <span class="detail-arrow">›</span></td>
+      </tr>
+      <tr onclick="openModal('schools')">
+        <td>
+          <div class="issue-name">Schools & extended year</div>
+          <div class="issue-summary">40 schools in pilot — before/after care, summer programs</div>
+        </td>
+        <td><span class="stance-pill stance-piloting">Piloting — not full year-round</span></td>
+        <td><span class="heat-chip heat-active">Active debate</span></td>
+        <td class="detail-btn">Full breakdown <span class="detail-arrow">›</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── KENSINGTON MODAL ── -->
+<div class="modal-overlay" id="modal-kensington">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Kensington drug & homelessness crisis</div>
+        <span class="heat-chip heat-high" style="margin-top:5px;display:inline-block;">High tension</span>
+      </div>
+      <div class="modal-close" onclick="closeModal('modal-kensington')">×</div>
+    </div>
+    <div class="modal-body">
+      <div class="tension-wrap">
+        <div class="tension-row">
+          <div class="tension-side left">
+            <div class="tension-side-label">Enforcement side</div>
+            <div class="tension-side-text">Clear the encampments. The open-air drug market is a public safety disaster. Kensington residents deserve to live without needles in front of their doors. Enforcement first — treatment is available for those who want it.</div>
+          </div>
+          <div class="tension-vs-col"><div class="tension-vs">vs</div></div>
+          <div class="tension-side">
+            <div class="tension-side-label">Harm reduction side</div>
+            <div class="tension-side-text">Sweeps don't solve addiction — they displace it. People need housing, treatment, and safe consumption before criminalization. Clearing encampments without adequate shelter kills people.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="position-block">
+        <div class="position-block-label">Parker's position</div>
+        <div class="position-block-text">Enforcement-first with treatment offered. Declared a public safety emergency in Kensington on Day 1. Cleared the Kensington Ave encampment in May 2024. Opposed safe injection sites. Signed EO adding 1,000 new shelter beds (Dec 2025). Invested $12M+ in anti-violence and overdose prevention.</div>
+      </div>
+
+      <div class="what-happened">
+        <div class="what-happened-label">What's happened</div>
+        <div class="timeline-item"><div class="timeline-date">Jan 2024</div><div class="timeline-event">Parker declares Kensington public safety emergency on first day in office</div></div>
+        <div class="timeline-item"><div class="timeline-date">May 2024</div><div class="timeline-event">First large-scale encampment sweep — 59 of ~75 residents accepted shelter or treatment</div></div>
+        <div class="timeline-item"><div class="timeline-date">Sep 2024</div><div class="timeline-event">Second sweep — 34 arrested. One person, Amanda Cahill, dies in jail three days later</div></div>
+        <div class="timeline-item"><div class="timeline-date">Feb 2025</div><div class="timeline-event">City reports: crime down 17%, homicides down 45%, shootings down 57% in Kensington district</div></div>
+        <div class="timeline-item"><div class="timeline-date">Dec 2025</div><div class="timeline-event">EO signed adding 1,000 shelter beds. Parker says open-air drug market "not done yet" but improving</div></div>
+      </div>
+
+      <div class="critics-block">
+        <div class="critics-label">What critics say</div>
+        <div class="critic-row">Drug use and homelessness haven't gone away — they've moved to surrounding blocks and other neighborhoods</div>
+        <div class="critic-row">Parker proposed cutting $1M from Prevention Point, a harm reduction and syringe exchange program</div>
+        <div class="critic-row">Amanda Cahill's death in custody after a sweep arrest raised serious questions about the city's approach</div>
+        <div class="critic-row">Treatment capacity hasn't kept pace with the number of people swept off the streets</div>
+      </div>
+
+      <div class="source-row">Sources: Philadelphia Inquirer · PhillyVoice · Billy Penn · City of Philadelphia press releases · Wikipedia · as of March 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ICE MODAL ── -->
+<div class="modal-overlay" id="modal-ice">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">ICE & immigration enforcement</div>
+        <span class="heat-chip heat-high" style="margin-top:5px;display:inline-block;">High tension</span>
+      </div>
+      <div class="modal-close" onclick="closeModal('modal-ice')">×</div>
+    </div>
+    <div class="modal-body">
+      <div class="tension-wrap">
+        <div class="tension-row">
+          <div class="tension-side left">
+            <div class="tension-side-label">Fight harder side</div>
+            <div class="tension-side-text">Parker should declare Philly a sanctuary city loudly and fight the Trump administration directly. ~47,000 undocumented residents need clear protection — silence is dangerous.</div>
+          </div>
+          <div class="tension-vs-col"><div class="tension-vs">vs</div></div>
+          <div class="tension-side">
+            <div class="tension-side-label">Stay quiet side</div>
+            <div class="tension-side-text">Philly receives $2.8B in federal grants. Picking a public fight risks losing that money. The 2016 policy stays in place regardless — quiet protection beats loud punishment.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="position-block">
+        <div class="position-block-label">Parker's position</div>
+        <div class="position-block-text">"Welcoming city" — not "sanctuary city." The 2016 Kenney executive order remains in place: city jails won't honor ICE detainers without a judicial warrant, and only for violent felony convictions. Parker has deliberately avoided confrontation with the Trump administration. In Aug 2025 the city secretly told the DOJ it had no plans to change its policies — but tried to keep the letter private.</div>
+      </div>
+
+      <div class="what-happened">
+        <div class="what-happened-label">What's happened</div>
+        <div class="timeline-item"><div class="timeline-date">Nov 2024</div><div class="timeline-event">Parker declines to reassert "sanctuary city" label after Trump's election. "I don't know what will happen."</div></div>
+        <div class="timeline-item"><div class="timeline-date">Dec 2024</div><div class="timeline-event">Dozens rally at City Hall demanding Parker take a firm stand. Her office declines further comment.</div></div>
+        <div class="timeline-item"><div class="timeline-date">Jan 2025</div><div class="timeline-event">ICE raids car wash in Philly — 7 arrested. City does not intervene.</div></div>
+        <div class="timeline-item"><div class="timeline-date">Aug 2025</div><div class="timeline-event">City Solicitor sends secret letter to DOJ affirming "welcoming city" policies won't change. City tries to block its release under RTK law.</div></div>
+        <div class="timeline-item"><div class="timeline-date">Feb 2026</div><div class="timeline-event">Inquirer obtains letter via open records. Council members Landau and Brooks propose "ICE Out" bills — a veto-proof majority signs on.</div></div>
+      </div>
+
+      <div class="critics-block">
+        <div class="critics-label">What critics say</div>
+        <div class="critic-row">Immigrant advocates say Parker's cautiousness leaves ~47,000 undocumented residents uncertain of their safety</div>
+        <div class="critic-row">The secret DOJ letter — and attempt to hide it — undermined trust in Parker's transparency</div>
+        <div class="critic-row">City Council is moving further than Parker on this — the "ICE Out" proposal has a veto-proof majority</div>
+        <div class="critic-row">Parker's former Office of Immigrant Affairs director resigned, saying they "weren't 100% on the same page"</div>
+      </div>
+
+      <div class="source-row">Sources: Philadelphia Inquirer · NBC10 · Billy Penn · Axios Philadelphia · CBS Philadelphia · as of March 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCHOOLS MODAL ── -->
+<div class="modal-overlay" id="modal-schools">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Schools & extended year</div>
+        <span class="heat-chip heat-active" style="margin-top:5px;display:inline-block;">Active debate</span>
+      </div>
+      <div class="modal-close" onclick="closeModal('modal-schools')">×</div>
+    </div>
+    <div class="modal-body">
+      <div class="tension-wrap">
+        <div class="tension-row">
+          <div class="tension-side left">
+            <div class="tension-side-label">Pro-extended year</div>
+            <div class="tension-side-text">Summer learning loss is real, especially for low-income students. Working parents need affordable childcare. More school time closes the opportunity gap. Year-round schooling works in other cities.</div>
+          </div>
+          <div class="tension-vs-col"><div class="tension-vs">vs</div></div>
+          <div class="tension-side">
+            <div class="tension-side-label">Critics say</div>
+            <div class="tension-side-text">Parker promised "year-round school" on the campaign trail — what she delivered is before/after care at 40 schools. The academic calendar hasn't changed. This is rebranded childcare, not education reform.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="position-block">
+        <div class="position-block-label">Parker's position</div>
+        <div class="position-block-text">"Extended Day, Extended Year" — not year-round school. 40 schools (20 public + 5 charters in Year 1, 15 more added Year 2). Schools open 7:30am–6pm, including winter/spring breaks and 6-week summer programs. Voluntary for families. Parker has walked back the "year-round" label but calls the program an essential opportunity gap-closer.</div>
+      </div>
+
+      <div class="what-happened">
+        <div class="what-happened-label">What's happened</div>
+        <div class="timeline-item"><div class="timeline-date">Campaign</div><div class="timeline-event">Parker promises mandatory year-round schooling — a signature pledge</div></div>
+        <div class="timeline-item"><div class="timeline-date">Jun 2024</div><div class="timeline-event">Launches pilot at 25 schools. Rebranded as "Extended Day, Extended Year" — voluntary, not year-round</div></div>
+        <div class="timeline-item"><div class="timeline-date">Oct 2024</div><div class="timeline-event">Reporting shows pilot mostly expanded access to existing programs already running at schools</div></div>
+        <div class="timeline-item"><div class="timeline-date">Jun 2025</div><div class="timeline-event">Expanded to 40 schools. ~3,000 students participating. Parker demurs on whether full year-round is coming</div></div>
+      </div>
+
+      <div class="critics-block">
+        <div class="critics-label">What critics say</div>
+        <div class="critic-row">Campaign promise was "year-round school" — what was delivered is before/after care with a new name</div>
+        <div class="critic-row">In Year 1, programming was largely outsourced to nonprofits that had been operating in these schools for years anyway</div>
+        <div class="critic-row">The Philadelphia Federation of Teachers was not consulted before the rollout — schools were notified days before Parker's press conference</div>
+        <div class="critic-row">Only 3,000 of ~100,000+ Philly public school students are participating after two years</div>
+      </div>
+
+      <div class="source-row">Sources: Philadelphia Inquirer · Chalkbeat Philadelphia · WHYY · 6abc · CBS Philadelphia · as of March 2026</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(id) {
+  document.getElementById('modal-' + id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(function(m) {
+      m.classList.remove('open');
+    });
+    document.body.style.overflow = '';
+  }
+});
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+});
+</script>

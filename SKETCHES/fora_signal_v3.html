@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA — Civic Intelligence for Everyone</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #f2f4f8;
+  --bg2:        #e8ebf2;
+  --white:      #ffffff;
+  --blue:       #1b3a6b;
+  --blue-mid:   #254f92;
+  --blue-lt:    #3a6abf;
+  --blue-pal:   #dde5f5;
+  --blue-vpal:  #edf1fb;
+  --gilt:       #b8860b;
+  --gilt-lt:    #d4a832;
+  --gilt-pal:   #f8f0dc;
+  --gilt-rul:   rgba(184,134,11,0.25);
+  --ink:        #0e1a2e;
+  --ink-mid:    #2c3e5a;
+  --ink-soft:   #5a6e8a;
+  --ink-mut:    #8a9ab8;
+  --rule:       rgba(27,58,107,0.1);
+  --rule-lt:    rgba(27,58,107,0.05);
+  --green:      #1a5c35;
+  --green-p:    #e8f5ed;
+  --green-r:    #a8d8ba;
+  --red:        #8b1a1a;
+  --red-p:      #faeaea;
+  --red-r:      #dba0a0;
+  --orange:     #b84a00;
+  --orng-p:     #fff3eb;
+  --purple:     #4a1f6e;
+  --purp-p:     #f0eaf7;
+  --purp-r:     #c8a8e8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--blue);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  height: 60px;
+  border-bottom: 3px solid var(--gilt);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--blue);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+}
+.wordmark {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: white;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.wordmark span { color: var(--gilt-lt); }
+.wordmark-sep {
+  width: 1px; height: 18px;
+  background: rgba(184,134,11,0.3);
+  margin: 0 14px;
+}
+.wordmark-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: rgba(184,134,11,0.65);
+}
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+  margin-left: 32px;
+}
+.nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  padding: 6px 14px; border-radius: 100px;
+  background: none; border: none; cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-link:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.06); }
+.nav-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.nav-signin {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: transparent;
+  border: 1.5px solid var(--gilt-rul);
+  color: var(--gilt-lt);
+  padding: 7px 18px; border-radius: 100px; cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-signin:hover { background: rgba(184,134,11,0.12); border-color: var(--gilt-lt); }
+.nav-cta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--gilt);
+  color: white; border: none;
+  padding: 8px 20px; border-radius: 100px; cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-cta:hover { background: var(--gilt-lt); }
+
+/* ── TICKER ── */
+.ticker {
+  background: var(--blue-mid);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 48px;
+  height: 34px;
+  display: flex; align-items: center; gap: 14px;
+  overflow: hidden;
+}
+.ticker-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase;
+  background: var(--gilt); color: var(--blue);
+  padding: 3px 10px; border-radius: 100px;
+  font-weight: 600; flex-shrink: 0;
+  display: flex; align-items: center; gap: 5px;
+}
+.ticker-pulse {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--blue);
+  animation: tp 1.4s ease-in-out infinite;
+}
+@keyframes tp { 0%,100%{opacity:1} 50%{opacity:0.25} }
+.ticker-track { overflow: hidden; flex: 1; height: 100%; display: flex; align-items: center; }
+.ticker-scroll {
+  display: flex; gap: 0;
+  animation: tickscroll 32s linear infinite;
+  white-space: nowrap;
+}
+.ticker-scroll:hover { animation-play-state: paused; }
+@keyframes tickscroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.04em; padding-right: 56px;
+  display: flex; align-items: center; gap: 8px;
+}
+.ticker-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gilt); opacity: 0.45; flex-shrink: 0; }
+.ticker-hl { color: rgba(255,255,255,0.82); }
+
+/* ── HERO SPLIT ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 94px);
+  position: relative;
+}
+.hero::after {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 26px;
+  display: flex; align-items: center;
+  padding: 0 48px;
+  font-size: 11px; letter-spacing: 0.55em;
+  color: var(--gilt);
+  overflow: hidden; white-space: nowrap;
+  z-index: 10;
+  -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, black 92%, transparent 100%);
+}
+
+/* ── HERO LEFT ── */
+.hero-left {
+  padding: 64px 56px 52px 48px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.hero-left::before {
+  content: '';
+  position: absolute; top: 20%; left: 10%;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(184,134,11,0.09) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-kicker {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-kicker-line { width: 24px; height: 2px; background: var(--gilt); border-radius: 1px; }
+.hero-kicker-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gilt);
+}
+.hero-hed {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 56px; font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1.05;
+  color: white;
+  margin-bottom: 22px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero-hed em {
+  font-style: italic;
+  color: var(--gilt-lt);
+  display: inline-block;
+  position: relative;
+}
+.hero-hed em::after {
+  content: '';
+  position: absolute; bottom: 4px; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--gilt-lt), transparent);
+  border-radius: 1px;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-dek {
+  font-size: 17px; font-weight: 300; line-height: 1.75;
+  color: rgba(255,255,255,0.5);
+  max-width: 460px;
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-dek strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+/* ADDRESS INPUT */
+.address-block {
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.address-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(184,134,11,0.7);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.address-label::before { content: ''; width: 12px; height: 1.5px; background: var(--gilt); opacity: 0.7; }
+.address-row { display: flex; gap: 8px; }
+.address-input {
+  flex: 1;
+  height: 52px; padding: 0 22px;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 500;
+  color: white;
+  outline: none;
+  transition: all 0.2s;
+}
+.address-input::placeholder { color: rgba(255,255,255,0.22); }
+.address-input:focus {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(184,134,11,0.45);
+  box-shadow: 0 0 0 4px rgba(184,134,11,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.address-go {
+  height: 52px; padding: 0 28px;
+  background: var(--gilt); color: white; border: none;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap; flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(184,134,11,0.3);
+}
+.address-go:hover { background: var(--gilt-lt); box-shadow: 0 4px 20px rgba(184,134,11,0.45); transform: translateY(-1px); }
+.address-alt {
+  margin-top: 12px;
+  font-size: 12.5px; color: rgba(255,255,255,0.25);
+}
+.address-alt button {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-size: 12.5px;
+  color: rgba(255,255,255,0.42);
+  text-decoration: underline; text-decoration-color: rgba(255,255,255,0.15);
+  transition: color 0.15s;
+}
+.address-alt button:hover { color: rgba(255,255,255,0.75); }
+
+/* TRUST STRIP */
+.trust-strip {
+  display: flex; gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.trust-item { display: flex; align-items: center; gap: 8px; }
+.trust-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(184,134,11,0.12); border: 1px solid rgba(184,134,11,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--gilt-lt); flex-shrink: 0;
+}
+.trust-text { font-size: 12px; color: rgba(255,255,255,0.32); }
+
+/* ── HERO RIGHT — FEED ── */
+.hero-right {
+  display: flex; flex-direction: column;
+  background: rgba(255,255,255,0.04);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  position: relative; z-index: 1;
+}
+.hero-right::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--gilt-rul), transparent);
+  pointer-events: none;
+}
+.feed-header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.feed-title { display: flex; align-items: center; gap: 10px; }
+.feed-live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green-r);
+  box-shadow: 0 0 0 3px rgba(168,216,186,0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 3px rgba(168,216,186,0.2)} 50%{box-shadow:0 0 0 6px rgba(168,216,186,0.08)} }
+.feed-title-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px; font-weight: 700; color: white;
+}
+.feed-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+}
+
+/* FEED TABS */
+.feed-tabs {
+  display: flex; gap: 0;
+  padding: 0 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.feed-tab {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: none; border: none;
+  color: rgba(255,255,255,0.32);
+  padding: 12px 14px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.14s;
+}
+.feed-tab:hover { color: rgba(255,255,255,0.65); }
+.feed-tab.active { color: var(--gilt-lt); border-bottom-color: var(--gilt); }
+
+/* FEED EVENTS */
+.feed-events {
+  flex: 1; overflow-y: auto;
+  padding: 8px 0;
+}
+.feed-event {
+  display: flex; cursor: pointer;
+  transition: background 0.12s;
+}
+.feed-event:hover { background: rgba(255,255,255,0.04); }
+.feed-event-bar {
+  width: 3px; flex-shrink: 0;
+  border-radius: 0 2px 2px 0;
+}
+.vote    { background: var(--green); }
+.bill    { background: var(--blue-lt); }
+.official{ background: var(--gilt); }
+.election{ background: var(--purple); }
+.watch   { background: var(--orange); }
+
+.feed-event-inner {
+  flex: 1; padding: 14px 24px 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.feed-event:last-child .feed-event-inner { border-bottom: none; }
+.feed-event-flag { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.feed-event-body { flex: 1; min-width: 0; }
+.feed-event-meta {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 5px; flex-wrap: wrap;
+}
+.feed-event-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 100px;
+}
+.type-vote     { background: rgba(26,92,53,0.35); color: var(--green-r); }
+.type-bill     { background: rgba(58,106,191,0.3); color: #93b8f5; }
+.type-official { background: rgba(184,134,11,0.25); color: var(--gilt-lt); }
+.type-election { background: rgba(74,31,110,0.35); color: var(--purp-r); }
+.type-watch    { background: rgba(184,74,0,0.3); color: #f4b07a; }
+
+.feed-event-country {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.32);
+}
+.feed-event-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: rgba(255,255,255,0.2);
+  margin-left: auto;
+}
+.feed-event-text {
+  font-size: 13.5px; font-weight: 600; line-height: 1.5;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 4px;
+}
+.feed-event-sub {
+  font-size: 12px; color: rgba(255,255,255,0.32); line-height: 1.4;
+}
+.feed-event-sub .yours {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gilt); background: rgba(184,134,11,0.12);
+  padding: 1px 6px; border-radius: 100px;
+}
+.feed-event-arrow {
+  font-size: 16px; color: rgba(255,255,255,0.2);
+  flex-shrink: 0; margin-top: 2px; align-self: center;
+}
+
+.feed-footer {
+  padding: 14px 28px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.feed-footer-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+}
+.feed-more {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+  padding: 7px 16px; border-radius: 100px; cursor: pointer;
+  transition: all 0.14s;
+}
+.feed-more:hover { background: rgba(255,255,255,0.12); color: white; }
+
+/* ── COUNTRY STRIP ── */
+.country-strip {
+  background: var(--blue-mid);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 48px;
+  height: 52px;
+  display: flex; align-items: center; gap: 10px;
+  overflow-x: auto;
+}
+.country-strip::-webkit-scrollbar { height: 0; }
+.country-strip-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  white-space: nowrap; flex-shrink: 0;
+  padding-right: 10px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  margin-right: 4px;
+}
+.country-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 100px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: all 0.14s;
+}
+.country-chip:hover { background: rgba(255,255,255,0.1); }
+.country-chip.active {
+  background: rgba(184,134,11,0.18);
+  border-color: var(--gilt-rul);
+}
+.chip-flag { font-size: 14px; }
+.chip-name {
+  font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,0.65);
+}
+.country-chip.active .chip-name { color: var(--gilt-lt); }
+.chip-status {
+  font-family: 'JetBrains Mono', monospace; font-size: 8px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--orange); background: rgba(184,74,0,0.15);
+  padding: 1px 6px; border-radius: 100px; margin-left: 2px;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+  padding: 40px 48px;
+  display: flex; align-items: center; justify-content: space-around;
+  gap: 20px;
+  position: relative;
+}
+.stats-bar::before {
+  content: 'By the numbers';
+  position: absolute; top: -12px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--bg);
+  padding: 0 14px;
+  white-space: nowrap;
+}
+.stat { text-align: center; }
+.stat-n {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 40px; font-weight: 700;
+  color: var(--blue); line-height: 1; margin-bottom: 6px;
+}
+.stat-accent { color: var(--gilt); }
+.stat-l {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.stat-sep { width: 1px; height: 52px; background: var(--rule); }
+
+/* ── FEATURE SECTION ── */
+.features-wrap {
+  background: var(--white);
+  padding: 56px 48px 64px;
+  border-top: 1px solid var(--rule);
+}
+.features-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--blue-pal);
+}
+.features-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--blue);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px;
+}
+.features-eyebrow::before { content: ''; width: 12px; height: 2px; background: var(--blue); }
+.features-hed {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px; font-weight: 700; color: var(--blue);
+}
+.features-tagline {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px; font-style: italic; color: var(--ink-soft);
+}
+.features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.feat-card {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--blue-pal);
+  border-radius: 12px;
+  padding: 22px 20px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: border-top-color 0.18s, box-shadow 0.18s, transform 0.18s;
+}
+.feat-card:hover {
+  border-top-color: var(--gilt);
+  box-shadow: 0 4px 20px rgba(27,58,107,0.08);
+  transform: translateY(-2px);
+}
+.feat-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--blue-vpal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.feat-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px; font-weight: 700; color: var(--blue);
+  line-height: 1.3;
+}
+.feat-desc {
+  font-size: 13px; font-weight: 400; color: var(--ink-soft);
+  line-height: 1.65; flex: 1;
+}
+.feat-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gilt); background: var(--gilt-pal);
+  padding: 3px 10px; border-radius: 100px;
+  display: inline-block;
+  align-self: flex-start;
+  border: 1px solid var(--gilt-rul);
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--blue);
+  border-top: 3px solid var(--gilt);
+  padding: 36px 48px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 48px;
+}
+.footer-brand {}
+.footer-logo {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 20px; font-weight: 700;
+  color: white; letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+.footer-logo span { color: var(--gilt-lt); }
+.footer-tagline {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px; font-style: italic; font-weight: 400;
+  color: rgba(255,255,255,0.28);
+}
+.footer-middle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.15);
+  text-align: center;
+}
+.footer-links {
+  display: flex; gap: 20px;
+}
+.footer-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); cursor: pointer;
+  transition: color 0.14s;
+}
+.footer-link:hover { color: rgba(255,255,255,0.6); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wordmark">F<span>O</span>RA</div>
+  <div class="wordmark-sep"></div>
+  <div class="wordmark-sub">Civic Intelligence</div>
+  <div class="nav-links">
+    <button class="nav-link">The Record</button>
+    <button class="nav-link">The Commons</button>
+    <button class="nav-link">Officials</button>
+    <button class="nav-link">Countries</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-signin">Sign in</button>
+    <button class="nav-cta">Get started</button>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-badge"><div class="ticker-pulse"></div>Live</div>
+  <div class="ticker-track">
+    <div class="ticker-scroll">
+      <div class="ticker-item"><div class="ticker-dot"></div>🇺🇸 <span class="ticker-hl">H.R. 4471</span> Rural Broadband Act passes House 247–183</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇩🇪 <span class="ticker-hl">Chancellor Merz</span> signs climate amendment into law</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇨🇦 <span class="ticker-hl">PM Carney</span> responds to 312 citizen housing questions</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇬🇧 <span class="ticker-hl">NHS Funding Bill</span> enters second reading</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇺🇸 <span class="ticker-hl">VA-08</span> special election filing deadline March 28</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇺🇸 <span class="ticker-hl">Sen. Charniele Herring</span> co-sponsors HB 1842 tenant protection</div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker-item"><div class="ticker-dot"></div>🇺🇸 <span class="ticker-hl">H.R. 4471</span> Rural Broadband Act passes House 247–183</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇩🇪 <span class="ticker-hl">Chancellor Merz</span> signs climate amendment into law</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇨🇦 <span class="ticker-hl">PM Carney</span> responds to 312 citizen housing questions</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇬🇧 <span class="ticker-hl">NHS Funding Bill</span> enters second reading</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇺🇸 <span class="ticker-hl">VA-08</span> special election filing deadline March 28</div>
+      <div class="ticker-item"><div class="ticker-dot"></div>🇺🇸 <span class="ticker-hl">Sen. Charniele Herring</span> co-sponsors HB 1842 tenant protection</div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO SPLIT -->
+<div class="hero">
+
+  <!-- LEFT: ENTRY -->
+  <div class="hero-left">
+    <div class="hero-kicker">
+      <div class="hero-kicker-line"></div>
+      <div class="hero-kicker-text">Civic intelligence for everyone</div>
+    </div>
+    <h1 class="hero-hed">Your government.<br><em>All of it.</em><br>In one place.</h1>
+    <p class="hero-dek">Enter your address and see every elected official — from <strong>school board to President</strong> — every bill that affects you, and a place to make your voice count.</p>
+
+    <div class="address-block">
+      <div class="address-label">Enter your address to get started</div>
+      <div class="address-row">
+        <input class="address-input" type="text" placeholder="123 King St, Alexandria, VA 22314" />
+        <button class="address-go">Find my officials →</button>
+      </div>
+      <div class="address-alt">
+        No address? &nbsp;
+        <button>Browse by country</button>
+        &nbsp;or&nbsp;
+        <button>explore by issue</button>
+      </div>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item">
+        <div class="trust-icon">✓</div>
+        <div class="trust-text">No account required</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">✓</div>
+        <div class="trust-text">Free, always</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">✓</div>
+        <div class="trust-text">Address never stored</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: GLOBAL FEED -->
+  <div class="hero-right">
+    <div class="feed-header">
+      <div class="feed-title">
+        <div class="feed-live-dot"></div>
+        <div class="feed-title-text">Global Civic Feed</div>
+      </div>
+      <div class="feed-count">Updated continuously</div>
+    </div>
+
+    <div class="feed-tabs">
+      <button class="feed-tab active">All</button>
+      <button class="feed-tab">Bills</button>
+      <button class="feed-tab">Votes</button>
+      <button class="feed-tab">Officials</button>
+      <button class="feed-tab">Elections</button>
+      <button class="feed-tab">Watch List</button>
+    </div>
+
+    <div class="feed-events">
+
+      <div class="feed-event">
+        <div class="feed-event-bar vote"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-vote">Vote</span>
+              <span class="feed-event-country">United States · House</span>
+              <span class="feed-event-time">2h ago</span>
+            </div>
+            <div class="feed-event-text">H.R. 4471 Rural Broadband Expansion Act passes 247–183</div>
+            <div class="feed-event-sub">Goes to Senate · <span class="yours">Your district voted Yea</span></div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar official"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇨🇦</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-official">Official</span>
+              <span class="feed-event-country">Canada · Federal</span>
+              <span class="feed-event-time">5h ago</span>
+            </div>
+            <div class="feed-event-text">PM Mark Carney responds to 312 citizen questions on housing affordability</div>
+            <div class="feed-event-sub">Official Q&amp;A · Open for 48h</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar bill"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-bill">Bill</span>
+              <span class="feed-event-country">United States · Senate</span>
+              <span class="feed-event-time">6h ago</span>
+            </div>
+            <div class="feed-event-text">S.847 Advanced Semiconductor Competitiveness Act passes 67–33</div>
+            <div class="feed-event-sub">Bipartisan · Signed into law</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar vote"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇩🇪</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-vote">Vote</span>
+              <span class="feed-event-country">Germany · Bundestag</span>
+              <span class="feed-event-time">8h ago</span>
+            </div>
+            <div class="feed-event-text">Klimaschutzgesetz amendment passes 412–189 · Compare to US climate legislation</div>
+            <div class="feed-event-sub">CDU/CSU + SPD coalition · Chancellor Friedrich Merz</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar bill"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇬🇧</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-bill">Bill</span>
+              <span class="feed-event-country">United Kingdom · Commons</span>
+              <span class="feed-event-time">11h ago</span>
+            </div>
+            <div class="feed-event-text">NHS Funding Reinvestment Bill enters second reading</div>
+            <div class="feed-event-sub">Health &amp; Social Care · PM Keir Starmer</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar election"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-election">Election</span>
+              <span class="feed-event-country">United States · Virginia</span>
+              <span class="feed-event-time">1d ago</span>
+            </div>
+            <div class="feed-event-text">VA-08 special election filing deadline: March 28</div>
+            <div class="feed-event-sub"><span class="yours">Your congressional district</span></div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar official"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-official">Official</span>
+              <span class="feed-event-country">Virginia · State</span>
+              <span class="feed-event-time">1d ago</span>
+            </div>
+            <div class="feed-event-text">Del. Charniele Herring co-sponsors HB 1842 tenant protection bill</div>
+            <div class="feed-event-sub"><span class="yours">Your state delegate</span> · Alexandria District 46</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar watch"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇨🇺</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-watch">Monitoring</span>
+              <span class="feed-event-country">Cuba · FORA Watch</span>
+              <span class="feed-event-time">Active</span>
+            </div>
+            <div class="feed-event-text">Cuba coverage ready to launch · Awaiting conditions for safe deployment</div>
+            <div class="feed-event-sub">Full civic data goes live immediately when conditions allow</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="feed-footer">
+      <div class="feed-footer-note">17 countries · Updated continuously</div>
+      <button class="feed-more">Full Feed →</button>
+    </div>
+  </div>
+
+</div><!-- /hero -->
+
+<!-- COUNTRY STRIP -->
+<div class="country-strip">
+  <div class="country-strip-label">17 Countries</div>
+  <div class="country-chip active"><span class="chip-flag">🇺🇸</span><span class="chip-name">United States</span></div>
+  <div class="country-chip"><span class="chip-flag">🇩🇪</span><span class="chip-name">Germany</span></div>
+  <div class="country-chip"><span class="chip-flag">🇨🇦</span><span class="chip-name">Canada</span></div>
+  <div class="country-chip"><span class="chip-flag">🇬🇧</span><span class="chip-name">United Kingdom</span></div>
+  <div class="country-chip"><span class="chip-flag">🇫🇷</span><span class="chip-name">France</span></div>
+  <div class="country-chip"><span class="chip-flag">🇮🇹</span><span class="chip-name">Italy</span></div>
+  <div class="country-chip"><span class="chip-flag">🇦🇺</span><span class="chip-name">Australia</span></div>
+  <div class="country-chip"><span class="chip-flag">🇯🇵</span><span class="chip-name">Japan</span></div>
+  <div class="country-chip"><span class="chip-flag">🇧🇷</span><span class="chip-name">Brazil</span></div>
+  <div class="country-chip"><span class="chip-flag">🇲🇽</span><span class="chip-name">Mexico</span></div>
+  <div class="country-chip watch"><span class="chip-flag">🇨🇺</span><span class="chip-name">Cuba</span><span class="chip-status">watching</span></div>
+  <div class="country-chip watch"><span class="chip-flag">🇻🇪</span><span class="chip-name">Venezuela</span><span class="chip-status">watching</span></div>
+  <div class="country-chip watch"><span class="chip-flag">🇮🇷</span><span class="chip-name">Iran</span><span class="chip-status">watching</span></div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-n">500<span class="stat-accent">K+</span></div>
+    <div class="stat-l">Officials tracked</div>
+  </div>
+  <div class="stat-sep"></div>
+  <div class="stat">
+    <div class="stat-n">18<span class="stat-accent">K+</span></div>
+    <div class="stat-l">Active bills</div>
+  </div>
+  <div class="stat-sep"></div>
+  <div class="stat">
+    <div class="stat-n">17</div>
+    <div class="stat-l">Countries</div>
+  </div>
+  <div class="stat-sep"></div>
+  <div class="stat">
+    <div class="stat-n"><span class="stat-accent">Free</span></div>
+    <div class="stat-l">Always, for everyone</div>
+  </div>
+</div>
+
+<!-- FEATURE CARDS -->
+<div class="features-wrap">
+  <div class="features-header">
+    <div>
+      <div class="features-eyebrow">Platform</div>
+      <div class="features-hed">How FORA works</div>
+    </div>
+    <div class="features-tagline">Orientation before opinion</div>
+  </div>
+  <div class="features">
+    <div class="feat-card">
+      <div class="feat-icon">🗺</div>
+      <div class="feat-title">Your Government Stack</div>
+      <div class="feat-desc">One address reveals every official from your school board to the President. Every branch. Every level.</div>
+      <span class="feat-tag">Entry flow</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">⚖️</div>
+      <div class="feat-title">Civic Scaffold</div>
+      <div class="feat-desc">Before any bill — what it does, who it affects, best and worst case, and historical precedent. Orientation before opinion.</div>
+      <span class="feat-tag">The Record</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💬</div>
+      <div class="feat-title">Legitimacy-Scored Discourse</div>
+      <div class="feat-desc">Every contribution scored by its citations. Steel-man challenges and tone intercepts keep the conversation honest.</div>
+      <span class="feat-tag">The Commons</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🌍</div>
+      <div class="feat-title">Global &amp; Bilingual</div>
+      <div class="feat-desc">17 countries. Indigenous civic infrastructure. Bilingual bill display. 574 tribal nations with CARE-principle data sovereignty.</div>
+      <span class="feat-tag">Global coverage</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">
+    <div class="footer-logo">F<span>O</span>RA</div>
+    <div class="footer-tagline">The civic record, open to everyone</div>
+  </div>
+  <div class="footer-middle">Free · Open · Nonpartisan</div>
+  <div class="footer-links">
+    <span class="footer-link">About</span>
+    <span class="footer-link">API</span>
+    <span class="footer-link">Privacy</span>
+    <span class="footer-link">Data Sovereignty</span>
+    <span class="footer-link">Contact</span>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.feed-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+document.querySelectorAll('.country-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.country-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

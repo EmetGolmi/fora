@@ -1,0 +1,280 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@400;600&display=swap');
+.tabs { display: flex; flex-wrap: wrap; gap: 0; }
+.tab-btn { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; padding: 9px 14px; border: none; background: #e8ebf2; color: #5a6e8a; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab-btn.active { background: #1b3a6b; color: white; border-bottom-color: #b8860b; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+.phone { width: 260px; margin: 16px auto; border: 2px solid #2a2a2a; border-radius: 32px; overflow: hidden; background: #f0f3f8; }
+.phone-nav { background: #1b3a6b; border-bottom: 2px solid #b8860b; padding: 10px 16px; display: flex; align-items: center; }
+.phone-logo { font-family: 'Libre Baskerville', serif; font-size: 14px; font-weight: 700; color: white; }
+.phone-logo span { color: #d4a832; }
+.phone-body { padding: 14px; max-height: 480px; overflow-y: auto; }
+
+.section-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.18em; text-transform: uppercase; color: #b8860b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.section-eyebrow::before { content: '◆'; font-size: 6px; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: #1b3a6b; margin: 0 0 10px; }
+
+.bill-card { background: white; border: 0.5px solid #dde5f5; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+.bill-id { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5a6e8a; background: #f0f3f8; border: 0.5px solid #dde5f5; border-radius: 4px; padding: 2px 6px; display: inline-block; margin-bottom: 6px; }
+.bill-title { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 600; color: #1b3a6b; line-height: 1.35; margin-bottom: 6px; }
+.status-badge { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; display: inline-block; }
+.status-under-review { background: #fef3cd; color: #856404; border: 0.5px solid #f5c842; }
+.status-being-debated { background: #cfe2ff; color: #084298; border: 0.5px solid #9ec5fe; }
+.status-passed { background: #d1e7dd; color: #0a3622; border: 0.5px solid #a3cfbb; }
+.status-final { background: #f8d7da; color: #58151c; border: 0.5px solid #f1aeb5; }
+
+.level-pill { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 100px; display: inline-block; margin-left: 4px; }
+.level-federal { background: #1b3a6b; color: white; }
+.level-state { background: #2d6a2d; color: white; }
+.level-city { background: #b8860b; color: white; }
+
+.leg-tabs { display: flex; border-bottom: 1px solid #dde5f5; margin-bottom: 10px; }
+.leg-tab { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 10px; border: none; background: none; color: #5a6e8a; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.leg-tab.active { color: #1b3a6b; border-bottom-color: #b8860b; font-weight: 700; }
+
+.accordion-section { margin-bottom: 6px; border: 0.5px solid #dde5f5; border-radius: 8px; overflow: hidden; }
+.accordion-header { background: white; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.accordion-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: #1b3a6b; font-weight: 700; }
+.accordion-count { font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #5a6e8a; }
+.accordion-body { display: none; padding: 0 10px 10px; background: #fafbfd; }
+.accordion-body.open { display: block; }
+
+.carousel { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+.carousel::-webkit-scrollbar { height: 3px; }
+.carousel::-webkit-scrollbar-track { background: #f0f3f8; }
+.carousel::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 2px; }
+.carousel-card { min-width: 160px; background: white; border: 0.5px solid #dde5f5; border-radius: 8px; padding: 10px; flex-shrink: 0; }
+
+.desc { font-family: 'Nunito', sans-serif; font-size: 10px; color: #5a6e8a; text-align: center; padding: 10px 14px; line-height: 1.4; }
+</style>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="show('tabs',this)">1 — Tabbed</button>
+  <button class="tab-btn" onclick="show('feed',this)">2 — Unified feed</button>
+  <button class="tab-btn" onclick="show('accordion',this)">3 — Accordion</button>
+  <button class="tab-btn" onclick="show('carousel',this)">4 — Carousel</button>
+</div>
+
+<div id="panel-tabs" class="panel active">
+  <div class="phone">
+    <div class="phone-nav"><span class="phone-logo">F<span>O</span>RA</span></div>
+    <div class="phone-body">
+      <div class="section-eyebrow">Legislation</div>
+      <div class="section-title">Bills Affecting You</div>
+      <div class="leg-tabs">
+        <button class="leg-tab active" onclick="legTab('federal',this)">Federal</button>
+        <button class="leg-tab" onclick="legTab('state',this)">State</button>
+        <button class="leg-tab" onclick="legTab('city',this)">City</button>
+      </div>
+      <div id="leg-federal">
+        <div class="bill-card">
+          <div class="bill-id">S. 4045</div>
+          <div class="bill-title">Food and Nutrition Act — online delivery standards</div>
+          <span class="status-badge status-under-review">Under Review</span>
+        </div>
+        <div class="bill-card">
+          <div class="bill-id">S. 3947</div>
+          <div class="bill-title">REWIRE Act</div>
+          <span class="status-badge status-under-review">Under Review</span>
+        </div>
+        <div class="bill-card">
+          <div class="bill-id">S. 3796</div>
+          <div class="bill-title">Ohio River Restoration Program Act of 2026</div>
+          <span class="status-badge status-under-review">Under Review</span>
+        </div>
+      </div>
+      <div id="leg-state" style="display:none">
+        <div class="bill-card">
+          <div class="bill-id">SB 1235</div>
+          <div class="bill-title">Pennsylvania Board of Probation and Parole — further provisions</div>
+          <span class="status-badge status-being-debated">In Committee</span>
+        </div>
+        <div class="bill-card">
+          <div class="bill-id">HB 2303</div>
+          <div class="bill-title">Short-term rentals — temporary lodging penalties</div>
+          <span class="status-badge status-being-debated">In Committee</span>
+        </div>
+      </div>
+      <div id="leg-city" style="display:none">
+        <div class="bill-card">
+          <div class="bill-id">260241</div>
+          <div class="bill-title">Short-term rental licensing — notice to building residents</div>
+          <span class="status-badge status-being-debated">Before Council</span>
+        </div>
+        <div class="bill-card">
+          <div class="bill-id">260247</div>
+          <div class="bill-title">National LGBTQ Health Awareness Week declaration</div>
+          <span class="status-badge status-passed">Adopted</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desc">One scroll. User picks Federal / State / City. Most mobile-friendly. Hides complexity.</div>
+</div>
+
+<div id="panel-feed" class="panel">
+  <div class="phone">
+    <div class="phone-nav"><span class="phone-logo">F<span>O</span>RA</span></div>
+    <div class="phone-body">
+      <div class="section-eyebrow">Legislation</div>
+      <div class="section-title">Bills Affecting You</div>
+      <div class="bill-card">
+        <div><div class="bill-id">260241</div><span class="level-pill level-city">City</span></div>
+        <div class="bill-title" style="margin-top:6px;">Short-term rental licensing — notice to building residents</div>
+        <span class="status-badge status-being-debated">Before Council</span>
+      </div>
+      <div class="bill-card">
+        <div><div class="bill-id">S. 4045</div><span class="level-pill level-federal">Federal</span></div>
+        <div class="bill-title" style="margin-top:6px;">Food and Nutrition Act — online delivery standards</div>
+        <span class="status-badge status-under-review">Under Review</span>
+      </div>
+      <div class="bill-card">
+        <div><div class="bill-id">SB 1235</div><span class="level-pill level-state">State</span></div>
+        <div class="bill-title" style="margin-top:6px;">Pennsylvania Board of Probation and Parole</div>
+        <span class="status-badge status-being-debated">In Committee</span>
+      </div>
+      <div class="bill-card">
+        <div><div class="bill-id">260247</div><span class="level-pill level-city">City</span></div>
+        <div class="bill-title" style="margin-top:6px;">National LGBTQ Health Awareness Week declaration</div>
+        <span class="status-badge status-passed">Adopted</span>
+      </div>
+    </div>
+  </div>
+  <div class="desc">One scroll. All levels mixed. Color-coded pills show level. Most context at a glance.</div>
+</div>
+
+<div id="panel-accordion" class="panel">
+  <div class="phone">
+    <div class="phone-nav"><span class="phone-logo">F<span>O</span>RA</span></div>
+    <div class="phone-body">
+      <div class="section-eyebrow">Legislation</div>
+      <div class="section-title">Bills Affecting You</div>
+      <div class="accordion-section">
+        <div class="accordion-header" onclick="toggleAcc('fed')">
+          <span class="accordion-label">Federal</span>
+          <span class="accordion-count">6 bills ▾</span>
+        </div>
+        <div class="accordion-body open" id="acc-fed">
+          <div class="bill-card" style="margin-top:8px;">
+            <div class="bill-id">S. 4045</div>
+            <div class="bill-title">Food and Nutrition Act — online delivery standards</div>
+            <span class="status-badge status-under-review">Under Review</span>
+          </div>
+          <div class="bill-card">
+            <div class="bill-id">S. 3947</div>
+            <div class="bill-title">REWIRE Act</div>
+            <span class="status-badge status-under-review">Under Review</span>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-section">
+        <div class="accordion-header" onclick="toggleAcc('state')">
+          <span class="accordion-label">State</span>
+          <span class="accordion-count">3 bills ▸</span>
+        </div>
+        <div class="accordion-body" id="acc-state">
+          <div class="bill-card" style="margin-top:8px;">
+            <div class="bill-id">SB 1235</div>
+            <div class="bill-title">Pennsylvania Board of Probation and Parole</div>
+            <span class="status-badge status-being-debated">In Committee</span>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-section">
+        <div class="accordion-header" onclick="toggleAcc('city')">
+          <span class="accordion-label">City</span>
+          <span class="accordion-count">10 bills ▸</span>
+        </div>
+        <div class="accordion-body" id="acc-city">
+          <div class="bill-card" style="margin-top:8px;">
+            <div class="bill-id">260241</div>
+            <div class="bill-title">Short-term rental licensing — notice to residents</div>
+            <span class="status-badge status-being-debated">Before Council</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desc">Collapsed by default. Tap to expand. Shows bill count per level. User controls depth.</div>
+</div>
+
+<div id="panel-carousel" class="panel">
+  <div class="phone">
+    <div class="phone-nav"><span class="phone-logo">F<span>O</span>RA</span></div>
+    <div class="phone-body">
+      <div class="section-eyebrow">Federal</div>
+      <div class="section-title" style="margin-bottom:8px;">Bills in Congress</div>
+      <div class="carousel">
+        <div class="carousel-card">
+          <div class="bill-id">S. 4045</div>
+          <div class="bill-title">Food and Nutrition Act — online delivery standards</div>
+          <span class="status-badge status-under-review">Under Review</span>
+        </div>
+        <div class="carousel-card">
+          <div class="bill-id">S. 3947</div>
+          <div class="bill-title">REWIRE Act</div>
+          <span class="status-badge status-under-review">Under Review</span>
+        </div>
+        <div class="carousel-card">
+          <div class="bill-id">S. 3796</div>
+          <div class="bill-title">Ohio River Restoration Act</div>
+          <span class="status-badge status-under-review">Under Review</span>
+        </div>
+      </div>
+      <div class="section-eyebrow" style="margin-top:12px;">State</div>
+      <div class="section-title" style="margin-bottom:8px;">Bills in Harrisburg</div>
+      <div class="carousel">
+        <div class="carousel-card">
+          <div class="bill-id">SB 1235</div>
+          <div class="bill-title">PA Board of Probation and Parole</div>
+          <span class="status-badge status-being-debated">In Committee</span>
+        </div>
+        <div class="carousel-card">
+          <div class="bill-id">HB 2303</div>
+          <div class="bill-title">Short-term rentals — lodging penalties</div>
+          <span class="status-badge status-being-debated">In Committee</span>
+        </div>
+      </div>
+      <div class="section-eyebrow" style="margin-top:12px;">City</div>
+      <div class="section-title" style="margin-bottom:8px;">Bills at City Hall</div>
+      <div class="carousel">
+        <div class="carousel-card">
+          <div class="bill-id">260241</div>
+          <div class="bill-title">Short-term rental licensing notice</div>
+          <span class="status-badge status-being-debated">Before Council</span>
+        </div>
+        <div class="carousel-card">
+          <div class="bill-id">260247</div>
+          <div class="bill-title">LGBTQ Health Awareness Week</div>
+          <span class="status-badge status-passed">Adopted</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desc">Three sections stay. Each scrolls horizontally. Vertical scroll is just page scroll — no nested scrolling.</div>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function legTab(id, btn) {
+  ['federal','state','city'].forEach(l => document.getElementById('leg-'+l).style.display='none');
+  document.querySelectorAll('.leg-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('leg-'+id).style.display='block';
+  btn.classList.add('active');
+}
+function toggleAcc(id) {
+  const body = document.getElementById('acc-'+id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  body.parentElement.querySelector('.accordion-count').textContent =
+    body.parentElement.querySelector('.accordion-count').textContent.replace(isOpen ? '▾' : '▸', isOpen ? '▸' : '▾');
+}
+</script>

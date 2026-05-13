@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #0f1f3d;
+  --navy-mid:   #162847;
+  --navy-light: #1e3a5f;
+  --navy-pale:  #243d6a;
+  --gold:       #c9a84c;
+  --gold-light: #e0bf6a;
+  --gold-dim:   rgba(201,168,76,0.35);
+  --paper:      #f7f4ee;
+  --paper-mid:  #edeae2;
+  --ink:        #0d1117;
+  --white:      #ffffff;
+  --rule:       rgba(255,255,255,0.08);
+  --rule-gold:  rgba(201,168,76,0.2);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 58px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+  z-index: 10;
+  background: var(--navy);
+}
+
+.wordmark {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wordmark-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--gold-dim);
+}
+.wordmark-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.nav-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+  cursor: pointer;
+  transition: color 0.15s;
+  background: none;
+  border: none;
+}
+.nav-link:hover { color: rgba(255,255,255,0.75); }
+
+.nav-signin {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  padding: 7px 18px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.18s;
+}
+.nav-signin:hover {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold);
+}
+
+/* ── TICKER ── */
+.ticker {
+  background: var(--navy-light);
+  border-bottom: 1px solid var(--rule-gold);
+  padding: 0 48px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+  position: relative;
+  z-index: 9;
+}
+
+.ticker-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 500;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ticker-pulse {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--navy);
+  animation: tp 1.4s ease-in-out infinite;
+}
+@keyframes tp {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.ticker-scroll {
+  display: flex;
+  gap: 0;
+  animation: scroll 28s linear infinite;
+  white-space: nowrap;
+}
+.ticker-scroll:hover { animation-play-state: paused; }
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-item {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.04em;
+  padding-right: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ticker-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+.ticker-hl { color: rgba(255,255,255,0.85); }
+
+/* ── HERO SPLIT ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 92px);
+  position: relative;
+}
+
+/* vertical gold rule at split */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold-dim) 0%, var(--rule-gold) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ── LEFT: ENTRY ── */
+.hero-left {
+  padding: 64px 56px 48px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+/* ambient glow */
+.hero-left::before {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.hero-kicker-line {
+  width: 28px;
+  height: 2px;
+  background: var(--gold);
+}
+.hero-kicker-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 5.5vw, 64px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.hero-h1 .accent {
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.hero-h2 {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.38);
+  margin-bottom: 32px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.hero-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.5);
+  max-width: 440px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+.hero-body strong {
+  color: rgba(255,255,255,0.85);
+  font-weight: 600;
+}
+
+/* address input */
+.address-block { max-width: 460px; }
+
+.address-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  margin-bottom: 8px;
+}
+
+.address-wrap {
+  display: flex;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  margin-bottom: 10px;
+  box-shadow: 0 0 0 0 rgba(201,168,76,0);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.address-wrap:focus-within {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+}
+
+.address-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 13px 16px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  color: var(--white);
+}
+.address-input::placeholder { color: rgba(255,255,255,0.22); }
+
+.address-go {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  padding: 0 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.address-go:hover { background: var(--gold-light); }
+.address-go-arrow { font-size: 12px; }
+
+.address-alt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.22);
+  text-transform: uppercase;
+}
+.address-alt button {
+  background: none;
+  border: none;
+  color: rgba(201,168,76,0.55);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+  transition: color 0.15s;
+}
+.address-alt button:hover { color: var(--gold); }
+
+/* trust strip */
+.trust-strip {
+  display: flex;
+  gap: 20px;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.trust-icon {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.trust-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+
+/* ── RIGHT: GLOBAL FEED ── */
+.hero-right {
+  background: rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.feed-header {
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.feed-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.feed-title-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+.feed-live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: tp 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.feed-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.22);
+}
+
+/* filter tabs */
+.feed-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+  padding: 0 28px;
+}
+.feed-tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  padding: 10px 14px 10px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+.feed-tab:hover { color: rgba(255,255,255,0.6); }
+.feed-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* events */
+.feed-events {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.feed-event {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background 0.12s;
+  position: relative;
+}
+.feed-event:hover { background: rgba(255,255,255,0.03); }
+.feed-event:hover .feed-event-arrow { opacity: 1; transform: translateX(2px); }
+
+/* left accent bar — color coded by type */
+.feed-event-bar {
+  width: 3px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08);
+}
+.feed-event-bar.bill { background: #4a9eff; }
+.feed-event-bar.vote { background: #a855f7; }
+.feed-event-bar.official { background: var(--gold); }
+.feed-event-bar.watch { background: #22c55e; }
+.feed-event-bar.election { background: #f97316; }
+
+.feed-event-inner {
+  flex: 1;
+  padding: 14px 20px 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.feed-event-flag { font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+
+.feed-event-body { flex: 1; min-width: 0; }
+
+.feed-event-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.feed-event-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+.type-bill { background: rgba(74,158,255,0.15); color: #7bb8ff; }
+.type-vote { background: rgba(168,85,247,0.15); color: #c084fc; }
+.type-official { background: rgba(201,168,76,0.15); color: var(--gold); }
+.type-watch { background: rgba(34,197,94,0.15); color: #86efac; }
+.type-election { background: rgba(249,115,22,0.15); color: #fdba74; }
+
+.feed-event-country {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+}
+.feed-event-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.05em;
+  margin-left: auto;
+}
+
+.feed-event-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.4;
+  margin-bottom: 3px;
+}
+.feed-event-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.32);
+  line-height: 1.5;
+}
+
+.feed-event-arrow {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0;
+  transition: all 0.15s;
+}
+
+/* feed footer */
+.feed-footer {
+  border-top: 1px solid var(--rule);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.feed-footer-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+}
+.feed-more {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.feed-more:hover { opacity: 1; }
+
+/* ── BOTTOM STATS BAR ── */
+.stats-bar {
+  border-top: 1px solid var(--rule-gold);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--navy-mid);
+}
+.stat {
+  padding: 20px 0;
+  text-align: center;
+  border-right: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.stat:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.stat-n .stat-accent { color: var(--gold); }
+.stat-l {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+}
+
+/* ── COUNTRY STRIP ── */
+.country-strip {
+  background: var(--navy-light);
+  border-top: 1px solid var(--rule);
+  padding: 14px 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.country-strip::-webkit-scrollbar { display: none; }
+
+.country-strip-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+  white-space: nowrap;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.country-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.country-chip:hover {
+  border-color: rgba(201,168,76,0.3);
+  background: rgba(201,168,76,0.07);
+}
+.country-chip.active {
+  border-color: var(--gold-dim);
+  background: rgba(201,168,76,0.1);
+}
+.country-chip.watch {
+  border-color: rgba(34,197,94,0.2);
+  background: rgba(34,197,94,0.05);
+}
+.chip-flag { font-size: 13px; line-height: 1; }
+.chip-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.country-chip.active .chip-name { color: var(--gold); }
+.country-chip.watch .chip-name { color: rgba(134,239,172,0.7); }
+.chip-status {
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  color: rgba(134,239,172,0.6);
+  margin-left: 1px;
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="wordmark">
+    FORA
+    <div class="wordmark-sep"></div>
+    <div class="wordmark-sub">Civic Intelligence</div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link">Explore</button>
+    <button class="nav-link">Compare</button>
+    <button class="nav-link">About</button>
+    <button class="nav-signin">Sign In</button>
+  </div>
+</nav>
+
+<!-- ── TICKER ── -->
+<div class="ticker">
+  <div class="ticker-badge">
+    <div class="ticker-pulse"></div>
+    Live
+  </div>
+  <div class="ticker-scroll">
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">US Senate</span> · S.847 Advanced Semiconductor Act passes 67–33 &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">Germany</span> · Bundestag climate package approved 412–189 &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">Canada</span> · PM Carney responds to 47 citizen questions on housing &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">UK</span> · NHS funding bill enters second reading &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">Cuba</span> · FORA monitoring · Coverage ready to launch &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">US House</span> · H.R.2241 Infrastructure Amendment scheduled for floor vote &nbsp;</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">US Senate</span> · S.847 Advanced Semiconductor Act passes 67–33 &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">Germany</span> · Bundestag climate package approved 412–189 &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">Canada</span> · PM Carney responds to 47 citizen questions on housing &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">UK</span> · NHS funding bill enters second reading &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">Cuba</span> · FORA monitoring · Coverage ready to launch &nbsp;</div>
+    <div class="ticker-item"><div class="ticker-dot"></div><span class="ticker-hl">US House</span> · H.R.2241 Infrastructure Amendment scheduled for floor vote &nbsp;</div>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+
+  <!-- LEFT: ENTRY -->
+  <div class="hero-left">
+
+    <div class="hero-kicker">
+      <div class="hero-kicker-line"></div>
+      <div class="hero-kicker-text">The world's civic commons</div>
+    </div>
+
+    <h1 class="hero-h1">
+      Your government.<br>
+      Every government.<br>
+      <span class="accent">Made visible.</span>
+    </h1>
+    <p class="hero-h2">From your city council to the world stage.</p>
+
+    <p class="hero-body">
+      Enter your address and see every official who governs you —
+      from the President to your school board.
+      <strong>Then look outward.</strong> Compare your government to others.
+      Follow what matters. Ask the people who represent you —
+      and see whether they answer.
+    </p>
+
+    <div class="address-block">
+      <div class="address-label">Start with your address</div>
+      <div class="address-wrap">
+        <input
+          class="address-input"
+          type="text"
+          placeholder="1600 King St, Alexandria, VA…"
+        />
+        <button class="address-go">
+          Show My Government
+          <span class="address-go-arrow">→</span>
+        </button>
+      </div>
+      <div class="address-alt">
+        No address? &nbsp;
+        <button>Explore by country</button>
+        &nbsp;or&nbsp;
+        <button>browse by issue</button>
+      </div>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item">
+        <div class="trust-icon">✓</div>
+        <div class="trust-text">No account required</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">✓</div>
+        <div class="trust-text">Free, always</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">✓</div>
+        <div class="trust-text">Address not stored</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: GLOBAL FEED -->
+  <div class="hero-right">
+
+    <div class="feed-header">
+      <div class="feed-title">
+        <div class="feed-live-dot"></div>
+        <div class="feed-title-text">Global Civic Feed</div>
+      </div>
+      <div class="feed-count">Updated continuously</div>
+    </div>
+
+    <div class="feed-tabs">
+      <button class="feed-tab active">All</button>
+      <button class="feed-tab">Bills</button>
+      <button class="feed-tab">Votes</button>
+      <button class="feed-tab">Officials</button>
+      <button class="feed-tab">Elections</button>
+      <button class="feed-tab">Watch List</button>
+    </div>
+
+    <div class="feed-events">
+
+      <div class="feed-event">
+        <div class="feed-event-bar vote"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-vote">Vote</span>
+              <span class="feed-event-country">United States · Senate</span>
+              <span class="feed-event-time">2h ago</span>
+            </div>
+            <div class="feed-event-text">S.847 Advanced Semiconductor Competitiveness Act passes 67–33</div>
+            <div class="feed-event-sub">47 senators you can follow · 2 represent your address</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar official"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇨🇦</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-official">Official</span>
+              <span class="feed-event-country">Canada · Federal</span>
+              <span class="feed-event-time">5h ago</span>
+            </div>
+            <div class="feed-event-text">PM Mark Carney responds to 47 citizen questions on housing affordability</div>
+            <div class="feed-event-sub">Official Q&A · 312 citizens engaged</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar bill"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-bill">Bill</span>
+              <span class="feed-event-country">United States · House</span>
+              <span class="feed-event-time">6h ago</span>
+            </div>
+            <div class="feed-event-text">H.R.2241 Moving Forward Infrastructure Amendment advances out of committee</div>
+            <div class="feed-event-sub">Transportation & Infrastructure · Floor vote scheduled</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar vote"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇩🇪</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-vote">Vote</span>
+              <span class="feed-event-country">Germany · Bundestag</span>
+              <span class="feed-event-time">8h ago</span>
+            </div>
+            <div class="feed-event-text">Klimaschutzgesetz amendment passes 412–189 · Compare to US climate legislation →</div>
+            <div class="feed-event-sub">CDU/CSU + SPD coalition · Chancellor Friedrich Merz</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar bill"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇬🇧</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-bill">Bill</span>
+              <span class="feed-event-country">United Kingdom · Commons</span>
+              <span class="feed-event-time">11h ago</span>
+            </div>
+            <div class="feed-event-text">NHS Funding Reinvestment Bill enters second reading</div>
+            <div class="feed-event-sub">Health & Social Care · PM Keir Starmer · Labour</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar election"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-election">Election</span>
+              <span class="feed-event-country">United States · Virginia</span>
+              <span class="feed-event-time">1d ago</span>
+            </div>
+            <div class="feed-event-text">VA-08 special election filing deadline: March 28</div>
+            <div class="feed-event-sub">Don Beyer seat · Your congressional district</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar official"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇺🇸</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-official">Official</span>
+              <span class="feed-event-country">United States · Virginia</span>
+              <span class="feed-event-time">1d ago</span>
+            </div>
+            <div class="feed-event-text">State Delegate Charniele Herring co-sponsors HB 1842 tenant protection bill</div>
+            <div class="feed-event-sub">Your state delegate · Alexandria District 46</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="feed-event">
+        <div class="feed-event-bar watch"></div>
+        <div class="feed-event-inner">
+          <div class="feed-event-flag">🇨🇺</div>
+          <div class="feed-event-body">
+            <div class="feed-event-meta">
+              <span class="feed-event-type type-watch">Watch</span>
+              <span class="feed-event-country">Cuba · FORA Monitor</span>
+              <span class="feed-event-time">Active</span>
+            </div>
+            <div class="feed-event-text">Cuba coverage ready to launch · Monitoring political conditions</div>
+            <div class="feed-event-sub">When conditions allow, full civic data will go live immediately</div>
+          </div>
+          <div class="feed-event-arrow">›</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="feed-footer">
+      <div class="feed-footer-note">17 countries · Updated continuously</div>
+      <button class="feed-more">Full Feed →</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── COUNTRY STRIP ── -->
+<div class="country-strip">
+  <div class="country-strip-label">Countries in FORA →</div>
+  <div class="country-chip active"><div class="chip-flag">🇺🇸</div><div class="chip-name">United States</div></div>
+  <div class="country-chip"><div class="chip-flag">🇩🇪</div><div class="chip-name">Germany</div></div>
+  <div class="country-chip"><div class="chip-flag">🇨🇦</div><div class="chip-name">Canada</div></div>
+  <div class="country-chip"><div class="chip-flag">🇬🇧</div><div class="chip-name">United Kingdom</div></div>
+  <div class="country-chip"><div class="chip-flag">🇫🇷</div><div class="chip-name">France</div></div>
+  <div class="country-chip"><div class="chip-flag">🇮🇹</div><div class="chip-name">Italy</div></div>
+  <div class="country-chip"><div class="chip-flag">🇦🇺</div><div class="chip-name">Australia</div></div>
+  <div class="country-chip"><div class="chip-flag">🇯🇵</div><div class="chip-name">Japan</div></div>
+  <div class="country-chip"><div class="chip-flag">🇧🇷</div><div class="chip-name">Brazil</div></div>
+  <div class="country-chip"><div class="chip-flag">🇲🇽</div><div class="chip-name">Mexico</div></div>
+  <div class="country-chip watch"><div class="chip-flag">🇨🇺</div><div class="chip-name">Cuba</div><div class="chip-status">watching</div></div>
+  <div class="country-chip watch"><div class="chip-flag">🇻🇪</div><div class="chip-name">Venezuela</div><div class="chip-status">watching</div></div>
+  <div class="country-chip watch"><div class="chip-flag">🇮🇷</div><div class="chip-name">Iran</div><div class="chip-status">watching</div></div>
+</div>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-n">500<span class="stat-accent">K+</span></div>
+    <div class="stat-l">Officials tracked</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n">18<span class="stat-accent">K+</span></div>
+    <div class="stat-l">Active bills</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n">17</div>
+    <div class="stat-l">Countries</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n"><span class="stat-accent">Free</span></div>
+    <div class="stat-l">Always, for everyone</div>
+  </div>
+</div>
+
+<script>
+// Feed tab filter behavior
+document.querySelectorAll('.feed-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Country chip behavior
+document.querySelectorAll('.country-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.country-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

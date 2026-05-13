@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Bella Vista Slow Zone North · Effort</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f2f4f8;
+  --bg2:      #e8ebf2;
+  --white:    #ffffff;
+  --blue:     #1b3a6b;
+  --blue-md:  #254f92;
+  --blue-lt:  #3a6abf;
+  --blue-pl:  #dde5f5;
+  --blue-vp:  #edf1fb;
+  --gilt:     #b8860b;
+  --gilt-lt:  #d4a832;
+  --gilt-pl:  #f8f0dc;
+  --gilt-rul: rgba(184,134,11,0.22);
+  --ink:      #0e1a2e;
+  --ink-mid:  #2c3e5a;
+  --ink-soft: #5a6e8a;
+  --ink-mut:  #8a9ab8;
+  --rule:     rgba(27,58,107,0.1);
+  --rule-lt:  rgba(27,58,107,0.05);
+  --green:    #155c2d;
+  --green-p:  #e5f0e8;
+  --green-r:  #8cc4a0;
+  --red:      #8b2020;
+  --red-p:    #f7eaea;
+  --amber:    #c47f00;
+  --amber-p:  #fdf3dc;
+  --amber-r:  rgba(196,127,0,0.3);
+  --stalled:  #6b4c1b;
+  --stalled-p:#faf0e0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--gilt-rul);border-radius:10px;}
+
+/* ══ NAV ══ */
+nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;position:sticky;top:0;z-index:200;border-bottom:4px solid var(--gilt);}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;text-decoration:none;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-links{display:flex;gap:6px;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);padding:6px 14px;border-radius:100px;text-decoration:none;transition:color 0.15s,background 0.15s;cursor:pointer;}
+.nav-link:hover{color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.06);}
+.nav-link.active{color:white;background:rgba(255,255,255,0.1);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--gilt-pl);border:2px solid var(--gilt-rul);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gilt);font-weight:700;cursor:pointer;}
+
+/* ══ HERO ══ */
+.hero{background:var(--blue);padding:44px 48px 52px;position:relative;overflow:hidden;}
+.hero::after{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;bottom:0;left:0;right:0;height:26px;display:flex;align-items:center;padding:0 48px;font-size:11px;letter-spacing:0.55em;color:var(--gilt);overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%);mask-image:linear-gradient(to right,black 92%,transparent 100%);}
+.hero-ring{position:absolute;right:-60px;top:-80px;width:380px;height:380px;border-radius:50%;border:40px solid rgba(255,255,255,0.02);pointer-events:none;}
+
+.hero-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.hero-breadcrumb a{color:rgba(255,255,255,0.3);text-decoration:none;}
+.hero-breadcrumb a:hover{color:rgba(255,255,255,0.6);}
+.hero-breadcrumb span{opacity:0.4;}
+
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;}
+.hero-left{flex:1;}
+
+.effort-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.effort-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);border:1px solid var(--gilt-rul);padding:4px 10px;border-radius:3px;}
+.effort-status{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 10px;border-radius:3px;}
+.status-active{background:rgba(21,92,45,0.25);border:1px solid rgba(140,196,160,0.4);color:#86efac;}
+.status-resolved{background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;}
+.status-stalled{background:rgba(196,127,0,0.15);border:1px solid rgba(196,127,0,0.3);color:#fcd34d;}
+
+.effort-title{font-family:'Libre Baskerville',serif;font-size:38px;font-weight:700;color:white;line-height:1.1;margin-bottom:8px;}
+.effort-subtitle{font-family:'Nunito',sans-serif;font-size:15px;font-weight:300;color:rgba(255,255,255,0.55);margin-bottom:20px;line-height:1.6;max-width:640px;}
+
+.effort-meta-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:20px;}
+.effort-meta{display:flex;flex-direction:column;gap:2px;}
+.em-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.em-val{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);font-weight:600;}
+.em-val a{color:var(--gilt-lt);text-decoration:none;}
+.em-val a:hover{text-decoration:underline;}
+
+.hero-stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-top:4px;}
+.hs{background:rgba(255,255,255,0.03);padding:12px 16px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-top:3px;}
+
+.hero-right{display:flex;flex-direction:column;gap:8px;min-width:190px;}
+.btn-follow{background:var(--gilt);border:none;border-radius:100px;padding:12px 24px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:white;cursor:pointer;font-weight:700;transition:background 0.15s;width:100%;}
+.btn-follow:hover{background:var(--gilt-lt);}
+.btn-join{background:transparent;border:1.5px solid rgba(255,255,255,0.18);border-radius:100px;padding:11px 24px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);cursor:pointer;transition:all 0.15s;width:100%;}
+.btn-join:hover{border-color:rgba(255,255,255,0.4);color:rgba(255,255,255,0.85);}
+.btn-submit{background:var(--green-p);border:1px solid var(--green-r);border-radius:100px;padding:11px 24px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);cursor:pointer;font-weight:700;transition:all 0.15s;width:100%;}
+.btn-submit:hover{background:#d0e8d8;}
+.hero-followers{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.22);text-align:center;margin-top:2px;}
+
+/* ══ GOVERNMENT TARGET BANNER ══ */
+.gov-target{background:var(--blue-vp);border-bottom:1px solid var(--rule);padding:14px 48px;display:flex;align-items:center;gap:16px;}
+.gt-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mut);flex-shrink:0;}
+.gt-targets{display:flex;gap:8px;flex-wrap:wrap;}
+.gt-pill{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:100px;background:var(--white);border:1px solid var(--rule);color:var(--blue);cursor:pointer;transition:all 0.12s;}
+.gt-pill:hover{background:var(--blue);color:white;border-color:var(--blue);}
+.gt-arrow{font-size:10px;color:var(--ink-mut);margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);cursor:pointer;white-space:nowrap;}
+.gt-arrow:hover{text-decoration:underline;}
+
+/* ══ BODY LAYOUT ══ */
+.body-layout{display:grid;grid-template-columns:1fr 320px;max-width:1200px;margin:0 auto;}
+
+/* ══ MAIN — THE RECORD ══ */
+.effort-main{padding:36px 48px;border-right:1px solid var(--rule);}
+
+/* Section headers */
+.sec-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.sec-ey::before{content:'◆';font-size:6px;}
+.sec-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:16px;}
+.sec-block{margin-bottom:40px;}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+
+/* ══ TIMELINE / THE RECORD ══ */
+.timeline{position:relative;padding-left:24px;}
+.timeline::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gilt-rul),var(--rule),transparent);}
+
+.tl-group{margin-bottom:28px;}
+.tl-month{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:12px;padding-left:0;position:relative;}
+.tl-month::before{content:'';position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:7px;height:1px;background:var(--gilt-rul);}
+
+.tl-item{position:relative;margin-bottom:12px;}
+.tl-dot{position:absolute;left:-21px;top:8px;width:9px;height:9px;border-radius:50%;border:2px solid;flex-shrink:0;}
+.dot-meeting{background:var(--blue-vp);border-color:var(--blue-lt);}
+.dot-document{background:var(--gilt-pl);border-color:var(--gilt);}
+.dot-submission{background:var(--green-p);border-color:var(--green-r);}
+.dot-response{background:var(--bg2);border-color:var(--ink-mut);}
+.dot-milestone{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-pl);}
+.dot-stalled{background:var(--amber-p);border-color:var(--amber-r);}
+
+.tl-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;transition:box-shadow 0.12s;}
+.tl-card:hover{box-shadow:0 3px 12px rgba(27,58,107,0.07);}
+.tl-card-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.tl-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:1px;}
+.type-meeting{background:var(--blue-vp);color:var(--blue-lt);border:1px solid var(--blue-pl);}
+.type-document{background:var(--gilt-pl);color:var(--gilt);border:1px solid var(--gilt-rul);}
+.type-submission{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
+.type-response{background:var(--bg2);color:var(--ink-soft);border:1px solid var(--rule);}
+.type-milestone{background:var(--blue);color:white;border:1px solid var(--blue);}
+.type-stalled{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.tl-title{font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;color:var(--ink);flex:1;line-height:1.35;}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);flex-shrink:0;margin-top:2px;}
+.tl-body{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.65;}
+.tl-body strong{color:var(--ink);}
+.tl-actors{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.tl-actor{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;padding:2px 7px;border-radius:3px;background:var(--bg);border:1px solid var(--rule);color:var(--ink-soft);}
+.tl-actor.actor-you{background:var(--blue-vp);border-color:var(--blue-pl);color:var(--blue);}
+.tl-docs{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.tl-doc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;padding:3px 8px;border-radius:3px;background:var(--gilt-pl);border:1px solid var(--gilt-rul);color:var(--stalled);cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:4px;}
+.tl-doc:hover{background:var(--gilt-rul);}
+
+/* ══ DOCUMENT VAULT ══ */
+.doc-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--rule-lt);}
+.doc-row:last-child{border-bottom:none;}
+.doc-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.doc-icon.pdf{background:var(--red-p);border:1px solid rgba(139,32,32,0.15);}
+.doc-icon.doc{background:var(--blue-vp);border:1px solid var(--blue-pl);}
+.doc-icon.img{background:var(--green-p);border:1px solid var(--green-r);}
+.doc-body{flex:1;min-width:0;}
+.doc-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:2px;}
+.doc-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);flex-shrink:0;}
+
+/* ══ RELATED EFFORTS ══ */
+.related-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.12s;}
+.related-card:hover{box-shadow:0 4px 14px rgba(27,58,107,0.08);}
+.rc-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.rc-status{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:1px;}
+.rc-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--blue);flex:1;line-height:1.3;}
+.rc-org{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-bottom:4px;}
+.rc-note{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.5;}
+
+/* ══ SIDEBAR ══ */
+.effort-sidebar{padding:28px 24px;background:var(--white);}
+.sb-block{margin-bottom:26px;padding-bottom:26px;border-bottom:1px solid var(--rule);}
+.sb-block:last-child{border-bottom:none;}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gilt);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.sb-ey::before{content:'◆';font-size:5.5px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+
+/* participant markers */
+.participant-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule-lt);}
+.participant-row:last-child{border-bottom:none;}
+.p-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue-vp);border:2px solid var(--blue-pl);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--blue);flex-shrink:0;}
+.p-avatar.org{background:var(--gilt-pl);border-color:var(--gilt-rul);color:var(--gilt);border-radius:6px;}
+.p-body{flex:1;min-width:0;}
+.p-name{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-role{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:1px;}
+
+/* status tracker */
+.status-track{display:flex;flex-direction:column;gap:0;}
+.st-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule-lt);}
+.st-row:last-child{border-bottom:none;}
+.st-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.st-dot.done{background:var(--green);}
+.st-dot.active{background:var(--gilt);box-shadow:0 0 0 3px var(--gilt-pl);}
+.st-dot.pending{background:var(--bg2);border:1px solid var(--rule);}
+.st-label{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);}
+.st-label.done{color:var(--ink-soft);}
+.st-label.active{color:var(--ink);font-weight:700;}
+.st-label.pending{color:var(--ink-mut);}
+.st-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:2px;}
+
+/* issue tags */
+.issue-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.issue-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:var(--bg);border:1px solid var(--rule);color:var(--ink-soft);cursor:pointer;}
+.issue-tag:hover{background:var(--blue);color:white;border-color:var(--blue);}
+
+/* agency card */
+.agency-card{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.agency-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:2px;}
+.agency-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;}
+.agency-contact{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);}
+.agency-contact a{color:var(--blue-lt);text-decoration:none;}
+.agency-contact a:hover{text-decoration:underline;}
+.agency-btn{margin-top:8px;width:100%;background:var(--green-p);border:1px solid var(--green-r);border-radius:100px;padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);cursor:pointer;font-weight:700;transition:all 0.12s;}
+.agency-btn:hover{background:#d0e8d8;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">F<span>O</span>RA</a>
+  <div class="nav-links">
+    <span class="nav-link">Feed</span>
+    <span class="nav-link active">The Record</span>
+    <span class="nav-link">Discourse</span>
+    <span class="nav-link">My Stack</span>
+  </div>
+  <div class="nav-right">
+    <div class="nav-avatar">NG</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-ring"></div>
+  <div class="hero-breadcrumb">
+    <a href="#">Philadelphia</a><span>/</span>
+    <a href="#">19147 · Bella Vista</a><span>/</span>
+    <a href="#">Community Efforts</a>
+  </div>
+  <div class="hero-top">
+    <div class="hero-left">
+      <div class="effort-eyebrow">
+        <span class="effort-type">Civic Effort</span>
+        <span class="effort-status status-stalled">⬤ Stalled — Awaiting City Response</span>
+      </div>
+      <div class="effort-title">Bella Vista Slow Zone North</div>
+      <div class="effort-subtitle">Reduce vehicle speeds on residential streets between South St, 11th St, Christian St, and 4th St. Lower speed limit to 20 MPH. Install speed cushions and corner clearances near Nebinger, Meredith, and Santore Library.</div>
+
+      <div class="effort-meta-row">
+        <div class="effort-meta">
+          <div class="em-label">Lead org</div>
+          <div class="em-val"><a href="#">Bella Vista Neighbors Assn.</a></div>
+        </div>
+        <div class="effort-meta">
+          <div class="em-label">Government target</div>
+          <div class="em-val"><a href="#">OTIS / Philly Streets</a></div>
+        </div>
+        <div class="effort-meta">
+          <div class="em-label">Opened</div>
+          <div class="em-val">May 2018</div>
+        </div>
+        <div class="effort-meta">
+          <div class="em-label">Application filed</div>
+          <div class="em-val">Dec 13, 2018</div>
+        </div>
+        <div class="effort-meta">
+          <div class="em-label">Decision deadline</div>
+          <div class="em-val">Mar 1, 2019</div>
+        </div>
+      </div>
+
+      <div class="hero-stat-strip">
+        <div class="hs"><div class="hs-num">9</div><div class="hs-label">Participants</div></div>
+        <div class="hs"><div class="hs-num">14</div><div class="hs-label">Events logged</div></div>
+        <div class="hs"><div class="hs-num">7</div><div class="hs-label">Documents</div></div>
+        <div class="hs"><div class="hs-num">4</div><div class="hs-label">Support orgs</div></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <button class="btn-follow">+ Follow</button>
+      <button class="btn-join">Join this effort</button>
+      <button class="btn-submit">↗ Submit to OTIS</button>
+      <div class="hero-followers">34 citizens following</div>
+    </div>
+  </div>
+</div>
+
+<!-- GOVERNMENT TARGET BANNER -->
+<div class="gov-target">
+  <span class="gt-label">Government targets</span>
+  <div class="gt-targets">
+    <span class="gt-pill">🏛 OTIS / Vision Zero PHL</span>
+    <span class="gt-pill">🏛 Philly Streets Dept.</span>
+    <span class="gt-pill">👤 Councilman Mark Squilla · 1st District</span>
+    <span class="gt-pill">👤 Traffic Engineering Division</span>
+  </div>
+  <span class="gt-arrow">Submit resolution via FORA →</span>
+</div>
+
+<!-- BODY -->
+<div class="body-layout">
+
+  <!-- MAIN -->
+  <div class="effort-main">
+
+    <!-- THE RECORD -->
+    <div class="sec-block">
+      <div class="sec-head">
+        <div>
+          <div class="sec-ey">Civic Record</div>
+          <div class="sec-title">The Effort Timeline</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);">14 events · May 2018 – Feb 2021</span>
+      </div>
+
+      <div class="timeline">
+
+        <!-- MAY 2018 -->
+        <div class="tl-group">
+          <div class="tl-month">May 2018</div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-milestone"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-milestone">Milestone</span>
+                <div class="tl-title">Transportation Committee formed — Noah Goldman joins</div>
+                <div class="tl-date">May 23</div>
+              </div>
+              <div class="tl-body">Eugene Desyatnik welcomes Noah Goldman (RA, AIA) to the BVNA Transportation Committee. Outgoing chair Joe Celentano transitions. Active issues identified: curb cuts at Rite Aid, 7th/Passyunk sight lines, 11th St bike lane, stop signs at Montrose/Nebinger.</div>
+              <div class="tl-actors">
+                <span class="tl-actor">Eugene Desyatnik · BVNA</span>
+                <span class="tl-actor actor-you">Noah Goldman · RA</span>
+                <span class="tl-actor">Joe Celentano</span>
+                <span class="tl-actor">Joseph Alkus</span>
+                <span class="tl-actor">Matt Skolnik</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JUNE 2018 -->
+        <div class="tl-group">
+          <div class="tl-month">June 2018</div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-document"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-document">Design work</span>
+                <div class="tl-title">First aerial sketches — 7th & Passyunk pedestrian refuge</div>
+                <div class="tl-date">Jun 8</div>
+              </div>
+              <div class="tl-body">Noah Goldman produces aerial overlays of 7th/Passyunk identifying triangular pedestrian refuge zone, proposed crosswalk locations, fire hydrant constraints, and sight line issues. References Janette Sadek-Khan / NYCDOT sneckdown approach and NACTO speed table standards.</div>
+              <div class="tl-actors">
+                <span class="tl-actor actor-you">Noah Goldman · RA</span>
+                <span class="tl-actor">Eugene Desyatnik</span>
+              </div>
+              <div class="tl-docs">
+                <span class="tl-doc">📎 aerial-7th_Passyunk2.jpg</span>
+                <span class="tl-doc">📎 sneckdowns-01.jpg</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-meeting"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-meeting">Committee meeting</span>
+                <div class="tl-title">Site visit — 7th, Passyunk & Carpenter</div>
+                <div class="tl-date">Jun 21</div>
+              </div>
+              <div class="tl-body">Committee meets on location. Joe Alkus raises concern: proposed triangle doesn't resolve mid-block crossing between Nebinger and Santore Library. Nate Hammitt notes manhole cover constraints. Matt Skolnik requests additional signage at library crossing.</div>
+              <div class="tl-actors">
+                <span class="tl-actor actor-you">Noah Goldman</span>
+                <span class="tl-actor">Nate Hammitt · AIA</span>
+                <span class="tl-actor">Joseph Alkus · BVNA Safety</span>
+                <span class="tl-actor">Matt Skolnik</span>
+                <span class="tl-actor">Eugene Desyatnik</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-document"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-document">Design revision</span>
+                <div class="tl-title">Iterated sketch — crosshatch crosswalk, pedestrian/parklet delineation, MMAX colorway</div>
+                <div class="tl-date">Jun 22–29</div>
+              </div>
+              <div class="tl-body">Multiple design iterations respond to Alkus concerns. Stop signs retained. Pedestrian egress zone separated from restaurant parklet by color. MMAX Corundum pavement product researched. Trigonometry calculated for lane widths. Request sent to Traffic Engineering for survey CAD files.</div>
+              <div class="tl-actors">
+                <span class="tl-actor actor-you">Noah Goldman</span>
+                <span class="tl-actor">Nate Hammitt</span>
+              </div>
+              <div class="tl-docs">
+                <span class="tl-doc">📎 7thpassyunk_sk2.png</span>
+                <span class="tl-doc">📎 7thpassyunk_trig.png</span>
+                <span class="tl-doc">📎 MMAX Colors Pantone.pdf</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JULY 2018 -->
+        <div class="tl-group">
+          <div class="tl-month">July 2018</div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-meeting"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-meeting">Agency meeting</span>
+                <div class="tl-title">On-site with Traffic Engineering — 7th & Carpenter</div>
+                <div class="tl-date">Jul 31</div>
+              </div>
+              <div class="tl-body">Eugene Desyatnik and Joe Alkus meet with Philly Traffic Engineering at the intersection. City reviews tools available: plaza app, speed humps, signals, pedestrian refuge, added crosswalks. Outcome: crosswalks at 7th/Passyunk will require removing up to 3 parking spots per crossing (6 total). City to follow up.</div>
+              <div class="tl-actors">
+                <span class="tl-actor">Eugene Desyatnik · BVNA</span>
+                <span class="tl-actor">Joseph Alkus · BVNA</span>
+                <span class="tl-actor">Traffic Engineering · Philly Streets</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-document"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-document">Design — final iteration</span>
+                <div class="tl-title">sk3 — triangular crosswalk with egress/parklet delineation, all stop signs retained</div>
+                <div class="tl-date">Jul 8–9</div>
+              </div>
+              <div class="tl-body">Final sketch iteration produced. Stop signs remain at all existing locations. Crosshatch crosswalk pattern proposed — unusual for Philly. Inspiration: Oakland Chinatown, Zurich, NACTO design guides. Indego bike share siting explored for refuge zone — NACTO siting guide reviewed for clearance requirements.</div>
+              <div class="tl-actors">
+                <span class="tl-actor actor-you">Noah Goldman</span>
+                <span class="tl-actor">Nate Hammitt</span>
+              </div>
+              <div class="tl-docs">
+                <span class="tl-doc">📎 7thpassyunk_sk3.png</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DECEMBER 2018 -->
+        <div class="tl-group">
+          <div class="tl-month">December 2018</div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-milestone"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-milestone">Pivot</span>
+                <div class="tl-title">Effort shifts to Slow Zone Program — two applications required</div>
+                <div class="tl-date">Dec 12</div>
+              </div>
+              <div class="tl-body">Matthew Solomon volunteers to file Slow Zone application for Bella Vista North. OTIS advises Christian St cannot be included (two-way with center line) — two separate applications required for North and South zones. Only 2 Slow Zone awards planned citywide for 2019. SOSNA, PSCA/EPX also competing.</div>
+              <div class="tl-actors">
+                <span class="tl-actor">Matthew Solomon · Applicant</span>
+                <span class="tl-actor">Eugene Desyatnik · BVNA</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-submission"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-submission">Submission</span>
+                <div class="tl-title">Slow Zone application filed — Bella Vista / Queen Village North</div>
+                <div class="tl-date">Dec 13</div>
+              </div>
+              <div class="tl-body">Matthew Solomon submits completed application to Charlotte Castle, Vision Zero / OTIS. Application includes: contact form, Slow Zone boundary map (South–11th–Christian–4th), Traffic Safety Concern Form, letter to Councilman Squilla requesting signature, ~20 signatures gathered. BVNA board asked for letter of support.</div>
+              <div class="tl-actors">
+                <span class="tl-actor">Matthew Solomon · Lead applicant</span>
+                <span class="tl-actor">Eugene Desyatnik · BVNA</span>
+              </div>
+              <div class="tl-docs">
+                <span class="tl-doc">📄 phila-slowzoneapp.pdf</span>
+                <span class="tl-doc">📄 20181213144043.pdf · Application</span>
+                <span class="tl-doc">📄 bvna_slow_zone_letter_of_support.doc</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-submission"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-submission">Endorsement</span>
+                <div class="tl-title">Ward committee support — all South Philly applications endorsed</div>
+                <div class="tl-date">Dec 13</div>
+              </div>
+              <div class="tl-body">Mark Kasten reports from ward committee meeting: ward will support all slow zone applicants from the ward (not just one). Ward includes neighborhoods throughout South Philly east of Broad. Mark Kasten to request formal ward letter of support for BVNA application.</div>
+              <div class="tl-actors">
+                <span class="tl-actor">Mark Kasten · Ward Committee</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEBRUARY 2021 -->
+        <div class="tl-group">
+          <div class="tl-month">February 2021</div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-document"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-document">Design work</span>
+                <div class="tl-title">601 Christian Pedestrian Plaza — fresh drawings, speed tables for level crosswalks</div>
+                <div class="tl-date">Feb 8</div>
+              </div>
+              <div class="tl-body">Effort revived at 6th & Passyunk under new scope. Noah Goldman produces architectural drawings for a pedestrian plaza at the triangular parcel. Speed tables designed for level crossings. Dan Rosin (601 Christian property owner) confirms he and partner Rafi Licht are supportive and had previously been asked by Streets to extend curbs — cost was the barrier.</div>
+              <div class="tl-actors">
+                <span class="tl-actor actor-you">Noah Goldman · RA</span>
+                <span class="tl-actor">Eugene Desyatnik · BVNA</span>
+                <span class="tl-actor">Dan Rosin · Property owner</span>
+                <span class="tl-actor">Rafi Licht · Property owner</span>
+              </div>
+              <div class="tl-docs">
+                <span class="tl-doc">📄 20210208 - 6TH AND PASSYUNK.pdf</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot dot-stalled"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-type type-stalled">Stalled</span>
+                <div class="tl-title">City CAD files never delivered — effort awaiting next move</div>
+                <div class="tl-date">Feb 9</div>
+              </div>
+              <div class="tl-body">Traffic Engineering never responded with requested survey CAD files. El Bocado restaurant closed, removing urgency at 7th/Passyunk. Effort remains open — survey drawings still needed to produce accurate submission documents. Next step: follow up with Traffic Engineering or pursue plaza application through Streets Dept directly.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+    </div>
+
+    <!-- DOCUMENT VAULT -->
+    <div class="sec-block">
+      <div class="sec-head">
+        <div>
+          <div class="sec-ey">Document Vault</div>
+          <div class="sec-title">Effort Files</div>
+        </div>
+      </div>
+
+      <div class="doc-row">
+        <div class="doc-icon pdf">📄</div>
+        <div class="doc-body">
+          <div class="doc-name">Vision Zero Slow Zone Application — Bella Vista/Queen Village North</div>
+          <div class="doc-meta">Submitted by Matthew Solomon · Filed Dec 13, 2018 · To: Charlotte Castle, OTIS</div>
+        </div>
+        <div class="doc-date">Dec 2018</div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon doc">📝</div>
+        <div class="doc-body">
+          <div class="doc-name">BVNA Letter of Support — Slow Zone North</div>
+          <div class="doc-meta">Authored by Eugene Desyatnik · Circulated for board approval</div>
+        </div>
+        <div class="doc-date">Dec 2018</div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon pdf">📄</div>
+        <div class="doc-body">
+          <div class="doc-name">Philadelphia Neighborhood Slow Zone Program Application 2018–2019</div>
+          <div class="doc-meta">Official OTIS / Vision Zero application packet · Charlotte Castle, contact</div>
+        </div>
+        <div class="doc-date">Oct 2018</div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon img">🗺</div>
+        <div class="doc-body">
+          <div class="doc-name">7th & Passyunk — Pedestrian Refuge Sketches (sk2, sk3)</div>
+          <div class="doc-meta">Architectural drawings by Noah Goldman RA · Multiple iterations</div>
+        </div>
+        <div class="doc-date">Jun–Jul 2018</div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon pdf">📄</div>
+        <div class="doc-body">
+          <div class="doc-name">6th & Passyunk Pedestrian Plaza — Architectural Drawings</div>
+          <div class="doc-meta">Speed tables for level crosswalks · Noah Goldman RA · Feb 2021</div>
+        </div>
+        <div class="doc-date">Feb 2021</div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon pdf">📄</div>
+        <div class="doc-body">
+          <div class="doc-name">MMAX Corundum Area Markings — Product Specification</div>
+          <div class="doc-meta">Pavement colorway product researched for pedestrian refuge zone</div>
+        </div>
+        <div class="doc-date">Jun 2018</div>
+      </div>
+    </div>
+
+    <!-- RELATED EFFORTS -->
+    <div class="sec-block">
+      <div class="sec-head">
+        <div>
+          <div class="sec-ey">Discovery</div>
+          <div class="sec-title">Related Efforts</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);">Same issue · Other orgs</span>
+      </div>
+
+      <div class="related-card">
+        <div class="rc-top">
+          <span class="rc-status status-stalled">Stalled</span>
+          <div class="rc-title">East Passyunk Slow Zone</div>
+        </div>
+        <div class="rc-org">PSCA / EPX · South Philadelphia · Filed Dec 2018</div>
+        <div class="rc-note">Competing application for same 2019 award cycle. Aaron Bauman coordinating. Support from Passyunk BID, Community Gardens, Police and Fire. 5th Square email blast used for petitions.</div>
+      </div>
+
+      <div class="related-card">
+        <div class="rc-top">
+          <span class="rc-status status-stalled">Stalled</span>
+          <div class="rc-title">SOSNA Slow Zone Application</div>
+        </div>
+        <div class="rc-org">Society Hill · Filed Dec 2018</div>
+        <div class="rc-note">Third competing application in same ward. Ward committee confirmed it would support all applicants. Outcome of all three applications unknown — city awarded only 2 zones citywide.</div>
+      </div>
+
+      <div class="related-card">
+        <div class="rc-top">
+          <span class="rc-status" style="background:var(--blue-vp);border:1px solid var(--blue-pl);color:var(--blue-lt);">Active</span>
+          <div class="rc-title">Bella Vista Slow Zone South</div>
+        </div>
+        <div class="rc-org">BVNA / Queen Village · South of Christian St · 2018–ongoing</div>
+        <div class="rc-note">Separate application required — Christian St ineligible as boundary. Nebinger School advisory invited BVNA delegate. Parallel effort, same team.</div>
+      </div>
+
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- SIDEBAR -->
+  <div class="effort-sidebar">
+
+    <!-- Status tracker -->
+    <div class="sb-block">
+      <div class="sb-ey">Progress</div>
+      <div class="sb-title">Effort Status</div>
+      <div class="status-track">
+        <div class="st-row"><div class="st-dot done"></div><div><div class="st-label done">Problem identified</div><div class="st-date">May 2018</div></div></div>
+        <div class="st-row"><div class="st-dot done"></div><div><div class="st-label done">Design work completed</div><div class="st-date">Jul 2018</div></div></div>
+        <div class="st-row"><div class="st-dot done"></div><div><div class="st-label done">Application filed</div><div class="st-date">Dec 13, 2018</div></div></div>
+        <div class="st-row"><div class="st-dot done"></div><div><div class="st-label done">Institutional support secured</div><div class="st-date">Dec 13, 2018</div></div></div>
+        <div class="st-row"><div class="st-dot active"></div><div><div class="st-label active">Awaiting city decision</div><div class="st-date">Mar 1, 2019 deadline passed</div></div></div>
+        <div class="st-row"><div class="st-dot pending"></div><div><div class="st-label pending">Survey CAD files from Streets</div></div></div>
+        <div class="st-row"><div class="st-dot pending"></div><div><div class="st-label pending">Plaza application — alternative path</div></div></div>
+        <div class="st-row"><div class="st-dot pending"></div><div><div class="st-label pending">Resolution</div></div></div>
+      </div>
+    </div>
+
+    <!-- Government targets -->
+    <div class="sb-block">
+      <div class="sb-ey">Government</div>
+      <div class="sb-title">Agencies & Officials</div>
+      <div class="agency-card">
+        <div class="agency-name">Vision Zero / OTIS</div>
+        <div class="agency-role">Primary — Slow Zone Program</div>
+        <div class="agency-contact">Charlotte Castle · <a href="#">VisionZeroPHL@phila.gov</a> · 215-686-4421</div>
+        <button class="agency-btn">Submit application via FORA →</button>
+      </div>
+      <div class="agency-card">
+        <div class="agency-name">Philly Streets — Traffic Engineering</div>
+        <div class="agency-role">Survey documents · Crosswalk approval</div>
+        <div class="agency-contact">Tracking number assigned — no response received</div>
+        <button class="agency-btn">Follow up via FORA →</button>
+      </div>
+      <div class="agency-card">
+        <div class="agency-name">Councilman Mark Squilla · 1st District</div>
+        <div class="agency-role">Required — Council letter of support</div>
+        <div class="agency-contact">Letter requested Dec 2018 · Status unknown</div>
+      </div>
+    </div>
+
+    <!-- Participants -->
+    <div class="sb-block">
+      <div class="sb-ey">Participants</div>
+      <div class="sb-title">Who's in this effort</div>
+
+      <div class="participant-row">
+        <div class="p-avatar org">BV</div>
+        <div class="p-body">
+          <div class="p-name">Bella Vista Neighbors Assn.</div>
+          <div class="p-role">Lead organization</div>
+        </div>
+      </div>
+      <div class="participant-row">
+        <div class="p-avatar" style="background:var(--blue-vp);border-color:var(--gilt-rul);font-size:8px;">NG</div>
+        <div class="p-body">
+          <div class="p-name">Noah Goldman · RA AIA</div>
+          <div class="p-role">Architect · Design volunteer</div>
+        </div>
+      </div>
+      <div class="participant-row">
+        <div class="p-avatar">NH</div>
+        <div class="p-body">
+          <div class="p-name">Nathaniel Hammitt · AIA</div>
+          <div class="p-role">Architect · Design volunteer</div>
+        </div>
+      </div>
+      <div class="participant-row">
+        <div class="p-avatar">MS</div>
+        <div class="p-body">
+          <div class="p-name">Matthew Solomon · Esq.</div>
+          <div class="p-role">Attorney · Application lead</div>
+        </div>
+      </div>
+      <div class="participant-row">
+        <div class="p-avatar">JA</div>
+        <div class="p-body">
+          <div class="p-name">Joseph Alkus</div>
+          <div class="p-role">BVNA Public Safety · Critical reviewer</div>
+        </div>
+      </div>
+      <div class="participant-row">
+        <div class="p-avatar org">5S</div>
+        <div class="p-body">
+          <div class="p-name">5th Square</div>
+          <div class="p-role">Civic ally · Petition support</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue tags -->
+    <div class="sb-block">
+      <div class="sb-ey">Issue Tags</div>
+      <div class="sb-title">What this effort is about</div>
+      <div class="issue-tags">
+        <span class="issue-tag">Pedestrian safety</span>
+        <span class="issue-tag">Vision Zero</span>
+        <span class="issue-tag">Traffic calming</span>
+        <span class="issue-tag">ADA access</span>
+        <span class="issue-tag">Schools</span>
+        <span class="issue-tag">Public space</span>
+        <span class="issue-tag">Speed cushions</span>
+        <span class="issue-tag">Crosswalks</span>
+        <span class="issue-tag">19147</span>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+
+</div><!-- /body -->
+
+</body>
+</html>

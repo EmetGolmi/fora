@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Forum Americanum — ERD v7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0e11;
+    --surface: #141518;
+    --border: rgba(255,255,255,0.07);
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --text: rgba(244,237,224,0.88);
+    --muted: rgba(244,237,224,0.38);
+    --new-badge: rgba(45,90,61,0.75);
+    --new-text: #7fd4a0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 32px 24px 80px;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+  }
+  .page-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .version-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+  }
+
+  .changelog {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    background: rgba(45,90,61,0.12);
+    border: 1px solid rgba(45,90,61,0.3);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .changelog-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--new-text);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 12px;
+  }
+  .changelog-title:first-child { margin-top: 0; }
+  .changelog-item {
+    font-size: 11px;
+    color: rgba(244,237,224,0.65);
+    margin-bottom: 5px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0.5px;
+  }
+  .crit { background: rgba(200,60,60,0.3); color: #f09090; }
+  .sem  { background: rgba(60,100,180,0.3); color: #90b0f0; }
+  .hyg  { background: rgba(60,60,60,0.4);   color: #a0a0a0; }
+  .brk  { background: rgba(200,100,0,0.35); color: #f0b060; }
+
+  /* ERD grid */
+  .erd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    grid-column: 1 / -1;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 0 4px;
+    border-bottom: 1px solid var(--border);
+    margin-top: 12px;
+  }
+
+  .entity {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .entity.geo      { border-top: 2px solid #7ab0df; }
+  .entity.core     { border-top: 2px solid #c9a84c; }
+  .entity.election { border-top: 2px solid #8fbf8f; }
+  .entity.identity { border-top: 2px solid #b07adf; }
+  .entity.discourse{ border-top: 2px solid #dfaa7a; }
+  .entity.harm     { border-top: 2px solid #df7a7a; }
+  .entity.psych    { border-top: 2px solid #7ac0df; }
+  .entity.civic    { border-top: 2px solid #c0c070; }
+  .entity.ops      { border-top: 2px solid #9ab0c0; }
+
+  .entity-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .entity-icon { font-size: 14px; }
+  .entity-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+  }
+  .entity-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .entity-tag.new-entity { background: rgba(45,90,61,0.6);  color: #7fd4a0; }
+  .entity-tag.updated    { background: rgba(90,60,20,0.6);  color: #dfaa60; }
+  .entity-tag.breaking   { background: rgba(180,50,50,0.6); color: #f09090; }
+
+  .entity-fields { padding: 6px 0 8px; }
+
+  .field {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 3px 12px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .field:hover { background: rgba(255,255,255,0.03); }
+
+  .field-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    min-width: 30px;
+    text-align: center;
+  }
+  .pk  { background: rgba(201,168,76,0.25);  color: var(--gold-light); }
+  .fk  { background: rgba(90,140,190,0.25);  color: #9ac0e8; }
+  .idx { background: rgba(90,170,110,0.2);   color: #9adf9a; }
+  .new { background: rgba(45,90,61,0.65);    color: #7fd4a0; font-weight: 700; }
+  .fix { background: rgba(90,60,20,0.65);    color: #dfaa60; font-weight: 700; }
+  .brk-badge { background: rgba(180,50,50,0.55); color: #f09090; font-weight: 700; }
+  .dash { color: var(--muted); font-size: 10px; min-width: 30px; text-align: center; }
+
+  .field-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(244,237,224,0.85);
+    flex: 1;
+  }
+  .field-name.renamed { color: #dfaa60; }
+  .field-type {
+    font-size: 10px;
+    color: rgba(244,237,224,0.32);
+    text-align: right;
+    flex-shrink: 0;
+    max-width: 140px;
+  }
+  .note-row {
+    font-size: 9.5px;
+    opacity: 0.6;
+    padding: 1px 12px 3px 48px;
+    font-style: italic;
+    color: rgba(244,237,224,0.55);
+    line-height: 1.4;
+  }
+
+  .legend {
+    max-width: 900px;
+    margin: 48px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .legend-title {
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .legend-item {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">Forum Americanum — Entity Relationship Diagram</div>
+  <div class="page-subtitle">Civic Intelligence Platform · Full Schema Reference</div>
+  <div class="version-badge">v7 · 2026-03-12 · UK/City-State Schema Resolution — 12 changes across 4 entities</div>
+</div>
+
+<div class="changelog">
+  <div class="changelog-title">v7 Changes — UK &amp; City-State Schema Resolution</div>
+
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Jurisdiction: added <code>government_type</code> enum (adds <code>geographic_only</code> value — England has a boundary but no government layer). Added <code>status</code> enum (active · suspended · dissolved · pending) + <code>suspended_since</code> date nullable + <code>suspension_reason</code> text nullable. Enables NI Assembly collapse modeling and any suspended legislature globally.</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Office: 5 new fields. <code>concurrent_holders_required</code> integer default 1 — UI contract: always render this many active Terms. <code>holder_balance_rule</code> enum (none · opposing_parties · community_designation · proportional · reserved_community). <code>investiture_dates</code> date[] nullable — fixed changeover dates (San Marino Apr 1 / Oct 1). <code>role_derived_from_office_id</code> FK→Office nullable — Andorra co-prince derives from French President office; cascade on source term end. <code>living_regency</code> boolean default false — Liechtenstein: Hans-Adam II sovereign but Alois holds operational authority.</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Person: added <code>community_designation</code> enum nullable (unionist · nationalist · other · not_applicable). Formal constitutional category used in Stormont power-sharing validation — NOT a political opinion field. Stored structurally; displayed only in NI Assembly context.</div>
+  <div class="changelog-item"><span class="tag brk">BREAK</span> CivicBody: <code>jurisdiction_id</code> (single FK) replaced by <code>jurisdiction_ids uuid[]</code>. Breaking change. Required for GFA North/South Implementation Bodies (Waterways Ireland etc.) which span UK + Republic of Ireland. Also covers US interstate compacts and British-Irish Council. Single-jurisdiction bodies store a one-element array — no functional regression for existing data.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Action (future Bill entity): added <code>territorial_scope</code> enum (uk_wide · england_only · england_wales · england_wales_ni · scotland_only · wales_only · ni_only · devolved_varies). Drives address-based legislation filtering — Manchester address resolves England-only bills correctly without a separate English parliament record.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> Jurisdiction system_type enum: added <code>crown_dependency</code> (Jersey, Guernsey, Isle of Man — not UK sub-jurisdictions, not sovereign states; Crown handles defense/foreign affairs).</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> England modeled as Jurisdiction with government_type: geographic_only — has boundary, no Offices. Resolves West Lothian address lookup gap without creating a phantom English parliament.</div>
+  <div class="changelog-item"><span class="tag hyg">HYG</span> Westminster Parliament modeled as one Office under UK Jurisdiction with territorial_scope: uk_wide. English-only legislation gets territorial_scope: england_only — same body, scoped output. No institution split.</div>
+
+  <div class="changelog-title">v6 Changes (carried forward)</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> CivicBody fully specced — 20 fields. CivicBodyTag join table added.</div>
+  <div class="changelog-item"><span class="tag crit">CRIT</span> Term: office_id nullable + civic_body_id FK added. CHECK: exactly one of office_id / civic_body_id NOT NULL.</div>
+  <div class="changelog-item"><span class="tag sem">SEM</span> AddressLookup: civic_body_ids uuid[] promoted from pending to active.</div>
+</div>
+
+<div class="erd-grid">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §1 GEOGRAPHIC FOUNDATION                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 1 — Geographic Foundation</div>
+
+<!-- Jurisdiction -->
+<div class="entity geo">
+  <div class="entity-header">
+    <div class="entity-icon">🌐</div>
+    <div class="entity-name">Jurisdiction</div>
+    <span class="entity-tag updated">updated v7</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">system_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">federal_democratic_republic · unitary_democratic_republic · constitutional_monarchy · absolute_monarchy · single_party_state · theocracy · crown_dependency ·&nbsp;<strong>+others</strong></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">government_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">full_government · geographic_only · devolved · federal_constituent · territory · special_administrative_region · crown_dependency</div>
+    <div class="note-row">geographic_only → England: has boundary polygon, no Office records. Prevents phantom parliament. Drives address lookup without creating ghost institutions.</div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">status</span><span class="field-type">enum default active</span></div>
+    <div class="note-row">active · suspended · dissolved · pending</div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">suspended_since</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">suspension_reason</span><span class="field-type">text (nullable)</span></div>
+    <div class="note-row">NI Assembly suspended 2022–2024. Platform banner: "Assembly suspended — direct rule applies." Also covers Venezuela, Belarus, Myanmar etc.</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_id</span><span class="field-type">→ self (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">country_code</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">hardcoded_config</span><span class="field-type">jsonb</span></div>
+    <div class="note-row">NI: windsor_framework_applies: true · community_designation_system: true. England: geographic_only: true · devolved_government: false.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exceptions_notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- District -->
+<div class="entity geo">
+  <div class="entity-header">
+    <div class="entity-icon">📍</div>
+    <div class="entity-name">District</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundary_polygon</span><span class="field-type">geometry</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">census_geoid</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">population</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- AddressLookup -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔑</div>
+    <div class="entity-name">AddressLookup</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">address_hash</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">lat</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">lng</span><span class="field-type">float</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">district_ids</span><span class="field-type">uuid[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_body_ids</span><span class="field-type">uuid[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cached_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §2 GOVERNMENT STRUCTURE                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 2 — Government Structure</div>
+
+<!-- Office -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">🏛</div>
+    <div class="entity-name">Office</div>
+    <span class="entity-tag updated">updated v7</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">branch</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">term_length_years</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">term_limit</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_elected</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">seats</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_active</span><span class="field-type">boolean default true</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">abolished_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">abolished_notes</span><span class="field-type">text (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">concurrent_holders_required</span><span class="field-type">integer default 1</span></div>
+    <div class="note-row">UI contract: always render this many active Term records. San Marino Captains Regent = 2. Andorra Co-Princes = 2. Swiss Federal Council = 7. Default 1 covers all standard offices.</div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">holder_balance_rule</span><span class="field-type">enum default none</span></div>
+    <div class="note-row">none · opposing_parties · community_designation · proportional · reserved_community</div>
+    <div class="note-row">community_designation → NI First Minister / Deputy FM must be unionist + nationalist. reserved_community → Singapore presidential reserved elections.</div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">investiture_dates</span><span class="field-type">date[] (nullable)</span></div>
+    <div class="note-row">Fixed calendar changeover dates. San Marino: [04-01, 10-01]. DataAlert fires on these dates prompting holder re-verification.</div>
+    <div class="field"><span class="field-badge fk new">NEW</span><span class="field-name">role_derived_from_office_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="note-row">Andorra: Co-Prince I Office links to French President Office. When source Term ends → cascade triggers DataAlert on derived office. Only case in platform of cross-jurisdiction role derivation.</div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">living_regency</span><span class="field-type">boolean default false</span></div>
+    <div class="note-row">Liechtenstein: Hans-Adam II is sovereign (Term.role: sovereign) but Alois holds operational authority (Term.role: regent_delegated). Prevents "two heads of state" display error. living_regency: true signals UI to show primary + delegated holder differently.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Person -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">👤</div>
+    <div class="entity-name">Person</div>
+    <span class="entity-tag updated">updated v7</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">full_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">photo_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">bio</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">contact_info</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_ids</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_proceedings</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exile_location</span><span class="field-type">string (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">claimed_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">community_designation</span><span class="field-type">enum (nullable)</span></div>
+    <div class="note-row">unionist · nationalist · other · not_applicable</div>
+    <div class="note-row">Formal constitutional category per NI Good Friday Agreement / Stormont rules. NOT a political opinion field. Used only for power-sharing validation (First Minister + Deputy FM must be unionist + nationalist). Display only in NI Assembly context — never shown as a generic profile label.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_spotlight_at</span><span class="field-type">timestamp (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Term -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">📜</div>
+    <div class="entity-name">Term (Incumbency)</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">civic_body_id</span><span class="field-type">→ CivicBody (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">election_id</span><span class="field-type">→ Election (nullable)</span></div>
+    <div class="note-row">⚠ CHECK: exactly one of office_id / civic_body_id NOT NULL</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">role</span><span class="field-type">string (nullable)</span></div>
+    <div class="note-row">Liechtenstein: "sovereign" (Hans-Adam II) vs "regent_delegated" (Alois). San Marino: "Captain Regent". NI: "First Minister" vs "deputy First Minister".</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_current</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">start_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">end_date</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legitimacy_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recognized_by</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- PersonStatus -->
+<div class="entity core">
+  <div class="entity-header">
+    <div class="entity-icon">⚖️</div>
+    <div class="entity-name">PersonStatus</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">mandate_source</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">recognized_by</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_proceedings</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_support_score</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">public_support_note</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">valid_from</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">valid_until</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">exalted_elder</span><span class="field-type">boolean default false</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §3 ELECTIONS & CANDIDACY                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 3 — Elections &amp; Candidacy</div>
+
+<!-- Election -->
+<div class="entity election">
+  <div class="entity-header">
+    <div class="entity-icon">🗳</div>
+    <div class="entity-name">Election</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">result_summary</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Candidacy -->
+<div class="entity election">
+  <div class="entity-header">
+    <div class="entity-icon">🙋</div>
+    <div class="entity-name">Candidacy</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">election_id</span><span class="field-type">→ Election</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">declared_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote_count</span><span class="field-type">integer (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote_pct</span><span class="field-type">decimal (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §4 CIVIC IDENTITY & CLAIMS                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 4 — Civic Identity &amp; Claims</div>
+
+<!-- User -->
+<div class="entity identity">
+  <div class="entity-header">
+    <div class="entity-icon">🪪</div>
+    <div class="entity-name">User</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">email_hash</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_occupation</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_age_range</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_region</span><span class="field-type">string</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">anonymity_level</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_profile</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficialClaim -->
+<div class="entity identity">
+  <div class="entity-header">
+    <div class="entity-icon">✅</div>
+    <div class="entity-name">OfficialClaim</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">term_id</span><span class="field-type">→ Term</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">verification_layer</span><span class="field-type">integer (1–3)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">evidence_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">reviewed_by</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficeCreationRequest -->
+<div class="entity identity">
+  <div class="entity-header">
+    <div class="entity-icon">📝</div>
+    <div class="entity-name">OfficeCreationRequest</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">submitted_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">proposed_title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">proposed_jurisdiction</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">evidence_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_by</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §5 CIVIC ACTIONS & DISCOURSE               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 5 — Civic Actions &amp; Discourse</div>
+
+<!-- Action -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">⚡</div>
+    <div class="entity-name">Action</div>
+    <span class="entity-tag updated">updated v7</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">action_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_id</span><span class="field-type">string</span></div>
+    <div class="field"><span class="field-badge new">NEW</span><span class="field-name">territorial_scope</span><span class="field-type">enum (nullable)</span></div>
+    <div class="note-row">uk_wide · england_only · england_wales · england_wales_ni · scotland_only · wales_only · ni_only · devolved_varies · not_applicable</div>
+    <div class="note-row">Drives address-based legislation filtering for UK. Manchester address → england_only bills surface under UK Parliament (not a phantom English parliament). Edinburgh address → scotland_only bills surface under Holyrood. null = non-UK jurisdictions where territorial scope is not applicable.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">introduced_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ActionPerson -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">🔗</div>
+    <div class="entity-name">ActionPerson</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">role</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">vote</span><span class="field-type">enum (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Source -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">📰</div>
+    <div class="entity-name">Source</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">domain</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">tier</span><span class="field-type">enum (S · A · B · C · ⚠)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">published_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- Contribution -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">💬</div>
+    <div class="entity-name">Contribution</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">source_id</span><span class="field-type">→ Source (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">body</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">stance</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legitimacy_score</span><span class="field-type">decimal</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">steelman_seen</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_pinned_official</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">is_structural_annotation</span><span class="field-type">boolean default false</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ContentFlag -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">🚩</div>
+    <div class="entity-name">ContentFlag</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">contribution_id</span><span class="field-type">→ Contribution</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">reason</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- SentimentSnapshot -->
+<div class="entity discourse">
+  <div class="entity-header">
+    <div class="entity-icon">📊</div>
+    <div class="entity-name">SentimentSnapshot</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_key</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_value</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">for_count</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">against_count</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">computed_at</span><span class="field-type">timestamp</span></div>
+    <div class="note-row">UNIQUE(action_id, cohort_key, cohort_value)</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §6 HARM & WELLBEING                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 6 — Harm &amp; Community Wellbeing</div>
+
+<!-- HarmClaim -->
+<div class="entity harm">
+  <div class="entity-header">
+    <div class="entity-icon">⚠️</div>
+    <div class="entity-name">HarmClaim</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">submitted_by_user_id</span><span class="field-type">→ User</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">source_primary_id</span><span class="field-type">→ Source</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">harm_type</span><span class="field-type">enum[]</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">severity</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">affected_population</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">precedent_cases</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_corroborations</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">mitigation_record</span><span class="field-type">jsonb</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">disputed_by</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- PsychologicalLog -->
+<div class="entity psych">
+  <div class="entity-header">
+    <div class="entity-icon">🧠</div>
+    <div class="entity-name">PsychologicalLog</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">cohort_hash</span><span class="field-type">string (NOT user_id)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">log_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">feeling_emoji</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">feeling_wheel_selection</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §7 CIVIC BODIES                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 7 — Civic Bodies (RCOs · Community Boards · Neighborhood Councils · Cross-Border Bodies)</div>
+
+<!-- CivicBody -->
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🏘</div>
+    <div class="entity-name">CivicBody</div>
+    <span class="entity-tag breaking">breaking v7</span>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge brk-badge">BRK</span><span class="field-name">jurisdiction_ids</span><span class="field-type">uuid[] → Jurisdiction</span></div>
+    <div class="note-row">BREAKING: replaces single jurisdiction_id FK. Single-jurisdiction bodies = one-element array (no functional regression). Cross-border bodies (GFA North/South Implementation Bodies, British-Irish Council, US interstate compacts) = two or more elements. CivicBody is the only entity with multi-jurisdiction FK — Office and Jurisdiction retain single FKs.</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">short_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">body_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">neighborhood_council · community_board · registered_community_org · civic_association · block_club · tax_increment_zone · special_improvement_district · watershed_council · cross_border_implementation_body · intergovernmental_council · other</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">civic_tier</span><span class="field-type">integer 1–4</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">binding_authority</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">process_rights</span><span class="field-type">enum[] (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_basis_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">city_charter · zoning_code · municipal_ordinance · state_statute · federal_statute · international_treaty · informal</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">legal_basis_citation</span><span class="field-type">string</span></div>
+    <div class="note-row">GFA bodies: "Good Friday Agreement 1998, Strand Two, §§8–10"</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">registrar_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">oversight_body_id</span><span class="field-type">→ Office (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundary_polygon</span><span class="field-type">geometry (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">boundaries_may_overlap</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_district_id</span><span class="field-type">→ District (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">member_count</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">member_selection_method</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">registered_at</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">registration_expires_at</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">activation_trigger</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">dissolved_at</span><span class="field-type">date (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">website_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">contact_email</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">meeting_schedule</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">annual_budget_cents</span><span class="field-type">bigint (nullable)</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">rep_claim_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">external_id</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_registrar_sync_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- CivicBodyTag -->
+<div class="entity civic">
+  <div class="entity-header">
+    <div class="entity-icon">🏷</div>
+    <div class="entity-name">CivicBodyTag</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">civic_body_id</span><span class="field-type">→ CivicBody</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">tag</span><span class="field-type">enum</span></div>
+    <div class="note-row">housing · environment · transit · public_safety · education · parks · zoning · economic_development · cultural · health · seniors · youth · accessibility</div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">tagged_by_user_id</span><span class="field-type">→ User (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="note-row">UNIQUE(civic_body_id, tag)</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- §8 DATA QUALITY & OPS                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section-label">§ 8 — Data Quality &amp; Operations</div>
+
+<!-- DataAlert -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔔</div>
+    <div class="entity-name">DataAlert</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_id</span><span class="field-type">uuid (polymorphic)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">alert_type</span><span class="field-type">enum</span></div>
+    <div class="note-row">holder_investiture_due · jurisdiction_suspended · derived_role_source_ended · concurrent_holder_vacant · cross_border_body_status_change · +others</div>
+    <div class="field"><span class="dash">—</span><span class="field-name">severity</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_a</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_a_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_b</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_b_url</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">community_flags</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">auto_resolvable</span><span class="field-type">boolean</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">assigned_to</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolution_notes</span><span class="field-type">text</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">resolved_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- OfficeStatus -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🟢</div>
+    <div class="entity-name">OfficeStatus</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">display_status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="field-badge fk">FK</span><span class="field-name">active_alert_id</span><span class="field-type">→ DataAlert (nullable)</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_verified_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_verified_source</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">election_date</span><span class="field-type">date</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+  </div>
+</div>
+
+<!-- ApiSync -->
+<div class="entity ops">
+  <div class="entity-header">
+    <div class="entity-icon">🔄</div>
+    <div class="entity-name">ApiSync</div>
+  </div>
+  <div class="entity-fields">
+    <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">source_name</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">entity_type</span><span class="field-type">string</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">last_synced_at</span><span class="field-type">timestamp</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">records_processed</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">records_failed</span><span class="field-type">integer</span></div>
+    <div class="field"><span class="dash">—</span><span class="field-name">error_log</span><span class="field-type">text</span></div>
+  </div>
+</div>
+
+</div><!-- /erd-grid -->
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-title">Entity Domain Key</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ab0df"></div> Geographic Foundation</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c9a84c"></div> Government Structure / Core</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8fbf8f"></div> Elections &amp; Candidacy</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#b07adf"></div> Civic Identity</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dfaa7a"></div> Discourse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#df7a7a"></div> Harm &amp; Wellbeing</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ac0df"></div> Psychological</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c0c070"></div> Civic Bodies</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9ab0c0"></div> Operations</div>
+  <div class="legend-title" style="margin-top:8px">Field Badge Key</div>
+  <div class="legend-item"><span class="field-badge pk" style="font-size:9px">PK</span> Primary Key</div>
+  <div class="legend-item"><span class="field-badge fk" style="font-size:9px">FK</span> Foreign Key</div>
+  <div class="legend-item"><span class="field-badge idx" style="font-size:9px">IDX</span> Indexed</div>
+  <div class="legend-item"><span class="field-badge new" style="font-size:9px">NEW</span> Added in v7</div>
+  <div class="legend-item"><span class="field-badge brk-badge" style="font-size:9px">BRK</span> Breaking change (migration required)</div>
+  <div class="legend-title" style="margin-top:8px">v7 Change Summary — 12 changes, 1 breaking</div>
+  <div class="legend-item" style="width:100%;flex-wrap:wrap;gap:6px;line-height:1.6;font-size:10.5px;color:rgba(244,237,224,0.6)">
+    Jurisdiction: +government_type +status +suspended_since +suspension_reason (4 fields) ·
+    Office: +concurrent_holders_required +holder_balance_rule +investiture_dates +role_derived_from_office_id +living_regency (5 fields) ·
+    Person: +community_designation (1 field) ·
+    CivicBody: jurisdiction_id→jurisdiction_ids (BREAKING) ·
+    Action: +territorial_scope (1 field)
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Session Reference v10</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f2f4f8; --bg2:#e8ebf2; --white:#ffffff;
+  --blue:#1b3a6b; --blue-mid:#254f92; --blue-lt:#3a6abf;
+  --blue-pal:#dde5f5; --blue-vpal:#edf1fb;
+  --gilt:#b8860b; --gilt-lt:#d4a832; --gilt-pal:#f8f0dc; --gilt-rul:rgba(184,134,11,0.25);
+  --ink:#0e1a2e; --ink-mid:#2c3e5a; --ink-soft:#5a6e8a; --ink-mut:#8a9ab8;
+  --rule:rgba(27,58,107,0.1); --rule-lt:rgba(27,58,107,0.05);
+  --green:#1a5c35; --green-p:#e8f5ed; --green-r:#a8d8ba;
+  --red:#8b1a1a; --red-p:#faeaea; --red-r:#dba0a0;
+  --amber:#c47f00; --amber-p:#fdf3dc; --amber-r:rgba(196,127,0,0.28);
+  --purple:#4a1f6e; --purp-p:#f0eaf7; --purp-r:#c8a8e8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:var(--rule);border-radius:3px;}
+
+.sidenav{position:fixed;top:0;left:0;bottom:0;width:220px;background:var(--blue);padding:32px 0 24px;display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.sidenav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:900;color:white;letter-spacing:0.06em;padding:0 24px 4px;}
+.sidenav-logo span{color:var(--gilt-lt);}
+.sidenav-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:0 24px 28px;}
+.sidenav-section{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:18px 24px 8px;}
+.sidenav-link{display:flex;align-items:center;gap:8px;padding:7px 24px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.12s;text-decoration:none;border-left:2px solid transparent;}
+.sidenav-link:hover{color:white;background:rgba(255,255,255,0.06);}
+.sidenav-link.active{color:white;border-left-color:var(--gilt-lt);background:rgba(255,255,255,0.06);}
+.sidenav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);flex-shrink:0;}
+.sidenav-link.active .sidenav-dot{background:var(--gilt-lt);}
+.sidenav-new{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;background:rgba(184,134,11,0.25);color:var(--gilt-lt);padding:1px 5px;border-radius:3px;margin-left:2px;}
+.sidenav-footer{margin-top:auto;padding:16px 24px 0;font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.18);line-height:1.8;}
+.main{margin-left:220px;padding:0 0 80px;}
+.doc-section{padding:52px 64px;}
+.bg-white{background:var(--white);}
+.bg-grey{background:var(--bg);}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;}
+.ew-gold{color:var(--gilt);}
+.ew-blue{color:var(--blue-lt);}
+.ew-purple{color:#7c4db8;}
+.section-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.section-desc{font-size:14px;color:var(--ink-soft);max-width:680px;line-height:1.7;margin-bottom:32px;}
+
+.token-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.token-card{border-radius:8px;overflow:hidden;border:1px solid var(--rule);}
+.tc-swatch{height:48px;}
+.tc-body{background:white;padding:10px 12px;}
+.tc-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--ink-mut);text-transform:uppercase;}
+.tc-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);font-weight:600;margin-top:2px;}
+.tc-use{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+.type-row{display:grid;grid-template-columns:160px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule-lt);align-items:baseline;}
+.type-row:last-child{border-bottom:none;}
+.tr-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);}
+.tr-sample{color:var(--ink);}
+
+.comp-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.comp-table th{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);background:var(--blue);padding:10px 14px;text-align:left;}
+.comp-table td{padding:11px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table tr:hover td{background:var(--blue-vpal);}
+.comp-name{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:600;}
+.comp-desc{font-size:12.5px;color:var(--ink-soft);line-height:1.55;}
+.comp-note{font-size:11px;color:var(--ink-mut);margin-top:4px;font-style:italic;}
+.status-done{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--green);}
+.status-next{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--amber);}
+.status-later{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);}
+.status-new{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#7c4db8;}
+
+.locked-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.locked-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;}
+.lc-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:8px;}
+.lc-tag-lock{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
+.lc-tag-new{background:var(--purp-p);color:#7c4db8;border:1px solid var(--purp-r);}
+.lc-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.lc-text{font-size:12px;color:var(--ink-soft);line-height:1.6;}
+
+.pending-list{display:flex;flex-direction:column;gap:10px;}
+.pending-item{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:start;}
+.pending-icon{font-size:18px;flex-shrink:0;}
+.pending-title{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.pending-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.pending-priority{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;margin-top:2px;}
+.p-next{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.p-later{background:var(--bg2);color:var(--ink-mut);border:1px solid var(--rule);}
+.p-new{background:var(--purp-p);color:#7c4db8;border:1px solid var(--purp-r);}
+
+.file-table-wrap{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;}
+.ft-header{display:grid;grid-template-columns:1.4fr 2.2fr 100px;background:var(--blue);padding:10px 16px;}
+.ft-header-cell{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.ft-group{display:grid;grid-template-columns:1.4fr 2.2fr 100px;background:var(--blue-vpal);padding:8px 16px;border-top:1px solid var(--rule);}
+.ft-group-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);grid-column:1/-1;}
+.ft-row{display:grid;grid-template-columns:1.4fr 2.2fr 100px;padding:11px 16px;border-top:1px solid var(--rule-lt);}
+.ft-row:hover{background:var(--blue-vpal);}
+.ft-row.ft-new{border-left:3px solid #7c4db8;}
+.ft-row.ft-arch{border-left:3px solid var(--ink-mut);opacity:0.6;}
+.ft-file{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:500;padding-right:12px;line-height:1.4;}
+.ft-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:12px;}
+.ft-status{font-size:11px;font-weight:600;}
+.ft-status.s-current{color:var(--green);}
+.ft-status.s-new{color:#7c4db8;}
+.ft-status.s-canon{color:var(--green);}
+.ft-status.s-ref{color:var(--blue-lt);}
+.ft-status.s-data{color:var(--amber);}
+.ft-status.s-super{color:var(--ink-mut);font-style:italic;}
+.ft-status.s-arch{color:var(--ink-mut);font-style:italic;}
+.ft-footer{padding:12px 16px;border-top:1px solid var(--rule-lt);background:var(--white);}
+.ft-footer-text{font-size:11px;color:var(--ink-mut);font-style:italic;}
+
+.version-banner{background:var(--blue);padding:32px 64px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;}
+.vb-left{}
+.vb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;}
+.vb-title{font-family:'Libre Baskerville',serif;font-size:36px;font-weight:700;color:white;line-height:1.1;margin-bottom:8px;}
+.vb-sub{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.65;max-width:560px;}
+.vb-stats{display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;min-width:280px;}
+.vbs{background:rgba(255,255,255,0.04);padding:14px 20px;text-align:center;}
+.vbs-n{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:white;}
+.vbs-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+.decision-table{width:100%;border-collapse:collapse;}
+.decision-table th{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);background:var(--blue);padding:10px 14px;text-align:left;}
+.decision-table td{padding:11px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;font-size:12.5px;color:var(--ink-soft);}
+.decision-table tr:last-child td{border-bottom:none;}
+.dt-key{font-weight:700;color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:10px;}
+.dt-lock{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:1px 6px;border-radius:3px;background:var(--green-p);color:var(--green);border:1px solid var(--green-r);margin-right:4px;}
+.dt-new{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:1px 6px;border-radius:3px;background:var(--purp-p);color:#7c4db8;border:1px solid var(--purp-r);margin-right:4px;}
+</style>
+</head>
+<body>
+
+<nav class="sidenav">
+  <div class="sidenav-logo">FO<span>RA</span></div>
+  <div class="sidenav-sub">Session Ref · v10</div>
+  <div class="sidenav-section">Design System</div>
+  <a href="#colors" class="sidenav-link"><div class="sidenav-dot"></div>Color Palette</a>
+  <a href="#type" class="sidenav-link"><div class="sidenav-dot"></div>Typography</a>
+  <a href="#components" class="sidenav-link"><div class="sidenav-dot"></div>Component Library</a>
+  <div class="sidenav-section">This Session</div>
+  <a href="#decisions" class="sidenav-link"><div class="sidenav-dot"></div>Locked Decisions <span class="sidenav-new">v9</span></a>
+  <a href="#screens" class="sidenav-link"><div class="sidenav-dot"></div>Screen Status</a>
+  <a href="#pending" class="sidenav-link"><div class="sidenav-dot"></div>Open Items</a>
+  <a href="#files" class="sidenav-link"><div class="sidenav-dot"></div>All Output Files</a>
+  <div class="sidenav-footer">
+    ERD: v14 · 84 entities<br>
+    Spreadsheet: v27<br>
+    Session: v9 · March 15 2026
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- BANNER -->
+<div class="version-banner">
+  <div class="vb-left">
+    <div class="vb-eyebrow">Forum Americanum · Session Reference</div>
+    <div class="vb-title">Session v10</div>
+    <div class="vb-sub">Gaza &amp; Hamas pages (Option 3 split). 9 modal stats with source tables. Sovereignty contested comparison (10 cases). Discourse tab system: comment threads, psych mirror, 3-round deliberation chamber, participation-weighted vote (60% of modal views). Canonical civic marker system confirmed. 21 hover term definitions. Population figure corrected to 2.1&ndash;2.2M (PCBS 2022).</div>
+  </div>
+  <div class="vb-stats">
+    <div class="vbs"><div class="vbs-n">84</div><div class="vbs-l">ERD entities</div></div>
+    <div class="vbs"><div class="vbs-n">7</div><div class="vbs-l">Canonical tabs</div></div>
+    <div class="vbs"><div class="vbs-n">5</div><div class="vbs-l">Jurisdiction scales</div></div>
+    <div class="vbs"><div class="vbs-n">v27</div><div class="vbs-l">Spreadsheet</div></div>
+  </div>
+</div>
+
+<!-- COLORS -->
+<div id="colors" class="doc-section bg-white">
+  <div class="section-eyebrow ew-gold">Design System</div>
+  <div class="section-title">Color Palette — Unchanged</div>
+  <div class="section-desc">All color tokens from v8 remain canonical. No changes this session.</div>
+  <div class="token-grid">
+    <div class="token-card"><div class="tc-swatch" style="background:#1b3a6b;"></div><div class="tc-body"><div class="tc-name">Blue</div><div class="tc-val">#1b3a6b</div><div class="tc-use">Nav, hero, primary UI</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#b8860b;"></div><div class="tc-body"><div class="tc-name">Gilt</div><div class="tc-val">#b8860b</div><div class="tc-use">Active tab, accents, CTA</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#8b1a1a;"></div><div class="tc-body"><div class="tc-name">Scarlet</div><div class="tc-val">#8b1a1a</div><div class="tc-use">War alert, crisis, NGE threat</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#c47f00;"></div><div class="tc-body"><div class="tc-name">Amber</div><div class="tc-val">#c47f00</div><div class="tc-use">Degraded status, pending, donors</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#2d1a4a;"></div><div class="tc-body"><div class="tc-name">NGE Purple</div><div class="tc-val">#2d1a4a</div><div class="tc-use">NGE entity headers</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#155c2d;"></div><div class="tc-body"><div class="tc-name">Green</div><div class="tc-val">#155c2d</div><div class="tc-use">Active status, confirmed, done</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#f2f4f8;"></div><div class="tc-body"><div class="tc-name">BG</div><div class="tc-val">#f2f4f8</div><div class="tc-use">Page background</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#0a0f1a;"></div><div class="tc-body"><div class="tc-name">Ticker BG</div><div class="tc-val">#0a0f1a</div><div class="tc-use">Scrolling ticker bar background — NEW v9</div></div></div>
+  </div>
+</div>
+
+<!-- TYPOGRAPHY -->
+<div id="type" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-gold">Design System</div>
+  <div class="section-title">Typography — Unchanged</div>
+  <div class="section-desc">All type tokens from v8 remain canonical.</div>
+  <div class="type-row"><div class="tr-label">Display · Hero name</div><div class="tr-sample" style="font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:#1b3a6b;">Libre Baskerville 700</div></div>
+  <div class="type-row"><div class="tr-label">Newspaper headline</div><div class="tr-sample" style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;">Playfair Display Italic</div></div>
+  <div class="type-row"><div class="tr-label">UI body</div><div class="tr-sample" style="font-family:'Nunito',sans-serif;font-size:14px;">Nunito Regular 400</div></div>
+  <div class="type-row"><div class="tr-label">Metadata / mono</div><div class="tr-sample" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;">JetBrains Mono · tabs, chips, labels, ticker</div></div>
+</div>
+
+<!-- COMPONENTS -->
+<div id="components" class="doc-section bg-white">
+  <div class="section-eyebrow ew-blue">Design System</div>
+  <div class="section-title">Component Library — v9 Additions</div>
+  <div class="section-desc">New components standardized this session. All v8 components remain.</div>
+  <table class="comp-table">
+    <thead><tr><th>Component</th><th>Description</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><div class="comp-name">War Ticker</div><div class="comp-note">ticker-bar · ticker-badge.crisis · ticker-track · animation</div></td><td><div class="comp-desc">Scrolling CNBC-style alert bar. Replaces static war-alert div when crisis_active=true. Red pulsing dot badge pinned left with entity/status label. Items scroll continuously (22s loop, duplicated for seamless). Red/amber/white value classes encode urgency. Quiet variant (quiet-ticker) for non-crisis jurisdictions — static one-liner.</div></td><td><span class="status-new">NEW v9</span></td></tr>
+      <tr><td><div class="comp-name">Hero Stats Bar — Standard Order</div><div class="comp-note">hero-stats · hs · hs-num · hs-label</div></td><td><div class="comp-desc">Locked stat order for all jurisdiction hero bars: Population → Freedom → Happiness → GDP or City Budget → Currency/USD. Nations with independent currency show IRR/USD, EUR/USD etc. States and cities drop currency. Neighborhood orgs show members + active efforts instead of GDP. HDI removed from hero — lives in tabs.</div></td><td><span class="status-new">NEW v9</span></td></tr>
+      <tr><td><div class="comp-name">Hero Right Panel — Affiliates</div><div class="comp-note">hero-right · net-label · chip variants</div></td><td><div class="comp-desc">Right column of hero standardized across all entity types. Nations: proxy/affiliated network chips (active=green, degraded=amber, severed=dark-red, neutral=blue) + IRGC regional commands. NGEs: parent/allied relationships + FTO designations. Officials: committee assignments + donor industries + lobbyist contacts. Neighborhood orgs: affiliated orgs + government targets. Representatives + neighborhood groups keep buttons in this column.</div></td><td><span class="status-new">NEW v9</span></td></tr>
+      <tr><td><div class="comp-name">NGE Emblem — Identity Slot</div><div class="comp-note">52×34px img · border 0.5px rgba white · border-radius 2px</div></td><td><div class="comp-desc">Organization flag/emblem sits in the identity slot (Option A) — same position and scale as a national flag. Displayed with a faint white rule border. Right of it: endonym + entity name. Applied to Hezbollah (yellow/green flag) and Quds Force (blue/gold flag). Pattern generalizes to all NGE pages: every entity has a visual mark at this slot.</div></td><td><span class="status-new">NEW v9</span></td></tr>
+      <tr><td><div class="comp-name">Wellbeing Survey Prompt</div><div class="comp-note">wellbeing_pending state · "Rate it ›" amber display</div></td><td><div class="comp-desc">When no FORA-native WellbeingSnapshot exists for a jurisdiction, the Freedom and Happiness stat slots show "Rate it ›" in amber instead of a dash. Clicking opens the Cantril Ladder or civic freedom survey. First contributor seeds the score. confidence_tier: seed → emerging → community → statistically_meaningful → robust. Sub-national jurisdictions (state, city, neighborhood) start in pending state; national scores are seeded from Freedom House / WHR imports.</div></td><td><span class="status-new">NEW v9</span></td></tr>
+      <tr><td><div class="comp-name">7-Tab Structure + Hover Questions</div><div class="comp-note">tabs-inner · tab[title] · ::after tooltip</div></td><td><div class="comp-desc">Universal 7 tabs for all jurisdictions: Overview · Active Crisis ● · Government · Foreign Affairs · Doctrine &amp; History · Discourse · The Record. Each tab has a title= attribute with the civic question shown on hover via CSS ::after tooltip. Questions: "What is this place?" / "What is happening right now?" / "How is it governed?" / "How does it relate to the world?" / "What does it believe?" / "What is contested?" / "What is the record?" Active Crisis is conditional — dot appears only when crisis_active=true.</div></td><td><span class="status-done">LOCKED v8→v9</span></td></tr>
+      <tr><td><div class="comp-name">Gaza / Hamas split (Option 3)</div><div class="comp-note">fora_jurisdiction_gaza.html · fora_nge_hamas.html</div></td><td><div class="comp-desc">Gaza as a jurisdiction (2.1–2.2M people, territory, governance void, 4 CivicIssues). Hamas as an NGE (org structure, political bureau, military wing, designations). Cross-linked via chip in Gaza hero-right and blue info banner on Hamas overview tab. Breadcrumb: Earth → Asia → Middle East → Levant → Palestinian Territories → Gaza Strip.</div></td><td><span class="status-done">Locked v10</span></td></tr>
+      <tr><td><div class="comp-name">Stat modal system — 9 modals</div><div class="comp-note">openStatModal · statData object · isTable branch</div></td><td><div class="comp-desc">Gaza page has 9 clickable stat modals: Population, Freedom, Happiness, GDP, Deaths (6-source comparison table Option C), Displaced, Infrastructure (sector table + callout stats), Ceasefire (3-section structured layout), Sovereignty contested (10-case comparison table). All body text runs through wrapTerms() for hover definitions. Modal box: white, 760px max, 3px gilt top border.</div></td><td><span class="status-done">Locked v10</span></td></tr>
+      <tr><td><div class="comp-name">Hover term definitions — wrapTerms()</div><div class="comp-note">termDefs object · showTermTip · hideTermTip · .fora-term CSS</div></td><td><div class="comp-desc">21 terms with FORA-blue tooltip (gilt top border, white text, fixed positioning, viewport-aware flip). Terms: PA, SADR, TRNC, ICJ, de facto, IDF, Hamas, Oslo, UNRWA, World Bank, Qatar, PLO, Fatah, Polisario, Srebrenica, Nakba, PCBS, Phase 1, Phase 2, Operation Epic Fury, Cantril Ladder, two-state. Applied to all modal body text and table cells.</div></td><td><span class="status-done">Locked v10</span></td></tr>
+      <tr><td><div class="comp-name">Discourse tab system</div><div class="comp-note">fora_discourse_deliberation_v2 wireframe · locked</div></td><td><div class="comp-desc">Comments anchored to section keys (e.g. stat-displaced::scale-in-context). Discourse tab only — not inline. Sorted by upvotes. Psych analysis on every comment: register, rhetorical pattern, legitimate core, what-it-is-not, steelman. Canonical civic marker (SVG ring + credential pill) identifies users — no names, no invented role badges. Psych mirror shown before posting with Revise / Post as written. 3-round deliberation: Proposal (72h) → Last editor response (72h, auto-advance if silent) → Community rebuttal (72h) → Vote opens. Vote threshold: 60% of anyone who opened the modal (lowest bar). Moderator veto as final circuit breaker.</div></td><td><span class="status-done">Locked v10</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- LOCKED DECISIONS -->
+<div id="decisions" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-purple">Session v10</div>
+  <div class="section-title">Locked Decisions</div>
+  <div class="section-desc">Architectural and design decisions made this session that are not to be revisited without explicit discussion.</div>
+  <table class="decision-table">
+    <thead><tr><th style="width:220px;">Decision</th><th>What was decided</th><th style="width:80px;">Status</th></tr></thead>
+    <tbody>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Hero stat order</div></td><td>Population → Freedom → Happiness → GDP/Budget → Currency/USD. Locked for all jurisdiction scales. HDI removed from hero. States drop currency. Cities drop currency. Neighborhood orgs show members + active efforts.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Ticker replaces static alert</div></td><td>The war-alert static div is replaced by a scrolling ticker bar whenever crisis_active=true. The ticker carries war-specific data (day counter, oil, Hormuz, ceasefire status, etc.) that formerly cluttered the hero stats. Non-crisis jurisdictions get a quiet-ticker — a static one-liner in #0e1a2e.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Freedom + Happiness at all scales</div></td><td>Freedom and Happiness are FORA's primary measurement mission, not just display stats. National scores seeded from Freedom House + World Happiness Report. Sub-national scores built bottom-up from user contributions via WellbeingContribution entity. The dash at sub-national scale is replaced by "Rate it ›" survey prompt. This is FORA's original data contribution — the first systematic Freedom and Happiness index at neighborhood scale.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Raster vs. vector governance</div></td><td>FORA needs two parallel governance models. Raster (Westphalian): territory-bounded, every address belongs to one sovereign. Vector (nodal/tribal/communal): people-bounded, authority attaches to communities not coordinates. GovernanceModel entity in ERD v13+ encodes this. Iran is hybrid. Hezbollah, Houthis, Kurds, Catholic Church are vector. Sykes-Picot imposed raster logic on vector-organized societies — sykes_picot_imposed boolean flags this.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>NGE emblem — Option A</div></td><td>Organization flags/emblems go in the identity slot at 52×34px — same as national flag treatment. Option A (identity slot) chosen over Option B (muted background) and Option C (dedicated right panel). Every NGE page gets an emblem in this slot. Pattern generalizes to all entity types with official visual marks.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Iran canonical page renamed</div></td><td>fora_iran_hybrid.html → fora_jurisdiction_iran.html. The toggle page (fora_jurisdiction_iran_toggle.html) is archived — the hybrid/single-page format is canonical. All future Iran work goes to fora_jurisdiction_iran.html.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Gaza / Hamas — Option 3</div></td><td>Two separate pages. fora_jurisdiction_gaza.html = the territory and 2.1–2.2M people. fora_nge_hamas.html = the organization (political bureau, military wing, funding, relationships, designations). Hamas chip in Gaza hero-right links to Hamas NGE page. Hamas org page has blue info banner linking to Gaza jurisdiction page. Hamas breadcrumb: The World / Palestinian Territories / Gaza Strip / Non-Governmental Entities / Hamas — Organization.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Discourse tab system</div></td><td>Comments live in Discourse tab only (not inline). Every piece of information is up for debate. Comments sorted by upvotes — most popular rise. Psych analysis on every comment shown to all readers. User sees own psych mirror before posting with Revise / Post as written. Canonical civic marker (ring + credential pill) for user identity — no names, no invented role badges. Three-round deliberation (72h each). Vote: 60% of anyone who opened the modal (lowest eligibility bar). Last editor has right of first response in Round 2. Moderator veto as final circuit breaker.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Amendment ratification threshold</div></td><td>60% of the eligible pool (anyone who opened the modal). Not 60% of voters — 60% of interested parties. This makes amendments on high-traffic contested content harder to pass than obscure sections, which is correct. Pool denominator = anyone who opened the modal (lowest bar). Vote opens only after all 3 deliberation rounds complete. Moderator may ratify, reject, or reopen deliberation after vote closes.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Population figure corrected</div></td><td>Pre-war Gaza population corrected from 2.3M (UN OCHA projection) to 2.1–2.2M (PCBS 2022 census authority + CIA World Factbook). Applied across all 6 instances on the Gaza page: hero stat, sidebar, body text, CivicIssues, displacement modal cards, stat-pop modal body.</td><td><span class="status-done">Locked</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-lock">LOCK</span>7 canonical tabs</div></td><td>Overview · Active Crisis ● · Government · Foreign Affairs · Doctrine &amp; History · Discourse · The Record. Every jurisdiction uses these 7. Active Crisis is conditional. Sub-national jurisdictions adapt labels (e.g. "Zoning &amp; Land Use" replaces "Foreign Affairs" at city scale). Hover tooltip shows the civic question.</td><td><span class="status-done">Locked v8</span></td></tr>
+      <tr><td><div class="dt-key"><span class="dt-lock">LOCK</span>Governing philosophy page — Iran</div></td><td>fora_iran_gov_philosophy.html: three sections — Doctrine (Velayat-e Faqih with clickable term modal) → Trajectory chart (6,400 BCE–2026) → Religion &amp; Legal Hierarchy table. Section order is locked. Trajectory moved above Religion/Law section this session.</td><td><span class="status-done">Locked v8</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SCREEN STATUS -->
+<div id="screens" class="doc-section bg-white">
+  <div class="section-eyebrow ew-blue">Session v10</div>
+  <div class="section-title">Screen Status — v9 Updates</div>
+  <div class="section-desc">All pages updated this session with the standardized hero (ticker + stat order + affiliates panel).</div>
+  <table class="comp-table">
+    <thead><tr><th>Page</th><th>v9 Changes</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><div class="comp-name">fora_jurisdiction_gaza.html</div><div class="comp-note">NEW v10</div></td><td><div class="comp-desc">Gaza jurisdiction page. Cosmic breadcrumb (Earth → Levant → Palestinian Territories → Gaza Strip). War ticker (active crisis). Hero: Population ~2.1–2.2M / Freedom 15/100 / Happiness Rate it / Economy Collapsed. Hero-right: governance contest chips (Hamas → links to NGE page, PA, Israel, UN). 9 clickable stat modals. Sovereignty contested modal (10 cases). Deaths modal (6 sources, Option C layout). Displacement modal (population callout cards + timeline). Infrastructure modal (sector table + callout stats). Ceasefire modal (3-section structured). 21 hover term definitions via wrapTerms().</div></td><td><span class="status-new">New v10</span></td></tr>
+      <tr><td><div class="comp-name">fora_nge_hamas.html</div><div class="comp-note">NEW v10</div></td><td><div class="comp-desc">Hamas organization page. Breadcrumb: The World / Palestinian Territories / Gaza Strip / Non-Governmental Entities / Hamas — Organization. Entity class: NGE · Militant · Political Party · Sunni Islamist. Blue info banner cross-links to Gaza jurisdiction. 7 tabs: Overview (Hamas paradox — Sunni in Shia axis, two-org structure, endonym/exonym table), Leadership (current + eliminated memorial cards), Timeline (1987–2026), Relationships (6 cards), Designations (split-world table), Discourse, The Record.</div></td><td><span class="status-new">New v10</span></td></tr>
+      <tr><td><div class="comp-name">fora_jurisdiction_iran.html</div><div class="comp-note">Renamed from fora_iran_hybrid.html</div></td><td><div class="comp-desc">War ticker (WAR · DAY 15). Stats: Population / Freedom 14/100 / Happiness #100 / GDP $366B / IRR~630K. Affiliates panel: Axis of Resistance chips (active/degraded/severed) + IRGC regional commands. Freedom + Happiness modals added (Freedom House + WHR sourcing). HDI removed.</div></td><td><span class="status-new">Updated v9</span></td></tr>
+      <tr><td><div class="comp-name">fora_jurisdiction_iran_toggle.html</div><div class="comp-note">Archived — use fora_jurisdiction_iran.html</div></td><td><div class="comp-desc">Updated with same ticker and affiliates panel for reference, but this file is archived. The hybrid single-page format is canonical going forward.</div></td><td><span class="status-new">Archived v9</span></td></tr>
+      <tr><td><div class="comp-name">fora_nge_hezbollah.html</div></td><td><div class="comp-desc">Active ticker (blue badge). Stats: Fighters / Op. status / FTO count / Iran funding / Founded. Relationships panel: Iran/IRGC parent + FTO designations. Hezbollah flag (yellow/green) in identity slot. btn-primary CSS added. Double ticker removed.</div></td><td><span class="status-new">Updated v9</span></td></tr>
+      <tr><td><div class="comp-name">fora_nge_quds_force.html</div></td><td><div class="comp-desc">War ticker (WAR · DAY 15, crisis red). Stats: 15K soldiers / Disrupted status / 4 regional commands / Qaani disputed / FTO 1998. Commands + proxy network panel in hero-right. Quds Force flag (blue/gold) in identity slot.</div></td><td><span class="status-new">Updated v9</span></td></tr>
+      <tr><td><div class="comp-name">fora_org_bvna.html</div></td><td><div class="comp-desc">Quiet ticker added. Stats: Households / Freedom "Rate it ›" / Happiness "Rate it ›" / Members / Active efforts. Affiliated orgs + government targets in hero-right. Wellbeing pending state introduced.</div></td><td><span class="status-new">Updated v9</span></td></tr>
+      <tr><td><div class="comp-name">fora_official_profile.html</div><div class="comp-note">Rep. Don Beyer VA-08</div></td><td><div class="comp-desc">Hero-right now has three labeled sections: committee assignments (Ways &amp; Means, Joint Economic, Science &amp; Technology) + top donor industries with dollar amounts + registered lobbyist contacts with contact counts. Quiet ticker was added then removed per direction — hero stats kept as-is.</div></td><td><span class="status-new">Updated v9</span></td></tr>
+      <tr><td><div class="comp-name">fora_iran_gov_philosophy.html</div></td><td><div class="comp-desc">Trajectory section moved above Religion &amp; Legal Hierarchy. VEF term modal: Article 23 Farsi original added above English translation. Trajectory chart: uncertainty band removed (was causing rendering failures). Chart loads cleanly — 2 datasets (black market rate + CBI official rate) in USD per 1,000 IRR orientation. IRR modal chart added to hero stat.</div></td><td><span class="status-done">Current</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PENDING -->
+<div id="pending" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-purple">Session v10</div>
+  <div class="section-title">Open Items</div>
+  <div class="section-desc">Immediate next steps in priority order.</div>
+  <div class="pending-list">
+    <div class="pending-item">
+      <div class="pending-icon">🗺</div>
+      <div>
+        <div class="pending-title">Overview tab content — Iran</div>
+        <div class="pending-desc">The hero is standardized but the Overview tab body is still old content. Needs: power structure SVG diagram, NGE network web with scraped logos, dual-layer (raster map + vector network diagram), stats bar with modals. This is the most visually ambitious remaining piece.</div>
+      </div>
+      <div class="pending-priority p-next">Next</div>
+    </div>
+    <div class="pending-item">
+      <div class="pending-icon">⚔️</div>
+      <div>
+        <div class="pending-title">Hamas NGE page</div>
+        <div class="pending-desc">Natural follow from Hezbollah and Quds Force. Sunni proxy — different dynamic than Shia proxies. Decapitated leadership. Post-Oct 7 to present. Same page structure as Hezbollah.</div>
+      </div>
+      <div class="pending-priority p-next">Next</div>
+    </div>
+    <div class="pending-item">
+      <div class="pending-icon">✈️</div>
+      <div>
+        <div class="pending-title">Go Elsewhere — 500 errors + missing fields</div>
+        <div class="pending-desc">master-destinations.js integrated but missing flag and why fields in many destination records. Railway production deployment error outstanding. Schema normalization needed.</div>
+      </div>
+      <div class="pending-priority p-next">Next</div>
+    </div>
+    <div class="pending-item">
+      <div class="pending-icon">🇱🇧</div>
+      <div>
+        <div class="pending-title">Lebanon jurisdiction page</div>
+        <div class="pending-desc">Most interesting raster/vector tension case — Hezbollah parallel state, confessional government, no single sovereign. Taiwan + Kosovo editorial policy decisions needed first.</div>
+      </div>
+      <div class="pending-priority p-later">Later</div>
+    </div>
+    <div class="pending-item">
+      <div class="pending-icon">🏛</div>
+      <div>
+        <div class="pending-title">Israel / Gaza jurisdiction pages</div>
+        <div class="pending-desc">Editorial policy decisions needed. Taiwan + Kosovo framing applies. Contested sovereignty, parallel governance, occupation. Requires policy decision before building.</div>
+      </div>
+      <div class="pending-priority p-later">Later</div>
+    </div>
+    <div class="pending-item">
+      <div class="pending-icon">⚖️</div>
+      <div>
+        <div class="pending-title">The Duel wireframe</div>
+        <div class="pending-desc">Structured debate feature with AI fact-checking. Lives in Discourse tab. Not yet wireframed.</div>
+      </div>
+      <div class="pending-priority p-later">Later</div>
+    </div>
+    <div class="pending-item">
+      <div class="pending-icon">🌱</div>
+      <div>
+        <div class="pending-title">Golem wireframes</div>
+        <div class="pending-desc">Formative mentorship platform. Four founding documents complete but no wireframes built yet.</div>
+      </div>
+      <div class="pending-priority p-later">Later</div>
+    </div>
+  </div>
+</div>
+
+<!-- FILES -->
+<div id="files" class="doc-section bg-white">
+  <div class="section-eyebrow ew-blue">Session v10</div>
+  <div class="section-title">All Output Files</div>
+  <div class="section-desc">Complete file inventory. New or updated files this session marked in purple. Archived files in gray.</div>
+
+  <div class="file-table-wrap">
+    <div class="ft-header">
+      <div class="ft-header-cell">File</div>
+      <div class="ft-header-cell">Description</div>
+      <div class="ft-header-cell">Status</div>
+    </div>
+
+    <div class="ft-group"><div class="ft-group-label">Jurisdiction Pages · Iran — Session v10</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_jurisdiction_iran.html</div><div class="ft-desc">Iran jurisdiction · CANONICAL · Renamed from fora_iran_hybrid · War ticker · Standardized hero stats (Pop/Freedom/Happiness/GDP/IRR) · Affiliates panel (Axis of Resistance + IRGC commands) · 7 tabs with hover questions · IRR chart modal · Freedom + Happiness modals</div><div class="ft-status s-new">✓ Canonical</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_jurisdiction_iran_toggle.html</div><div class="ft-desc">Iran toggle (dashboard/newspaper) · Archived · Use fora_jurisdiction_iran.html</div><div class="ft-status s-arch">Archived</div></div>
+    <div class="ft-row"><div class="ft-file">fora_iran_gov_philosophy.html</div><div class="ft-desc">Governing Philosophy + Trajectory + Religion/Law · Trajectory moved above Religion section · VEF modal with Farsi Article 23 · Chart: USD per 1,000 IRR with black market + CBI rates</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_jurisdiction_iran_newspaper.html</div><div class="ft-desc">Newspaper layout exploration · Archived for reference</div><div class="ft-status s-arch">Archived</div></div>
+
+    <div class="ft-group"><div class="ft-group-label">NGE Pages — Session v10</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_nge_hezbollah.html</div><div class="ft-desc">Hezbollah NGE · Active ticker (blue) · Hezbollah flag in identity slot · Relationships + FTO panels · btn-primary CSS fixed · Double ticker removed</div><div class="ft-status s-new">Updated v9</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_nge_quds_force.html</div><div class="ft-desc">IRGC Quds Force NGE · War ticker (crisis red) · Quds Force flag in identity slot · 4 regional commands + proxy network panel</div><div class="ft-status s-new">Updated v9</div></div>
+
+    <div class="ft-group"><div class="ft-group-label">Community &amp; Official Pages — Session v10</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_org_bvna.html</div><div class="ft-desc">BVNA · Quiet ticker · Wellbeing pending "Rate it ›" prompts for Freedom + Happiness · Affiliated orgs + government targets in hero-right</div><div class="ft-status s-new">Updated v9</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_official_profile.html</div><div class="ft-desc">Rep. Don Beyer VA-08 · Committee assignments + donor industries + lobbyist contacts in hero-right · Hero stats kept as-is</div><div class="ft-status s-new">Updated v9</div></div>
+
+    <div class="ft-group"><div class="ft-group-label">Wireframes — Prior Sessions</div></div>
+    <div class="ft-row"><div class="ft-file">fora_entry_flow.html</div><div class="ft-desc">Address entry → Government stack reveal · 4 stages</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_feed.html</div><div class="ft-desc">Home Feed · 3-column · 5 card types</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_bill_us.html</div><div class="ft-desc">Bill Page · H.R. 4471 Broadband Act</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_bill_cuba.html</div><div class="ft-desc">Bill Page · Cuba Ley No. 148 · EN/ES bilingual</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_zoning_bvna.html</div><div class="ft-desc">Zoning tab · BVNA · Active case cards</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_case_824_s8th.html</div><div class="ft-desc">Zoning case folder · 824 S 8th St</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_effort_page.html</div><div class="ft-desc">Effort page · Bella Vista Slow Zone</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_civic_event.html</div><div class="ft-desc">CivicEvent · Temple Israel attack Mar 12 2026</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_psych_analysis.html</div><div class="ft-desc">Psychological Analysis panel · 7 scientific method stages</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_composer.html</div><div class="ft-desc">Contribution Composer · Plain-language type selector</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_signal_v3.html</div><div class="ft-desc">Signal landing page</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_blueprint.html</div><div class="ft-desc">Product blueprint diagram</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group"><div class="ft-group-label">Component Library</div></div>
+    <div class="ft-row"><div class="ft-file">fora_variant_1.html</div><div class="ft-desc">Canonical component set · Five-tier source · Star divider · Steel-man</div><div class="ft-status s-canon">✓ Canonical</div></div>
+    <div class="ft-row"><div class="ft-file">fora_ref_civic_commons.html</div><div class="ft-desc">Design system reference</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group"><div class="ft-group-label">Data &amp; Schema</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_erd_v14.html</div><div class="ft-desc">ERD v14 · 84 entities · §13 Governance Model &amp; Trajectory Layer (GovernanceModel, ParallelAuthorityLayer, AuthorityNode, TrajectoryEra, TrajectorySource, NGEActor, JurisdictionTab) · §14 Wellbeing Measurement Layer (WellbeingSnapshot, WellbeingContribution, WellbeingDimension) · v13 Jurisdiction additions (governance_model, authority_type, endonym, exonyms, trajectory_start_year, crisis_active, wellbeing_pending, stats_order, hero_currency_pair)</div><div class="ft-status s-new">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_erd_v13.html</div><div class="ft-desc">ERD v13 · 78 entities — superseded by v14</div><div class="ft-status s-super">Superseded</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">forum_americanum_governance_v27.xlsx</div><div class="ft-desc">Governance spreadsheet v27 · ERD v14 fields · WellbeingSnapshot layer · 7-tab structure · Wellbeing dimension reference · Ticker component spec · Hero stat order · Jurisdiction scale matrix</div><div class="ft-status s-new">✓ Current</div></div>
+
+    <div class="ft-group"><div class="ft-group-label">Session References</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_session_ref_v10.html</div><div class="ft-desc">This file</div><div class="ft-status s-new">You are here</div></div>
+    <div class="ft-row"><div class="ft-file">fora_session_ref_v9.html</div><div class="ft-desc">Previous session ref — superseded</div><div class="ft-status s-super">Superseded</div></div>
+
+    <div class="ft-footer"><div class="ft-footer-text">All files at /mnt/user-data/outputs/ · ERD: fora_erd_v14.html (84 entities) · Governance data: forum_americanum_governance_v27.xlsx · Session ref: fora_session_ref_v10.html · Canonical marker: fora_marker_options.html · Discourse wireframe: locked v10</div></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const links = document.querySelectorAll('.sidenav-link');
+const sections = document.querySelectorAll('[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  links.forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

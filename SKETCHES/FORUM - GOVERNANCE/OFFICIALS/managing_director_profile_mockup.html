@@ -1,0 +1,359 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.p { max-width: 920px; margin: 0 auto; padding-bottom: 2rem; font-family: var(--font-sans); }
+
+.hero { background: #1c1c1c; color: #f0ebe0; padding: 1.5rem 2rem 0; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; display: flex; gap: 1.5rem; align-items: flex-end; }
+.hero-photo { width: 96px; height: 114px; border-radius: 4px; background: #2a2a2a; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 36px; color: #666; margin-bottom: -1px; }
+.hero-left { flex: 1; padding-bottom: 1.25rem; }
+.eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 5px; font-weight: 500; }
+.hero-name { font-size: 24px; font-weight: 500; color: #f0ebe0; margin-bottom: 8px; }
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.chip-role { background: rgba(180,134,11,0.2); color: #d4a832; border: 0.5px solid rgba(180,134,11,0.4); }
+.chip-status { background: rgba(200,80,80,0.2); color: #e08080; border: 0.5px solid rgba(200,80,80,0.35); }
+.chip-appt { font-size: 11px; color: #7a8a9a; }
+.hero-actions { padding-bottom: 1.25rem; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.btn-contact { padding: 8px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: #b8860b; color: #1c1c1c; border: none; cursor: pointer; font-weight: 500; white-space: nowrap; }
+.btn-follow { padding: 7px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: transparent; color: #d4a832; border: 0.5px solid #b8860b; cursor: pointer; white-space: nowrap; }
+
+.alert-bar { background: #2a1a1a; border-bottom: 1px solid rgba(200,80,80,0.3); padding: 9px 2rem; font-size: 12px; color: #e08080; display: flex; align-items: center; gap: 8px; }
+.alert-dot { width: 6px; height: 6px; border-radius: 50%; background: #e08080; flex-shrink: 0; }
+
+.tab-row { background: #161616; display: flex; padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.tab { font-size: 11px; padding: 11px 12px; color: #5a6a7a; cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; white-space: nowrap; }
+.tab.active { color: #d4a832; border-bottom-color: #b8860b; }
+
+.body { display: grid; grid-template-columns: 1fr 268px; gap: 1.25rem; padding: 1.25rem 0 0; }
+.main { display: flex; flex-direction: column; gap: 1rem; }
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; }
+.card-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: .9rem; font-weight: 500; }
+
+.role-callout { background: var(--color-background-secondary); border-left: 3px solid #b8860b; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.6; }
+.role-callout strong { color: var(--color-text-primary); font-weight: 500; }
+
+.accountability-card { background: var(--color-background-primary); border: 0.5px solid rgba(200,80,80,0.3); border-left: 3px solid #c85050; border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; }
+.accountability-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #c85050; margin-bottom: .9rem; font-weight: 500; }
+.acct-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.acct-row:last-child { border-bottom: none; }
+.acct-key { color: var(--color-text-secondary); }
+.acct-val { font-weight: 500; color: var(--color-text-primary); }
+.acct-val.red { color: #c85050; }
+.acct-source { font-size: 10px; color: var(--color-text-secondary); margin-top: 8px; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 8px; }
+
+.dept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dept-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.dept-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+.dept-why { font-size: 11px; color: var(--color-text-secondary); line-height: 1.4; }
+.dept-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-top: 4px; background: var(--color-background-primary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+
+.staff-list { display: flex; flex-direction: column; gap: 0; }
+.staff-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.staff-row:last-child { border-bottom: none; }
+.staff-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--color-background-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--color-text-secondary); flex-shrink: 0; }
+.staff-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.staff-title { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+.staff-why { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; font-style: italic; }
+.staff-badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-top: 3px; }
+.badge-acting { background: #faeeda; color: #633806; }
+.badge-key { background: #e6f1fb; color: #185fa5; }
+
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 10px; text-align: center; }
+.stat-val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.stat-lbl { font-size: 10px; color: var(--color-text-secondary); margin-top: 3px; }
+
+.timeline { display: flex; flex-direction: column; gap: 0; padding-left: 16px; position: relative; }
+.tl-line { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--color-border-tertiary); }
+.tl-item { position: relative; padding: 0 0 12px 12px; }
+.tl-dot { position: absolute; left: -12px; top: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--color-border-tertiary); }
+.tl-dot.active { background: #b8860b; }
+.tl-dot.flag { background: #c85050; }
+.tl-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.tl-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+
+.salary-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.salary-row:last-child { border-bottom: none; }
+.salary-key { color: var(--color-text-secondary); }
+.salary-val { font-weight: 500; color: var(--color-text-primary); }
+
+@media (prefers-color-scheme: dark) {
+  .badge-acting { background: #412402; color: #fac775; }
+  .badge-key { background: #042c53; color: #85b7eb; }
+}
+</style>
+
+<div class="p">
+  <div class="hero">
+    <div class="hero-photo">AT</div>
+    <div class="hero-left">
+      <div class="eyebrow">Managing Director · City of Philadelphia</div>
+      <div class="hero-name">Adam K. Thiel</div>
+      <div class="hero-chips">
+        <span class="chip chip-role">Appointed — not elected</span>
+        <span class="chip chip-status">On military leave · Interim: Michael Carroll</span>
+        <span class="chip chip-appt">Appointed Jan 2024 by Mayor Parker</span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-contact">Contact Office</button>
+      <button class="btn-follow">+ Follow</button>
+    </div>
+  </div>
+
+  <div class="alert-bar">
+    <div class="alert-dot"></div>
+    Thiel is currently on military leave. Deputy MD Michael Carroll is serving as interim Managing Director.
+  </div>
+
+  <div class="tab-row">
+    <div class="tab active">Overview</div>
+    <div class="tab">Departments</div>
+    <div class="tab">Staff</div>
+    <div class="tab">Accountability</div>
+    <div class="tab">Record</div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <div class="role-callout">
+        <strong>The city's chief operating officer.</strong> The Managing Director runs Philadelphia's day-to-day operations — not elected, appointed by the Mayor. If your street isn't plowed, your trash isn't picked up, or your neighborhood feels unsafe, this office is where that accountability starts. Thiel oversees roughly 20 city departments and thousands of employees.
+      </div>
+
+      <div class="card">
+        <div class="card-label">Office at a glance</div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">~20</div>
+            <div class="stat-lbl">Departments overseen</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">$316K</div>
+            <div class="stat-lbl">Annual salary</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">33 yrs</div>
+            <div class="stat-lbl">Emergency mgmt experience</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accountability-card">
+        <div class="accountability-label">Accountability record — as of March 2026</div>
+        <div class="acct-row">
+          <div class="acct-key">Time out of office in 2025</div>
+          <div class="acct-val red">~5 months</div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-key">Salary paid as time off (2025)</div>
+          <div class="acct-val red">~50% of $316,200</div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-key">Outside consulting income (2024)</div>
+          <div class="acct-val">$305,000+</div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-key">Council members who report direct contact</div>
+          <div class="acct-val red">Minimal — most go to Thurman</div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-key">Military leave disclosure before appointment</div>
+          <div class="acct-val red">Not publicly disclosed</div>
+        </div>
+        <div class="acct-source">Source: Philadelphia Inquirer reporting · Feb 2026 · Payroll records obtained via public records request</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Key departments this office oversees</div>
+        <div class="dept-grid">
+          <div class="dept-item">
+            <div class="dept-name">Philadelphia Fire Department</div>
+            <div class="dept-why">Emergency response, fire prevention, EMS</div>
+            <span class="dept-tag">Public Safety</span>
+          </div>
+          <div class="dept-item">
+            <div class="dept-name">Streets Department</div>
+            <div class="dept-why">Trash pickup, snow removal, road maintenance</div>
+            <span class="dept-tag">Infrastructure</span>
+          </div>
+          <div class="dept-item">
+            <div class="dept-name">Philadelphia Water Dept.</div>
+            <div class="dept-why">Drinking water, stormwater, sewage</div>
+            <span class="dept-tag">Infrastructure</span>
+          </div>
+          <div class="dept-item">
+            <div class="dept-name">Prisons / Dept. of Corrections</div>
+            <div class="dept-why">City jail operations, pre-trial detention</div>
+            <span class="dept-tag">Public Safety</span>
+          </div>
+          <div class="dept-item">
+            <div class="dept-name">Office of Emergency Management</div>
+            <div class="dept-why">Disaster preparedness, crisis coordination</div>
+            <span class="dept-tag">Emergency</span>
+          </div>
+          <div class="dept-item">
+            <div class="dept-name">Dept. of Public Health</div>
+            <div class="dept-why">Disease surveillance, clinics, Kensington response</div>
+            <span class="dept-tag">Health</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Senior staff — who actually runs things day to day</div>
+        <div class="staff-list">
+          <div class="staff-row">
+            <div class="staff-avatar">MC</div>
+            <div>
+              <div class="staff-name">Michael Carroll</div>
+              <div class="staff-title">Deputy MD — Transportation & Infrastructure</div>
+              <div class="staff-why">Currently serving as interim Managing Director during Thiel's leave</div>
+              <span class="staff-badge badge-acting">Acting MD</span>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">BC</div>
+            <div>
+              <div class="staff-name">Brian Clinton</div>
+              <div class="staff-title">Chief of Staff</div>
+              <div class="staff-why">Day-to-day operations of the MD's office</div>
+              <span class="staff-badge badge-key">Key contact</span>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">TM</div>
+            <div>
+              <div class="staff-name">Tara Mohr</div>
+              <div class="staff-title">First Deputy Managing Director</div>
+              <div class="staff-why">Second in command under Thiel</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">DM</div>
+            <div>
+              <div class="staff-name">Dominick Mireles</div>
+              <div class="staff-title">Deputy MD — Community Safety</div>
+              <div class="staff-why">Oversees police, fire, prisons, and emergency management coordination</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">CY</div>
+            <div>
+              <div class="staff-name">Crystal Yates-Gale</div>
+              <div class="staff-title">Deputy MD — Health & Human Services</div>
+              <div class="staff-why">Oversees public health, behavioral health, and social services</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">AP</div>
+            <div>
+              <div class="staff-name">Aparna Palantino</div>
+              <div class="staff-title">Deputy MD — Capital Program Office</div>
+              <div class="staff-why">Manages city infrastructure investments and capital projects</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">AS</div>
+            <div>
+              <div class="staff-name">Aubrey C. Powers</div>
+              <div class="staff-title">Deputy MD — Community Services</div>
+              <div class="staff-why">Parks, recreation, libraries, and neighborhood services</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">SS</div>
+            <div>
+              <div class="staff-name">Stephen St. Vincent</div>
+              <div class="staff-title">Deputy MD — Strategic Initiatives</div>
+              <div class="staff-why">Special projects and mayoral priority initiatives</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">DW</div>
+            <div>
+              <div class="staff-name">David G. Wilson</div>
+              <div class="staff-title">Deputy MD — General Services</div>
+              <div class="staff-why">City facilities, fleet, and procurement</div>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar">SG</div>
+            <div>
+              <div class="staff-name">Sharon Gallagher</div>
+              <div class="staff-title">Senior Director of Communications</div>
+              <div class="staff-why">Press inquiries for the MD's office go through her</div>
+              <span class="staff-badge badge-key">Media contact</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+
+      <div class="card">
+        <div class="card-label">Career timeline</div>
+        <div class="timeline">
+          <div class="tl-line"></div>
+          <div class="tl-item">
+            <div class="tl-dot active"></div>
+            <div class="tl-title">Managing Director</div>
+            <div class="tl-sub">Jan 2024 – present</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot flag"></div>
+            <div class="tl-title">Army Reserve — joined</div>
+            <div class="tl-sub">Aug 2024 · Major, 38G</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Fire Commissioner + Deputy MD</div>
+            <div class="tl-sub">2016 – 2024</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">OEM Director</div>
+            <div class="tl-sub">2019 – 2022 (concurrent)</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">VA Deputy Sec. Public Safety</div>
+            <div class="tl-sub">Before 2016</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Compensation</div>
+        <div class="salary-row">
+          <div class="salary-key">City salary</div>
+          <div class="salary-val">$316,200</div>
+        </div>
+        <div class="salary-row">
+          <div class="salary-key">Consulting income (2024)</div>
+          <div class="salary-val">$305,000+</div>
+        </div>
+        <div class="salary-row">
+          <div class="salary-key">Lecturing (George Mason)</div>
+          <div class="salary-val">$7,000</div>
+        </div>
+        <div class="salary-row">
+          <div class="salary-key">Total disclosed (2024)</div>
+          <div class="salary-val">$628,200+</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Contact</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;">During Thiel's leave, direct inquiries to:</div>
+        <a href="#" style="display:block;font-size:12px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);color:var(--color-text-primary);text-decoration:none;margin-bottom:6px;">phila.gov/managing-directors-office ↗</a>
+        <a href="#" style="display:block;font-size:12px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);color:var(--color-text-primary);text-decoration:none;">Sharon Gallagher — Communications ↗</a>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forum Americanum — Data Model</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --stone: #1a1814;
+    --parchment: #f4ede0;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --red: #8b2d2d;
+    --blue: #2d4a6b;
+    --green: #2d5a3d;
+    --purple: #4a2d6b;
+    --ink: #2a2420;
+    --rule: rgba(201,168,76,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--stone);
+    font-family: 'Crimson Text', serif;
+    color: var(--parchment);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .page-title h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .page-title p {
+    font-family: 'Crimson Text', serif;
+    font-size: 16px;
+    color: rgba(244,237,224,0.6);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(244,237,224,0.7);
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+
+  .diagram {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* SVG connector lines */
+  .connectors {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .entity {
+    border: 1px solid;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .entity.core { border-color: var(--gold); }
+  .entity.geo { border-color: #5a8bbf; }
+  .entity.civic { border-color: #5aaa6e; }
+  .entity.discourse { border-color: #aa7a5a; }
+  .entity.user { border-color: #9a7abf; }
+
+  .entity-header {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .entity.core .entity-header { background: rgba(201,168,76,0.15); }
+  .entity.geo .entity-header { background: rgba(45,74,107,0.4); }
+  .entity.civic .entity-header { background: rgba(45,90,61,0.4); }
+  .entity.discourse .entity-header { background: rgba(139,74,45,0.35); }
+  .entity.user .entity-header { background: rgba(74,45,107,0.4); }
+
+  .entity-icon {
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+  }
+
+  .entity-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .entity.core .entity-name { color: var(--gold); }
+  .entity.geo .entity-name { color: #7ab0df; }
+  .entity.civic .entity-name { color: #7acf8e; }
+  .entity.discourse .entity-name { color: #dfaa7a; }
+  .entity.user .entity-name { color: #b07adf; }
+
+  .entity-fields {
+    padding: 10px 0;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    padding: 5px 14px;
+    gap: 8px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .field:last-child { border-bottom: none; }
+  .field:hover { background: rgba(255,255,255,0.04); }
+
+  .field-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-weight: 500;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .pk { background: rgba(201,168,76,0.3); color: var(--gold-light); }
+  .fk { background: rgba(90,140,190,0.3); color: #9ac0e8; }
+  .idx { background: rgba(90,170,110,0.25); color: #9adf9a; }
+
+  .field-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(244,237,224,0.85);
+  }
+
+  .field-type {
+    font-size: 11px;
+    color: rgba(244,237,224,0.35);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  /* Relationship annotations */
+  .relations {
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .relation {
+    font-size: 11px;
+    color: rgba(244,237,224,0.4);
+    padding: 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .relation-arrow {
+    color: var(--gold);
+    opacity: 0.6;
+    font-size: 10px;
+  }
+
+  /* Section labels */
+  .section-label {
+    grid-column: 1 / -1;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(244,237,224,0.3);
+    padding: 16px 0 4px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    margin-top: 8px;
+  }
+
+  .section-label:first-child {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  /* Full-width entity */
+  .span-2 { grid-column: span 2; }
+  .span-4 { grid-column: span 4; }
+
+  /* Notes panel */
+  .notes {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .note {
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 16px 18px;
+    background: rgba(201,168,76,0.04);
+  }
+
+  .note-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .note p {
+    font-size: 13px;
+    color: rgba(244,237,224,0.65);
+    line-height: 1.6;
+  }
+
+  .note code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: rgba(201,168,76,0.1);
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: var(--gold-light);
+  }
+
+  .divider {
+    max-width: 1200px;
+    margin: 32px auto;
+    border: none;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>Forum Americanum</h1>
+  <p>Entity Relationship Diagram — Data Foundation</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:rgba(201,168,76,0.5)"></div>
+    Core Government Structure
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:rgba(45,74,107,0.7)"></div>
+    Geography
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:rgba(45,90,61,0.7)"></div>
+    Civic Actions
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:rgba(139,74,45,0.7)"></div>
+    Discourse Layer
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:rgba(74,45,107,0.7)"></div>
+    Users & Identity
+  </div>
+  <div class="legend-item" style="gap:12px">
+    <span style="font-family:monospace;font-size:11px;background:rgba(201,168,76,0.3);color:#e8c97a;padding:1px 5px;border-radius:2px">PK</span> Primary Key
+  </div>
+  <div class="legend-item" style="gap:12px">
+    <span style="font-family:monospace;font-size:11px;background:rgba(90,140,190,0.3);color:#9ac0e8;padding:1px 5px;border-radius:2px">FK</span> Foreign Key
+  </div>
+  <div class="legend-item" style="gap:12px">
+    <span style="font-family:monospace;font-size:11px;background:rgba(90,170,110,0.25);color:#9adf9a;padding:1px 5px;border-radius:2px">IDX</span> Indexed
+  </div>
+</div>
+
+<div class="diagram">
+  <div class="grid">
+
+    <!-- CORE GOVERNMENT -->
+    <div class="section-label">Core Government Structure</div>
+
+    <!-- Jurisdiction -->
+    <div class="entity core">
+      <div class="entity-header">
+        <div class="entity-icon">🏛</div>
+        <div class="entity-name">Jurisdiction</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">name</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_id</span><span class="field-type">→ self</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">country_code</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">hardcoded_config</span><span class="field-type">jsonb</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">exceptions_notes</span><span class="field-type">text</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">↓</span> has many Districts</div>
+        <div class="relation"><span class="relation-arrow">↓</span> has many Offices</div>
+        <div class="relation"><span class="relation-arrow">↑</span> belongs to parent Jurisdiction</div>
+      </div>
+    </div>
+
+    <!-- District -->
+    <div class="entity geo">
+      <div class="entity-header">
+        <div class="entity-icon">📍</div>
+        <div class="entity-name">District</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">name</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">boundary_polygon</span><span class="field-type">geometry</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">census_geoid</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">population</span><span class="field-type">integer</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">↓</span> contains many Offices</div>
+        <div class="relation"><span class="relation-arrow">↑</span> belongs to Jurisdiction</div>
+      </div>
+    </div>
+
+    <!-- Office -->
+    <div class="entity core">
+      <div class="entity-header">
+        <div class="entity-icon">⚖️</div>
+        <div class="entity-name">Office</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">district_id</span><span class="field-type">→ District</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">title</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">branch</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">term_length_years</span><span class="field-type">integer</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">is_elected</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">seats</span><span class="field-type">integer</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">↓</span> held by Person via Term</div>
+      </div>
+    </div>
+
+    <!-- Person -->
+    <div class="entity core">
+      <div class="entity-header">
+        <div class="entity-icon">👤</div>
+        <div class="entity-name">Person</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">full_name</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">party</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">photo_url</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">bio</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">contact_info</span><span class="field-type">jsonb</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User (if claimed)</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">external_ids</span><span class="field-type">jsonb</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">↓</span> linked to Terms</div>
+        <div class="relation"><span class="relation-arrow">↓</span> authors Actions</div>
+      </div>
+    </div>
+
+    <!-- Term (bridge) -->
+    <div class="entity core span-2">
+      <div class="entity-header">
+        <div class="entity-icon">📅</div>
+        <div class="entity-name">Term (Incumbency)</div>
+      </div>
+      <div class="entity-fields" style="display:grid;grid-template-columns:1fr 1fr">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">is_current</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">start_date</span><span class="field-type">date</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">end_date</span><span class="field-type">date</span></div>
+      </div>
+      <div class="relations" style="display:flex;gap:32px">
+        <div class="relation"><span class="relation-arrow">↑</span> Person holds Office</div>
+        <div class="relation"><span class="relation-arrow">—</span> Historical record preserved when official leaves office</div>
+      </div>
+    </div>
+
+    <!-- CIVIC ACTIONS -->
+    <div class="section-label">Civic Actions</div>
+
+    <!-- Action -->
+    <div class="entity civic span-2">
+      <div class="entity-header">
+        <div class="entity-icon">📜</div>
+        <div class="entity-name">Action</div>
+      </div>
+      <div class="entity-fields" style="display:grid;grid-template-columns:1fr 1fr">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">type</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">jurisdiction_id</span><span class="field-type">→ Jurisdiction</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">title</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">description</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">full_text_url</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">introduced_date</span><span class="field-type">date</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">civic_briefing</span><span class="field-type">jsonb</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">external_id</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">source_api</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">tags</span><span class="field-type">string[]</span></div>
+      </div>
+      <div class="relations" style="display:flex;gap:32px">
+        <div class="relation"><span class="relation-arrow">↔</span> linked to Persons via ActionPerson (sponsor, cosponsor, voter)</div>
+        <div class="relation"><span class="relation-arrow">↓</span> receives Contributions</div>
+      </div>
+    </div>
+
+    <!-- ActionPerson bridge -->
+    <div class="entity civic">
+      <div class="entity-header">
+        <div class="entity-icon">🤝</div>
+        <div class="entity-name">ActionPerson</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">person_id</span><span class="field-type">→ Person</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">role</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">vote_position</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">date</span><span class="field-type">date</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">—</span> role: sponsor | cosponsor | voter | signatory</div>
+        <div class="relation"><span class="relation-arrow">—</span> vote: yea | nay | abstain | absent</div>
+      </div>
+    </div>
+
+    <!-- Source -->
+    <div class="entity discourse">
+      <div class="entity-header">
+        <div class="entity-icon">🔗</div>
+        <div class="entity-name">Source</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">url</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">title</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">publication</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">quality_tier</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">political_lean</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">country_restrictions</span><span class="field-type">string[]</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">is_flagged</span><span class="field-type">boolean</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">↑</span> attached to Contributions</div>
+      </div>
+    </div>
+
+    <!-- DISCOURSE LAYER -->
+    <div class="section-label">Discourse Layer</div>
+
+    <!-- Contribution -->
+    <div class="entity discourse span-2">
+      <div class="entity-header">
+        <div class="entity-icon">💬</div>
+        <div class="entity-name">Contribution</div>
+      </div>
+      <div class="entity-fields" style="display:grid;grid-template-columns:1fr 1fr">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">entity_type</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">entity_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">body</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">position</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">source_id</span><span class="field-type">→ Source</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">tone_score</span><span class="field-type">float</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">source_tier</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">cohort_tags</span><span class="field-type">jsonb</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">parent_id</span><span class="field-type">→ self</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">steelman_seen</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">is_pinned_official</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations" style="display:flex;gap:32px;flex-wrap:wrap">
+        <div class="relation"><span class="relation-arrow">—</span> entity_type: bill | official | election | topic | jurisdiction</div>
+        <div class="relation"><span class="relation-arrow">—</span> position: for | against | question | neutral</div>
+        <div class="relation"><span class="relation-arrow">↓</span> receives Flags</div>
+      </div>
+    </div>
+
+    <!-- Flag -->
+    <div class="entity discourse">
+      <div class="entity-header">
+        <div class="entity-icon">🚩</div>
+        <div class="entity-name">Flag</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">contribution_id</span><span class="field-type">→ Contribution</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">user_id</span><span class="field-type">→ User</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">reason</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">—</span> reason: hateful | misleading</div>
+        <div class="relation"><span class="relation-arrow">—</span> off_topic | unconstructive</div>
+      </div>
+    </div>
+
+    <!-- Sentiment Snapshot -->
+    <div class="entity discourse">
+      <div class="entity-header">
+        <div class="entity-icon">📊</div>
+        <div class="entity-name">SentimentSnapshot</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">action_id</span><span class="field-type">→ Action</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">cohort_key</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">cohort_value</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">for_count</span><span class="field-type">integer</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">against_count</span><span class="field-type">integer</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">computed_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">—</span> cohort: occupation | age_range | region</div>
+      </div>
+    </div>
+
+    <!-- DATA INTEGRITY -->
+    <div class="section-label">Data Integrity & Freshness</div>
+
+    <!-- DataAlert -->
+    <div class="entity discourse span-2">
+      <div class="entity-header">
+        <div class="entity-icon">🚨</div>
+        <div class="entity-name">DataAlert</div>
+      </div>
+      <div class="entity-fields" style="display:grid;grid-template-columns:1fr 1fr">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">entity_type</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">entity_id</span><span class="field-type">uuid (polymorphic)</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">alert_type</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">severity</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">source_a</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">source_b</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">source_b_url</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">community_flags</span><span class="field-type">integer</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">auto_resolvable</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">assigned_to</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">resolution_notes</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">resolved_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations" style="display:flex;gap:32px;flex-wrap:wrap">
+        <div class="relation"><span class="relation-arrow">—</span> alert_type: term_expired | sync_failed | community_flag | source_conflict | election_imminent | appointment_pending | term_limit_reached</div>
+        <div class="relation"><span class="relation-arrow">—</span> severity: critical | high | medium | low</div>
+        <div class="relation"><span class="relation-arrow">—</span> status: open | reviewing | resolved | auto_resolved</div>
+        <div class="relation"><span class="relation-arrow">↑</span> generated by ApiSync failures, Term expiry, community flags, or source conflicts</div>
+      </div>
+    </div>
+
+    <!-- OfficeStatus -->
+    <div class="entity discourse span-2">
+      <div class="entity-header">
+        <div class="entity-icon">🔵</div>
+        <div class="entity-name">OfficeStatus (Card Display State)</div>
+      </div>
+      <div class="entity-fields" style="display:grid;grid-template-columns:1fr 1fr">
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">office_id</span><span class="field-type">→ Office</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">display_status</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge fk">FK</span><span class="field-name">active_alert_id</span><span class="field-type">→ DataAlert</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">last_verified_at</span><span class="field-type">timestamp</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">last_verified_source</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">election_date</span><span class="field-type">date</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">updated_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations" style="display:flex;gap:32px;flex-wrap:wrap">
+        <div class="relation"><span class="relation-arrow">—</span> display_status: confirmed ● | unverified ● | disputed ● | election_imminent 🗳 | vacant ○ | appointed_pending ◐</div>
+        <div class="relation"><span class="relation-arrow">—</span> This table drives the dot color on every official card in the UI. One row per Office. Auto-updated by sync jobs and DataAlert resolution.</div>
+      </div>
+    </div>
+
+    <!-- USERS & IDENTITY -->
+    <div class="section-label">Users & Identity</div>
+
+    <!-- User -->
+    <div class="entity user span-2">
+      <div class="entity-header">
+        <div class="entity-icon">🎭</div>
+        <div class="entity-name">User</div>
+      </div>
+      <div class="entity-fields" style="display:grid;grid-template-columns:1fr 1fr">
+        <div class="field"><span class="field-badge pk">PK</span><span class="field-name">id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">verified_identity</span><span class="field-type">encrypted</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">public_occupation</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">public_age_range</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">public_region</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">trust_level</span><span class="field-type">integer</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">is_verified_official</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">friction_exempt</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">home_address_hash</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">created_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations" style="display:flex;gap:32px;flex-wrap:wrap">
+        <div class="relation"><span class="relation-arrow">—</span> Real identity encrypted and never exposed publicly</div>
+        <div class="relation"><span class="relation-arrow">—</span> Public persona: "Nurse · 40s · Northern Virginia"</div>
+        <div class="relation"><span class="relation-arrow">↓</span> makes Contributions, posts Flags</div>
+      </div>
+    </div>
+
+    <!-- Address Lookup Cache -->
+    <div class="entity geo">
+      <div class="entity-header">
+        <div class="entity-icon">🗺</div>
+        <div class="entity-name">AddressLookup</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge idx">IDX</span><span class="field-name">address_hash</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">lat</span><span class="field-type">float</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">lng</span><span class="field-type">float</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">district_ids</span><span class="field-type">uuid[]</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">cached_at</span><span class="field-type">timestamp</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">—</span> Cache geocode results</div>
+        <div class="relation"><span class="relation-arrow">—</span> Never store raw addresses</div>
+      </div>
+    </div>
+
+    <!-- External API Sync -->
+    <div class="entity geo">
+      <div class="entity-header">
+        <div class="entity-icon">🔄</div>
+        <div class="entity-name">ApiSync</div>
+      </div>
+      <div class="entity-fields">
+        <div class="field"><span class="field-badge">—</span><span class="field-name">source_name</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">entity_type</span><span class="field-type">string</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">last_synced_at</span><span class="field-type">timestamp</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">status</span><span class="field-type">enum</span></div>
+        <div class="field"><span class="field-badge">—</span><span class="field-name">error_log</span><span class="field-type">text</span></div>
+      </div>
+      <div class="relations">
+        <div class="relation"><span class="relation-arrow">—</span> Congress.gov · OpenStates</div>
+        <div class="relation"><span class="relation-arrow">—</span> GovTrack · FEC · Census</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="notes">
+  <div class="note">
+    <div class="note-title">Hardcoded Exceptions</div>
+    <p>Stored in <code>Jurisdiction.hardcoded_config</code> as JSON. Nebraska: <code>chambers: 1</code>. DC: <code>senate_seats: 0, house_delegate: non_voting</code>. States with appointed AG: <code>ag_elected: false</code>. Territories: <code>federal_voting: false</code>. Write once, test once, never changes unless there's a constitutional amendment.</p>
+  </div>
+  <div class="note">
+    <div class="note-title">Phase 6 Stubs (Built Now)</div>
+    <p>Contribution table already has <code>tone_score</code>, <code>source_tier</code>, <code>cohort_tags</code>, and <code>steelman_seen</code> columns — empty in Phase 1, populated in Phase 6. No migration needed later. User table has <code>trust_level</code> and <code>friction_exempt</code> ready for the discourse layer.</p>
+  </div>
+  <div class="note">
+    <div class="note-title">DataAlert System</div>
+    <p>Every official card has a live <code>display_status</code> driven by <code>OfficeStatus</code>. When a Term expires, an alert fires automatically. Three community flags triggers review. Source conflicts mark a card <code>DISPUTED</code> — both values shown to users. The platform never silently shows wrong data; it shows uncertain data honestly with a dot color and tooltip. Sync frequency varies by layer: federal daily, state weekly, local monthly, special districts ad hoc.</p>
+  </div>
+
+  <div class="note">
+    <div class="note-title">Identity Model</div>
+    <p>Real identity (name, email, address) is encrypted at rest and never surfaced publicly. The public persona is constructed from <code>public_occupation</code> + <code>public_age_range</code> + <code>public_region</code>. Displayed as: <em>"Nurse · 40s · Northern Virginia"</em>. Address is hashed for district lookup — the raw string is never stored.</p>
+  </div>
+</div>
+
+</body>
+</html>

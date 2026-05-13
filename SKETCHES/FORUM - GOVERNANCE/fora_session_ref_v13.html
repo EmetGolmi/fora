@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Session Reference v13</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f2f4f8;--white:#ffffff;--rule:rgba(27,58,107,0.1);
+  --green:#155c2d;--green-p:#e5f0e8;
+  --purple:#2d1a4a;--purple-p:#ede6f7;
+  --scarlet:#8b1a1a;--scarlet-p:#faeaea;
+  --amber:#c47f00;--amber-p:#fff3dc;
+  --spd:#0a6b2a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh;}
+
+/* ── SIDENAV ──────────────────────────────────────────── */
+.sidenav{width:220px;flex-shrink:0;background:var(--blue);min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+.sn-logo{padding:20px 20px 12px;border-bottom:2px solid rgba(255,255,255,0.08);}
+.sn-fora{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;letter-spacing:0.1em;}
+.sn-fora span{color:var(--gilt-lt);}
+.sn-ver{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:4px;}
+.sn-links{padding:12px 0;flex:1;}
+.sn-group{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:10px 20px 4px;}
+.sn-link{display:flex;align-items:center;gap:8px;padding:7px 20px;color:rgba(255,255,255,0.55);font-size:12px;text-decoration:none;transition:all 0.12s;cursor:pointer;}
+.sn-link:hover{background:rgba(255,255,255,0.07);color:white;}
+.sn-link.active{background:rgba(184,134,11,0.18);color:var(--gilt-lt);border-right:2px solid var(--gilt);}
+.sn-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;}
+.sn-new{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;background:var(--gilt);color:white;padding:1px 5px;border-radius:3px;}
+.sn-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.3);line-height:1.8;}
+
+/* ── MAIN ─────────────────────────────────────────────── */
+.main{flex:1;max-width:900px;padding:40px 48px 80px;}
+
+/* ── VERSION BANNER ──────────────────────────────────── */
+.version-banner{background:var(--blue);border-radius:12px;padding:28px 32px;margin-bottom:36px;display:flex;align-items:flex-start;justify-content:space-between;gap:32px;}
+.vb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}
+.vb-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;}
+.vb-sub{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:480px;}
+.vb-stats{display:flex;gap:20px;flex-shrink:0;}
+.vbs{text-align:center;background:rgba(255,255,255,0.08);border-radius:8px;padding:12px 16px;min-width:70px;}
+.vbs-n{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--gilt-lt);line-height:1;}
+.vbs-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:4px;}
+
+/* ── SECTIONS ────────────────────────────────────────── */
+.doc-section{background:white;border-radius:12px;padding:28px 32px;margin-bottom:24px;border:1px solid var(--rule);}
+.doc-section.bg-grey{background:var(--bg);}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;}
+.ew-gold{color:var(--gilt);}
+.ew-blue{color:var(--blue);}
+.ew-purple{color:var(--purple);}
+.ew-green{color:var(--green);}
+.ew-red{color:var(--scarlet);}
+.section-title{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.section-desc{font-size:13px;color:var(--ink-soft);line-height:1.65;margin-bottom:20px;max-width:640px;}
+
+/* ── DECISION TABLE ──────────────────────────────────── */
+.decision-table{width:100%;border-collapse:collapse;font-size:12px;}
+.decision-table th{text-align:left;padding:8px 12px;background:var(--blue);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;}
+.decision-table td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.55;}
+.decision-table tr:last-child td{border-bottom:none;}
+.decision-table tr:nth-child(even) td{background:var(--bg);}
+.dt-key{font-weight:600;color:var(--ink);margin-bottom:2px;}
+.dt-new{font-family:'JetBrains Mono',monospace;font-size:7.5px;background:var(--gilt);color:white;padding:1px 5px;border-radius:3px;margin-right:5px;}
+.status-done{font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--green-p);color:var(--green);padding:2px 7px;border-radius:100px;white-space:nowrap;}
+
+/* ── SCREEN / FILE TABLE ──────────────────────────────── */
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.comp-table th{text-align:left;padding:8px 12px;background:var(--blue-md);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;}
+.comp-table td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.55;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table tr:nth-child(even) td{background:var(--bg);}
+.comp-name{font-weight:700;color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:10px;}
+.comp-note{font-size:10px;color:var(--ink-soft);margin-top:2px;}
+.comp-desc{font-size:12px;color:var(--ink);line-height:1.55;}
+
+/* ── FILE TABLE ──────────────────────────────────────── */
+.file-table-wrap{border:1px solid var(--rule);border-radius:8px;overflow:hidden;}
+.ft-header{display:grid;grid-template-columns:260px 1fr 110px;background:var(--blue);padding:8px 14px;gap:12px;}
+.ft-header-cell{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.7);}
+.ft-group{background:var(--blue-pl);padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);border-top:1px solid var(--rule);}
+.ft-row{display:grid;grid-template-columns:260px 1fr 110px;padding:9px 14px;gap:12px;border-top:1px solid var(--rule);align-items:start;}
+.ft-row.ft-new{background:rgba(93,66,154,0.04);}
+.ft-row.ft-arch{background:var(--bg);opacity:0.6;}
+.ft-file{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:600;word-break:break-all;}
+.ft-desc{font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+.ft-status{font-family:'JetBrains Mono',monospace;font-size:8.5px;}
+.s-new{color:var(--purple);}
+.s-current{color:var(--green);}
+.s-arch{color:var(--ink-mut);}
+
+/* ── TOKEN GRID ──────────────────────────────────────── */
+.token-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.token-card{background:var(--bg);border:1px solid var(--rule);border-radius:8px;overflow:hidden;}
+.tc-swatch{height:40px;}
+.tc-body{padding:8px 10px;}
+.tc-name{font-weight:600;font-size:12px;color:var(--ink);}
+.tc-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);}
+.tc-use{font-size:10px;color:var(--ink-mut);margin-top:2px;}
+.type-row{display:flex;align-items:center;gap:20px;padding:10px 0;border-bottom:1px solid var(--rule);}
+.tr-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);width:180px;flex-shrink:0;}
+
+/* ── OPEN ITEMS ──────────────────────────────────────── */
+.open-list{display:flex;flex-direction:column;gap:10px;}
+.open-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;}
+.oi-priority{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;flex-shrink:0;margin-top:2px;}
+.p-blocking{background:var(--scarlet-p);color:var(--scarlet);}
+.p-dev{background:var(--blue-pl);color:var(--blue);}
+.p-design{background:var(--gilt-pl);color:var(--gilt);}
+.p-org{background:var(--green-p);color:var(--green);}
+.p-tabled{background:var(--bg);color:var(--ink-mut);border:1px solid var(--rule);}
+.oi-title{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:3px;}
+.oi-desc{font-size:12px;color:var(--ink-soft);line-height:1.55;}
+</style>
+</head>
+<body>
+
+<nav class="sidenav">
+  <div class="sn-logo">
+    <div class="sn-fora">F<span>O</span>RA</div>
+    <div class="sn-ver">Session Reference · v13</div>
+  </div>
+  <div class="sn-links">
+    <div class="sn-group">Design System</div>
+    <a href="#colors" class="sn-link"><div class="sn-dot"></div>Color palette</a>
+    <a href="#type" class="sn-link"><div class="sn-dot"></div>Typography</a>
+    <div class="sn-group">Session v13</div>
+    <a href="#decisions" class="sn-link active"><div class="sn-dot"></div>Locked decisions <span class="sn-new">v13</span></a>
+    <a href="#screens" class="sn-link"><div class="sn-dot"></div>Screen status</a>
+    <a href="#open" class="sn-link"><div class="sn-dot"></div>Open items</a>
+    <a href="#files" class="sn-link"><div class="sn-dot"></div>All output files</a>
+  </div>
+  <div class="sn-footer">
+    ERD: v15 · 93 entities<br>
+    Spreadsheet: v31 · 52 sheets<br>
+    Session: v13 · March 17 2026
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- BANNER -->
+<div class="version-banner">
+  <div class="vb-left">
+    <div class="vb-eyebrow">Forum Americanum · Session Reference</div>
+    <div class="vb-title">Session v13</div>
+    <div class="vb-sub">User-facing platform fully built: dashboard (14 widgets, drag-to-move, edge-drag resize), four section pages (Legislation, Issues, Events, Discourse), Cultural Page prototype (St. Patrick's Day), nav restructured (Dashboard · Legislation · Issues · Events · Discourse), The Living sidebar feature, Following expanded (Places / Topics / Organizations / People). Spreadsheet v31 adds §20 Cultural Layer, §21 Dashboard & Pages, §22 The Living.</div>
+  </div>
+  <div class="vb-stats">
+    <div class="vbs"><div class="vbs-n">14</div><div class="vbs-l">Widgets</div></div>
+    <div class="vbs"><div class="vbs-n">4</div><div class="vbs-l">Section pages</div></div>
+    <div class="vbs"><div class="vbs-n">52</div><div class="vbs-l">SS sheets</div></div>
+    <div class="vbs"><div class="vbs-n">v31</div><div class="vbs-l">Spreadsheet</div></div>
+  </div>
+</div>
+
+<!-- COLORS -->
+<div id="colors" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-gold">Design System</div>
+  <div class="section-title">Color Palette — Unchanged</div>
+  <div class="section-desc">All color tokens from v8 remain canonical. No changes this session. St. Patrick's Day cultural page introduced a local palette (--spd-green, --spd-gold, --spd-navy) scoped to that page only.</div>
+  <div class="token-grid">
+    <div class="token-card"><div class="tc-swatch" style="background:#1b3a6b;"></div><div class="tc-body"><div class="tc-name">Blue</div><div class="tc-val">#1b3a6b</div><div class="tc-use">Nav, hero, primary UI</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#b8860b;"></div><div class="tc-body"><div class="tc-name">Gilt</div><div class="tc-val">#b8860b</div><div class="tc-use">Active tab, accents, CTA</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#8b1a1a;"></div><div class="tc-body"><div class="tc-name">Scarlet</div><div class="tc-val">#8b1a1a</div><div class="tc-use">War alert, crisis, critical urgency</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#c47f00;"></div><div class="tc-body"><div class="tc-name">Amber</div><div class="tc-val">#c47f00</div><div class="tc-use">Degraded, pending, high urgency</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#2d1a4a;"></div><div class="tc-body"><div class="tc-name">NGE Purple</div><div class="tc-val">#2d1a4a</div><div class="tc-use">NGE headers, duel arena, discourse</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#155c2d;"></div><div class="tc-body"><div class="tc-name">Green</div><div class="tc-val">#155c2d</div><div class="tc-use">Active, confirmed, The Living</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#f2f4f8;"></div><div class="tc-body"><div class="tc-name">BG</div><div class="tc-val">#f2f4f8</div><div class="tc-use">Page background</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#0a0f1a;"></div><div class="tc-body"><div class="tc-name">Ticker BG</div><div class="tc-val">#0a0f1a</div><div class="tc-use">Scrolling ticker bar</div></div></div>
+    <div class="token-card"><div class="tc-swatch" style="background:#0a6b2a;"></div><div class="tc-body"><div class="tc-name">SPD Green</div><div class="tc-val">#0a6b2a</div><div class="tc-use">Cultural pages — local only</div></div></div>
+  </div>
+</div>
+
+<!-- TYPOGRAPHY -->
+<div id="type" class="doc-section">
+  <div class="section-eyebrow ew-gold">Design System</div>
+  <div class="section-title">Typography — Unchanged</div>
+  <div class="section-desc">All type tokens from v8 remain canonical.</div>
+  <div class="type-row"><div class="tr-label">Display · Hero name</div><div style="font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:#1b3a6b;">Libre Baskerville 700</div></div>
+  <div class="type-row"><div class="tr-label">UI labels · mono</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5a6e8a;letter-spacing:0.12em;text-transform:uppercase;">JetBrains Mono · Uppercase</div></div>
+  <div class="type-row"><div class="tr-label">Body · UI text</div><div style="font-family:'Nunito',sans-serif;font-size:14px;color:#0e1a2e;">Nunito 400 / 600 · Body and UI text</div></div>
+  <div class="type-row" style="border-bottom:none;"><div class="tr-label">Italic accent</div><div style="font-family:'Libre Baskerville',serif;font-size:14px;font-style:italic;color:#b8860b;">Libre Baskerville Italic · Gilt accent</div></div>
+</div>
+
+<!-- LOCKED DECISIONS -->
+<div id="decisions" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-purple">Session v13</div>
+  <div class="section-title">Locked Decisions</div>
+  <div class="section-desc">All decisions from sessions v8–v12 remain locked. New decisions from this session marked NEW.</div>
+  <table class="decision-table">
+    <thead><tr><th style="width:220px;">Decision</th><th>What was decided</th><th style="width:80px;">Status</th></tr></thead>
+    <tbody>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Nav structure — final</div></td><td>Dashboard · Legislation · Issues · Events · Discourse. Feed dropped as top-level nav — surfaces as "See all" from the Civic Feed dashboard widget. Commonwealth naming (The Commons, The Lyceum, The Ledger, The Square) permanently retired — not referenced anywhere in FORA. Discourse elevated to top-level tab, replacing Feed.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Navigation model — Option C</div></td><td>Top nav for sections (Dashboard · Legislation · Issues · Events · Discourse). Left sidebar for personal items only (identity anchor, My FORA, Following). Sidebar collapses on content pages to restore full width. Three options were mocked up (A: top only, B: left only, C: both). Option C selected.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Dashboard — free-form widget grid</div></td><td>12-column CSS grid, 60px row units. Drag to move in customize mode. Edge/corner drag to resize at any time (not gated by customize mode). 14 widgets at launch: Civic Feed, My Representatives, Rep Activity, Active Deliberations, Duel Arena, Bills Tracking, Civic Marker (3 scales), Avatar Card, Civic Stats, Freedom & Happiness, Trending, My Jurisdictions, People (→ The Living), Notes. Widget picker slide-in panel. Customize mode shows drag handles and reveals Add Widget button.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Bills Tracking widget — country flag</div></td><td>Country flag emoji sits left of each bill in the Bills Tracking widget and the Legislation page BillCard. Supports multi-country bill tracking. US, UK, Canadian, Cuban bills all render with their respective flag.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Notes widget</div></td><td>Free-text research workspace on the dashboard. Formatting toolbar (Bold, Italic, Underline, Bullet, Link, @ page-tag, " cite-source). Character count. "Share with community ↗" button routes to discourse contribution flow — attaches note to a specific page section or starts a new thread. Note content stored on DashboardWidget.config — not a separate entity.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Following sidebar — expanded</div></td><td>Four subsections: Places (jurisdictions), Topics (civic issues), Organizations (NGEs), People. "+" Follow button at the bottom covers all four types. People subsection shows officials and registered users. The Living subsection behavior described separately below.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>The Living</div></td><td>The sidebar subsection starts as "People" for every user. It renames to "The Living" — for that user only — the first time they follow a non-human entity (zoo animal, sanctuary resident, tracked wildlife). The Living divider appears in the People widget between human and animal follows. A greyed placeholder ("No animals followed yet — zoo and sanctuary residents with FORA pages will appear here") shows before first animal follow. FORA recognizes animals as civic stakeholders in specific legal contexts (Endangered Species Act, diplomatic loans, national park management). FORAnimal entity in ERD handles animal pages with livestream URLs and civic_context fields.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Legislation page layout</div></td><td>Two columns. Left: bills the user is tracking, grouped by scale (Federal → State → City), each group collapsible. Right: discovery column — bills FORA has identified as relevant to the user's profile but not yet tracked. Each BillCard has flag, bill ID, title, status chip, scale chip, relevance note explaining why it's surfaced, and Track / Tracked / Discuss / Full text action buttons.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Issues page layout</div></td><td>Left panel: topic cards with jurisdiction-scale chips (Women's Rights → Iran / USA / TX / CA / VA / Gaza). Right panel: detail view showing the same issue at every scale the user follows — status, condition chips, FORA contribution count. Jurisdictions the user doesn't follow are visible but greyed with "Follow [place] to engage." Topic pages at nested jurisdiction scales (full Women's Rights → Iran deep-dive) is a separate content type — tabled for its own session.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Events page layout</div></td><td>Month calendar with color-coded event pips (blue=civic/federal, green=community, scarlet=FORA events, amber=deadlines, purple=discourse). Jurisdiction filter chips above calendar — toggle places on/off. Day/Week/Month toggle. Daily digest right panel showing today's and tomorrow's events across all followed places. Philadelphia in following → Philly events (St. Patrick's Day parade, Flower Show) appear in digest. Community events (festivals, parades) = v2 pending data partnership. Launch = civic calendar only.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Discourse page layout</div></td><td>Single column sorted by urgency (time_remaining ASC). Left border color encodes urgency tier: Critical (scarlet), High (amber), Active (blue), Watching (grey). Each item: countdown timer, type badge (Vote closing / Duel · Your turn / Deliberation · Round N / Deliberation · Your proposal / Duel · Watching), page reference, plain-language description of current state, context chips, action button (Cast vote / Respond now / Add rebuttal / View thread / Watch). Right rail: personal discourse stats + live platform activity counts with pulse animation.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Cultural Page — architecture</div></td><td>New content type. Cultural pages live inside jurisdiction pages under a Culture section. Canonical home: [Country] › Culture › [Holiday]. NOT a standalone top-level entity. St. Patrick's Day canonical home: Ireland › Culture › St. Patrick's Day. Global celebrations cross-link: each city's jurisdiction page links to the canonical cultural page; the canonical page aggregates all cross-links with a world map hero and place cards. FORA seeds editorially. Community expands through standard amendment process. Cross-linked from the Events calendar — clicking a cultural event pip opens the cultural page.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Cultural Page — content structure</div></td><td>Eight tabs: Celebrations (SVG world map with pins + place cards), History (narrative + timeline), Food & Drink (food grid with authenticity notes), Traditions (tradition items with icons), Etiquette (Do / Don't items), Civic Context (contested civic dimensions of the holiday), People (historical and contemporary figures), Discourse. Hero: gradient, holiday icon, English + local-language name, stats bar (countries, diaspora, years, first notable date). Date badge and origin card float right.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Cultural Page — map hero</div></td><td>SVG world map with green pins for major celebrations, gold pin for user's followed cities (Philadelphia starred as "You follow Philly"). Click any pin → city celebration summary. Place cards below map: each city gets a card with hero color, flag, place name, scale, description, tradition chips, distinctive detail, FORA cross-link. Canonical origin city (Dublin) gets "Origin · Canonical" badge. User's followed cities get gold border and "★ You follow [city]" badge.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>Cultural Page — civic context tab</div></td><td>The Civic Context tab holds the contested civic dimensions of every holiday — not just celebration content. St. Patrick's Day prototype includes: NYC LGBTQ parade exclusion (1991–2015), Irish immigration and "No Irish Need Apply" nativism, The Troubles and Northern Ireland, Boston Irish-American political machine. FORA describes, does not decree — same principle as jurisdiction pages and NGE pages. Each civic item links to the discourse tab.</td><td><span class="status-done">Locked</span></td></tr>
+
+      <tr><td><div class="dt-key"><span class="dt-new">NEW</span>ERD v16 — pending</div></td><td>Four new entities from the Cultural Layer: CulturalEvent, CultureSection (1:1 with Jurisdiction), CulturalEventJurisdiction (many-to-many cross-link), CulturalEventContent (one row per tab per event). All four fully specced in Spreadsheet §20. ERD v16 HTML file not yet built — immediate next step.</td><td><span class="status-done">Spec locked · ERD pending</span></td></tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- SCREEN STATUS -->
+<div id="screens" class="doc-section">
+  <div class="section-eyebrow ew-blue">Session v13</div>
+  <div class="section-title">Screen Status — v13 Builds</div>
+  <div class="section-desc">All files built or significantly updated this session.</div>
+  <table class="comp-table">
+    <thead><tr><th>File</th><th>v13 Changes</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><div class="comp-name">fora_nav_mockups.html</div><div class="comp-note">Three nav options — A, B, C</div></td><td><div class="comp-desc">Three nav model mockups rendered side by side with browser chrome, live widget placeholders, and a verdict block beneath each. Option A (top nav only), Option B (left sidebar only), Option C (both — top nav for sections, left sidebar for personal). Option C selected.</div></td><td><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--green);">Decision made</span></td></tr>
+      <tr><td><div class="comp-name">fora_dashboard.html</div><div class="comp-note">Full user dashboard · 14 widgets · v13</div></td><td><div class="comp-desc">Option C nav (top + sidebar). Free-form 12-col drag-and-drop widget grid. All 14 widgets fully built with realistic content: Civic Feed (5 news items), My Representatives (Tim Kaine, Mark Warner, Don Beyer, Adam Ebbin, Charniele Herring), Civic Marker (3 scales S/M/L with live toggle), Bills Tracking (country flags), Active Deliberations (round + timer), Civic Stats (4 stats + ring progress bar), Trending, My Jurisdictions (2×2 grid), Avatar Card (Franchise template), Freedom & Happiness (4-row jurisdiction stack), Rep Activity, Duel Arena (live duel + watching duel), People / The Living (3 people + animal placeholder), Notes (Gaza methodology research note). Edge-drag resize on all 14 widgets. Widget picker slide-in. Customize mode. Following sidebar has Places / Topics / Organizations / People subsections.</div></td><td><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--purple);">New v13 · Canonical</span></td></tr>
+      <tr><td><div class="comp-name">fora_section_pages.html</div><div class="comp-note">Four section pages in one file · tab nav</div></td><td><div class="comp-desc">All four pages in one file, tab navigation between them. Legislation: two-column, tracking left (grouped by scale, collapsible), discovery right (relevant, not yet tracked). BillCards with flags. Issues: topic cards left (Women's Rights / Infrastructure / Labor / Housing / Press Freedom), detail panel right (same issue at each followed scale — Iran, USA, TX, CA, VA, Gaza — with status, condition chips, FORA activity). Events: month calendar with color-coded pips, jurisdiction filter chips, day/week/month toggle, daily digest right panel (today's St. Patrick's Day parade in Philly, Senate appropriations hearing; tomorrow's FORA vote deadline, Philadelphia Flower Show). Discourse: five urgency items with left-border color coding, countdown timers, action buttons, right rail with personal stats and live platform activity.</div></td><td><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--purple);">New v13 · Canonical</span></td></tr>
+      <tr><td><div class="comp-name">fora_cultural_page_spd.html</div><div class="comp-note">St. Patrick's Day · Cultural page prototype</div></td><td><div class="comp-desc">Full cultural page prototype. Breadcrumb: The World › 🇮🇪 Ireland › Culture › St. Patrick's Day. Dark green gradient hero with English + Irish names, stats bar (180+ countries, 13M+ diaspora, 1762 first NYC parade). 8 tabs all fully built. Celebrations: SVG world map with 9 city pins (Dublin, Philadelphia★, NYC, Boston, Chicago, Buenos Aires, Sydney, London, Tokyo), 6 place cards. History: essay + timeline 461AD–1995. Food & Drink: 8 food cards including corned beef vs. bacon & cabbage distinction. Traditions: 6 items. Etiquette: 4 Do / 4 Don't including "Patty's Day is wrong." Civic Context: NYC LGBTQ parade exclusion, Irish immigration nativism, The Troubles, Boston political machine. People: 6 figures. Discourse: 2 live community comments with psych analysis scores. Philadelphia starred with gold pin, "You follow Philly" badge, gold card border.</div></td><td><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--purple);">New v13 · Prototype</span></td></tr>
+      <tr><td><div class="comp-name">forum_americanum_governance_v31.xlsx</div><div class="comp-note">Spreadsheet v31 · 52 sheets</div></td><td><div class="comp-desc">Three new sections added. §20 Cultural Layer: CulturalEvent (16 fields), CultureSection (5 fields), CulturalEventJurisdiction (11 fields including yours computed field), CulturalEventContent (8 fields). §21 Dashboard & Pages: DashboardWidget entity (11 fields), 14-widget type reference table, 5-section page content model table. §22 The Living: UserFollow (10 fields including sidebar_subsection computed and the_living_unlocked per-user boolean), FORAnimal (12 fields including civic_context, has_livestream, conservation_status).</div></td><td><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--purple);">New v13</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- OPEN ITEMS -->
+<div id="open" class="doc-section bg-grey">
+  <div class="section-eyebrow ew-red">Session v13</div>
+  <div class="section-title">Open Items</div>
+  <div class="section-desc">Priority order. Blocking items first.</div>
+  <div class="open-list">
+
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div><div class="oi-title">ERD v16 — Cultural Layer entities</div><div class="oi-desc">Four new entities fully specced in §20: CulturalEvent, CultureSection, CulturalEventJurisdiction, CulturalEventContent. Need to be added to fora_erd_v15.html → fora_erd_v16.html. Estimated +4 entities → ~98 total. Immediate next step before any more design work.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div><div class="oi-title">The Duel — wireframe</div><div class="oi-desc">All discourse system decisions locked since v11. Still no wireframe for The Duel experience itself: proposition, two-user structure, round format (Opening · Rebuttal · Cross · Closing), AI fact-checking in real time, community scoring, how it opens from a content page. Most FORA-original feature on the platform. Recommended next design session.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div><div class="oi-title">Lebanon jurisdiction page</div><div class="oi-desc">Most ready next jurisdiction build. Cross-links to Iran, Hezbollah, and Quds Force all exist and are waiting. Structurally identical to Iran — same layout, same tab system, same trajectory mechanic. Hezbollah-Lebanon relationship is the primary civic complexity.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div><div class="oi-title">Houthis NGE page</div><div class="oi-desc">Tickered on Iran, Gaza, and Hamas pages with no destination. Every tick is a broken promise. Yemen jurisdiction page is the natural companion.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-design">Design</span>
+      <div><div class="oi-title">Mobile entry flow — Section D dual-path update</div><div class="oi-desc">fora_entry_flow.html still has the old 10-category occupation grid. Needs the dual-path system (AI interpreter + 22-sector + BLS SOC) adapted for single-column mobile layout.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-dev">Dev</span>
+      <div><div class="oi-title">Credential verification backend</div><div class="oi-desc">Entry flow and ERD fully specced (CivicCredential entity). Connections to NCEES, state bar registries, NPI, AFL-CIO directories not yet built. Gold ring cannot function without this. Can launch with graceful degradation (credential submitted, verification pending).</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-dev">Dev</span>
+      <div><div class="oi-title">Address-to-representative assignment</div><div class="oi-desc">Entry flow collects address with HAVA/NVRA explanation. Google Civic Information API (or equivalent) connection not built. Without it, representative stack is empty after onboarding.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-dev">Dev</span>
+      <div><div class="oi-title">BLS SOC data seed — 867 occupations</div><div class="oi-desc">Onboarding SOC search uses a ~35-entry HTML subset. Production requires importing full BLS SOC 2018 dataset into SOCOccupation table, mapped to CivilizationSector IDs with US worker counts from OEWS. Static dataset — seed once, update on BLS revision cycle.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-org">Org</span>
+      <div><div class="oi-title">Editorial Board composition</div><div class="oi-desc">Community Standards references the Editorial Board 11 times. Needs to exist on paper with composition published in first Transparency Report before contested jurisdiction pages (Iran, Gaza) go live.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-org">Org</span>
+      <div><div class="oi-title">Legal review — all three documents</div><div class="oi-desc">Privacy Policy, Community Standards, Terms of Service are confidential drafts. All three must be reviewed before any user sees them. Key areas: Delaware corporate law, Section 230, AAA arbitration enforceability, COPPA, DMCA designated agent, registered agent in Delaware. Three placeholders remain: effective date, DMCA agent contact, registered agent.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-org">Org</span>
+      <div><div class="oi-title">Cookie policy / consent banner</div><div class="oi-desc">Required before any analytics are added. Even a minimal disclosure. Should be drafted and reviewed alongside the three main legal documents.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-tabled">Tabled</span>
+      <div><div class="oi-title">Topic pages at nested jurisdiction scales</div><div class="oi-desc">Women's Rights → Iran / USA / TX / CA — a new content type between Issues and Cultural pages. Needs its own session. The Issues page currently shows the issue at each scale as cards; full topic pages with their own discourse systems are a separate architectural decision.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-tabled">Tabled</span>
+      <div><div class="oi-title">Comparison widget + share findings</div><div class="oi-desc">Tabled from the dashboard session. Touches the discourse system, sharing infrastructure, and potentially a new widget type. Needs its own session once the core discourse wireframe (The Duel) is complete.</div></div>
+    </div>
+
+    <div class="open-item">
+      <span class="oi-priority p-tabled">Tabled</span>
+      <div><div class="oi-title">Community Events integration</div><div class="oi-desc">Events page is civic calendar only at launch. Philly Flower Show, St. Patrick's parade, festivals require data partnership with Eventbrite or equivalent. v2 feature.</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ALL OUTPUT FILES -->
+<div id="files" class="doc-section">
+  <div class="section-eyebrow ew-blue">Session v13</div>
+  <div class="section-title">All Output Files</div>
+  <div class="section-desc">Complete inventory. New or updated this session in purple. Canonical files in green. Archived in gray.</div>
+
+  <div class="file-table-wrap">
+    <div class="ft-header"><div class="ft-header-cell">File</div><div class="ft-header-cell">Description</div><div class="ft-header-cell">Status</div></div>
+
+    <div class="ft-group">Jurisdiction Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_jurisdiction_iran.html</div><div class="ft-desc">Iran · CANONICAL · War ticker · Pop/Freedom/Happiness/GDP/IRR · Affiliates panel · 7 tabs · IRR chart · Freedom + Happiness modals</div><div class="ft-status s-current">✓ Canonical</div></div>
+    <div class="ft-row"><div class="ft-file">fora_iran_gov_philosophy.html</div><div class="ft-desc">Governing Philosophy + Trajectory + Religion/Law · VEF modal · IRR chart</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_jurisdiction_gaza.html</div><div class="ft-desc">Gaza · War ticker · 9 stat modals · 21 hover terms · Sovereignty contest · Deaths (6 sources) · Displacement · Ceasefire</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_jurisdiction_iran_toggle.html</div><div class="ft-desc">Archived — use fora_jurisdiction_iran.html</div><div class="ft-status s-arch">Archived</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_jurisdiction_iran_newspaper.html</div><div class="ft-desc">Newspaper layout exploration — archived</div><div class="ft-status s-arch">Archived</div></div>
+
+    <div class="ft-group">NGE Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_nge_hamas.html</div><div class="ft-desc">Hamas · 7 tabs · Hamas paradox framing · Leadership cards · Designations split-world table · Cross-link to Gaza</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_nge_hezbollah.html</div><div class="ft-desc">Hezbollah · Active ticker (blue) · Flag in identity slot · Relationships + FTO panels</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_nge_quds_force.html</div><div class="ft-desc">IRGC Quds Force · War ticker · Flag in identity slot · 4 regional commands + proxy network panel</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">Community & Official Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_org_bvna.html</div><div class="ft-desc">BVNA community org · Quiet ticker · Wellbeing Rate it prompts</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_official_profile.html</div><div class="ft-desc">Don Beyer VA-08 · Official profile page</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">Bill Pages</div>
+    <div class="ft-row"><div class="ft-file">fora_bill_us.html</div><div class="ft-desc">US bill page · Blue hero · 6 tabs · Stats bar · Star divider</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_bill_cuba.html</div><div class="ft-desc">Cuba bill page · Authors & Interests tab · EN·ES language chip</div><div class="ft-status s-current">✓ Current</div></div>
+
+    <div class="ft-group">User-Facing Platform — Session v13</div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_nav_mockups.html</div><div class="ft-desc">Three nav option mockups (A/B/C) with rendered dashboard previews and verdict blocks. Option C selected.</div><div class="ft-status s-new">New v13 · Decision</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_dashboard.html</div><div class="ft-desc">Full user dashboard · Option C nav · 14 widgets · drag-to-move · edge-drag resize · 3-scale civic marker · widget picker · Following with Places/Topics/Organizations/People · The Living placeholder</div><div class="ft-status s-new">New v13 · Canonical</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_section_pages.html</div><div class="ft-desc">Four section pages in one file: Legislation (2-col tracking+discovery), Issues (topic cards + jurisdiction scale drill), Events (calendar + daily digest), Discourse (urgency-sorted + right rail stats)</div><div class="ft-status s-new">New v13 · Canonical</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_cultural_page_spd.html</div><div class="ft-desc">St. Patrick's Day cultural page prototype · 8 tabs · SVG world map · 6 place cards · Philadelphia starred · Civic Context (LGBTQ exclusion, nativism, Troubles, Boston machine) · Discourse preview</div><div class="ft-status s-new">New v13 · Prototype</div></div>
+
+    <div class="ft-group">Onboarding & Identity</div>
+    <div class="ft-row"><div class="ft-file">fora_identity_builder_desktop.html</div><div class="ft-desc">Full desktop onboarding · Section D dual-path (AI interpreter + 22-sector + BLS SOC) · Avatar card carousel in right panel (4 templates)</div><div class="ft-status s-current">✓ Current · v12</div></div>
+    <div class="ft-row"><div class="ft-file">fora_avatar_card.html</div><div class="ft-desc">Standalone avatar card · 4 templates · Share tier toggle (Tier 1/2/3) · Export buttons</div><div class="ft-status s-current">✓ Current · v12</div></div>
+    <div class="ft-row"><div class="ft-file">fora_entry_flow.html</div><div class="ft-desc">Mobile 12-stage onboarding · Section D needs dual-path update (still has old 10-category grid)</div><div class="ft-status" style="color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:8.5px;">⚠ Section D outdated</div></div>
+    <div class="ft-row"><div class="ft-file">fora_ring_taxonomy.html</div><div class="ft-desc">Ring taxonomy v2 · All 6 military branches · Sector rings · Merge logic</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_marker_options.html</div><div class="ft-desc">Canonical marker options · Rings · Military ribbons · Sponsor center</div><div class="ft-status s-current">✓ Current</div></div>
+    <div class="ft-row"><div class="ft-file">fora_occupation_options.html</div><div class="ft-desc">Five occupation input patterns reference · BLS SOC typeahead · AI interpreter</div><div class="ft-status s-current">✓ Current · v12</div></div>
+    <div class="ft-row"><div class="ft-file">fora_occ_dual_path.html</div><div class="ft-desc">Standalone dual-path occupation · 22-sector grid · stacked step 2</div><div class="ft-status s-current">✓ Current · v12</div></div>
+
+    <div class="ft-group">Legal Documents</div>
+    <div class="ft-row"><div class="ft-file">fora_privacy_policy_v1.docx</div><div class="ft-desc">Privacy Policy v1.0 · 248 paragraphs · 10 sections · Confidential draft · Not reviewed by legal counsel</div><div class="ft-status s-current">✓ v12</div></div>
+    <div class="ft-row"><div class="ft-file">fora_community_standards_v1.docx</div><div class="ft-desc">Community Standards & Editorial Policy v1.0 · 166 paragraphs · 12 sections · Hamas worked example · Confidential draft</div><div class="ft-status s-current">✓ v12</div></div>
+    <div class="ft-row"><div class="ft-file">fora_tos_v1.docx</div><div class="ft-desc">Terms of Service v1.0 · 171 paragraphs · 14 sections · Delaware arbitration · Irrevocable perpetual license · Confidential draft</div><div class="ft-status s-current">✓ v12</div></div>
+
+    <div class="ft-group">ERD & Governance</div>
+    <div class="ft-row"><div class="ft-file">fora_erd_v15.html</div><div class="ft-desc">ERD v15 · 93 entities · 15 sections · §15 Discourse Layer + §16 Civic Identity. v16 pending: +4 Cultural Layer entities → ~98 total.</div><div class="ft-status" style="color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:8.5px;">⚠ v16 pending</div></div>
+    <div class="ft-row ft-new"><div class="ft-file">forum_americanum_governance_v31.xlsx</div><div class="ft-desc">Spreadsheet v31 · 52 sheets · Added §20 Cultural Layer · §21 Dashboard & Pages · §22 The Living</div><div class="ft-status s-new">New v13</div></div>
+
+    <div class="ft-group">Session References</div>
+    <div class="ft-row ft-new"><div class="ft-file">fora_session_ref_v13.html</div><div class="ft-desc">This document</div><div class="ft-status s-new">New v13</div></div>
+    <div class="ft-row ft-arch"><div class="ft-file">fora_session_ref_v12.html</div><div class="ft-desc">Previous session reference — superseded</div><div class="ft-status s-arch">Superseded</div></div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</body>
+</html>

@@ -1,0 +1,397 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.p { max-width: 920px; margin: 0 auto; padding-bottom: 2rem; font-family: var(--font-sans); }
+
+.hero { background: #0d2010; color: #e8f5e0; padding: 1.5rem 2rem 0; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; display: flex; gap: 1.5rem; align-items: flex-end; }
+.hero-photo { width: 96px; height: 114px; border-radius: 4px; background: #1a3520; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 36px; color: #4a8050; margin-bottom: -1px; }
+.hero-left { flex: 1; padding-bottom: 1.25rem; }
+.eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #5a9060; margin-bottom: 5px; font-weight: 500; }
+.hero-name { font-size: 24px; font-weight: 500; color: #e8f5e0; margin-bottom: 8px; }
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.chip-role { background: rgba(90,160,90,0.2); color: #7acc7a; border: 0.5px solid rgba(90,160,90,0.4); }
+.chip-tenure { background: rgba(90,160,90,0.1); color: #5a9060; border: 0.5px solid rgba(90,160,90,0.25); }
+.hero-stat { font-size: 11px; color: #6a8a70; }
+.hero-actions { padding-bottom: 1.25rem; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.btn-contact { padding: 8px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: #2d7a3a; color: #e8f5e0; border: none; cursor: pointer; font-weight: 500; }
+.btn-follow { padding: 7px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: transparent; color: #7acc7a; border: 0.5px solid #2d7a3a; cursor: pointer; }
+
+.tenure-bar { background: #081508; padding: 9px 2rem; display: flex; align-items: center; gap: 16px; font-size: 11px; color: #4a7050; }
+.tenure-item { display: flex; align-items: center; gap: 5px; }
+.tenure-dot { width: 6px; height: 6px; border-radius: 50%; background: #2d7a3a; }
+.tenure-val { color: #7acc7a; font-weight: 500; }
+
+.tab-row { background: #0a1c0c; display: flex; padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.tab { font-size: 11px; padding: 11px 12px; color: #4a6050; cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; white-space: nowrap; }
+.tab.active { color: #7acc7a; border-bottom-color: #2d7a3a; }
+
+.body { display: grid; grid-template-columns: 1fr 268px; gap: 1.25rem; padding: 1.25rem 0 0; }
+.main { display: flex; flex-direction: column; gap: 1rem; }
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; }
+.card-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: .9rem; font-weight: 500; }
+
+.cfo-callout { background: var(--color-background-secondary); border-left: 3px solid #2d7a3a; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.6; }
+.cfo-callout strong { color: var(--color-text-primary); font-weight: 500; }
+
+.budget-hero { text-align: center; padding: 1rem 0 .5rem; }
+.budget-num { font-size: 36px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.budget-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 16px; }
+.budget-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 1px; margin-bottom: 12px; }
+.budget-seg { height: 100%; }
+.budget-legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.budget-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+.budget-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.revenue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.rev-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.rev-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+.rev-amount { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.1; }
+.rev-pct { font-size: 11px; color: var(--color-text-secondary); }
+.rev-explain { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; line-height: 1.4; font-style: italic; }
+.rev-bar-wrap { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 6px; }
+.rev-bar { height: 100%; border-radius: 2px; }
+
+.does-list { display: flex; flex-direction: column; gap: 8px; }
+.does-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); }
+.does-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.does-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.does-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.4; }
+
+.doesnt-list { display: flex; flex-direction: column; gap: 6px; }
+.doesnt-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); }
+.doesnt-x { font-size: 12px; color: var(--color-text-secondary); flex-shrink: 0; margin-top: 1px; }
+.doesnt-text { font-size: 12px; color: var(--color-text-secondary); }
+.doesnt-who { font-size: 11px; color: var(--color-text-secondary); font-style: italic; }
+
+.risk-list { display: flex; flex-direction: column; gap: 8px; }
+.risk-row { display: flex; gap: 10px; padding: 9px 10px; border-radius: var(--border-radius-md); align-items: flex-start; }
+.risk-row.high { background: #fcebeb; border: 0.5px solid #f09595; }
+.risk-row.med { background: #faeeda; border: 0.5px solid #fac775; }
+.risk-row.low { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); }
+.risk-level { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; min-width: 28px; padding-top: 2px; }
+.risk-level.high { color: #a32d2d; }
+.risk-level.med { color: #633806; }
+.risk-level.low { color: var(--color-text-secondary); }
+.risk-text { font-size: 12px; color: var(--color-text-primary); }
+.risk-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.4; }
+@media (prefers-color-scheme: dark) {
+  .risk-row.high { background: #501313; border-color: #791f1f; }
+  .risk-row.med { background: #412402; border-color: #633806; }
+}
+
+.timeline { padding-left: 16px; position: relative; }
+.tl-line { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--color-border-tertiary); }
+.tl-item { position: relative; padding: 0 0 12px 12px; }
+.tl-dot { position: absolute; left: -12px; top: 4px; width: 8px; height: 8px; border-radius: 50%; background: #2d7a3a; }
+.tl-dot.old { background: var(--color-border-tertiary); }
+.tl-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.tl-sub { font-size: 11px; color: var(--color-text-secondary); }
+
+.credit-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.credit-row:last-child { border-bottom: none; }
+.credit-agency { color: var(--color-text-secondary); }
+.credit-rating { font-weight: 500; font-size: 14px; }
+.credit-good { color: #3b6d11; }
+.credit-note { font-size: 10px; color: var(--color-text-secondary); margin-top: 6px; line-height: 1.4; }
+
+.pension-bar-wrap { margin: 8px 0; }
+.pension-bar-bg { height: 10px; background: var(--color-background-secondary); border-radius: 5px; overflow: hidden; }
+.pension-bar-fill { height: 100%; border-radius: 5px; background: #2d7a3a; width: 68%; }
+.pension-stats { display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: var(--color-text-secondary); }
+
+.contact-link { display: block; font-size: 12px; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); color: var(--color-text-primary); text-decoration: none; margin-bottom: 6px; }
+</style>
+
+<div class="p">
+  <div class="hero">
+    <div class="hero-photo">RD</div>
+    <div class="hero-left">
+      <div class="eyebrow">Director of Finance · City of Philadelphia</div>
+      <div class="hero-name">Rob Dubow</div>
+      <div class="hero-chips">
+        <span class="chip chip-role">Appointed — not elected</span>
+        <span class="chip chip-tenure">In office since Jan 2008</span>
+      </div>
+      <div class="hero-stat" style="margin-top:6px;">Served under Mayors Nutter, Kenney, and Parker · 18 years as CFO</div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-contact">Contact Office</button>
+      <button class="btn-follow">+ Follow</button>
+    </div>
+  </div>
+
+  <div class="tenure-bar">
+    <div class="tenure-item"><div class="tenure-dot"></div><span>3 mayors served</span></div>
+    <div class="tenure-item"><div class="tenure-dot"></div><span>Budget managed: <span class="tenure-val">$6.84B (FY2026)</span></span></div>
+    <div class="tenure-item"><div class="tenure-dot"></div><span>Credit rating: <span class="tenure-val">A-range — highest in 40+ years</span></span></div>
+  </div>
+
+  <div class="tab-row">
+    <div class="tab active">Overview</div>
+    <div class="tab">How the City is Funded</div>
+    <div class="tab">Budget</div>
+    <div class="tab">Risks & Outlook</div>
+    <div class="tab">Record</div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <div class="cfo-callout">
+        <strong>Philadelphia's chief financial officer — appointed, not elected.</strong> Dubow doesn't decide how money is spent — that's the Mayor and Council. He makes sure there's money to spend. He manages the city's $6.84B budget, keeps the books, issues bonds, manages the pension fund, and tells the Mayor when the numbers don't work. When something gets cut, he's usually the one who identified the problem first.
+      </div>
+
+      <div class="card">
+        <div class="card-label">FY2026 city budget</div>
+        <div class="budget-hero">
+          <div class="budget-num">$6.84B</div>
+          <div class="budget-sub">Total operating budget approved by City Council · FY2026</div>
+        </div>
+        <div class="budget-bar">
+          <div class="budget-seg" style="width:38%;background:#1d9e75;"></div>
+          <div class="budget-seg" style="width:22%;background:#378add;"></div>
+          <div class="budget-seg" style="width:14%;background:#993556;"></div>
+          <div class="budget-seg" style="width:12%;background:#ba7517;"></div>
+          <div class="budget-seg" style="width:8%;background:#534ab7;"></div>
+          <div class="budget-seg" style="width:6%;background:#888780;"></div>
+        </div>
+        <div class="budget-legend">
+          <div class="budget-leg"><div class="budget-dot" style="background:#1d9e75;"></div>Health & Human Services 38%</div>
+          <div class="budget-leg"><div class="budget-dot" style="background:#378add;"></div>Public Safety 22%</div>
+          <div class="budget-leg"><div class="budget-dot" style="background:#993556;"></div>Education & Libraries 14%</div>
+          <div class="budget-leg"><div class="budget-dot" style="background:#ba7517;"></div>Infrastructure 12%</div>
+          <div class="budget-leg"><div class="budget-dot" style="background:#534ab7;"></div>Debt & Pensions 8%</div>
+          <div class="budget-leg"><div class="budget-dot" style="background:#888780;"></div>General Govt 6%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">How the city pays for everything — where the money comes from</div>
+        <div class="revenue-grid">
+          <div class="rev-item">
+            <div class="rev-name">Wage & Earnings Tax</div>
+            <div class="rev-amount">~$2.2B</div>
+            <div class="rev-pct">~33% of the budget</div>
+            <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%;background:#378add;"></div></div>
+            <div class="rev-explain">If you work in Philly or live here, a % of every paycheck goes to the city. No other major US city relies on this as much as Philadelphia.</div>
+          </div>
+          <div class="rev-item">
+            <div class="rev-name">Property Tax</div>
+            <div class="rev-amount">~$800M</div>
+            <div class="rev-pct">~15% of the budget</div>
+            <div class="rev-bar-wrap"><div class="rev-bar" style="width:36%;background:#1d9e75;"></div></div>
+            <div class="rev-explain">1.3998% of your assessed property value. Split between the City (0.6159%) and School District (0.7839%). Lower than NYC, Houston, LA.</div>
+          </div>
+          <div class="rev-item">
+            <div class="rev-name">Business Taxes (BIRT)</div>
+            <div class="rev-amount">~$700M</div>
+            <div class="rev-pct">~10% of the budget</div>
+            <div class="rev-bar-wrap"><div class="rev-bar" style="width:32%;background:#ba7517;"></div></div>
+            <div class="rev-explain">Tax on business revenue and net income. Philly leads all major cities here — a reason businesses cite when choosing not to locate here.</div>
+          </div>
+          <div class="rev-item">
+            <div class="rev-name">Federal & State Grants</div>
+            <div class="rev-amount">~$2.8B</div>
+            <div class="rev-pct">~41% of the budget</div>
+            <div class="rev-bar-wrap"><div class="rev-bar" style="width:82%;background:#993556;"></div></div>
+            <div class="rev-explain">Medicaid reimbursements, federal housing funds, state education aid. This is the city's biggest vulnerability — federal cuts hit here first.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What this office does</div>
+        <div class="does-list">
+          <div class="does-row">
+            <div>
+              <div class="does-title">Proposes and manages the annual budget</div>
+              <div class="does-sub">Works with every city department to build the Mayor's budget proposal. Monitors spending throughout the year and flags overruns to the Mayor and Council.</div>
+            </div>
+          </div>
+          <div class="does-row">
+            <div>
+              <div class="does-title">Borrows money on behalf of the city</div>
+              <div class="does-sub">Issues municipal bonds to fund capital projects — new buildings, infrastructure, housing. The city's credit rating determines the interest rate. Higher rating = lower borrowing cost = more money for services.</div>
+            </div>
+          </div>
+          <div class="does-row">
+            <div>
+              <div class="does-title">Manages the pension fund</div>
+              <div class="does-sub">Oversees $7B+ in pension obligations for city workers. Currently at ~68% funded — up from 44.8% in 2016. When fully funded, the city saves $430M/year in annual contributions.</div>
+            </div>
+          </div>
+          <div class="does-row">
+            <div>
+              <div class="does-title">Keeps the books for the entire city</div>
+              <div class="does-sub">All city financial activity — every contract, payment, and grant — flows through his office. Publishes the Comprehensive Annual Financial Report (CAFR).</div>
+            </div>
+          </div>
+          <div class="does-row">
+            <div>
+              <div class="does-title">Monitors federal funding risk</div>
+              <div class="does-sub">In 2024, Philly received $2.8B in federal grants. Any reduction — Medicaid, housing, education — hits the city budget immediately. Dubow tracks this and builds reserves.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What this office does NOT do — and who does instead</div>
+        <div class="doesnt-list">
+          <div class="doesnt-row">
+            <div class="doesnt-x">✕</div>
+            <div>
+              <div class="doesnt-text">Collect your taxes</div>
+              <div class="doesnt-who">That's the Department of Revenue — separate office</div>
+            </div>
+          </div>
+          <div class="doesnt-row">
+            <div class="doesnt-x">✕</div>
+            <div>
+              <div class="doesnt-text">Decide how the budget is spent</div>
+              <div class="doesnt-who">The Mayor proposes, City Council approves — Dubow executes</div>
+            </div>
+          </div>
+          <div class="doesnt-row">
+            <div class="doesnt-x">✕</div>
+            <div>
+              <div class="doesnt-text">Audit the city's spending</div>
+              <div class="doesnt-who">That's the City Controller — independently elected, separate office</div>
+            </div>
+          </div>
+          <div class="doesnt-row">
+            <div class="doesnt-x">✕</div>
+            <div>
+              <div class="doesnt-text">Manage city contracts and procurement</div>
+              <div class="doesnt-who">Procurement Department — separate, though Finance oversees compliance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Current fiscal risks — as of March 2026</div>
+        <div class="risk-list">
+          <div class="risk-row high">
+            <div class="risk-level high">High</div>
+            <div>
+              <div class="risk-text">Federal funding cuts</div>
+              <div class="risk-sub">$2.8B in federal grants at risk from Washington policy changes. A $95M reserve has been set aside. Education, medical institutions, and federal jobs generate $1B+ in wage tax revenue alone.</div>
+            </div>
+          </div>
+          <div class="risk-row high">
+            <div class="risk-level high">High</div>
+            <div>
+              <div class="risk-text">ARPA funds exhausted</div>
+              <div class="risk-sub">$1.4B in pandemic federal relief is gone as of end of 2024. Programs funded by ARPA must now come from city tax revenue or be cut.</div>
+            </div>
+          </div>
+          <div class="risk-row med">
+            <div class="risk-level med">Med</div>
+            <div>
+              <div class="risk-text">Pension fund not yet fully funded</div>
+              <div class="risk-sub">At ~68% funded. Annual contributions are a fixed cost. Full funding projected within the decade — at which point $430M/year is freed up.</div>
+            </div>
+          </div>
+          <div class="risk-row med">
+            <div class="risk-level med">Med</div>
+            <div>
+              <div class="risk-text">Commercial property tax base erosion</div>
+              <div class="risk-sub">Remote work has reduced commercial real estate values. Lower assessments = lower property tax revenue from office buildings.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+
+      <div class="card">
+        <div class="card-label">Career — 18 years as CFO</div>
+        <div class="timeline">
+          <div class="tl-line"></div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-title">Director of Finance</div>
+            <div class="tl-sub">Jan 2008 – present · 3 mayors</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot old"></div>
+            <div class="tl-title">Exec. Dir., PICA</div>
+            <div class="tl-sub">State financial oversight board for Philly</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot old"></div>
+            <div class="tl-title">CFO, Commonwealth of PA</div>
+            <div class="tl-sub">2004–2005</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot old"></div>
+            <div class="tl-title">Budget Director, City of Philly</div>
+            <div class="tl-sub">2000–2004</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Bond credit ratings</div>
+        <div class="credit-row">
+          <div class="credit-agency">Moody's</div>
+          <div class="credit-rating credit-good">A2</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-agency">S&P</div>
+          <div class="credit-rating credit-good">A</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-agency">Fitch</div>
+          <div class="credit-rating credit-good">A</div>
+        </div>
+        <div class="credit-note">Highest ratings in 40+ years. Better rating = lower interest on borrowed money = more for services. Dubow has maintained A-range since 2013.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Pension fund progress</div>
+        <div class="pension-bar-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;">
+            <span>Funded status</span><span style="font-weight:500;color:var(--color-text-primary);">~68%</span>
+          </div>
+          <div class="pension-bar-bg"><div class="pension-bar-fill"></div></div>
+        </div>
+        <div class="pension-stats">
+          <span>44.8% in 2016</span>
+          <span>100% goal</span>
+        </div>
+        <div class="credit-note" style="margin-top:8px;">When fully funded, annual contributions drop by $430M — money that could go to services instead. This is the single biggest long-term fiscal improvement Dubow has managed.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Philadelphia tax burden vs. other cities</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);">
+            <span>Wage tax reliance</span><span style="font-weight:500;color:#a32d2d;">#1 in US</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);">
+            <span>Business tax reliance</span><span style="font-weight:500;color:#a32d2d;">#1 in US</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);">
+            <span>Property tax reliance</span><span style="font-weight:500;color:#3b6d11;">2nd lowest major city</span>
+          </div>
+          <div style="padding-top:6px;font-style:italic;">Philadelphia leans harder on workers and businesses than any comparable US city. This is the structural tax challenge Dubow navigates every year.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Contact</div>
+        <a class="contact-link" href="#">rob.dubow@phila.gov ↗</a>
+        <a class="contact-link" href="#">(215) 686-6141</a>
+        <a class="contact-link" href="#">phila.gov/finance ↗</a>
+      </div>
+
+    </div>
+  </div>
+</div>

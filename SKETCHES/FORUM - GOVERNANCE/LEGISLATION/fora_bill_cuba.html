@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA — Ley No. 148 / 2025 · Cuba</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #f2f4f8;
+  --white:      #ffffff;
+  --blue:       #1b3a6b;
+  --blue-mid:   #254f92;
+  --blue-lt:    #3a6abf;
+  --blue-pal:   #dde5f5;
+  --blue-vpal:  #edf1fb;
+  --gilt:       #b8860b;
+  --gilt-lt:    #d4a832;
+  --gilt-pal:   #f8f0dc;
+  --gilt-rul:   rgba(184,134,11,0.25);
+  --ink:        #0e1a2e;
+  --ink-mid:    #2c3e5a;
+  --ink-soft:   #5a6e8a;
+  --ink-mut:    #8a9ab8;
+  --rule:       rgba(27,58,107,0.1);
+  --rule-lt:    rgba(27,58,107,0.05);
+  --green:      #1a5c35;
+  --green-p:    #e8f5ed;
+  --green-r:    #a8d8ba;
+  --red:        #8b1a1a;
+  --red-p:      #faeaea;
+  --red-r:      #dba0a0;
+  --orange:     #b84a00;
+  --orng-p:     #fff3eb;
+  --orng-r:     #f4c09a;
+  --purple:     #4a1f6e;
+  --purp-p:     #f0eaf7;
+  --purp-r:     #c8a8e8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--blue-pal); border-radius: 10px; }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--blue);
+  border-bottom: 3px solid var(--gilt);
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 40px; gap: 0;
+}
+.nav-logo {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 20px; font-weight: 700;
+  color: white; letter-spacing: 0.1em;
+  margin-right: 32px; flex-shrink: 0;
+}
+.nav-logo span { color: var(--gilt-lt); }
+.nav-crumb {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.nav-crumb-sep { opacity: 0.3; }
+.nav-crumb-cur { color: var(--gilt-lt); }
+.nav-actions { margin-left: auto; display: flex; gap: 8px; }
+.nav-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 100px; cursor: pointer; border: none;
+}
+.nb-follow { background: var(--gilt); color: white; }
+.nb-share  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+/* HERO */
+.hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+  padding: 36px 40px 32px;
+}
+.hero-top {
+  display: grid; grid-template-columns: 1fr 320px;
+  gap: 48px; align-items: start;
+}
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gilt);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+}
+.hero-eyebrow::before { content: ''; width: 16px; height: 2px; background: var(--gilt); flex-shrink: 0; }
+.hero-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 32px; font-weight: 700;
+  color: var(--blue); letter-spacing: -0.01em; line-height: 1.2;
+  margin-bottom: 6px;
+}
+.hero-title-es {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px; font-weight: 400; font-style: italic;
+  color: var(--ink-soft); line-height: 1.4; margin-bottom: 16px;
+}
+.hero-meta-row {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  padding-top: 16px; border-top: 1px solid var(--rule-lt);
+}
+.hm { display: flex; flex-direction: column; gap: 3px; }
+.hm-l { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mut); }
+.hm-v { font-size: 13px; font-weight: 700; color: var(--blue); }
+.hm-sep { width: 1px; background: var(--rule); align-self: stretch; }
+
+/* STATUS PANEL */
+.status-panel {
+  background: var(--blue-vpal);
+  border: 1px solid var(--blue-pal);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.sp-row { display: flex; flex-direction: column; gap: 5px; }
+.sp-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mut); }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 100px;
+}
+.sb-committee { background: var(--orng-p); color: var(--orange); border: 1px solid var(--orng-r); }
+.sb-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* PROGRESS */
+.progress { display: flex; align-items: center; }
+.pn { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.pn-done { background: var(--blue); }
+.pn-curr { background: var(--orange); box-shadow: 0 0 0 3px var(--orng-p); }
+.pn-none { background: white; border: 2px solid var(--rule); }
+.pl { flex: 1; height: 2px; min-width: 14px; }
+.pl-done { background: var(--blue); }
+.pl-none { background: var(--rule); }
+.plbl { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 4px; white-space: nowrap; }
+.plbl-done { color: var(--blue); }
+.plbl-curr { color: var(--orange); font-weight: 600; }
+.plbl-none { color: var(--ink-mut); }
+
+/* CIVIC ACTION */
+.civic-action { background: var(--blue); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.ca-title { font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; color: white; }
+.ca-sub { font-size: 11.5px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+.ca-btns { display: flex; flex-direction: column; gap: 6px; }
+.ca-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  border: none; border-radius: 100px; padding: 9px 16px; cursor: pointer; text-align: center;
+}
+.ca-primary { background: var(--gilt); color: white; }
+.ca-secondary { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+/* BILINGUAL STRIP */
+.bil-strip {
+  background: var(--gilt-pal);
+  border-top: 1px solid var(--gilt-rul);
+  border-bottom: 1px solid var(--gilt-rul);
+  padding: 10px 40px;
+  display: flex; align-items: center; gap: 16px;
+}
+.bil-tag {
+  display: flex; align-items: center; gap: 5px;
+  background: white; border: 1px solid var(--gilt-rul);
+  border-radius: 100px; padding: 4px 12px;
+  flex-shrink: 0;
+}
+.bil-flag { font-size: 13px; }
+.bil-code { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: var(--gilt); font-weight: 500; }
+.bil-dot { color: rgba(184,134,11,0.3); }
+.bil-note { font-size: 13px; color: #6b5800; }
+.bil-link { color: var(--gilt); font-weight: 700; cursor: pointer; }
+
+/* SPLIT LAYOUT */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 0;
+  min-height: calc(100vh - 180px);
+  align-items: start;
+}
+
+/* LEFT COLUMN */
+.col-left {
+  padding: 32px 40px;
+  display: flex; flex-direction: column; gap: 32px;
+  border-right: 1px solid var(--rule);
+}
+
+/* SECTION BLOCK */
+.s-block { display: flex; flex-direction: column; gap: 14px; }
+.s-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--blue-pal);
+}
+.s-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--blue);
+  display: flex; align-items: center; gap: 8px;
+}
+.s-eyebrow::before { content: ''; width: 12px; height: 2px; background: currentColor; }
+.s-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: var(--blue); }
+.collapse-pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-mut); background: var(--bg); border: 1px solid var(--rule);
+  padding: 3px 10px; border-radius: 100px; cursor: pointer; flex-shrink: 0;
+}
+
+/* SCAFFOLD GRID */
+.scaffold-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.scaf-card {
+  border-radius: 10px; padding: 13px 14px;
+  border: 1px solid var(--rule);
+  background: var(--white);
+}
+.scaf-card.full { grid-column: 1 / -1; }
+.scaf-card.best { background: var(--green-p); border-color: var(--green-r); }
+.scaf-card.worst { background: var(--red-p); border-color: var(--red-r); }
+.scaf-card.hist { background: var(--blue-vpal); border-color: var(--blue-pal); }
+.scaf-kicker { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 5px; }
+.sk-blue { color: var(--blue); }
+.sk-green { color: var(--green); }
+.sk-red { color: var(--red); }
+.sk-gilt { color: var(--gilt); }
+.scaf-en { font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--ink-mid); margin-bottom: 6px; }
+.scaf-es { font-family: 'Nunito', sans-serif; font-size: 12px; font-style: italic; font-weight: 400; color: var(--ink-soft); border-top: 1px dashed var(--rule); padding-top: 6px; line-height: 1.55; }
+
+/* SOURCES */
+.source-list { display: flex; flex-direction: column; gap: 8px; }
+.source-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; background: var(--white);
+  border: 1px solid var(--rule); border-radius: 8px;
+}
+.tier-badge {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0; border: 1.5px solid;
+}
+.tb-inst  { background: var(--green-p);   border-color: var(--green-r); padding-top: 3px; }
+.tb-ver   { background: var(--blue-vpal); border-color: var(--blue); font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--blue); }
+.tb-persp { background: var(--bg);        border-color: var(--rule); }
+.tb-caut  { background: transparent; border: none; font-size: 22px; }
+.tb-disp  { background: transparent; border: none; font-size: 22px; }
+.source-body { flex: 1; min-width: 0; }
+.source-name { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.source-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; }
+.source-meta { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mut); margin-top: 3px; }
+
+/* LEGITIMACY BAR */
+.leg-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px; border-radius: 10px;
+  background: var(--blue-vpal); border-left: 3px solid var(--blue);
+}
+.leg-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); white-space: nowrap; }
+.leg-note { font-size: 11px; font-style: italic; color: var(--ink-mut); white-space: nowrap; }
+.leg-track { flex: 1; height: 6px; border-radius: 100px; background: var(--blue-pal); overflow: hidden; }
+.leg-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--blue), var(--blue-lt)); }
+.leg-score { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--blue); }
+.leg-denom { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mut); }
+
+/* SENTIMENT */
+.cohort-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.chip {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 13px; border-radius: 100px;
+  border: 1px solid var(--blue-pal); background: var(--blue-vpal); color: var(--blue);
+  cursor: pointer;
+}
+.chip.active { background: var(--blue); border-color: var(--blue); color: white; }
+.sent-bars { display: flex; flex-direction: column; gap: 9px; }
+.sb-row { display: flex; align-items: center; gap: 10px; }
+.sb-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mut); width: 58px; flex-shrink: 0; }
+.sb-track { flex: 1; height: 8px; background: var(--bg); border-radius: 100px; overflow: hidden; }
+.sb-fill { height: 100%; border-radius: 100px; }
+.sf-s { background: linear-gradient(to right, var(--green), #86efac); }
+.sf-o { background: linear-gradient(to right, var(--red), #fca5a5); }
+.sf-n { background: var(--ink-mut); }
+.sb-pct { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
+.pct-s { color: var(--green); }
+.pct-o { color: var(--red); }
+.pct-n { color: var(--ink-mut); }
+.cohort-callout {
+  border-left: 3px solid var(--gilt); background: var(--gilt-pal);
+  padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 10px;
+  font-size: 12.5px; color: #6b5800; line-height: 1.55;
+}
+.cohort-callout strong { color: var(--gilt); }
+
+/* SPONSORS */
+.sponsor-list { display: flex; flex-direction: column; gap: 8px; }
+.sponsor-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; background: var(--white);
+  border: 1px solid var(--rule); border-radius: 8px;
+}
+.sponsor-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--blue-pal); border: 2px solid var(--blue-vpal);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; color: var(--blue);
+  flex-shrink: 0;
+}
+.sponsor-name { font-size: 13px; font-weight: 700; color: var(--blue); }
+.sponsor-role { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mut); }
+.sponsor-tag { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt); }
+
+/* VOTE TALLY */
+.tally {
+  display: flex; background: var(--white);
+  border: 2px solid var(--blue-pal); border-radius: 12px; overflow: hidden;
+  border-top: 3px solid var(--blue);
+}
+.tc { flex: 1; padding: 14px 0; text-align: center; border-right: 1px solid var(--rule); }
+.tc:last-child { border-right: none; }
+.tnum { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.tn-yea { color: var(--green); }
+.tn-nay { color: var(--red); }
+.tn-pend { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mut); letter-spacing: 0.1em; margin-top: 7px; }
+.tlbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); }
+
+/* RIGHT COLUMN — DISCOURSE */
+.col-right {
+  background: var(--white);
+  border-left: 1px solid var(--rule);
+  display: flex; flex-direction: column;
+  position: sticky; top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+.disc-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.disc-title { font-family: 'Libre Baskerville', serif; font-size: 17px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+.disc-sub { font-size: 12px; color: var(--ink-soft); }
+
+/* STEEL-MAN */
+.sm-banner {
+  margin: 16px 24px 0;
+  padding: 13px 14px;
+  background: var(--purp-p); border: 1px solid var(--purp-r);
+  border-left: 4px solid var(--purple); border-radius: 0 10px 10px 0;
+  display: flex; gap: 10px; align-items: flex-start;
+  flex-shrink: 0;
+}
+.sm-ico { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.sm-body { flex: 1; }
+.sm-title { font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+.sm-sub { font-size: 11.5px; color: rgba(74,31,110,0.65); line-height: 1.45; }
+.sm-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--purple); color: white; border: none;
+  padding: 5px 12px; border-radius: 100px; cursor: pointer; margin-top: 7px;
+}
+
+/* CONTRIBUTIONS */
+.contrib-feed { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 16px; }
+.contrib {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 13px 14px; background: var(--bg);
+  border-radius: 10px; border: 1px solid var(--rule-lt);
+}
+.contrib-identity { display: flex; align-items: center; gap: 8px; }
+.contrib-avatar {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--blue-pal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; background: var(--blue-vpal); flex-shrink: 0;
+}
+.contrib-who { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: var(--ink-soft); }
+.contrib-who strong { color: var(--blue); }
+.contrib-text { font-size: 13px; line-height: 1.6; color: var(--ink-mid); }
+.contrib-es { font-size: 12px; font-style: italic; color: var(--ink-soft); border-top: 1px dashed var(--rule); padding-top: 5px; margin-top: 2px; line-height: 1.5; }
+.contrib-footer { display: flex; align-items: center; gap: 10px; }
+.contrib-stance {
+  font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 100px;
+}
+.cs-support { background: var(--green-p); color: var(--green); }
+.cs-oppose { background: var(--red-p); color: var(--red); }
+.cs-nuanced { background: var(--blue-vpal); color: var(--blue-lt); }
+.contrib-time { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--ink-mut); margin-left: auto; }
+.source-chip { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt); }
+
+/* TONE INTERCEPT */
+.tone-banner {
+  margin: 0 24px 4px;
+  padding: 11px 14px;
+  background: var(--orng-p); border: 1px solid var(--orng-r);
+  border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0;
+  flex-shrink: 0;
+}
+.tone-title { font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; color: var(--orange); margin-bottom: 2px; }
+.tone-sub { font-size: 11.5px; color: var(--ink-soft); line-height: 1.45; }
+.tone-btns { display: flex; gap: 6px; margin-top: 8px; }
+.tone-rev { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--orange); color: white; border: none; padding: 5px 12px; border-radius: 100px; cursor: pointer; }
+.tone-post { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; background: white; color: var(--ink-soft); border: 1px solid var(--rule); padding: 5px 12px; border-radius: 100px; cursor: pointer; }
+
+/* COMPOSE */
+.compose-area {
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.compose-identity {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.compose-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gilt-pal); border: 2px solid var(--gilt-rul); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.compose-who { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: var(--ink-soft); }
+.compose-who strong { color: var(--blue); }
+.compose-box {
+  width: 100%; min-height: 72px; padding: 12px 14px;
+  font-family: 'Nunito', sans-serif; font-size: 13px; line-height: 1.55;
+  border: 1.5px solid var(--blue-pal); border-radius: 10px; background: var(--bg);
+  color: var(--ink); resize: none; outline: none;
+}
+.compose-box:focus { border-color: var(--blue); background: var(--white); }
+.compose-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.compose-source { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt); cursor: pointer; }
+.compose-submit { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: var(--blue); color: white; border: none; padding: 8px 18px; border-radius: 100px; cursor: pointer; }
+
+.hero-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:10px 24px 0;line-height:2;}
+.hero-breadcrumb a{color:rgba(255,255,255,0.3);text-decoration:none;}
+.hero-breadcrumb a:hover{color:rgba(255,255,255,0.75);}
+.hero-breadcrumb .sep{opacity:0.2;margin:0 5px;}
+.bc-earth a{color:rgba(255,255,255,0.22);}
+.bc-local a{color:rgba(255,255,255,0.45);}
+.bc-here{color:var(--gilt-lt);font-weight:600;}
+.bc-collapse{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);cursor:pointer;border:1px solid rgba(255,255,255,0.12);padding:2px 8px;border-radius:3px;margin-left:4px;}
+.bc-full{display:none;flex-wrap:wrap;align-items:center;gap:0;}
+.bc-full.open{display:flex;}
+.bill-entity-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.bill-type-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:3px;background:rgba(184,134,11,0.25);color:var(--gilt-lt);border:0.5px solid rgba(184,134,11,0.4);}
+.bill-lang-chip{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.15);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);}
+.bill-num-line{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;color:rgba(255,255,255,0.35);margin-bottom:5px;}
+.hero-stats-bill{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px;}
+.bhs{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);border-radius:4px;padding:5px 10px;min-width:68px;}
+.bhs-num{font-size:13px;font-weight:600;color:white;line-height:1;}
+.bhs-num.g{color:#9FE1CB;}.bhs-num.a{color:#FAC775;}
+.bhs-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-top:2px;}
+.star-div{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.55em;color:var(--gilt);text-align:right;padding:8px 24px 0;opacity:0.5;}
+.bill-tabs{display:flex;border-top:0.5px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.15);}
+.btab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:9px 14px;color:rgba(255,255,255,0.3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;position:relative;}
+.btab:hover{color:rgba(255,255,255,0.6);}
+.btab.on{color:var(--gilt-lt);border-bottom-color:var(--gilt);}
+.btab::after{content:attr(title);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.7);font-size:9px;padding:4px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.12s;border:1px solid rgba(255,255,255,0.1);margin-bottom:4px;}
+.btab:hover::after{opacity:1;}
+
+
+/* ── BILL HERO v10 — light theme ── */
+.hero{background:var(--blue);border-bottom:3px solid var(--gilt);padding:0;}
+.hero-bc-strip{padding:10px 40px 0;display:flex;flex-wrap:wrap;align-items:center;gap:0;}
+.hero-bc-strip a{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.22);text-decoration:none;}
+.hero-bc-strip a:hover{color:rgba(255,255,255,0.6);}
+.hero-bc-strip .bc-sep{color:rgba(255,255,255,0.15);margin:0 5px;font-size:9px;}
+.hero-bc-strip .bc-here{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt-lt);font-weight:600;}
+.hero-bc-strip .bc-toggle{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);cursor:pointer;border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:3px;margin-left:6px;}
+.bc-full-row{display:none;flex-wrap:wrap;align-items:center;gap:0;padding:4px 40px 0;}
+.bc-full-row.open{display:flex;}
+.bc-full-row a{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;}
+.bc-cosmic-item a,.bc-cosmic-item{color:rgba(255,255,255,0.14);}
+.bc-earth-item a,.bc-earth-item{color:rgba(255,255,255,0.22);}
+.hero-top{display:grid;grid-template-columns:1fr 320px;gap:48px;align-items:start;padding:18px 40px 0;}
+.bill-entity-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px;}
+.bill-type-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 9px;border-radius:3px;background:rgba(184,134,11,0.3);color:var(--gilt-lt);border:0.5px solid rgba(184,134,11,0.5);}
+.bill-lang-chip{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:3px;background:rgba(55,138,221,0.2);border:0.5px solid rgba(181,212,244,0.35);color:rgba(181,212,244,0.85);}
+.bill-num-line{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;color:rgba(255,255,255,0.35);margin-bottom:6px;}
+.hero-title{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:white;letter-spacing:-0.01em;line-height:1.2;margin-bottom:12px;}
+.hero-title-es{font-family:'Libre Baskerville',serif;font-size:14px;color:rgba(255,255,255,0.4);font-style:italic;margin-bottom:12px;margin-top:-8px;}
+.hero-meta-row{display:flex;gap:20px;flex-wrap:wrap;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);}
+.hm{display:flex;flex-direction:column;gap:3px;}
+.hm-l{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.hm-v{font-size:13px;font-weight:700;color:white;}
+.hm-sep{width:1px;background:rgba(255,255,255,0.1);align-self:stretch;}
+.hero-stats-bill{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px;padding-bottom:18px;}
+.bhs{background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);border-radius:4px;padding:6px 11px;min-width:70px;}
+.bhs-num{font-size:14px;font-weight:700;color:white;line-height:1;}
+.bhs-num.g{color:#9FE1CB;}.bhs-num.a{color:#FAC775;}.bhs-num.r{color:#ff8080;}
+.bhs-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-top:2px;}
+.status-panel{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;}
+.sp-row{display:flex;flex-direction:column;gap:5px;}
+.sp-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.status-badge{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border-radius:100px;}
+.sb-floor{background:rgba(21,92,45,0.35);color:#9FE1CB;border:1px solid rgba(21,92,45,0.5);}
+.sb-committee{background:rgba(196,127,0,0.25);color:#FAC775;border:1px solid rgba(196,127,0,0.4);}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.pn-done{background:var(--gilt);}
+.pn-curr{background:var(--gilt);box-shadow:0 0 0 3px rgba(184,134,11,0.3);}
+.pn-none{background:rgba(255,255,255,0.15);border:none;}
+.pl-done{background:var(--gilt);}
+.pl-none{background:rgba(255,255,255,0.1);}
+.plbl-done{color:var(--gilt-lt);}
+.plbl-curr{color:var(--gilt-lt);font-weight:700;}
+.plbl-none{color:rgba(255,255,255,0.3);}
+.civic-action{background:rgba(0,0,0,0.2);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.08);}
+.ca-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:white;}
+.ca-sub{font-size:11.5px;color:rgba(255,255,255,0.45);line-height:1.5;}
+.ca-btns{display:flex;flex-direction:column;gap:6px;}
+.ca-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:100px;padding:9px 16px;cursor:pointer;text-align:center;}
+.ca-primary{background:var(--gilt);color:white;}
+.ca-secondary{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.12);}
+.hero-star-div{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.55em;color:var(--gilt);text-align:right;padding:8px 40px 0;opacity:0.45;}
+.bill-tabs{display:flex;border-top:0.5px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.18);}
+.btab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 15px;color:rgba(255,255,255,0.3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;position:relative;}
+.btab:hover{color:rgba(255,255,255,0.65);}
+.btab.on{color:var(--gilt-lt);border-bottom-color:var(--gilt);}
+.btab::after{content:attr(title);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.75);font-size:9px;padding:4px 9px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.12s;border:1px solid rgba(255,255,255,0.12);}
+.btab:hover::after{opacity:1;}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-links">
+    <a href="#" class="nav-link">Commons</a>
+    <a href="#" class="nav-link">Lyceum</a>
+    <a href="#" class="nav-link">Ledger</a>
+    <a href="#" class="nav-link">Square</a>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn nb-share">Share</button>
+    <button class="nav-btn nb-follow">Follow</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bc-strip" id="bc-short-r">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(255,255,255,0.12);">&#183;&#183;&#183;</span>
+    <span class="bc-sep">/</span>
+    <a href="#">Caribbean</a>
+    <span class="bc-sep">/</span>
+    <a href="#">Cuba</a>
+    <span class="bc-sep">/</span>
+    <a href="#">Asamblea Nacional</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-here">Ley No. 148 / 2025</span>
+    <span class="bc-toggle" onclick="toggleBcCosmic()">&#8593; Full location</span>
+  </div>
+  <div class="bc-full-row" id="bc-full-r">
+    <span class="bc-cosmic-item">The Universe</span><span class="bc-sep">/</span>
+    <span class="bc-cosmic-item">Milky Way</span><span class="bc-sep">/</span>
+    <span class="bc-cosmic-item">Solar System</span><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">Earth</a><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">North America</a><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">Caribbean</a><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">Cuba</a><span class="bc-sep">/</span>
+    <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none;">Asamblea Nacional</a><span class="bc-sep">/</span>
+    <span class="bc-here">Ley No. 148 / 2025</span>
+    <span class="bc-toggle" onclick="toggleBcCosmic()">&#8595; Collapse</span>
+  </div>
+
+  <div class="hero-top">
+    <div>
+      <div class="bill-entity-row">
+        <span class="bill-type-chip">National Legislation &middot; Asamblea</span>
+        <span class="status-badge sb-committee"><span class="sb-dot"></span>In Committee</span>
+        <span class="bill-lang-chip">EN &middot; ES</span>
+      </div>
+      <div class="bill-num-line">Ley No. 148 / 2025 &middot; Introduced March 4, 2025</div>
+      <h1 class="hero-title">Housing Allocation and<br>Cooperative Reform Act</h1>
+      <div class="hero-title-es">Ley de Asignaci&oacute;n de Vivienda y Reforma Cooperativa</div>
+      <div class="hero-meta-row">
+        <div class="hm"><span class="hm-l">Author</span><span class="hm-v">M. D&iacute;az-Canel</span></div>
+        <div class="hm-sep"></div>
+        <div class="hm"><span class="hm-l">Committee</span><span class="hm-v">Housing &amp; Urban Affairs</span></div>
+      </div>
+      <div class="hero-stats-bill">
+        <div class="bhs"><div class="bhs-num a">Committee</div><div class="bhs-lbl">Stage</div></div>
+        <div class="bhs"><div class="bhs-num">18 mo</div><div class="bhs-lbl">Implementation</div></div>
+        <div class="bhs"><div class="bhs-num">10 yr</div><div class="bhs-lbl">Occupancy req.</div></div>
+        <div class="bhs"><div class="bhs-num g">12.8K</div><div class="bhs-lbl">Engaged</div></div>
+      </div>
+    </div>
+    <div class="status-panel">
+      <div class="sp-row">
+        <span class="sp-label">Legislative progress</span>
+        <div class="progress">
+          <div class="pn pn-done"></div><div class="pl pl-done"></div>
+          <div class="plbl plbl-done">Introduced</div><div class="pl pl-done"></div>
+          <div class="pn pn-done"></div><div class="pl pl-done"></div>
+          <div class="plbl plbl-curr">Committee</div><div class="pl pl-none"></div>
+          <div class="pn pn-curr"></div><div class="pl pl-none"></div>
+          <div class="plbl plbl-none">Floor Vote</div><div class="pl pl-none"></div>
+          <div class="pn pn-none"></div>
+        </div>
+      </div>
+      <div class="civic-action">
+        <div class="ca-title">Add your voice</div>
+        <div class="ca-sub">12,847 Cubans and diaspora members have engaged with this bill.</div>
+        <div class="ca-btns">
+          <button class="ca-btn ca-primary">Post a contribution</button>
+          <button class="ca-btn ca-secondary">Contact your delegate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-star-div">&#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733;</div>
+  <div class="bill-tabs">
+    <div class="btab on" title="What does this law do?">Overview</div>
+    <div class="btab" title="Where is it in the process?">Status &amp; Progress</div>
+    <div class="btab" title="Who authored it and who benefits?">Authors &amp; Interests</div>
+    <div class="btab" title="What do the sources say?">Coverage</div>
+    <div class="btab" title="What is contested?">Discourse</div>
+    <div class="btab" title="What is the record?">The Record</div>
+  </div>
+</div>
+
+<!-- SPLIT BODY -->
+<div class="split">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-left">
+
+    <!-- CIVIC SCAFFOLD -->
+    <div class="s-block">
+      <div class="s-head">
+        <div>
+          <div class="s-eyebrow">Civic Scaffold</div>
+          <div class="s-title">Orientation before opinion</div>
+        </div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="scaffold-grid">
+        <div class="scaf-card full">
+          <div class="scaf-kicker sk-blue">What it does</div>
+          <div class="scaf-en">Restructures urban housing allocation by transferring state-directed assignment to cooperative ownership for residents with 10 or more years of continuous occupancy. Creates a new Housing Cooperative Registry and mandates municipal-level implementation within 18 months.</div>
+          <div class="scaf-es">Reestructura la asignación de vivienda urbana transfiriendo la asignación dirigida por el estado a propiedad cooperativa para residentes con 10 o más años de ocupación continua.</div>
+        </div>
+        <div class="scaf-card">
+          <div class="scaf-kicker sk-gilt">Who it affects</div>
+          <div class="scaf-en">Est. 2.1 million households in Havana, Santiago de Cuba, and Holguín. Excludes recently assigned housing (under 10 yrs) and state-sector workers in tied accommodations.</div>
+          <div class="scaf-es">Aprox. 2,1 millones de hogares. Excluye viviendas asignadas recientemente y trabajadores del sector estatal.</div>
+        </div>
+        <div class="scaf-card">
+          <div class="scaf-kicker sk-gilt">Fiscal note</div>
+          <div class="scaf-en">Est. ₱840M in title transfer revenue over 5 years. Implementation cost ~₱120M. Net positive to municipal budgets by year 3.</div>
+          <div class="scaf-es">₱840M en ingresos por transferencia de títulos en 5 años. Costo de implementación ~₱120M.</div>
+        </div>
+        <div class="scaf-card best">
+          <div class="scaf-kicker sk-green">Best case</div>
+          <div class="scaf-en">Builds a property-owning citizenry. Incentivizes maintenance and investment. Reduces state housing burden by an estimated 30% within a decade.</div>
+          <div class="scaf-es">Construye ciudadanía propietaria. Incentiva el mantenimiento e inversión. Reduce la carga estatal de vivienda en un 30%.</div>
+        </div>
+        <div class="scaf-card worst">
+          <div class="scaf-kicker sk-red">Worst case</div>
+          <div class="scaf-en">Wealthier residents use connections to consolidate multiple units. Poorer long-term tenants priced out of cooperative pricing. Inequality accelerates in urban centers.</div>
+          <div class="scaf-es">Residentes más ricos consolidan múltiples unidades. Inquilinos más pobres quedan fuera de los precios cooperativos.</div>
+        </div>
+        <div class="scaf-card hist full">
+          <div class="scaf-kicker sk-blue">Historical precedent</div>
+          <div class="scaf-en">Cuba's 1960 Urban Reform Law nationalized all rental housing and abolished landlordism. This bill marks the first reversal of that policy since the Revolution — a structural shift comparable in scale. Similar cooperative housing transitions in Vietnam (2005–2014) and Nicaragua (1990s) produced mixed results depending on pricing mechanisms.</div>
+          <div class="scaf-es">La Ley de Reforma Urbana de Cuba de 1960 nationalizó todo el arrendamiento. Este proyecto marca la primera reversión de esa política desde la Revolución.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOURCES -->
+    <div class="s-block">
+      <div class="s-head">
+        <div>
+          <div class="s-eyebrow">Sources</div>
+          <div class="s-title">4 sources · Community-scored</div>
+        </div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="source-list">
+        <div class="source-row">
+          <div class="tier-badge tb-inst" title="Tier 1 · Institution">🏛</div>
+          <div class="source-body">
+            <div class="source-name">Asamblea Nacional del Poder Popular</div>
+            <div class="source-desc">Official bill text and committee referral notice. Primary legislative source.</div>
+            <div class="source-meta">asamblea.gob.cu · Published Mar 4, 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-ver" title="Tier 2 · Verified">✓</div>
+          <div class="source-body">
+            <div class="source-name">Reuters — Havana Bureau</div>
+            <div class="source-desc">Reporting on the bill's committee referral and initial diaspora response. Confirmed details with two government officials.</div>
+            <div class="source-meta">reuters.com · Mar 9, 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-persp" title="Tier 3 · Perspective">💬</div>
+          <div class="source-body">
+            <div class="source-name">14ymedio — Havana</div>
+            <div class="source-desc">Independent Cuban outlet. Analysis of the 10-year occupancy threshold and who qualifies. Critical framing but factually sourced.</div>
+            <div class="source-meta">14ymedio.com · Mar 11, 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-persp" title="Tier 3 · Perspective">💬</div>
+          <div class="source-body">
+            <div class="source-name">Cuban Studies Institute — Policy Brief</div>
+            <div class="source-desc">Academic comparison to Vietnam and Nicaragua cooperative transitions. Methodology disclosed.</div>
+            <div class="source-meta">cubanstudies.org · Feb 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="leg-bar">
+        <span class="leg-lbl">Legitimacy Score</span>
+        <span class="leg-note">Scores citations, not claims</span>
+        <div class="leg-track"><div class="leg-fill" style="width:78%"></div></div>
+        <span class="leg-score">78</span>
+        <span class="leg-denom">/ 100</span>
+      </div>
+    </div>
+
+    <!-- SENTIMENT -->
+    <div class="s-block">
+      <div class="s-head">
+        <div>
+          <div class="s-eyebrow">Cohort Sentiment</div>
+          <div class="s-title">Public position by group</div>
+        </div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="cohort-chips">
+        <div class="chip active">All</div>
+        <div class="chip">Cuban diaspora</div>
+        <div class="chip">Havana residents</div>
+        <div class="chip">Age 25–44</div>
+        <div class="chip">Long-term tenants</div>
+      </div>
+      <div class="sent-bars">
+        <div class="sb-row"><span class="sb-lbl">Support</span><div class="sb-track"><div class="sb-fill sf-s" style="width:54%"></div></div><span class="sb-pct pct-s">54%</span></div>
+        <div class="sb-row"><span class="sb-lbl">Oppose</span><div class="sb-track"><div class="sb-fill sf-o" style="width:31%"></div></div><span class="sb-pct pct-o">31%</span></div>
+        <div class="sb-row"><span class="sb-lbl">Neutral</span><div class="sb-track"><div class="sb-fill sf-n" style="width:15%"></div></div><span class="sb-pct pct-n">15%</span></div>
+      </div>
+      <div class="cohort-callout"><strong>Notable split:</strong> Long-term tenants (20+ yrs) support at 72% vs. recent residents at 38%. The 10-year threshold is the dividing line.</div>
+    </div>
+
+    <!-- SPONSORS & RECORD -->
+    <div class="s-block">
+      <div class="s-head">
+        <div>
+          <div class="s-eyebrow">Sponsors &amp; Vote Record</div>
+          <div class="s-title">Floor vote pending · Committee stage</div>
+        </div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="sponsor-list">
+        <div class="sponsor-row">
+          <div class="sponsor-avatar">MD</div>
+          <div><div class="sponsor-name">Miguel Díaz-Canel</div><div class="sponsor-role">President · Primary Sponsor</div></div>
+          <span class="sponsor-tag">Lead sponsor</span>
+        </div>
+        <div class="sponsor-row">
+          <div class="sponsor-avatar">AL</div>
+          <div><div class="sponsor-name">Ana Luis Rodríguez</div><div class="sponsor-role">Housing Committee Chair</div></div>
+          <span class="sponsor-tag">Co-sponsor</span>
+        </div>
+        <div class="sponsor-row">
+          <div class="sponsor-avatar">EM</div>
+          <div><div class="sponsor-name">Esteban Morales</div><div class="sponsor-role">Delegate · Santiago de Cuba</div></div>
+          <span class="sponsor-tag">Co-sponsor</span>
+        </div>
+      </div>
+      <div class="tally" style="margin-top:10px;">
+        <div class="tc"><div class="tnum tn-pend" style="font-size:12px;margin-top:8px;">In Committee</div><div class="tlbl" style="margin-top:4px;">Floor vote pending</div></div>
+      </div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- RIGHT COLUMN — DISCOURSE -->
+  <div class="col-right">
+    <div class="disc-header">
+      <div class="disc-title">Community Discourse</div>
+      <div class="disc-sub">3,241 contributions · Ranked by legitimacy score</div>
+    </div>
+
+    <div class="sm-banner">
+      <div class="sm-ico">⚖️</div>
+      <div class="sm-body">
+        <div class="sm-title">Steel-man challenge</div>
+        <div class="sm-sub">Before posting, articulate the strongest case for the view you oppose.</div>
+        <button class="sm-btn">Try it</button>
+      </div>
+    </div>
+
+    <div class="contrib-feed">
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">🏗</div>
+          <span class="contrib-who"><strong>Civil Engineer · 40s · Havana</strong></span>
+        </div>
+        <div class="contrib-text">The 10-year occupancy requirement is the critical detail. Most Havana tenants have lived in their units for 20+ years. But the question is whether cooperative pricing gets set at market rate or at a subsidized basis — the bill leaves this to municipal discretion, which worries me.</div>
+        <div class="contrib-es">El requisito de 10 años de ocupación es el detalle crítico. La pregunta es si el precio cooperativo se establece a valor de mercado o subsidiado — el proyecto deja esto a la discreción municipal.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-nuanced">Nuanced</span>
+          <span class="source-chip">Reuters [A] · 14ymedio [A]</span>
+          <span class="contrib-time">2h ago</span>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">🏛</div>
+          <span class="contrib-who"><strong>Lawyer · 50s · Miami (Diaspora)</strong></span>
+        </div>
+        <div class="contrib-text">I've watched Vietnam's cooperative housing transition closely. The mechanism matters enormously. When pricing was left to local discretion in Hanoi, wealthier residents quickly consolidated. Cuba needs a national pricing floor written into the bill itself, not deferred to municipalities.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-oppose">Concerned</span>
+          <span class="source-chip">CSI Brief [B]</span>
+          <span class="contrib-time">4h ago</span>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">👩‍🏫</div>
+          <span class="contrib-who"><strong>Teacher · 30s · Santiago de Cuba</strong></span>
+        </div>
+        <div class="contrib-text">My family has lived in our apartment since 1967. This would be the first time we have any claim to ownership. Whatever the flaws, the principle is right. I support this bill.</div>
+        <div class="contrib-es">Mi familia ha vivido en nuestro apartamento desde 1967. Por primera vez tendríamos derecho a la propiedad. Apoyo este proyecto.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-support">Support</span>
+          <span class="contrib-time">6h ago</span>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">📊</div>
+          <span class="contrib-who"><strong>Economist · 40s · Havana</strong></span>
+        </div>
+        <div class="contrib-text">The fiscal note understates implementation risk. Municipal governments lack the registry infrastructure to process 2.1 million title transfers in 18 months. The timeline needs to be extended or the rollout will be chaotic.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-nuanced">Nuanced</span>
+          <span class="source-chip">ANPP [S]</span>
+          <span class="contrib-time">8h ago</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tone-banner">
+      <div class="tone-title">Tone check</div>
+      <div class="tone-sub">Your draft uses language that may read as dismissive of diaspora perspectives. Consider revising before posting.</div>
+      <div class="tone-btns">
+        <button class="tone-rev">Revise draft</button>
+        <button class="tone-post">Post anyway</button>
+      </div>
+    </div>
+
+    <div class="compose-area">
+      <div class="compose-identity">
+        <div class="compose-avatar">🏘</div>
+        <span class="compose-who">Posting as <strong>Homeowner · 40s · Havana</strong> · <span style="color:var(--gilt);cursor:pointer;">Change</span></span>
+      </div>
+      <textarea class="compose-box" placeholder="Add your contribution — cite a source to boost your legitimacy score..."></textarea>
+      <div class="compose-footer">
+        <span class="compose-source">+ Add a source</span>
+        <button class="compose-submit">Post contribution</button>
+      </div>
+    </div>
+
+  </div><!-- /col-right -->
+</div><!-- /split -->
+
+<script>
+function toggleBcCosmic(){var f=document.getElementById("bc-full"),s=document.getElementById("bc-short"),o=f.classList.contains("open");if(o){f.classList.remove("open");s.style.display="flex";}else{f.classList.add("open");s.style.display="none";}}
+</script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.p { max-width: 920px; margin: 0 auto; padding-bottom: 2rem; font-family: var(--font-sans); }
+
+.hero { background: #1a1a2e; color: #f0ebe0; padding: 1.5rem 2rem 0; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; display: flex; gap: 1.5rem; align-items: flex-end; }
+.hero-photo { width: 96px; height: 114px; border-radius: 4px; background: #2a2a4a; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 36px; color: #8080b0; margin-bottom: -1px; }
+.hero-left { flex: 1; padding-bottom: 1.25rem; }
+.eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #9b8a5a; margin-bottom: 5px; font-weight: 500; }
+.hero-name { font-size: 24px; font-weight: 500; color: #f0ebe0; margin-bottom: 8px; }
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.chip-party { background: rgba(30,80,160,0.35); color: #90b4f0; border: 0.5px solid rgba(80,130,220,0.4); }
+.chip-district { background: rgba(155,138,90,0.2); color: #c4a85a; border: 0.5px solid rgba(155,138,90,0.35); }
+.chip-term { font-size: 11px; color: #8a9ab0; }
+.hero-actions { padding-bottom: 1.25rem; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.btn-primary { padding: 8px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: #9b8a5a; color: #1a1a2e; border: none; cursor: pointer; font-weight: 500; white-space: nowrap; }
+.btn-secondary { padding: 7px 16px; border-radius: var(--border-radius-md); font-size: 12px; background: transparent; color: #c4a85a; border: 0.5px solid #9b8a5a; cursor: pointer; white-space: nowrap; }
+
+.proximity-bar { background: #0f1020; padding: 10px 2rem; display: flex; align-items: center; gap: 12px; font-size: 11px; color: #6a7a8a; }
+.prox-label { color: #9b8a5a; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; font-size: 10px; }
+.prox-item { display: flex; align-items: center; gap: 5px; }
+.prox-dot { width: 6px; height: 6px; border-radius: 50%; background: #1d9e75; }
+.prox-dot.amber { background: #ba7517; }
+.prox-dot.red { background: #a32d2d; }
+.prox-name { color: #a0b0c0; font-size: 11px; }
+.prox-divider { color: #2a3040; }
+
+.tab-row { background: #141428; display: flex; padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.tab { font-size: 11px; padding: 11px 12px; color: #5a6a7a; cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; white-space: nowrap; }
+.tab.active { color: #c4a85a; border-bottom-color: #9b8a5a; }
+
+.body { display: grid; grid-template-columns: 1fr 268px; gap: 1.25rem; padding: 1.25rem 0 0; }
+.main { display: flex; flex-direction: column; gap: 1rem; }
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; }
+.card-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: .9rem; font-weight: 500; }
+
+.proximity-callout { background: var(--color-background-secondary); border-left: 3px solid #9b8a5a; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.5; }
+.proximity-callout strong { color: var(--color-text-primary); font-weight: 500; }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 11px 10px; text-align: center; }
+.stat-val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.stat-lbl { font-size: 10px; color: var(--color-text-secondary); margin-top: 3px; }
+.stat-sub { font-size: 10px; color: var(--color-text-secondary); margin-top: 1px; opacity: 0.65; }
+
+.vote-list { display: flex; flex-direction: column; gap: 0; }
+.vote-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.vote-row:last-child { border-bottom: none; }
+.vote-pill { font-size: 10px; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; min-width: 36px; text-align: center; font-weight: 500; }
+.vote-yes { background: #eaf3de; color: #3b6d11; }
+.vote-no { background: #fcebeb; color: #791f1f; }
+.vote-abs { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+.vote-bill { flex: 1; color: var(--color-text-primary); }
+.vote-bill-sub { font-size: 11px; color: var(--color-text-secondary); }
+.vote-date { font-size: 10px; color: var(--color-text-secondary); white-space: nowrap; }
+.vote-tag { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: var(--color-background-secondary); color: var(--color-text-secondary); white-space: nowrap; }
+
+.issue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.issue-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; display: flex; gap: 8px; align-items: flex-start; }
+.issue-icon { font-size: 16px; flex-shrink: 0; }
+.issue-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.issue-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.issue-bar-wrap { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 5px; }
+.issue-bar { height: 100%; border-radius: 2px; }
+
+.contact-methods { display: flex; flex-direction: column; gap: 6px; }
+.contact-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); font-size: 12px; }
+.contact-type { color: var(--color-text-secondary); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.contact-val { color: var(--color-text-primary); font-weight: 500; }
+.contact-action { font-size: 11px; color: #185fa5; cursor: pointer; }
+@media (prefers-color-scheme: dark) { .contact-action { color: #85b7eb; } }
+
+.request-types { display: flex; flex-direction: column; gap: 6px; }
+.req-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); cursor: pointer; }
+.req-row:hover { background: var(--color-background-tertiary); }
+.req-icon { font-size: 14px; flex-shrink: 0; }
+.req-label { font-size: 12px; color: var(--color-text-primary); flex: 1; }
+.req-arrow { font-size: 12px; color: var(--color-text-secondary); }
+
+.upcoming-list { display: flex; flex-direction: column; gap: 8px; }
+.upcoming-item { display: flex; gap: 10px; align-items: flex-start; }
+.upcoming-date { min-width: 36px; text-align: center; }
+.upcoming-month { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-secondary); }
+.upcoming-day { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.upcoming-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.upcoming-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.upcoming-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-top: 3px; }
+
+.district-fact { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.district-fact:last-child { border-bottom: none; }
+.district-key { color: var(--color-text-secondary); }
+.district-val { font-weight: 500; color: var(--color-text-primary); }
+
+.committee-list { display: flex; flex-direction: column; gap: 6px; }
+.committee-row { font-size: 12px; padding: 7px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); display: flex; justify-content: space-between; align-items: center; }
+.committee-name { color: var(--color-text-primary); }
+.committee-role { font-size: 10px; padding: 1px 7px; border-radius: 8px; }
+.role-chair { background: #faeeda; color: #633806; }
+.role-member { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+@media (prefers-color-scheme: dark) {
+  .role-chair { background: #412402; color: #fac775; }
+}
+
+.neighbors-note { font-size: 11px; color: var(--color-text-secondary); background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 10px; margin-top: 8px; border-left: 2px solid #378add; line-height: 1.5; }
+
+.scale-legend { display: flex; gap: 12px; margin-bottom: .75rem; flex-wrap: wrap; }
+.scale-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+.scale-dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+
+<div class="p">
+  <div class="hero">
+    <div class="hero-photo">👤</div>
+    <div class="hero-left">
+      <div class="eyebrow">Philadelphia City Council · 2nd District</div>
+      <div class="hero-name">Councilmember Kenyatta Johnson</div>
+      <div class="hero-chips">
+        <span class="chip chip-party">Democrat</span>
+        <span class="chip chip-district">District 2 · South Philadelphia</span>
+        <span class="chip chip-term">In office since 2012</span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-primary">Contact Office</button>
+      <button class="btn-secondary">+ Follow</button>
+    </div>
+  </div>
+
+  <div class="proximity-bar">
+    <span class="prox-label">Your rep</span>
+    <div class="prox-item"><div class="prox-dot"></div><span class="prox-name">District 2 resident</span></div>
+    <span class="prox-divider">·</span>
+    <div class="prox-item"><div class="prox-dot"></div><span class="prox-name">Covers Point Breeze, Grays Ferry, East Passyunk, Pennsport</span></div>
+    <span class="prox-divider">·</span>
+    <div class="prox-item"><div class="prox-dot amber"></div><span class="prox-name">Next council meeting Apr 10</span></div>
+  </div>
+
+  <div class="tab-row">
+    <div class="tab active">Overview</div>
+    <div class="tab">Votes</div>
+    <div class="tab">Legislation</div>
+    <div class="tab">District</div>
+    <div class="tab">Contact & Requests</div>
+    <div class="tab">Record</div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <div class="proximity-callout">
+        <strong>Your most local elected official.</strong> Your city councilmember controls the things you see every day — zoning, permits, street repairs, trash pickup contracts, rec centers, and whether your neighborhood gets a new development or stops one. This is the office that answers the phone.
+      </div>
+
+      <div class="card">
+        <div class="card-label">Council record — this term</div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">94%</div>
+            <div class="stat-lbl">Attendance rate</div>
+            <div class="stat-sub">council sessions</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">31</div>
+            <div class="stat-lbl">Bills introduced</div>
+            <div class="stat-sub">this term</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">18</div>
+            <div class="stat-lbl">Bills passed</div>
+            <div class="stat-sub">58% passage rate</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">87%</div>
+            <div class="stat-lbl">Party-line votes</div>
+            <div class="stat-sub">Democratic majority</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Recent votes — bills affecting your district</div>
+        <div class="vote-list">
+          <div class="vote-row">
+            <div class="vote-pill vote-yes">Yes</div>
+            <div>
+              <div class="vote-bill">Affordable Housing Preservation Fund — $25M allocation</div>
+              <div class="vote-bill-sub">Bill 240312 · Passed 14–2 · Mar 2024</div>
+            </div>
+            <span class="vote-tag">Housing</span>
+          </div>
+          <div class="vote-row">
+            <div class="vote-pill vote-no">No</div>
+            <div>
+              <div class="vote-bill">Broadway Market zoning variance (1400 S Broad)</div>
+              <div class="vote-bill-sub">Bill 230891 · Failed 8–9 · Dec 2023</div>
+            </div>
+            <span class="vote-tag">Zoning</span>
+          </div>
+          <div class="vote-row">
+            <div class="vote-pill vote-yes">Yes</div>
+            <div>
+              <div class="vote-bill">Vision Zero — protected bike lane expansion on Passyunk Ave</div>
+              <div class="vote-bill-sub">Bill 240088 · Passed 11–5 · Feb 2024</div>
+            </div>
+            <span class="vote-tag">Streets</span>
+          </div>
+          <div class="vote-row">
+            <div class="vote-pill vote-abs">Abs</div>
+            <div>
+              <div class="vote-bill">Police contract ratification — FY 2024 collective bargaining</div>
+              <div class="vote-bill-sub">Bill 230750 · Passed 13–1 · Nov 2023</div>
+            </div>
+            <span class="vote-tag">Public Safety</span>
+          </div>
+          <div class="vote-row">
+            <div class="vote-pill vote-yes">Yes</div>
+            <div>
+              <div class="vote-bill">Short-term rental density cap — owner-occupied exemption</div>
+              <div class="vote-bill-sub">Bill 240201 · Passed 12–4 · Jan 2024</div>
+            </div>
+            <span class="vote-tag">Housing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Issue focus areas</div>
+        <div class="issue-grid">
+          <div class="issue-item">
+            <div>
+              <div class="issue-name">Affordable housing</div>
+              <div class="issue-sub">11 bills this term</div>
+              <div class="issue-bar-wrap"><div class="issue-bar" style="width:90%;background:#378add;"></div></div>
+            </div>
+          </div>
+          <div class="issue-item">
+            <div>
+              <div class="issue-name">Zoning & development</div>
+              <div class="issue-sub">8 bills this term</div>
+              <div class="issue-bar-wrap"><div class="issue-bar" style="width:72%;background:#ba7517;"></div></div>
+            </div>
+          </div>
+          <div class="issue-item">
+            <div>
+              <div class="issue-name">Public safety</div>
+              <div class="issue-sub">6 bills this term</div>
+              <div class="issue-bar-wrap"><div class="issue-bar" style="width:58%;background:#993556;"></div></div>
+            </div>
+          </div>
+          <div class="issue-item">
+            <div>
+              <div class="issue-name">Streets & transit</div>
+              <div class="issue-sub">4 bills this term</div>
+              <div class="issue-bar-wrap"><div class="issue-bar" style="width:42%;background:#1d9e75;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Council committees</div>
+        <div class="committee-list">
+          <div class="committee-row">
+            <div class="committee-name">Housing, Neighborhood Development & the Homeless</div>
+            <span class="committee-role role-chair">Chair</span>
+          </div>
+          <div class="committee-row">
+            <div class="committee-name">Streets & Services</div>
+            <span class="committee-role role-member">Member</span>
+          </div>
+          <div class="committee-row">
+            <div class="committee-name">Licenses & Inspections</div>
+            <span class="committee-role role-member">Member</span>
+          </div>
+          <div class="committee-row">
+            <div class="committee-name">Budget & Finance</div>
+            <span class="committee-role role-member">Member</span>
+          </div>
+        </div>
+        <div class="neighbors-note">Committee assignments tell you where your councilmember's power actually sits. Johnson chairs Housing — that's where district development decisions originate.</div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+
+      <div class="card">
+        <div class="card-label">Contact your rep</div>
+        <div class="contact-methods">
+          <div class="contact-row">
+            <div><div class="contact-type">Office phone</div><div class="contact-val">(215) 686-3412</div></div>
+            <span class="contact-action">Call ↗</span>
+          </div>
+          <div class="contact-row">
+            <div><div class="contact-type">District office</div><div class="contact-val">1501 S Broad St</div></div>
+            <span class="contact-action">Directions ↗</span>
+          </div>
+          <div class="contact-row">
+            <div><div class="contact-type">Office hours</div><div class="contact-val">Tue & Thu 10am–4pm</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Submit a constituent request</div>
+        <div class="request-types">
+          <div class="req-row">
+            <div class="req-icon">🕳</div>
+            <div class="req-label">Pothole / street repair</div>
+            <div class="req-arrow">→</div>
+          </div>
+          <div class="req-row">
+            <div class="req-icon">🗑</div>
+            <div class="req-label">Trash / sanitation issue</div>
+            <div class="req-arrow">→</div>
+          </div>
+          <div class="req-row">
+            <div class="req-icon">🏚</div>
+            <div class="req-label">Vacant / blighted property</div>
+            <div class="req-arrow">→</div>
+          </div>
+          <div class="req-row">
+            <div class="req-icon">💡</div>
+            <div class="req-label">Broken streetlight</div>
+            <div class="req-arrow">→</div>
+          </div>
+          <div class="req-row">
+            <div class="req-icon">📋</div>
+            <div class="req-label">Zoning question</div>
+            <div class="req-arrow">→</div>
+          </div>
+          <div class="req-row">
+            <div class="req-icon">💬</div>
+            <div class="req-label">Other — message office</div>
+            <div class="req-arrow">→</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Upcoming — district calendar</div>
+        <div class="upcoming-list">
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <div class="upcoming-month">Apr</div>
+              <div class="upcoming-day">10</div>
+            </div>
+            <div>
+              <div class="upcoming-title">City Council session</div>
+              <div class="upcoming-sub">City Hall · Room 400 · 10am</div>
+              <span class="upcoming-tag" style="background:#eaf3de;color:#3b6d11;">Public welcome</span>
+            </div>
+          </div>
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <div class="upcoming-month">Apr</div>
+              <div class="upcoming-day">15</div>
+            </div>
+            <div>
+              <div class="upcoming-title">District office hours</div>
+              <div class="upcoming-sub">1501 S Broad St · 10am–4pm</div>
+              <span class="upcoming-tag" style="background:#e6f1fb;color:#185fa5;">Walk-ins ok</span>
+            </div>
+          </div>
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <div class="upcoming-month">Apr</div>
+              <div class="upcoming-day">22</div>
+            </div>
+            <div>
+              <div class="upcoming-title">Housing Committee hearing</div>
+              <div class="upcoming-sub">1400 S Broad zoning variance</div>
+              <span class="upcoming-tag" style="background:#faeeda;color:#633806;">Testimony open</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">District 2 — at a glance</div>
+        <div class="district-fact"><div class="district-key">Population</div><div class="district-val">~163,000</div></div>
+        <div class="district-fact"><div class="district-key">Neighborhoods</div><div class="district-val">14 neighborhoods</div></div>
+        <div class="district-fact"><div class="district-key">Median household income</div><div class="district-val">$38,200</div></div>
+        <div class="district-fact"><div class="district-key">Owner-occupied housing</div><div class="district-val">43%</div></div>
+        <div class="district-fact"><div class="district-key">RCOs active</div><div class="district-val">12 registered</div></div>
+        <div class="district-fact"><div class="district-key">Council since</div><div class="district-val">2012 · 4th term</div></div>
+      </div>
+
+    </div>
+  </div>
+</div>

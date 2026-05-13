@@ -1,0 +1,335 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@400;600;700&display=swap');
+  .f { font-family: 'Nunito', sans-serif; }
+  .fm { font-family: 'JetBrains Mono', monospace; }
+  .fb { font-family: 'Libre Baskerville', serif; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-text-tertiary); margin: 28px 0 10px;
+    padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  /* ── HERO OPTIONS ── */
+  .hero-opt {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .hero-band {
+    display: flex; align-items: flex-end; gap: 18px;
+    padding: 22px 24px 18px;
+    position: relative; overflow: hidden;
+  }
+  .hero-photo {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #254f92, #0d1f3f);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Libre Baskerville', serif; font-size: 24px; color: #d4a832;
+    flex-shrink: 0; border: 2px solid rgba(184,134,11,0.4);
+  }
+  .hero-name { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: white; line-height: 1.15; margin-bottom: 3px; }
+  .hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+
+  /* Stat bar */
+  .stat-bar { display: flex; border-top: 0.5px solid rgba(255,255,255,0.07); background: rgba(0,0,0,0.25); }
+  .stat { flex: 1; padding: 10px 6px; text-align: center; border-right: 0.5px solid rgba(255,255,255,0.05); }
+  .stat:last-child { border-right: none; }
+  .sv { font-family: 'Libre Baskerville', serif; font-size: 16px; font-weight: 700; color: white; line-height: 1; }
+  .sl { font-family: 'JetBrains Mono', monospace; font-size: 5.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 3px; }
+
+  /* NEWS STRIP */
+  .news-strip { background: var(--color-background-secondary); border-top: 0.5px solid var(--color-border-tertiary); padding: 0; }
+  .news-item { display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: background 0.12s; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item:hover { background: var(--color-background-primary); }
+  .news-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .news-source { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-tertiary); flex-shrink: 0; width: 60px; }
+  .news-text { font-family: 'Nunito', sans-serif; font-size: 11px; color: var(--color-text-secondary); flex: 1; line-height: 1.35; }
+  .news-age { font-family: 'JetBrains Mono', monospace; font-size: 7px; color: var(--color-text-tertiary); flex-shrink: 0; }
+
+  /* TIMELINE OPTIONS */
+  .tl-opt {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .opt-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 7px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-text-tertiary); margin-bottom: 14px;
+  }
+
+  /* TL A — horizontal progress bar */
+  .tl-a-track { position: relative; margin: 8px 0 24px; }
+  .tl-a-line { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; position: relative; }
+  .tl-a-fill { height: 100%; border-radius: 2px; background: linear-gradient(to right, #1b3a6b, #b8860b); }
+  .tl-a-nodes { display: flex; justify-content: space-between; margin-top: 10px; }
+  .tl-a-node { text-align: center; flex: 1; }
+  .tl-a-dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 5px; }
+  .dot-done { background: #1b3a6b; }
+  .dot-now { background: #b8860b; border: 2px solid white; box-shadow: 0 0 0 2px #b8860b; }
+  .dot-future { background: var(--color-border-tertiary); }
+  .tl-a-date { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: var(--color-text-tertiary); }
+  .tl-a-evt { font-family: 'Nunito', sans-serif; font-size: 10px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 2px; }
+  .tl-a-now-label { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: #b8860b; }
+
+  /* TL B — vertical condensed with predecessor */
+  .tl-b-row { display: flex; gap: 12px; margin-bottom: 0; position: relative; }
+  .tl-b-spine { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 16px; }
+  .tl-b-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .tl-b-line { width: 1px; flex: 1; background: var(--color-border-tertiary); min-height: 12px; }
+  .tl-b-line.active { background: #b8860b; }
+  .tl-b-content { padding-bottom: 12px; flex: 1; }
+  .tl-b-evt { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 600; color: var(--color-text-primary); }
+  .tl-b-date { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: var(--color-text-tertiary); margin-top: 1px; }
+  .tl-b-sub { font-family: 'Nunito', sans-serif; font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .tl-b-badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 6.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 100px; margin-top: 3px; }
+  .badge-now { background: rgba(184,134,11,0.12); color: #b8860b; border: 1px solid rgba(184,134,11,0.3); }
+  .badge-prev { background: var(--color-background-secondary); color: var(--color-text-tertiary); border: 0.5px solid var(--color-border-tertiary); }
+  .badge-soon { background: rgba(139,32,32,0.08); color: #8b2020; border: 1px solid rgba(200,60,60,0.2); }
+  .badge-future { background: var(--color-background-secondary); color: var(--color-text-tertiary); border: 0.5px solid var(--color-border-tertiary); }
+
+  /* TL C — compact countdown card */
+  .tl-c-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tl-c-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 14px; border: 0.5px solid var(--color-border-tertiary); }
+  .tl-c-card.highlight { border-color: rgba(184,134,11,0.4); background: rgba(184,134,11,0.06); }
+  .tl-c-card.danger { border-color: rgba(200,60,60,0.3); background: rgba(139,32,32,0.05); }
+  .tl-c-num { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--color-text-primary); line-height: 1; }
+  .tl-c-unit { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary); margin: 2px 0 4px; }
+  .tl-c-evt { font-family: 'Nunito', sans-serif; font-size: 10px; color: var(--color-text-secondary); font-weight: 600; }
+  .tl-c-date { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: var(--color-text-tertiary); margin-top: 3px; }
+  .progress-ring-text { font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; fill: var(--color-text-primary); }
+  .progress-ring-sub { font-family: 'JetBrains Mono', monospace; font-size: 7px; fill: var(--color-text-tertiary); }
+
+  /* TL D — slim inline predecessor+current+next */
+  .tl-d-wrap { display: flex; align-items: stretch; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; }
+  .tl-d-seg { flex: 1; padding: 12px 14px; border-right: 0.5px solid var(--color-border-tertiary); }
+  .tl-d-seg:last-child { border-right: none; }
+  .tl-d-seg.dim { background: var(--color-background-secondary); opacity: 0.6; }
+  .tl-d-seg.current { background: rgba(184,134,11,0.07); }
+  .tl-d-seg.next { background: rgba(139,32,32,0.04); }
+  .tl-d-tag { font-family: 'JetBrains Mono', monospace; font-size: 6.5px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .tag-past-c { color: var(--color-text-tertiary); }
+  .tag-curr-c { color: #b8860b; }
+  .tag-next-c { color: #8b2020; }
+  .tl-d-evt { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; color: var(--color-text-primary); line-height: 1.3; }
+  .tl-d-date { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: var(--color-text-tertiary); margin-top: 3px; }
+  .tl-d-year { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin: 4px 0 2px; }
+</style>
+
+<!-- ─────────────────────────────────
+     HERO: option A — true color strip + news
+───────────────────────────────────── -->
+<div class="section-label">Hero — Option A · True color strip, no pills</div>
+<div class="hero-opt">
+  <div class="hero-band" style="background: linear-gradient(to right, rgb(50,48,130) 0%, rgb(59,56,155) 100%);">
+    <div class="hero-photo">JS</div>
+    <div>
+      <div class="hero-name">Josh Shapiro</div>
+      <div class="hero-sub" style="margin-top:4px;">48th Governor · Pennsylvania · Since Jan 2023</div>
+    </div>
+  </div>
+  <div class="stat-bar">
+    <div class="stat"><div class="sv">$50.1B</div><div class="sl">FY25-26 Budget</div></div>
+    <div class="stat"><div class="sv">+$920M</div><div class="sl">Ed. Increase</div></div>
+    <div class="stat"><div class="sv">42%↓</div><div class="sl">Gun Violence</div></div>
+    <div class="stat"><div class="sv">42+</div><div class="sl">Bills Signed</div></div>
+    <div class="stat"><div class="sv">0</div><div class="sl">Vetoes</div></div>
+  </div>
+  <div class="news-strip">
+    <div class="news-item">
+      <div class="news-dot" style="background:#e24b4a;"></div>
+      <div class="news-source">Inquirer</div>
+      <div class="news-text">Shapiro files for re-election, citing record education investments as centerpiece</div>
+      <div class="news-age">3d</div>
+    </div>
+    <div class="news-item">
+      <div class="news-dot" style="background:#378add;"></div>
+      <div class="news-source">WHYY</div>
+      <div class="news-text">PA governor signs $50.1B budget — largest education increase in state history</div>
+      <div class="news-age">4mo</div>
+    </div>
+    <div class="news-item">
+      <div class="news-dot" style="background:#639922;"></div>
+      <div class="news-source">AP</div>
+      <div class="news-text">Shapiro family survives arson attack at governor's mansion on Passover Seder night</div>
+      <div class="news-age">5mo</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:4px;">same hero for Nikil Saval · different true color</div>
+<div class="hero-opt">
+  <div class="hero-band" style="background: linear-gradient(to right, rgb(12,36,100) 0%, rgb(18,46,120) 100%);">
+    <div class="hero-photo" style="font-size:20px;">NS</div>
+    <div>
+      <div class="hero-name" style="font-size:19px;">Nikil Saval</div>
+      <div class="hero-sub" style="margin-top:4px;">PA State Senator · District 1 · South Philadelphia &amp; Center City</div>
+    </div>
+  </div>
+  <div class="stat-bar">
+    <div class="stat"><div class="sv">District 1</div><div class="sl">PA Senate</div></div>
+    <div class="stat"><div class="sv">4yr</div><div class="sl">Term</div></div>
+    <div class="stat"><div class="sv">2028</div><div class="sl">Next Vote</div></div>
+    <div class="stat"><div class="sv">Chair</div><div class="sl">Urban Affairs</div></div>
+    <div class="stat"><div class="sv">5+</div><div class="sl">Bills</div></div>
+  </div>
+  <div class="news-strip">
+    <div class="news-item">
+      <div class="news-dot" style="background:#378add;"></div>
+      <div class="news-source">WHYY</div>
+      <div class="news-text">Saval introduces Shelter First Act to prevent criminalization of homelessness in PA</div>
+      <div class="news-age">4mo</div>
+    </div>
+    <div class="news-item">
+      <div class="news-dot" style="background:#639922;"></div>
+      <div class="news-source">Inquirer</div>
+      <div class="news-text">Whole-Home Repairs Program wins $125M in state budget — Saval's landmark policy survives</div>
+      <div class="news-age">5mo</div>
+    </div>
+    <div class="news-item">
+      <div class="news-dot" style="background:#b8860b;"></div>
+      <div class="news-source">City &amp; State</div>
+      <div class="news-text">Saval named to Philly Power 100 for third consecutive year</div>
+      <div class="news-age">6mo</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────
+     TIMELINE OPTIONS
+───────────────────────────────────── -->
+<div class="section-label">Timeline — Option A · Horizontal progress bar with year-in-term</div>
+<div class="tl-opt">
+  <div class="opt-label">◆ Term Progress · Year 3 of 4</div>
+  <div style="position:relative;margin-bottom:8px;">
+    <div class="tl-a-line"><div class="tl-a-fill" style="width:62%;"></div></div>
+    <div style="position:absolute;top:-4px;left:62%;transform:translateX(-50%);">
+      <div style="width:14px;height:14px;border-radius:50%;background:#b8860b;border:2px solid var(--color-background-primary);box-shadow:0 0 0 2px #b8860b;"></div>
+    </div>
+  </div>
+  <div class="tl-a-nodes">
+    <div class="tl-a-node">
+      <div class="tl-a-dot dot-done"></div>
+      <div class="tl-a-evt">Sworn in</div>
+      <div class="tl-a-date">Jan 2023</div>
+    </div>
+    <div class="tl-a-node">
+      <div class="tl-a-dot dot-done"></div>
+      <div class="tl-a-evt">Year 2</div>
+      <div class="tl-a-date">Jan 2024</div>
+    </div>
+    <div class="tl-a-node" style="position:relative;">
+      <div class="tl-a-dot dot-now"></div>
+      <div class="tl-a-now-label">▲ Now</div>
+      <div class="tl-a-evt" style="color:var(--color-text-primary);font-weight:700;">Year 3</div>
+      <div class="tl-a-date">Mar 2026</div>
+    </div>
+    <div class="tl-a-node">
+      <div class="tl-a-dot dot-future"></div>
+      <div class="tl-a-evt" style="color:var(--color-text-tertiary);">Election</div>
+      <div class="tl-a-date">Nov 2026</div>
+    </div>
+    <div class="tl-a-node">
+      <div class="tl-a-dot dot-future" style="background:rgba(139,32,32,0.3);"></div>
+      <div class="tl-a-evt" style="color:var(--color-text-tertiary);">Term ends</div>
+      <div class="tl-a-date">Jan 2027</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Timeline — Option B · Vertical snippet with predecessor</div>
+<div class="tl-opt">
+  <div class="opt-label">◆ Election Timeline</div>
+
+  <div class="tl-b-row">
+    <div class="tl-b-spine"><div class="tl-b-dot" style="background:var(--color-border-secondary);"></div><div class="tl-b-line"></div></div>
+    <div class="tl-b-content"><div class="tl-b-evt">Tom Wolf <span style="font-weight:400;font-size:10px;color:var(--color-text-tertiary)">— predecessor</span></div><div class="tl-b-date">2015–2023 · Two terms</div><div class="badge-prev tl-b-badge">Governor before Shapiro</div></div>
+  </div>
+  <div class="tl-b-row">
+    <div class="tl-b-spine"><div class="tl-b-dot dot-done"></div><div class="tl-b-line"></div></div>
+    <div class="tl-b-content"><div class="tl-b-evt">Shapiro sworn in</div><div class="tl-b-date">January 17, 2023</div></div>
+  </div>
+  <div class="tl-b-row">
+    <div class="tl-b-spine"><div class="tl-b-dot dot-now"></div><div class="tl-b-line active"></div></div>
+    <div class="tl-b-content"><div class="tl-b-evt">In office — Year 3 of 4</div><div class="tl-b-date">March 2026</div><div class="badge-now tl-b-badge">Currently serving</div></div>
+  </div>
+  <div class="tl-b-row">
+    <div class="tl-b-spine"><div class="tl-b-dot" style="background:rgba(184,134,11,0.4);"></div><div class="tl-b-line"></div></div>
+    <div class="tl-b-content"><div class="tl-b-evt">Primary</div><div class="tl-b-date">May 19, 2026</div><div class="badge-soon tl-b-badge">57 days away</div></div>
+  </div>
+  <div class="tl-b-row">
+    <div class="tl-b-spine"><div class="tl-b-dot" style="background:rgba(139,32,32,0.35);"></div><div class="tl-b-line"></div></div>
+    <div class="tl-b-content"><div class="tl-b-evt">General Election</div><div class="tl-b-date">November 3, 2026</div></div>
+  </div>
+  <div class="tl-b-row">
+    <div class="tl-b-spine"><div class="tl-b-dot dot-future"></div></div>
+    <div class="tl-b-content"><div class="tl-b-evt" style="color:var(--color-text-tertiary);">Term ends</div><div class="tl-b-date">January 2027</div></div>
+  </div>
+</div>
+
+<div class="section-label">Timeline — Option C · Countdown cards + ring</div>
+<div class="tl-opt">
+  <div class="opt-label">◆ Term &amp; Election</div>
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+    <svg width="90" height="90" viewBox="0 0 90 90">
+      <circle cx="45" cy="45" r="38" fill="none" stroke="var(--color-border-tertiary)" stroke-width="5"/>
+      <circle cx="45" cy="45" r="38" fill="none" stroke="#1b3a6b" stroke-width="5"
+        stroke-dasharray="238.76" stroke-dashoffset="90.78" stroke-linecap="round"
+        transform="rotate(-90 45 45)"/>
+      <text class="progress-ring-text" x="45" y="43" text-anchor="middle" dominant-baseline="central" style="font-size:18px;font-weight:700;fill:var(--color-text-primary);">3/4</text>
+      <text class="progress-ring-sub" x="45" y="59" text-anchor="middle" style="font-size:8px;fill:var(--color-text-tertiary);">years done</text>
+    </svg>
+    <div style="flex:1;">
+      <div style="font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px;">Year 3 of 4</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--color-text-tertiary);">Sworn Jan 2023 · Term ends Jan 2027</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--color-text-secondary);margin-top:6px;line-height:1.45;">PA governors cannot serve more than two consecutive terms. This is Shapiro's first.</div>
+    </div>
+  </div>
+  <div class="tl-c-grid">
+    <div class="tl-c-card highlight">
+      <div class="tl-c-num">57</div>
+      <div class="tl-c-unit">days until</div>
+      <div class="tl-c-evt">Primary Election</div>
+      <div class="tl-c-date">May 19, 2026</div>
+    </div>
+    <div class="tl-c-card danger">
+      <div class="tl-c-num">225</div>
+      <div class="tl-c-unit">days until</div>
+      <div class="tl-c-evt">General Election</div>
+      <div class="tl-c-date">Nov 3, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Timeline — Option D · Slim 3-segment predecessor · now · next</div>
+<div class="tl-opt">
+  <div class="opt-label">◆ Who was before, who is now, when is next</div>
+  <div class="tl-d-wrap">
+    <div class="tl-d-seg dim">
+      <div class="tl-d-tag tag-past-c">◀ Previous</div>
+      <div class="tl-d-evt">Tom Wolf</div>
+      <div class="tl-d-date">2015–2023</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:9.5px;color:var(--color-text-tertiary);margin-top:4px;">Democrat · 2 terms</div>
+    </div>
+    <div class="tl-d-seg current">
+      <div class="tl-d-tag tag-curr-c">● Now · Year 3 of 4</div>
+      <div class="tl-d-evt">Josh Shapiro</div>
+      <div class="tl-d-year">2023</div>
+      <div class="tl-d-date">Term ends Jan 2027</div>
+    </div>
+    <div class="tl-d-seg next">
+      <div class="tl-d-tag tag-next-c">▸ Election</div>
+      <div class="tl-d-evt">General</div>
+      <div class="tl-d-year">2026</div>
+      <div class="tl-d-date">Nov 3 · 225 days</div>
+    </div>
+  </div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--color-text-tertiary);margin-top:8px;letter-spacing:0.08em;">Primary · May 19, 2026 · 57 days away</div>
+</div>

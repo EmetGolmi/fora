@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Civitas — Three Landing Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1a1a; font-family: sans-serif; }
+
+/* ── CONCEPT SWITCHER ── */
+.switcher {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 0;
+  background: rgba(0,0,0,0.85);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.sw-btn {
+  padding: 9px 22px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  border: none;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.sw-btn:last-child { border-right: none; }
+.sw-btn:hover { color: white; background: rgba(255,255,255,0.08); }
+.sw-btn.active { background: white; color: black; }
+
+.concept { display: none; }
+.concept.active { display: block; }
+
+/* ══════════════════════════════════════════════════════
+   CONCEPT A — "THE MONUMENT"
+   Dark, weighty, editorial. Marble + ink. Newspaper meets
+   classical architecture. The gravitas of civic life.
+══════════════════════════════════════════════════════ */
+#concept-a {
+  min-height: 100vh;
+  background: #0d0d0b;
+  color: #f0ece2;
+  font-family: 'Cormorant Garamond', serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* marble texture via CSS */
+#concept-a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      105deg,
+      transparent 0px,
+      transparent 80px,
+      rgba(255,255,255,0.012) 80px,
+      rgba(255,255,255,0.012) 81px
+    ),
+    repeating-linear-gradient(
+      75deg,
+      transparent 0px,
+      transparent 120px,
+      rgba(255,255,255,0.008) 120px,
+      rgba(255,255,255,0.008) 121px
+    );
+  pointer-events: none;
+}
+
+.a-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 2;
+}
+.a-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f0ece2;
+}
+.a-wordmark span { color: #c9a84c; }
+.a-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.a-nav-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(240,236,226,0.45);
+  cursor: pointer;
+}
+.a-nav-link:hover { color: #f0ece2; }
+.a-signin {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid rgba(201,168,76,0.5);
+  color: #c9a84c;
+  background: transparent;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.a-signin:hover { background: rgba(201,168,76,0.1); border-color: #c9a84c; }
+
+/* hero */
+.a-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 48px 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* decorative rule set */
+.a-rule-set {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 600px;
+}
+.a-rule-line { flex: 1; height: 1px; background: rgba(201,168,76,0.3); }
+.a-rule-ornament {
+  font-size: 16px;
+  color: #c9a84c;
+  opacity: 0.7;
+}
+
+.a-kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.a-headline {
+  font-size: clamp(56px, 9vw, 108px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+  color: #f0ece2;
+  margin-bottom: 8px;
+}
+.a-headline em {
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(240,236,226,0.55);
+}
+
+.a-subhead {
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(240,236,226,0.5);
+  margin-bottom: 40px;
+  letter-spacing: 0.02em;
+}
+
+.a-manifesto {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(240,236,226,0.6);
+  max-width: 540px;
+  margin-bottom: 48px;
+  font-weight: 300;
+}
+.a-manifesto strong {
+  color: #f0ece2;
+  font-weight: 600;
+}
+
+/* entry options */
+.a-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 480px;
+}
+.a-input-row {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(240,236,226,0.2);
+  background: rgba(255,255,255,0.04);
+}
+.a-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 14px 18px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: #f0ece2;
+}
+.a-input::placeholder { color: rgba(240,236,226,0.25); }
+.a-go {
+  background: #c9a84c;
+  color: #0d0d0b;
+  border: none;
+  padding: 0 22px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.a-go:hover { background: #e0bf6a; }
+.a-or {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,236,226,0.25);
+}
+.a-explore-btn {
+  background: transparent;
+  border: 1px solid rgba(240,236,226,0.18);
+  color: rgba(240,236,226,0.55);
+  padding: 12px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+.a-explore-btn:hover { border-color: rgba(240,236,226,0.4); color: #f0ece2; }
+
+/* columns section */
+.a-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 2;
+}
+.a-col {
+  padding: 32px 40px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.a-col:last-child { border-right: none; }
+.a-col-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: rgba(201,168,76,0.3);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.a-col-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin-bottom: 8px;
+}
+.a-col-text {
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(240,236,226,0.45);
+  font-weight: 300;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   CONCEPT B — "THE SIGNAL"
+   Clean, urgent, kinetic. White with sharp red accent.
+   Feels like a civic emergency broadcast. Functional,
+   democratic, no-nonsense. The NYT meets Crisis Map.
+══════════════════════════════════════════════════════ */
+#concept-b {
+  min-height: 100vh;
+  background: #f8f8f6;
+  color: #111;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.b-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 56px;
+  border-bottom: 2px solid #111;
+  background: white;
+}
+.b-wordmark {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111;
+}
+.b-wordmark .b-dot { color: #c0392b; }
+.b-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.b-nav-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(17,17,17,0.5);
+  cursor: pointer;
+}
+.b-nav-link:hover { color: #111; }
+.b-signin {
+  background: #111;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+/* ticker */
+.b-ticker {
+  background: #c0392b;
+  color: white;
+  padding: 8px 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+}
+.b-ticker-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+  background: white;
+  color: #c0392b;
+  padding: 2px 8px;
+  border-radius: 1px;
+}
+.b-ticker-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.04em;
+}
+
+/* split hero */
+.b-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+  border-bottom: 2px solid #111;
+}
+.b-hero-left {
+  padding: 56px 48px;
+  border-right: 2px solid #111;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.b-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #c0392b;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.b-label::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: #c0392b;
+}
+.b-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 5.5vw, 60px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: #111;
+  margin-bottom: 20px;
+}
+.b-headline .b-accent { color: #c0392b; }
+.b-body {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(17,17,17,0.6);
+  margin-bottom: 32px;
+  max-width: 400px;
+  font-weight: 300;
+}
+.b-cta-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.b-cta-primary {
+  background: #111;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.b-cta-primary:hover { background: #333; }
+.b-cta-secondary {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(17,17,17,0.5);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: none;
+}
+
+.b-hero-right {
+  background: #111;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.b-right-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 16px;
+}
+.b-globe-prompt {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.b-country-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.b-country-chip {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 2px;
+}
+.b-country-chip:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+.b-country-chip.featured {
+  background: rgba(192,57,43,0.2);
+  border-color: rgba(192,57,43,0.5);
+}
+.b-country-flag { font-size: 18px; line-height: 1; }
+.b-country-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+.b-country-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.35);
+  margin-top: 1px;
+}
+.b-or-divider {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  margin: 4px 0;
+}
+.b-address-input-row {
+  display: flex;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.b-address-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 11px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: white;
+}
+.b-address-input::placeholder { color: rgba(255,255,255,0.25); }
+.b-address-go {
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 0 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* bottom band */
+.b-bottom {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 2px solid #111;
+}
+.b-bottom-item {
+  padding: 24px 32px;
+  border-right: 2px solid #111;
+}
+.b-bottom-item:last-child { border-right: none; }
+.b-bottom-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.b-bottom-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(17,17,17,0.45);
+  margin-top: 3px;
+  font-weight: 400;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   CONCEPT C — "THE COMMONS"
+   Warm, human, textured. Linen + wood. Feels like a
+   community board or a town hall poster. Approachable.
+   Not a tech product — a civic *place*.
+══════════════════════════════════════════════════════ */
+#concept-c {
+  min-height: 100vh;
+  background: #2c2416;
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* linen-like grain overlay */
+#concept-c::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.c-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  position: relative;
+  z-index: 2;
+}
+.c-wordmark {
+  display: flex;
+  flex-direction: column;
+}
+.c-wordmark-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: #f5e6c8;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.c-wordmark-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(245,230,200,0.35);
+  margin-top: 2px;
+}
+.c-nav-links { display: flex; align-items: center; gap: 24px; }
+.c-nav-link {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(245,230,200,0.45);
+  cursor: pointer;
+}
+.c-nav-link:hover { color: #f5e6c8; }
+.c-nav-join {
+  background: #d4a84b;
+  color: #2c2416;
+  border: none;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.01em;
+}
+
+/* hero */
+.c-hero {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 0;
+  padding: 60px 48px 48px;
+  position: relative;
+  z-index: 2;
+  min-height: 460px;
+  align-items: center;
+}
+
+.c-hero-left { padding-right: 60px; }
+
+.c-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212,168,75,0.15);
+  border: 1px solid rgba(212,168,75,0.3);
+  border-radius: 100px;
+  padding: 5px 14px 5px 8px;
+  margin-bottom: 24px;
+}
+.c-pill-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #d4a84b;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.c-pill-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #d4a84b;
+}
+
+.c-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 5.5vw, 66px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #f5e6c8;
+  margin-bottom: 20px;
+}
+.c-headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: #d4a84b;
+}
+
+.c-body {
+  font-size: 16px;
+  line-height: 1.75;
+  color: rgba(245,230,200,0.55);
+  max-width: 440px;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+.c-body strong { color: rgba(245,230,200,0.85); font-weight: 500; }
+
+.c-cta-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.c-cta-primary {
+  background: #d4a84b;
+  color: #2c2416;
+  border: none;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s;
+  letter-spacing: -0.01em;
+}
+.c-cta-primary:hover { background: #e0bf6a; }
+.c-cta-ghost {
+  background: transparent;
+  border: 1px solid rgba(245,230,200,0.2);
+  color: rgba(245,230,200,0.6);
+  padding: 13px 24px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+.c-cta-ghost:hover { border-color: rgba(245,230,200,0.5); color: #f5e6c8; }
+
+/* right panel — "the board" */
+.c-hero-right {
+  background: rgba(245,230,200,0.05);
+  border: 1px solid rgba(245,230,200,0.1);
+  border-radius: 4px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.c-board-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245,230,200,0.3);
+  margin-bottom: 4px;
+}
+.c-board-card {
+  background: rgba(245,230,200,0.04);
+  border: 1px solid rgba(245,230,200,0.08);
+  border-radius: 3px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.c-board-card:hover { background: rgba(245,230,200,0.09); border-color: rgba(245,230,200,0.18); }
+.c-board-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.c-board-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,230,200,0.3);
+}
+.c-board-flag { font-size: 14px; }
+.c-board-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f5e6c8;
+  line-height: 1.3;
+  margin-bottom: 2px;
+}
+.c-board-meta {
+  font-size: 11px;
+  color: rgba(245,230,200,0.4);
+  line-height: 1.4;
+}
+.c-board-bar {
+  height: 2px;
+  background: rgba(245,230,200,0.08);
+  border-radius: 1px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.c-board-fill {
+  height: 100%;
+  border-radius: 1px;
+  background: #d4a84b;
+  opacity: 0.6;
+}
+.c-board-add {
+  border: 1px dashed rgba(245,230,200,0.15);
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.c-board-add-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245,230,200,0.25);
+}
+.c-board-add:hover .c-board-add-text { color: rgba(245,230,200,0.5); }
+
+/* bottom strip */
+.c-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(245,230,200,0.08);
+  position: relative;
+  z-index: 2;
+}
+.c-strip-item {
+  padding: 28px 40px;
+  border-right: 1px solid rgba(245,230,200,0.06);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.c-strip-item:last-child { border-right: none; }
+.c-strip-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0.7;
+}
+.c-strip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f5e6c8;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.c-strip-text {
+  font-size: 12px;
+  color: rgba(245,230,200,0.4);
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- SWITCHER -->
+<div class="switcher">
+  <button class="sw-btn active" onclick="showConcept('a', this)">A · The Monument</button>
+  <button class="sw-btn" onclick="showConcept('b', this)">B · The Signal</button>
+  <button class="sw-btn" onclick="showConcept('c', this)">C · The Commons</button>
+</div>
+
+<!-- ══════════════════
+     CONCEPT A
+══════════════════ -->
+<div class="concept active" id="concept-a">
+
+  <div class="a-nav">
+    <div class="a-wordmark">CIVITAS<span>·</span>GOV</div>
+    <div class="a-nav-links">
+      <span class="a-nav-link">About</span>
+      <span class="a-nav-link">Explore</span>
+      <span class="a-nav-link">Compare</span>
+      <button class="a-signin">Sign In</button>
+    </div>
+  </div>
+
+  <div class="a-hero">
+    <div class="a-rule-set">
+      <div class="a-rule-line"></div>
+      <div class="a-rule-ornament">⚖</div>
+      <div class="a-rule-line"></div>
+    </div>
+
+    <div class="a-kicker">Civic Intelligence · Open to the World</div>
+
+    <h1 class="a-headline">CIVITAS<br><em>The people govern.</em></h1>
+    <p class="a-subhead">Or they don't. Find out.</p>
+
+    <p class="a-manifesto">
+      <strong>Every government makes decisions in your name.</strong> Most of them count on you not paying attention.
+      Civitas maps every official, every bill, every vote — from Washington to your city council — and puts it in your hands.
+      <strong>Compare your government to others.</strong> Connect with citizens across borders who are building the same thing you are: accountability.
+    </p>
+
+    <div class="a-entry">
+      <div class="a-input-row">
+        <input class="a-input" type="text" placeholder="Enter your address to see who governs you…" />
+        <button class="a-go">Show My Government →</button>
+      </div>
+      <div class="a-or">— or —</div>
+      <button class="a-explore-btn">Explore Without an Address</button>
+    </div>
+  </div>
+
+  <div class="a-columns">
+    <div class="a-col">
+      <div class="a-col-num">I</div>
+      <div class="a-col-title">Know Your Government</div>
+      <div class="a-col-text">Enter any address and see every official who governs it — from the President to your school board. No account required.</div>
+    </div>
+    <div class="a-col">
+      <div class="a-col-num">II</div>
+      <div class="a-col-title">Compare Across Borders</div>
+      <div class="a-col-text">See how other countries structure power. What do citizens in Germany, Cuba, or Canada have that you don't? What do you have that they don't?</div>
+    </div>
+    <div class="a-col">
+      <div class="a-col-num">III</div>
+      <div class="a-col-title">Connect &amp; Engage</div>
+      <div class="a-col-text">Follow bills. Ask your officials questions. Share what's working in your community. Civic knowledge travels.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════
+     CONCEPT B
+══════════════════ -->
+<div class="concept" id="concept-b">
+
+  <div class="b-nav">
+    <div class="b-wordmark">civitas<span class="b-dot">.</span></div>
+    <div class="b-nav-right">
+      <span class="b-nav-link">Explore</span>
+      <span class="b-nav-link">Compare</span>
+      <span class="b-nav-link">About</span>
+      <button class="b-signin">Sign In</button>
+    </div>
+  </div>
+
+  <div class="b-ticker">
+    <div class="b-ticker-label">Live</div>
+    <div class="b-ticker-text">247 bills in committee · 3 votes scheduled today · 12 officials responded to citizen questions this week · Cuba: 1 tracked official</div>
+  </div>
+
+  <div class="b-hero">
+    <div class="b-hero-left">
+      <div class="b-label">Civic Intelligence Platform</div>
+      <h1 class="b-headline">Your government.<br>Made <span class="b-accent">visible.</span></h1>
+      <p class="b-body">
+        Who governs you? Who votes on your behalf? What bills are moving through your legislature right now?
+        <br><br>
+        Civitas answers these questions for <strong>every address in America</strong> — and lets you compare your government to the rest of the world.
+      </p>
+      <div class="b-cta-row">
+        <button class="b-cta-primary">Enter My Address →</button>
+        <button class="b-cta-secondary">Explore without an address</button>
+      </div>
+    </div>
+
+    <div class="b-hero-right">
+      <div class="b-right-label">Or choose a country to explore</div>
+      <div class="b-globe-prompt">Where in the world do you want to understand?</div>
+      <div class="b-country-grid">
+        <div class="b-country-chip featured">
+          <div class="b-country-flag">🇺🇸</div>
+          <div>
+            <div class="b-country-name">United States</div>
+            <div class="b-country-status">Full coverage</div>
+          </div>
+        </div>
+        <div class="b-country-chip">
+          <div class="b-country-flag">🇩🇪</div>
+          <div>
+            <div class="b-country-name">Germany</div>
+            <div class="b-country-status">Full coverage</div>
+          </div>
+        </div>
+        <div class="b-country-chip">
+          <div class="b-country-flag">🇬🇧</div>
+          <div>
+            <div class="b-country-name">United Kingdom</div>
+            <div class="b-country-status">Full coverage</div>
+          </div>
+        </div>
+        <div class="b-country-chip">
+          <div class="b-country-flag">🇨🇦</div>
+          <div>
+            <div class="b-country-name">Canada</div>
+            <div class="b-country-status">Full coverage</div>
+          </div>
+        </div>
+        <div class="b-country-chip">
+          <div class="b-country-flag">🇨🇺</div>
+          <div>
+            <div class="b-country-name">Cuba</div>
+            <div class="b-country-status">Monitoring</div>
+          </div>
+        </div>
+        <div class="b-country-chip">
+          <div class="b-country-flag">🌍</div>
+          <div>
+            <div class="b-country-name">+ 12 more</div>
+            <div class="b-country-status">See all countries</div>
+          </div>
+        </div>
+      </div>
+      <div class="b-or-divider">— or enter an address —</div>
+      <div class="b-address-input-row">
+        <input class="b-address-input" type="text" placeholder="1600 King St, Alexandria, VA…" />
+        <button class="b-address-go">Go →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-bottom">
+    <div class="b-bottom-item">
+      <div class="b-bottom-num">500K+</div>
+      <div class="b-bottom-label">Elected officials tracked</div>
+    </div>
+    <div class="b-bottom-item">
+      <div class="b-bottom-num">18K+</div>
+      <div class="b-bottom-label">Active bills monitored</div>
+    </div>
+    <div class="b-bottom-item">
+      <div class="b-bottom-num">17</div>
+      <div class="b-bottom-label">Countries in database</div>
+    </div>
+    <div class="b-bottom-item">
+      <div class="b-bottom-num">Free</div>
+      <div class="b-bottom-label">Always. For everyone.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════
+     CONCEPT C
+══════════════════ -->
+<div class="concept" id="concept-c">
+
+  <div class="c-nav">
+    <div class="c-wordmark">
+      <div class="c-wordmark-main">Civitas</div>
+      <div class="c-wordmark-sub">The People's Platform</div>
+    </div>
+    <div class="c-nav-links">
+      <span class="c-nav-link">Explore</span>
+      <span class="c-nav-link">Compare</span>
+      <span class="c-nav-link">About</span>
+      <button class="c-nav-join">Join</button>
+    </div>
+  </div>
+
+  <div class="c-hero">
+    <div class="c-hero-left">
+      <div class="c-pill">
+        <div class="c-pill-dot"></div>
+        <div class="c-pill-text">Civic intelligence for everyone</div>
+      </div>
+
+      <h1 class="c-headline">
+        Government is<br>
+        <em>your business.</em><br>
+        Make it yours.
+      </h1>
+
+      <p class="c-body">
+        Civitas connects you to every official, every bill, and every vote that affects your life.
+        <strong>Start with your address.</strong> Then look outward — compare your government to others,
+        connect with citizens who share your challenges, and share what's working in your community.
+        <br><br>
+        Built for America first. Open to the world.
+      </p>
+
+      <div class="c-cta-group">
+        <button class="c-cta-primary">Find My Government →</button>
+        <button class="c-cta-ghost">Explore the World</button>
+      </div>
+    </div>
+
+    <div class="c-hero-right">
+      <div class="c-board-title">Your civic world at a glance</div>
+
+      <div class="c-board-card">
+        <div class="c-board-card-top">
+          <div class="c-board-type">Your Officials</div>
+          <div class="c-board-flag">🇺🇸</div>
+        </div>
+        <div class="c-board-name">25 officials govern your address</div>
+        <div class="c-board-meta">From the President to your city council — all in one place</div>
+        <div class="c-board-bar"><div class="c-board-fill" style="width:100%"></div></div>
+      </div>
+
+      <div class="c-board-card">
+        <div class="c-board-card-top">
+          <div class="c-board-type">Active in Congress</div>
+          <div class="c-board-flag">🏛️</div>
+        </div>
+        <div class="c-board-name">S.1234 · Housing Affordability Act</div>
+        <div class="c-board-meta">In committee · 3 of your officials are co-sponsors</div>
+        <div class="c-board-bar"><div class="c-board-fill" style="width:45%"></div></div>
+      </div>
+
+      <div class="c-board-card">
+        <div class="c-board-card-top">
+          <div class="c-board-type">Compare</div>
+          <div class="c-board-flag">🌍</div>
+        </div>
+        <div class="c-board-name">How does the US compare to Germany on housing policy?</div>
+        <div class="c-board-meta">17 countries available to explore and compare</div>
+        <div class="c-board-bar"><div class="c-board-fill" style="width:70%;background:#7dcea0;opacity:0.6;"></div></div>
+      </div>
+
+      <div class="c-board-add">
+        <div class="c-board-add-text">+ Enter your address to personalize</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-strip">
+    <div class="c-strip-item">
+      <div class="c-strip-icon">🏠</div>
+      <div>
+        <div class="c-strip-title">Know your stack</div>
+        <div class="c-strip-text">Every official who governs your address, from federal to local, in one place. No account required.</div>
+      </div>
+    </div>
+    <div class="c-strip-item">
+      <div class="c-strip-icon">🌐</div>
+      <div>
+        <div class="c-strip-title">Compare across borders</div>
+        <div class="c-strip-text">See how governments differ. Learn from what works elsewhere. Share what's working here.</div>
+      </div>
+    </div>
+    <div class="c-strip-item">
+      <div class="c-strip-icon">✊</div>
+      <div>
+        <div class="c-strip-title">Engage with integrity</div>
+        <div class="c-strip-text">Structured discourse. Source quality scoring. Steel-man your position. No hot takes, just civic intelligence.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showConcept(id, btn) {
+  document.querySelectorAll('.concept').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('concept-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

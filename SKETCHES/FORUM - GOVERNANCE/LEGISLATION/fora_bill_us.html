@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA — H.R. 4471 · Infrastructure &amp; Rural Broadband Act</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #f2f4f8;
+  --white:      #ffffff;
+  --blue:       #1b3a6b;
+  --blue-mid:   #254f92;
+  --blue-lt:    #3a6abf;
+  --blue-pal:   #dde5f5;
+  --blue-vpal:  #edf1fb;
+  --gilt:       #b8860b;
+  --gilt-lt:    #d4a832;
+  --gilt-pal:   #f8f0dc;
+  --gilt-rul:   rgba(184,134,11,0.25);
+  --ink:        #0e1a2e;
+  --ink-mid:    #2c3e5a;
+  --ink-soft:   #5a6e8a;
+  --ink-mut:    #8a9ab8;
+  --rule:       rgba(27,58,107,0.1);
+  --rule-lt:    rgba(27,58,107,0.05);
+  --green:      #1a5c35;
+  --green-p:    #e8f5ed;
+  --green-r:    #a8d8ba;
+  --red:        #8b1a1a;
+  --red-p:      #faeaea;
+  --red-r:      #dba0a0;
+  --orange:     #b84a00;
+  --orng-p:     #fff3eb;
+  --orng-r:     #f4c09a;
+  --purple:     #4a1f6e;
+  --purp-p:     #f0eaf7;
+  --purp-r:     #c8a8e8;
+  --dem:        #1a3fa0;
+  --rep:        #9b1c1c;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--blue-pal); border-radius: 10px; }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--blue);
+  border-bottom: 3px solid var(--gilt);
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 40px; gap: 0;
+}
+.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: white; letter-spacing: 0.1em; margin-right: 32px; flex-shrink: 0; }
+.nav-logo span { color: var(--gilt-lt); }
+.nav-crumb { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.nav-crumb-sep { opacity: 0.3; }
+.nav-crumb-cur { color: var(--gilt-lt); }
+.nav-actions { margin-left: auto; display: flex; gap: 8px; }
+.nav-btn { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; cursor: pointer; border: none; }
+.nb-follow { background: var(--gilt); color: white; }
+.nb-share  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+/* HERO */
+.hero { background: var(--white); border-bottom: 1px solid var(--rule); padding: 36px 40px 32px; }
+.hero-top { display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start; }
+.hero-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gilt); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.hero-eyebrow::before { content: ''; width: 16px; height: 2px; background: var(--gilt); flex-shrink: 0; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: 30px; font-weight: 700; color: var(--blue); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 16px; }
+.hero-meta-row { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--rule-lt); }
+.hm { display: flex; flex-direction: column; gap: 3px; }
+.hm-l { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mut); }
+.hm-v { font-size: 13px; font-weight: 700; color: var(--blue); }
+.hm-sep { width: 1px; background: var(--rule); align-self: stretch; }
+
+/* STATUS PANEL */
+.status-panel { background: var(--blue-vpal); border: 1px solid var(--blue-pal); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.sp-row { display: flex; flex-direction: column; gap: 5px; }
+.sp-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mut); }
+.status-badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; }
+.sb-floor { background: var(--blue-pal); color: var(--blue); border: 1px solid var(--blue); }
+.sb-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* PROGRESS */
+.progress { display: flex; align-items: center; }
+.pn { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.pn-done { background: var(--blue); }
+.pn-curr { background: var(--blue); box-shadow: 0 0 0 3px var(--blue-pal); }
+.pn-none { background: white; border: 2px solid var(--rule); }
+.pl { flex: 1; height: 2px; min-width: 14px; }
+.pl-done { background: var(--blue); }
+.pl-none { background: var(--rule); }
+.plbl { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 4px; white-space: nowrap; }
+.plbl-done { color: var(--blue); }
+.plbl-curr { color: var(--blue); font-weight: 700; }
+.plbl-none { color: var(--ink-mut); }
+
+/* CIVIC ACTION */
+.civic-action { background: var(--blue); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.ca-title { font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; color: white; }
+.ca-sub { font-size: 11.5px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+.ca-btns { display: flex; flex-direction: column; gap: 6px; }
+.ca-btn { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; border: none; border-radius: 100px; padding: 9px 16px; cursor: pointer; text-align: center; }
+.ca-primary { background: var(--gilt); color: white; }
+.ca-secondary { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+/* SPLIT LAYOUT */
+.split { display: grid; grid-template-columns: 1fr 360px; gap: 0; min-height: calc(100vh - 160px); align-items: start; }
+
+/* LEFT COLUMN */
+.col-left { padding: 32px 40px; display: flex; flex-direction: column; gap: 32px; border-right: 1px solid var(--rule); }
+
+.s-block { display: flex; flex-direction: column; gap: 14px; }
+.s-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px; border-bottom: 2px solid var(--blue-pal); }
+.s-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+.s-eyebrow::before { content: ''; width: 12px; height: 2px; background: currentColor; }
+.s-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: var(--blue); }
+.collapse-pill { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mut); background: var(--bg); border: 1px solid var(--rule); padding: 3px 10px; border-radius: 100px; cursor: pointer; flex-shrink: 0; }
+
+/* SCAFFOLD */
+.scaffold-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.scaf-card { border-radius: 10px; padding: 13px 14px; border: 1px solid var(--rule); background: var(--white); }
+.scaf-card.full { grid-column: 1 / -1; }
+.scaf-card.best { background: var(--green-p); border-color: var(--green-r); }
+.scaf-card.worst { background: var(--red-p); border-color: var(--red-r); }
+.scaf-card.hist { background: var(--blue-vpal); border-color: var(--blue-pal); }
+.scaf-kicker { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 5px; }
+.sk-blue { color: var(--blue); }
+.sk-green { color: var(--green); }
+.sk-red { color: var(--red); }
+.sk-gilt { color: var(--gilt); }
+.scaf-en { font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--ink-mid); }
+
+/* SOURCES */
+.source-list { display: flex; flex-direction: column; gap: 8px; }
+.source-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 8px; }
+.tier-badge {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0; border: 1.5px solid;
+}
+.tb-inst  { background: var(--green-p);   border-color: var(--green-r); padding-top: 3px; }
+.tb-ver   { background: var(--blue-vpal); border-color: var(--blue); font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--blue); }
+.tb-persp { background: var(--bg);        border-color: var(--rule); }
+.tb-caut  { background: transparent; border: none; font-size: 22px; }
+.tb-disp  { background: transparent; border: none; font-size: 22px; }
+.source-body { flex: 1; }
+.source-name { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.source-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; }
+.source-meta { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mut); margin-top: 3px; }
+.leg-bar { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-radius: 10px; background: var(--blue-vpal); border-left: 3px solid var(--blue); }
+.leg-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); white-space: nowrap; }
+.leg-note { font-size: 11px; font-style: italic; color: var(--ink-mut); white-space: nowrap; }
+.leg-track { flex: 1; height: 6px; border-radius: 100px; background: var(--blue-pal); overflow: hidden; }
+.leg-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--blue), var(--blue-lt)); }
+.leg-score { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--blue); }
+.leg-denom { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mut); }
+
+/* VOTE TALLY — US floor vote */
+.tally { display: flex; background: var(--white); border: 2px solid var(--blue-pal); border-radius: 12px; overflow: hidden; border-top: 3px solid var(--blue); }
+.tc { flex: 1; padding: 14px 0; text-align: center; border-right: 1px solid var(--rule); }
+.tc:last-child { border-right: none; }
+.tnum { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.tn-yea { color: var(--green); }
+.tn-nay { color: var(--red); }
+.tlbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); }
+
+/* PARTY BREAKDOWN */
+.party-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.party-card { padding: 10px 14px; border-radius: 8px; }
+.pc-dem { background: rgba(26,63,160,0.06); border: 1px solid rgba(26,63,160,0.15); }
+.pc-rep { background: rgba(155,28,28,0.06); border: 1px solid rgba(155,28,28,0.15); }
+.pc-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
+.pc-label-d { color: var(--dem); }
+.pc-label-r { color: var(--rep); }
+.pc-nums { display: flex; gap: 14px; }
+.pc-num { display: flex; flex-direction: column; gap: 2px; }
+.pc-n { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; }
+.pcn-dy { color: var(--green); }
+.pcn-dn { color: var(--red); }
+.pcn-ry { color: var(--green); }
+.pcn-rn { color: var(--red); }
+.pc-nlbl { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mut); }
+
+/* SENTIMENT */
+.cohort-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.chip { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 13px; border-radius: 100px; border: 1px solid var(--blue-pal); background: var(--blue-vpal); color: var(--blue); cursor: pointer; }
+.chip.active { background: var(--blue); border-color: var(--blue); color: white; }
+.sent-bars { display: flex; flex-direction: column; gap: 9px; }
+.sb-row { display: flex; align-items: center; gap: 10px; }
+.sb-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mut); width: 58px; flex-shrink: 0; }
+.sb-track { flex: 1; height: 8px; background: var(--bg); border-radius: 100px; overflow: hidden; }
+.sb-fill { height: 100%; border-radius: 100px; }
+.sf-s { background: linear-gradient(to right, var(--green), #86efac); }
+.sf-o { background: linear-gradient(to right, var(--red), #fca5a5); }
+.sf-n { background: var(--ink-mut); }
+.sb-pct { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
+.pct-s { color: var(--green); }
+.pct-o { color: var(--red); }
+.pct-n { color: var(--ink-mut); }
+.cohort-callout { border-left: 3px solid var(--gilt); background: var(--gilt-pal); padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 10px; font-size: 12.5px; color: #6b5800; line-height: 1.55; }
+.cohort-callout strong { color: var(--gilt); }
+
+/* SPONSORS */
+.sponsor-list { display: flex; flex-direction: column; gap: 8px; }
+.sponsor-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 8px; }
+.sponsor-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.sa-dem { background: rgba(26,63,160,0.1); color: var(--dem); border: 2px solid rgba(26,63,160,0.2); }
+.sa-rep { background: rgba(155,28,28,0.08); color: var(--rep); border: 2px solid rgba(155,28,28,0.15); }
+.sponsor-name { font-size: 13px; font-weight: 700; color: var(--blue); }
+.sponsor-role { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mut); }
+.sponsor-party { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+.sp-dem { color: var(--dem); }
+.sp-rep { color: var(--rep); }
+
+/* RIGHT COLUMN */
+.col-right { background: var(--white); border-left: 1px solid var(--rule); display: flex; flex-direction: column; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
+.disc-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--rule); flex-shrink: 0; }
+.disc-title { font-family: 'Libre Baskerville', serif; font-size: 17px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+.disc-sub { font-size: 12px; color: var(--ink-soft); }
+.sm-banner { margin: 16px 24px 0; padding: 13px 14px; background: var(--purp-p); border: 1px solid var(--purp-r); border-left: 4px solid var(--purple); border-radius: 0 10px 10px 0; display: flex; gap: 10px; align-items: flex-start; flex-shrink: 0; }
+.sm-ico { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.sm-bd { flex: 1; }
+.sm-title { font-family: 'Libre Baskerville', serif; font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+.sm-sub { font-size: 11.5px; color: rgba(74,31,110,0.65); line-height: 1.45; }
+.sm-btn { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--purple); color: white; border: none; padding: 5px 12px; border-radius: 100px; cursor: pointer; margin-top: 7px; }
+.contrib-feed { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 16px; }
+.contrib { display: flex; flex-direction: column; gap: 6px; padding: 13px 14px; background: var(--bg); border-radius: 10px; border: 1px solid var(--rule-lt); }
+.contrib-identity { display: flex; align-items: center; gap: 8px; }
+.contrib-avatar { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--blue-pal); display: flex; align-items: center; justify-content: center; font-size: 12px; background: var(--blue-vpal); flex-shrink: 0; }
+.contrib-who { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: var(--ink-soft); }
+.contrib-who strong { color: var(--blue); }
+.contrib-text { font-size: 13px; line-height: 1.6; color: var(--ink-mid); }
+.contrib-footer { display: flex; align-items: center; gap: 10px; }
+.contrib-stance { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; }
+.cs-support { background: var(--green-p); color: var(--green); }
+.cs-oppose { background: var(--red-p); color: var(--red); }
+.cs-nuanced { background: var(--blue-vpal); color: var(--blue-lt); }
+.contrib-time { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--ink-mut); margin-left: auto; }
+.source-chip { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt); }
+.compose-area { padding: 16px 24px 20px; border-top: 1px solid var(--rule); flex-shrink: 0; }
+.compose-identity { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.compose-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gilt-pal); border: 2px solid var(--gilt-rul); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.compose-who { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: var(--ink-soft); }
+.compose-who strong { color: var(--blue); }
+.compose-box { width: 100%; min-height: 72px; padding: 12px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; line-height: 1.55; border: 1.5px solid var(--blue-pal); border-radius: 10px; background: var(--bg); color: var(--ink); resize: none; outline: none; }
+.compose-box:focus { border-color: var(--blue); background: var(--white); }
+.compose-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.compose-source { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt); cursor: pointer; }
+.compose-submit { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: var(--blue); color: white; border: none; padding: 8px 18px; border-radius: 100px; cursor: pointer; }
+
+
+
+/* ── BILL HERO v10 — light theme ── */
+.hero{background:var(--blue);border-bottom:3px solid var(--gilt);padding:0;}
+.hero-bc-strip{padding:10px 40px 0;display:flex;flex-wrap:wrap;align-items:center;gap:0;}
+.hero-bc-strip a{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.22);text-decoration:none;}
+.hero-bc-strip a:hover{color:rgba(255,255,255,0.6);}
+.hero-bc-strip .bc-sep{color:rgba(255,255,255,0.15);margin:0 5px;font-size:9px;}
+.hero-bc-strip .bc-here{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt-lt);font-weight:600;}
+.hero-bc-strip .bc-toggle{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);cursor:pointer;border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:3px;margin-left:6px;}
+.bc-full-row{display:none;flex-wrap:wrap;align-items:center;gap:0;padding:4px 40px 0;}
+.bc-full-row.open{display:flex;}
+.bc-full-row a{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;}
+.bc-cosmic-item a,.bc-cosmic-item{color:rgba(255,255,255,0.14);}
+.bc-earth-item a,.bc-earth-item{color:rgba(255,255,255,0.22);}
+.hero-top{display:grid;grid-template-columns:1fr 320px;gap:48px;align-items:start;padding:18px 40px 0;}
+.bill-entity-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px;}
+.bill-type-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 9px;border-radius:3px;background:rgba(184,134,11,0.3);color:var(--gilt-lt);border:0.5px solid rgba(184,134,11,0.5);}
+.bill-lang-chip{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:3px;background:rgba(55,138,221,0.2);border:0.5px solid rgba(181,212,244,0.35);color:rgba(181,212,244,0.85);}
+.bill-num-line{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;color:rgba(255,255,255,0.35);margin-bottom:6px;}
+.hero-title{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:white;letter-spacing:-0.01em;line-height:1.2;margin-bottom:12px;}
+.hero-title-es{font-family:'Libre Baskerville',serif;font-size:14px;color:rgba(255,255,255,0.4);font-style:italic;margin-bottom:12px;margin-top:-8px;}
+.hero-meta-row{display:flex;gap:20px;flex-wrap:wrap;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);}
+.hm{display:flex;flex-direction:column;gap:3px;}
+.hm-l{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.hm-v{font-size:13px;font-weight:700;color:white;}
+.hm-sep{width:1px;background:rgba(255,255,255,0.1);align-self:stretch;}
+.hero-stats-bill{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px;padding-bottom:18px;}
+.bhs{background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);border-radius:4px;padding:6px 11px;min-width:70px;}
+.bhs-num{font-size:14px;font-weight:700;color:white;line-height:1;}
+.bhs-num.g{color:#9FE1CB;}.bhs-num.a{color:#FAC775;}.bhs-num.r{color:#ff8080;}
+.bhs-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-top:2px;}
+.status-panel{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;}
+.sp-row{display:flex;flex-direction:column;gap:5px;}
+.sp-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.status-badge{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border-radius:100px;}
+.sb-floor{background:rgba(21,92,45,0.35);color:#9FE1CB;border:1px solid rgba(21,92,45,0.5);}
+.sb-committee{background:rgba(196,127,0,0.25);color:#FAC775;border:1px solid rgba(196,127,0,0.4);}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.pn-done{background:var(--gilt);}
+.pn-curr{background:var(--gilt);box-shadow:0 0 0 3px rgba(184,134,11,0.3);}
+.pn-none{background:rgba(255,255,255,0.15);border:none;}
+.pl-done{background:var(--gilt);}
+.pl-none{background:rgba(255,255,255,0.1);}
+.plbl-done{color:var(--gilt-lt);}
+.plbl-curr{color:var(--gilt-lt);font-weight:700;}
+.plbl-none{color:rgba(255,255,255,0.3);}
+.civic-action{background:rgba(0,0,0,0.2);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.08);}
+.ca-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:white;}
+.ca-sub{font-size:11.5px;color:rgba(255,255,255,0.45);line-height:1.5;}
+.ca-btns{display:flex;flex-direction:column;gap:6px;}
+.ca-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:100px;padding:9px 16px;cursor:pointer;text-align:center;}
+.ca-primary{background:var(--gilt);color:white;}
+.ca-secondary{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.12);}
+.hero-star-div{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.55em;color:var(--gilt);text-align:right;padding:8px 40px 0;opacity:0.45;}
+.bill-tabs{display:flex;border-top:0.5px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.18);}
+.btab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 15px;color:rgba(255,255,255,0.3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;position:relative;}
+.btab:hover{color:rgba(255,255,255,0.65);}
+.btab.on{color:var(--gilt-lt);border-bottom-color:var(--gilt);}
+.btab::after{content:attr(title);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.75);font-size:9px;padding:4px 9px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.12s;border:1px solid rgba(255,255,255,0.12);}
+.btab:hover::after{opacity:1;}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-links">
+    <a href="#" class="nav-link">Commons</a>
+    <a href="#" class="nav-link">Lyceum</a>
+    <a href="#" class="nav-link">Ledger</a>
+    <a href="#" class="nav-link">Square</a>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn nb-share">Share</button>
+    <button class="nav-btn nb-follow">Follow</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bc-strip" id="bc-short-r">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(255,255,255,0.12);">&#183;&#183;&#183;</span>
+    <span class="bc-sep">/</span>
+    <a href="#">North America</a>
+    <span class="bc-sep">/</span>
+    <a href="#">United States</a>
+    <span class="bc-sep">/</span>
+    <a href="#">Federal</a>
+    <span class="bc-sep">/</span>
+    <a href="#">119th Congress</a>
+    <span class="bc-sep">/</span>
+    <a href="#">House</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-here">H.R. 4471</span>
+    <span class="bc-toggle" onclick="toggleBcCosmic()">&#8593; Full location</span>
+  </div>
+  <div class="bc-full-row" id="bc-full-r">
+    <span class="bc-cosmic-item">The Universe</span><span class="bc-sep">/</span>
+    <span class="bc-cosmic-item">Milky Way</span><span class="bc-sep">/</span>
+    <span class="bc-cosmic-item">Solar System</span><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">Earth</a><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">North America</a><span class="bc-sep">/</span>
+    <a href="#" class="bc-earth-item">United States</a><span class="bc-sep">/</span>
+    <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none;">Federal</a><span class="bc-sep">/</span>
+    <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none;">119th Congress</a><span class="bc-sep">/</span>
+    <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none;">House</a><span class="bc-sep">/</span>
+    <span class="bc-here">H.R. 4471</span>
+    <span class="bc-toggle" onclick="toggleBcCosmic()">&#8595; Collapse</span>
+  </div>
+
+  <div class="hero-top">
+    <div>
+      <div class="bill-entity-row">
+        <span class="bill-type-chip">Federal Bill &middot; House</span>
+        <span class="status-badge sb-floor"><span class="sb-dot"></span>Passed House &middot; Awaiting Senate</span>
+      </div>
+      <div class="bill-num-line">H.R. 4471 &middot; 119th Congress &middot; Introduced February 11, 2025</div>
+      <h1 class="hero-title">Infrastructure Investment and<br>Rural Broadband Expansion Act</h1>
+      <div class="hero-meta-row">
+        <div class="hm"><span class="hm-l">Sponsor</span><span class="hm-v">Rep. C. Davis (D-VA)</span></div>
+        <div class="hm-sep"></div>
+        <div class="hm"><span class="hm-l">Committee</span><span class="hm-v">Energy &amp; Commerce</span></div>
+      </div>
+      <div class="hero-stats-bill">
+        <div class="bhs"><div class="bhs-num">247&ndash;183</div><div class="bhs-lbl">House vote</div></div>
+        <div class="bhs"><div class="bhs-num a">Pending</div><div class="bhs-lbl">Senate</div></div>
+        <div class="bhs"><div class="bhs-num">$42B</div><div class="bhs-lbl">Authorized</div></div>
+        <div class="bhs"><div class="bhs-num">7 yrs</div><div class="bhs-lbl">Timeline</div></div>
+        <div class="bhs"><div class="bhs-num g">8.2K</div><div class="bhs-lbl">Constituents</div></div>
+      </div>
+    </div>
+    <div class="status-panel">
+      <div class="sp-row">
+        <span class="sp-label">Legislative progress</span>
+        <div class="progress">
+          <div class="pn pn-done"></div><div class="pl pl-done"></div>
+          <div class="plbl plbl-done">Introduced</div><div class="pl pl-done"></div>
+          <div class="pn pn-done"></div><div class="pl pl-done"></div>
+          <div class="plbl plbl-done">Committee</div><div class="pl pl-done"></div>
+          <div class="pn pn-curr"></div><div class="pl pl-done"></div>
+          <div class="plbl plbl-curr">House &#10003;</div><div class="pl pl-none"></div>
+          <div class="pn pn-none"></div><div class="pl pl-none"></div>
+          <div class="plbl plbl-none">Senate</div>
+        </div>
+      </div>
+      <div class="civic-action">
+        <div class="ca-title">Contact your Senator</div>
+        <div class="ca-sub">The bill passed the House 247&ndash;183. It now awaits a Senate vote. 8,219 constituents have contacted their senators.</div>
+        <div class="ca-btns">
+          <button class="ca-btn ca-primary">Contact your Senator</button>
+          <button class="ca-btn ca-secondary">Post a contribution</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-star-div">&#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733; &#9733;</div>
+  <div class="bill-tabs">
+    <div class="btab on" title="What does this bill do?">Overview</div>
+    <div class="btab" title="Where is it in the process?">Status &amp; Progress</div>
+    <div class="btab" title="Who sponsored it and who benefits?">Sponsors &amp; Interests</div>
+    <div class="btab" title="What do the sources say?">Coverage</div>
+    <div class="btab" title="What is contested?">Discourse</div>
+    <div class="btab" title="What is the record?">The Record</div>
+  </div>
+</div>
+
+<!-- SPLIT BODY -->
+<div class="split">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-left">
+
+    <!-- CIVIC SCAFFOLD -->
+    <div class="s-block">
+      <div class="s-head">
+        <div><div class="s-eyebrow">Civic Scaffold</div><div class="s-title">Orientation before opinion</div></div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="scaffold-grid">
+        <div class="scaf-card full">
+          <div class="scaf-kicker sk-blue">What it does</div>
+          <div class="scaf-en">Allocates $42 billion over seven years to expand broadband infrastructure in rural and underserved communities. Requires ISPs receiving federal funds to offer a $30/month affordable tier. Establishes a new Rural Connectivity Office within the FCC and mandates 25 Mbps minimum download speeds for all funded projects.</div>
+        </div>
+        <div class="scaf-card">
+          <div class="scaf-kicker sk-gilt">Who it affects</div>
+          <div class="scaf-en">Approximately 21 million Americans in rural areas who currently lack access to broadband. Affects ISPs who bid for federal contracts and the 14 states with less than 50% broadband coverage.</div>
+        </div>
+        <div class="scaf-card">
+          <div class="scaf-kicker sk-gilt">Fiscal note</div>
+          <div class="scaf-en">$42B authorized over FY2026–2032. CBO scores net cost at $38.4B after projected tax revenue from new economic activity. Funded through discretionary appropriations.</div>
+        </div>
+        <div class="scaf-card best">
+          <div class="scaf-kicker sk-green">Best case</div>
+          <div class="scaf-en">Closes the digital divide for 21 million Americans. Enables telehealth, remote work, and digital education in rural communities. Estimated $64B in long-term economic returns per CBO supplemental analysis.</div>
+        </div>
+        <div class="scaf-card worst">
+          <div class="scaf-kicker sk-red">Worst case</div>
+          <div class="scaf-en">ISPs capture contracts without meaningful rural deployment. Price floor requirements go unenforced. Infrastructure built but unaffordable. Prior rural broadband programs (e.g. FCC E-Rate, 2010 USDA grants) saw similar deployment gaps.</div>
+        </div>
+        <div class="scaf-card hist full">
+          <div class="scaf-kicker sk-blue">Historical precedent</div>
+          <div class="scaf-en">The Rural Electrification Act of 1936 brought electricity to 90% of American farms within 20 years using a similar federal loan/grant structure. By contrast, the 2010 National Broadband Plan fell short of its targets, largely due to weak deployment mandates. This bill's mandatory service tiers and FCC oversight represent a structural improvement — though enforcement authority remains contested.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOURCES -->
+    <div class="s-block">
+      <div class="s-head">
+        <div><div class="s-eyebrow">Sources</div><div class="s-title">5 sources · Community-scored</div></div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="source-list">
+        <div class="source-row">
+          <div class="tier-badge tb-inst" title="Tier 1 · Institution">🏛</div>
+          <div class="source-body">
+            <div class="source-name">Congress.gov — H.R. 4471 Full Text</div>
+            <div class="source-desc">Official enrolled bill text and committee report. Primary legislative source.</div>
+            <div class="source-meta">congress.gov · Feb 11, 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-inst" title="Tier 1 · Institution">🏛</div>
+          <div class="source-body">
+            <div class="source-name">CBO Cost Estimate — H.R. 4471</div>
+            <div class="source-desc">Congressional Budget Office scoring. Net cost $38.4B over 10 years. Includes supplemental economic return analysis.</div>
+            <div class="source-meta">cbo.gov · Mar 2, 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-ver" title="Tier 2 · Verified">✓</div>
+          <div class="source-body">
+            <div class="source-name">Washington Post — Technology</div>
+            <div class="source-desc">Analysis of ISP lobbying against the $30 price floor requirement. Quotes FCC Chair and two dissenting House Republicans.</div>
+            <div class="source-meta">washingtonpost.com · Mar 14, 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-ver" title="Tier 2 · Verified">✓</div>
+          <div class="source-body">
+            <div class="source-name">Pew Research Center — Digital Divide</div>
+            <div class="source-desc">Survey data on rural broadband access gaps. Methodology disclosed. Cited in bill's House committee report.</div>
+            <div class="source-meta">pewresearch.org · Jan 2025</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="tier-badge tb-persp" title="Tier 3 · Perspective">💬</div>
+          <div class="source-body">
+            <div class="source-name">Broadband Now — Industry Analysis</div>
+            <div class="source-desc">ISP industry tracking publication. Favorable framing toward providers; data on deployment costs is independently verifiable.</div>
+            <div class="source-meta">broadbandnow.com · Mar 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="leg-bar">
+        <span class="leg-lbl">Legitimacy Score</span>
+        <span class="leg-note">Scores citations, not claims</span>
+        <div class="leg-track"><div class="leg-fill" style="width:84%"></div></div>
+        <span class="leg-score">84</span>
+        <span class="leg-denom">/ 100</span>
+      </div>
+    </div>
+
+    <!-- SENTIMENT -->
+    <div class="s-block">
+      <div class="s-head">
+        <div><div class="s-eyebrow">Cohort Sentiment</div><div class="s-title">Public position by group</div></div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="cohort-chips">
+        <div class="chip active">All</div>
+        <div class="chip">Rural residents</div>
+        <div class="chip">Virginia (VA-11)</div>
+        <div class="chip">Small business</div>
+        <div class="chip">Age 18–34</div>
+      </div>
+      <div class="sent-bars">
+        <div class="sb-row"><span class="sb-lbl">Support</span><div class="sb-track"><div class="sb-fill sf-s" style="width:68%"></div></div><span class="sb-pct pct-s">68%</span></div>
+        <div class="sb-row"><span class="sb-lbl">Oppose</span><div class="sb-track"><div class="sb-fill sf-o" style="width:19%"></div></div><span class="sb-pct pct-o">19%</span></div>
+        <div class="sb-row"><span class="sb-lbl">Neutral</span><div class="sb-track"><div class="sb-fill sf-n" style="width:13%"></div></div><span class="sb-pct pct-n">13%</span></div>
+      </div>
+      <div class="cohort-callout"><strong>Notable split:</strong> Rural residents support at 81% vs. urban residents at 52%. Small business owners in rural districts are the highest-support cohort at 87%.</div>
+    </div>
+
+    <!-- SPONSORS & VOTE RECORD -->
+    <div class="s-block">
+      <div class="s-head">
+        <div><div class="s-eyebrow">Sponsors &amp; Vote Record</div><div class="s-title">House passed · 247–183 · Senate pending</div></div>
+        <span class="collapse-pill">Collapse ↑</span>
+      </div>
+      <div class="sponsor-list">
+        <div class="sponsor-row">
+          <div class="sponsor-avatar sa-dem">CD</div>
+          <div><div class="sponsor-name">Rep. Cynthia Davis (D-VA-11)</div><div class="sponsor-role">Primary Sponsor · Energy &amp; Commerce</div></div>
+          <span class="sponsor-party sp-dem">D · Virginia</span>
+        </div>
+        <div class="sponsor-row">
+          <div class="sponsor-avatar sa-rep">TM</div>
+          <div><div class="sponsor-name">Rep. Tom Merritt (R-IA-3)</div><div class="sponsor-role">Co-Sponsor · Agriculture Committee</div></div>
+          <span class="sponsor-party sp-rep">R · Iowa</span>
+        </div>
+        <div class="sponsor-row">
+          <div class="sponsor-avatar sa-dem">LW</div>
+          <div><div class="sponsor-name">Rep. Lena Washington (D-MS-2)</div><div class="sponsor-role">Co-Sponsor · Rural Caucus Chair</div></div>
+          <span class="sponsor-party sp-dem">D · Mississippi</span>
+        </div>
+      </div>
+
+      <div class="tally" style="margin-top:10px;">
+        <div class="tc"><div class="tnum tn-yea">247</div><div class="tlbl">Yea</div></div>
+        <div class="tc"><div class="tnum tn-nay">183</div><div class="tlbl">Nay</div></div>
+        <div class="tc"><div class="tnum" style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--ink-soft);">5</div><div class="tlbl">Not voting</div></div>
+      </div>
+
+      <div class="party-breakdown">
+        <div class="party-card pc-dem">
+          <div class="pc-label pc-label-d">Democratic</div>
+          <div class="pc-nums">
+            <div class="pc-num"><div class="pc-n pcn-dy">212</div><div class="pc-nlbl">Yea</div></div>
+            <div class="pc-num"><div class="pc-n pcn-dn">4</div><div class="pc-nlbl">Nay</div></div>
+          </div>
+        </div>
+        <div class="party-card pc-rep">
+          <div class="pc-label pc-label-r">Republican</div>
+          <div class="pc-nums">
+            <div class="pc-num"><div class="pc-n pcn-ry">35</div><div class="pc-nlbl">Yea</div></div>
+            <div class="pc-num"><div class="pc-n pcn-rn">179</div><div class="pc-nlbl">Nay</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- RIGHT COLUMN — DISCOURSE -->
+  <div class="col-right">
+    <div class="disc-header">
+      <div class="disc-title">Community Discourse</div>
+      <div class="disc-sub">5,847 contributions · Ranked by legitimacy score</div>
+    </div>
+    <div class="sm-banner">
+      <div class="sm-ico">⚖️</div>
+      <div class="sm-bd">
+        <div class="sm-title">Steel-man challenge</div>
+        <div class="sm-sub">Before posting, articulate the strongest case for the view you oppose.</div>
+        <button class="sm-btn">Try it</button>
+      </div>
+    </div>
+    <div class="contrib-feed">
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">🌾</div>
+          <span class="contrib-who"><strong>Farmer · 50s · Rural Iowa</strong></span>
+        </div>
+        <div class="contrib-text">I've run my farm without reliable internet for 12 years. My kids do homework at McDonald's for the WiFi. The $30 price floor mandate is the part that matters most — we've had promises about rural buildout before. The enforcement mechanism is what's different here.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-support">Support</span>
+          <span class="source-chip">CBO [S] · Pew [A]</span>
+          <span class="contrib-time">1h ago</span>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">📡</div>
+          <span class="contrib-who"><strong>Telecom Engineer · 40s · Northern Virginia</strong></span>
+        </div>
+        <div class="contrib-text">The 25 Mbps minimum is already outdated — the FCC's own definition of broadband is now 100 Mbps. We'll spend $42B building infrastructure that's obsolete on day one for the most remote areas. The standard should be future-proofed to at least 100/20 Mbps or we're wasting the money.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-nuanced">Technical concern</span>
+          <span class="source-chip">Congress.gov [S]</span>
+          <span class="contrib-time">3h ago</span>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">🏥</div>
+          <span class="contrib-who"><strong>Rural Physician · 40s · Mississippi</strong></span>
+        </div>
+        <div class="contrib-text">Telehealth has transformed what I can offer my patients — but only the ones with reliable connections. Half my patient panel can't do video visits. This bill would change the practice of rural medicine. I've watched colleagues leave because they can't deliver modern care. Broadband is healthcare infrastructure.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-support">Support</span>
+          <span class="source-chip">Pew [A]</span>
+          <span class="contrib-time">5h ago</span>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-identity">
+          <div class="contrib-avatar">💼</div>
+          <span class="contrib-who"><strong>ISP Policy Director · 40s · Washington DC</strong></span>
+        </div>
+        <div class="contrib-text">The $30 price floor is a price control by another name. It sounds affordable but in rural markets with limited competition it's actually above what many residents pay now. The real cost driver is the mandatory symmetrical upload speed — it requires a complete infrastructure rebuild rather than upgrades to existing networks.</div>
+        <div class="contrib-footer">
+          <span class="contrib-stance cs-oppose">Industry concern</span>
+          <span class="source-chip">Broadband Now [B]</span>
+          <span class="contrib-time">7h ago</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="compose-area">
+      <div class="compose-identity">
+        <div class="compose-avatar">🏡</div>
+        <span class="compose-who">Posting as <strong>Small business owner · 30s · Virginia</strong> · <span style="color:var(--gilt);cursor:pointer;">Change</span></span>
+      </div>
+      <textarea class="compose-box" placeholder="Add your contribution — cite a source to boost your legitimacy score..."></textarea>
+      <div class="compose-footer">
+        <span class="compose-source">+ Add a source</span>
+        <button class="compose-submit">Post contribution</button>
+      </div>
+    </div>
+  </div><!-- /col-right -->
+
+</div><!-- /split -->
+
+<script>
+function toggleBcCosmic() {
+  var full = document.getElementById('bc-full');
+  var short = document.getElementById('bc-short');
+  var isOpen = full.classList.contains('open');
+  if (isOpen) { full.classList.remove('open'); short.style.display = 'flex'; }
+  else { full.classList.add('open'); short.style.display = 'none'; }
+}
+</script>
+</body>
+</html>

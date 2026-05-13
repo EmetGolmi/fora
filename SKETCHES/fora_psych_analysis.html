@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Psychological Analysis · Temple Israel Attack</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f2f4f8;
+  --bg2:     #e8ebf2;
+  --white:   #ffffff;
+  --blue:    #1b3a6b;
+  --blue-md: #254f92;
+  --blue-lt: #3a6abf;
+  --blue-pl: #dde5f5;
+  --blue-vp: #edf1fb;
+  --gilt:    #b8860b;
+  --gilt-lt: #d4a832;
+  --gilt-pl: #f8f0dc;
+  --gilt-rul:rgba(184,134,11,0.22);
+  --ink:     #0e1a2e;
+  --ink-mid: #2c3e5a;
+  --ink-soft:#5a6e8a;
+  --ink-mut: #8a9ab8;
+  --rule:    rgba(27,58,107,0.1);
+  --rule-lt: rgba(27,58,107,0.05);
+  --green:   #155c2d;
+  --green-p: #e5f0e8;
+  --green-r: #8cc4a0;
+  --red:     #8b2020;
+  --red-p:   #f7eaea;
+  --red-r:   #d4a0a0;
+  --amber:   #c47f00;
+  --amber-p: #fdf3dc;
+  --amber-r: rgba(196,127,0,0.28);
+  --purple:  #5c3a8b;
+  --purple-p:#f3eefa;
+  --purple-r:rgba(92,58,139,0.25);
+  --psych:   #3a2d6b;   /* deep indigo for psych layer */
+  --psych-p: #eeeafa;
+  --psych-r: rgba(58,45,107,0.25);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--gilt-rul);border-radius:10px;}
+
+/* ══ NAV ══ */
+nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-right{margin-left:auto;}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--gilt-pl);border:2px solid var(--gilt-rul);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gilt);font-weight:700;}
+
+/* ══ EVENT CONTEXT BAR ══ */
+.event-bar{background:var(--blue-vp);border-bottom:1px solid var(--rule);padding:10px 48px;display:flex;align-items:center;gap:14px;}
+.eb-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);}
+.eb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);}
+.eb-sep{color:var(--ink-mut);opacity:0.3;}
+.eb-tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border-radius:100px;cursor:pointer;color:var(--ink-mut);transition:all 0.12s;}
+.eb-tab:hover{background:var(--blue-pl);color:var(--blue);}
+.eb-tab.active{background:var(--purple-p);color:var(--purple);border:1px solid var(--purple-r);font-weight:700;}
+
+/* ══ PAGE LAYOUT ══ */
+.page{max-width:980px;margin:0 auto;padding:40px 48px;}
+
+/* ══ PANEL HEADER ══ */
+.panel-header{background:var(--psych);border-radius:14px 14px 0 0;padding:24px 28px;position:relative;overflow:hidden;}
+.ph-ring{position:absolute;right:-40px;top:-60px;width:260px;height:260px;border-radius:50%;border:30px solid rgba(255,255,255,0.025);pointer-events:none;}
+.ph-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.ph-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gilt-lt);}
+.ph-title{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:white;margin-bottom:6px;}
+.ph-sub{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;max-width:600px;margin-bottom:18px;}
+.ph-meta{display:flex;gap:12px;flex-wrap:wrap;}
+.ph-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:3px;}
+.badge-ai{background:rgba(92,58,139,0.3);color:#c4b5fd;border:1px solid rgba(92,58,139,0.4);}
+.badge-ver{background:rgba(21,92,45,0.25);color:#86efac;border:1px solid rgba(21,92,45,0.4);}
+.badge-v{background:rgba(184,134,11,0.2);color:var(--gilt-lt);border:1px solid rgba(184,134,11,0.3);}
+.ph-version-row{margin-top:14px;display:flex;align-items:center;gap:10px;}
+.ph-ver-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.ph-ver-link{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.2);}
+.ph-ver-link:hover{color:white;}
+
+/* ══ SCIENTIFIC METHOD SPINE ══ */
+.sm-nav{background:var(--white);border:1px solid var(--rule);border-top:none;padding:0 28px;display:flex;gap:0;overflow-x:auto;}
+.sm-tab{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;padding:13px 16px;color:var(--ink-mut);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
+.sm-tab:hover{color:var(--psych);}
+.sm-tab.active{color:var(--psych);border-bottom-color:var(--gilt);font-weight:700;}
+.sm-tab-num{font-family:'Libre Baskerville',serif;font-size:11px;font-weight:700;color:var(--ink-mut);opacity:0.4;}
+.sm-tab.active .sm-tab-num{opacity:1;color:var(--psych);}
+
+/* ══ PANEL BODY ══ */
+.panel-body{background:var(--white);border:1px solid var(--rule);border-top:none;border-radius:0 0 14px 14px;padding:32px 28px;}
+
+/* Stage header */
+.stage-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--rule);}
+.stage-num-box{background:var(--psych);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stage-num-text{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;opacity:0.6;}
+.stage-title-block{}
+.stage-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:3px;}
+.stage-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);}
+.stage-question{font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink-soft);font-style:italic;margin-top:2px;}
+
+/* AI draft block */
+.ai-draft{background:var(--psych-p);border:1px solid var(--psych-r);border-radius:10px;padding:18px 20px;margin-bottom:20px;position:relative;}
+.ai-draft-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--psych);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ai-label-chip{background:var(--psych);color:white;padding:2px 6px;border-radius:3px;font-size:6px;letter-spacing:0.1em;}
+.ai-body{font-family:'Nunito',sans-serif;font-size:13.5px;color:var(--ink);line-height:1.8;}
+.ai-body .term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;}
+.ai-body em{color:var(--psych);font-style:normal;font-weight:600;}
+.ai-cite{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--psych);background:rgba(58,45,107,0.08);padding:1px 6px;border-radius:2px;cursor:pointer;margin-left:2px;}
+.ai-cite:hover{background:rgba(58,45,107,0.18);}
+.ai-footer{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--psych-r);}
+.ai-footer-note{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(58,45,107,0.5);flex:1;}
+.ai-challenge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1px solid var(--psych-r);color:var(--psych);cursor:pointer;transition:all 0.12s;}
+.ai-challenge:hover{background:var(--psych);color:white;}
+
+/* ══ RADICALIZATION PATHWAY DIAGRAM ══ */
+.pathway-diagram{background:var(--ink);border-radius:12px;padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.pd-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:32px 32px;}
+.pd-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;position:relative;}
+.pd-name{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;margin-bottom:6px;position:relative;}
+.pd-sub{font-family:'Nunito',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.35);margin-bottom:24px;position:relative;}
+.pd-note{font-family:'Nunito',sans-serif;font-size:11px;color:rgba(255,255,255,0.25);font-style:italic;margin-bottom:24px;position:relative;border-left:2px solid rgba(255,255,255,0.08);padding-left:10px;}
+
+/* pathway stages */
+.pathway-stages{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;margin-bottom:16px;}
+.pathway-stages::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:2px;background:linear-gradient(to right,rgba(139,32,32,0.6),rgba(196,127,0,0.6),rgba(196,127,0,0.6),rgba(196,127,0,0.8),rgba(139,32,32,0.9),rgba(139,32,32,1));z-index:0;}
+
+.ps-item{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;}
+.ps-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid;margin-bottom:10px;transition:transform 0.15s;cursor:pointer;}
+.ps-dot:hover{transform:scale(1.12);}
+.ps-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);text-align:center;line-height:1.4;}
+.ps-date{font-family:'Libre Baskerville',serif;font-size:9px;color:rgba(255,255,255,0.2);text-align:center;margin-top:3px;}
+
+/* stage color progression — grief to violence */
+.ps-1{background:rgba(92,58,139,0.3);border-color:rgba(92,58,139,0.7);}
+.ps-2{background:rgba(139,64,0,0.25);border-color:rgba(139,64,0,0.6);}
+.ps-3{background:rgba(196,127,0,0.2);border-color:rgba(196,127,0,0.6);}
+.ps-4{background:rgba(139,32,32,0.2);border-color:rgba(139,32,32,0.6);}
+.ps-5{background:rgba(139,32,32,0.35);border-color:rgba(139,32,32,0.8);}
+.ps-6{background:rgba(60,20,20,0.5);border-color:rgba(139,32,32,1);}
+
+/* intervention markers */
+.intervention-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-top:8px;}
+.iv-item{display:flex;flex-direction:column;align-items:center;padding:0 4px;}
+.iv-dot{width:8px;height:8px;border-radius:50%;margin-bottom:4px;}
+.iv-dot.green{background:#86efac;}
+.iv-dot.empty{background:transparent;}
+.iv-label{font-family:'Nunito',sans-serif;font-size:9px;color:rgba(134,239,172,0.7);text-align:center;line-height:1.3;}
+.iv-label.none{color:rgba(255,255,255,0.15);font-style:italic;}
+
+.pd-legend{display:flex;gap:16px;margin-top:12px;position:relative;}
+.pdl-item{display:flex;align-items:center;gap:5px;}
+.pdl-dot{width:8px;height:8px;border-radius:50%;}
+.pdl-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+
+/* case timeline within diagram */
+.case-timeline{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px;margin-top:12px;position:relative;}
+.ct-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:8px;}
+.ct-row{display:flex;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.ct-row:last-child{border-bottom:none;}
+.ct-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.2);width:80px;flex-shrink:0;}
+.ct-event{font-family:'Nunito',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.55);}
+.ct-stage{font-family:'JetBrains Mono',monospace;font-size:7px;padding:1px 6px;border-radius:2px;margin-left:auto;flex-shrink:0;}
+
+/* ══ PROFESSIONAL CONTRIBUTIONS ══ */
+.pro-contribution{background:var(--white);border:1px solid rgba(92,58,139,0.2);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;}
+.pro-contribution::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--purple);border-radius:10px 0 0 10px;}
+.pc-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.pc-av{width:34px;height:34px;border-radius:50%;background:var(--purple-p);border:2px solid var(--purple-r);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--purple);flex-shrink:0;position:relative;}
+.pc-ring{position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--gilt);pointer-events:none;}
+.pc-who{flex:1;}
+.pc-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--ink);}
+.pc-cred{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--purple);background:var(--purple-p);border:1px solid var(--purple-r);padding:2px 6px;border-radius:3px;margin-left:5px;}
+.pc-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:2px;}
+.pc-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:var(--purple-p);color:var(--purple);border:1px solid var(--purple-r);flex-shrink:0;}
+.pc-body{font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.7;}
+.pc-cite{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--psych);cursor:pointer;}
+.pc-accepted{display:flex;align-items:center;gap:5px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--green);}
+
+/* citizen contribution to psych */
+.cit-contribution{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.cc-header-r{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.cit-av{width:28px;height:28px;border-radius:50%;background:var(--bg2);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;color:var(--ink-soft);flex-shrink:0;}
+.cit-who{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);flex:1;}
+.cit-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--bg2);color:var(--ink-mut);border:1px solid var(--rule);}
+.cit-body{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);line-height:1.65;}
+
+/* ══ MEMORIAL FLAME ══ */
+.memorial-user{display:flex;align-items:center;gap:8px;}
+.memorial-flame-svg{width:14px;height:18px;flex-shrink:0;}
+.memorial-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--ink);}
+.memorial-phrase{font-family:'Libre Baskerville',serif;font-size:11px;font-style:italic;color:var(--gilt);display:block;margin-top:1px;}
+
+/* ══ ADD CONTRIBUTION ══ */
+.add-contribution{background:var(--white);border:1.5px dashed var(--purple-r);border-radius:10px;padding:16px;margin-top:12px;}
+.ac-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--psych);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ac-type-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.ac-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 12px;border-radius:100px;border:1.5px solid var(--rule);color:var(--ink-mut);cursor:pointer;transition:all 0.12s;}
+.ac-type:hover,.ac-type.selected{border-color:var(--purple);color:var(--purple);background:var(--purple-p);}
+.ac-stage-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.ac-stage{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:3px;border:1px solid var(--rule);color:var(--ink-mut);cursor:pointer;transition:all 0.12s;}
+.ac-stage:hover,.ac-stage.selected{border-color:var(--gilt);color:var(--gilt);background:var(--gilt-pl);}
+.ac-textarea{width:100%;border:1.5px solid var(--rule);border-radius:8px;padding:11px 13px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);outline:none;resize:vertical;min-height:80px;transition:border-color 0.12s;line-height:1.65;}
+.ac-textarea:focus{border-color:var(--purple);}
+.ac-footer{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.ac-cred-note{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);flex:1;}
+.ac-submit{background:var(--psych);border:none;border-radius:100px;padding:9px 20px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:white;font-weight:700;cursor:pointer;transition:background 0.15s;}
+.ac-submit:hover{background:var(--purple);}
+
+/* ══ VERSION HISTORY ══ */
+.version-history{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin-top:20px;}
+.vh-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:10px;}
+.vh-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--rule-lt);}
+.vh-row:last-child{border-bottom:none;}
+.vh-ver{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--blue-pl);width:28px;flex-shrink:0;}
+.vh-body{flex:1;}
+.vh-what{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);}
+.vh-by{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:2px;}
+.vh-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);flex-shrink:0;}
+.vh-cur{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--green-p);color:var(--green);border:1px solid var(--green-r);flex-shrink:0;}
+
+/* sensitivity notice */
+.sensitivity-notice{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;gap:10px;}
+.sn-icon{font-size:16px;flex-shrink:0;}
+.sn-text{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-mid);line-height:1.6;}
+.sn-text strong{color:var(--ink);}
+
+/* tappable terms */
+.term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;transition:color 0.1s;}
+.term:hover{color:var(--gilt);}
+
+/* def modal */
+.def-modal{display:none;position:fixed;inset:0;background:rgba(10,18,32,0.75);z-index:600;align-items:center;justify-content:center;}
+.def-modal.open{display:flex;}
+.def-panel{background:var(--white);border-radius:14px;padding:28px;max-width:420px;width:90%;position:relative;}
+.def-close{position:absolute;top:14px;right:18px;font-size:20px;color:var(--ink-mut);cursor:pointer;}
+.def-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px;}
+.def-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.def-body{font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.7;margin-bottom:12px;}
+.def-ex{background:var(--bg);border-radius:8px;padding:11px 13px;border-left:3px solid var(--gilt);}
+.def-ex-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.def-ex-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.55;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-right"><div class="nav-avatar">NG</div></div>
+</nav>
+
+<!-- Event context bar -->
+<div class="event-bar">
+  <span class="eb-type">Civic Event</span>
+  <span class="eb-sep">/</span>
+  <span class="eb-title">Temple Israel Synagogue Attack · March 12, 2026</span>
+  <div style="margin-left:auto;display:flex;gap:6px;">
+    <span class="eb-tab">Government</span>
+    <span class="eb-tab">Media Framing</span>
+    <span class="eb-tab">Citizens</span>
+    <span class="eb-tab active">Psychological Analysis</span>
+    <span class="eb-tab">Reasoning View</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- PANEL HEADER -->
+  <div class="panel-header">
+    <div class="ph-ring"></div>
+    <div class="ph-eyebrow"><div class="ph-eyebrow-dot"></div>Psychological Analysis · Version 2</div>
+    <div class="ph-title">Understanding What Happened and Why</div>
+    <div class="ph-sub">An AI-drafted analysis, refined by the community, structured by the scientific method. This analysis describes a mechanism — not to excuse, but to understand. Understanding is how prevention begins.</div>
+    <div class="ph-meta">
+      <span class="ph-badge badge-ai">🤖 AI-drafted</span>
+      <span class="ph-badge badge-ver">✓ Professionally reviewed</span>
+      <span class="ph-badge badge-v">Version 2 · Mar 15, 2026</span>
+      <span class="ph-badge" style="background:rgba(196,127,0,0.15);color:#fcd34d;border:1px solid rgba(196,127,0,0.3);">3 community additions</span>
+    </div>
+    <div class="ph-version-row">
+      <span class="ph-ver-label">Prior versions:</span>
+      <span class="ph-ver-link">v1 — AI draft · Mar 13</span>
+      <span style="color:rgba(255,255,255,0.15);font-size:10px;">·</span>
+      <span class="ph-ver-link">v2 — Community-refined · Mar 15 (current)</span>
+    </div>
+  </div>
+
+  <!-- SCIENTIFIC METHOD NAV -->
+  <div class="sm-nav">
+    <div class="sm-tab active" onclick="showStage('obs',this)"><span class="sm-tab-num">1</span> Observation</div>
+    <div class="sm-tab" onclick="showStage('q',this)"><span class="sm-tab-num">2</span> Question</div>
+    <div class="sm-tab" onclick="showStage('res',this)"><span class="sm-tab-num">3</span> Research</div>
+    <div class="sm-tab" onclick="showStage('hyp',this)"><span class="sm-tab-num">4</span> Hypothesis</div>
+    <div class="sm-tab" onclick="showStage('ev',this)"><span class="sm-tab-num">5</span> Evidence</div>
+    <div class="sm-tab" onclick="showStage('an',this)"><span class="sm-tab-num">6</span> Analysis</div>
+    <div class="sm-tab" onclick="showStage('com',this)"><span class="sm-tab-num">7</span> Communication</div>
+  </div>
+
+  <!-- PANEL BODY -->
+  <div class="panel-body">
+
+    <!-- sensitivity notice -->
+    <div class="sensitivity-notice">
+      <div class="sn-icon">🕊</div>
+      <div class="sn-text">This analysis discusses political violence, grief, and radicalization. <strong>It does not excuse or justify the attack.</strong> If you are experiencing distress, the Crisis Text Line is available at 741741. If you have information about a potential threat, contact the FBI at 1-800-CALL-FBI.</div>
+    </div>
+
+    <!-- ══ STAGE 1: OBSERVATION ══ -->
+    <div id="stage-obs">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">1</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 1 of 7</div>
+          <div class="stage-title">Observation</div>
+          <div class="stage-question">What happened? — stripped of interpretation</div>
+        </div>
+      </div>
+
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> AI-drafted · Based on confirmed government sources only</div>
+        <div class="ai-body">
+          On March 12, 2026, Ayman Mohamad Ghazali, 41, drove a pickup truck loaded with commercial-grade fireworks and containers of gasoline into the entrance of <span class="term" onclick="showDef('temple')">Temple Israel</span> synagogue in West Bloomfield Township, Michigan. He then fired a rifle through the windshield, exchanging gunfire with an armed security guard. He died of a self-inflicted gunshot wound after becoming trapped when the vehicle's engine caught fire.<br><br>
+          The attack occurred during afternoon hours. Approximately 140 people — including preschool children and staff — were present. The preschool was evacuated safely. One security guard was struck by the vehicle and rendered unconscious; no life-threatening injuries were sustained. Approximately 30 law enforcement officers were treated for smoke inhalation after entering the building.<br><br>
+          The <span class="term" onclick="showDef('fbi')">FBI</span> confirmed: no prior criminal history, no registered firearms, no prior FBI investigation. Ghazali entered the United States in 2011 on an IR1 spouse visa and became a citizen in 2016. A prior <span class="term" onclick="showDef('cbp')">CBP</span> inspection found suspected Hezbollah members in his phone contacts. He was not listed as a Hezbollah member.
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">Sources: FBI Detroit · DHS · Oakland County Sheriff · verified journalism</span>
+          <button class="ai-challenge">Challenge this observation →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STAGE 2: QUESTION ══ -->
+    <div id="stage-q" style="display:none;">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">2</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 2 of 7</div>
+          <div class="stage-title">Question</div>
+          <div class="stage-question">What specifically are we trying to understand?</div>
+        </div>
+      </div>
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> AI-drafted</div>
+        <div class="ai-body">
+          <em>Primary question:</em> What psychological pathway led from Ayman Ghazali's personal circumstances to a targeted attack on a Jewish community with which he had no direct conflict?<br><br>
+          <em>Secondary questions:</em><br>
+          — Why a synagogue? What is the relationship between the proximate cause (brothers killed in Israeli airstrike) and the target selection (American Jewish congregation)?<br>
+          — Does this attack fit a documented psychological pattern, and if so, which one?<br>
+          — Were there observable warning signs? If so, who could have seen them and when?<br>
+          — What are the intervention points — where in the pathway could a different outcome have been possible?<br><br>
+          <em>What this analysis will not determine:</em> Whether Ghazali was directed by Hezbollah (an ongoing FBI investigation), the full extent of his ideological beliefs, or the legal classification of the attack. These are evidentiary and legal questions. This is a psychological analysis.
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">The question shapes what evidence is relevant. Citizen contributions that address these questions belong in Stage 5.</span>
+          <button class="ai-challenge">Refine the question →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STAGE 3: RESEARCH ══ -->
+    <div id="stage-res" style="display:none;">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">3</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 3 of 7</div>
+          <div class="stage-title">Research</div>
+          <div class="stage-question">What does existing knowledge tell us?</div>
+        </div>
+      </div>
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> AI-synthesized from peer-reviewed literature</div>
+        <div class="ai-body">
+          <em>On grief-driven radicalization:</em> The psychological literature documents a pathway in which acute personal loss — particularly loss perceived as politically caused — can rapidly convert grief into targeted political violence. <span class="ai-cite" onclick="showDef('mccauley')">McCauley &amp; Moskalenko (2008)</span> describe the "personal grievance" pathway as distinct from ideological radicalization: the violence is personal before it is political. The political framing comes second — it provides a target and justification for pre-existing grief.<br><br>
+          <em>On target displacement:</em> <span class="ai-cite" onclick="showDef('post')">Jerrold Post (2004)</span> documents the psychological phenomenon of "target displacement" in political violence — attacking a proximate symbol of a distal enemy. An American Jewish congregation is not responsible for Israeli military operations. However, in a grief-driven radicalization framework, the symbolic connection (Jewish → Israel → airstrike that killed family) can override rational targeting. This is documented across multiple case studies.<br><br>
+          <em>On the lone-actor profile:</em> <span class="ai-cite" onclick="showDef('ramadan')">Ramadan &amp; Paton (2015)</span> analyzed 119 lone-actor terrorist events and found: social isolation in the pre-attack period (100% of cases), prior expression of grievance online or in person (79%), and no formal organizational direction (by definition). The use of improvised, commercially available materials (fireworks, gasoline) rather than military-grade weapons is consistent with a non-trained, non-directed actor.<br><br>
+          <em>On the 7-day interval:</em> The interval between Ghazali's brothers' death (March 5) and the attack (March 12) is notable. Grief-driven attacks in the literature show shorter fuse times than ideologically-driven attacks. <span class="ai-cite" onclick="showDef('pape')">Pape (2005)</span> distinguishes between "strategic" suicide attackers (planned, directed, calm) and "crisis" attackers (impulsive, improvised, emotionally overwhelmed). Ghazali's profile — improvised weapons, self-inflicted death, no prior investigation — is more consistent with the crisis profile.
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">4 citations · All peer-reviewed · Tap any citation to read summary</span>
+          <button class="ai-challenge">Add a source →</button>
+        </div>
+      </div>
+
+      <!-- Professional contribution -->
+      <div class="pro-contribution">
+        <div class="pc-header">
+          <div class="pc-av">
+            DR
+            <div class="pc-ring"></div>
+          </div>
+          <div class="pc-who">
+            <div class="pc-name">Dr. Rachel Stein <span class="pc-cred">PhD · Clinical Psychology</span></div>
+            <div class="pc-meta">Licensed Psychologist · Verified credential · 35–44 · New York · Mar 14, 2026</div>
+          </div>
+          <span class="pc-type">Addition · Research</span>
+        </div>
+        <div class="pc-body">
+          The AI synthesis is accurate but omits one important strand: the role of pre-existing ideological priming in determining which grief pathway activates. Ghazali had Hezbollah contacts in his phone before the March 5 airstrike. This suggests he had prior exposure to an ideological framework that identified Israeli military action as illegitimate violence against Muslims. When his brothers were killed, that pre-existing framework was available to process the grief — it provided both a target and a permission structure. This is not a purely grief-driven pathway. It is grief activating a pre-primed ideological template. The distinction matters for intervention: the window was not just the 7 days before the attack, but the years of prior ideological exposure. <span class="pc-cite">See: Wiktorowicz (2004), "Joining the Cause," on ideological priming as a precondition for rapid radicalization.</span>
+        </div>
+        <div class="pc-accepted"><span>✓</span> Accepted into v2 analysis — see Stage 4, Hypothesis</div>
+      </div>
+    </div>
+
+    <!-- ══ STAGE 4: HYPOTHESIS ══ -->
+    <div id="stage-hyp" style="display:none;">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">4</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 4 of 7</div>
+          <div class="stage-title">Hypothesis</div>
+          <div class="stage-question">A testable, falsifiable explanation</div>
+        </div>
+      </div>
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> v2 · Revised to incorporate Dr. Stein's addition</div>
+        <div class="ai-body">
+          <em>Hypothesis:</em> Ghazali's attack followed a <em>hybrid radicalization pathway</em> — grief-driven activation of a pre-existing ideological template — consistent with the following sequence:<br><br>
+          <strong>1. Ideological priming (years prior):</strong> Sustained exposure to an ideological framework (via Hezbollah-connected contacts, social networks, or media) that framed Israeli military action as illegitimate violence against Muslims. This framework was present but latent — not yet operational.<br><br>
+          <strong>2. Acute personal loss (March 5):</strong> Brothers Kassim and Ibrahim killed in Israeli airstrike in Mashghara, Lebanon. Niece and nephew also killed. The grief was real and devastating.<br><br>
+          <strong>3. Grievance activation (March 5–10):</strong> The pre-existing ideological framework processed the grief — providing a narrative (Israeli state violence → collective Jewish responsibility) and a permission structure (resistance, retaliation).<br><br>
+          <strong>4. Target selection (March 10–12):</strong> Temple Israel selected as the proximate symbol of the distal target (Israeli government/military). The selection is irrational in the sense that the congregation had no connection to the airstrike — but psychologically consistent with documented target displacement patterns.<br><br>
+          <strong>5. Attack (March 12):</strong> Improvised weapons, no organizational direction, self-inflicted death — consistent with a non-trained, emotionally overwhelmed actor, not a directed operative.<br><br>
+          <em>If this hypothesis is correct:</em> The attack was preventable at multiple points — most clearly during the years of ideological priming and in the 7-day window after the airstrike. The platform invites evidence that supports, complicates, or refutes this hypothesis in Stage 5.
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">This is a hypothesis, not a conclusion. It is offered to be challenged.</span>
+          <button class="ai-challenge">Submit a counter-hypothesis →</button>
+        </div>
+      </div>
+
+      <!-- Citizen challenge to hypothesis -->
+      <div class="cit-contribution">
+        <div class="cc-header-r">
+          <div class="cit-av">AM</div>
+          <span class="cit-who">A. Mousa · Attorney · 45–54 · Dearborn, MI</span>
+          <span class="cit-type">Counter-hypothesis</span>
+        </div>
+        <div class="cit-body">The hypothesis assumes ideological priming as a necessary precondition, but that may be circular reasoning — we know he had Hezbollah contacts, therefore we assume ideological priming, therefore we explain the attack through ideological priming. What if the attack was primarily a grief-impulsive act with no sophisticated ideology behind it? The choice of a synagogue may simply be the nearest available symbol of "Israel" to someone in a state of acute grief — not a doctrinally reasoned target selection. The distinction matters: one story is "radicalized man acts on ideology," the other is "grieving man acts on impulse using the nearest cultural symbol available." Different interventions required.</div>
+      </div>
+    </div>
+
+    <!-- ══ STAGE 5: EVIDENCE ══ -->
+    <div id="stage-ev" style="display:none;">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">5</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 5 of 7</div>
+          <div class="stage-title">Evidence</div>
+          <div class="stage-question">What facts support or challenge the hypothesis?</div>
+        </div>
+      </div>
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> Evidence summary · Community-addable</div>
+        <div class="ai-body">
+          <em>Supports hybrid pathway hypothesis:</em><br>
+          — Hezbollah contacts in phone (prior CBP inspection, 2022)<br>
+          — 7-day interval: brothers killed March 5, attack March 12<br>
+          — $2,250 fireworks purchase March 10 — minimum 2-day planning period<br>
+          — Improvised weapons (commercially available, not military-grade)<br>
+          — Self-inflicted death — consistent with non-operative, non-extraction-planned actor<br>
+          — No prior criminal history, no registered weapons, no prior investigation<br>
+          — Described as "jovial" and "happy" at fireworks store March 10 — dissociation or compartmentalization consistent with crisis state<br><br>
+          <em>Complicates or challenges hypothesis:</em><br>
+          — 2-day planning period suggests some intentionality beyond pure impulse<br>
+          — No direct evidence of Hezbollah communication after airstrike — contacts do not prove active coordination<br>
+          — "Jovial" description at fireworks store is inconsistent with acute grief state — may suggest ideological calm rather than emotional crisis<br>
+          — No suicide note or recorded statement of intent recovered (as of March 15)
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">Add evidence that supports OR challenges the hypothesis. Both are needed.</span>
+          <button class="ai-challenge">Add evidence →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STAGE 6: ANALYSIS ══ -->
+    <div id="stage-an" style="display:none;">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">6</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 6 of 7</div>
+          <div class="stage-title">Analysis</div>
+          <div class="stage-question">What does the evidence mean?</div>
+        </div>
+      </div>
+
+      <!-- RADICALIZATION PATHWAY DIAGRAM -->
+      <div class="pathway-diagram">
+        <div class="pd-bg-grid"></div>
+        <div class="pd-title">Radicalization Pathway · Documented Model</div>
+        <div class="pd-name">Hybrid: Grief-Driven + Pre-Primed Ideology</div>
+        <div class="pd-sub">Consistent with McCauley/Moskalenko (2008), Post (2004), Ramadan/Paton (2015)</div>
+        <div class="pd-note">Each stage in Ghazali's case is drawn from confirmed or assessed evidence. The pathway is not an excuse. It is a documented mechanism. Mechanisms can be interrupted. The green markers show where.</div>
+
+        <div class="pathway-stages">
+          <div class="ps-item">
+            <div class="ps-dot ps-1" title="Years of contact with Hezbollah-connected individuals. Framework available but latent.">🧩</div>
+            <div class="ps-label">Ideological<br>priming</div>
+            <div class="ps-date">2011–2025</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-dot ps-2" title="Brothers Kassim and Ibrahim killed in Israeli airstrike, Mashghara, Lebanon. March 5, 2026.">💔</div>
+            <div class="ps-label">Acute<br>personal loss</div>
+            <div class="ps-date">Mar 5</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-dot ps-3" title="Grief processed through ideological framework. Narrative: Israeli state violence → collective Jewish responsibility.">🔥</div>
+            <div class="ps-label">Grievance<br>activation</div>
+            <div class="ps-date">Mar 5–10</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-dot ps-4" title="Temple Israel selected as proximate symbol of distal target. $2,250 fireworks purchased March 10.">🎯</div>
+            <div class="ps-label">Target<br>selection</div>
+            <div class="ps-date">Mar 10</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-dot ps-5" title="Final preparation. No communications with external parties confirmed. Isolation.">⚡</div>
+            <div class="ps-label">Final<br>preparation</div>
+            <div class="ps-date">Mar 11–12</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-dot ps-6" title="Attack. Self-inflicted death. No organizational extraction plan.">✝</div>
+            <div class="ps-label">Attack /<br>self-death</div>
+            <div class="ps-date">Mar 12</div>
+          </div>
+        </div>
+
+        <!-- Intervention markers -->
+        <div class="intervention-row">
+          <div class="iv-item">
+            <div class="iv-dot green"></div>
+            <div class="iv-label">Counter-narrative exposure. Community engagement.</div>
+          </div>
+          <div class="iv-item">
+            <div class="iv-dot green"></div>
+            <div class="iv-label">Grief support. Witness. Social connection.</div>
+          </div>
+          <div class="iv-item">
+            <div class="iv-dot green"></div>
+            <div class="iv-label">Community outreach. Mental health referral. Platform engagement.</div>
+          </div>
+          <div class="iv-item">
+            <div class="iv-dot green"></div>
+            <div class="iv-label">Tip line. Concerned family or friend report.</div>
+          </div>
+          <div class="iv-item">
+            <div class="iv-dot" style="background:rgba(139,32,32,0.5);"></div>
+            <div class="iv-label none">Very limited window.</div>
+          </div>
+          <div class="iv-item">
+            <div class="iv-dot" style="background:transparent;border:1px solid rgba(255,255,255,0.1);"></div>
+            <div class="iv-label none">None.</div>
+          </div>
+        </div>
+
+        <!-- Case timeline -->
+        <div class="case-timeline">
+          <div class="ct-label">Ghazali timeline — confirmed events</div>
+          <div class="ct-row">
+            <span class="ct-date">2011</span>
+            <span class="ct-event">Enters US on spouse visa. Settles in Dearborn Heights. Joins local Muslim community.</span>
+            <span class="ct-stage" style="background:rgba(92,58,139,0.2);color:#c4b5fd;border:1px solid rgba(92,58,139,0.3);">Stage 1</span>
+          </div>
+          <div class="ct-row">
+            <span class="ct-date">2022</span>
+            <span class="ct-event">CBP inspection. Hezbollah contacts found on phone. No action taken.</span>
+            <span class="ct-stage" style="background:rgba(92,58,139,0.2);color:#c4b5fd;border:1px solid rgba(92,58,139,0.3);">Stage 1</span>
+          </div>
+          <div class="ct-row">
+            <span class="ct-date">Mar 5</span>
+            <span class="ct-event">Brothers Kassim and Ibrahim killed in Israeli airstrike. Mashghara, Lebanon. Niece and nephew also killed.</span>
+            <span class="ct-stage" style="background:rgba(139,64,0,0.2);color:#fdba74;border:1px solid rgba(139,64,0,0.3);">Stage 2</span>
+          </div>
+          <div class="ct-row">
+            <span class="ct-date">Mar 8</span>
+            <span class="ct-event">Memorial service for brothers at Islamic Institute of America, Dearborn Heights.</span>
+            <span class="ct-stage" style="background:rgba(196,127,0,0.15);color:#fcd34d;border:1px solid rgba(196,127,0,0.25);">Stage 3</span>
+          </div>
+          <div class="ct-row">
+            <span class="ct-date">Mar 10</span>
+            <span class="ct-event">Purchases $2,250 in commercial fireworks. Described as "jovial" and "happy." Also purchases gasoline containers.</span>
+            <span class="ct-stage" style="background:rgba(139,32,32,0.15);color:#fca5a5;border:1px solid rgba(139,32,32,0.25);">Stage 4</span>
+          </div>
+          <div class="ct-row">
+            <span class="ct-date">Mar 12</span>
+            <span class="ct-event">Attack on Temple Israel. Dies of self-inflicted gunshot wound.</span>
+            <span class="ct-stage" style="background:rgba(60,20,20,0.3);color:#fca5a5;border:1px solid rgba(139,32,32,0.4);">Stage 6</span>
+          </div>
+        </div>
+
+        <div class="pd-legend">
+          <div class="pdl-item"><div class="pdl-dot" style="background:#86efac;"></div><span class="pdl-label">Intervention possible</span></div>
+          <div class="pdl-item"><div class="pdl-dot" style="background:rgba(196,127,0,0.6);"></div><span class="pdl-label">Window closing</span></div>
+          <div class="pdl-item"><div class="pdl-dot" style="background:rgba(139,32,32,0.8);"></div><span class="pdl-label">Very limited</span></div>
+          <div class="pdl-item"><div class="pdl-dot" style="background:rgba(60,20,20,0.8);"></div><span class="pdl-label">No intervention</span></div>
+        </div>
+      </div>
+
+      <!-- Pattern connection -->
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> Pattern analysis · Cross-event</div>
+        <div class="ai-body">
+          This attack follows a documented pattern of antisemitic violence triggered by Middle East geopolitical events:<br><br>
+          — <em>Pittsburgh, Oct 2018:</em> Robert Bowers, radicalized online, attacked during morning services. Ideological (white supremacist) not grief-driven. 11 killed.<br>
+          — <em>Poway, Apr 2019:</em> John Earnest, 19, cited Pittsburgh as inspiration. Ideological copycat. 1 killed, 3 injured.<br>
+          — <em>Boulder, May 2025:</em> Attack followed Israeli military operation. Grief-adjacent, no family connection established.<br>
+          — <em>West Bloomfield, Mar 2026:</em> Current case. Grief-driven + pre-primed. 0 killed (excluding perpetrator).<br><br>
+          Each attack occurred within weeks of a major Israeli military operation or geopolitical escalation. The pattern does not excuse any of them. The pattern does suggest that the risk environment for American Jewish communities elevates during periods of Israeli-Palestinian/Lebanese conflict — and that security preparation and community outreach in those windows is evidence-based, not reactive.
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">Pattern recognition is not victim-blaming. It is evidence-based risk assessment.</span>
+          <button class="ai-challenge">Challenge this pattern claim →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STAGE 7: COMMUNICATION ══ -->
+    <div id="stage-com" style="display:none;">
+      <div class="stage-header">
+        <div class="stage-num-box"><div class="stage-num-text">7</div></div>
+        <div class="stage-title-block">
+          <div class="stage-label">Stage 7 of 7</div>
+          <div class="stage-title">Communication</div>
+          <div class="stage-question">What the community has learned, and what remains open</div>
+        </div>
+      </div>
+      <div class="ai-draft">
+        <div class="ai-draft-label"><span class="ai-label-chip">AI</span> Synthesis · v2 · Mar 15, 2026</div>
+        <div class="ai-body">
+          <em>What the v2 analysis supports:</em><br>
+          — The attack is consistent with a hybrid radicalization pathway: grief activation of a pre-existing ideological template<br>
+          — Multiple intervention points existed, with the widest window during the years of ideological priming and the first 3–5 days after the airstrike<br>
+          — The self-inflicted death and improvised weapons are consistent with a non-directed, non-trained actor<br>
+          — The attack fits a documented geopolitical trigger pattern across four incidents since 2018<br><br>
+          <em>What remains uncertain:</em><br>
+          — Whether Ghazali had active communication with Hezbollah-connected contacts after March 5 (FBI investigation ongoing)<br>
+          — Whether the "jovial" demeanor at the fireworks store represents dissociation, ideological calm, or simply normal behavior during a planning phase<br>
+          — The full content of his social media and messaging history (court process will determine disclosure)<br><br>
+          <em>What this means for civic action:</em><br>
+          The pattern suggests that security grant funding (NSGP) addresses the consequences, not the causes. The upstream intervention — community outreach, grief support, counter-narrative engagement during geopolitical trigger periods — has no equivalent federal program. That is a policy gap visible in this analysis.<br><br>
+          <em>This analysis will be updated</em> as the FBI investigation produces public findings. Citizens are invited to contribute at any stage.
+        </div>
+        <div class="ai-footer">
+          <span class="ai-footer-note">This analysis is the property of the civic record. It cannot be deleted, only refined.</span>
+          <button class="ai-challenge">Contribute to this analysis →</button>
+        </div>
+      </div>
+
+      <!-- Memorial contribution from deceased user -->
+      <div class="pro-contribution" style="border-color:rgba(184,134,11,0.25);background:var(--gilt-pl);">
+        <div class="pc-header">
+          <div class="pc-av" style="background:var(--gilt-pl);border-color:var(--gilt-rul);color:var(--gilt);position:relative;">
+            MF
+            <!-- Flame SVG -->
+            <svg class="memorial-flame-svg" style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:12px;height:16px;" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 1C6 1 2 6 2 11C2 14.3137 3.68629 17 6 17C8.31371 17 10 14.3137 10 11C10 6 6 1 6 1Z" fill="#b8860b" opacity="0.8"/>
+              <path d="M6 7C6 7 4 10 4 12C4 13.6569 4.89543 15 6 15C7.10457 15 8 13.6569 8 12C8 10 6 7 6 7Z" fill="#fcd34d" opacity="0.9"/>
+            </svg>
+            <div class="pc-ring" style="border-color:var(--gilt);"></div>
+          </div>
+          <div class="pc-who">
+            <div class="memorial-user">
+              <span class="pc-name">Marcus Freeman</span>
+            </div>
+            <span class="memorial-phrase" style="font-family:'Libre Baskerville',serif;font-size:11px;font-style:italic;color:var(--gilt);display:block;">May his memory be a blessing</span>
+            <div class="pc-meta">Social worker · 55–64 · Detroit, MI · Contributed Mar 13, 2026 · Passed Mar 14, 2026</div>
+          </div>
+          <span class="pc-type" style="background:var(--gilt-pl);color:var(--gilt);border-color:var(--gilt-rul);">Communication · Final contribution</span>
+        </div>
+        <div class="pc-body" style="font-family:'Libre Baskerville',serif;font-style:italic;color:var(--ink-mid);line-height:1.8;">
+          "I have worked with grieving families in the Dearborn community for 22 years. What this analysis describes — grief finding a political target — I have seen it come close many times and been interrupted many more. The interruption is always the same: someone who witnessed the grief, who sat with it, who didn't let the person be alone with it. We have the infrastructure for grief in our communities. We do not have the infrastructure for connecting that grief to something larger than violence. That is what a platform like this could be."
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ADD CONTRIBUTION -->
+    <div class="add-contribution">
+      <div class="ac-label">+ Contribute to this analysis</div>
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;">Which stage does your contribution address?</div>
+      <div class="ac-stage-row">
+        <span class="ac-stage selected">Observation</span>
+        <span class="ac-stage">Question</span>
+        <span class="ac-stage">Research</span>
+        <span class="ac-stage">Hypothesis</span>
+        <span class="ac-stage">Evidence</span>
+        <span class="ac-stage">Analysis</span>
+        <span class="ac-stage">Communication</span>
+      </div>
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;">What kind of contribution?</div>
+      <div class="ac-type-row">
+        <span class="ac-type selected">Addition</span>
+        <span class="ac-type">Correction</span>
+        <span class="ac-type">Challenge</span>
+        <span class="ac-type">Context</span>
+        <span class="ac-type">Counter-hypothesis</span>
+      </div>
+
+      <textarea class="ac-textarea" placeholder="Contribute to this analysis. If you are a licensed professional, your credential will be verified and displayed."></textarea>
+      <div class="ac-footer">
+        <span class="ac-cred-note">Licensed psychologists and social workers: your verified credential will be displayed. Citizens: your contribution is equally welcome.</span>
+        <button class="ac-submit">Post contribution →</button>
+      </div>
+    </div>
+
+    <!-- VERSION HISTORY -->
+    <div class="version-history">
+      <div class="vh-label">Version history · All versions permanently available</div>
+      <div class="vh-row">
+        <div class="vh-ver">v2</div>
+        <div class="vh-body">
+          <div class="vh-what">AI revised to incorporate Dr. Stein's addition (ideological priming as pre-condition). Radicalization pathway diagram added. Case timeline expanded. Pattern analysis (Pittsburgh/Poway/Boulder) added.</div>
+          <div class="vh-by">AI regeneration incorporating 3 community contributions · Dr. Rachel Stein (verified) · A. Mousa · M. Freeman</div>
+        </div>
+        <div class="vh-date">Mar 15</div>
+        <span class="vh-cur">Current</span>
+      </div>
+      <div class="vh-row" style="opacity:0.6;">
+        <div class="vh-ver">v1</div>
+        <div class="vh-body">
+          <div class="vh-what">Initial AI draft. Observation, question, research, hypothesis, evidence, analysis, communication — based on confirmed government sources and peer-reviewed literature. No community contributions yet.</div>
+          <div class="vh-by">AI-generated · FORA platform · Sources: FBI, DHS, McCauley/Moskalenko, Post, Ramadan/Paton, Pape</div>
+        </div>
+        <div class="vh-date">Mar 13</div>
+      </div>
+    </div>
+
+  </div><!-- /panel-body -->
+
+</div><!-- /page -->
+
+<!-- DEFINITION MODAL -->
+<div class="def-modal" id="def-modal" onclick="closeDef(event)">
+  <div class="def-panel" style="position:relative;">
+    <span class="def-close" onclick="closeDef()">✕</span>
+    <div class="def-ey" id="def-ey">Definition</div>
+    <div class="def-title" id="def-title">—</div>
+    <div class="def-body" id="def-body">—</div>
+    <div class="def-ex">
+      <div class="def-ex-label">Context</div>
+      <div class="def-ex-text" id="def-ex">—</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Stage navigation
+function showStage(stage, el) {
+  const stages = ['obs','q','res','hyp','ev','an','com'];
+  stages.forEach(s => {
+    const el2 = document.getElementById('stage-' + s);
+    if (el2) el2.style.display = s === stage ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sm-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Definitions
+const defs = {
+  temple: {ey:'Organization · Religious', title:'Temple Israel', body:'A major Jewish synagogue in West Bloomfield Township, Michigan, serving the greater Detroit metropolitan area. One of the largest synagogues in Michigan, with an active preschool program. The congregation had invested significantly in private security infrastructure in the years before the 2026 attack.', ex:'Temple Israel described its security team as "heroic" in their response. All preschool children and staff were safely evacuated. Sen. Slotkin: "If they had not all done their jobs almost perfectly, we would be talking about an immense tragedy here with children gone."'},
+  fbi: {ey:'Agency · US Federal', title:'FBI — Federal Bureau of Investigation', body:'The domestic intelligence and security service of the United States, operating under the Department of Justice. The FBI\'s Detroit field office led the Temple Israel investigation.', ex:'Special Agent in Charge Jennifer Runyan confirmed at the March 13 press conference that Ghazali died of a self-inflicted gunshot wound — correcting earlier reports — and that he had no prior criminal history, no registered weapons, and had never been the subject of an FBI investigation.'},
+  cbp: {ey:'Agency · US Federal', title:'CBP — Customs and Border Protection', body:'The primary US border security agency, part of the Department of Homeland Security. During routine inspections, CBP agents may examine traveler phones and check contacts against government databases.', ex:'In 2022, during a routine CBP inspection, agents examined Ghazali\'s phone and found individuals listed as known or suspected Hezbollah members in his contacts. This was noted in government databases but did not result in any investigation or further action.'},
+  mccauley: {ey:'Academic citation · Psychology', title:'McCauley & Moskalenko (2008)', body:'Clark McCauley and Sophia Moskalenko, "Mechanisms of Political Radicalization: Pathways Toward Terrorism," Terrorism and Political Violence, 20(3), 415-433. Introduced the "Two Pyramids Model" of radicalization — distinguishing opinion radicalization from action radicalization, and identifying the "personal grievance" pathway as a distinct route to political violence.', ex:'The personal grievance pathway: "An individual who has suffered a personal loss or injustice — the death of a family member, discrimination, humiliation — and who attributes that loss to a specific political enemy may be more susceptible to rapid radicalization than someone who has undergone gradual ideological conversion."'},
+  post: {ey:'Academic citation · Political Psychology', title:'Jerrold Post (2004)', body:'"Leaders and Their Followers in a Dangerous World: The Psychology of Political Behavior." Jerrold Post, Cornell University Press. Post is one of the founding figures of political psychology. His work on terrorist motivations, political paranoia, and leader-follower dynamics is foundational to the field.', ex:'On target displacement: "The proximate target need not be the distal enemy. What matters is that the target represents, symbolically or culturally, the entity the actor holds responsible for their suffering. The displacement is psychologically consistent even when it is tactically irrational."'},
+  ramadan: {ey:'Academic citation · Terrorism Studies', title:'Ramadan & Paton (2015)', body:'"Lone Actor Terrorism: Analysis of Terrorist Events." Journal of Terrorism Research, 6(2). Analysis of 119 documented lone-actor terrorist events across multiple countries and ideological backgrounds, identifying common psychological and behavioral patterns.', ex:'Key finding: "Social isolation in the pre-attack period was present in 100% of documented cases. Prior expression of grievance — online, in person, or in writing — was present in 79% of cases. Formal organizational direction was absent by definition, but in 34% of cases, passive ideological encouragement from organizational media or leadership was present."'},
+  pape: {ey:'Academic citation · Political Science', title:'Robert Pape (2005)', body:'"Dying to Win: The Strategic Logic of Suicide Terrorism." Robert Pape, Random House. Pape analyzed every documented suicide attack from 1980 to 2003, developing a strategic theory of suicide terrorism that distinguished between organized strategic campaigns and individual crisis actors.', ex:'On crisis vs. strategic attackers: "Strategic attackers are calm, planned, expecting to survive at least briefly after the attack. Crisis attackers are emotionally overwhelmed, improvised, not expecting extraction. The profile of the attacker — their planning horizon, their weapon choice, their post-attack behavior — tells you which type you are dealing with."'},
+};
+
+function showDef(key) {
+  const d = defs[key];
+  if (!d) return;
+  document.getElementById('def-ey').textContent = d.ey;
+  document.getElementById('def-title').textContent = d.title;
+  document.getElementById('def-body').textContent = d.body;
+  document.getElementById('def-ex').textContent = d.ex;
+  document.getElementById('def-modal').classList.add('open');
+}
+function closeDef(e) {
+  if (!e || e.target === document.getElementById('def-modal')) {
+    document.getElementById('def-modal').classList.remove('open');
+  }
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.getElementById('def-modal').classList.remove('open'); });
+
+// Stage pill interactions
+document.querySelectorAll('.ac-stage').forEach(s => {
+  s.addEventListener('click', function() {
+    document.querySelectorAll('.ac-stage').forEach(x => x.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+document.querySelectorAll('.ac-type').forEach(s => {
+  s.addEventListener('click', function() {
+    document.querySelectorAll('.ac-type').forEach(x => x.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+</script>
+</body>
+</html>

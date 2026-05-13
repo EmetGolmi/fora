@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forum Americanum — Miami View</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:        #0F1419;
+  --surface:   #161D26;
+  --surface2:  #1C2530;
+  --surface3:  #222E3C;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.14);
+  --text:      #E8EDF2;
+  --muted:     #7A8A9A;
+  --gold:      #C9A84C;
+  --gold-dim:  rgba(201,168,76,0.15);
+  --teal:      #2DD4BF;
+  --teal-dim:  rgba(45,212,191,0.12);
+  --red:       #F87171;
+  --red-dim:   rgba(248,113,113,0.12);
+  --blue:      #60A5FA;
+  --blue-dim:  rgba(96,165,250,0.12);
+  --green:     #4ADE80;
+  --green-dim: rgba(74,222,128,0.1);
+  --orange:    #FB923C;
+  --purple:    #A78BFA;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: 56px 1fr;
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────────── */
+.topbar {
+  grid-column: 1 / -1;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.logo span {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 13px;
+  margin-left: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+.topbar-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--text);
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.topbar-location .pin { color: var(--teal); font-size: 14px; }
+.topbar-location .change { color: var(--muted); font-size: 11px; margin-left: 8px; }
+
+.topbar-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: #0F1419;
+  flex-shrink: 0;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 12px 8px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.nav-item:hover { background: var(--surface3); color: var(--text); }
+.nav-item.active { background: var(--gold-dim); color: var(--gold); }
+.nav-item .icon { font-size: 15px; width: 20px; text-align: center; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--red-dim);
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+/* ── MAIN ─────────────────────────────────────────────── */
+.main {
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg);
+}
+
+/* ── PAGE HEADER ─────────────────────────────────────────── */
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.page-header .sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.page-header .address-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--teal-dim);
+  border: 1px solid rgba(45,212,191,0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--teal);
+  margin-top: 10px;
+}
+
+/* ── LAYER BANNER ─────────────────────────────────────────── */
+.layer-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.layer-banner.two-layer {
+  border-color: rgba(248,113,113,0.3);
+  background: linear-gradient(135deg, rgba(248,113,113,0.06), var(--surface));
+}
+
+.layer-icon { font-size: 22px; flex-shrink: 0; }
+
+.layer-banner h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.layer-banner p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.layer-count {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── GRID ─────────────────────────────────────────────── */
+.gov-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* ── SECTION HEADER ─────────────────────────────────────── */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 10px;
+}
+
+.section-head h2 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-head::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-federal  { background: rgba(96,165,250,0.15); color: var(--blue); }
+.badge-state    { background: rgba(74,222,128,0.12); color: var(--green); }
+.badge-county   { background: rgba(201,168,76,0.15); color: var(--gold); }
+.badge-city     { background: rgba(45,212,191,0.12); color: var(--teal); }
+.badge-special  { background: rgba(167,139,250,0.15); color: var(--purple); }
+
+/* ── OFFICIAL CARD ─────────────────────────────────────── */
+.official-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.official-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+
+.official-card.federal::before  { background: var(--blue); }
+.official-card.state::before    { background: var(--green); }
+.official-card.county::before   { background: var(--gold); }
+.official-card.city::before     { background: var(--teal); }
+.official-card.special::before  { background: var(--purple); }
+
+.official-card:hover {
+  border-color: var(--border2);
+  background: var(--surface2);
+  transform: translateY(-1px);
+}
+
+.official-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}
+
+.av-blue   { background: var(--blue-dim);  color: var(--blue);   border: 1px solid rgba(96,165,250,0.3); }
+.av-green  { background: var(--green-dim); color: var(--green);  border: 1px solid rgba(74,222,128,0.3); }
+.av-gold   { background: var(--gold-dim);  color: var(--gold);   border: 1px solid rgba(201,168,76,0.3); }
+.av-teal   { background: var(--teal-dim);  color: var(--teal);   border: 1px solid rgba(45,212,191,0.3); }
+.av-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+
+.official-info { flex: 1; min-width: 0; }
+
+.official-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.official-title {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.official-party {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+.party-d { background: rgba(96,165,250,0.15); color: var(--blue); }
+.party-r { background: rgba(248,113,113,0.12); color: var(--red); }
+.party-i { background: rgba(167,139,250,0.15); color: var(--purple); }
+
+.official-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.official-term {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.official-activity {
+  font-size: 11px;
+  color: var(--teal);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--teal);
+  margin-top: 6px;
+}
+
+/* ── TWO COLUMN ─────────────────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── BILL CARD ─────────────────────────────────────────── */
+.bill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bill-card:hover { border-color: var(--border2); background: var(--surface2); }
+
+.bill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.bill-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.bill-meta { font-size: 11px; color: var(--muted); }
+
+.sentiment-bar {
+  display: flex;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 10px 0 6px;
+  gap: 1px;
+}
+
+.sentiment-for    { background: var(--green);  }
+.sentiment-against { background: var(--red); }
+.sentiment-neutral { background: var(--surface3); }
+
+.sentiment-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.sentiment-labels .for    { color: var(--green); }
+.sentiment-labels .against { color: var(--red); }
+
+/* ── ACTIVITY FEED ─────────────────────────────────────── */
+.feed-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.feed-item:last-child { border-bottom: none; }
+
+.feed-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+
+.feed-content { flex: 1; }
+
+.feed-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.feed-meta strong { color: var(--text); }
+.feed-meta .official-name-inline { color: var(--gold); }
+
+.feed-body {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.feed-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--teal);
+  margin-top: 6px;
+  padding: 2px 8px;
+  background: var(--teal-dim);
+  border-radius: 4px;
+}
+
+.source-tier {
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px; height: 18px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tier-s { background: rgba(74,222,128,0.2); color: var(--green); }
+.tier-a { background: rgba(96,165,250,0.2); color: var(--blue); }
+.tier-b { background: rgba(201,168,76,0.15); color: var(--gold); }
+.tier-c { background: rgba(248,113,113,0.12); color: var(--red); }
+
+.cohort-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--surface3);
+  color: var(--muted);
+  margin-right: 4px;
+  margin-top: 6px;
+}
+
+/* ── WIDGET PANEL ─────────────────────────────────────── */
+.widget {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.widget-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* ── SENTIMENT WIDGET ─────────────────────────────────── */
+.sentiment-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.sentiment-label { width: 120px; color: var(--text); flex-shrink: 0; }
+.sentiment-track {
+  flex: 1;
+  height: 6px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sentiment-fill { height: 100%; border-radius: 3px; }
+.s-green { background: var(--green); }
+.s-red   { background: var(--red); }
+.s-gold  { background: var(--gold); }
+.s-blue  { background: var(--blue); }
+.s-teal  { background: var(--teal); }
+
+.sentiment-pct { width: 36px; text-align: right; font-size: 11px; color: var(--muted); }
+
+/* ── EXCEPTION CALLOUT ─────────────────────────────────── */
+.exception-callout {
+  background: rgba(251,146,60,0.08);
+  border: 1px solid rgba(251,146,60,0.25);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 12px 0;
+  font-size: 12px;
+  color: var(--orange);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.exception-callout .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── TABS ──────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+}
+
+.tab {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab:hover:not(.active) { color: var(--text); }
+
+/* ── COMPOSE BOX ─────────────────────────────────────── */
+.compose {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.compose textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  resize: none;
+  min-height: 60px;
+}
+
+.compose textarea::placeholder { color: var(--muted); }
+
+.compose-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.compose-hint { font-size: 11px; color: var(--muted); flex: 1; }
+.compose-hint span { color: var(--gold); }
+
+.btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #0F1419;
+}
+
+.btn-ghost {
+  background: var(--surface3);
+  color: var(--muted);
+}
+
+/* ── DEMO LABEL ─────────────────────────────────────────── */
+.demo-banner {
+  background: rgba(167,139,250,0.1);
+  border: 1px solid rgba(167,139,250,0.25);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: var(--purple);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="logo">Forum Americanum <span>β</span></div>
+
+    <div class="topbar-location">
+      <span class="pin">📍</span>
+      <span>Little Havana, Miami, FL 33135</span>
+      <span class="change">Change →</span>
+    </div>
+
+    <div class="topbar-avatar">M</div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">My Government</div>
+      <div class="nav-item active"><span class="icon">🏛</span> My Representatives</div>
+      <div class="nav-item"><span class="icon">📜</span> Legislation <span class="nav-badge">4 new</span></div>
+      <div class="nav-item"><span class="icon">🗳</span> Elections</div>
+      <div class="nav-item"><span class="icon">📊</span> Public Record</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Discourse</div>
+      <div class="nav-item"><span class="icon">💬</span> The Forum</div>
+      <div class="nav-item"><span class="icon">🔥</span> Trending</div>
+      <div class="nav-item"><span class="icon">🔖</span> Following</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Learn</div>
+      <div class="nav-item"><span class="icon">📚</span> Civic Library</div>
+      <div class="nav-item"><span class="icon">🗺</span> Government Map</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Account</div>
+      <div class="nav-item"><span class="icon">👤</span> My Profile</div>
+      <div class="nav-item"><span class="icon">⚙️</span> Settings</div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <div class="demo-banner">
+      🎨 <strong>Interface Mockup</strong> — Logged in as: Nurse · 30s · Little Havana, Miami. Identity verified, publicly masked.
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1>Your Government</h1>
+      <p class="sub">Everyone elected or appointed to serve you, from President to City Commissioner.</p>
+      <div class="address-pill">📍 1425 SW 8th St, Miami, FL 33135 · <strong>24 elected officials represent you</strong></div>
+    </div>
+
+    <!-- TWO-LAYER CALLOUT -->
+    <div class="layer-banner two-layer" style="margin-bottom:16px">
+      <div class="layer-icon">⚠️</div>
+      <div>
+        <h3>Miami has two local governments</h3>
+        <p>You are represented by both the <strong>City of Miami</strong> and <strong>Miami-Dade County</strong>. Both affect your daily life. Both are shown below.</p>
+      </div>
+      <div class="layer-count">2 local layers</div>
+    </div>
+
+    <!-- ── FEDERAL ─────────────────────────────────────────── -->
+    <div class="section-head">
+      <h2>Federal</h2>
+      <span class="section-badge badge-federal">Washington, DC</span>
+    </div>
+
+    <div class="gov-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="official-card federal">
+        <div class="official-avatar av-blue">T</div>
+        <div class="official-info">
+          <div class="official-name">Donald Trump</div>
+          <div class="official-title">President of the United States</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2029</div>
+        </div>
+      </div>
+
+      <div class="official-card federal">
+        <div class="official-avatar av-blue">W</div>
+        <div class="official-info">
+          <div class="official-name">Marco Rubio</div>
+          <div class="official-title">U.S. Senator · Florida</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2028</div>
+          <div class="official-activity">↑ 3 bills active</div>
+        </div>
+      </div>
+
+      <div class="official-card federal">
+        <div class="official-avatar av-blue">S</div>
+        <div class="official-info">
+          <div class="official-name">Rick Scott</div>
+          <div class="official-title">U.S. Senator · Florida</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2030</div>
+        </div>
+      </div>
+
+      <div class="official-card federal" style="grid-column: 1 / -1;">
+        <div class="official-avatar av-blue">S</div>
+        <div class="official-info">
+          <div class="official-name">Maria Elvira Salazar</div>
+          <div class="official-title">U.S. Representative · FL-27 (Little Havana, Coral Gables, Key Biscayne)</div>
+          <div class="official-party party-r">Republican</div>
+          <div class="verified-badge">✓ Verified official on platform</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2027</div>
+          <div class="official-activity">↑ Active on Forum</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATE ─────────────────────────────────────────────── -->
+    <div class="section-head">
+      <h2>State of Florida</h2>
+      <span class="section-badge badge-state">Tallahassee</span>
+    </div>
+
+    <div class="gov-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="official-card state">
+        <div class="official-avatar av-green">D</div>
+        <div class="official-info">
+          <div class="official-name">Ron DeSantis</div>
+          <div class="official-title">Governor of Florida</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2027</div>
+        </div>
+      </div>
+
+      <div class="official-card state">
+        <div class="official-avatar av-green">A</div>
+        <div class="official-info">
+          <div class="official-name">Alexis Calatayud</div>
+          <div class="official-title">FL State Senator · District 39</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2026</div>
+          <div class="official-activity">↑ 1 bill sponsored</div>
+        </div>
+      </div>
+
+      <div class="official-card state">
+        <div class="official-avatar av-green">L</div>
+        <div class="official-info">
+          <div class="official-name">Demi Busatta Cabrera</div>
+          <div class="official-title">FL State Representative · District 114</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MIAMI-DADE COUNTY ──────────────────────────────────── -->
+    <div class="section-head">
+      <h2>Miami-Dade County</h2>
+      <span class="section-badge badge-county">County Government</span>
+    </div>
+
+    <div class="exception-callout">
+      <span class="icon">🔔</span>
+      <div><strong>This is your county government.</strong> Miami-Dade County provides services across the entire county: transit (Metrorail, Metrobus), Jackson Health System, county courts, property taxes, and the school district. Your county mayor and commissioner are separate from your city officials below.</div>
+    </div>
+
+    <div class="gov-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="official-card county">
+        <div class="official-avatar av-gold">D</div>
+        <div class="official-info">
+          <div class="official-name">Daniella Levine Cava</div>
+          <div class="official-title">Mayor · Miami-Dade County</div>
+          <div class="official-party party-d">Democrat</div>
+          <div class="verified-badge">✓ Verified official on platform</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2026</div>
+          <div class="official-activity">↑ Posted 3 days ago</div>
+        </div>
+      </div>
+
+      <div class="official-card county">
+        <div class="official-avatar av-gold">R</div>
+        <div class="official-info">
+          <div class="official-name">Raquel Regalado</div>
+          <div class="official-title">County Commissioner · District 7</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2026</div>
+        </div>
+      </div>
+
+      <div class="official-card county">
+        <div class="official-avatar av-gold">K</div>
+        <div class="official-info">
+          <div class="official-name">Katherine Fernandez Rundle</div>
+          <div class="official-title">State Attorney · 11th Judicial Circuit</div>
+          <div class="official-party party-d">Democrat</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Elected · 4yr</div>
+        </div>
+      </div>
+
+      <div class="official-card county">
+        <div class="official-avatar av-gold">M</div>
+        <div class="official-info">
+          <div class="official-name">Monica Platero</div>
+          <div class="official-title">Supervisor of Elections · Miami-Dade</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2028</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CITY OF MIAMI ─────────────────────────────────────── -->
+    <div class="section-head">
+      <h2>City of Miami</h2>
+      <span class="section-badge badge-city">Municipal Government</span>
+    </div>
+
+    <div class="exception-callout" style="border-color:rgba(45,212,191,0.25); background:rgba(45,212,191,0.06); color:var(--teal)">
+      <span class="icon">🏙</span>
+      <div><strong>This is your city government.</strong> The City of Miami handles zoning, building permits, city police (MPD), parks, and local roads within city limits. Your address falls in City Commission District 3.</div>
+    </div>
+
+    <div class="gov-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="official-card city">
+        <div class="official-avatar av-teal">F</div>
+        <div class="official-info">
+          <div class="official-name">Francis Suarez</div>
+          <div class="official-title">Mayor · City of Miami</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">Term ends 2025</div>
+          <div class="official-activity" style="color:var(--orange)">⚠ Verify — term may have ended</div>
+        </div>
+      </div>
+
+      <div class="official-card city">
+        <div class="official-avatar av-teal">J</div>
+        <div class="official-info">
+          <div class="official-name">Joe Carollo</div>
+          <div class="official-title">City Commissioner · District 3</div>
+          <div class="official-party party-r">Republican</div>
+        </div>
+        <div class="official-meta">
+          <div class="official-term">District 3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCHOOL BOARD ──────────────────────────────────────── -->
+    <div class="section-head">
+      <h2>Education</h2>
+      <span class="section-badge badge-special">Miami-Dade Public Schools</span>
+    </div>
+
+    <div class="official-card special" style="margin-bottom:24px">
+      <div class="official-avatar av-purple">L</div>
+      <div class="official-info">
+        <div class="official-name">Lubby Navarro</div>
+        <div class="official-title">School Board Member · District 6 · Miami-Dade County Public Schools</div>
+        <div class="official-party party-r">Republican</div>
+      </div>
+      <div class="official-meta">
+        <div class="official-term">~350,000 students</div>
+        <div class="official-term" style="margin-top:4px">Board is <strong>elected</strong></div>
+      </div>
+    </div>
+
+    <!-- ── ACTIVE LEGISLATION ───────────────────────────────── -->
+    <div class="section-head">
+      <h2>Active Legislation Near You</h2>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">All Levels</div>
+      <div class="tab">Federal (12)</div>
+      <div class="tab">Florida (8)</div>
+      <div class="tab">Miami-Dade (3)</div>
+      <div class="tab">City of Miami (2)</div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:24px">
+
+      <div class="bill-card">
+        <div class="bill-tag badge-county">Miami-Dade · Active</div>
+        <div class="bill-title">Miami-Dade County Affordable Housing Trust Fund Expansion</div>
+        <div class="bill-meta">Sponsored by Commissioner Regalado · Introduced Feb 2026</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-for" style="width:71%"></div>
+          <div class="sentiment-against" style="width:21%"></div>
+          <div class="sentiment-neutral" style="width:8%"></div>
+        </div>
+        <div class="sentiment-labels">
+          <span class="for">71% For</span>
+          <span>847 voices</span>
+          <span class="against">21% Against</span>
+        </div>
+      </div>
+
+      <div class="bill-card">
+        <div class="bill-tag badge-state">Florida · In Committee</div>
+        <div class="bill-title">SB 1204 — Biscayne Bay Restoration and Water Quality Act</div>
+        <div class="bill-meta">Sen. Calatayud · Introduced Jan 2026</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-for" style="width:88%"></div>
+          <div class="sentiment-against" style="width:8%"></div>
+          <div class="sentiment-neutral" style="width:4%"></div>
+        </div>
+        <div class="sentiment-labels">
+          <span class="for">88% For</span>
+          <span>1,203 voices</span>
+          <span class="against">8% Against</span>
+        </div>
+      </div>
+
+      <div class="bill-card">
+        <div class="bill-tag badge-federal">Federal · House Floor</div>
+        <div class="bill-title">HR 892 — Emergency Coastal Infrastructure Resilience Act</div>
+        <div class="bill-meta">Rep. Salazar · Co-sponsored by 14 members</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-for" style="width:62%"></div>
+          <div class="sentiment-against" style="width:29%"></div>
+          <div class="sentiment-neutral" style="width:9%"></div>
+        </div>
+        <div class="sentiment-labels">
+          <span class="for">62% For</span>
+          <span>3,841 voices</span>
+          <span class="against">29% Against</span>
+        </div>
+      </div>
+
+      <div class="bill-card">
+        <div class="bill-tag badge-city">City of Miami · First Reading</div>
+        <div class="bill-title">Little Havana Historic District Expansion Ordinance</div>
+        <div class="bill-meta">Commissioner Carollo · Public comment open</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-for" style="width:54%"></div>
+          <div class="sentiment-against" style="width:38%"></div>
+          <div class="sentiment-neutral" style="width:8%"></div>
+        </div>
+        <div class="sentiment-labels">
+          <span class="for">54% For</span>
+          <span>412 voices</span>
+          <span class="against">38% Against</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DISCOURSE FEED ───────────────────────────────────── -->
+    <div class="section-head">
+      <h2>Forum Activity · Little Havana Historic District Bill</h2>
+    </div>
+
+    <div class="compose">
+      <textarea placeholder="What do you think about the Little Havana Historic District Expansion? Add a source to give your comment more weight..."></textarea>
+      <div class="compose-footer">
+        <div class="compose-hint">💡 Comments with sources earn <span>Source Tier badges</span> and carry more weight in sentiment data.</div>
+        <button class="btn btn-ghost">Add Source</button>
+        <button class="btn btn-primary">Post</button>
+      </div>
+    </div>
+
+    <div class="widget" style="padding:0; overflow:hidden;">
+
+      <div class="feed-item" style="padding:14px 16px">
+        <div class="feed-avatar">🏛</div>
+        <div class="feed-content">
+          <div class="feed-meta"><span class="official-name-inline">Commissioner Joe Carollo</span> · Pinned Statement · 2 days ago</div>
+          <div class="feed-body">This expansion protects the cultural heart of Miami. Little Havana is not just a neighborhood — it is living history. Preventing demolition of pre-1970 structures preserves what no amount of money can rebuild.</div>
+          <div class="verified-badge" style="margin-top:8px">✓ Verified Official Statement</div>
+        </div>
+      </div>
+
+      <div class="feed-item" style="padding:14px 16px">
+        <div class="feed-avatar">👷</div>
+        <div class="feed-content">
+          <div class="feed-meta"><strong>Contractor · 50s · Little Havana</strong> · 1 day ago</div>
+          <div class="feed-body">Historic designation sounds good until you try to get a permit. I've been waiting 14 months on a renovation in Coral Gables' historic district. This will freeze needed housing upgrades for years.</div>
+          <span class="cohort-tag">Construction</span>
+          <span class="cohort-tag">Little Havana</span>
+          <div class="feed-source">
+            <span class="source-tier tier-a">A</span>
+            Miami Herald · "Historic Districts and Permit Delays" · 2024
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-item" style="padding:14px 16px">
+        <div class="feed-avatar">🏥</div>
+        <div class="feed-content">
+          <div class="feed-meta"><strong>Nurse · 30s · Little Havana</strong> · 22 hours ago</div>
+          <div class="feed-body">I moved here because it was affordable. If this district designation raises property values the way it did in Wynwood, people like me get pushed out. Who exactly is this protecting?</div>
+          <span class="cohort-tag">Healthcare</span>
+          <span class="cohort-tag">30s</span>
+          <span class="cohort-tag">Renter</span>
+          <div class="feed-source">
+            <span class="source-tier tier-b">B</span>
+            Urban Institute · "Displacement Effects of Historic Designation" · 2023
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-item" style="padding:14px 16px; border-bottom:none;">
+        <div class="feed-avatar">📚</div>
+        <div class="feed-content">
+          <div class="feed-meta"><strong>Teacher · 40s · Hialeah</strong> · 18 hours ago</div>
+          <div class="feed-body">Worth noting that New Orleans' French Quarter designation is one of the few examples where historic protection AND affordable housing were preserved together — through a community land trust. Has anyone looked at that model for Little Havana?</div>
+          <span class="cohort-tag">Education</span>
+          <span class="cohort-tag">Adjacent district</span>
+          <div class="feed-source">
+            <span class="source-tier tier-s">S</span>
+            HUD Office of Policy Development · "Community Land Trusts and Historic Preservation" · 2022
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SENTIMENT BY SECTOR ─────────────────────────────── -->
+    <div class="section-head" style="margin-top:24px">
+      <h2>Sentiment by Sector · Little Havana Historic District Bill</h2>
+    </div>
+
+    <div class="widget">
+      <div class="widget-title">Who supports this bill in your area</div>
+
+      <div class="sentiment-row">
+        <div class="sentiment-label">Cultural workers</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-green" style="width:91%"></div></div>
+        <div class="sentiment-pct">91%</div>
+      </div>
+      <div class="sentiment-row">
+        <div class="sentiment-label">Homeowners</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-green" style="width:73%"></div></div>
+        <div class="sentiment-pct">73%</div>
+      </div>
+      <div class="sentiment-row">
+        <div class="sentiment-label">Renters</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-red" style="width:62%"></div></div>
+        <div class="sentiment-pct" style="color:var(--red)">38%</div>
+      </div>
+      <div class="sentiment-row">
+        <div class="sentiment-label">Construction</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-red" style="width:71%"></div></div>
+        <div class="sentiment-pct" style="color:var(--red)">29%</div>
+      </div>
+      <div class="sentiment-row">
+        <div class="sentiment-label">Healthcare</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-gold" style="width:51%"></div></div>
+        <div class="sentiment-pct" style="color:var(--gold)">51%</div>
+      </div>
+      <div class="sentiment-row">
+        <div class="sentiment-label">55 and older</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-green" style="width:82%"></div></div>
+        <div class="sentiment-pct">82%</div>
+      </div>
+      <div class="sentiment-row">
+        <div class="sentiment-label">Under 35</div>
+        <div class="sentiment-track"><div class="sentiment-fill s-red" style="width:58%"></div></div>
+        <div class="sentiment-pct" style="color:var(--red)">42%</div>
+      </div>
+
+      <div style="margin-top:14px; font-size:11px; color:var(--muted);">
+        Based on 412 verified contributions · Click any sector to read those voices
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

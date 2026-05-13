@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forum Americanum — Sitemap v1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a18;
+    --parchment: #f5f0e8;
+    --cream: #faf7f2;
+    --gold: #b8860b;
+    --gold-light: #d4a017;
+    --senate-blue: #1e3a5f;
+    --senate-blue-mid: #2d5282;
+    --senate-blue-light: #4a7ab5;
+    --red: #8b1a1a;
+    --red-light: #c0392b;
+    --green: #1a4a2e;
+    --green-light: #27664a;
+    --purple: #3d1a6e;
+    --purple-light: #6a3fa0;
+    --gray-100: #f0ece4;
+    --gray-200: #e0d9cc;
+    --gray-400: #9e9488;
+    --gray-600: #5c5550;
+    --rule: 1px solid var(--gray-200);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    text-align: center;
+    border-top: 4px double var(--ink);
+    border-bottom: 4px double var(--ink);
+    padding: 20px 0 16px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .masthead::before, .masthead::after {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--gold);
+  }
+  .masthead::before { left: 24px; }
+  .masthead::after { right: 24px; }
+
+  .masthead-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 6px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .masthead-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    justify-content: center;
+    margin: 16px 0 32px;
+    padding: 12px 20px;
+    border: var(--rule);
+    background: var(--parchment);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+  }
+
+  /* ── FLOW LABEL ── */
+  .flow-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* ── ENTRY FLOWS ── */
+  .entry-section {
+    margin-bottom: 36px;
+  }
+  .entry-flows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--ink);
+  }
+  .entry-flow {
+    padding: 16px 20px 20px;
+    position: relative;
+  }
+  .entry-flow:first-child {
+    border-right: 2px solid var(--ink);
+    background: var(--senate-blue);
+    color: white;
+  }
+  .entry-flow:last-child {
+    background: var(--parchment);
+  }
+  .entry-flow-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+  .entry-flow h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .entry-flow p {
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.75;
+    margin-bottom: 12px;
+  }
+  .entry-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .entry-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .entry-flow:first-child .step-num {
+    background: rgba(255,255,255,0.2);
+    color: white;
+  }
+  .entry-flow:last-child .step-num {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  /* ── MAIN SITEMAP GRID ── */
+  .sitemap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 2px solid var(--ink);
+    margin-bottom: 32px;
+  }
+
+  .section-col {
+    border-right: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+  .section-col:last-child { border-right: none; }
+
+  .section-header {
+    padding: 12px 14px 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 4px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .section-header p {
+    font-size: 10px;
+    line-height: 1.4;
+    margin-top: 4px;
+    opacity: 0.7;
+  }
+
+  /* section color themes */
+  .col-feed .section-header { background: var(--senate-blue); color: white; }
+  .col-record .section-header { background: var(--red); color: white; }
+  .col-discourse .section-header { background: var(--green); color: white; }
+  .col-profile .section-header { background: var(--purple); color: white; }
+
+  .screen-list {
+    padding: 0;
+    flex: 1;
+  }
+
+  .screen-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-200);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .screen-item:last-child { border-bottom: none; }
+  .screen-item:hover { background: var(--gray-100); }
+
+  .screen-name {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+  .screen-path {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--gray-400);
+    margin-bottom: 4px;
+  }
+  .screen-desc {
+    font-size: 10px;
+    color: var(--gray-600);
+    line-height: 1.4;
+  }
+
+  .screen-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 5px;
+  }
+  .screen-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    padding: 1px 5px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .tag-auth { background: #fef3c7; color: #92400e; }
+  .tag-official { background: #dbeafe; color: #1e3a8a; }
+  .tag-anon { background: #f0fdf4; color: #166534; }
+  .tag-new-user { background: #fce7f3; color: #9d174d; }
+  .tag-api { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+  /* ── MODALS / OVERLAYS SECTION ── */
+  .modals-section {
+    border: 2px solid var(--ink);
+    margin-bottom: 32px;
+  }
+  .modals-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 10px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .modals-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .modals-header span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .modals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .modal-item {
+    padding: 10px 14px;
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .modal-item:nth-child(4n) { border-right: none; }
+  .modal-name {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .modal-trigger {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--gray-400);
+    margin-bottom: 3px;
+  }
+  .modal-desc {
+    font-size: 10px;
+    color: var(--gray-600);
+    line-height: 1.4;
+  }
+
+  /* ── OFFICIAL LAYER ── */
+  .official-section {
+    border: 2px solid var(--senate-blue);
+    margin-bottom: 32px;
+  }
+  .official-header {
+    background: var(--senate-blue);
+    color: white;
+    padding: 10px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .official-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .official-header span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .official-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .official-item {
+    padding: 10px 14px;
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    background: #f0f4fb;
+  }
+  .official-item:nth-child(4n) { border-right: none; }
+  .official-name {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: var(--senate-blue);
+  }
+  .official-base {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--gray-400);
+    margin-bottom: 3px;
+  }
+  .official-delta {
+    font-size: 10px;
+    color: var(--gray-600);
+    line-height: 1.4;
+  }
+  .official-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    padding: 1px 5px;
+    border-radius: 2px;
+    background: var(--senate-blue);
+    color: white;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  /* ── URL STRUCTURE ── */
+  .url-section {
+    border: 2px solid var(--ink);
+    margin-bottom: 32px;
+  }
+  .url-header {
+    background: var(--parchment);
+    border-bottom: 2px solid var(--ink);
+    padding: 10px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .url-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .url-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .url-group {
+    padding: 12px 16px;
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .url-group:nth-child(2n) { border-right: none; }
+  .url-group-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+  }
+  .url-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    font-size: 11px;
+  }
+  .url-path {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--senate-blue-mid);
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+  .url-label {
+    font-size: 10px;
+    color: var(--gray-600);
+  }
+
+  /* ── SCREEN COUNT FOOTER ── */
+  .footer {
+    border-top: 4px double var(--ink);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-stat {
+    text-align: center;
+  }
+  .footer-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .footer-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-top: 3px;
+  }
+  .footer-note {
+    font-size: 11px;
+    color: var(--gray-600);
+    line-height: 1.6;
+    max-width: 400px;
+    border-left: 2px solid var(--gold);
+    padding-left: 12px;
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-rule {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+  .section-rule::before, .section-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-eyebrow">Product Design Document · Internal · v1.0</div>
+  <div class="masthead-title">FORUM AMERICANUM</div>
+  <div class="masthead-sub">Site Map — Screens, Flows &amp; URL Structure</div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border:1px solid #d97706"></div> Auth required</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dbeafe;border:1px solid #2563eb"></div> Official-only layer</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f0fdf4;border:1px solid #16a34a"></div> Anonymous / public</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fce7f3;border:1px solid #db2777"></div> First-time / onboarding</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f3f4f6;border:1px solid #9ca3af"></div> Requires external API</div>
+</div>
+
+<!-- ENTRY FLOWS -->
+<div class="entry-section">
+  <div class="flow-label">Entry Flows — Two Paths, One Platform</div>
+  <div class="entry-flows">
+    <div class="entry-flow">
+      <div class="entry-flow-tag">First Visit · New User</div>
+      <h3>Discover Your Government</h3>
+      <p>Address-first onboarding. Enter where you live, see who governs you, follow what matters.</p>
+      <div class="entry-steps">
+        <div class="entry-step">
+          <div class="step-num">1</div>
+          <span>Enter home address → geocode → polygon match</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">2</div>
+          <span>Government Stack revealed: President → school board</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">3</div>
+          <span>Prompt: "Follow these officials?" → 1-click follow all</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">4</div>
+          <span>Create account (semi-anonymous) → Feed populates</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">5</div>
+          <span>Optional: complete Civic Profile (occupation, interests)</span>
+        </div>
+      </div>
+    </div>
+    <div class="entry-flow">
+      <div class="entry-flow-tag">Returning User · Every Visit</div>
+      <h3>Your Civic Feed</h3>
+      <p>Personalized wall of everything happening across your followed officials, tracked bills, and active districts.</p>
+      <div class="entry-steps">
+        <div class="entry-step">
+          <div class="step-num">1</div>
+          <span>Feed loads: bill activity, official posts, vote results</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">2</div>
+          <span>Cohort sentiment panels: "People like you think…"</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">3</div>
+          <span>Surface: bills entering committee, upcoming votes</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">4</div>
+          <span>Notifications: officials you follow post or respond</span>
+        </div>
+        <div class="entry-step">
+          <div class="step-num">5</div>
+          <span>Explore: discover adjacent issues / new officials</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN SITEMAP GRID -->
+<div class="section-rule">Primary Screens — Four Pillars</div>
+
+<div class="sitemap-grid">
+
+  <!-- COL 1: THE FEED -->
+  <div class="section-col col-feed">
+    <div class="section-header">
+      <div class="section-header-tag">Pillar I</div>
+      <h2>The Feed</h2>
+      <p>Your personalized civic wall. Everything you follow, happening now.</p>
+    </div>
+    <div class="screen-list">
+
+      <div class="screen-item">
+        <div class="screen-name">Home Feed</div>
+        <div class="screen-path">/feed</div>
+        <div class="screen-desc">Chronological + ranked stream of activity across followed officials, tracked bills, and watched districts.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+          <span class="screen-tag tag-api">Congress.gov</span>
+          <span class="screen-tag tag-api">OpenStates</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Government Stack</div>
+        <div class="screen-path">/stack</div>
+        <div class="screen-desc">Full list of every official who governs your address, from federal to local. Entry point on first visit.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+          <span class="screen-tag tag-api">Google Civic</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Address Lookup</div>
+        <div class="screen-path">/explore?address=…</div>
+        <div class="screen-desc">Look up any address (not just yours). Enter → see full government stack for that location.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Explore by Issue</div>
+        <div class="screen-path">/explore/issues</div>
+        <div class="screen-desc">Browse active bills and officials by topic tag: housing, education, climate, healthcare, etc.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Notifications</div>
+        <div class="screen-path">/notifications</div>
+        <div class="screen-desc">All alerts: bill moved to floor, official responded to a topic you engaged with, vote result posted.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Search</div>
+        <div class="screen-path">/search?q=…</div>
+        <div class="screen-desc">Global search across officials, bills, civic bodies, jurisdictions, and discourse threads.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COL 2: THE RECORD -->
+  <div class="section-col col-record">
+    <div class="section-header">
+      <div class="section-header-tag">Pillar II</div>
+      <h2>The Record</h2>
+      <p>Officials, bills, and civic bodies. The factual substrate of governance.</p>
+    </div>
+    <div class="screen-list">
+
+      <div class="screen-item">
+        <div class="screen-name">Official Profile</div>
+        <div class="screen-path">/officials/:id</div>
+        <div class="screen-desc">Bio, current office, term history, sponsored bills, voting record, public statements, contact info.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+          <span class="screen-tag tag-api">Congress.gov</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Bill Page</div>
+        <div class="screen-path">/bills/:id</div>
+        <div class="screen-desc">12-section intelligence dashboard: plain-language summary, sponsors, timeline, vote counts, affected cohorts, public support, debate.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+          <span class="screen-tag tag-api">Congress.gov</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Civic Body Page</div>
+        <div class="screen-path">/bodies/:id</div>
+        <div class="screen-desc">Profile for boards, commissions, councils, tribal governments, inter-jurisdictional bodies. Members, authority, meeting schedule.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Jurisdiction Page</div>
+        <div class="screen-path">/places/:slug</div>
+        <div class="screen-desc">Overview of a city, county, state, or country: full government structure, elected officials, active legislation.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Election Page</div>
+        <div class="screen-path">/elections/:id</div>
+        <div class="screen-desc">Upcoming or past election: candidates, office, district, results (when available), links to register or get ballot info.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+          <span class="screen-tag tag-api">Google Civic</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Voting Record</div>
+        <div class="screen-path">/officials/:id/votes</div>
+        <div class="screen-desc">Full chronological vote history for a legislator, filterable by topic, session, and bill type.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+          <span class="screen-tag tag-api">Congress.gov</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COL 3: THE DISCOURSE -->
+  <div class="section-col col-discourse">
+    <div class="section-header">
+      <div class="section-header-tag">Pillar III</div>
+      <h2>The Discourse</h2>
+      <p>Structured civic conversation. Steel-man prompts, source scoring, tone intercept.</p>
+    </div>
+    <div class="screen-list">
+
+      <div class="screen-item">
+        <div class="screen-name">Bill Discourse</div>
+        <div class="screen-path">/bills/:id/discuss</div>
+        <div class="screen-desc">Structured debate thread attached to a bill. Civic scaffold shown first: what it does, who it affects, best/worst case, precedent.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Issue Discourse</div>
+        <div class="screen-path">/issues/:tag/discuss</div>
+        <div class="screen-desc">Cross-bill conversation on a topic (e.g. housing). Aggregated sentiment, trending arguments, cohort breakdowns.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Official Q&amp;A</div>
+        <div class="screen-path">/officials/:id/qa</div>
+        <div class="screen-desc">Citizens submit questions to an official. Official (if verified) can respond. Upvote-ranked. Unanswered questions visible.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+          <span class="screen-tag tag-official">official responds</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Sentiment Dashboard</div>
+        <div class="screen-path">/bills/:id/sentiment</div>
+        <div class="screen-desc">Public support charts broken down by cohort (occupation × age range × region). No individual data exposed.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-anon">public</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Compose Action</div>
+        <div class="screen-path">/compose</div>
+        <div class="screen-desc">Write a civic statement, question, or position. Steel-man prompt, source quality widget, tone intercept before publish.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Harm Reports</div>
+        <div class="screen-path">/reports (mod-only)</div>
+        <div class="screen-desc">Flagged content queue. Moderation dashboard. Harm claim review workflow. Internal only.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COL 4: THE PROFILE -->
+  <div class="section-col col-profile">
+    <div class="section-header">
+      <div class="section-header-tag">Pillar IV</div>
+      <h2>The Profile</h2>
+      <p>Civic identity, resume, and history. Semi-anonymous by design.</p>
+    </div>
+    <div class="screen-list">
+
+      <div class="screen-item">
+        <div class="screen-name">My Profile</div>
+        <div class="screen-path">/profile</div>
+        <div class="screen-desc">Your public-facing civic identity: occupation + age range + region. No name. Your statements, positions, and activity.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Civic Resume</div>
+        <div class="screen-path">/profile/resume</div>
+        <div class="screen-desc">BAML-parsed credential profile. Occupation, expertise tags, community roles. Used for cohort weighting in sentiment display.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+          <span class="screen-tag tag-new-user">onboarding</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">My Following</div>
+        <div class="screen-path">/profile/following</div>
+        <div class="screen-desc">Officials, bills, issues, and civic bodies you follow. Manage and curate what populates your Feed.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">My Activity</div>
+        <div class="screen-path">/profile/activity</div>
+        <div class="screen-desc">Your full civic history: statements made, bills engaged, officials questioned, sources cited.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Settings</div>
+        <div class="screen-path">/settings</div>
+        <div class="screen-desc">Notification preferences, privacy controls, address management, account verification, data export.</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-auth">auth</span>
+        </div>
+      </div>
+
+      <div class="screen-item">
+        <div class="screen-name">Auth Screens</div>
+        <div class="screen-path">/login · /register · /verify</div>
+        <div class="screen-desc">Sign up, log in, identity verification flow (real identity encrypted; public display = occupation + age + region).</div>
+        <div class="screen-tags">
+          <span class="screen-tag tag-new-user">onboarding</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- OFFICIAL LAYER -->
+<div class="official-section">
+  <div class="official-header">
+    <h2>Official Layer — Same Screens, Unlocked Permissions</h2>
+    <span>Verified badge · Role-based · Twitter/X model</span>
+  </div>
+  <div class="official-grid">
+
+    <div class="official-item">
+      <div class="official-badge">Official Only</div>
+      <div class="official-name">Constituency Dashboard</div>
+      <div class="official-base">Replaces: My Profile</div>
+      <div class="official-delta">Private pulse dashboard: constituent sentiment by bill, district breakdown, question volume, trending issues in their district.</div>
+    </div>
+
+    <div class="official-item">
+      <div class="official-badge">Official Only</div>
+      <div class="official-name">Post as Official</div>
+      <div class="official-base">Replaces: Compose Action</div>
+      <div class="official-delta">Statements appear with verified badge and are surfaced on the official's profile and in followers' feeds with elevated prominence.</div>
+    </div>
+
+    <div class="official-item">
+      <div class="official-badge">Official Only</div>
+      <div class="official-name">Respond to Q&amp;A</div>
+      <div class="official-base">Unlocks: Official Q&amp;A</div>
+      <div class="official-delta">Official can reply to citizen questions. Responses pinned at top of Q&amp;A thread. Unanswered questions remain visible to all.</div>
+    </div>
+
+    <div class="official-item">
+      <div class="official-badge">Official Only</div>
+      <div class="official-name">Claim Verification</div>
+      <div class="official-base">/officials/:id/claim</div>
+      <div class="official-delta">OfficialClaim workflow: submit credentials → admin review → verified badge granted. Civic Resume auto-populated from public record.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS & OVERLAYS -->
+<div class="modals-section">
+  <div class="modals-header">
+    <h2>Modals &amp; Overlays</h2>
+    <span>Not standalone screens — triggered in-context</span>
+  </div>
+  <div class="modals-grid">
+
+    <div class="modal-item">
+      <div class="modal-name">Civic Scaffold</div>
+      <div class="modal-trigger">Triggered: before engaging on any bill</div>
+      <div class="modal-desc">What it does · Who it affects · Best/worst case · Precedent · Cohort sentiment. Must be dismissed before posting.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Source Quality Widget</div>
+      <div class="modal-trigger">Triggered: in Compose, inline on discourse</div>
+      <div class="modal-desc">Tier S→D + ⚠flagged rating shown alongside any cited source. Legitimacy scores citations, not claims.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Tone Intercept</div>
+      <div class="modal-trigger">Triggered: before publishing a post</div>
+      <div class="modal-desc">Forced pause. Surfaced opposing article. "Are you sure?" with a 10-second delay. Reduces reactive posting.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Steel-Man Prompt</div>
+      <div class="modal-trigger">Triggered: when composing a position</div>
+      <div class="modal-desc">"What's the strongest argument against your position?" — optional but encouraged. Elevated display if completed.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Address Entry</div>
+      <div class="modal-trigger">Triggered: first visit, or /stack with no address</div>
+      <div class="modal-desc">Simple address field → geocode → polygon match → government stack returned. No account required to view.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Follow Prompt</div>
+      <div class="modal-trigger">Triggered: after government stack revealed</div>
+      <div class="modal-desc">"Follow all your officials?" One-click to populate feed. Seeding moment — highest-leverage onboarding step.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Content Flag</div>
+      <div class="modal-trigger">Triggered: flag button on any post</div>
+      <div class="modal-desc">ContentFlag record created. Routes to moderation queue. Flagger gets confirmation; no immediate removal.</div>
+    </div>
+
+    <div class="modal-item">
+      <div class="modal-name">Data Alert Banner</div>
+      <div class="modal-trigger">Triggered: stale or unverified data detected</div>
+      <div class="modal-desc">DataAlert record surfaced inline. "This record may be outdated — last verified [date]." Links to report issue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- URL STRUCTURE -->
+<div class="url-section">
+  <div class="url-header">
+    <h2>URL Structure</h2>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gray-400)">Canonical patterns — RESTful, human-readable</span>
+  </div>
+  <div class="url-grid">
+
+    <div class="url-group">
+      <div class="url-group-title">Feed &amp; Explore</div>
+      <div class="url-row"><span class="url-path">/</span><span class="url-label">Landing / address entry (unauthenticated)</span></div>
+      <div class="url-row"><span class="url-path">/feed</span><span class="url-label">Personalized civic feed (auth)</span></div>
+      <div class="url-row"><span class="url-path">/stack</span><span class="url-label">My government stack</span></div>
+      <div class="url-row"><span class="url-path">/explore</span><span class="url-label">Browse / address lookup</span></div>
+      <div class="url-row"><span class="url-path">/explore/issues</span><span class="url-label">Browse by issue topic</span></div>
+      <div class="url-row"><span class="url-path">/search?q=</span><span class="url-label">Global search</span></div>
+      <div class="url-row"><span class="url-path">/notifications</span><span class="url-label">Notification inbox</span></div>
+    </div>
+
+    <div class="url-group">
+      <div class="url-group-title">The Record</div>
+      <div class="url-row"><span class="url-path">/officials/:id</span><span class="url-label">Official profile</span></div>
+      <div class="url-row"><span class="url-path">/officials/:id/votes</span><span class="url-label">Voting record</span></div>
+      <div class="url-row"><span class="url-path">/officials/:id/qa</span><span class="url-label">Citizen Q&amp;A</span></div>
+      <div class="url-row"><span class="url-path">/bills/:id</span><span class="url-label">Bill intelligence dashboard</span></div>
+      <div class="url-row"><span class="url-path">/bills/:id/discuss</span><span class="url-label">Bill discourse thread</span></div>
+      <div class="url-row"><span class="url-path">/bills/:id/sentiment</span><span class="url-label">Public sentiment dashboard</span></div>
+      <div class="url-row"><span class="url-path">/bodies/:id</span><span class="url-label">Civic body profile</span></div>
+      <div class="url-row"><span class="url-path">/places/:slug</span><span class="url-label">Jurisdiction overview</span></div>
+      <div class="url-row"><span class="url-path">/elections/:id</span><span class="url-label">Election page</span></div>
+    </div>
+
+    <div class="url-group">
+      <div class="url-group-title">Profile &amp; Identity</div>
+      <div class="url-row"><span class="url-path">/profile</span><span class="url-label">My civic profile (public-facing)</span></div>
+      <div class="url-row"><span class="url-path">/profile/resume</span><span class="url-label">Civic resume / credentials</span></div>
+      <div class="url-row"><span class="url-path">/profile/following</span><span class="url-label">Manage follows</span></div>
+      <div class="url-row"><span class="url-path">/profile/activity</span><span class="url-label">My civic history</span></div>
+      <div class="url-row"><span class="url-path">/settings</span><span class="url-label">Account &amp; privacy settings</span></div>
+      <div class="url-row"><span class="url-path">/login · /register</span><span class="url-label">Auth screens</span></div>
+      <div class="url-row"><span class="url-path">/verify</span><span class="url-label">Identity verification flow</span></div>
+    </div>
+
+    <div class="url-group">
+      <div class="url-group-title">Official Layer</div>
+      <div class="url-row"><span class="url-path">/officials/:id/claim</span><span class="url-label">Official claim / verification request</span></div>
+      <div class="url-row"><span class="url-path">/dashboard</span><span class="url-label">Constituency pulse dashboard (official)</span></div>
+      <div class="url-row"><span class="url-path">/compose</span><span class="url-label">Compose civic action / official statement</span></div>
+      <div class="url-row"><span class="url-path">/issues/:tag/discuss</span><span class="url-label">Issue-level discourse</span></div>
+      <div class="url-row"><span class="url-path">/reports</span><span class="url-label">Moderation queue (internal)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER STATS -->
+<div class="footer">
+  <div style="display:flex;gap:32px;flex-wrap:wrap">
+    <div class="footer-stat">
+      <div class="footer-stat-num">24</div>
+      <div class="footer-stat-label">Screens</div>
+    </div>
+    <div class="footer-stat">
+      <div class="footer-stat-num">8</div>
+      <div class="footer-stat-label">Modals / Overlays</div>
+    </div>
+    <div class="footer-stat">
+      <div class="footer-stat-num">4</div>
+      <div class="footer-stat-label">Official-only Views</div>
+    </div>
+    <div class="footer-stat">
+      <div class="footer-stat-num">2</div>
+      <div class="footer-stat-label">Entry Flows</div>
+    </div>
+  </div>
+  <div class="footer-note">
+    Official layer follows the Twitter/X model: same URLs, same screens, role-based permissions unlock additional views and post types. No separate portal — one platform, two modes.
+    <br><br>
+    Next: wireframe priority order — Address Entry → Government Stack → Bill Page → Official Profile → Feed.
+  </div>
+</div>
+
+</body>
+</html>

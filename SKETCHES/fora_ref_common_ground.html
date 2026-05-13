@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Common Ground — Component Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* COMMON GROUND — Forest green + terracotta + cream */
+  --bg:        #f4f0e8;   /* warm cream — the village square at midday */
+  --bg2:       #ede8dc;
+  --white:     #fdfbf7;
+  --forest:    #1e4d2b;   /* deep forest green — the commons, the park, the gathering */
+  --forest-md: #2a6b3c;
+  --forest-lt: #3d8f52;
+  --forest-pl: #e4ede7;   /* pale forest */
+  --forest-vp: #f0f5f1;
+  --terra:     #c0522a;   /* terracotta — brick, earth, the village hearth */
+  --terra-lt:  #d96f45;
+  --terra-pl:  #f7ede7;
+  --terra-rul: rgba(192,82,42,0.2);
+  --clay:      #8b4020;   /* darker terracotta — the tile roof */
+  --cream:     #f9f5ec;
+  --ink:       #1c1710;
+  --ink-mid:   #2e2518;
+  --ink-soft:  #5c5040;
+  --ink-mut:   #9c8e7c;
+  --rule:      rgba(30,77,43,0.12);
+  --rule-lt:   rgba(30,77,43,0.06);
+  --terra-rule: rgba(192,82,42,0.15);
+  --green-sem: #155c2d;
+  --green-p:   #e5f0e8;
+  --green-r:   #8cc4a0;
+  --red:       #8b2020;
+  --red-p:     #f7eaea;
+  --red-r:     #d4a0a0;
+  --purple:    #4a1f6e;
+  --purp-p:    #f0eaf7;
+  --purp-r:    #c8a8e8;
+  --gold:      #a07428;
+  --gold-p:    #f7f0e0;
+  --gold-r:    #d4b878;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--terra-rul); border-radius: 10px; }
+
+/* NAV — town hall board */
+.nav {
+  background: var(--forest);
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 0;
+  border-bottom: 4px solid var(--terra);
+}
+.nav-logo {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.1em;
+  margin-right: 32px;
+  flex-shrink: 0;
+}
+.nav-logo span { color: var(--terra-lt); }
+.nav-tagline {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.35);
+  margin-right: auto;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+.nav-links { display: flex; gap: 0; height: 60px; }
+.nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  padding: 0 18px;
+  height: 100%;
+  display: flex; align-items: center;
+  border-bottom: 4px solid transparent;
+  margin-bottom: -4px;
+  cursor: pointer;
+}
+.nav-link.active { color: var(--terra-lt); border-bottom-color: var(--terra); }
+
+/* COMMONS HERO */
+.commons-hero {
+  background: var(--forest);
+  padding: 60px 48px 52px;
+  position: relative;
+  overflow: hidden;
+}
+.commons-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(to right, var(--terra) 0, var(--terra) 20px, transparent 20px, transparent 24px);
+}
+/* decorative ring */
+.hero-ring {
+  position: absolute;
+  right: -60px; top: -80px;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  border: 40px solid rgba(255,255,255,0.03);
+  pointer-events: none;
+}
+.hero-ring-2 {
+  position: absolute;
+  right: 20px; top: -10px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  border: 1px solid rgba(192,82,42,0.2);
+  pointer-events: none;
+}
+.ch-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra-lt);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ch-kicker::before { content: '◆'; font-size: 8px; }
+.ch-title {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+  margin-bottom: 14px;
+}
+.ch-sub {
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  max-width: 580px;
+  line-height: 1.65;
+  margin-bottom: 36px;
+}
+.ch-meta {
+  display: flex;
+  gap: 28px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.cm-item { display: flex; flex-direction: column; gap: 4px; }
+.cm-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+.cm-val { font-family: 'Libre Baskerville', Georgia, serif; font-size: 14px; color: var(--terra-lt); }
+.cm-sep { width: 1px; background: rgba(255,255,255,0.08); align-self: stretch; }
+
+/* SECTIONS */
+.section {
+  padding: 56px 48px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg);
+}
+.section.on-cream { background: var(--cream); }
+.section.on-white { background: var(--white); }
+.sec-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 9px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sec-kicker::before { content: '◆'; font-size: 7px; }
+.sec-title {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--forest);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.sec-desc {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  max-width: 600px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+/* VARIANT GRID — three panels with warm separators */
+.variant-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.vr-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(30,77,43,0.05);
+}
+.vr-head {
+  padding: 13px 18px 11px;
+  background: var(--forest-vp);
+  border-bottom: 1px solid var(--rule-lt);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.vr-name { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--forest); }
+.vr-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--forest); color: white;
+  padding: 2px 8px; border-radius: 100px;
+}
+.vr-body { padding: 20px 18px; display: flex; flex-direction: column; gap: 12px; }
+.vr-note {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px; font-style: italic;
+  color: var(--ink-soft);
+  padding: 9px 12px;
+  background: var(--bg);
+  border-left: 3px solid var(--terra-rul);
+  border-radius: 0 6px 6px 0;
+  line-height: 1.55;
+}
+
+/* —— COMPONENT STYLES —— */
+.pill-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+
+/* Pills V1: Rounded warm pill */
+.pill-cg1 { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; padding: 5px 16px; border-radius: 100px; display: inline-block; }
+.pcg1-forest { background: var(--forest); color: white; }
+.pcg1-terra { background: var(--terra); color: white; }
+.pcg1-terra-out { background: var(--terra-pl); color: var(--terra); border: 1.5px solid var(--terra-rul); }
+.pcg1-enacted { background: var(--green-p); color: var(--green-sem); border: 1.5px solid var(--green-r); }
+.pcg1-pending { background: var(--gold-p); color: var(--gold); border: 1.5px solid var(--gold-r); }
+
+/* Pills V2: Forest leaf shape — angled */
+.pill-cg2 { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; padding: 5px 14px 5px 18px; border-radius: 0 100px 100px 0; display: inline-block; }
+.pcg2-forest { background: var(--forest); color: white; }
+.pcg2-terra { background: var(--terra); color: white; }
+.pcg2-committee { background: var(--terra-pl); color: var(--terra); border: 1px solid var(--terra-rul); }
+.pcg2-enacted { background: var(--green-p); color: var(--green-sem); border: 1px solid var(--green-r); }
+
+/* Pills V3: Hand-lettered feel — serif lower case */
+.pill-cg3 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 13px; padding: 3px 12px; display: inline-block; border: 2px solid; border-radius: 4px; }
+.pcg3-forest { color: var(--forest); border-color: var(--forest); background: var(--forest-vp); }
+.pcg3-terra { color: var(--terra); border-color: var(--terra-rul); background: var(--terra-pl); }
+.pcg3-committee { color: var(--clay); border-color: var(--terra-rul); background: var(--terra-pl); }
+.pcg3-enacted { color: var(--green-sem); border-color: var(--green-r); background: var(--green-p); }
+
+/* Source Tiers */
+/* V1: Forest badge — circle with leaf */
+.tier-cg1 { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Libre Baskerville', Georgia, serif; font-size: 14px; font-weight: 700; border: 2px solid; flex-shrink: 0; }
+.tcg1-s { color: var(--green-sem); border-color: var(--green-sem); background: var(--green-p); }
+.tcg1-a { color: var(--forest); border-color: var(--forest); background: var(--forest-vp); }
+.tcg1-b { color: var(--ink-soft); border-color: var(--rule); background: var(--bg); }
+.tcg1-w { color: white; border-color: var(--red); background: var(--red); }
+
+/* V2: Terracotta tile */
+.tier-cg2 { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+.tcg2-s { background: var(--green-sem); color: white; }
+.tcg2-a { background: var(--forest); color: white; }
+.tcg2-b { background: var(--bg2); color: var(--ink-soft); border: 1px solid var(--rule); }
+.tcg2-w { background: var(--terra); color: white; }
+
+/* V3: Community label */
+.tier-cg3 { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; display: inline-block; }
+.tcg3-s { background: var(--green-p); color: var(--green-sem); border: 1.5px solid var(--green-r); }
+.tcg3-a { background: var(--forest-vp); color: var(--forest); border: 1.5px solid var(--forest-pl); }
+.tcg3-b { background: var(--bg2); color: var(--ink-soft); border: 1.5px solid var(--rule); }
+.tcg3-w { background: var(--red-p); color: var(--red); border: 1.5px solid var(--red-r); }
+.tier-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* Legitimacy Bar */
+.leg-cg1 { padding: 12px 16px; background: var(--forest-vp); border: 1px solid var(--forest-pl); border-left: 4px solid var(--forest); border-radius: 0 8px 8px 0; display: flex; align-items: center; gap: 12px; }
+.leg-cg2 { padding: 12px 16px; background: var(--forest); border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+.leg-cg3 { padding: 12px 16px; background: var(--terra-pl); border: 1px solid var(--terra-rul); border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+.lcg-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+.lcgl-1 { color: var(--forest); }
+.lcgl-2 { color: rgba(255,255,255,0.45); }
+.lcgl-3 { color: var(--clay); }
+.lcg-trk { flex: 1; height: 6px; border-radius: 100px; overflow: hidden; }
+.lcgt-1 { background: var(--forest-pl); }
+.lcgt-2 { background: rgba(255,255,255,0.12); }
+.lcgt-3 { background: rgba(192,82,42,0.15); }
+.lcg-fill { height: 100%; width: 71%; border-radius: 100px; }
+.lcgf-1 { background: linear-gradient(to right, var(--forest), var(--forest-lt)); }
+.lcgf-2 { background: linear-gradient(to right, var(--terra-lt), var(--terra-pl)); }
+.lcgf-3 { background: linear-gradient(to right, var(--terra), var(--terra-lt)); }
+.lcg-score { font-family: 'Libre Baskerville', Georgia, serif; font-weight: 700; font-size: 20px; }
+.lcgs-1 { color: var(--forest); }
+.lcgs-2 { color: white; }
+.lcgs-3 { color: var(--terra); }
+.lcg-den { font-family: 'JetBrains Mono', monospace; font-size: 9px; }
+.lcgd-1 { color: var(--ink-mut); }
+.lcgd-2 { color: rgba(255,255,255,0.3); }
+.lcgd-3 { color: var(--terra-rul); }
+
+/* Steel-Man */
+.sm-cg1 { padding: 14px 16px; background: var(--purp-p); border: 1px solid var(--purp-r); border-radius: 10px; border-left: 4px solid var(--purple); display: flex; gap: 12px; align-items: flex-start; }
+.sm-cg2 { padding: 14px 16px; background: var(--forest); border-radius: 10px; display: flex; gap: 12px; align-items: flex-start; }
+.sm-cg3 { padding: 14px 16px; background: var(--terra-pl); border: 1.5px solid var(--terra-rul); border-radius: 10px; display: flex; gap: 12px; align-items: flex-start; }
+.smcg-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.smcg-bd { flex: 1; }
+.smcg-hd1 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 3px; }
+.smcg-hd2 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+.smcg-hd3 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 14px; font-weight: 700; color: var(--clay); margin-bottom: 3px; }
+.smcg-tx1 { font-family: 'Nunito', sans-serif; font-size: 12.5px; color: rgba(74,31,110,0.65); line-height: 1.5; }
+.smcg-tx2 { font-family: 'Nunito', sans-serif; font-size: 12.5px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+.smcg-tx3 { font-family: 'Nunito', sans-serif; font-size: 12.5px; color: var(--clay); line-height: 1.5; }
+.smcg-cta { margin-top: 10px; }
+.smcg-btn1 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--purple); color: white; border: none; padding: 7px 16px; border-radius: 100px; cursor: pointer; }
+.smcg-btn2 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--terra); color: white; border: none; padding: 7px 16px; border-radius: 100px; cursor: pointer; }
+.smcg-btn3 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--terra); color: white; border: none; padding: 7px 16px; border-radius: 100px; cursor: pointer; }
+
+/* Tone Intercept */
+.tone-cg1 { padding: 13px 16px; background: var(--gold-p); border: 1px solid var(--gold-r); border-radius: 10px; border-left: 4px solid var(--terra); display: flex; gap: 12px; }
+.tone-cg2 { padding: 13px 16px; background: var(--terra); border-radius: 10px; display: flex; gap: 12px; }
+.tone-cg3 { padding: 13px 16px; background: var(--white); border: 1.5px solid var(--terra-rul); border-radius: 10px; border-top: 3px solid var(--terra); display: flex; gap: 12px; }
+.tcg-ico { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.tcg-bd { flex: 1; }
+.tcg-hd1 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 13.5px; font-weight: 700; color: var(--clay); margin-bottom: 3px; }
+.tcg-hd2 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 13.5px; font-weight: 700; color: white; margin-bottom: 3px; }
+.tcg-hd3 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 13.5px; font-weight: 700; color: var(--terra); margin-bottom: 3px; }
+.tcg-tx1 { font-family: 'Nunito', sans-serif; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.tcg-tx2 { font-family: 'Nunito', sans-serif; font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+.tcg-tx3 { font-family: 'Nunito', sans-serif; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.tone-btns { display: flex; gap: 6px; margin-top: 8px; }
+.tcgb-r1 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--terra); color: white; border: none; padding: 5px 13px; border-radius: 100px; cursor: pointer; }
+.tcgb-r2 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: white; color: var(--terra); border: none; padding: 5px 13px; border-radius: 100px; cursor: pointer; }
+.tcgb-r3 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--terra); color: white; border: none; padding: 5px 13px; border-radius: 100px; cursor: pointer; }
+.tcgb-p { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; color: var(--ink-mut); border: 1px solid var(--rule); padding: 5px 13px; border-radius: 100px; cursor: pointer; }
+
+/* Bilingual */
+.bil-cg1 { background: var(--gold-p); border: 1px solid var(--gold-r); border-radius: 8px; padding: 9px 16px; display: flex; align-items: center; gap: 12px; }
+.bil-cg2 { background: var(--forest); border-radius: 8px; padding: 9px 16px; display: flex; align-items: center; gap: 12px; }
+.bil-cg3 { background: var(--white); border: 1px solid var(--rule); border-radius: 8px; border-left: 4px solid var(--terra); padding: 9px 16px; display: flex; align-items: center; gap: 12px; }
+.bil-flags { display: flex; align-items: center; gap: 6px; }
+.bil-flag-ico { font-size: 14px; }
+.bil-code { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; }
+.bc-1 { color: var(--gold); }
+.bc-2 { color: rgba(255,255,255,0.55); }
+.bc-3 { color: var(--ink-soft); }
+.bil-sep { margin: 0 2px; }
+.bsep-1 { color: var(--gold-r); }
+.bsep-2 { color: rgba(255,255,255,0.18); }
+.bsep-3 { color: var(--rule); }
+.bil-note { font-family: 'Nunito', sans-serif; font-size: 13px; }
+.bnote-1 { color: var(--clay); }
+.bnote-2 { color: rgba(255,255,255,0.5); }
+.bnote-3 { color: var(--ink-soft); }
+.bil-lnk-1 { color: var(--terra); font-weight: 700; cursor: pointer; }
+.bil-lnk-2 { color: var(--terra-lt); font-weight: 700; cursor: pointer; }
+.bil-lnk-3 { color: var(--terra); font-weight: 700; cursor: pointer; text-decoration: underline; }
+
+/* Scaffold */
+.scaf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.scaf-cg1 { background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; border-top: 3px solid var(--forest); padding: 13px 15px; }
+.scaf-cg1.best { border-top-color: var(--green-sem); background: var(--green-p); }
+.scaf-cg1.worst { border-top-color: var(--red); background: var(--red-p); }
+.scaf-cg2 { background: var(--white); border: 1px solid var(--rule); border-radius: 8px; border-left: 4px solid var(--forest); padding: 13px 15px; }
+.scaf-cg2.best { border-left-color: var(--green-sem); }
+.scaf-cg2.worst { border-left-color: var(--red); }
+.scaf-cg3 { background: var(--white); border: 1px solid var(--rule); border-radius: 8px; padding: 13px 15px; }
+.scaf-cg3.best { background: var(--green-p); border-color: var(--green-r); }
+.scaf-cg3.worst { background: var(--red-p); border-color: var(--red-r); }
+.scaf-kicker { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 5px; }
+.sk-forest { color: var(--forest); }
+.sk-green { color: var(--green-sem); }
+.sk-red { color: var(--red); }
+.scaf-en { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--ink-mid); margin-bottom: 7px; }
+.scaf-es { font-family: 'Nunito', sans-serif; font-size: 12px; font-style: italic; font-weight: 400; color: var(--ink-mut); border-top: 1px dashed var(--rule); padding-top: 6px; line-height: 1.55; }
+
+/* Progress */
+.prog { display: flex; align-items: center; }
+.pnode { width: 10px; height: 10px; flex-shrink: 0; }
+.pncg1-done { background: var(--forest); border-radius: 50%; }
+.pncg1-curr { background: var(--terra); border-radius: 50%; box-shadow: 0 0 0 3px var(--terra-pl); }
+.pncg1-none { background: white; border: 2px solid var(--rule); border-radius: 50%; }
+.pncg2-done { background: var(--forest); border-radius: 2px; }
+.pncg2-curr { background: var(--terra); border-radius: 2px; box-shadow: 0 0 0 3px var(--terra-pl); }
+.pncg2-none { background: var(--bg); border: 2px solid var(--rule); border-radius: 2px; }
+.pncg3-done { background: white; border: 2px solid var(--forest); border-radius: 50%; }
+.pncg3-curr { background: var(--terra); border: 2px solid var(--terra); border-radius: 50%; box-shadow: 0 0 0 3px var(--terra-pl); }
+.pncg3-none { background: white; border: 2px solid var(--rule); border-radius: 50%; }
+.pline { flex: 1; height: 2px; min-width: 16px; }
+.plcg-done { background: var(--forest); }
+.plcg-none { background: var(--rule); }
+.plcg-done-t { background: var(--terra-rul); }
+.plbl { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; margin: 0 5px; }
+.plbl-done { color: var(--forest); }
+.plbl-curr { color: var(--terra); font-weight: 700; }
+.plbl-none { color: var(--ink-mut); }
+
+/* Tally */
+.tally-cg1 { display: flex; background: var(--white); border: 1px solid var(--rule); border-radius: 12px; border-top: 3px solid var(--forest); overflow: hidden; }
+.tally-cg2 { display: flex; background: var(--forest); border-radius: 12px; overflow: hidden; }
+.tally-cg3 { display: flex; background: var(--cream); border: 1.5px solid var(--terra-rul); border-radius: 12px; overflow: hidden; }
+.tc { flex: 1; padding: 14px 0; text-align: center; border-right: 1px solid var(--rule); }
+.tally-cg2 .tc { border-right-color: rgba(255,255,255,0.08); }
+.tally-cg3 .tc { border-right-color: var(--terra-rule); }
+.tc:last-child { border-right: none; }
+.tnum { font-family: 'Libre Baskerville', Georgia, serif; font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.tn-yea-1 { color: var(--green-sem); }
+.tn-nay-1 { color: var(--red); }
+.tn-pend-1 { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--ink-mut); letter-spacing: 0.1em; margin-top: 7px; }
+.tn-yea-2 { color: #86efac; }
+.tn-nay-2 { color: #fca5a5; }
+.tn-pend-2 { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; margin-top: 7px; }
+.tn-yea-3 { color: var(--green-sem); }
+.tn-nay-3 { color: var(--terra); }
+.tn-pend-3 { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--ink-mut); letter-spacing: 0.1em; margin-top: 7px; }
+.tlbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); }
+.tally-cg2 .tlbl { color: rgba(255,255,255,0.2); }
+.tally-cg3 .tlbl { color: var(--clay); }
+
+/* Cohort + Sentiment */
+.chips { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip-cg1 { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 600; padding: 5px 15px; border-radius: 100px; border: 1.5px solid var(--rule); background: white; color: var(--ink-soft); cursor: pointer; transition: all 0.12s; }
+.chip-cg1.active { background: var(--forest); border-color: var(--forest); color: white; }
+.chip-cg2 { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 600; padding: 5px 15px; border-radius: 8px; border: 1.5px solid var(--rule); background: var(--bg); color: var(--ink-soft); cursor: pointer; }
+.chip-cg2.active { background: var(--terra); border-color: var(--terra); color: white; }
+.chip-cg3 { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 13px; border-radius: 4px; border: 1px solid var(--forest-pl); background: var(--forest-vp); color: var(--forest-md); cursor: pointer; }
+.chip-cg3.active { background: var(--forest); border-color: var(--forest); color: white; }
+.sent-bars { display: flex; flex-direction: column; gap: 9px; }
+.sb-row { display: flex; align-items: center; gap: 10px; }
+.sb-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; width: 58px; color: var(--ink-mut); flex-shrink: 0; }
+.sb-trk { flex: 1; height: 8px; background: var(--bg2); border-radius: 100px; overflow: hidden; }
+.sbf-s { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--green-sem), #86efac); }
+.sbf-o { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--terra), var(--terra-lt)); }
+.sbf-n { height: 100%; border-radius: 100px; background: var(--ink-mut); }
+.sb-pct { font-family: 'Libre Baskerville', Georgia, serif; font-size: 15px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
+.sp-s { color: var(--green-sem); }
+.sp-o { color: var(--terra); }
+.sp-n { color: var(--ink-mut); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-tagline">Where the community gathers</div>
+  <div class="nav-links">
+    <div class="nav-link active">Common Ground</div>
+    <div class="nav-link" style="opacity:0.4;">Civic Trust</div>
+    <div class="nav-link" style="opacity:0.4;">The Record</div>
+  </div>
+</nav>
+
+<!-- COMMONS HERO -->
+<div class="commons-hero">
+  <div class="hero-ring"></div>
+  <div class="hero-ring-2"></div>
+  <div class="ch-kicker">Psychological provocation — Community &amp; belonging</div>
+  <h1 class="ch-title">Common Ground</h1>
+  <p class="ch-sub">Forest green and terracotta. Libre Baskerville — sturdy, warm, democratic. This palette says: this is where we all belong. The village commons. The town hall. The park where every voice is heard.</p>
+  <div class="ch-meta">
+    <div class="cm-item"><span class="cm-lbl">Typeface</span><span class="cm-val">Libre Baskerville + Nunito + JetBrains Mono</span></div>
+    <div class="cm-sep"></div>
+    <div class="cm-item"><span class="cm-lbl">Primary</span><span class="cm-val">#1e4d2b Forest Green</span></div>
+    <div class="cm-sep"></div>
+    <div class="cm-item"><span class="cm-lbl">Accent</span><span class="cm-val">#c0522a Terracotta</span></div>
+    <div class="cm-sep"></div>
+    <div class="cm-item"><span class="cm-lbl">Provocation</span><span class="cm-val">Community · Belonging · Common cause</span></div>
+  </div>
+</div>
+
+<!-- STATUS PILLS -->
+<div class="section on-white">
+  <div class="sec-kicker">Component 01</div>
+  <h2 class="sec-title">Status Pills &amp; Tags</h2>
+  <p class="sec-desc">Three shapes speaking to different levels of civic warmth — the rounded pill of a community notice board, the leaf-shape of something organic, the hand-stamped mark of a local charter.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Notice Board</span><span class="vr-tag">Rounded pill</span></div>
+      <div class="vr-body">
+        <div class="pill-row">
+          <span class="pill-cg1 pcg1-forest">Ley No. 148</span>
+          <span class="pill-cg1 pcg1-terra">Follow</span>
+        </div>
+        <div class="pill-row">
+          <span class="pill-cg1 pcg1-terra-out">In Committee</span>
+          <span class="pill-cg1 pcg1-enacted">Enacted</span>
+          <span class="pill-cg1 pcg1-pending">Pending</span>
+        </div>
+        <div class="vr-note">Soft rounded pills — a community notice board. Approachable, inclusive. Forest primary, terracotta follow CTA, semantic status fills.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Leaf Shape</span><span class="vr-tag">Organic · Angled</span></div>
+      <div class="vr-body">
+        <div class="pill-row">
+          <span class="pill-cg2 pcg2-forest">Ley No. 148</span>
+          <span class="pill-cg2 pcg2-terra">Follow</span>
+        </div>
+        <div class="pill-row">
+          <span class="pill-cg2 pcg2-committee">In Committee</span>
+          <span class="pill-cg2 pcg2-enacted">Enacted</span>
+        </div>
+        <div class="vr-note">Leaf-tab shape — squared on the left, rounded on the right. Grows from the text. Organic civic energy. Unusual enough to be memorable.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Charter Mark</span><span class="vr-tag">Serif · Hand-stamped</span></div>
+      <div class="vr-body">
+        <div class="pill-row">
+          <span class="pill-cg3 pcg3-forest">Ley No. 148</span>
+          <span class="pill-cg3 pcg3-terra">Follow Bill</span>
+        </div>
+        <div class="pill-row">
+          <span class="pill-cg3 pcg3-committee">In Committee</span>
+          <span class="pill-cg3 pcg3-enacted">Enacted</span>
+        </div>
+        <div class="vr-note">Rounded-corner Baskerville. Feels like a hand-stamped mark on a local charter or a community land trust document. Human touch.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOURCE TIERS -->
+<div class="section">
+  <div class="sec-kicker">Component 02</div>
+  <h2 class="sec-title">Source Tier Badges</h2>
+  <p class="sec-desc">Three civic registers for source credibility — the civic medallion, the terracotta tile, the community label. All warm, none bureaucratic.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Civic Medallion</span><span class="vr-tag">Circle · Baskerville</span></div>
+      <div class="vr-body">
+        <div class="tier-row">
+          <div class="tier-cg1 tcg1-s">S</div>
+          <div class="tier-cg1 tcg1-a">A</div>
+          <div class="tier-cg1 tcg1-b">B</div>
+          <div class="tier-cg1 tcg1-w">⚠</div>
+        </div>
+        <div class="tier-row" style="margin-top:4px; font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">
+          <div class="tier-cg1 tcg1-s" style="flex-shrink:0;">S</div>
+          <span>Asamblea Nacional (primary source)</span>
+        </div>
+        <div class="vr-note">Circle medallion. Community award energy — earned credibility, not bureaucratic clearance. Forest for official, terracotta for flagged.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Terracotta Tile</span><span class="vr-tag">Rounded square · Nunito</span></div>
+      <div class="vr-body">
+        <div class="tier-row">
+          <div class="tier-cg2 tcg2-s">S</div>
+          <div class="tier-cg2 tcg2-a">A</div>
+          <div class="tier-cg2 tcg2-b">B</div>
+          <div class="tier-cg2 tcg2-w">⚠</div>
+        </div>
+        <div class="tier-row" style="margin-top:4px; font-family:'Nunito',sans-serif; font-size:12px; color:var(--ink-soft);">
+          <div class="tier-cg2 tcg2-s" style="flex-shrink:0;">S</div>
+          <span>Asamblea Nacional (primary source)</span>
+        </div>
+        <div class="vr-note">Rounded square tiles — like mosaic or terracotta floor tiles. Visually warm, rooted in material culture. Nunito weight reads as community bulletin.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Community Label</span><span class="vr-tag">Pill · Full word</span></div>
+      <div class="vr-body">
+        <div class="tier-row" style="flex-wrap:wrap;">
+          <span class="tier-cg3 tcg3-s">Primary Source</span>
+          <span class="tier-cg3 tcg3-a">Verified</span>
+          <span class="tier-cg3 tcg3-b">Independent</span>
+          <span class="tier-cg3 tcg3-w">Flagged</span>
+        </div>
+        <div class="vr-note">Full-word rounded label pills. Maximally clear to civic newcomers. Forest/terracotta palette keeps community warmth even on metadata.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEGITIMACY BAR -->
+<div class="section on-white">
+  <div class="sec-kicker">Component 03</div>
+  <h2 class="sec-title">Legitimacy Score Bar</h2>
+  <p class="sec-desc">Source credibility scored. Three voices: the community notice, the gathering hall, the warm invitation.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Commons Notice</span><span class="vr-tag">Forest tint · Left rule</span></div>
+      <div class="vr-body">
+        <div class="leg-cg1"><span class="lcg-lbl lcgl-1">Legitimacy</span><div class="lcg-trk lcgt-1"><div class="lcg-fill lcgf-1"></div></div><span class="lcg-score lcgs-1">71</span><span class="lcg-den lcgd-1">&thinsp;/ 100</span></div>
+        <div class="vr-note">Forest left-rule on pale tint. Reading the notice board at the town commons. Official but welcoming.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Gathering Hall</span><span class="vr-tag">Forest fill · Terracotta bar</span></div>
+      <div class="vr-body">
+        <div class="leg-cg2"><span class="lcg-lbl lcgl-2">Legitimacy</span><div class="lcg-trk lcgt-2"><div class="lcg-fill lcgf-2"></div></div><span class="lcg-score lcgs-2">71</span><span class="lcg-den lcgd-2">&thinsp;/ 100</span></div>
+        <div class="vr-note">Forest fill, terracotta gradient bar. The hall where the community gathers — forest walls, terracotta hearth. Score stands out warmly.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Hearth Card</span><span class="vr-tag">Terracotta tint</span></div>
+      <div class="vr-body">
+        <div class="leg-cg3"><span class="lcg-lbl lcgl-3">Legitimacy</span><div class="lcg-trk lcgt-3"><div class="lcg-fill lcgf-3"></div></div><span class="lcg-score lcgs-3">71</span><span class="lcg-den lcgd-3">&thinsp;/ 100</span></div>
+        <div class="vr-note">Terracotta tint — the warm hearth card. The score feels personal, not scored by algorithm but by community trust.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEEL MAN -->
+<div class="section">
+  <div class="sec-kicker">Component 04</div>
+  <h2 class="sec-title">Steel-Man Banner</h2>
+  <p class="sec-desc">The invitation to deeper civic thinking. Should feel like a trusted neighbor asking you to consider another point of view — not a moderator's warning.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Neighbor's Note</span><span class="vr-tag">Purple tint · Rounded</span></div>
+      <div class="vr-body">
+        <div class="sm-cg1"><div class="smcg-ico">⚖️</div><div class="smcg-bd"><div class="smcg-hd1">Steel-man challenge</div><div class="smcg-tx1">Before posting, articulate the strongest case for the view you oppose.</div><div class="smcg-cta"><button class="smcg-btn1">Try it</button></div></div></div>
+        <div class="vr-note">Purple tint with rounded corners — a neighbor's thoughtful note slipped under the door. Warm, respectful, not a wall.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Gathering Call</span><span class="vr-tag">Forest fill</span></div>
+      <div class="vr-body">
+        <div class="sm-cg2"><div class="smcg-ico">⚖️</div><div class="smcg-bd"><div class="smcg-hd2">Steel-man challenge</div><div class="smcg-tx2">Before posting, articulate the strongest case for the view you oppose.</div><div class="smcg-cta"><button class="smcg-btn2">Try it</button></div></div></div>
+        <div class="vr-note">Forest inverted — the gathering call posted on the village board. Authoritative but inclusive. The community has set this expectation together.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Hearth Prompt</span><span class="vr-tag">Terracotta tint</span></div>
+      <div class="vr-body">
+        <div class="sm-cg3"><div class="smcg-ico">⚖️</div><div class="smcg-bd"><div class="smcg-hd3">Steel-man challenge</div><div class="smcg-tx3">Before posting, articulate the strongest case for the view you oppose.</div><div class="smcg-cta"><button class="smcg-btn3">Try it</button></div></div></div>
+        <div class="vr-note">Terracotta tint — warmest of the three. Like a conversation starter around the fire. Feels communal, not institutional.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TONE INTERCEPT -->
+<div class="section on-cream">
+  <div class="sec-kicker">Component 05</div>
+  <h2 class="sec-title">Tone Intercept</h2>
+  <p class="sec-desc">A community member tapping you on the shoulder before you speak at the town meeting. Warm, not punitive. We hold each other accountable here.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Community Notice</span><span class="vr-tag">Gold tint · Terra rule</span></div>
+      <div class="vr-body">
+        <div class="tone-cg1"><div class="tcg-ico">🌡</div><div class="tcg-bd"><div class="tcg-hd1">Tone check</div><div class="tcg-tx1">Your draft may read as dismissive. The community gathers in good faith — consider revising.</div><div class="tone-btns"><button class="tcgb-r1">Revise</button><button class="tcgb-p">Post anyway</button></div></div></div>
+        <div class="vr-note">Gold cream tint with terracotta rule. Warm caution — the village elder's gentle correction. The most human of the three treatments.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Hearth Warning</span><span class="vr-tag">Terra fill · Direct</span></div>
+      <div class="vr-body">
+        <div class="tone-cg2"><div class="tcg-ico">🌡</div><div class="tcg-bd"><div class="tcg-hd2">Tone check</div><div class="tcg-tx2">Your draft may read as dismissive. The community gathers in good faith — consider revising.</div><div class="tone-btns"><button class="tcgb-r2">Revise</button><button class="tcgb-p" style="background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);">Post anyway</button></div></div></div>
+        <div class="vr-note">Terracotta fill — earthy directness. Not alarming like red, but visibly firm. The community has spoken together about this norm.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Meeting Notice</span><span class="vr-tag">White · Top border</span></div>
+      <div class="vr-body">
+        <div class="tone-cg3"><div class="tcg-ico">🌡</div><div class="tcg-bd"><div class="tcg-hd3">Tone check</div><div class="tcg-tx3">Your draft may read as dismissive. The community gathers in good faith — consider revising.</div><div class="tone-btns"><button class="tcgb-r3">Revise</button><button class="tcgb-p">Post anyway</button></div></div></div>
+        <div class="vr-note">White with terracotta top border — a notice pinned to the town meeting bulletin board. Clean, respected, communal.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BILINGUAL STRIP -->
+<div class="section on-white">
+  <div class="sec-kicker">Component 06</div>
+  <h2 class="sec-title">Bilingual Strip</h2>
+  <p class="sec-desc">The community speaks more than one language. This strip celebrates that — it should feel like welcome signage, not a dropdown menu.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Welcome Sign</span><span class="vr-tag">Gold cream · Warm</span></div>
+      <div class="vr-body">
+        <div class="bil-cg1">
+          <div class="bil-flags"><span class="bil-flag-ico">🇺🇸</span><span class="bil-code bc-1">EN</span><span class="bil-sep bsep-1">·</span><span class="bil-flag-ico">🇨🇺</span><span class="bil-code bc-1">ES</span></div>
+          <span class="bil-note bnote-1">Bilingual display active · <span class="bil-lnk-1">Improve a translation ↗</span></span>
+        </div>
+        <div class="vr-note">Gold cream with rounded corners — a welcome sign at the community center entrance. Both languages equally honored, equally warm.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Gathering Hall</span><span class="vr-tag">Forest fill</span></div>
+      <div class="vr-body">
+        <div class="bil-cg2">
+          <div class="bil-flags"><span class="bil-flag-ico">🇺🇸</span><span class="bil-code bc-2">EN</span><span class="bil-sep bsep-2">·</span><span class="bil-flag-ico">🇨🇺</span><span class="bil-code bc-2">ES</span></div>
+          <span class="bil-note bnote-2">Bilingual display active · <span class="bil-lnk-2">Improve ↗</span></span>
+        </div>
+        <div class="vr-note">Forest inverted — the banner above the door of the gathering hall. Both languages welcome. The community made this policy together.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Charter Left Rule</span><span class="vr-tag">White · Terra accent</span></div>
+      <div class="vr-body">
+        <div class="bil-cg3">
+          <div class="bil-flags"><span class="bil-flag-ico">🇺🇸</span><span class="bil-code bc-3">EN</span><span class="bil-sep bsep-3">·</span><span class="bil-flag-ico">🇨🇺</span><span class="bil-code bc-3">ES</span></div>
+          <span class="bil-note bnote-3">Bilingual display active · <span class="bil-lnk-3">Improve a translation ↗</span></span>
+        </div>
+        <div class="vr-note">White with terracotta left rule. Grounded, community charter energy. The rule draws the eye to the language declaration.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCAFFOLD CARDS -->
+<div class="section">
+  <div class="sec-kicker">Component 07</div>
+  <h2 class="sec-title">Civic Scaffold Cards</h2>
+  <p class="sec-desc">The community briefing before the debate. Three structures, all warm — the bulletin board card, the meeting agenda item, the colored handout.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Bulletin Board</span><span class="vr-tag">Rounded · Top rule</span></div>
+      <div class="vr-body">
+        <div class="scaf-grid">
+          <div class="scaf-cg1"><div class="scaf-kicker sk-forest">What it does</div><div class="scaf-en">Shifts housing from state assignment to cooperative ownership for 10+ year tenants.</div><div class="scaf-es">Transfiere vivienda de asignación estatal.</div></div>
+          <div class="scaf-cg1 best"><div class="scaf-kicker sk-green">Best case</div><div class="scaf-en">Builds property-owning citizens. State burden −30%.</div><div class="scaf-es">Construye propietarios.</div></div>
+          <div class="scaf-cg1 worst"><div class="scaf-kicker sk-red">Worst case</div><div class="scaf-en">Wealthier residents consolidate. Inequality grows.</div><div class="scaf-es">Los ricos consolidan.</div></div>
+          <div class="scaf-cg1"><div class="scaf-kicker sk-forest">Fiscal note</div><div class="scaf-en">₱840M revenue / ₱120M cost.</div><div class="scaf-es">₱840M ingresos / ₱120M costo.</div></div>
+        </div>
+        <div class="vr-note">Rounded cards with color-coded top rules. Like postcards pinned to a community bulletin board — each with its own message.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Agenda Item</span><span class="vr-tag">Left rule · Warm</span></div>
+      <div class="vr-body">
+        <div class="scaf-grid">
+          <div class="scaf-cg2"><div class="scaf-kicker sk-forest">What it does</div><div class="scaf-en">Shifts housing from state assignment to cooperative ownership for 10+ year tenants.</div><div class="scaf-es">Transfiere vivienda de asignación estatal.</div></div>
+          <div class="scaf-cg2 best"><div class="scaf-kicker sk-green">Best case</div><div class="scaf-en">Builds property-owning citizens. State burden −30%.</div><div class="scaf-es">Construye propietarios.</div></div>
+          <div class="scaf-cg2 worst"><div class="scaf-kicker sk-red">Worst case</div><div class="scaf-en">Wealthier residents consolidate. Inequality grows.</div><div class="scaf-es">Los ricos consolidan.</div></div>
+          <div class="scaf-cg2"><div class="scaf-kicker sk-forest">Fiscal note</div><div class="scaf-en">₱840M revenue / ₱120M cost.</div><div class="scaf-es">₱840M ingresos / ₱120M costo.</div></div>
+        </div>
+        <div class="vr-note">Left rule creates a reading column — like a town meeting agenda handout. Continuous line of warmth guiding the eye.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Color Handout</span><span class="vr-tag">Background tint</span></div>
+      <div class="vr-body">
+        <div class="scaf-grid">
+          <div class="scaf-cg3"><div class="scaf-kicker sk-forest">What it does</div><div class="scaf-en">Shifts housing from state assignment to cooperative ownership for 10+ year tenants.</div><div class="scaf-es">Transfiere vivienda de asignación estatal.</div></div>
+          <div class="scaf-cg3 best"><div class="scaf-kicker sk-green">Best case</div><div class="scaf-en">Builds property-owning citizens. State burden −30%.</div><div class="scaf-es">Construye propietarios.</div></div>
+          <div class="scaf-cg3 worst"><div class="scaf-kicker sk-red">Worst case</div><div class="scaf-en">Wealthier residents consolidate. Inequality grows.</div><div class="scaf-es">Los ricos consolidan.</div></div>
+          <div class="scaf-cg3"><div class="scaf-kicker sk-forest">Fiscal note</div><div class="scaf-en">₱840M revenue / ₱120M cost.</div><div class="scaf-es">₱840M ingresos / ₱120M costo.</div></div>
+        </div>
+        <div class="vr-note">Background tint cards — like colored paper handouts at a public meeting. Visually scannable at a glance. Most accessible for newcomers.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VOTE TALLY + COHORT SENTIMENT -->
+<div class="section on-cream">
+  <div class="sec-kicker">Components 08 &amp; 09</div>
+  <h2 class="sec-title">Vote Tally &amp; Cohort Sentiment</h2>
+  <p class="sec-desc">How the community voted. Three palettes — the meeting room scoreboard, the gathering hall board, the terracotta hearth count.</p>
+  <div class="variant-row">
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant I — Meeting Room</span><span class="vr-tag">Forest top · Rounded pill chips</span></div>
+      <div class="vr-body">
+        <div class="tally-cg1">
+          <div class="tc"><div class="tnum tn-yea-1">247</div><div class="tlbl">Yea</div></div>
+          <div class="tc"><div class="tnum tn-nay-1">68</div><div class="tlbl">Nay</div></div>
+          <div class="tc"><div class="tnum tn-pend-1">In Committee</div><div class="tlbl">Pending</div></div>
+        </div>
+        <div style="height:14px;"></div>
+        <div class="chips"><div class="chip-cg1 active">All</div><div class="chip-cg1">Cuban diaspora</div><div class="chip-cg1">Age 25–44</div></div>
+        <div class="sent-bars">
+          <div class="sb-row"><span class="sb-lbl">Support</span><div class="sb-trk"><div class="sbf-s" style="width:58%"></div></div><span class="sb-pct sp-s">58%</span></div>
+          <div class="sb-row"><span class="sb-lbl">Oppose</span><div class="sb-trk"><div class="sbf-o" style="width:27%"></div></div><span class="sb-pct sp-o">27%</span></div>
+          <div class="sb-row"><span class="sb-lbl">Neutral</span><div class="sb-trk"><div class="sbf-n" style="width:15%"></div></div><span class="sb-pct sp-n">15%</span></div>
+        </div>
+        <div class="vr-note">Forest tally, pill chips, rounded bars. The most modern/accessible of the three. Community-first aesthetic.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant II — Gathering Hall</span><span class="vr-tag">Forest fill · Terra chips</span></div>
+      <div class="vr-body">
+        <div class="tally-cg2">
+          <div class="tc"><div class="tnum tn-yea-2">247</div><div class="tlbl">Yea</div></div>
+          <div class="tc"><div class="tnum tn-nay-2">68</div><div class="tlbl">Nay</div></div>
+          <div class="tc"><div class="tnum tn-pend-2">In Committee</div><div class="tlbl">Pending</div></div>
+        </div>
+        <div style="height:14px;"></div>
+        <div class="chips"><div class="chip-cg2 active">All</div><div class="chip-cg2">Cuban diaspora</div><div class="chip-cg2">Age 25–44</div></div>
+        <div class="sent-bars">
+          <div class="sb-row"><span class="sb-lbl">Support</span><div class="sb-trk"><div class="sbf-s" style="width:58%"></div></div><span class="sb-pct sp-s">58%</span></div>
+          <div class="sb-row"><span class="sb-lbl">Oppose</span><div class="sb-trk"><div class="sbf-o" style="width:27%"></div></div><span class="sb-pct sp-o">27%</span></div>
+          <div class="sb-row"><span class="sb-lbl">Neutral</span><div class="sb-trk"><div class="sbf-n" style="width:15%"></div></div><span class="sb-pct sp-n">15%</span></div>
+        </div>
+        <div class="vr-note">Forest inverted tally + terracotta chip active state. The hall where everyone gathered. Bold colors carry civic weight with warmth.</div>
+      </div>
+    </div>
+    <div class="vr-card">
+      <div class="vr-head"><span class="vr-name">Variant III — Hearth Count</span><span class="vr-tag">Terra border · Mono chips</span></div>
+      <div class="vr-body">
+        <div class="tally-cg3">
+          <div class="tc"><div class="tnum tn-yea-3">247</div><div class="tlbl">Yea</div></div>
+          <div class="tc"><div class="tnum tn-nay-3">68</div><div class="tlbl">Nay</div></div>
+          <div class="tc"><div class="tnum tn-pend-3">In Committee</div><div class="tlbl">Pending</div></div>
+        </div>
+        <div style="height:14px;"></div>
+        <div class="chips"><div class="chip-cg3 active">All</div><div class="chip-cg3">Cuban diaspora</div><div class="chip-cg3">Age 25–44</div></div>
+        <div class="sent-bars">
+          <div class="sb-row"><span class="sb-lbl">Support</span><div class="sb-trk"><div class="sbf-s" style="width:58%"></div></div><span class="sb-pct sp-s">58%</span></div>
+          <div class="sb-row"><span class="sb-lbl">Oppose</span><div class="sb-trk"><div class="sbf-o" style="width:27%"></div></div><span class="sb-pct sp-o">27%</span></div>
+          <div class="sb-row"><span class="sb-lbl">Neutral</span><div class="sb-trk"><div class="sbf-n" style="width:15%"></div></div><span class="sb-pct sp-n">15%</span></div>
+        </div>
+        <div class="vr-note">Terracotta cream tally + forest mono chips. The hearth count — intimate record of who stood where around the fire. Warmest aesthetic of the set.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="background:var(--forest);border-top:4px solid var(--terra);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;">
+  <div style="position:absolute;right:48px;top:50%;transform:translateY(-50%);width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);pointer-events:none;"></div>
+  <div>
+    <div style="font-family:'Libre Baskerville',Georgia,serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.08em;margin-bottom:4px;">FORA <span style="color:var(--terra-lt);">◆</span> Common Ground</div>
+    <div style="font-family:'Nunito',sans-serif;font-size:13px;font-weight:300;color:rgba(255,255,255,0.35);font-style:italic;">Component Reference · Doc III of III</div>
+  </div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.2);">See also: Civic Trust · The Record</div>
+</div>
+
+</body>
+</html>

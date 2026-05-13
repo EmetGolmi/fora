@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Identity Marker Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f2f4f8;
+  --bg2:      #e8ebf2;
+  --white:    #ffffff;
+  --blue:     #1b3a6b;
+  --blue-md:  #254f92;
+  --blue-pl:  #dde5f5;
+  --blue-vp:  #edf1fb;
+  --gilt:     #b8860b;
+  --gilt-lt:  #d4a832;
+  --gilt-pl:  #f8f0dc;
+  --gilt-rul: rgba(184,134,11,0.25);
+  --ink:      #0e1a2e;
+  --ink-soft: #5a6e8a;
+  --ink-mut:  #8a9ab8;
+  --rule:     rgba(27,58,107,0.1);
+  --rule-lt:  rgba(27,58,107,0.05);
+  --silver:   #9aaabf;
+  --silver-lt:#bfcce0;
+
+  --army-black:  #1a1a1a;
+  --army-gold:   #c9a84c;
+  --navy-blue:   #0a1f44;
+  --af-blue:     #1c3d8f;
+  --af-yellow:   #e8c84a;
+  --marines-scarlet: #8b1a1a;
+  --marines-gold:#c9a84c;
+  --cg-red:     #c0392b;
+  --cg-blue:    #003087;
+  --sf-black:   #0a0a14;
+  --sf-plat:    #b0b8c8;
+  --sf-blue:    #1a3060;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--gilt-rul);border-radius:10px;}
+
+nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;position:sticky;top:0;z-index:200;border-bottom:4px solid var(--gilt);}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.28);border-left:1px solid rgba(255,255,255,0.1);padding-left:20px;}
+.nav-right{margin-left:auto;background:var(--gilt);color:white;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 14px;border-radius:100px;}
+
+.hero{background:var(--blue);padding:52px 48px 52px;position:relative;overflow:hidden;}
+.hero::after{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;bottom:0;left:0;right:0;height:26px;display:flex;align-items:center;padding:0 48px;font-size:11px;letter-spacing:0.55em;color:var(--gilt);overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%);mask-image:linear-gradient(to right,black 92%,transparent 100%);}
+.hero-ring{position:absolute;right:-40px;top:-60px;width:340px;height:340px;border-radius:50%;border:36px solid rgba(255,255,255,0.025);pointer-events:none;}
+.h-ey{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gilt);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.h-ey::before{content:'◆';font-size:8px;}
+.h-title{font-family:'Libre Baskerville',serif;font-size:48px;font-weight:700;color:white;line-height:1.1;margin-bottom:12px;}
+.h-title em{font-style:italic;color:var(--gilt-lt);}
+.h-sub{font-family:'Nunito',sans-serif;font-size:15px;font-weight:300;color:rgba(255,255,255,0.48);max-width:560px;line-height:1.65;}
+
+.section{padding:52px 48px;border-bottom:1px solid var(--rule);}
+.section.on-white{background:var(--white);}
+.section.on-dark{background:#0e1a2e;}
+.sec-ey{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gilt);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.sec-ey::before{content:'◆';font-size:7px;}
+.sec-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.sec-title.light{color:white;}
+.sec-desc{font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink-soft);max-width:640px;line-height:1.7;margin-bottom:32px;}
+.sec-desc.light{color:rgba(255,255,255,0.42);}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--blue-pl);margin-bottom:32px;}
+.sec-head.dk{border-bottom-color:rgba(255,255,255,0.08);}
+.sec-head-r{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);}
+.sec-head-r.light{color:rgba(255,255,255,0.28);}
+.note{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-mut);line-height:1.65;padding:12px 16px;background:var(--bg);border-left:3px solid var(--blue-pl);border-radius:0 6px 6px 0;margin-top:24px;}
+.note.dk{background:rgba(255,255,255,0.04);border-left-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);}
+.note strong{color:var(--blue);}
+.note.dk strong{color:var(--gilt-lt);}
+
+/* ══ COMP SHELL ══ */
+.comp{background:var(--white);border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin-bottom:24px;}
+.comp.dk{background:#141d2e;border-color:rgba(255,255,255,0.07);}
+.comp-top{padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-mut);}
+.comp-top.dk{background:rgba(255,255,255,0.03);border-bottom-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);}
+.comp-top span{color:var(--gilt);}
+.comp-body{padding:40px 36px;}
+.comp-body.dk{background:#141d2e;}
+
+/* ══ MARKER ROW ══ */
+/* All circles vertically centered on the same axis.
+   Each cell is a fixed-width column.
+   The SVG height varies per row (with/without ribbon).
+   We use align-items:center on the row so
+   the circle midpoints align. */
+.mrow{
+  display:flex;
+  align-items:center;
+  gap:0;
+  flex-wrap:wrap;
+  row-gap:32px;
+}
+.mcell{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:140px;
+  flex-shrink:0;
+}
+.mcell-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:0.13em;
+  text-transform:uppercase;
+  color:var(--ink-mut);
+  text-align:center;
+  max-width:120px;
+  line-height:1.6;
+  margin-top:10px;
+}
+.mcell-label em{font-style:normal;color:var(--gilt);}
+.mcell-label.light{color:rgba(255,255,255,0.35);}
+.mcell-label.light em{color:var(--gilt-lt);}
+
+/* divider between rows */
+.row-divider{
+  width:100%;
+  height:1px;
+  background:var(--rule);
+  margin:8px 0 32px;
+}
+.row-divider.dk{background:rgba(255,255,255,0.06);}
+.row-ey{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--ink-mut);
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.row-ey::before{content:'◆';font-size:6px;color:var(--gilt);}
+.row-ey.light{color:rgba(255,255,255,0.28);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-tag">Identity Marker Options</div>
+  <div class="nav-right">Component Ref</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-ring"></div>
+  <div class="h-ey">Civic Identity · Marker System</div>
+  <div class="h-title">The marker.<br><em>Clean options.</em></div>
+  <div class="h-sub">Rings, no rings, military ribbon, credential pill, user image center. One Coca-Cola sponsor example. Centers aligned.</div>
+</div>
+
+<!-- ══════════════════════════════════
+     01. RINGS
+══════════════════════════════════ -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div><div class="sec-ey">01 · Credential Rings</div><div class="sec-title">What a ring means</div></div>
+    <div class="sec-head-r">Gold ring = third-party verified · No ring = self-reported or anonymous</div>
+  </div>
+  <div class="sec-desc">A ring means one thing: a third party has confirmed this claim. Gold ring = licensing board verified, present tense. No ring = no verification — the pill still tells you what the person claims. The ring and the pill are independent of each other.</div>
+
+  <div class="comp">
+    <div class="comp-top">Rings · <span>user image in center · credential pill below</span></div>
+    <div class="comp-body">
+      <div class="row-ey">Gold ring — state-verified credential</div>
+      <div class="mrow">
+
+        <!-- Gold · PE · user image -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp1"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph1" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#8aaac8"/></radialGradient>
+            </defs>
+            <!-- gold ring -->
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <!-- user photo placeholder -->
+            <circle cx="48" cy="48" r="36" fill="url(#ph1)" clip-path="url(#cp1)"/>
+            <!-- silhouette -->
+            <circle cx="48" cy="40" r="12" fill="#6a8aaa" clip-path="url(#cp1)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#6a8aaa" clip-path="url(#cp1)"/>
+            <!-- credential pill -->
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">PE</text>
+          </svg>
+          <div class="mcell-label">Gold ring<br><em>PE · Professional Engineer</em></div>
+        </div>
+
+        <!-- Gold · ESQ -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp2"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph2" cx="40%" cy="35%"><stop offset="0%" stop-color="#d0c8f0"/><stop offset="100%" stop-color="#9888c8"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#ph2)" clip-path="url(#cp2)"/>
+            <circle cx="48" cy="40" r="12" fill="#7868a8" clip-path="url(#cp2)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#7868a8" clip-path="url(#cp2)"/>
+            <rect x="22" y="81" width="52" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">ESQ</text>
+          </svg>
+          <div class="mcell-label">Gold ring<br><em>ESQ · Attorney</em></div>
+        </div>
+
+        <!-- Gold · MD -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp3"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph3" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8f0d8"/><stop offset="100%" stop-color="#88c8a0"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#ph3)" clip-path="url(#cp3)"/>
+            <circle cx="48" cy="40" r="12" fill="#5a9870" clip-path="url(#cp3)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#5a9870" clip-path="url(#cp3)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">MD</text>
+          </svg>
+          <div class="mcell-label">Gold ring<br><em>MD · Physician</em></div>
+        </div>
+
+        <!-- Gold · RN -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp4"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph4" cx="40%" cy="35%"><stop offset="0%" stop-color="#f0e8c8"/><stop offset="100%" stop-color="#c8a870"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#ph4)" clip-path="url(#cp4)"/>
+            <circle cx="48" cy="40" r="12" fill="#a07840" clip-path="url(#cp4)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#a07840" clip-path="url(#cp4)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">RN</text>
+          </svg>
+          <div class="mcell-label">Gold ring<br><em>RN · Registered Nurse</em></div>
+        </div>
+
+      </div>
+
+      <div class="row-divider" style="margin-top:32px;"></div>
+      <div class="row-ey">No ring — self-reported or anonymous · pill carries the claim</div>
+      <div class="mrow">
+
+        <!-- No ring · eng -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp5"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph5" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#8aaac8"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="36" fill="url(#ph5)" clip-path="url(#cp5)"/>
+            <circle cx="48" cy="40" r="12" fill="#6a8aaa" clip-path="url(#cp5)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#6a8aaa" clip-path="url(#cp5)"/>
+            <rect x="24" y="81" width="48" height="15" rx="7.5" fill="#e8eef6" stroke="rgba(27,58,107,0.2)" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="500" fill="#5a6e8a">eng</text>
+          </svg>
+          <div class="mcell-label">No ring<br><em>eng · self-reported</em></div>
+        </div>
+
+        <!-- No ring · teacher -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp6"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph6" cx="40%" cy="35%"><stop offset="0%" stop-color="#d0f0e0"/><stop offset="100%" stop-color="#90c8a8"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="36" fill="url(#ph6)" clip-path="url(#cp6)"/>
+            <circle cx="48" cy="40" r="12" fill="#5a9878" clip-path="url(#cp6)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#5a9878" clip-path="url(#cp6)"/>
+            <rect x="14" y="81" width="68" height="15" rx="7.5" fill="#e8eef6" stroke="rgba(27,58,107,0.2)" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="500" fill="#5a6e8a">teacher</text>
+          </svg>
+          <div class="mcell-label">No ring<br><em>teacher · self-reported</em></div>
+        </div>
+
+        <!-- No ring · bartender -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp7"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph7" cx="40%" cy="35%"><stop offset="0%" stop-color="#f0e8c8"/><stop offset="100%" stop-color="#c8a870"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="36" fill="url(#ph7)" clip-path="url(#cp7)"/>
+            <circle cx="48" cy="40" r="12" fill="#a07840" clip-path="url(#cp7)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#a07840" clip-path="url(#cp7)"/>
+            <rect x="8" y="81" width="80" height="15" rx="7.5" fill="#e8eef6" stroke="rgba(27,58,107,0.2)" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="500" fill="#5a6e8a">bartender</text>
+          </svg>
+          <div class="mcell-label">No ring<br><em>bartender · self-reported</em></div>
+        </div>
+
+        <!-- No ring · mailman -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp7b"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph7b" cx="40%" cy="35%"><stop offset="0%" stop-color="#dde8f8"/><stop offset="100%" stop-color="#98b0d0"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="36" fill="url(#ph7b)" clip-path="url(#cp7b)"/>
+            <circle cx="48" cy="40" r="12" fill="#6880a8" clip-path="url(#cp7b)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#6880a8" clip-path="url(#cp7b)"/>
+            <rect x="12" y="81" width="72" height="15" rx="7.5" fill="#e8eef6" stroke="rgba(27,58,107,0.2)" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="500" fill="#5a6e8a">mailman</text>
+          </svg>
+          <div class="mcell-label">No ring<br><em>mailman · self-reported</em></div>
+        </div>
+
+        <!-- No ring · no pill — anonymous -->
+        <div class="mcell">
+          <svg width="96" height="110" viewBox="0 0 96 110">
+            <defs>
+              <clipPath id="cp8"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="ph8" cx="40%" cy="35%"><stop offset="0%" stop-color="#dde5f5"/><stop offset="100%" stop-color="#a8b8d0"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="36" fill="url(#ph8)" clip-path="url(#cp8)"/>
+            <circle cx="48" cy="40" r="12" fill="#8898b0" clip-path="url(#cp8)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#8898b0" clip-path="url(#cp8)"/>
+          </svg>
+          <div class="mcell-label">No ring · no pill<br><em>Anonymous citizen</em></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="note"><strong>Gold ring</strong> — a third party has confirmed this claim. Licensing board verified. Present tense — if the license lapses, the ring goes. <strong>No ring</strong> — no third party involved. The pill tells you what the person claims: eng, teacher, bartender, mailman. No ring makes no judgment about that claim. <strong>No ring, no pill</strong> — anonymous citizen. No claim at all.</div>
+</div>
+
+<!-- ══════════════════════════════════
+     02. MILITARY RIBBON
+══════════════════════════════════ -->
+<div class="section">
+  <div class="sec-head">
+    <div><div class="sec-ey">02 · Military Ribbon</div><div class="sec-title">Veterans only · six branches</div></div>
+    <div class="sec-head-r">DD-214 verified · no branch text</div>
+  </div>
+  <div class="sec-desc">The ribbon bar sits beneath the circle. It carries the branch colors. Nothing else — no text, no label on the marker itself. The branch colors do all the work for anyone who recognizes them.</div>
+
+  <div class="comp">
+    <div class="comp-top">Military ribbon · <span>all six branches · no ring shown for clarity</span></div>
+    <div class="comp-body">
+      <div class="mrow">
+
+        <!-- ARMY -->
+        <div class="mcell">
+          <svg width="96" height="130" viewBox="0 0 96 130">
+            <defs>
+              <clipPath id="cpm1"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="phm1" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#8aaac8"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#phm1)" clip-path="url(#cpm1)"/>
+            <circle cx="48" cy="40" r="12" fill="#6a8aaa" clip-path="url(#cpm1)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#6a8aaa" clip-path="url(#cpm1)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">vet</text>
+            <!-- ribbon bar -->
+            <rect x="14" y="103" width="70" height="7" rx="3.5" fill="#1a1a1a"/>
+            <rect x="28" y="103" width="24" height="7" fill="#c9a84c"/>
+            <rect x="52" y="103" width="14" height="7" fill="#1a1a1a"/>
+            <rect x="66" y="103" width="18" height="7" rx="0 3.5 3.5 0" fill="#1a1a1a"/>
+          </svg>
+          <div class="mcell-label">Army<br>Black · Gold</div>
+        </div>
+
+        <!-- NAVY -->
+        <div class="mcell">
+          <svg width="96" height="130" viewBox="0 0 96 130">
+            <defs>
+              <clipPath id="cpm2"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="phm2" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8d0f0"/><stop offset="100%" stop-color="#8090c8"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#phm2)" clip-path="url(#cpm2)"/>
+            <circle cx="48" cy="40" r="12" fill="#6070a8" clip-path="url(#cpm2)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#6070a8" clip-path="url(#cpm2)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">vet</text>
+            <rect x="14" y="103" width="70" height="7" rx="3.5" fill="#0a1f44"/>
+            <rect x="28" y="103" width="24" height="7" fill="#c9a84c"/>
+            <rect x="52" y="103" width="14" height="7" fill="#0a1f44"/>
+            <rect x="66" y="103" width="18" height="7" rx="0 3.5 3.5 0" fill="#0a1f44"/>
+          </svg>
+          <div class="mcell-label">Navy<br>Navy Blue · Gold</div>
+        </div>
+
+        <!-- AIR FORCE -->
+        <div class="mcell">
+          <svg width="96" height="130" viewBox="0 0 96 130">
+            <defs>
+              <clipPath id="cpm3"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="phm3" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8d8f8"/><stop offset="100%" stop-color="#7090d0"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#phm3)" clip-path="url(#cpm3)"/>
+            <circle cx="48" cy="40" r="12" fill="#5078b0" clip-path="url(#cpm3)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#5078b0" clip-path="url(#cpm3)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">vet</text>
+            <rect x="14" y="103" width="70" height="7" rx="3.5" fill="#1c3d8f"/>
+            <rect x="28" y="103" width="24" height="7" fill="#e8c84a"/>
+            <rect x="52" y="103" width="14" height="7" fill="#1c3d8f"/>
+            <rect x="66" y="103" width="18" height="7" rx="0 3.5 3.5 0" fill="#1c3d8f"/>
+          </svg>
+          <div class="mcell-label">Air Force<br>Ultramarine · Yellow</div>
+        </div>
+
+        <!-- MARINES -->
+        <div class="mcell">
+          <svg width="96" height="130" viewBox="0 0 96 130">
+            <defs>
+              <clipPath id="cpm4"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="phm4" cx="40%" cy="35%"><stop offset="0%" stop-color="#f0c8c8"/><stop offset="100%" stop-color="#c08080"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#phm4)" clip-path="url(#cpm4)"/>
+            <circle cx="48" cy="40" r="12" fill="#a06060" clip-path="url(#cpm4)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#a06060" clip-path="url(#cpm4)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">vet</text>
+            <rect x="14" y="103" width="70" height="7" rx="3.5" fill="#8b1a1a"/>
+            <rect x="28" y="103" width="24" height="7" fill="#c9a84c"/>
+            <rect x="52" y="103" width="14" height="7" fill="#8b1a1a"/>
+            <rect x="66" y="103" width="18" height="7" rx="0 3.5 3.5 0" fill="#8b1a1a"/>
+          </svg>
+          <div class="mcell-label">Marines<br>Scarlet · Gold</div>
+        </div>
+
+        <!-- COAST GUARD -->
+        <div class="mcell">
+          <svg width="96" height="130" viewBox="0 0 96 130">
+            <defs>
+              <clipPath id="cpm5"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="phm5" cx="40%" cy="35%"><stop offset="0%" stop-color="#d0e8f8"/><stop offset="100%" stop-color="#88a8c8"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#phm5)" clip-path="url(#cpm5)"/>
+            <circle cx="48" cy="40" r="12" fill="#6088a8" clip-path="url(#cpm5)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#6088a8" clip-path="url(#cpm5)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">vet</text>
+            <!-- CG: blue, white, red, blue -->
+            <rect x="14" y="103" width="70" height="7" rx="3.5" fill="#003087"/>
+            <rect x="30" y="103" width="14" height="7" fill="white"/>
+            <rect x="44" y="103" width="14" height="7" fill="#c0392b"/>
+          </svg>
+          <div class="mcell-label">Coast Guard<br>Blue · White · Red</div>
+        </div>
+
+        <!-- SPACE FORCE -->
+        <div class="mcell">
+          <svg width="96" height="130" viewBox="0 0 96 130">
+            <defs>
+              <clipPath id="cpm6"><circle cx="48" cy="48" r="36"/></clipPath>
+              <radialGradient id="phm6" cx="40%" cy="35%"><stop offset="0%" stop-color="#c8d0e8"/><stop offset="100%" stop-color="#606880"/></radialGradient>
+            </defs>
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#b8860b" stroke-width="3"/>
+            <circle cx="48" cy="48" r="45" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="48" cy="48" r="47" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="48" cy="48" r="36" fill="url(#phm6)" clip-path="url(#cpm6)"/>
+            <circle cx="48" cy="40" r="12" fill="#485068" clip-path="url(#cpm6)"/>
+            <ellipse cx="48" cy="72" rx="20" ry="14" fill="#485068" clip-path="url(#cpm6)"/>
+            <rect x="26" y="81" width="44" height="15" rx="7.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="48" y="92.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" font-weight="700" fill="#b8860b">vet</text>
+            <!-- SF: space black, platinum, blue -->
+            <rect x="14" y="103" width="70" height="7" rx="3.5" fill="#0a0a14"/>
+            <rect x="31" y="103" width="20" height="7" fill="#b0b8c8"/>
+            <rect x="51" y="103" width="16" height="7" fill="#1a3060"/>
+            <rect x="67" y="103" width="17" height="7" rx="0 3.5 3.5 0" fill="#0a0a14"/>
+          </svg>
+          <div class="mcell-label">Space Force<br>Black · Platinum · Blue</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="note"><strong>No text on the ribbon.</strong> The branch colors are the signal. The ribbon bar is 7px, full width of the marker, with rounded ends. It sits 8px below the credential pill with comfortable breathing room. A veteran who is also a verified professional carries both the gold ring and the ribbon — neither displaces the other.</div>
+</div>
+
+<!-- ══════════════════════════════════
+     03. SPONSOR EXAMPLE
+══════════════════════════════════ -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div><div class="sec-ey">03 · Sponsor Center</div><div class="sec-title">Advertisement lives in the circle</div></div>
+    <div class="sec-head-r">User chose this · it is their expression</div>
+  </div>
+  <div class="sec-desc">The circle is the user's content. If they accept a sponsorship, the sponsor's presence is the face itself — a branded preset they chose. The ring, the ribbon, the pill remain unchanged. The face is the only advertisement surface.</div>
+
+  <div class="comp">
+    <div class="comp-top">Sponsor example · <span>Coca-Cola preset chosen by user · ESQ · no ribbon</span></div>
+    <div class="comp-body">
+      <div class="mrow" style="align-items:flex-start; gap:48px;">
+
+        <!-- Sponsored — Coca-Cola face -->
+        <div class="mcell" style="width:180px;">
+          <svg width="130" height="155" viewBox="0 0 130 155">
+            <defs>
+              <clipPath id="cpcc"><circle cx="65" cy="65" r="50"/></clipPath>
+              <radialGradient id="ccbg" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="#e8190a"/>
+                <stop offset="100%" stop-color="#b01208"/>
+              </radialGradient>
+            </defs>
+            <!-- gold ring -->
+            <circle cx="65" cy="65" r="58" fill="none" stroke="#b8860b" stroke-width="3.5"/>
+            <circle cx="65" cy="65" r="62" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="65" cy="65" r="64" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <!-- Coca-Cola red circle face -->
+            <circle cx="65" cy="65" r="50" fill="url(#ccbg)" clip-path="url(#cpcc)"/>
+            <!-- white wave / dynamic ribbon — simplified Coca-Cola script suggestion -->
+            <path d="M20 72 Q40 55 65 68 Q90 81 110 64" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <!-- "Coca-Cola" wordmark simplified as text — in practice this would be the actual logo SVG -->
+            <text x="65" y="60" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="white" font-style="italic">Coca-Cola</text>
+            <!-- credential pill — unchanged -->
+            <rect x="38" y="111" width="54" height="17" rx="8.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="65" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" font-weight="700" fill="#b8860b">ESQ</text>
+            <!-- sponsored label below pill -->
+            <circle cx="42" cy="140" r="3" fill="#e8190a"/>
+            <text x="49" y="143.5" font-family="JetBrains Mono,monospace" font-size="7" fill="#8a9ab8" letter-spacing="0.1em">SPONSORED</text>
+          </svg>
+          <div class="mcell-label" style="max-width:150px;">Coca-Cola preset · user chose this<br><em>Gold ring + ESQ unchanged</em><br>Sponsored label below pill</div>
+        </div>
+
+        <!-- Same user, unsponsored — for contrast -->
+        <div class="mcell" style="width:180px;">
+          <svg width="130" height="155" viewBox="0 0 130 155">
+            <defs>
+              <clipPath id="cpns"><circle cx="65" cy="65" r="50"/></clipPath>
+              <radialGradient id="nsbg" cx="40%" cy="35%">
+                <stop offset="0%" stop-color="#254f92"/>
+                <stop offset="100%" stop-color="#1b3a6b"/>
+              </radialGradient>
+            </defs>
+            <circle cx="65" cy="65" r="58" fill="none" stroke="#b8860b" stroke-width="3.5"/>
+            <circle cx="65" cy="65" r="62" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+            <circle cx="65" cy="65" r="64" fill="none" stroke="#b8860b" stroke-width="1"/>
+            <circle cx="65" cy="65" r="50" fill="url(#nsbg)" clip-path="url(#cpns)"/>
+            <circle cx="65" cy="53" r="16" fill="#3a6abf" clip-path="url(#cpns)"/>
+            <ellipse cx="65" cy="92" rx="28" ry="20" fill="#3a6abf" clip-path="url(#cpns)"/>
+            <rect x="38" y="111" width="54" height="17" rx="8.5" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+            <text x="65" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" font-weight="700" fill="#b8860b">ESQ</text>
+          </svg>
+          <div class="mcell-label" style="max-width:150px;">Same user, no sponsor<br><em>Default face · no sponsored label</em></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="note"><strong>The credential ring and pill are immutable.</strong> The sponsor cannot change the ESQ. The sponsor cannot move the ribbon. They bought the face — nothing else. The "Sponsored" label appears below the pill in 7px JetBrains Mono, with the sponsor's brand dot. It is legible but not loud. The user chose this. That choice is the disclosure.</div>
+</div>
+
+</body>
+</html>

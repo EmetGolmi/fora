@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Build Your Civic Identity</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:    #1b3a6b;
+  --blue-md: #254f92;
+  --blue-lt: #3a6abf;
+  --blue-pl: #dde5f5;
+  --blue-vp: #edf1fb;
+  --gilt:    #b8860b;
+  --gilt-lt: #d4a832;
+  --gilt-pl: #f8f0dc;
+  --gilt-rul:rgba(184,134,11,0.25);
+  --ink:     #0e1a2e;
+  --ink-soft:#5a6e8a;
+  --ink-mut: #8a9ab8;
+  --rule:    rgba(27,58,107,0.1);
+  --bg:      #f2f4f8;
+  --white:   #ffffff;
+  --field:   #080f1e;
+  --field-2: #0d1628;
+  --field-3: #121e36;
+  --green:   #155c2d;
+  --green-p: #e5f0e8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:var(--field);color:white;}
+
+/* ── CHROME ─────────────────────────────────────────────────── */
+.nav{height:56px;background:var(--blue);border-bottom:3px solid var(--gilt);display:flex;align-items:center;padding:0 32px;gap:20px;flex-shrink:0;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;letter-spacing:0.1em;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.nav-step{margin-left:auto;display:flex;align-items:center;gap:6px;}
+.step-pip{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);}
+.step-pip.done{background:var(--gilt);}
+.step-pip.curr{background:white;}
+
+/* ── PROGRESS ───────────────────────────────────────────────── */
+.prog-wrap{height:3px;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.prog-fill{height:100%;background:var(--gilt);transition:width 0.5s cubic-bezier(.4,0,.2,1);}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.layout{display:grid;grid-template-columns:1fr 340px;height:calc(100vh - 59px);overflow:hidden;}
+
+/* ── LEFT PANEL ─────────────────────────────────────────────── */
+.form-panel{overflow-y:auto;padding:40px 48px;display:flex;flex-direction:column;gap:36px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+.form-panel::-webkit-scrollbar{width:4px;}
+.form-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:2px;}
+
+.form-intro{margin-bottom:4px;}
+.form-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:10px;}
+.form-title{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;color:white;line-height:1.2;margin-bottom:10px;}
+.form-title em{color:var(--gilt-lt);font-style:italic;}
+.form-sub{font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:520px;}
+
+/* ── FORM SECTIONS ──────────────────────────────────────────── */
+.form-section{display:flex;flex-direction:column;gap:16px;}
+.fs-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.fs-num{width:22px;height:22px;border-radius:50%;background:var(--gilt);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:white;flex-shrink:0;}
+.fs-num.done{background:rgba(21,92,45,0.8);border:1px solid var(--green);}
+.fs-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.fs-title.active{color:white;}
+
+/* ── FIELDS ─────────────────────────────────────────────────── */
+.field-row{display:grid;gap:12px;}
+.field-row.two{grid-template-columns:1fr 1fr;}
+.field-row.three{grid-template-columns:1fr 1fr 1.4fr;}
+.field-row.date{grid-template-columns:80px 80px 110px;}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:7px;}
+.field-input{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:11px 14px;font-size:13px;color:white;font-family:'Nunito',sans-serif;transition:border-color 0.15s,background 0.15s;outline:none;width:100%;}
+.field-input:focus{border-color:rgba(184,134,11,0.55);background:rgba(255,255,255,0.1);}
+.field-input::placeholder{color:rgba(255,255,255,0.18);}
+.field-input.center{text-align:center;}
+.field-hint{font-size:10.5px;color:rgba(255,255,255,0.28);line-height:1.5;}
+.law-ref{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gilt);border-bottom:1px dotted rgba(184,134,11,0.35);cursor:pointer;letter-spacing:0.04em;}
+
+/* help icon */
+.help{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.4);font-size:9px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-family:'Libre Baskerville',serif;font-style:italic;flex-shrink:0;position:relative;}
+.help:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:0;transform:translateX(-20%);background:#1b3a6b;border:1px solid rgba(184,134,11,0.35);border-top:2px solid var(--gilt);color:rgba(255,255,255,0.75);font-size:11px;font-family:'Nunito',sans-serif;font-style:normal;padding:10px 13px;border-radius:8px;white-space:pre-wrap;width:240px;z-index:200;line-height:1.6;pointer-events:none;}
+
+/* why callout */
+.why{background:rgba(184,134,11,0.07);border:1px solid rgba(184,134,11,0.18);border-left:3px solid var(--gilt);border-radius:0 8px 8px 0;padding:11px 14px;}
+.why-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px;}
+.why-body{font-size:11.5px;color:rgba(255,255,255,0.5);line-height:1.65;}
+.why-cite{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(184,134,11,0.6);margin-top:5px;}
+
+/* occupation grid */
+.occ-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.occ-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:all 0.12s;text-align:left;}
+.occ-btn:hover{border-color:rgba(255,255,255,0.24);background:rgba(255,255,255,0.07);}
+.occ-btn.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.occ-name{font-size:12px;color:rgba(255,255,255,0.8);font-weight:600;}
+.occ-sub{font-size:8.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.28);letter-spacing:0.05em;text-transform:uppercase;}
+
+/* dual occ toggle */
+.dual-occ-toggle{background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.14);border-radius:8px;padding:9px 14px;color:rgba(255,255,255,0.35);font-size:11.5px;cursor:pointer;text-align:left;transition:all 0.12s;}
+.dual-occ-toggle:hover{border-color:rgba(255,255,255,0.28);color:rgba(255,255,255,0.6);}
+
+/* retired checkbox */
+.check-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;cursor:pointer;transition:all 0.12s;}
+.check-row:hover{border-color:rgba(255,255,255,0.22);}
+.check-row.on{border-color:rgba(184,134,11,0.4);background:rgba(184,134,11,0.08);}
+.check-box{width:18px;height:18px;border-radius:4px;border:2px solid rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.12s;}
+.check-row.on .check-box{background:var(--gilt);border-color:var(--gilt);}
+.check-label{font-size:12.5px;color:rgba(255,255,255,0.65);}
+.check-sub{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:1px;}
+
+/* radio */
+.radio-list{display:flex;flex-direction:column;gap:8px;}
+.radio-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;cursor:pointer;transition:all 0.12s;}
+.radio-row:hover{border-color:rgba(255,255,255,0.22);}
+.radio-row.on{background:rgba(184,134,11,0.12);border-color:var(--gilt);}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.22);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.12s;}
+.radio-row.on .radio-dot{border-color:var(--gilt);background:var(--gilt);}
+.radio-row.on .radio-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:white;display:block;}
+.radio-text{font-size:13px;color:rgba(255,255,255,0.75);}
+.radio-sub{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:1px;}
+
+/* tags */
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px;border-radius:100px;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.12s;}
+.tag:hover{border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.65);}
+.tag.on{background:rgba(184,134,11,0.18);border-color:var(--gilt);color:var(--gilt-lt);}
+
+/* credential section */
+.cred-branch{display:flex;gap:10px;flex-wrap:wrap;}
+.cred-branch-btn{flex:1;min-width:140px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all 0.12s;text-align:left;}
+.cred-branch-btn:hover{border-color:rgba(255,255,255,0.22);}
+.cred-branch-btn.on{background:rgba(184,134,11,0.14);border-color:var(--gilt);}
+.cred-branch-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:600;margin-bottom:2px;}
+.cred-branch-sub{font-size:9.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;}
+
+select.field-input{appearance:none;cursor:pointer;}
+
+/* submit */
+.submit-area{padding:32px 0 0;display:flex;flex-direction:column;gap:10px;}
+.btn-submit{background:var(--gilt);color:white;border:none;border-radius:100px;padding:15px 40px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity 0.12s;align-self:flex-start;}
+.btn-submit:hover{opacity:0.88;}
+.btn-skip{background:transparent;color:rgba(255,255,255,0.28);border:none;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;align-self:flex-start;padding:0;}
+.btn-skip:hover{color:rgba(255,255,255,0.55);}
+
+/* ── RIGHT PANEL ─────────────────────────────────────────────── */
+.preview-panel{background:var(--field-2);border-left:1px solid rgba(255,255,255,0.06);padding:40px 32px;display:flex;flex-direction:column;gap:0;overflow-y:auto;}
+
+.preview-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:24px;}
+
+/* live marker */
+.marker-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;margin-bottom:36px;}
+.marker-svg-wrap{position:relative;}
+
+/* identity display */
+.identity-display{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px 16px;text-align:center;}
+.id-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);line-height:1.8;}
+.id-tag .filled{color:white;}
+.id-tag .pending{color:rgba(255,255,255,0.2);font-style:italic;}
+
+/* progress checklist */
+.checklist{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.cl-item{display:flex;align-items:center;gap:10px;font-size:11.5px;color:rgba(255,255,255,0.3);transition:color 0.2s;}
+.cl-item.done{color:rgba(255,255,255,0.65);}
+.cl-item.active{color:white;}
+.cl-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);flex-shrink:0;transition:all 0.2s;}
+.cl-item.done .cl-dot{background:var(--green);}
+.cl-item.active .cl-dot{background:var(--gilt);box-shadow:0 0 6px rgba(184,134,11,0.6);}
+
+/* ring legend */
+.ring-legend{margin-top:32px;display:flex;flex-direction:column;gap:8px;}
+.rl-ey{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;}
+.rl-item{display:flex;align-items:center;gap:10px;font-size:11px;color:rgba(255,255,255,0.35);}
+.rl-swatch{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+
+/* ── COMPLETION SCREEN ──────────────────────────────────────── */
+.completion{display:none;position:fixed;inset:0;background:var(--field);flex-direction:column;align-items:center;justify-content:center;gap:24px;z-index:100;}
+.completion.show{display:flex;}
+.comp-title{font-family:'Libre Baskerville',serif;font-size:42px;font-weight:700;color:white;text-align:center;line-height:1.2;}
+.comp-title em{color:var(--gilt-lt);}
+.comp-tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:100px;padding:8px 20px;}
+.comp-sub{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px;text-align:center;}
+.btn-enter{background:var(--gilt);color:white;border:none;border-radius:100px;padding:15px 48px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;font-weight:700;margin-top:8px;}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-label">Building your civic identity</div>
+  <div class="nav-step">
+    <div class="step-pip done"></div>
+    <div class="step-pip done"></div>
+    <div class="step-pip done"></div>
+    <div class="step-pip curr"></div>
+  </div>
+</nav>
+<div class="prog-wrap"><div class="prog-fill" id="prog" style="width:0%;"></div></div>
+
+<!-- ── MAIN LAYOUT ─────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- ── LEFT: FORM ─────────────────────────────────────────── -->
+  <div class="form-panel" id="form-panel">
+
+    <div class="form-intro">
+      <div class="form-ey">Civic Identity · Step 4 of your onboarding</div>
+      <h1 class="form-title">Who are you<br><em>in the forum?</em></h1>
+      <p class="form-sub">Your identity on FORA is derived from what you verify — not what you choose. Fill in what you know. Everything updates in real time on the right. You can always return and complete or update later.</p>
+    </div>
+
+    <!-- §A NAME + CONTACT ──────────────────────────────────── -->
+    <div class="form-section" id="sec-a">
+      <div class="fs-head">
+        <div class="fs-num" id="num-a">A</div>
+        <div class="fs-title active">Name &amp; contact</div>
+      </div>
+
+      <div class="field-row two">
+        <div class="field-group">
+          <label class="field-label">First name <span class="help" data-tip="Used internally to address you. Never displayed publicly. Your community sees your occupation and region, not your name.">i</span></label>
+          <input class="field-input" type="text" placeholder="Your first name" id="inp-name" oninput="updatePreview()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email <span class="help" data-tip="Account recovery and notification preferences only. Never sold, shared, or displayed to other users.">i</span></label>
+          <input class="field-input" type="email" placeholder="your@email.com" id="inp-email" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Phone <span class="help" data-tip="One-time SMS verification to confirm you are a real person, not an automated account. After verification, your phone number is hashed and the original is deleted. FORA cannot reconstruct it.&#10;&#10;FEC guidance on civic platform authentication.">i</span></label>
+        <input class="field-input" type="tel" placeholder="+1 (555) 000-0000" id="inp-phone" oninput="updatePreview()" style="max-width:260px;">
+        <div class="field-hint">Used once for verification. Original deleted after. <span class="law-ref">Why this matters →</span></div>
+      </div>
+    </div>
+
+    <!-- §B DATE OF BIRTH ──────────────────────────────────── -->
+    <div class="form-section" id="sec-b">
+      <div class="fs-head">
+        <div class="fs-num" id="num-b">B</div>
+        <div class="fs-title">Date of birth</div>
+      </div>
+      <div class="why">
+        <div class="why-title">Why FORA asks</div>
+        <div class="why-body">Your community sees your age range (e.g. 35–44) — never your exact birthday. We use your birthdate to compute the range, to verify you are 13+, and to surface generational patterns in civic engagement. Your birthdate is encrypted and never shown.</div>
+        <div class="why-cite">COPPA · 15 U.S.C. § 6501 · FTC Rule 16 C.F.R. Part 312</div>
+      </div>
+      <div class="field-row">
+        <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div class="field-group">
+            <label class="field-label">Month</label>
+            <input class="field-input center" type="number" placeholder="MM" min="1" max="12" id="inp-dobm" oninput="updatePreview()" style="width:80px;">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Day</label>
+            <input class="field-input center" type="number" placeholder="DD" min="1" max="31" id="inp-dobd" oninput="updatePreview()" style="width:80px;">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Year</label>
+            <input class="field-input center" type="number" placeholder="YYYY" min="1920" max="2010" id="inp-doby" oninput="updatePreview()" style="width:110px;">
+          </div>
+          <div style="padding-bottom:2px;padding-left:12px;">
+            <div style="font-size:10px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px;">Displayed as</div>
+            <div id="age-range-preview" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,0.4);">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §C ADDRESS ──────────────────────────────────────────── -->
+    <div class="form-section" id="sec-c">
+      <div class="fs-head">
+        <div class="fs-num" id="num-c">C</div>
+        <div class="fs-title">Residential address</div>
+      </div>
+      <div class="why">
+        <div class="why-title">Why we ask for your full address</div>
+        <div class="why-body">Your zip code helps us show you the platform, but it isn't precise enough to determine your local representatives. Zip codes were created for mail delivery, not political boundaries. A single zip code can cross multiple cities, counties, congressional districts, and school districts. Your representatives at every level — federal, state, county, city, school board — are determined by your exact residential address. FORA uses the same address standards as voter registration.</div>
+        <div class="why-cite">Help America Vote Act · 52 U.S.C. § 20901 · National Voter Registration Act · 52 U.S.C. § 20501</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Street address <span class="help" data-tip="Optional but strongly recommended. Without it, FORA may assign you to the wrong district near boundaries.">i</span></label>
+        <input class="field-input" type="text" placeholder="123 Main Street" id="inp-street" oninput="updatePreview()">
+      </div>
+      <div class="field-row two">
+        <div class="field-group">
+          <label class="field-label">City</label>
+          <input class="field-input" type="text" placeholder="Alexandria" id="inp-city" oninput="updatePreview()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">State</label>
+          <input class="field-input" type="text" placeholder="VA" id="inp-state" oninput="updatePreview()" style="max-width:80px;">
+        </div>
+      </div>
+      <div class="field-hint">Street address is optional. Publicly shown as region only (e.g. "Mid-Atlantic" or "Alexandria VA").</div>
+    </div>
+
+    <!-- §D OCCUPATION ──────────────────────────────────────── -->
+    <div class="form-section" id="sec-d">
+      <div class="fs-head">
+        <div class="fs-num" id="num-d">D</div>
+        <div class="fs-title">Occupation</div>
+      </div>
+
+      <div class="why">
+        <div class="why-title">Why occupation shapes your civic identity</div>
+        <div class="why-body">Your occupation is your public civic identity. A Master Electrician commenting on building code carries a different perspective than an anonymous post — not more validity, but different context. Alexandria Ocasio-Cortez was a bartender before Congress. A bartender commenting on alcohol licensing has direct standing. Everyone who lives somewhere has a stake in how it is governed.</div>
+        <div class="why-cite">First Amendment · U.S. Const. amend. I · Context is not censorship — it's civic literacy.</div>
+      </div>
+
+      <div class="occ-grid" id="occ-grid-primary">
+        <button class="occ-btn" onclick="selectOcc(this,'Law','law')">
+          <span class="occ-name">Law</span><span class="occ-sub">Attorney, judge, paralegal</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Healthcare','healthcare')">
+          <span class="occ-name">Healthcare</span><span class="occ-sub">MD, RN, PT, pharmacist</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Engineering','engineering')">
+          <span class="occ-name">Engineering</span><span class="occ-sub">PE, architect, surveyor</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Skilled trades','skilled_trades')">
+          <span class="occ-name">Skilled trades</span><span class="occ-sub">Electrician, plumber, HVAC</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Finance','finance')">
+          <span class="occ-name">Finance</span><span class="occ-sub">CPA, CFP, advisor</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Education','education')">
+          <span class="occ-name">Education</span><span class="occ-sub">Teacher, professor</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Government','government')">
+          <span class="occ-name">Government</span><span class="occ-sub">Elected, appointed, civil service</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Journalism','journalism')">
+          <span class="occ-name">Journalism</span><span class="occ-sub">Reporter, editor, freelance</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Student','student')">
+          <span class="occ-name">Student</span><span class="occ-sub">Undergraduate, graduate, vocational</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Homemaker','homemaker')">
+          <span class="occ-name">Homemaker</span><span class="occ-sub">Primary caregiver, household manager</span>
+        </button>
+        <button class="occ-btn" onclick="selectOcc(this,'Other','other')">
+          <span class="occ-name">Other</span><span class="occ-sub">Type below</span>
+        </button>
+      </div>
+
+      <div id="occ-other-wrap" style="display:none;">
+        <div class="field-group">
+          <label class="field-label">Your occupation</label>
+          <input class="field-input" type="text" placeholder="e.g. Small business owner, Farmer, Bartender…" id="inp-occ-other" oninput="updatePreview()">
+        </div>
+      </div>
+
+      <button class="dual-occ-toggle" id="dual-occ-toggle" onclick="toggleDualOcc()" style="display:none;">+ Add a second occupation</button>
+
+      <div id="occ-grid-secondary" style="display:none;flex-direction:column;gap:8px;">
+        <div class="field-label">Second occupation <span class="help" data-tip="Many people wear two hats — an architect who manages projects, a nurse who also teaches, a lawyer who also farms. Both appear in your civic identity.">i</span></div>
+        <div class="occ-grid">
+          <button class="occ-btn" onclick="selectOcc2(this,'Law','law')"><span class="occ-name">Law</span><span class="occ-sub">Attorney, judge</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Healthcare','healthcare')"><span class="occ-name">Healthcare</span><span class="occ-sub">MD, RN, PT</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Engineering','engineering')"><span class="occ-name">Engineering</span><span class="occ-sub">PE, architect</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Skilled trades','skilled_trades')"><span class="occ-name">Skilled trades</span><span class="occ-sub">Electrician, plumber</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Finance','finance')"><span class="occ-name">Finance</span><span class="occ-sub">CPA, CFP</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Business','business')"><span class="occ-name">Business</span><span class="occ-sub">Owner, manager</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Education','education')"><span class="occ-name">Education</span><span class="occ-sub">Teacher, faculty</span></button>
+          <button class="occ-btn" onclick="selectOcc2(this,'Other','other')"><span class="occ-name">Other</span><span class="occ-sub">Type below</span></button>
+        </div>
+      </div>
+
+      <div class="check-row" id="retired-row" onclick="toggleRetired()" style="display:none;">
+        <div class="check-box" id="retired-check"></div>
+        <div>
+          <div class="check-label">I am retired</div>
+          <div class="check-sub">Your occupation will display as your former field, e.g. "Retired Engineer"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §E MILITARY ─────────────────────────────────────────── -->
+    <div class="form-section" id="sec-e">
+      <div class="fs-head">
+        <div class="fs-num" id="num-e">E</div>
+        <div class="fs-title">Military service</div>
+      </div>
+      <div class="radio-list">
+        <div class="radio-row" onclick="selectMil(this,'yes')">
+          <div class="radio-dot"></div>
+          <div><div class="radio-text">Yes — I served or am currently serving</div><div class="radio-sub">Veteran, active duty, reservist, National Guard</div></div>
+        </div>
+        <div class="radio-row" onclick="selectMil(this,'no')">
+          <div class="radio-dot"></div>
+          <div><div class="radio-text">No military service</div></div>
+        </div>
+        <div class="radio-row" onclick="selectMil(this,'skip')">
+          <div class="radio-dot"></div>
+          <div><div class="radio-text">Prefer not to answer</div></div>
+        </div>
+      </div>
+      <div id="mil-detail" style="display:none;flex-direction:column;gap:12px;">
+        <div class="field-group">
+          <label class="field-label">Branch of service</label>
+          <select class="field-input" id="inp-branch" onchange="updatePreview()" style="max-width:260px;">
+            <option value="">Select branch…</option>
+            <option value="army">Army</option>
+            <option value="navy">Navy</option>
+            <option value="marines">Marine Corps</option>
+            <option value="air_force">Air Force</option>
+            <option value="space_force">Space Force</option>
+            <option value="coast_guard">Coast Guard</option>
+            <option value="national_guard">National Guard</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div class="field-group">
+            <label class="field-label">Service start</label>
+            <input class="field-input center" type="number" placeholder="YYYY" style="width:100px;">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Service end</label>
+            <input class="field-input center" type="number" placeholder="YYYY" style="width:100px;">
+          </div>
+        </div>
+        <div class="field-hint">DD-214 upload available in profile settings to earn a verified branch ribbon. <span class="law-ref">What is a DD-214? →</span></div>
+      </div>
+      <div class="why">
+        <div class="why-title">Why military service is a separate credential</div>
+        <div class="why-body">Veterans have a distinct relationship to civic life — service, sacrifice, and firsthand knowledge of federal policy. FORA treats military service as a credential independent of occupation, shown as a branch ribbon below your civic marker.</div>
+        <div class="why-cite">USERRA · 38 U.S.C. § 4301</div>
+      </div>
+    </div>
+
+    <!-- §F ORGANIZATIONS ─────────────────────────────────────── -->
+    <div class="form-section" id="sec-f">
+      <div class="fs-head">
+        <div class="fs-num" id="num-f">F</div>
+        <div class="fs-title">Professional organizations</div>
+      </div>
+      <div class="tag-row" id="org-tags">
+        <span class="tag" onclick="toggleTag(this)">IBEW (Electricians)</span>
+        <span class="tag" onclick="toggleTag(this)">ABA (Attorneys)</span>
+        <span class="tag" onclick="toggleTag(this)">AMA (Physicians)</span>
+        <span class="tag" onclick="toggleTag(this)">AFT (Teachers)</span>
+        <span class="tag" onclick="toggleTag(this)">NEA (Educators)</span>
+        <span class="tag" onclick="toggleTag(this)">UAW (Auto workers)</span>
+        <span class="tag" onclick="toggleTag(this)">SEIU</span>
+        <span class="tag" onclick="toggleTag(this)">Teamsters (IBT)</span>
+        <span class="tag" onclick="toggleTag(this)">ASCE (Civil Engrs)</span>
+        <span class="tag" onclick="toggleTag(this)">VFW</span>
+        <span class="tag" onclick="toggleTag(this)">American Legion</span>
+        <span class="tag" onclick="toggleTag(this)">NAACP</span>
+        <span class="tag" onclick="toggleTag(this)">ACLU</span>
+        <span class="tag" onclick="toggleTag(this)">CFA Institute</span>
+      </div>
+      <div class="field-group" style="margin-top:4px;">
+        <label class="field-label">Not listed? Add yours</label>
+        <input class="field-input" type="text" placeholder="Organization name…" style="max-width:320px;">
+      </div>
+      <div class="why" style="margin-top:4px;">
+        <div class="why-body" style="font-size:11px;">An IBEW card is a credential. ABA membership is a credential. These affiliations are part of your civic identity and provide context for your contributions.</div>
+        <div class="why-cite">NLRA · 29 U.S.C. § 151 · NAACP v. Alabama, 357 U.S. 449 (1958)</div>
+      </div>
+    </div>
+
+    <!-- §G CREDENTIAL ───────────────────────────────────────── -->
+    <div class="form-section" id="sec-g">
+      <div class="fs-head">
+        <div class="fs-num" id="num-g">G</div>
+        <div class="fs-title">Professional license · optional</div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(184,134,11,0.06);border:1px solid rgba(184,134,11,0.18);border-radius:10px;padding:14px 16px;">
+        <svg width="52" height="62" viewBox="0 0 52 62" style="flex-shrink:0;margin-top:2px;">
+          <circle cx="26" cy="26" r="18" fill="none" stroke="rgba(184,134,11,0.25)" stroke-width="6"/>
+          <circle cx="26" cy="26" r="13" fill="none" stroke="#b8860b" stroke-width="2"/>
+          <circle cx="26" cy="26" r="11" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+          <circle cx="26" cy="26" r="9" fill="rgba(200,216,240,0.5)"/>
+          <circle cx="26" cy="23" r="4" fill="#8aaac8"/>
+          <ellipse cx="26" cy="33" rx="7" ry="5" fill="#8aaac8"/>
+          <rect x="10" y="42" width="32" height="12" rx="6" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+          <text x="26" y="51.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#8b6914" id="cred-pill-preview">—</text>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:white;margin-bottom:4px;">Gold ring &mdash; licensed credential marker</div>
+          <div style="font-size:11.5px;color:rgba(255,255,255,0.45);line-height:1.6;">Verify your credentials against your state licensing board records. Your credential type is shown (e.g. &ldquo;Licensed PE&rdquo;). Your license number is never displayed.</div>
+        </div>
+      </div>
+
+      <div class="cred-branch">
+        <button class="cred-branch-btn" onclick="selectCredPath(this,'license')">
+          <div class="cred-branch-name">State / federal license</div>
+          <div class="cred-branch-sub">PE, MD, ESQ, CPA, RN, teacher…</div>
+        </button>
+        <button class="cred-branch-btn" onclick="selectCredPath(this,'union')">
+          <div class="cred-branch-name">Union credential</div>
+          <div class="cred-branch-sub">IBEW local, UA, Teamsters…</div>
+        </button>
+        <button class="cred-branch-btn" onclick="selectCredPath(this,'none')">
+          <div class="cred-branch-name">No license to verify</div>
+          <div class="cred-branch-sub">Skip — verify later in profile</div>
+        </button>
+      </div>
+
+      <div id="cred-license-fields" style="display:none;flex-direction:column;gap:12px;">
+        <div class="field-row two">
+          <div class="field-group">
+            <label class="field-label">Credential type</label>
+            <select class="field-input" id="inp-cred-type" onchange="updateCredPill()">
+              <option value="">Select type…</option>
+              <optgroup label="Law"><option value="ESQ">Attorney (ESQ)</option><option value="JDG">Judge</option></optgroup>
+              <optgroup label="Medicine"><option value="MD">Physician (MD)</option><option value="DO">Physician (DO)</option><option value="RN">Registered Nurse</option><option value="NP">Nurse Practitioner</option><option value="PA">Physician Assistant</option><option value="PharmD">Pharmacist</option><option value="DDS">Dentist</option></optgroup>
+              <optgroup label="Engineering"><option value="PE">Professional Engineer</option><option value="RA">Registered Architect</option><option value="PLS">Land Surveyor</option></optgroup>
+              <optgroup label="Finance"><option value="CPA">CPA</option><option value="CFP">CFP</option><option value="CFA">CFA</option></optgroup>
+              <optgroup label="Trades"><option value="ME">Master Electrician</option><option value="JE">Journeyman Electrician</option><option value="MP">Master Plumber</option><option value="GC">General Contractor</option></optgroup>
+              <optgroup label="Education"><option value="TCH">Licensed Teacher</option></optgroup>
+              <optgroup label="First Responders"><option value="LEO">Police (POST)</option><option value="EMT">EMT / Paramedic</option><option value="FF">Firefighter</option></optgroup>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Issuing state</label>
+            <select class="field-input" id="inp-cred-state">
+              <option value="">Select state…</option>
+              <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option selected>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option><option value="FED">Federal / National</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">License number <span class="help" data-tip="Used only to verify against the issuing board's public registry. Hashed immediately on receipt — the original is permanently deleted. Never displayed to other users. Cannot be reconstructed.&#10;&#10;Fourth Amendment · U.S. Const. amend. IV">i</span></label>
+          <input class="field-input" type="text" placeholder="e.g. VA-PE-12345" style="max-width:280px;">
+          <div class="field-hint">Never displayed. SHA-256 hashed on receipt. Original deleted. <span class="law-ref">How verification works →</span></div>
+        </div>
+      </div>
+
+      <div id="cred-union-fields" style="display:none;flex-direction:column;gap:12px;">
+        <div class="field-group">
+          <label class="field-label">Union local</label>
+          <input class="field-input" type="text" placeholder="e.g. IBEW Local 26" id="inp-union-local" style="max-width:280px;" oninput="updatePreview()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Member ID <span class="help" data-tip="Optional. Speeds up verification. Hashed on receipt — original deleted.">i</span></label>
+          <input class="field-input" type="text" placeholder="Your union member ID" style="max-width:200px;">
+          <div class="field-hint">Optional. Verified through AFL-CIO affiliated directory. <span class="law-ref">AFL-CIO verification →</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §G WHY CALLOUT ──────────────────────────────────────── -->
+    <style>
+      .term{border-bottom:1px dotted rgba(184,134,11,0.5);color:rgba(255,255,255,0.72);cursor:help;position:relative;white-space:nowrap;}
+      .term::after{content:attr(data-def);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#1b3a6b;border:1px solid rgba(184,134,11,0.35);border-top:2px solid var(--gilt);color:rgba(255,255,255,0.82);font-size:11px;font-family:'Nunito',sans-serif;font-style:normal;font-weight:400;padding:10px 13px;border-radius:8px;white-space:normal;width:260px;z-index:300;line-height:1.65;pointer-events:none;opacity:0;transition:opacity 0.15s;}
+      .term:hover::after{opacity:1;}
+    </style>
+    <div class="why">
+      <div class="why-title">Why licensed professionals are a distinct civic category</div>
+      <div class="why-body" style="font-size:12px;line-height:1.9;">
+        All individuals <span class="term" data-def="Licensed by a state means a government agency — typically a state board — has reviewed your qualifications and granted you legal permission to practice. Without that permission, practicing the occupation is illegal in that state.">licensed by a state</span> to perform their jobs share a common foundation: they are
+        <span class="term" data-def="Legal authorization is distinct from a private certification or a degree. A degree shows you studied something. A certification shows you passed a test. A license means a government agency has formally recognized your right to practice — and can revoke it.">legally authorized by a government agency</span>
+        to work in their occupation, having met
+        <span class="term" data-def="Predetermined standards are the minimum requirements set by a licensing board before a license is granted: education hours, supervised practice, written exams, background checks, and more. They vary by state and by occupation — a master electrician in Virginia faces different standards than one in California.">predetermined standards</span>
+        of
+        <span class="term" data-def="Competency in a licensing context means the demonstrated ability to perform the job safely and correctly — not just knowledge of it. Boards test competency through exams, supervised practice hours, and continuing education requirements designed to reflect real-world conditions.">competency</span>,
+        <span class="term" data-def="Training requirements are the supervised, hands-on hours a board requires before a license can be issued. A licensed electrician may need thousands of apprenticeship hours. A licensed attorney needs three years of law school plus bar passage. Training is separate from education and is often more rigorous.">training</span>, and
+        <span class="term" data-def="Education requirements are the formal academic credentials a board requires before you can even apply — a medical degree, a law degree, an engineering degree, a teaching credential. They are a prerequisite to training and examination, not a substitute for them.">education</span>.
+        These licenses are
+        <span class="term" data-def="Time-limited means licenses expire — typically every one to three years. Renewal requires continuing education to ensure practitioners stay current. An expired license means the holder is no longer legally authorized to practice, regardless of their previous standing.">time-limited credentials</span>
+        designed to protect
+        <span class="term" data-def="Public health, safety, and welfare is the constitutional justification for occupational licensing. States license doctors, engineers, and electricians because an incompetent practitioner can injure or kill people. The license is the public's assurance that a verified minimum standard has been met. This power flows from the 10th Amendment's reservation of police powers to the states.">public health, safety, and welfare</span>
+        by ensuring a minimum standard of professional practice.
+      </div>
+      <div class="why-cite">
+        National Council of State Legislatures &middot; Institute for Justice &ldquo;License to Work&rdquo; &middot; U.S. Dept. of Labor Occupational Licensing Policy &middot; Police powers reserved to the states &middot; U.S. Const. amend. X
+      </div>
+    </div>
+
+    <!-- SUBMIT ──────────────────────────────────────────────── -->
+    <div class="submit-area">
+      <button class="btn-submit" onclick="submitIdentity()">Create my civic identity →</button>
+      <button class="btn-skip" onclick="submitIdentity()">Save what I have — complete later in profile</button>
+    </div>
+
+  </div><!-- end form-panel -->
+
+  <!-- ── RIGHT: LIVE PREVIEW ───────────────────────────────── -->
+  <div class="preview-panel">
+
+    <div class="preview-ey">Your civic identity · live preview</div>
+
+    <div class="marker-wrap">
+      <svg width="120" height="144" viewBox="0 0 120 144" id="marker-svg">
+        <defs>
+          <clipPath id="cp-main"><circle cx="60" cy="60" r="40"/></clipPath>
+          <radialGradient id="ph-main" cx="40%" cy="35%">
+            <stop offset="0%" stop-color="#c8d8f0"/>
+            <stop offset="100%" stop-color="#8aaac8"/>
+          </radialGradient>
+        </defs>
+        <!-- Outer glow — grows with engagement -->
+        <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(27,58,107,0.0)" stroke-width="0" id="glow-outer"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(27,58,107,0.0)" stroke-width="0" id="glow-mid"/>
+        <!-- Ring — shown when earned -->
+        <circle cx="60" cy="60" r="44" fill="none" stroke="transparent" stroke-width="0" id="ring-main"/>
+        <circle cx="60" cy="60" r="46" fill="none" stroke="transparent" stroke-width="0" id="ring-inner"/>
+        <!-- Avatar -->
+        <circle cx="60" cy="60" r="40" fill="url(#ph-main)" clip-path="url(#cp-main)"/>
+        <circle cx="60" cy="52" r="15" fill="#8aaac8" clip-path="url(#cp-main)"/>
+        <ellipse cx="60" cy="82" rx="22" ry="16" fill="#8aaac8" clip-path="url(#cp-main)"/>
+        <!-- Credential pill -->
+        <rect x="38" y="96" width="44" height="16" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" id="pill-bg"/>
+        <text x="60" y="107.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="rgba(255,255,255,0.2)" id="pill-text">—</text>
+        <!-- Military ribbon — hidden by default -->
+        <rect x="20" y="118" width="80" height="10" rx="3" fill="transparent" id="ribbon-bg"/>
+        <rect x="20" y="118" width="18" height="10" fill="transparent" id="ribbon-c1"/>
+        <rect x="38" y="118" width="20" height="10" fill="transparent" id="ribbon-c2"/>
+        <rect x="58" y="118" width="20" height="10" fill="transparent" id="ribbon-c3"/>
+        <rect x="78" y="118" width="22" height="10" fill="transparent" id="ribbon-c4" rx="0"/>
+      </svg>
+
+      <div class="identity-display">
+        <div class="id-tag">
+          <span id="id-occ" class="pending">Occupation</span>
+          <span> · </span>
+          <span id="id-age" class="pending">Age range</span>
+          <span> · </span>
+          <span id="id-loc" class="pending">Region</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- progress checklist -->
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:10px;">Identity completeness</div>
+    <div class="checklist">
+      <div class="cl-item active" id="cl-a"><div class="cl-dot"></div>Name &amp; contact</div>
+      <div class="cl-item" id="cl-b"><div class="cl-dot"></div>Date of birth</div>
+      <div class="cl-item" id="cl-c"><div class="cl-dot"></div>Address</div>
+      <div class="cl-item" id="cl-d"><div class="cl-dot"></div>Occupation</div>
+      <div class="cl-item" id="cl-e"><div class="cl-dot"></div>Military service</div>
+      <div class="cl-item" id="cl-f"><div class="cl-dot"></div>Organizations</div>
+      <div class="cl-item" id="cl-g"><div class="cl-dot"></div>Credential</div>
+    </div>
+
+  </div><!-- end preview-panel -->
+
+</div><!-- end layout -->
+
+<!-- ── COMPLETION ─────────────────────────────────────────────── -->
+<div class="completion" id="completion">
+  <svg width="120" height="144" viewBox="0 0 120 144" id="comp-marker">
+    <defs>
+      <clipPath id="cp-comp"><circle cx="60" cy="60" r="40"/></clipPath>
+      <radialGradient id="ph-comp" cx="40%" cy="35%">
+        <stop offset="0%" stop-color="#c8d8f0"/>
+        <stop offset="100%" stop-color="#8aaac8"/>
+      </radialGradient>
+    </defs>
+    <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(184,134,11,0.2)" stroke-width="12"/>
+    <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(184,134,11,0.35)" stroke-width="10"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+    <circle cx="60" cy="60" r="42" fill="none" stroke="#e8c84a" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="40" fill="url(#ph-comp)" clip-path="url(#cp-comp)"/>
+    <circle cx="60" cy="52" r="15" fill="#8aaac8" clip-path="url(#cp-comp)"/>
+    <ellipse cx="60" cy="82" rx="22" ry="16" fill="#8aaac8" clip-path="url(#cp-comp)"/>
+    <rect x="38" y="96" width="44" height="16" rx="8" fill="#f8f0dc" stroke="#b8860b" stroke-width="1.5"/>
+    <text x="60" y="107.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#8b6914" id="comp-pill">PE</text>
+  </svg>
+  <h1 class="comp-title">Your civic<br><em>identity is set.</em></h1>
+  <div class="comp-tag" id="comp-identity-tag">Engineer · 35–44 · Alexandria VA</div>
+  <p class="comp-sub">This is how your community sees you. Your name stays private. Your voice is yours.</p>
+  <button class="btn-enter" onclick="window.location='#'">Enter FORA →</button>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const state = {
+  name:'', email:'', phone:'',
+  dobM:'', dobD:'', dobY:'',
+  city:'', state_:'',
+  occ1:'', occ1Cat:'', occ2:'', occ2Cat:'',
+  retired: false,
+  mil: '',
+  branch: '',
+  credType:'', credDisplay:'',
+  credPath: '',
+};
+
+const BRANCH_RIBBONS = {
+  army:         {bg:'#1a1a1a', c:['#1a1a1a','#c9a84c','#1a1a1a','#1a1a1a']},
+  navy:         {bg:'#0a1f44', c:['#0a1f44','#c9a84c','#0a1f44','#0a1f44']},
+  air_force:    {bg:'#1c3d8f', c:['#1c3d8f','#e8c84a','#1c3d8f','#1c3d8f']},
+  marines:      {bg:'#8b1a1a', c:['#8b1a1a','#c9a84c','#8b1a1a','#8b1a1a']},
+  coast_guard:  {bg:'#003087', c:['#003087','white',  '#c0392b','#003087']},
+  space_force:  {bg:'#0a0a14', c:['#0a0a14','#b0b8c8','#1a3060','#0a0a14']},
+  national_guard:{bg:'#1a1a1a',c:['#1a1a1a','#c9a84c','#1a1a1a','#1a1a1a']},
+};
+
+// ── Age range ──────────────────────────────────────────────────────────────
+function ageRange(y) {
+  if (!y || y < 1920 || y > 2010) return null;
+  const age = new Date().getFullYear() - y;
+  if (age < 13) return null;
+  const lo = Math.floor(age/10)*10;
+  return `${lo}–${lo+9}`;
+}
+
+// ── Progress ───────────────────────────────────────────────────────────────
+function calcProgress() {
+  let score = 0;
+  const n = document.getElementById('inp-name').value;
+  const e = document.getElementById('inp-email').value;
+  if (n) score += 10;
+  if (e) score += 5;
+  const y = parseInt(document.getElementById('inp-doby').value);
+  if (ageRange(y)) score += 15;
+  const city = document.getElementById('inp-city').value;
+  if (city) score += 15;
+  if (state.occ1) score += 20;
+  if (state.mil) score += 15;
+  if (document.querySelectorAll('.tag.on').length > 0) score += 10;
+  if (state.credType || state.credPath === 'none') score += 10;
+  return Math.min(score, 100);
+}
+
+// ── Checklist ──────────────────────────────────────────────────────────────
+function updateChecklist() {
+  const n = document.getElementById('inp-name').value;
+  const e = document.getElementById('inp-email').value;
+  setClItem('cl-a', !!(n && e));
+
+  const y = parseInt(document.getElementById('inp-doby').value);
+  setClItem('cl-b', !!ageRange(y));
+
+  const city = document.getElementById('inp-city').value;
+  setClItem('cl-c', !!city);
+
+  setClItem('cl-d', !!state.occ1);
+  setClItem('cl-e', !!state.mil);
+  setClItem('cl-f', document.querySelectorAll('.tag.on').length > 0);
+  setClItem('cl-g', !!(state.credType || state.credPath === 'none'));
+}
+
+function setClItem(id, done) {
+  const el = document.getElementById(id);
+  el.classList.toggle('done', done);
+}
+
+// ── Identity display ───────────────────────────────────────────────────────
+function updatePreview() {
+  state.name  = document.getElementById('inp-name').value;
+  state.email = document.getElementById('inp-email').value;
+
+  // Age range
+  const y = parseInt(document.getElementById('inp-doby').value);
+  const ar = ageRange(y);
+  const ageEl = document.getElementById('id-age');
+  const arPrev = document.getElementById('age-range-preview');
+  if (ar) {
+    ageEl.textContent = ar;
+    ageEl.className = 'filled';
+    arPrev.textContent = ar;
+    arPrev.style.color = 'rgba(255,255,255,0.75)';
+  } else {
+    ageEl.textContent = 'Age range';
+    ageEl.className = 'pending';
+    arPrev.textContent = '—';
+    arPrev.style.color = 'rgba(255,255,255,0.3)';
+  }
+
+  // Location
+  const city = document.getElementById('inp-city').value;
+  const st   = document.getElementById('inp-state').value;
+  const locEl = document.getElementById('id-loc');
+  if (city) {
+    locEl.textContent = st ? `${city} ${st.toUpperCase()}` : city;
+    locEl.className = 'filled';
+  } else {
+    locEl.textContent = 'Region';
+    locEl.className = 'pending';
+  }
+
+  // Occupation
+  const occEl = document.getElementById('id-occ');
+  if (state.occ1) {
+    let display = state.occ1;
+    if (state.retired) display = 'Retired ' + display;
+    if (state.occ2) display += ' & ' + state.occ2;
+    occEl.textContent = display;
+    occEl.className = 'filled';
+  } else {
+    occEl.textContent = 'Occupation';
+    occEl.className = 'pending';
+  }
+
+  // Military ribbon
+  const branch = document.getElementById('inp-branch').value;
+  state.branch = branch;
+  const ribbonData = BRANCH_RIBBONS[branch];
+  const ids = ['ribbon-bg','ribbon-c1','ribbon-c2','ribbon-c3','ribbon-c4'];
+  if (ribbonData && state.mil === 'yes') {
+    document.getElementById('ribbon-bg').setAttribute('fill', ribbonData.bg);
+    ribbonData.c.forEach((col, i) => {
+      document.getElementById('ribbon-c'+(i+1)).setAttribute('fill', col);
+    });
+  } else {
+    ids.forEach(id => document.getElementById(id).setAttribute('fill','transparent'));
+  }
+
+  // Credential pill on marker
+  updateCredPill();
+
+  // Progress bar
+  const prog = calcProgress();
+  document.getElementById('prog').style.width = prog + '%';
+
+  // Checklist
+  updateChecklist();
+
+  // Section number badges — mark done
+  updateSectionBadges();
+}
+
+function updateSectionBadges() {
+  const n = document.getElementById('inp-name').value;
+  const e = document.getElementById('inp-email').value;
+  const y = parseInt(document.getElementById('inp-doby').value);
+  const city = document.getElementById('inp-city').value;
+  const badges = {
+    'num-a': !!(n && e),
+    'num-b': !!ageRange(y),
+    'num-c': !!city,
+    'num-d': !!state.occ1,
+    'num-e': !!state.mil,
+    'num-f': document.querySelectorAll('.tag.on').length > 0,
+    'num-g': !!(state.credType || state.credPath === 'none'),
+  };
+  Object.entries(badges).forEach(([id, done]) => {
+    const el = document.getElementById(id);
+    if (done) {
+      el.classList.add('done');
+      el.innerHTML = '✓';
+    }
+  });
+}
+
+function updateCredPill() {
+  const typeEl = document.getElementById('inp-cred-type');
+  const val = typeEl ? typeEl.value : '';
+  state.credType = val;
+  const pillText = document.getElementById('pill-text');
+  const pillBg   = document.getElementById('pill-bg');
+  const credPrev = document.getElementById('cred-pill-preview');
+
+  if (val) {
+    pillText.setAttribute('fill', '#b8860b');
+    pillText.textContent = val;
+    pillBg.setAttribute('fill','#f8f0dc');
+    pillBg.setAttribute('stroke','#b8860b');
+    if (credPrev) credPrev.textContent = val;
+    // Show ring on marker
+    document.getElementById('ring-main').setAttribute('stroke','#b8860b');
+    document.getElementById('ring-main').setAttribute('stroke-width','2.5');
+    document.getElementById('ring-inner').setAttribute('stroke','#e8c84a');
+    document.getElementById('ring-inner').setAttribute('stroke-width','1.5');
+    document.getElementById('glow-mid').setAttribute('stroke','rgba(184,134,11,0.3)');
+    document.getElementById('glow-mid').setAttribute('stroke-width','8');
+    document.getElementById('glow-outer').setAttribute('stroke','rgba(184,134,11,0.15)');
+    document.getElementById('glow-outer').setAttribute('stroke-width','10');
+  } else {
+    pillText.setAttribute('fill','rgba(255,255,255,0.2)');
+    pillText.textContent = '—';
+    pillBg.setAttribute('fill','rgba(255,255,255,0.06)');
+    pillBg.setAttribute('stroke','rgba(255,255,255,0.12)');
+    if (credPrev) credPrev.textContent = '—';
+    document.getElementById('ring-main').setAttribute('stroke','transparent');
+    document.getElementById('ring-inner').setAttribute('stroke','transparent');
+    document.getElementById('glow-mid').setAttribute('stroke','rgba(27,58,107,0.0)');
+    document.getElementById('glow-outer').setAttribute('stroke','rgba(27,58,107,0.0)');
+  }
+}
+
+// ── Occupation ─────────────────────────────────────────────────────────────
+function selectOcc(btn, name, cat) {
+  document.querySelectorAll('#occ-grid-primary .occ-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  state.occ1 = name; state.occ1Cat = cat;
+  document.getElementById('occ-other-wrap').style.display = cat==='other' ? 'block' : 'none';
+  document.getElementById('dual-occ-toggle').style.display = 'block';
+  document.getElementById('retired-row').style.display = 'flex';
+  updatePreview();
+}
+
+function selectOcc2(btn, name, cat) {
+  document.querySelectorAll('#occ-grid-secondary .occ-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  state.occ2 = name; state.occ2Cat = cat;
+  const toggle = document.getElementById('dual-occ-toggle');
+  toggle.textContent = '✓ Second: ' + name + '  (tap to change)';
+  updatePreview();
+}
+
+let dualOccOpen = false;
+function toggleDualOcc() {
+  dualOccOpen = !dualOccOpen;
+  const grid = document.getElementById('occ-grid-secondary');
+  grid.style.display = dualOccOpen ? 'flex' : 'none';
+}
+
+let retired = false;
+function toggleRetired() {
+  retired = !retired;
+  state.retired = retired;
+  const row = document.getElementById('retired-row');
+  const check = document.getElementById('retired-check');
+  row.classList.toggle('on', retired);
+  check.innerHTML = retired ? '<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' : '';
+  updatePreview();
+}
+
+// ── Military ───────────────────────────────────────────────────────────────
+function selectMil(btn, val) {
+  btn.closest('.radio-list').querySelectorAll('.radio-row').forEach(r=>r.classList.remove('on'));
+  btn.classList.add('on');
+  state.mil = val;
+  const detail = document.getElementById('mil-detail');
+  detail.style.display = val==='yes' ? 'flex' : 'none';
+  if (val==='yes') detail.style.flexDirection = 'column';
+  updatePreview();
+}
+
+// ── Tags ───────────────────────────────────────────────────────────────────
+function toggleTag(el) {
+  el.classList.toggle('on');
+  updatePreview();
+}
+
+// ── Credential path ────────────────────────────────────────────────────────
+function selectCredPath(btn, path) {
+  document.querySelectorAll('.cred-branch-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  state.credPath = path;
+  document.getElementById('cred-license-fields').style.display = path==='license' ? 'flex' : 'none';
+  if (path==='license') document.getElementById('cred-license-fields').style.flexDirection='column';
+  document.getElementById('cred-union-fields').style.display = path==='union' ? 'flex' : 'none';
+  if (path==='union') document.getElementById('cred-union-fields').style.flexDirection='column';
+  updatePreview();
+}
+
+// ── Submit ─────────────────────────────────────────────────────────────────
+function submitIdentity() {
+  const occ = state.occ1 || 'Registered Member';
+  const y = parseInt(document.getElementById('inp-doby').value);
+  const ar = ageRange(y) || '—';
+  const city = document.getElementById('inp-city').value;
+  const st   = document.getElementById('inp-state').value;
+  const loc  = city ? (st ? `${city} ${st.toUpperCase()}` : city) : '—';
+  let display = state.retired ? 'Retired ' + occ : occ;
+  if (state.occ2) display += ' & ' + state.occ2;
+
+  document.getElementById('comp-identity-tag').textContent = `${display} · ${ar} · ${loc}`;
+
+  const pill = document.getElementById('comp-pill');
+  if (state.credType) {
+    pill.textContent = state.credType;
+    pill.setAttribute('fill','#8b6914');
+  } else {
+    pill.textContent = 'NA';
+    pill.setAttribute('fill','rgba(255,255,255,0.3)');
+  }
+
+  document.getElementById('completion').classList.add('show');
+}
+
+// Init
+updatePreview();
+</script>
+</body>
+</html>

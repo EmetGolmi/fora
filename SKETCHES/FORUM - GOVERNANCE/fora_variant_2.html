@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Variant Set II — Gathering Hall</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f2f4f8;
+  --bg2:       #e8ebf2;
+  --white:     #ffffff;
+  --blue:      #1b3a6b;
+  --blue-md:   #254f92;
+  --blue-lt:   #3a6abf;
+  --blue-pl:   #dde5f5;
+  --blue-vp:   #edf1fb;
+  --gilt:      #b8860b;
+  --gilt-lt:   #d4a832;
+  --gilt-pl:   #f8f0dc;
+  --gilt-rul:  rgba(184,134,11,0.25);
+  --clay:      #6b5800;
+  --ink:       #0e1a2e;
+  --ink-mid:   #2c3e5a;
+  --ink-soft:  #5a6e8a;
+  --ink-mut:   #8a9ab8;
+  --rule:      rgba(27,58,107,0.1);
+  --rule-lt:   rgba(27,58,107,0.05);
+  --green:     #155c2d;
+  --green-p:   #e5f0e8;
+  --green-r:   #8cc4a0;
+  --red:       #8b2020;
+  --red-p:     #f7eaea;
+  --red-r:     #d4a0a0;
+  --purple:    #4a1f6e;
+  --purp-p:    #f0eaf7;
+  --purp-r:    #c8a8e8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--ink); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--gilt-rul); border-radius: 10px; }
+
+/* ── NAV ── */
+nav {
+  background: var(--blue); padding: 0 48px;
+  display: flex; align-items: center; height: 60px;
+  position: sticky; top: 0; z-index: 200;
+  border-bottom: 4px solid var(--gilt); gap: 0;
+}
+.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: white; letter-spacing: 0.1em; margin-right: 24px; }
+.nav-logo span { color: var(--gilt-lt); }
+.nav-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.28); border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px; }
+.nav-badge { margin-left: auto; background: var(--gilt); color: white; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; }
+
+/* ── HERO ── */
+.hero { background: var(--blue); padding: 52px 48px 52px; position: relative; overflow: hidden; }
+.hero::after {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 26px;
+  display: flex; align-items: center;
+  padding: 0 48px;
+  font-size: 11px; letter-spacing: 0.55em;
+  color: var(--gilt);
+  overflow: hidden; white-space: nowrap;
+  -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, black 92%, transparent 100%);
+}
+.hero-ring { position: absolute; right: -40px; top: -60px; width: 340px; height: 340px; border-radius: 50%; border: 36px solid rgba(255,255,255,0.025); pointer-events: none; }
+.hero-ring2 { position: absolute; right: 40px; top: -20px; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(184,134,11,0.18); pointer-events: none; }
+.h-num { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gilt); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.h-num::before { content: '◆'; font-size: 8px; }
+.h-title { font-family: 'Libre Baskerville', serif; font-size: 48px; font-weight: 700; color: white; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 12px; }
+.h-title em { font-style: italic; color: var(--gilt-lt); }
+.h-sub { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.48); max-width: 600px; line-height: 1.65; }
+.h-access { margin-top: 20px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: rgba(184,134,11,0.1); border: 1px solid var(--gilt-rul); border-radius: 8px; max-width: 620px; }
+.h-access-ico { font-size: 16px; flex-shrink: 0; }
+.h-access-text { font-family: 'Nunito', sans-serif; font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+.h-access-text strong { color: var(--gilt-lt); }
+
+/* ── SECTION ── */
+.section { padding: 52px 48px; border-bottom: 1px solid var(--rule); }
+.section.on-white { background: var(--white); }
+.section.on-blue { background: var(--blue); }
+.sec-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gilt); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.sec-eyebrow::before { content: '◆'; font-size: 7px; }
+.sec-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--blue); letter-spacing: -0.01em; margin-bottom: 6px; }
+.sec-title-inv { color: white; }
+.sec-desc { font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--ink-soft); max-width: 580px; line-height: 1.7; margin-bottom: 32px; }
+.sec-desc-inv { color: rgba(255,255,255,0.45); }
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 14px; border-bottom: 2px solid var(--blue-pl); margin-bottom: 28px; }
+.sec-head-inv { border-bottom-color: rgba(255,255,255,0.1); }
+.sec-head-right { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); }
+.sec-head-right-inv { color: rgba(255,255,255,0.3); }
+
+/* ── COMPONENT DISPLAY ── */
+.comp-display { background: var(--white); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+.comp-display-inv { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); }
+.comp-label { padding: 12px 20px; background: var(--blue-vp); border-bottom: 1px solid var(--rule-lt); font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); display: flex; align-items: center; justify-content: space-between; }
+.comp-label-inv { background: rgba(255,255,255,0.04); border-bottom-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+.comp-label-tag { color: var(--gilt); background: var(--gilt-pl); padding: 2px 10px; border-radius: 100px; border: 1px solid var(--gilt-rul); font-size: 8.5px; }
+.comp-label-tag-inv { color: var(--gilt-lt); background: rgba(184,134,11,0.12); border-color: var(--gilt-rul); }
+.comp-body { padding: 24px 20px; display: flex; flex-direction: column; gap: 14px; }
+.comp-note { font-family: 'Nunito', sans-serif; font-size: 12px; font-style: italic; color: var(--ink-soft); background: var(--bg); border-left: 3px solid var(--gilt-rul); border-radius: 0 6px 6px 0; padding: 9px 12px; line-height: 1.55; }
+.comp-note-inv { background: rgba(255,255,255,0.04); border-left-color: var(--gilt-rul); color: rgba(255,255,255,0.4); }
+.gap { height: 20px; }
+
+/* ── ACCESSIBILITY CALLOUT ── */
+.a11y-box {
+  background: var(--blue-vp); border: 1px solid var(--blue-pl);
+  border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0;
+  padding: 14px 16px; margin-bottom: 20px;
+}
+.a11y-title { font-family: 'Libre Baskerville', serif; font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+.a11y-body { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+.a11y-body strong { color: var(--blue); font-weight: 700; }
+.a11y-body code { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--bg2); padding: 1px 5px; border-radius: 4px; color: var(--ink-mid); }
+
+/* ── 01. STATUS PILLS — LEAF ── */
+.pill-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+.leaf { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; padding: 5px 14px 5px 18px; border-radius: 0 100px 100px 0; display: inline-block; }
+.leaf-blue { background: var(--blue); color: white; }
+.leaf-gilt { background: var(--gilt); color: white; }
+.leaf-comm { background: var(--gilt-pl); color: var(--gilt); border: 1px solid var(--gilt-rul); }
+.leaf-enact { background: var(--green-p); color: var(--green); border: 1px solid var(--green-r); }
+.leaf-pend { background: var(--blue-vp); color: var(--blue); border: 1px solid var(--blue-pl); }
+.leaf-veto { background: var(--red-p); color: var(--red); border: 1px solid var(--red-r); }
+
+/* ── 02. SOURCE TIER — COMMUNITY LABEL — FIVE-TIER ──
+   Institution · Verified · Perspective · Cautioned · Disputed
+   Accessibility-resolved: left-rule square tag, not a pill.
+*/
+:root {
+  --amber:     #c47f00; --amber-p:   #fdf3dc; --amber-r:   rgba(196,127,0,0.3);
+  --scarlet:   #b84a00; --scarlet-p: #fdeee6; --scarlet-r: rgba(184,74,0,0.3);
+}
+.label-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px; border-radius: 3px; cursor: default; }
+.lt-inst { background: var(--green-p);   color: var(--green);    border: 1.5px solid var(--green-r);   border-left: 4px solid var(--green); }
+.lt-ver  { background: var(--blue-vp);   color: var(--blue);     border: 1.5px solid var(--blue-pl);   border-left: 4px solid var(--blue-md); }
+.lt-persp{ background: var(--bg2);       color: var(--ink-soft); border: 1.5px solid var(--rule);      border-left: 4px solid var(--ink-mut); }
+.lt-caut { background: var(--amber-p);   color: var(--amber);    border: 1.5px solid var(--amber-r);   border-left: 4px solid var(--amber); }
+.lt-disp { background: var(--scarlet-p); color: var(--scarlet);  border: 1.5px solid var(--scarlet-r); border-left: 4px solid var(--scarlet); }
+.lt-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.lt-dot-inst  { background: var(--green); }
+.lt-dot-ver   { background: var(--blue-md); }
+.lt-dot-persp { background: var(--ink-mut); }
+.lt-dot-caut  { background: var(--amber); }
+.lt-dot-disp  { background: var(--scarlet); }
+.label-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.label-source-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; }
+.label-source-row.caut { background: var(--amber-p);   border-left: 4px solid var(--amber);   border-radius: 0 8px 8px 0; }
+.label-source-row.disp { background: var(--scarlet-p); border-left: 4px solid var(--scarlet); border-radius: 0 8px 8px 0; }
+.label-source-body { flex: 1; }
+.label-source-name { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.label-source-name.cn { color: var(--amber); } .label-source-name.dn { color: var(--scarlet); }
+.label-source-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.label-source-meta { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mut); margin-top: 3px; }
+.flag-pip { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; }
+.fp-caut { background: var(--amber-p); color: var(--amber); border: 1px solid var(--amber-r); }
+.fp-disp { background: var(--scarlet-p); color: var(--scarlet); border: 1px solid var(--scarlet-r); }
+
+/* ── 03. LEGITIMACY — GATHERING HALL ── */
+.leg-hall { padding: 12px 16px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+.leg-lbl-inv { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45); white-space: nowrap; }
+.leg-trk-inv { flex: 1; height: 6px; border-radius: 100px; background: rgba(255,255,255,0.1); overflow: hidden; }
+.leg-fill-gilt { height: 100%; width: 78%; border-radius: 100px; background: linear-gradient(to right, var(--gilt-lt), var(--gilt-pl)); }
+.leg-score-wht { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: white; }
+.leg-den-inv { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.25); }
+.leg-note-inv { font-size: 11px; font-style: italic; color: rgba(255,255,255,0.28); white-space: nowrap; }
+
+/* ── 04. STEEL-MAN — NEIGHBOR'S NOTE ── */
+.sm-note { padding: 16px 18px; background: var(--purp-p); border: 1px solid var(--purp-r); border-left: 4px solid var(--purple); border-radius: 0 12px 12px 0; display: flex; gap: 12px; align-items: flex-start; }
+.sm-ico { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.sm-bd { flex: 1; }
+.sm-hd { font-family: 'Libre Baskerville', serif; font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 4px; }
+.sm-tx { font-family: 'Nunito', sans-serif; font-size: 12.5px; color: rgba(74,31,110,0.65); line-height: 1.5; margin-bottom: 10px; }
+.sm-btn { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: var(--purple); color: white; border: none; padding: 7px 18px; border-radius: 100px; cursor: pointer; }
+
+/* ── 05. TONE — HEARTH WARNING (terra fill) ── */
+.tone-hearth { padding: 13px 16px; background: var(--gilt); border-radius: 10px; display: flex; gap: 12px; }
+.tone-ico { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.tone-bd { flex: 1; }
+.tone-hd-inv { font-family: 'Libre Baskerville', serif; font-size: 13.5px; font-weight: 700; color: white; margin-bottom: 3px; }
+.tone-tx-inv { font-family: 'Nunito', sans-serif; font-size: 12px; color: rgba(255,255,255,0.72); line-height: 1.5; }
+.tone-btns { display: flex; gap: 6px; margin-top: 9px; }
+.tone-rev-inv { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: white; color: var(--gilt); border: none; padding: 6px 15px; border-radius: 100px; cursor: pointer; }
+.tone-post-inv { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.18); padding: 6px 15px; border-radius: 100px; cursor: pointer; }
+
+/* ── 06. BILINGUAL — GATHERING HALL (white + blue 2pt border, charter text) ── */
+.bil-gh {
+  background: var(--white);
+  border: 2px solid var(--blue);
+  border-radius: 8px;
+  padding: 10px 18px;
+  display: flex; align-items: center; gap: 14px;
+}
+.bil-flags { display: flex; align-items: center; gap: 6px; }
+.bil-flag { font-size: 14px; }
+.bil-code { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); }
+.bil-sep { color: var(--rule); margin: 0 2px; }
+.bil-note { font-family: 'Nunito', sans-serif; font-size: 13px; color: var(--ink-soft); }
+.bil-link { color: var(--gilt); font-weight: 700; cursor: pointer; text-decoration: underline; text-decoration-color: var(--gilt-rul); }
+
+/* ── 07. SCAFFOLD — BULLETIN BOARD ── */
+.scaf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bulletin { background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; border-top: 3px solid var(--blue); padding: 13px 15px; }
+.bulletin.best { border-top-color: var(--green); background: var(--green-p); }
+.bulletin.worst { border-top-color: var(--red); background: var(--red-p); }
+.bulletin.gilt { border-top-color: var(--gilt); background: var(--gilt-pl); }
+.scaf-kick { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+.sk-blue { color: var(--blue); }
+.sk-green { color: var(--green); }
+.sk-red { color: var(--red); }
+.sk-gilt { color: var(--gilt); }
+.scaf-en { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--ink-mid); margin-bottom: 7px; }
+.scaf-es { font-family: 'Nunito', sans-serif; font-size: 12px; font-style: italic; color: var(--ink-mut); border-top: 1px dashed var(--rule); padding-top: 6px; line-height: 1.55; }
+
+/* ── 08+09. TALLY + SENTIMENT — GATHERING HALL (white + blue 2pt border) ── */
+.tally-gh {
+  display: flex;
+  background: var(--white);
+  border: 2px solid var(--blue);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.tc { flex: 1; padding: 16px 0; text-align: center; border-right: 1px solid var(--rule); }
+.tc:last-child { border-right: none; }
+.ht-num { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.hn-yea { color: var(--green); }
+.hn-nay { color: var(--red); }
+.hn-pend { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--ink-mut); letter-spacing: 0.1em; margin-top: 8px; }
+.ht-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-md); }
+
+/* COHORT CHIPS — square, terra active */
+.chips { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip-sq { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 6px; border: 1.5px solid var(--rule); background: var(--bg); color: var(--ink-soft); cursor: pointer; transition: all 0.12s; }
+.chip-sq.active { background: var(--gilt); border-color: var(--gilt); color: white; }
+
+/* SENTIMENT BARS */
+.sent-bars { display: flex; flex-direction: column; gap: 9px; }
+.sb-row { display: flex; align-items: center; gap: 10px; }
+.sb-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mut); width: 58px; flex-shrink: 0; }
+.sb-trk { flex: 1; height: 8px; background: var(--bg2); border-radius: 100px; overflow: hidden; }
+.sbf-s { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--green), #86efac); }
+.sbf-o { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--red), #fca5a5); }
+.sbf-n { height: 100%; border-radius: 100px; background: var(--ink-mut); }
+.sb-pct { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
+.sp-s { color: var(--green); }
+.sp-o { color: var(--red); }
+.sp-n { color: var(--ink-mut); }
+.callout-blue {
+  border-left: 3px solid var(--blue);
+  background: var(--blue-vp);
+  padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 12px;
+  font-size: 12.5px; color: var(--ink-soft); line-height: 1.55;
+}
+.callout-blue strong { color: var(--blue); }
+
+/* ── VAR LABEL STRIP ── */
+.var-label { background: var(--blue); color: rgba(255,255,255,0.6); padding: 8px 20px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; }
+.var-label span { color: var(--gilt-lt); }
+
+/* ── FOOTER ── */
+footer { background: var(--blue); border-top: 4px solid var(--gilt); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; }
+.ft-logo { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.08em; }
+.ft-logo span { color: var(--gilt-lt); }
+.ft-tag { font-family: 'Nunito', sans-serif; font-size: 12px; font-style: italic; font-weight: 300; color: rgba(255,255,255,0.28); margin-top: 3px; }
+.ft-links { display: flex; gap: 20px; }
+.ft-link { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.22); cursor: pointer; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-tag">Component Variants · Set II</div>
+  <div class="nav-badge">Gathering Hall</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-ring"></div>
+  <div class="hero-ring2"></div>
+  <div class="h-num">Variant Set II — Gathering Hall</div>
+  <h1 class="h-title">Leaf · Community Label · Gathering Hall<br><em>Bulletin Board · Hearth Warning</em></h1>
+  <p class="h-sub">A bolder, more civic-institutional combination: Gathering Hall inverted legitimacy and tally blocks in white + federal blue 2pt border, community label source tags resolved for accessibility, gilt Hearth Warning tone intercept, Bulletin Board scaffold cards.</p>
+  <div class="h-access">
+    <div class="h-access-ico">♿</div>
+    <div class="h-access-text"><strong>Accessibility note on source labels:</strong> You raised a valid concern about pill-shaped static labels creating button affordance. Per <strong>WCAG 2.1 SC 1.4.1</strong> and <strong>ISO 9241-171:2008 §9.3.14</strong>, interactive and non-interactive elements must be visually distinguishable beyond color alone. This set resolves that with a left-rule square tag — <code>border-radius: 3px</code>, no hover cursor, JetBrains Mono label treatment. It reads as metadata, not a button.</div>
+  </div>
+</div>
+
+<!-- 01. STATUS PILLS — LEAF -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 01</div>
+      <h2 class="sec-title">Status Pills &amp; Tags — Leaf Shape</h2>
+    </div>
+    <div class="sec-head-right">Variant II · Shared across sets</div>
+  </div>
+  <p class="sec-desc">Same Leaf Shape as Set I — carried across both variants as the agreed status pill treatment.</p>
+  <div class="comp-display">
+    <div class="var-label">Status pills · <span>Leaf Shape</span></div>
+    <div class="comp-body">
+      <div class="pill-row">
+        <span class="leaf leaf-blue">H.R. 4471</span>
+        <span class="leaf leaf-gilt">Follow Bill</span>
+      </div>
+      <div class="pill-row">
+        <span class="leaf leaf-comm">In Committee</span>
+        <span class="leaf leaf-enact">Enacted</span>
+        <span class="leaf leaf-pend">Scheduled</span>
+        <span class="leaf leaf-veto">Vetoed</span>
+      </div>
+      <div class="comp-note">Directional shape — squared flush left, fully rounded right. Status label anchors to the element it describes, always pointing forward.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 02. SOURCE TIER — COMMUNITY LABEL — FIVE TIERS -->
+<div class="section">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 02</div>
+      <h2 class="sec-title">Source Tier — Community Label (Accessibility-Resolved)</h2>
+    </div>
+    <div class="sec-head-right">Five tiers · Square left-rule tag</div>
+  </div>
+  <p class="sec-desc">Five tiers in full English — maximally clear to civic newcomers. S/A/B retired. Left-rule square tag throughout — including Cautioned (amber) and Disputed (scarlet) — consistent shape language across all five tiers.</p>
+  <div class="a11y-box">
+    <div class="a11y-title">Accessibility Resolution — unchanged</div>
+    <div class="a11y-body">
+      <strong>WCAG 2.1 SC 1.4.1 (Use of Color)</strong> — interactive/non-interactive distinction must not rely on color alone.<br>
+      <strong>WAI-ARIA Authoring Practices</strong> — buttons require <code>role="button"</code> or <code>&lt;button&gt;</code>; static labels should never share that visual language.<br>
+      <strong>ISO 9241-171:2008 §9.3.14</strong> — "Interactive and non-interactive elements should be visually distinguishable."<br><br>
+      Resolution: <strong>Left-rule square tag</strong> (<code>border-radius: 3px</code>, <code>cursor: default</code>, <code>border-left: 4px solid</code> for semantic colour, colour dot as secondary signal, full-word label in JetBrains Mono).
+    </div>
+  </div>
+  <div class="comp-display">
+    <div class="var-label">Source tier labels · <span>Square left-rule tag — not a button</span></div>
+    <div class="comp-body">
+      <div class="label-row">
+        <span class="label-tag lt-inst"><span class="lt-dot lt-dot-inst"></span>Institution</span>
+        <span class="label-tag lt-ver"><span class="lt-dot lt-dot-ver"></span>Verified</span>
+        <span class="label-tag lt-persp"><span class="lt-dot lt-dot-persp"></span>Perspective</span>
+        <span class="label-tag lt-caut"><span class="lt-dot lt-dot-caut"></span>Cautioned</span>
+        <span class="label-tag lt-disp"><span class="lt-dot lt-dot-disp"></span>Disputed</span>
+      </div>
+      <div class="label-source-row">
+        <span class="label-tag lt-inst" style="align-self:center;flex-shrink:0;"><span class="lt-dot lt-dot-inst"></span>Institution</span>
+        <div class="label-source-body">
+          <div class="label-source-name">Congress.gov — H.R. 4471 Full Text</div>
+          <div class="label-source-desc">Official enrolled bill text and committee report. Primary legislative source.</div>
+          <div class="label-source-meta">congress.gov · Feb 11, 2025</div>
+        </div>
+      </div>
+      <div class="label-source-row">
+        <span class="label-tag lt-ver" style="align-self:center;flex-shrink:0;"><span class="lt-dot lt-dot-ver"></span>Verified</span>
+        <div class="label-source-body">
+          <div class="label-source-name">Pew Research Center — Digital Divide Survey</div>
+          <div class="label-source-desc">Rural broadband access gap data. Methodology disclosed. Cited in House committee report.</div>
+          <div class="label-source-meta">pewresearch.org · Jan 2025</div>
+        </div>
+      </div>
+      <div class="label-source-row caut">
+        <span class="label-tag lt-caut" style="align-self:center;flex-shrink:0;"><span class="lt-dot lt-dot-caut"></span>Cautioned</span>
+        <div class="label-source-body">
+          <div class="label-source-name cn">BroadbandNow Industry Report <span class="flag-pip fp-caut">2 flags</span></div>
+          <div class="label-source-desc">Coverage statistics flagged as inconsistent with FCC filing. Under community review. Source remains in record.</div>
+          <div class="label-source-meta">broadbandnow.com · Review opened Mar 8, 2025</div>
+        </div>
+      </div>
+      <div class="label-source-row disp">
+        <span class="label-tag lt-disp" style="align-self:center;flex-shrink:0;"><span class="lt-dot lt-dot-disp"></span>Disputed</span>
+        <div class="label-source-body">
+          <div class="label-source-name dn">Heritage Foundation Op-Ed <span class="flag-pip fp-disp">5 flags · Disputed</span></div>
+          <div class="label-source-desc">Economic projections cannot be traced to any cited source. Community review upheld. Remains in archive.</div>
+          <div class="label-source-meta">heritage.org · Disputed Mar 10, 2025</div>
+        </div>
+      </div>
+      <div class="comp-note">All five tiers use the same left-rule square shape — no new visual language introduced for the card tiers. Full English names legible to first-time civic users. Left-rule colour + dot provide two independent WCAG-compliant signals across all five tiers.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 03. LEGITIMACY — GATHERING HALL (inverted) -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 03</div>
+      <h2 class="sec-title">Legitimacy Score — Gathering Hall</h2>
+    </div>
+    <div class="sec-head-right">Variant II · Federal blue fill</div>
+  </div>
+  <p class="sec-desc">Forest inverted — the hall where the community gathered. Score stands out warmly in gilt against the federal blue. The gathering hall's walls are blue; the hearth glow is gilt.</p>
+  <div class="comp-display">
+    <div class="var-label">Legitimacy score · <span>Gathering Hall</span></div>
+    <div class="comp-body">
+      <div class="leg-hall">
+        <span class="leg-lbl-inv">Legitimacy</span>
+        <span class="leg-note-inv">Scores citations, not claims</span>
+        <div class="leg-trk-inv"><div class="leg-fill-gilt"></div></div>
+        <span class="leg-score-wht">78</span>
+        <span class="leg-den-inv">&thinsp;/ 100</span>
+      </div>
+      <div class="comp-note">Federal blue field, gilt gradient fill bar, white score numeral. The contrast ratio between white score (4.5:1 minimum WCAG AA) and blue background exceeds the threshold. The gilt bar sits warmly against the blue — the hearth in the gathering hall.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 04. STEEL-MAN — NEIGHBOR'S NOTE -->
+<div class="section">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 04</div>
+      <h2 class="sec-title">Steel-Man Banner — Neighbor's Note</h2>
+    </div>
+    <div class="sec-head-right">Variant I · Royal Phoenician Purple — shared across sets</div>
+  </div>
+  <p class="sec-desc">Purple reserved exclusively for the steel-man across the entire platform. No other component uses this colour. Phoenician earned valour — presenting the strongest opposing case is honoured, not penalised.</p>
+  <div class="comp-display">
+    <div class="var-label">Steel-man challenge · <span>Neighbor's Note · Purple is platform-exclusive</span></div>
+    <div class="comp-body">
+      <div class="sm-note">
+        <div class="sm-ico">⚖️</div>
+        <div class="sm-bd">
+          <div class="sm-hd">Steel-man challenge</div>
+          <div class="sm-tx">Before posting, articulate the strongest case for the view you oppose. Not a caricature — the best version of the argument you disagree with.</div>
+          <button class="sm-btn">Accept the challenge</button>
+        </div>
+      </div>
+      <div class="comp-note">Identical across Set I and Set II — the steel-man component never changes colour. Its purple exclusivity is the signal. When a reader anywhere on the platform sees this shade, they know exactly what is being asked of them.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 05. TONE INTERCEPT — HEARTH WARNING -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 05</div>
+      <h2 class="sec-title">Tone Intercept — Hearth Warning</h2>
+    </div>
+    <div class="sec-head-right">Variant II · Federal Gilt fill</div>
+  </div>
+  <p class="sec-desc">Gilt fill — earthy directness. Not alarming like red, not passive like parchment. Gilt carries weight without panic. The community has set this norm together around the fire.</p>
+  <div class="comp-display">
+    <div class="var-label">Tone intercept · <span>Hearth Warning — gilt fill</span></div>
+    <div class="comp-body">
+      <div class="tone-hearth">
+        <div class="tone-ico">🌡</div>
+        <div class="tone-bd">
+          <div class="tone-hd-inv">Tone check</div>
+          <div class="tone-tx-inv">Your draft may read as dismissive of diaspora perspectives. The community gathers in good faith — consider revising.</div>
+          <div class="tone-btns">
+            <button class="tone-rev-inv">Revise draft</button>
+            <button class="tone-post-inv">Post anyway</button>
+          </div>
+        </div>
+      </div>
+      <div class="comp-note">Gilt fill uses the Federal Gilt `#b8860b` — the same accent used for civic authority across the platform. Applied here, it says: this is a norm the community has chosen, not an automated penalty. "Post anyway" is always visible and fully accessible.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 06. BILINGUAL — GATHERING HALL (white + blue 2pt border) -->
+<div class="section">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 06</div>
+      <h2 class="sec-title">Bilingual Strip — Gathering Hall Variant</h2>
+    </div>
+    <div class="sec-head-right">Variant II modified · White + 2pt blue border · Charter text</div>
+  </div>
+  <p class="sec-desc">Your specified variant: white background, 2pt federal blue border, text matching Charter Left Rule styling. The clean white field within the blue border reads as a civic document — a formal language declaration.</p>
+  <div class="comp-display">
+    <div class="var-label">Bilingual display · <span>Gathering Hall — white + blue 2pt border</span></div>
+    <div class="comp-body">
+      <div class="bil-gh">
+        <div class="bil-flags">
+          <span class="bil-flag">🇺🇸</span>
+          <span class="bil-code">EN</span>
+          <span class="bil-sep">·</span>
+          <span class="bil-flag">🇨🇺</span>
+          <span class="bil-code">ES</span>
+        </div>
+        <span class="bil-note">Bilingual display active — translations community-verified · <span class="bil-link">Improve a translation ↗</span></span>
+      </div>
+      <div class="comp-note">White field framed by a 2pt federal blue border — the civic document container. The blue border signals institutional weight without the full inverted treatment of the original Gathering Hall. Code text and link styling match the Charter Left Rule from Set I: JetBrains Mono for language codes, Nunito for the note, gilt underlined link.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 07. SCAFFOLD — BULLETIN BOARD -->
+<div class="section on-white">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Component 07</div>
+      <h2 class="sec-title">Civic Scaffold Cards — Bulletin Board</h2>
+    </div>
+    <div class="sec-head-right">Variant I</div>
+  </div>
+  <p class="sec-desc">Rounded cards with colour-coded top rules. Like postcards pinned to a community bulletin board — each card has its own message, its own colour. Scan the row at a glance before reading a word.</p>
+  <div class="comp-display">
+    <div class="var-label">Civic scaffold · <span>Bulletin Board layout</span></div>
+    <div class="comp-body">
+      <div class="scaf-grid">
+        <div class="bulletin">
+          <div class="scaf-kick sk-blue">What it does</div>
+          <div class="scaf-en">Shifts housing from state assignment to cooperative ownership for residents with 10+ years of continuous occupancy.</div>
+          <div class="scaf-es">Transfiere la vivienda de asignación estatal a propiedad cooperativa.</div>
+        </div>
+        <div class="bulletin gilt">
+          <div class="scaf-kick sk-gilt">Fiscal note</div>
+          <div class="scaf-en">₱840M in title transfer revenue over 5 years. Implementation cost ~₱120M. Net positive by year 3.</div>
+          <div class="scaf-es">₱840M en ingresos · costo ₱120M.</div>
+        </div>
+        <div class="bulletin best">
+          <div class="scaf-kick sk-green">Best case</div>
+          <div class="scaf-en">Builds property-owning citizenry. Incentivizes maintenance. State housing burden −30% within a decade.</div>
+          <div class="scaf-es">Construye ciudadanía propietaria. Carga estatal −30%.</div>
+        </div>
+        <div class="bulletin worst">
+          <div class="scaf-kick sk-red">Worst case</div>
+          <div class="scaf-en">Wealthier residents consolidate multiple units. Long-term low-income tenants priced out of cooperative pricing.</div>
+          <div class="scaf-es">Los ricos consolidan. Los inquilinos pobres quedan fuera.</div>
+        </div>
+      </div>
+      <div class="comp-note">Top-rule cards have a different visual logic than left-rule: the top rule is a headline, not a margin note. The card is a self-contained document. Best and worst case carry background tint to reinforce the semantic signal beyond the rule colour alone — satisfying WCAG color-independence.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 08+09. VOTE TALLY + COHORT SENTIMENT — GATHERING HALL (white + blue 2pt border) -->
+<div class="section">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow">Components 08 &amp; 09</div>
+      <h2 class="sec-title">Vote Tally &amp; Cohort Sentiment — Gathering Hall Variant</h2>
+    </div>
+    <div class="sec-head-right">Variant II modified · White + blue 2pt border · Meeting Room text</div>
+  </div>
+  <p class="sec-desc">Your specified variant: white tally background framed in 2pt federal blue border, vote labels and numbers matching the Meeting Room text treatment. Square chip active state in gilt.</p>
+  <div class="comp-display">
+    <div class="var-label">Vote tally + cohort sentiment · <span>Gathering Hall — white + 2pt blue border</span></div>
+    <div class="comp-body">
+      <div class="tally-gh">
+        <div class="tc">
+          <div class="ht-num hn-yea">247</div>
+          <div class="ht-lbl">Yea</div>
+        </div>
+        <div class="tc">
+          <div class="ht-num hn-nay">183</div>
+          <div class="ht-lbl">Nay</div>
+        </div>
+        <div class="tc">
+          <div class="hn-pend">House · Passed</div>
+          <div class="ht-lbl">Senate pending</div>
+        </div>
+      </div>
+      <div class="gap"></div>
+      <div class="chips">
+        <div class="chip-sq active">All</div>
+        <div class="chip-sq">Cuban diaspora</div>
+        <div class="chip-sq">Havana residents</div>
+        <div class="chip-sq">Age 25–44</div>
+      </div>
+      <div class="sent-bars">
+        <div class="sb-row"><span class="sb-lbl">Support</span><div class="sb-trk"><div class="sbf-s" style="width:54%"></div></div><span class="sb-pct sp-s">54%</span></div>
+        <div class="sb-row"><span class="sb-lbl">Oppose</span><div class="sb-trk"><div class="sbf-o" style="width:31%"></div></div><span class="sb-pct sp-o">31%</span></div>
+        <div class="sb-row"><span class="sb-lbl">Neutral</span><div class="sb-trk"><div class="sbf-n" style="width:15%"></div></div><span class="sb-pct sp-n">15%</span></div>
+      </div>
+      <div class="callout-blue"><strong>Notable split:</strong> Long-term tenants (20+ yrs) support at 72% vs. recent residents at 38%. The 10-year occupancy threshold is the dividing line.</div>
+      <div class="comp-note">White field, 2pt blue border — the civic record container. Meeting Room text treatment: green Yea, red Nay, blue-mid label text. Square chips with gilt active state — the square corners match the Bulletin Board and Community Label treatments, creating cohesion across this set. Chips are clearly interactive (pointer cursor, hover state, rounded-square not pill).</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="ft-logo">F<span>O</span>RA</div>
+    <div class="ft-tag">Variant Set II — Gathering Hall</div>
+  </div>
+  <div class="ft-links">
+    <span class="ft-link">← Set I</span>
+    <span class="ft-link">Set III →</span>
+    <span class="ft-link">Component Reference</span>
+  </div>
+</footer>
+
+</body>
+</html>

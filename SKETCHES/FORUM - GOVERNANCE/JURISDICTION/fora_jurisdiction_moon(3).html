@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Moon · Jurisdiction</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --moon1:#080c18;--moon2:#111828;--moon3:#1a2238;
+  --silver:#c8cee0;--silver-lt:#e8ecf4;--silver-dk:#8898b8;
+  --gilt:#b8860b;--gilt-lt:#d4a832;
+  --red:#8b1a1a;--red-p:rgba(139,26,26,0.07);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.08);
+  --green:#155c2d;--green-lt:#e5f0e8;
+  --blue-sci:#3a7ab8;--blue-sci-p:rgba(58,122,184,0.1);
+  --purple:#4a2a7a;--purple-lt:#f0eaf7;
+  --ink:#0e1a2e;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f2f4f8;--white:#fff;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* ── NAV ── */
+.nav{background:#050810;border-bottom:3px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;}
+.nav-link:hover,.nav-link.active{color:white;}
+
+/* ── TICKER ── */
+.ticker-bar{height:30px;background:#030508;border-bottom:1px solid rgba(200,206,224,0.1);display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 14px;display:flex;align-items:center;gap:7px;background:rgba(200,206,224,0.07);border-right:1px solid rgba(200,206,224,0.15);}
+.ticker-pulse{width:7px;height:7px;border-radius:50%;background:var(--silver);animation:pulse 2.2s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--silver);white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;white-space:nowrap;animation:ts 40s linear infinite;}
+@keyframes ts{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ti{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.04);}
+.tk{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.tv{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.tv-s{color:var(--silver);}
+.tv-w{color:rgba(255,255,255,0.82);}
+.tv-a{color:#FAC775;}
+.tv-r{color:#ff8080;}
+.tv-g{color:#7fcf95;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#030508 0%,#080e1c 40%,#0c1428 70%,#060a12 100%);padding:36px 40px 0;position:relative;overflow:hidden;min-height:320px;}
+/* star field */
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:
+  radial-gradient(1.5px 1.5px at 5% 12%,rgba(255,255,255,0.7) 0%,transparent 100%),
+  radial-gradient(1px 1px at 12% 65%,rgba(255,255,255,0.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 18% 34%,rgba(200,210,255,0.6) 0%,transparent 100%),
+  radial-gradient(2px 2px at 28% 8%,rgba(255,255,255,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 35% 78%,rgba(255,255,255,0.45) 0%,transparent 100%),
+  radial-gradient(1px 1px at 42% 22%,rgba(200,210,255,0.4) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 55% 55%,rgba(255,255,255,0.65) 0%,transparent 100%),
+  radial-gradient(1px 1px at 62% 88%,rgba(255,255,255,0.3) 0%,transparent 100%),
+  radial-gradient(1px 1px at 70% 18%,rgba(200,210,255,0.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 78% 42%,rgba(255,255,255,0.4) 0%,transparent 100%),
+  radial-gradient(2px 2px at 85% 72%,rgba(255,255,255,0.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 90% 28%,rgba(200,210,255,0.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 95% 90%,rgba(255,255,255,0.35) 0%,transparent 100%),
+  radial-gradient(1px 1px at 22% 50%,rgba(255,255,255,0.3) 0%,transparent 100%),
+  radial-gradient(1px 1px at 48% 40%,rgba(255,255,255,0.25) 0%,transparent 100%);}
+.hero-inner{display:flex;align-items:flex-start;gap:28px;position:relative;z-index:2;}
+.hero-bc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;position:relative;z-index:2;}
+.bc-c{color:rgba(255,255,255,0.1);font-size:6.5px;}
+.bc-sep{opacity:0.15;}
+.bc-h{color:rgba(200,206,224,0.7);}
+
+.moon-sphere{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 38% 35%,#e8ecf4 0%,#c8cee0 30%,#98a4c0 60%,#6878a0 85%,#485878 100%);flex-shrink:0;position:relative;box-shadow:0 0 40px rgba(200,206,224,0.15),inset -20px -10px 40px rgba(30,40,60,0.5);margin-top:4px;}
+/* crater overlays */
+.moon-sphere::before{content:'';position:absolute;inset:0;border-radius:50%;background:
+  radial-gradient(circle at 25% 60%,rgba(80,90,110,0.4) 0%,transparent 12%),
+  radial-gradient(circle at 65% 30%,rgba(80,90,110,0.3) 0%,transparent 8%),
+  radial-gradient(circle at 50% 70%,rgba(60,70,90,0.25) 0%,transparent 6%),
+  radial-gradient(circle at 30% 25%,rgba(70,80,100,0.2) 0%,transparent 5%),
+  radial-gradient(circle at 75% 65%,rgba(80,90,110,0.3) 0%,transparent 10%),
+  radial-gradient(circle at 18% 45%,rgba(60,70,90,0.2) 0%,transparent 4%),
+  radial-gradient(circle at 80% 20%,rgba(50,60,80,0.15) 0%,transparent 3%);}
+/* terminator */
+.moon-sphere::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 72% 50%,transparent 45%,rgba(10,15,25,0.6) 65%,rgba(5,8,15,0.8) 80%);}
+
+.juris-name{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:var(--silver-lt);line-height:0.9;letter-spacing:-0.01em;}
+.juris-name-sub{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(200,206,224,0.38);margin-top:5px;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(200,206,224,0.28);margin-top:6px;}
+.juris-lead{font-size:13.5px;color:rgba(200,210,230,0.5);line-height:1.7;max-width:540px;margin-top:12px;}
+.term{border-bottom:1px dotted rgba(212,168,50,0.5);cursor:help;color:inherit;}
+.term:hover{color:var(--gilt-lt);}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;display:inline-block;margin:3px 3px 0 0;}
+
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.08);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.02);padding:10px 12px;cursor:pointer;transition:background 0.15s;}
+.hs:hover{background:rgba(200,206,224,0.08);}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--silver);}
+.hs-num.gold{color:var(--gilt-lt);}
+.hs-num.red{color:#ff8080;}
+.hs-num.amber{color:#FAC775;}
+.hs-num.green{color:#7fcf95;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(200,206,224,0.25);margin-top:3px;line-height:1.5;}
+
+/* hero right */
+.hero-right{min-width:210px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;}
+.hr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:3px;}
+.fw-card{padding:9px 12px;border-radius:8px;border:1px solid;cursor:pointer;transition:all 0.12s;margin-bottom:4px;}
+.fw-card:hover{opacity:0.85;}
+.fw-name{font-size:12px;font-weight:700;color:var(--silver);}
+.fw-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.38);margin-top:2px;}
+.btn-moon{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(200,206,224,0.2);cursor:pointer;background:rgba(200,206,224,0.08);color:var(--silver);transition:all 0.12s;width:100%;margin-top:4px;}
+.btn-moon:hover{background:rgba(200,206,224,0.14);}
+
+/* ── TABS ── */
+.org-tabs{background:#0a0e1a;border-bottom:1px solid rgba(200,206,224,0.1);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;padding:0 40px;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 16px;cursor:pointer;color:rgba(200,206,224,0.35);border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.12s;}
+.tab:hover{color:rgba(200,206,224,0.7);}
+.tab.active{color:var(--silver);border-bottom-color:var(--silver);}
+
+/* ── BODY ── */
+.page-body{max-width:1100px;margin:0 auto;padding:32px 40px 80px;}
+.two-col{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:20px;margin-bottom:16px;}
+.card-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;}
+.card-title{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.card-body{font-size:13px;color:var(--ink-soft);line-height:1.75;}
+.card-body p{margin-bottom:10px;}
+.card-body p:last-child{margin-bottom:0;}
+.card-rule{height:1px;background:var(--rule);margin:14px 0;}
+
+/* dark science card */
+.sci-card{background:#070c18;border:1px solid rgba(200,206,224,0.1);border-radius:10px;padding:20px;margin-bottom:16px;color:rgba(200,210,230,0.7);}
+.sci-card .card-title{color:var(--silver-lt);}
+.sci-card .card-ey{color:rgba(200,206,224,0.35);}
+
+/* ── REGION MAP ── */
+.region-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.region-card{padding:12px;border-radius:8px;border:1px solid var(--rule);cursor:pointer;transition:all 0.12s;background:var(--bg);}
+.region-card:hover{border-color:var(--silver-dk);background:white;}
+.rc-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.rc-sub{font-size:11px;color:var(--ink-mut);}
+.rc-badge{font-family:'JetBrains Mono',monospace;font-size:7px;padding:2px 7px;border-radius:100px;display:inline-block;margin-top:5px;}
+
+/* ── TIMELINE ── */
+.tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule-lt);}
+.tl-item:last-child{border-bottom:none;}
+.tl-year{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--silver-dk);width:72px;flex-shrink:0;padding-top:1px;}
+.tl-text{font-size:12.5px;color:var(--ink-soft);line-height:1.55;}
+.tl-milestone{color:var(--gilt);}
+
+/* ── LAW TABLE ── */
+.law-table{width:100%;border-collapse:collapse;font-size:12px;}
+.law-table th{text-align:left;padding:8px 12px;background:#0a0e1a;color:var(--silver);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;}
+.law-table td{padding:9px 12px;border-bottom:1px solid var(--rule-lt);vertical-align:top;line-height:1.55;}
+.law-table tr:last-child td{border-bottom:none;}
+.law-table tr:nth-child(even) td{background:var(--bg);}
+.law-name{font-weight:700;color:var(--ink);}
+.law-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 7px;border-radius:100px;}
+
+/* ── MISSION CARDS ── */
+.mission-card{padding:14px;border-radius:8px;border:1px solid var(--rule);margin-bottom:8px;cursor:pointer;transition:all 0.12s;display:flex;gap:12px;align-items:flex-start;}
+.mission-card:hover{border-color:var(--silver-dk);background:var(--bg);}
+.mc-flag{font-size:20px;flex-shrink:0;margin-top:2px;}
+.mc-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.mc-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--ink-mut);}
+.mc-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;margin-top:3px;}
+.mc-status{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;margin-top:5px;display:inline-block;}
+
+/* ── OWNERSHIP TABLE ── */
+.own-row{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;border:1px solid var(--rule);margin-bottom:8px;background:var(--bg);}
+.own-icon{font-size:28px;flex-shrink:0;}
+.own-verdict{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;flex-shrink:0;margin-top:3px;}
+
+/* ── APOLLO TABLE ── */
+.apollo-table{width:100%;border-collapse:collapse;font-size:12px;}
+.apollo-table th{text-align:left;padding:7px 10px;background:#0a0e1a;color:var(--silver);font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;}
+.apollo-table td{padding:8px 10px;border-bottom:1px solid var(--rule-lt);vertical-align:top;line-height:1.5;}
+.apollo-table tr:last-child td{border-bottom:none;}
+.apollo-table tr:nth-child(even) td{background:var(--bg);}
+
+/* ── CIVIC ISSUES ── */
+.ci-card{display:flex;gap:12px;padding:13px;background:var(--bg);border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color 0.12s;}
+.ci-card:hover{border-color:var(--silver-dk);}
+.ci-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.ci-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ci-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.ci-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:5px;}
+
+/* ── DISCOURSE ── */
+.disc-item{padding:10px 0;border-bottom:1px solid var(--rule-lt);}
+.disc-item:last-child{border-bottom:none;}
+.di-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.di-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 7px;border-radius:100px;}
+.di-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.di-meta{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(5,8,20,0.75);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:12px;padding:28px;max-width:500px;width:92%;box-shadow:0 24px 64px rgba(0,0,0,0.3);max-height:88vh;overflow-y:auto;}
+.modal-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--ink-mut);margin-bottom:14px;}
+.modal-body{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+.modal-source{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);margin-top:12px;border-top:1px solid var(--rule);padding-top:10px;}
+.modal-close{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;border-radius:100px;border:1px solid var(--rule);color:var(--ink-mut);background:transparent;cursor:pointer;margin-top:14px;}
+details summary::-webkit-details-marker{display:none;}
+details[open] summary span:first-child{transform:rotate(90deg);display:inline-block;}
+.ap{position:relative;}
+.ap:hover::after{content:attr(title);position:absolute;left:0;top:calc(100% + 4px);background:#0a0e1a;color:#e8ecf4;font-size:11px;padding:7px 10px;border-radius:7px;z-index:99;width:260px;line-height:1.55;box-shadow:0 4px 20px rgba(0,0,0,0.3);pointer-events:none;white-space:normal;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-links">
+    <span class="nav-link">Dashboard</span>
+    <span class="nav-link">Legislation</span>
+    <span class="nav-link active">Issues</span>
+    <span class="nav-link">Discourse</span>
+  </div>
+  <button class="btn-moon" style="width:auto;padding:6px 18px;letter-spacing:0.06em;font-size:7.5px;">FOLLOW THE MOON, SHE FOLLOWS YOU!</button>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge">
+    <div class="ticker-pulse"></div>
+    <span class="ticker-badge-text">MOONNEWS:</span>
+  </div>
+  <div class="ticker-scroll-wrap"><div class="ticker-track">
+    <div class="ti"><span class="tk">🔭 Tonight</span><span class="tv tv-g">Moon &amp; Mars 1.5° apart · Pre-dawn eastern sky · Best 6–7 AM · Mars mag 1.1 · 1° above horizon</span></div>
+    <div class="ti"><span class="tk">Artemis II</span><span class="tv tv-a">Launch no earlier than April 1 2026 · First crewed lunar flight since 1972</span></div>
+    <div class="ti"><span class="tk">Crew</span><span class="tv tv-w">Wiseman · Glover · Koch · Hansen · 10-day flyby</span></div>
+    <div class="ti"><span class="tk">Artemis Accords</span><span class="tv tv-s">61 signatories · Oman joined Jan 26 2026 · Non-binding</span></div>
+    <div class="ti"><span class="tk">OST 1967</span><span class="tv tv-w">118 parties · Binding · No sovereignty over any celestial body</span></div>
+    <div class="ti"><span class="tk">South Pole ice</span><span class="tv tv-a">~600M tonnes estimated · US China India all targeting same zone · No resource law</span></div>
+    <div class="ti"><span class="tk">Chang'e 7</span><span class="tv tv-a">China · 2026 · South pole ice detection · Competing with Artemis</span></div>
+    <div class="ti"><span class="tk">Moon Agreement 1979</span><span class="tv tv-r">18 ratifications · No major spacefaring nation signed · Functionally dead</span></div>
+    <div class="ti"><span class="tk">Lunar Gateway</span><span class="tv tv-s">$2.6B allocated 2026–28 · First station in lunar orbit</span></div>
+    <div class="ti"><span class="tk">ILRS</span><span class="tv tv-a">China-Russia competing lunar base · South pole target · Pakistan signed 2025</span></div>
+    <div class="ti"><span class="tk">Dennis Hope</span><span class="tv tv-r">Has sold 5M acres of "lunar land" since 1980 · Zero legal validity</span></div>
+    <div class="ti"><span class="tk">Apollo heritage</span><span class="tv tv-a">Tranquility Base footprints legally unprotected · No binding law</span></div>
+    <div class="ti"><span class="tk">Artemis II</span><span class="tv tv-a">Launch no earlier than April 1 2026 · First crewed lunar flight since 1972</span></div>
+    <div class="ti"><span class="tk">South Pole ice</span><span class="tv tv-a">~600M tonnes estimated · US China India all targeting same zone · No resource law</span></div>
+    <div class="ti"><span class="tk">OST 1967</span><span class="tv tv-w">118 parties · Binding · No sovereignty over any celestial body</span></div>
+    <div class="ti"><span class="tk">ILRS</span><span class="tv tv-a">China-Russia competing lunar base · South pole target · Pakistan signed 2025</span></div>
+    <div class="ti"><span class="tk">Moon Agreement 1979</span><span class="tv tv-r">18 ratifications · No major spacefaring nation signed · Functionally dead</span></div>
+  </div></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bc">
+    <span class="bc-c">The Universe / Laniakea Supercluster / Virgo Supercluster / Local Group / Milky Way / Orion Arm /</span>
+    <span class="bc-sep">/</span>
+    <a href="#" style="color:rgba(255,255,255,0.3);">Solar System</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-h">Moon</span>
+  </div>
+  <div class="hero-inner">
+    <!-- Moon sphere -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div class="moon-sphere"></div>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
+        <div class="jtag" style="color:rgba(200,206,224,0.7);border-color:rgba(200,206,224,0.2);background:rgba(200,206,224,0.06);">Celestial Body</div>
+        <div class="jtag" style="color:rgba(250,199,117,0.8);border-color:rgba(196,127,0,0.2);background:rgba(196,127,0,0.06);">No Sovereignty · OST</div>
+        <div class="jtag" style="color:rgba(255,150,150,0.8);border-color:rgba(139,26,26,0.2);background:rgba(139,26,26,0.06);">Moon Agreement Unratified</div>
+        <div class="jtag" style="color:rgba(200,206,224,0.7);border-color:rgba(200,206,224,0.2);background:rgba(200,206,224,0.06);">Artemis Accords · 61 nations</div>
+      </div>
+    </div>
+
+    <div style="flex:1;">
+      <div class="juris-name">Moon</div>
+      <div class="juris-name-sub">Luna · Selene · &#26376; · القمر</div>
+      <div class="juris-sub">Earth's natural satellite · Solar System · 384,400 km average · No sovereign · No permanent residents</div>
+      <div class="juris-lead">
+        The Moon is humanity's nearest neighbor, first extraterrestrial destination, and most legally contested body in the Solar System. Twelve humans have walked on it. No one governs it. No nation owns it. And the race to determine who gets to use its most valuable resource — the water ice frozen at its south pole — has no legal referee. <span class="term" onclick="openModal('artemis2')">Artemis II launches April 1, 2026</span> — the first humans near the Moon in 54 years. They arrive into a legal vacuum that is only growing more contested.
+      </div>
+
+      <div class="hero-stats">
+        <div class="hs" onclick="openModal('distance')"><div class="hs-num">384,218 km</div><div class="hs-label">Today's distance ›</div></div>
+        <div class="hs" onclick="openModal('ost')"><div class="hs-num">118</div><div class="hs-label">OST parties ›</div></div>
+        <div class="hs" onclick="openModal('accords')"><div class="hs-num gold">61</div><div class="hs-label">Artemis signatories ›</div></div>
+        <div class="hs" onclick="openModal('ice')"><div class="hs-num amber">~600M t</div><div class="hs-label">South pole ice ›</div></div>
+        <div class="hs" onclick="openModal('walkers')"><div class="hs-num">12</div><div class="hs-label">Humans walked ›</div></div>
+        <div class="hs" onclick="openModal('hope')"><div class="hs-num red">5M</div><div class="hs-label">Acres "sold" ›</div></div>
+      </div>
+    </div>
+
+    <!-- Hero right — Live Moon facts -->
+    <div class="hero-right">
+      <div class="hr-label" style="display:flex;align-items:center;gap:6px;">
+        <span>🌙 Right now · Alexandria, VA</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:6.5px;padding:1px 6px;border-radius:100px;background:rgba(127,207,149,0.15);color:#7fcf95;letter-spacing:0.1em;">LIVE</span>
+      </div>
+
+      <!-- Phase card -->
+      <div style="padding:10px 12px;border-radius:8px;border:1px solid rgba(200,206,224,0.12);background:rgba(200,206,224,0.04);margin-bottom:4px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.28);margin-bottom:5px;">Current phase</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:36px;filter:drop-shadow(0 0 8px rgba(200,206,224,0.2));">🌘</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--silver);">Waning Crescent</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(200,206,224,0.4);margin-top:2px;">3% illuminated · Day 27 of cycle</div>
+          </div>
+        </div>
+        <!-- Mini phase bar -->
+        <div style="margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;color:rgba(200,206,224,0.25);">New moon</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;color:rgba(200,206,224,0.25);">Next full moon</div>
+          </div>
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:100px;position:relative;overflow:visible;">
+            <div style="position:absolute;left:0;top:0;height:100%;width:93%;background:linear-gradient(90deg,rgba(200,206,224,0.08) 0%,rgba(200,206,224,0.3) 100%);border-radius:100px;"></div>
+            <div style="position:absolute;left:93%;top:50%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:50%;background:var(--silver);box-shadow:0 0 6px rgba(200,206,224,0.6);"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:3px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(200,206,224,0.45);">~3 days away</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(200,206,224,0.45);">~15 days away</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next full moon -->
+      <div style="padding:10px 12px;border-radius:8px;border:1px solid rgba(250,199,117,0.2);background:rgba(196,127,0,0.06);margin-bottom:4px;position:relative;cursor:help;" class="pink-moon-card">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(250,199,117,0.45);margin-bottom:5px;">Next full moon</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#FAC775;">🌕 Pink Moon</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(250,199,117,0.5);margin-top:2px;">April 1, 2026 · 10:12 PM EDT</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:19px;font-weight:700;color:#FAC775;font-family:'Libre Baskerville',serif;">15</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;color:rgba(250,199,117,0.4);">days away</div>
+          </div>
+        </div>
+        <!-- Hover pop -->
+        <div class="pink-moon-pop">
+          Coincides with Artemis II launch window (April 1–6). The Pink Moon gets its name from phlox — wild ground flowers blooming across North America in early spring. Also a Supermoon — closest full moon since January.
+        </div>
+      </div>
+      <style>
+        .pink-moon-card .pink-moon-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:0;background:#0a0c14;border:1px solid rgba(250,199,117,0.25);border-radius:9px;padding:10px 12px;font-size:11px;color:rgba(250,199,117,0.75);line-height:1.6;z-index:50;box-shadow:0 8px 28px rgba(0,0,0,0.5);}
+        .pink-moon-card .pink-moon-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#0a0c14;}
+        .pink-moon-card:hover .pink-moon-pop{display:block;}
+      </style>
+
+      <button class="btn-moon">FOLLOW THE MOON, SHE FOLLOWS YOU!</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" onclick="showTab('overview',this)">Overview</div>
+    <div class="tab" onclick="showTab('geography',this)">Geography</div>
+    <div class="tab" onclick="showTab('law',this)">Space Law</div>
+    <div class="tab" onclick="showTab('ownership',this)">Ownership & Claims</div>
+    <div class="tab" onclick="showTab('missions',this)">Missions</div>
+    <div class="tab" onclick="showTab('apollo',this)">Apollo</div>
+    <div class="tab" onclick="showTab('science',this)">Science</div>
+    <div class="tab" onclick="showTab('future',this)">Future</div>
+    <div class="tab" onclick="showTab('travel',this)">How to Get There</div>
+    <div class="tab" onclick="showTab('culture',this)">Culture & Astrology</div>
+    <div class="tab" onclick="showTab('discourse',this)">Discourse</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+<!-- ══ OVERVIEW ═══════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Overview</div>
+        <div class="card-title">The most contested body without a law</div>
+        <div class="card-body">
+          <p>The Moon is 384,400 kilometers away, has no atmosphere, no liquid water on its surface, and temperatures that swing from 127°C at lunar noon to −173°C at night. It has also been, since 1969, one of only two extraterrestrial bodies ever visited by humans — and it is about to receive humans again for the first time in over half a century.</p>
+          <p>Artemis II launches April 1, 2026 — a 10-day crewed flyby, the first time humans will reach the Moon's vicinity since Apollo 17 landed in December 1972. It carries no legal settlement to the questions the Moon now raises: who can use its resources, who can establish permanent bases, and how two competing great-power programs targeting the same small craters at the south pole resolve their disputes without a framework for doing so.</p>
+          <p>The Moon is governed — nominally — by the Outer Space Treaty of 1967, which forbids sovereignty claims and requires peaceful use. What it does not govern is a $150 billion Artemis program, a competing Chinese-Russian International Lunar Research Station, commercial mining companies planning to extract water ice for rocket fuel, and the Dennis Hopes of the world who have sold five million acres of lunar real estate with zero legal validity. The Moon is the largest body of unresolved property law in history. It is also the staging ground for everything humanity does in space for the next century. Those two facts are not unrelated.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ey">Civic Issues · Moon</div>
+        <div class="card-title">What is actually in dispute in 2026</div>
+        <div class="ci-card">
+          <div class="ci-icon">💧</div>
+          <div>
+            <div class="ci-title">Who controls the south pole ice?</div>
+            <div class="ci-desc">NASA Artemis, China's ILRS, and India's Chandrayaan are all targeting the lunar south pole's permanently shadowed craters. ~600 million tonnes of water ice. No legal framework governs who can mine it, what exclusion zones look like, or how competing bases in the same geography would resolve conflicts. The race to establish physical presence precedes the legal framework for managing it.</div>
+            <div class="ci-count">2,841 FORA contributions · 12 active amendments · 6 duels</div>
+          </div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">🏛️</div>
+          <div>
+            <div class="ci-title">Are the Apollo sites legally protected heritage?</div>
+            <div class="ci-desc">The Artemis Accords include heritage site protection principles. NASA has issued guidelines recommending missions stay away from Apollo sites. But neither has legal force. Any nation or private company can land next to Tranquility Base. The bootprints Neil Armstrong left on July 20, 1969 — which will last millions of years in the airless environment — have no formal legal protection from future missions.</div>
+            <div class="ci-count">1,203 FORA contributions · 5 active amendments · 3 duels</div>
+          </div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">⚖️</div>
+          <div>
+            <div class="ci-title">Is the Artemis Accords framework legitimate international law?</div>
+            <div class="ci-desc">Russia calls it "a blatant attempt to create international space law that favors the United States." China compares the safety zones provision to colonial land enclosure. 61 nations have signed — but the 2 nations with competing lunar programs haven't. Two incompatible legal-normative frameworks are racing to establish facts on the ground before a binding international treaty resolves the conflict.</div>
+            <div class="ci-count">1,920 FORA contributions · 8 active amendments · 4 duels</div>
+          </div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">⛏️</div>
+          <div>
+            <div class="ci-title">Can you legally mine the Moon?</div>
+            <div class="ci-desc">The US Commercial Space Launch Competitiveness Act (2015) says Americans can own resources they extract from space, even if they can't own the Moon. Luxembourg, UAE, and Japan passed similar laws. The Artemis Accords endorse this interpretation. Legal scholars disagree whether this violates OST Article II. No court has ruled on it. No extraction has occurred. The legal question will be resolved by whoever gets there first and forces the issue.</div>
+            <div class="ci-count">1,504 FORA contributions · 7 active amendments</div>
+          </div>
+        </div>
+        <div class="ci-card">
+          <div class="ci-icon">🛒</div>
+          <div>
+            <div class="ci-title">Dennis Hope sold you an acre of the Moon. Do you own it?</div>
+            <div class="ci-desc">Since 1980, Dennis Hope's Lunar Embassy has sold over 5 million acres of lunar real estate at ~$25/acre to millions of people including, he claims, two US presidents and several NASA astronauts. No government recognizes these deeds. No court will enforce them. But the underlying legal argument — that the OST forbids national appropriation, not private appropriation — is not entirely frivolous, and versions of it appear in serious legal journals.</div>
+            <div class="ci-count">987 FORA contributions · 3 active amendments</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Fast facts</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--silver-dk);">3,474 km</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Diameter (27% Earth)</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--silver-dk);">1/6 g</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Surface gravity</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--silver-dk);">29.5 d</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Orbital period</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#FAC775;">−173°C</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Night min temp</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#ff8080;">None</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Atmosphere</div></div>
+            <div style="background:var(--bg);padding:9px;border-radius:7px;text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--silver-dk);">4.5 Ga</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mut);">Age (billion years)</div></div>
+          </div>
+          <div style="background:var(--bg);padding:9px;border-radius:7px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Tidal locking</div>
+            <div style="font-size:11.5px;color:var(--ink-soft);">The Moon rotates once per orbit — the same face always points at Earth. The "far side" was never seen by humans until 1959 (Luna 3 photographs) and was never landed on until 2019 (China's Chang'e 4). The near side is brighter because its lighter highlands reflect more light.</div>
+          </div>
+          <div style="background:var(--bg);padding:9px;border-radius:7px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">You can see it tonight</div>
+            <div style="font-size:11.5px;color:var(--ink-soft);">The Moon is the only extraterrestrial body visible to the naked eye in enough detail to name features. The dark patches (maria) visible from Earth have been named since the 17th century — Tycho Brahe, Giambattista Riccioli, and later the IAU formalized the system of nomenclature that governs all 9,000+ named lunar features today.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Current status · March 2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:rgba(196,127,0,0.08);border-radius:7px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;color:var(--amber);">Artemis II — April 1 2026</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Launch window April 1–6. Wiseman, Glover, Koch, Hansen. 10-day free-return flyby. No landing. First crewed deep space mission since Apollo 17, December 1972.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--silver-dk);">
+            <div style="font-weight:700;color:var(--silver-dk);">Chang'e 7 — 2026</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">China's south pole mission. Primary objective: water ice detection and mapping. Directly competing with Artemis south pole targeting. No coordination framework with Artemis.</div>
+          </div>
+          <div style="padding:8px;background:var(--green-lt);border-radius:7px;border-left:3px solid var(--green);">
+            <div style="font-weight:700;color:var(--green);">Griffin Mission One — 2026</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">NASA/Astrobotic commercial lander. South pole area target. Commercial Lunar Payload Services program. Tests the commercial lunar economy.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--silver-dk);">
+            <div style="font-weight:700;color:var(--silver-dk);">Lunar Gateway — 2027</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">First two modules planned 2027. $2.6B allocated 2026–28. International partners: ESA, JAXA, CSA. First human structure in lunar orbit.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GEOGRAPHY ══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-geography">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Geography</div>
+        <div class="card-title">Regions, features, and the geography of a world with 9,000 named places</div>
+        <div class="card-body">
+          <p>The Moon's geography is divided into two fundamental terrain types: the heavily cratered ancient highlands (terrae) that cover most of the far side and the southern near side, and the vast dark volcanic plains (maria) that fill the large impact basins on the near side. This asymmetry — more maria on the near side, more highlands on the far side — remains only partially explained but relates to the thinner crust on the near side during the period of heavy bombardment.</p>
+          <p>The International Astronomical Union (IAU) governs the naming of all 9,000+ named features on the Moon. Craters, mountains, valleys, rilles, and plains all have formal approved names. The naming tradition is rich: craters are named after scientists, astronomers, artists, and explorers. The maria (seas) — despite containing no water — carry evocative Latin names assigned by 17th-century observers. The most contested real estate in the Solar System is named Shackleton, after the Antarctic explorer, because no one in 1994 when it was named imagined it would become the target of billion-dollar missions from competing superpowers.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Major regions</div>
+        <div class="card-title">The Moon's primary geographic divisions</div>
+        <div class="region-grid">
+          <div class="region-card" onclick="openModal('maria')">
+            <div class="rc-name">Maria (Seas)</div>
+            <div class="rc-sub">Dark volcanic basalt plains · Near side · ~17% of surface</div>
+            <div class="rc-badge" style="background:rgba(27,58,107,0.1);color:var(--blue-sci);">Volcanic origin</div>
+          </div>
+          <div class="region-card" onclick="openModal('highlands')">
+            <div class="rc-name">Terrae (Highlands)</div>
+            <div class="rc-sub">Ancient cratered crust · Far side dominant · ~83% of surface</div>
+            <div class="rc-badge" style="background:rgba(139,110,60,0.1);color:#7a5a2a;">Ancient crust</div>
+          </div>
+          <div class="region-card" onclick="openModal('southpole')">
+            <div class="rc-name">South Pole Region</div>
+            <div class="rc-sub">Permanently shadowed craters · Water ice · Most contested zone</div>
+            <div class="rc-badge" style="background:rgba(196,127,0,0.1);color:var(--amber);">⚡ Contested</div>
+          </div>
+          <div class="region-card" onclick="openModal('northpole')">
+            <div class="rc-name">North Pole Region</div>
+            <div class="rc-sub">Less ice than south pole · Permanently shadowed regions · Less contested</div>
+            <div class="rc-badge" style="background:rgba(21,92,45,0.1);color:var(--green);">Explored · less contested</div>
+          </div>
+          <div class="region-card" onclick="openModal('farside')">
+            <div class="rc-name">Far Side</div>
+            <div class="rc-sub">Never faces Earth · First visited 2019 · Thicker crust · No maria</div>
+            <div class="rc-badge" style="background:rgba(74,42,122,0.1);color:var(--purple);">Chang'e 4 landed 2019</div>
+          </div>
+          <div class="region-card" onclick="openModal('spa')">
+            <div class="rc-name">South Pole–Aitken Basin</div>
+            <div class="rc-sub">Largest impact crater in Solar System · 2,500 km wide · 12 km deep</div>
+            <div class="rc-badge" style="background:rgba(139,26,26,0.1);color:var(--red);">Deepest point on Moon</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Named Maria (Seas) — near side</div>
+        <div class="card-body" style="font-size:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;">
+            <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Mare Tranquillitatis</strong><br><span style="color:var(--ink-soft);">Sea of Tranquility · Apollo 11 landing site (1969) · One of the most recognizable features visible from Earth</span></div>
+            <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Oceanus Procellarum</strong><br><span style="color:var(--ink-soft);">Ocean of Storms · Largest mare at ~2.5M km² · Luna 9 first soft landing (1966)</span></div>
+            <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Mare Imbrium</strong><br><span style="color:var(--ink-soft);">Sea of Showers · Formed by massive impact ~3.9 Ga · Apollo 15 landing site</span></div>
+            <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Mare Serenitatis</strong><br><span style="color:var(--ink-soft);">Sea of Serenity · Apollo 17 landing (1972) · Last crewed lunar landing to date</span></div>
+            <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Mare Crisium</strong><br><span style="color:var(--ink-soft);">Sea of Crises · Isolated basin visible near limb · Luna 24 sample return (1976)</span></div>
+            <div style="padding:8px;background:var(--bg);border-radius:7px;"><strong>Mare Fecunditatis</strong><br><span style="color:var(--ink-soft);">Sea of Fecundity · Luna 16 first robotic sample return (1970)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">The South Pole in detail — Shackleton and the contested craters</div>
+        <div class="card-body">
+          <p>The lunar south pole sits on the rim of Shackleton Crater — a 21 km wide, 4.2 km deep impact basin whose rotational axis passes directly through it. The crater floor has been in permanent shadow for approximately 2 billion years, maintaining temperatures of around −183°C. At those temperatures, water ice delivered by ancient comet impacts survives essentially forever.</p>
+          <p>Surrounding Shackleton is a cluster of named craters — de Gerlache, Sverdrup, Haworth, Nobile, Faustini, Shoemaker, Cabeus — each with their own permanently shadowed interiors. The Shackleton-de Gerlache ridge between the two craters has points that receive near-continuous sunlight — a rare combination in the polar region, making it potentially ideal for a base with both solar power and easy access to ice-bearing craters below.</p>
+          <p>India's Chandrayaan-3 confirmed the presence of sulfur, iron oxide, aluminum, calcium, chromium, titanium, manganese, silicon, and oxygen near the south pole in 2023 — the first in-situ chemical analysis of the south polar surface. This mission, combined with NASA's LCROSS water ice confirmation (2009), has transformed the south pole from a scientific curiosity into the most strategically valuable real estate off-Earth.</p>
+          <p>NASA's Artemis program is targeting the Shackleton rim for Artemis Base Camp. China's ILRS is targeting the south pole region. India's Chandrayaan-4 is in development. There is no framework for managing multiple permanent bases in the same small geography.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Key craters</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:rgba(196,127,0,0.06);border-radius:7px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;color:var(--amber);">Shackleton · 21 km · 89.9°S</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Named after Antarctic explorer Ernest Shackleton. The Moon's rotational axis passes through it. Permanently shadowed floor at −183°C. Ice confirmed. Primary Artemis landing target. Named 1994.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--silver-dk);">
+            <div style="font-weight:700;">Tycho · 85 km · 43.4°S</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Most dramatic ray system on the Moon — bright white streaks extending 1,500 km. Only ~108 million years old (young for the Moon). The dominant feature of the southern near side visible from Earth.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--silver-dk);">
+            <div style="font-weight:700;">Copernicus · 93 km · 9.7°N</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Formed ~800 million years ago. Spectacular terraced walls and central mountains. Named after Nicolaus Copernicus. Frequently called "The Monarch of the Moon" by early observers.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--silver-dk);">
+            <div style="font-weight:700;">Clavius · 231 km · 58.5°S</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">One of the largest impact craters on the Moon. Featured in 2001: A Space Odyssey as the site of a lunar base. Contains a nested chain of smaller craters visible even in small telescopes.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--silver-dk);">
+            <div style="font-weight:700;">Aristarchus · 40 km · 23.7°N</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Brightest large crater on the Moon. Located in Oceanus Procellarum. Center of the most volcanically active region in the lunar past. Possible source of the "transient lunar phenomena" (unexplained lights) observed historically.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Named mountains</div>
+        <div class="card-body" style="font-size:12px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;margin-bottom:6px;">
+            <div style="font-weight:700;">Mons Huygens · 5,500 m</div>
+            <div style="color:var(--ink-soft);">Highest peak on the Moon. Part of the Montes Apenninus range bordering Mare Imbrium. Named after Christiaan Huygens.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;margin-bottom:6px;">
+            <div style="font-weight:700;">Epsilon Peak · 9,050 m</div>
+            <div style="color:var(--ink-soft);">Near the south pole. Taller than any mountain on Earth (relative to planetary average). Part of the Leibniz Beta formation. Dramatic elevation changes of the south polar region.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;">
+            <div style="font-weight:700;">Montes Apenninus</div>
+            <div style="color:var(--ink-soft);">Largest mountain range on the near side. Forms the southeastern rim of Mare Imbrium. Apollo 15 landed at their base (Hadley Rille).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Naming authority</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>The International Astronomical Union (IAU) Planetary Nomenclature database governs all officially named lunar features. As of 2025: 9,000+ approved names. Craters are primarily named after deceased scientists, artists, and explorers. No living person may have a crater named after them. Mountains are named after terrestrial mountain ranges or after explorers and scientists.</p>
+          <p style="margin-top:8px;"><strong>Notable naming decisions:</strong> Shackleton (1994) — named after the Antarctic explorer, predating any awareness it would be the contested south pole crater it is now. Malapert Mountain, near the south pole, named after 17th-century Belgian mathematician Charles Malapert — a key Artemis navigation landmark.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LAW ════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-law">
+  <div class="card">
+    <div class="card-ey">Space Law</div>
+    <div class="card-title">The legal framework governing the Moon — five treaties, one fatal gap</div>
+    <div class="card-body" style="margin-bottom:16px;">
+      <p>Five treaties constitute international space law. All were negotiated between 1967 and 1979, when only the US and USSR had meaningful space capability. They were not written for commercial operators, permanent settlements, or resource extraction. The resulting gaps are not loopholes — they are architectural absences that the 21st century is now stress-testing in real time with billion-dollar programs.</p>
+      <p>The central gap: the Outer Space Treaty forbids sovereignty over the Moon. But what about using and extracting resources from the Moon? Article II says no "national appropriation" — but does mining water ice constitute appropriation? US law (2015) says no. China and Russia disagree. No international court has ruled. No extraction has occurred. The legal question will be resolved by whoever establishes physical presence first and forces the issue before a framework is agreed.</p>
+    </div>
+    <table class="law-table">
+      <thead><tr><th>Treaty</th><th style="width:60px;">Year</th><th style="width:80px;">Parties</th><th>Key provisions</th><th>The gap</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="law-name">Outer Space Treaty (OST)</div><div style="font-size:10.5px;color:var(--ink-mut);">Treaty on Principles Governing Activities in Outer Space</div></td>
+          <td>1967</td>
+          <td><span class="law-tag" style="background:var(--green-lt);color:var(--green);">118 parties</span></td>
+          <td style="font-size:11.5px;">Art. II: No sovereignty over Moon or any celestial body "by claim of sovereignty, by means of use or occupation, or by any other means." Art. I: Space is "province of all mankind." Art. IV: No WMDs in space, celestial bodies for peaceful use only. Art. VI: States responsible for ALL national activities including private operators.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);">Art. II bans sovereignty but says nothing about resource ownership. This is the entire legal battleground. Can you own what you mine if you can't own where you mined it? The US says yes. China and Russia are skeptical. No court has decided.</td>
+        </tr>
+        <tr>
+          <td><div class="law-name">Rescue Agreement</div></td>
+          <td>1968</td>
+          <td><span class="law-tag" style="background:var(--green-lt);color:var(--green);">100 parties</span></td>
+          <td style="font-size:11.5px;">States must assist and safely return any astronaut who lands in their territory. Space objects must be returned to the launching state. Emergency assistance is mandatory.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);">Written when "astronaut" meant a state employee. Does not address commercial crew, private astronauts, or tourists. Does not cover what happens if a private company's lander strands occupants.</td>
+        </tr>
+        <tr>
+          <td><div class="law-name">Liability Convention</div></td>
+          <td>1972</td>
+          <td><span class="law-tag" style="background:var(--green-lt);color:var(--green);">98 parties</span></td>
+          <td style="font-size:11.5px;">States absolutely liable for damage caused on Earth by their space objects. In space: fault-based liability. Only successful claim in history: Canada vs. USSR for Cosmos 954 crash (1978), settled for $3M.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);">Does not cover damage between private operators. Commercial debris liability entirely unaddressed. Who is liable if a private mining rover damages another company's equipment?</td>
+        </tr>
+        <tr>
+          <td><div class="law-name">Registration Convention</div></td>
+          <td>1976</td>
+          <td><span class="law-tag" style="background:var(--green-lt);color:var(--green);">73 parties</span></td>
+          <td style="font-size:11.5px;">States must register space objects with the UN. Registering state "retains jurisdiction and control" over that object. Provides basis for flag-of-convenience in space.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);">Compliance inconsistent. Many objects unregistered. A lunar base can fly the flag of any ratifying nation regardless of who operates it.</td>
+        </tr>
+        <tr>
+          <td><div class="law-name">Moon Agreement (Moon Treaty)</div></td>
+          <td>1979</td>
+          <td><span class="law-tag" style="background:var(--red-p);color:var(--red);">18 parties</span></td>
+          <td style="font-size:11.5px;">Declares Moon and its resources "common heritage of mankind." Any exploitation requires an international regime ensuring equitable benefit-sharing. Prohibits military use. Requires sharing of scientific information.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);"><strong>Functionally dead.</strong> The US, Russia, and China — the only nations capable of lunar resource extraction — have all refused to ratify it. "Common heritage" implies international oversight of resources. Spacefaring nations want none of that. Only 18 small states have ratified it and none of them can reach the Moon.</td>
+        </tr>
+        <tr>
+          <td><div class="law-name">Artemis Accords</div></td>
+          <td>2020</td>
+          <td><span class="law-tag" style="background:rgba(196,127,0,0.1);color:var(--amber);">61 signatories</span></td>
+          <td style="font-size:11.5px;">Non-binding political commitments. Peaceful purposes, transparency, interoperability, emergency assistance, orbital debris mitigation, heritage site protection, safety zones, resource extraction. Covers Moon, Mars, comets, asteroids. 61st signatory: Oman, Jan 26, 2026.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);">Not a treaty — no legal force. Russia and China absent. Russia calls it "a blatant attempt to create international space law that favors the United States." China compares it to colonial enclosure. The nations it needs to matter most haven't signed it.</td>
+        </tr>
+        <tr>
+          <td><div class="law-name">US Commercial Space Launch Competitiveness Act</div></td>
+          <td>2015</td>
+          <td><span class="law-tag" style="background:rgba(27,58,107,0.1);color:var(--blue-sci);">US domestic law</span></td>
+          <td style="font-size:11.5px;">US citizens may own resources they extract from space, even if they cannot own the celestial body itself. Not a sovereignty claim — just ownership of extracted materials. Luxembourg (2017), UAE (2020), Japan (2021) passed similar laws.</td>
+          <td style="font-size:11.5px;color:var(--ink-soft);">Does OST Art. VI allow states to authorize private resource extraction that Art. II appears to prohibit? No international court has ruled. The law's authors say yes. Critics say you can't do indirectly what you're prohibited from doing directly.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ OWNERSHIP ══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-ownership">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Ownership & Claims</div>
+        <div class="card-title">Who "owns" the Moon — and what that actually means</div>
+        <div class="card-body">
+          <p>The short answer: no one. The Outer Space Treaty of 1967 — signed by every major spacefaring nation — explicitly forbids national appropriation of the Moon or any celestial body by sovereignty claim, use, or occupation. No nation can own the Moon.</p>
+          <p>Whether private individuals or corporations can is a genuine legal question. The OST's Article II addresses "national appropriation" — not private appropriation. Entrepreneurs like Dennis Hope have exploited this textual gap since 1980, filing ownership declarations and selling lunar plots. These have no legal validity: no government recognizes them, no court enforces them, and OST Article VI makes states responsible for ALL national space activities including private operators, which effectively means states cannot authorize what they themselves are prohibited from doing.</p>
+          <p>The more serious question is resource ownership. US law (2015) and similar laws in Luxembourg, UAE, and Japan assert that extracted space resources can be privately owned — even if the body they came from cannot be. The Artemis Accords (non-binding, 61 nations) endorse this position. Russia and China reject it. No extraction has occurred. When it does, the legal question will be forced into the open without a multilateral framework to resolve it.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">The Dennis Hope story</div>
+        <div class="card-title">5 million acres, zero legal validity, and a surprisingly serious underlying argument</div>
+        <div class="card-body">
+          <p>In 1980, a Nevada man named Dennis Hope read the Outer Space Treaty and noticed that Article II forbids "national appropriation" — but says nothing about private individuals. He sent a letter to the United Nations declaring his ownership of the Moon, received no formal objection, and began selling lunar real estate through his Lunar Embassy Commission at approximately $25 per acre.</p>
+          <p>As of 2025, he claims to have sold over 5 million 1-acre plots to more than 6 million buyers in 193 countries. His claimed customers include Jimmy Carter, Ronald Reagan, and George H.W. Bush (through aides). Several NASA astronauts reportedly have plots. He has allocated land on Mars, Venus, and Io as well.</p>
+          <p>All of these deeds are legally worthless. No government recognizes them. No court would enforce them. You cannot prevent anyone from landing on "your" plot. You have no mineral rights. You have purchased a novelty certificate. Buying from the Lunar Embassy is not illegal — you simply receive paper, not property.</p>
+          <p>The underlying argument — that individuals might have property rights the OST doesn't explicitly forbid — has been taken seriously by academic space law journals. The Journal of Air Law and Commerce published a peer-reviewed article (2008) arguing that a true private settlement on the Moon could claim the real estate it needs to survive. This is the legal foundation that the US Commercial Space Launch Competitiveness Act (2015) partially built on. So Hope is legally wrong in practice — but the kernel of his argument is not entirely frivolous in theory.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Three men from Yemen sued NASA</div>
+        <div class="card-body">
+          <p>In 1997, three Yemeni men — Adam Ismail, Mustafa Khalil, and Abdullah al-Umari — sued NASA for trespassing on Mars, claiming they "inherited the planet from our ancestors 3,000 years ago" based on the mythologies of the Himyaritic and Sabaean civilizations. The suit was widely reported as absurd and dismissed. It is included here because it illustrates the global appetite for extraterrestrial property claims and the complete absence of any legal framework for addressing them.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Claims table</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+          <div class="own-row">
+            <div class="own-icon">🇺🇸</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;">NASA / Artemis program</div>
+              <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Does not claim sovereignty. Claims right to extract resources (US 2015 law). Claims safety zone concept around operations. Targets Shackleton rim for permanent base.</div>
+            </div>
+            <div class="own-verdict" style="background:var(--amber-p);color:var(--amber);">Gray zone</div>
+          </div>
+          <div class="own-row">
+            <div class="own-icon">🇨🇳</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;">China / ILRS</div>
+              <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Does not claim sovereignty. Has not passed resource extraction law. Rejects Artemis Accords framework as US-imposed. Targeting same south pole area under different normative framework.</div>
+            </div>
+            <div class="own-verdict" style="background:var(--amber-p);color:var(--amber);">Gray zone</div>
+          </div>
+          <div class="own-row">
+            <div class="own-icon">🌍</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;">Individual nations (OST parties)</div>
+              <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Cannot claim sovereignty. Can claim jurisdiction over their own structures and registered objects. Cannot claim the land beneath or around their structures.</div>
+            </div>
+            <div class="own-verdict" style="background:var(--green-lt);color:var(--green);">Clear</div>
+          </div>
+          <div class="own-row">
+            <div class="own-icon">🏢</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;">Private companies (SpaceX, Axiom, etc.)</div>
+              <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Cannot claim sovereignty. May claim ownership of extracted resources under US/Luxembourg/UAE/Japan domestic law. Governed by their state's obligations under OST Art. VI.</div>
+            </div>
+            <div class="own-verdict" style="background:var(--amber-p);color:var(--amber);">Gray zone</div>
+          </div>
+          <div class="own-row">
+            <div class="own-icon">📄</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;">Lunar Embassy / Dennis Hope deeds</div>
+              <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">No government recognizes. No court enforces. No exclusivity right. You received novelty paper, not property. The seller has no authority to convey what they claim to sell.</div>
+            </div>
+            <div class="own-verdict" style="background:var(--red-p);color:var(--red);">Invalid</div>
+          </div>
+          <div class="own-row">
+            <div class="own-icon">👤</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;">Any individual person</div>
+              <div style="color:var(--ink-soft);margin-top:2px;font-size:11.5px;">Cannot claim sovereignty. Art. VI makes states responsible for private activities. States cannot authorize what they themselves are prohibited from doing under Art. II.</div>
+            </div>
+            <div class="own-verdict" style="background:var(--red-p);color:var(--red);">No valid claim</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MISSIONS ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-missions">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Missions · Historical</div>
+        <div class="card-title">From the first crash to the first south pole landing</div>
+        <div class="tl-item"><div class="tl-year">1959</div><div class="tl-text">USSR Luna 2 — first spacecraft to reach the Moon. Hard impact near Mare Imbrium. Luna 3 photographs the far side for the first time in history — revealing a world almost entirely covered in highlands with almost no maria.</div></div>
+        <div class="tl-item"><div class="tl-year">1966</div><div class="tl-text">USSR Luna 9 — first soft landing (Oceanus Procellarum). Proves the surface can support spacecraft weight — refuting fears of deep dust. US Surveyor 1 lands two months later. Both nations now capable of controlled surface operations.</div></div>
+        <div class="tl-item"><div class="tl-year">1966–68</div><div class="tl-text">US Lunar Orbiter program — 5 spacecraft map 99% of the lunar surface in preparation for Apollo. Soviet Zond program attempts crewed lunar flyby precursor tests. The race to the Moon is at its most intense.</div></div>
+        <div class="tl-item"><div class="tl-year tl-milestone">Jul 20, 1969</div><div class="tl-text"><strong>Apollo 11 — humans land on the Moon for the first time.</strong> Neil Armstrong and Buzz Aldrin at Tranquility Base. "One small step for man, one giant leap for mankind." Michael Collins orbits above. 12 humans walk on the Moon total across 6 missions through December 1972.</div></div>
+        <div class="tl-item"><div class="tl-year">1970–76</div><div class="tl-text">USSR Luna 16, 17, 20, 21, 23, 24 — robotic sample returns and rovers (Lunokhod 1 and 2). Luna 16 returns first robotic samples. Lunokhod 2 drives 37 km — a lunar distance record that stood until 2014 (when Opportunity rover broke it on Mars).</div></div>
+        <div class="tl-item"><div class="tl-year">1972–2013</div><div class="tl-text">41-year gap in soft landings. No humans return. Science missions continue: Clementine (1994) first suggests polar ice. Lunar Prospector (1998) detects hydrogen at poles, crashed into Shoemaker crater to attempt water vapor detection (result: ambiguous).</div></div>
+        <div class="tl-item"><div class="tl-year">2009</div><div class="tl-text">NASA LCROSS crashes into Cabeus crater south pole — confirms water ice in the permanently shadowed crater. LRO (Lunar Reconnaissance Orbiter) begins comprehensive mapping, still operating as of 2026.</div></div>
+        <div class="tl-item"><div class="tl-year">2013</div><div class="tl-text">China's Chang'e 3 — first soft landing since 1976. Yutu rover deployed. China's first lunar surface mission establishes its capability and intent for the south pole races to come.</div></div>
+        <div class="tl-item"><div class="tl-year">2019</div><div class="tl-text">China's Chang'e 4 — first landing on the far side (Von Kármán crater). Yutu-2 rover. India's Chandrayaan-2 orbiter succeeds; lander crashes. Israel's Beresheet crashes. Private lunar landing is harder than it looks.</div></div>
+        <div class="tl-item"><div class="tl-year">Aug 2023</div><div class="tl-text"><strong class="tl-milestone">India's Chandrayaan-3 — first successful south pole landing.</strong> Vikram lander, Pragyan rover. Detects sulfur, iron, calcium, aluminum, silicon, and other elements. Russia's Luna-25 attempts the same region two weeks earlier — crashes. India: 1. Russia: 0. The south pole era begins.</div></div>
+        <div class="tl-item"><div class="tl-year">Feb–Mar 2025</div><div class="tl-text">Firefly's Blue Ghost — successful US commercial lunar landing (near side). ispace's Resilience — crashes 90 seconds from south pole touchdown. Intuitive Machines IM-2 — lands tilted near south pole area. US commercial lunar economy beginning — messy.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Active missions · 2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div class="mission-card">
+            <div class="mc-flag">🛸</div>
+            <div>
+              <div class="mc-name">Artemis II</div>
+              <div class="mc-type">NASA · Crewed flyby · April 1 2026 earliest</div>
+              <div class="mc-desc">Wiseman, Glover, Koch, Hansen. 10-day free-return trajectory around Moon. First humans near the Moon in 54 years. No landing — Orion flyby at ~5,000 km beyond the far side. Tests life support, navigation, and deep space communication.</div>
+              <div class="mc-status" style="background:rgba(196,127,0,0.1);color:var(--amber);">Launch ready · April 1–6 window</div>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mc-flag">🇨🇳</div>
+            <div>
+              <div class="mc-name">Chang'e 7</div>
+              <div class="mc-type">CNSA · Lander + rover · 2026</div>
+              <div class="mc-desc">South pole targeting. Primary mission: water ice detection and in-situ analysis. Mini flying probe to enter permanently shadowed regions. Direct competition with Artemis south pole targeting. No coordination with NASA.</div>
+              <div class="mc-status" style="background:var(--green-lt);color:var(--green);">Planned 2026</div>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mc-flag">🇺🇸</div>
+            <div>
+              <div class="mc-name">Griffin Mission One</div>
+              <div class="mc-type">NASA/Astrobotic · Commercial lander · 2026</div>
+              <div class="mc-desc">NASA CLPS program. Carries VIPER rover precursor instruments near south pole. Tests terrain and excavates regolith. Commercial lunar delivery becoming operationally real.</div>
+              <div class="mc-status" style="background:var(--green-lt);color:var(--green);">Planned 2026</div>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mc-flag">🌍</div>
+            <div>
+              <div class="mc-name">LRO — Lunar Reconnaissance Orbiter</div>
+              <div class="mc-type">NASA · Orbiter · Active since 2009</div>
+              <div class="mc-desc">Still operational after 16+ years. Continues comprehensive surface mapping, illumination studies, and crater floor temperature monitoring. Provides navigation data for all south pole missions. The most productive planetary science mission per dollar in NASA history.</div>
+              <div class="mc-status" style="background:var(--green-lt);color:var(--green);">Active · 16+ years</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Upcoming missions · 2027–2030</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Artemis III / IV (2027–28)</strong><br>Artemis III now a LEO lander demonstration. First crewed lunar landing: Artemis IV ~2028. First woman and first person of color on the Moon. South pole landing site. SpaceX Starship HLS.</div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Lunar Gateway (2027)</strong><br>First two modules (PPE + HALO) planned 2027. International: NASA, ESA, JAXA, CSA. First human structure in lunar orbit. Staging point for surface missions.</div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>Chang'e 8 (2028)</strong><br>China resource utilization demonstration. Tests in-situ resource utilization (ISRU) for potential ILRS construction. Verifies Chinese south pole presence capability.</div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong>China crewed lunar landing (~2030)</strong><br>CNSA target. Would make China the second nation to land humans on the Moon. Long March 10 rocket + Mengzhou spacecraft + LASS lander. Also targeting south pole.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APOLLO ════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-apollo">
+  <div class="card">
+    <div class="card-ey">Apollo Program</div>
+    <div class="card-title">The 12 humans who walked on the Moon — and what they left behind</div>
+    <div class="card-body" style="margin-bottom:16px;">
+      <p>Between July 1969 and December 1972, six Apollo missions landed on the Moon. Twelve American men walked on its surface. They collected 382 kg of lunar rock and soil, deployed scientific instruments still returning data decades later, planted six American flags, left plaques, mirrors, seismometers, and the personal effects of the astronauts. They also left approximately 96 tonnes of equipment — descent stages, rovers, scientific experiments — that remain on the surface today, legally protected by nothing except the practical difficulty of getting there.</p>
+      <p>The Apollo program was the most expensive peacetime scientific undertaking in human history (~$257 billion in 2020 dollars). It was driven by Cold War competition rather than scientific merit — but the science it produced transformed our understanding of the Moon, the Solar System, and Earth. The samples returned by Apollo remain the primary source of ground truth for lunar science 50+ years later.</p>
+    </div>
+    <table class="apollo-table">
+      <thead>
+        <tr>
+          <th>Mission</th><th>Date</th><th>Landing Site</th><th>Crew (surface)</th><th>Duration</th><th>Key achievement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Apollo 11</strong></td>
+          <td>Jul 20, 1969</td>
+          <td>Mare Tranquillitatis · Tranquility Base</td>
+          <td>Neil Armstrong · Buzz Aldrin</td>
+          <td>2h 31m EVA</td>
+          <td style="color:var(--ink-soft);">First humans on the Moon. "One small step." 21.5 kg samples. Plaque: "We came in peace for all mankind."</td>
+        </tr>
+        <tr>
+          <td><strong>Apollo 12</strong></td>
+          <td>Nov 19, 1969</td>
+          <td>Oceanus Procellarum</td>
+          <td>Pete Conrad · Alan Bean</td>
+          <td>7h 45m EVA</td>
+          <td style="color:var(--ink-soft);">Precision landing (within 200m of Surveyor 3 probe). Recovered Surveyor 3 camera. 34 kg samples. Lightning strike at launch — mission nearly aborted.</td>
+        </tr>
+        <tr>
+          <td><strong>Apollo 14</strong></td>
+          <td>Feb 5, 1971</td>
+          <td>Fra Mauro highlands</td>
+          <td>Alan Shepard · Edgar Mitchell</td>
+          <td>9h 23m EVA</td>
+          <td style="color:var(--ink-soft);">First use of MET (lunar cart). Shepard hit two golf balls on the Moon. Mitchell performed unauthorized ESP experiment. 42 kg samples. Apollo 13 had targeted this site before aborting.</td>
+        </tr>
+        <tr>
+          <td><strong>Apollo 15</strong></td>
+          <td>Jul 31, 1971</td>
+          <td>Hadley-Apennine</td>
+          <td>David Scott · James Irwin</td>
+          <td>18h 35m EVA</td>
+          <td style="color:var(--ink-soft);">First Lunar Roving Vehicle. Scott dropped feather and hammer simultaneously — confirmed equal gravity. Genesis Rock (4.5 Ga) found — oldest yet. 77 kg samples. First J-mission (3-day stay).</td>
+        </tr>
+        <tr>
+          <td><strong>Apollo 16</strong></td>
+          <td>Apr 21, 1972</td>
+          <td>Descartes Highlands</td>
+          <td>John Young · Charles Duke</td>
+          <td>20h 14m EVA</td>
+          <td style="color:var(--ink-soft);">First landing in highlands. Young accidentally disconnected heat flow experiment while snagging cable. 96 kg samples — the most of any mission except Apollo 17. Duke left a family photo on the surface (still there).</td>
+        </tr>
+        <tr>
+          <td><strong>Apollo 17</strong></td>
+          <td>Dec 11, 1972</td>
+          <td>Taurus-Littrow Valley</td>
+          <td>Eugene Cernan · Harrison Schmitt</td>
+          <td>22h 4m EVA</td>
+          <td style="color:var(--ink-soft);">Last crewed lunar mission to date. First (and only) professional geologist on the Moon (Schmitt). 111 kg samples — largest return. Cernan's last words on the Moon: "We leave as we came and, God willing, as we shall return, with peace and hope for all mankind." The "Blue Marble" photograph taken en route.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card" style="max-width:720px;">
+    <div class="card-ey">What is still on the Moon</div>
+    <div class="card-title">96 tonnes of human equipment — legally protected by nothing</div>
+    <div class="card-body">
+      <p>The six Apollo landing sites contain: six descent stages (the bottom half of the Lunar Module), three Lunar Roving Vehicles (Apollos 15, 16, 17), five ALSEP scientific instrument packages (still returning seismic data until 1977 when funding was cut), two golf balls hit by Alan Shepard, Charles Duke's family photograph in a plastic sleeve, retroreflectors still bounced off by lasers from Earth today (providing the most precise measurement of the Moon's distance and drift), 96 American flags (five of them almost certainly bleached white by radiation), and approximately 96 metric tonnes of equipment total.</p>
+      <p>NASA's Office of Planetary Protection has issued "NASA's Recommendations to Space-Faring Entities: How to Protect and Preserve the Historic and Scientific Value of U.S. Government Lunar Artifacts" — a voluntary guideline suggesting other missions stay 75–225 meters away from landing sites. It is not binding. The Artemis Accords include a heritage protection principle. It is non-binding. There is no legal instrument that prevents any nation or private company from driving a rover over Tranquility Base today.</p>
+    </div>
+  </div>
+  <div class="card" style="max-width:720px;">
+    <div class="card-ey">Apollo 13 — the one that didn't land</div>
+    <div class="card-body">
+      <p>Apollo 13 launched April 11, 1970, targeted for Fra Mauro highlands. On April 13, an oxygen tank in the Service Module exploded, crippling the spacecraft. The crew — Jim Lovell, Jack Swigert, Fred Haise — used the Lunar Module as a lifeboat, circled the Moon without landing, and returned to Earth safely on April 17. "Houston, we've had a problem" (the actual transmission; "we have a problem" is the film version). The successful return was one of NASA's greatest feats of improvised engineering. Fra Mauro was successfully reached by Apollo 14 nine months later.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCIENCE ════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-science">
+  <div class="two-col">
+    <div>
+      <div class="sci-card">
+        <div class="card-ey">Science</div>
+        <div class="card-title" style="color:var(--silver-lt);">What we know — and what we don't</div>
+        <div style="font-size:13px;line-height:1.75;color:rgba(200,210,230,0.65);">
+          <p>The Moon is the best-studied extraterrestrial body in history and we are still learning fundamental things about it. The Apollo samples revolutionized planetary science. LRO has produced the most detailed maps of any body other than Earth. Chandrayaan-3 gave us the first chemical readings of the south pole surface. And we still don't fully understand how the Moon formed, why it has a thicker crust on the far side, or the nature of the "transient lunar phenomena" observed by astronomers for centuries.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Formation — the Giant Impact hypothesis</div>
+        <div class="card-body">
+          <p>The leading scientific theory for the Moon's origin is the Giant Impact hypothesis: approximately 4.5 billion years ago, a Mars-sized body (named Theia) collided with the proto-Earth at a glancing angle. The impact vaporized and ejected enormous amounts of material. Much fell back to Earth; much entered orbit and coalesced into the Moon. This explains the Moon's similar isotopic composition to Earth, its low iron content (the core material sank back to Earth), and its lack of water (high-temperature impact drove off volatiles).</p>
+          <p>The hypothesis is well-supported but not fully settled. Recent isotopic analysis of Apollo samples shows the Moon and Earth are almost identical in oxygen, titanium, and chromium isotopes — more similar than the simple Giant Impact model predicts. More sophisticated variants of the hypothesis involve a more head-on impact, a faster-spinning proto-Earth, or multiple smaller impacts. The Moon's exact origin remains an active research area.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Water ice — confirmed and strategic</div>
+        <div class="card-body">
+          <p>Water ice on the Moon was confirmed by multiple missions. Clementine (1994) detected hints. Lunar Prospector (1998) found elevated hydrogen at both poles. LCROSS (2009) crashed into Cabeus crater and detected water vapor in the plume. LRO's LAMP instrument and M3 spectrometer on Chandrayaan-1 confirmed surface water ice exposure in permanently shadowed regions. SOFIA airborne observatory (2020) detected water molecules in the sunlit Clavius crater region — surprising, as this was outside the expected polar cold traps.</p>
+          <p>The ice is not a uniform sheet — it is patchy, concentrated in permanently shadowed craters, mixed with regolith, and exists in various forms (surface frost, subsurface deposits, and possibly ancient buried layers). Exactly how much there is, how accessible it is, and how pure it is at mineable depth are questions that can only be answered by surface missions and drilling — which is exactly what the next generation of missions aims to do.</p>
+          <p>The strategic implications: water ice at the south pole is rocket propellant. Split by electrolysis into hydrogen and oxygen, it can fuel the next generation of spacecraft for missions to Mars, the asteroid belt, and beyond. A lunar propellant depot could reduce the cost of deep space missions by an order of magnitude. This is why $150+ billion in missions are targeting the same few craters.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Moonquakes — the Moon is not geologically dead</div>
+        <div class="card-body">
+          <p>Apollo seismometers (operating 1969–1977) detected four types of moonquakes: deep moonquakes (~700 km depth, tidal origin), shallow moonquakes (near the surface, unexpectedly powerful — up to M5.5), meteorite impacts, and thermal moonquakes (surface cracks due to temperature changes at dawn/dusk). The shallow moonquakes are scientifically puzzling and practically important — any permanent lunar base must be designed to withstand them. They can last for up to 10 minutes (Earth quakes typically last 30–60 seconds).</p>
+          <p>A 2019 study analyzing LRO imagery found thousands of fresh surface cliffs (lobate scarps) indicating the Moon is still contracting as it cools, producing shallow faulting and quakes. The Moon is geologically active — just very slowly. This has implications for long-term habitation near fault zones and for understanding the Moon's thermal history.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Key discoveries</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">Lunar lava tubes</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">LRO discovered large pits (skylights) leading to hollow underground tubes formed by ancient lava flows. Some may be hundreds of meters wide and kilometers long. Temperatures inside remain stable (~−20°C) compared to surface extremes. Natural habitat candidates for bases — no construction required, protected from radiation and meteorites.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">Chandrayaan-3 chemical detections</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">2023 — First in-situ analysis of south polar surface. Detected: sulfur (unexpected — implications for geology), iron oxide, aluminum, calcium, chromium, titanium, manganese, silicon, oxygen. Sulfur presence was surprising and suggests volcanic activity reached the south pole or sulfur was deposited by impacts.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">MOXIE oxygen production</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Perseverance rover's MOXIE experiment on Mars (2021) demonstrated oxygen production from CO₂. Analogous technology — splitting water ice electrolytically — is planned for lunar ISRU (in-situ resource utilization). Artemis missions will test this on the Moon.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">Genesis Rock (Apollo 15)</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">4.5 billion year old anorthosite sample collected by Apollo 15. Essentially the age of the Solar System — evidence of the Moon's original "magma ocean" crust. One of the most scientifically important rock samples ever collected.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">Laser ranging retroreflectors</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Apollo 11, 14, and 15 left retroreflectors that are still bounced off by lasers from Earth today. These provide the most precise measurement of the Earth-Moon distance (accurate to a few millimeters) and confirm the Moon is moving away from Earth at 3.8 cm/year.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Open science questions</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>Despite 60+ years of study, these fundamental questions remain open:</p>
+          <p style="margin-top:8px;"><strong>Why is the far side crust thicker?</strong> The near/far side asymmetry is pronounced and not fully explained. The Giant Impact model predicts symmetric thicknesses. Something else happened.</p>
+          <p style="margin-top:8px;"><strong>What are transient lunar phenomena?</strong> Hundreds of reports of localized glows, color changes, and obscurations on the lunar surface from qualified observers over centuries. Some are almost certainly explained (impact flashes, atmospheric effects in the observer's telescope). Some are not satisfactorily explained. The lunar atmosphere (extremely thin, but present) may be involved.</p>
+          <p style="margin-top:8px;"><strong>How much ice is actually at the poles, at what depth, and at what purity?</strong> Surface estimates vary by orders of magnitude. Drilling data is essential and no drill has reached the permanently shadowed regions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FUTURE ═════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-future">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Future</div>
+        <div class="card-title">Three possible Moons — 2026 to 2050</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+          <div style="padding:14px;border-radius:8px;border-left:3px solid var(--green);background:var(--green-lt);">
+            <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:5px;">Path 1 — Managed Coexistence</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Artemis and ILRS both establish permanent bases at the south pole without direct conflict. UN COPUOS negotiates a resource framework both blocs accept. Safety zones are recognized de facto. The Moon develops like Antarctica — competitive science under a shared minimum framework. Permanent human presence sustained by multiple nations, commercially supplied, no territorial claims asserted. Probability: possible, requires sustained US-China diplomatic engagement that does not currently exist.</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;border-left:3px solid var(--amber);background:var(--amber-p);">
+            <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:5px;">Path 2 — The Muddle</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Both programs establish bases but in different parts of the south pole. No direct conflict but no framework either. Resource extraction begins under domestic laws with no international oversight. Disputes arise over safety zones, ice access, and radio frequency interference. Each bloc builds its own legal norms through practice. International law catches up slowly and incompletely. The Moon becomes legally complex in the same way international waters did — contested, pragmatically managed, never fully governed. Most likely single outcome.</div>
+          </div>
+          <div style="padding:14px;border-radius:8px;border-left:3px solid var(--red);background:var(--red-p);">
+            <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:5px;">Path 3 — Facts on the Ground</div>
+            <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">One bloc establishes presence at the best south pole ice sites before the other. De facto control established without de jure sovereignty claim. The second-arriving bloc finds the prime locations occupied. Disputes escalate without a resolution mechanism. Earth's geopolitical competition replicated on another world. Law follows power — whoever occupies the craters first effectively controls them regardless of what the OST says. The historical precedent of terrestrial resource races offers little comfort.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Permanent habitation</div>
+        <div class="card-title">What living on the Moon actually looks like</div>
+        <div class="card-body">
+          <p>A permanent lunar base must solve radiation (no magnetosphere, thin surface shielding needed — underground or thick regolith coverage), temperature extremes (127°C to −173°C in 14-Earth-day cycles at equatorial latitudes, more stable at the poles), vacuum (pressurized structures required for everything), dust (lunar regolith is sharp, abrasive, electrostatically charged, and coats everything — killed the seals on Apollo gear), and supply chains (every consumable except water ice and oxygen must come from Earth until true self-sufficiency is established).</p>
+          <p>The most credible near-term habitat solutions involve inflatable structures covered with regolith for radiation shielding, or utilization of existing lava tubes (naturally shielded, temperature-stable, no construction required). NASA and ESA have run 3D printing in regolith experiments and sintering studies. The basic engineering is understood. The challenge is cost and supply chain — maintaining a crew continuously on the Moon requires a launch cadence and logistics system that doesn't yet exist.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Open variables · 2026</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Will Artemis IV land before China?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">Artemis IV crewed landing ~2028. China crewed landing ~2030. Race is closer than it looks. Both depend on unproven heavy-lift vehicles (Starship HLS for NASA, Long March 10 for China).</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Can Starship HLS deliver?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">NASA's crewed landing depends entirely on SpaceX Starship as the Human Landing System. Starship is still in testing. SpaceX delayed Mars missions to focus on lunar. The critical path runs through Boca Chica.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Will COPUOS produce a resource framework?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">No treaty has emerged from COPUOS since the Moon Agreement in 1979. The political will for a binding framework requires US-China agreement. Current geopolitical temperature makes this unlikely before physical presence is established.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Will VIPER find mineable ice?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">NASA's VIPER rover (delayed from 2023) will prospect south pole ice deposits. The quantity, purity, and accessibility of ice at drillable depths are still unknown. Everything about the south pole's economic value rests on what VIPER and Chang'e 7 find.</div>
+          </div>
+          <div style="padding:8px;background:var(--bg);border-radius:7px;border:1px solid var(--rule);">
+            <div style="font-weight:700;color:var(--ink);">Who governs a permanent lunar base?</div>
+            <div style="color:var(--ink-soft);margin-top:2px;">The ISS Intergovernmental Agreement (1998) is the only model for multi-national space governance. It was negotiated over years among committed partners. No equivalent framework exists for the Moon. Any permanent base will initially be governed by a patchwork of the launching state's domestic law + OST + bilateral agreements.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Why it matters for Earth</div>
+        <div class="card-body" style="font-size:12px;">
+          <p>The Moon's south pole ice, if accessible, would transform the economics of space. A propellant depot at the lunar south pole — fueled by in-situ water ice electrolysis — would reduce the cost of reaching Mars, the asteroid belt, and beyond by an order of magnitude. Earth-launched missions carry all their fuel from the bottom of Earth's gravity well. Moon-based missions start from a shallower well with local propellant.</p>
+          <p style="margin-top:8px;">The geopolitical stakes are correspondingly high. The nation or coalition that controls lunar propellant controls the logistics of the entire Solar System economy. The Moon is not just a destination — it is a logistics hub. The legal and governance framework (or lack of one) established in the next decade will determine whether that hub is a shared commons or a contested asset.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRAVEL ═════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-travel">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">How to Get There</div>
+        <div class="card-title">The physics, engineering, and economics of reaching the Moon</div>
+        <div class="card-body">
+          <p>The Moon is 384,400 km away on average — about 30 Earth diameters. Light takes 1.3 seconds to reach it. A typical lunar transit takes 3 days by spacecraft. Apollo took 3 days outbound; Artemis II will follow a similar free-return trajectory taking 3 days to reach lunar vicinity.</p>
+          <p>Getting to the Moon requires first reaching Earth orbit (needs ~9.4 km/s delta-v from the surface), then performing a Trans-Lunar Injection (TLI) burn to leave Earth orbit (~3.2 km/s more), then a Lunar Orbit Insertion (LOI) to enter lunar orbit (~1.0 km/s), then a Powered Descent Initiation (PDI) and landing (~2.0 km/s). Each step requires enormous energy expenditure. The rocket equation means each kilogram of payload delivered to the lunar surface requires many kilograms of propellant.</p>
+          <p>The Saturn V — the only rocket ever to send humans to the Moon — produced 35 million newtons of thrust, weighed 2.8 million kg at launch, and delivered ~45 kg of returned samples per mission. NASA's current Space Launch System produces 39 million newtons. SpaceX's Starship is designed to be fully reusable and could dramatically reduce per-kg costs.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Launch windows and orbital mechanics</div>
+        <div class="card-body">
+          <p>Lunar launch windows depend on several factors: the Moon's position in its orbit, the desired landing site latitude, and the desired lighting conditions at the landing site (too little sunlight = can't see, too much = high temperatures). Apollo missions targeted early lunar morning at the landing site — long shadows revealed terrain, but temperatures were not yet extreme.</p>
+          <p>Artemis missions also must consider the Lunar Gateway orbit when it exists. The Gateway's Near Rectilinear Halo Orbit (NRHO) around the Moon is stable and accessible from multiple lunar surface locations — a key advantage over traditional low lunar orbit for a staging station.</p>
+          <p>Earth-Moon transit time trades off with fuel: Apollo used a direct free-return trajectory (3 days). Some robotic missions use slower, more fuel-efficient low-energy transfer orbits via the Sun-Earth L1 Lagrange point (3–4 months). Artemis II will use a free-return trajectory — if the main engine fails after TLI, the spacecraft automatically returns to Earth without any burns.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">Commercial lunar travel — what is currently possible</div>
+        <div class="card-body">
+          <p>As of 2026, no commercial provider offers public crewed lunar travel. The only organization providing crewed access is NASA through Artemis. However:</p>
+          <p><strong>Axiom Space</strong> has flown commercial missions to the ISS at ~$55M per seat. It has discussed future lunar tourism in the Artemis era but no lunar mission is planned. <strong>SpaceX</strong> sold a circumlunar mission to Japanese entrepreneur Yusaku Maezawa (the "dearMoon" project) using Starship — this was officially cancelled in 2024 after crew members withdrew. <strong>Blue Origin</strong> has not announced lunar tourist offerings.</p>
+          <p>The practical reality: lunar access in the 2020s-30s will be dominated by NASA, CNSA, and government-funded science programs. Commercial lunar tourism — if it comes — will likely not be available at any price until the 2040s at the earliest, requiring stable propellant infrastructure and a functioning lunar economy.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-ey">Current launch vehicles to the Moon</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:7px;">
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 Space Launch System (SLS) Block 1</div>
+            <div style="color:var(--ink-soft);margin-top:3px;font-size:11.5px;">322 feet tall · 39M N thrust · Only human-rated rocket for deep space · Carries Orion + crew. Cost: ~$2.2B per launch. Very expensive — NASA's plan is to transition to commercial for cargo and eventually crew. Artemis I and II use Block 1. Artemis III and beyond: Block 1B with larger upper stage.</div>
+          </div>
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 SpaceX Starship (in development)</div>
+            <div style="color:var(--ink-soft);margin-top:3px;font-size:11.5px;">Tallest rocket ever · Designed to be fully reusable · NASA selected as Artemis Human Landing System (Starship HLS variant). Not yet crewed-certified for lunar missions. Orbital refueling required for Moon. Game-changing if it achieves full reusability — could reduce lunar access costs 10-100×.</div>
+          </div>
+          <div style="padding:9px;background:rgba(196,127,0,0.05);border-radius:7px;border-left:3px solid var(--amber);">
+            <div style="font-weight:700;color:var(--amber);">🇨🇳 Long March 10 (in development)</div>
+            <div style="color:var(--ink-soft);margin-top:3px;font-size:11.5px;">China's crewed lunar mission rocket. Tested in unmanned configuration. First uncrewed orbital flight ~2026. Designed for CNSA's crewed lunar program targeting 2030. Also carries the Mengzhou crewed spacecraft and LASS (Chinese Lunar lander).</div>
+          </div>
+          <div style="padding:9px;background:rgba(27,58,107,0.05);border-radius:7px;border-left:3px solid var(--blue-sci);">
+            <div style="font-weight:700;color:var(--blue-sci);">🇺🇸 Falcon 9 / Falcon Heavy (commercial)</div>
+            <div style="color:var(--ink-soft);margin-top:3px;font-size:11.5px;">Used for commercial lunar landers (CLPS program) and small probes. Cannot carry crew to the Moon. Reliable, cost-effective for robotic lunar missions. Most lunar commercial deliveries in the near term use these.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-ey">The lunar environment you are traveling to</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--red);">Radiation</strong><br><span style="color:var(--ink-soft);">No magnetosphere. No atmosphere. Surface exposed to solar energetic particles and galactic cosmic rays. A 2-week stay at the lunar surface delivers ~30 mSv — equivalent to ~1 chest CT scan. Long-term habitation requires shielding (regolith, lava tubes, or purpose-built shielding).</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--red);">Dust</strong><br><span style="color:var(--ink-soft);">Apollo astronauts' biggest practical complaint. Lunar regolith is extremely fine, jagged (no weathering rounds the particles), and electrostatically charged. It stuck to everything, scratched visors, degraded seals, and was nearly impossible to remove. Every long-duration surface operation must solve the dust problem.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--amber);">Temperature extremes</strong><br><span style="color:var(--ink-soft);">Equatorial daytime: +127°C. Equatorial night: −173°C. Poles (sunlit rim): near constant −50°C (much more manageable). Polar permanently shadowed regions: −183°C to −233°C. South pole bases have enormous thermal advantages over equatorial locations.</span></div>
+          <div style="padding:7px;background:var(--bg);border-radius:6px;"><strong style="color:var(--blue-sci);">Communications</strong><br><span style="color:var(--ink-soft);">1.28 second one-way signal delay. Real-time communication with Earth is fully functional — unlike Mars. Near-side locations have direct line-of-sight to Earth continuously. Far-side requires relay satellites. Artemis Gateway will provide improved relay coverage.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CULTURE & ASTROLOGY ════════════════════════════════════ -->
+<div class="tab-panel" id="panel-culture">
+
+  <!-- LUNAR DATES TODAY -->
+  <div class="card" style="background:linear-gradient(135deg,#080c18 0%,#0e1428 100%);border:1px solid rgba(200,206,224,0.12);color:white;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div style="font-size:28px;">🌙</div>
+      <div>
+        <div class="card-ey" style="color:rgba(200,206,224,0.4);">Today's lunar date across the world</div>
+        <div class="card-title" style="color:var(--silver-lt);margin-bottom:0;">Tuesday, March 17, 2026 — seen through eight calendars</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">☪️</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Islamic · Hijri</div>
+        <div style="font-size:15px;font-weight:700;color:#FAC775;font-family:'Libre Baskerville',serif;">27 Ramadan 1447</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">Last days of Ramadan — Laylat al-Qadr. Eid al-Fitr expected ~March 20. Tonight is among the most sacred nights of the Islamic year. The month began with the first crescent sighting Feb 18.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">✡️</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Hebrew · Anno Mundi</div>
+        <div style="font-size:15px;font-weight:700;color:#a0d0ff;font-family:'Libre Baskerville',serif;">27 Adar 5786</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">The month of Adar — month of Purim and joy. Purim was celebrated last week (14–15 Adar). The new moon of Nisan — the first month of the Jewish sacred year, and month of Passover — arrives in roughly 3 days.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">🐉</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Chinese Lunar</div>
+        <div style="font-size:15px;font-weight:700;color:#7fcf95;font-family:'Libre Baskerville',serif;">乙巳年 二月十八</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">Year of the Wood Snake (乙巳) · 2nd lunar month, day 18. The Waning Crescent approaches the new moon — the new lunar month will begin ~March 20, initiating the third month. Chinese New Year was Jan 29.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">🕉️</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Hindu Panchang</div>
+        <div style="font-size:15px;font-weight:700;color:#ff9966;font-family:'Libre Baskerville',serif;">Krishna Paksha 12</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">Phalguna Vadya 12 — the waning (Krishna) fortnight of Phalguna. The month of Holi. Shivaratri was last month. Amavasya (new moon) in ~3 days begins the month of Chaitra, and Ugadi / Hindu New Year follows.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">☸️</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Buddhist Era</div>
+        <div style="font-size:15px;font-weight:700;color:#e8c866;font-family:'Libre Baskerville',serif;">2569 BE · Phaggun 27</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">The Buddhist Era adds 543 years to the Gregorian year (CE 2026 = BE 2569). Used officially in Thailand and Cambodia. This is the waning moon of Phaggun — the quiet, introspective phase before Chaitra New Year.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">🌿</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Celtic / Neo-Pagan</div>
+        <div style="font-size:15px;font-weight:700;color:#88ffcc;font-family:'Libre Baskerville',serif;">Waning · Alder Moon</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">The Wiccan/Celtic Wheel places this under the Alder Moon — the fourth tree moon of the year, associated with courage and the turning of winter to spring. Ostara (Spring Equinox) arrives in 3 days.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">🌾</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Farmers' / Folk</div>
+        <div style="font-size:15px;font-weight:700;color:#d4a832;font-family:'Libre Baskerville',serif;">Worm Moon · Waning</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">The March full moon is traditionally the Worm Moon — named for the earthworms that emerge as the ground thaws. The next Full Moon (April 1–2) will be the Pink Moon, and will coincide with Artemis II's launch window.</div>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,206,224,0.1);border-radius:9px;">
+        <div style="font-size:18px;margin-bottom:5px;">♓</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);margin-bottom:4px;">Western Astrology</div>
+        <div style="font-size:15px;font-weight:700;color:#c8a8ff;font-family:'Libre Baskerville',serif;">Moon in Pisces</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.5);margin-top:4px;line-height:1.5;">The Moon transits Pisces today — associated with intuition, dreams, and spiritual sensitivity. The waning phase in Pisces is traditionally considered a time for reflection, release, and preparation for the new cycle beginning at New Moon.</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(200,206,224,0.2);text-align:right;">
+      All dates as of March 17, 2026 · Regional variations exist for Islamic dates based on moon sighting methodology
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+
+      <!-- MOON DEITIES -->
+      <div class="card">
+        <div class="card-ey">The moon goddesses</div>
+        <div class="card-title">She has had a thousand names</div>
+        <div class="card-body">
+          <p>In nearly every culture on Earth, the Moon was feminine before it was scientific. The connection is not arbitrary — the Moon's 29.5-day cycle mirrors the average human menstrual cycle with uncanny precision, and the two were observed and named long before anyone knew why. Across hundreds of distinct mythologies, the Moon became the domain of goddesses of fertility, birth, death, healing, magic, time, and the cycles of all living things.</p>
+          <p>A small handful of cultures assigned the Moon to male deities — most notably Japan (Tsukuyomi), Egypt (Khonsu and Thoth), Norse tradition (Máni), and Mesopotamia (Sin/Nanna). But the overwhelming cross-cultural tendency was feminine. The Moon was the Great Mother, the measurer of time, the protector of women and childbirth, the weaver of fate. She watched over the night while the Sun ruled the day — and the night was always more mysterious, more intimate, more tied to the cycles of the body.</p>
+        </div>
+      </div>
+
+      <!-- GODDESS GRID -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #c8a8ff;">
+          <div class="card-ey">Greek</div>
+          <div style="font-size:16px;font-weight:700;color:var(--purple);font-family:'Libre Baskerville',serif;margin-bottom:6px;">Selene · Artemis · Hecate</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">The Greek lunar triple — Selene was the Moon itself, driving a silver chariot across the night sky, daughter of Hyperion and Theia. Artemis governed the crescent and the hunt. Hecate ruled the dark moon, magic, and crossroads. Together they were the Triple Goddess of the lunar cycle's three faces. Selene fell in love with the mortal Endymion and begged Zeus to grant him eternal sleep so his beauty would never fade — she visited him nightly on Mount Latmos, his eyes forever closed.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #ffccaa;">
+          <div class="card-ey">Roman</div>
+          <div style="font-size:16px;font-weight:700;color:var(--amber);font-family:'Libre Baskerville',serif;margin-bottom:6px;">Luna · Diana</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Luna was the direct personification of the Moon, her influence so pervasive that "luna" gave English its word for lunatic — the belief that the full moon drove people mad. Diana was the huntress, protector of animals and young girls, goddess of childbirth. She was worshipped at Lake Nemi in a sacred grove near Rome in rites so ancient and strange that James Frazer opened The Golden Bough with them. The month name "Monday" descends from "Moon's day" — Lunae dies in Latin.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #ffaa66;">
+          <div class="card-ey">Incan</div>
+          <div style="font-size:16px;font-weight:700;color:#c47f00;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Mama Quilla — Mother Moon</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Mama Quilla (Kichwa: "Mother Moon") was among the most important deities in the Inca pantheon — sister and wife of Inti the Sun God, protector of married women and the menstrual cycle, regulator of the agricultural calendar. Silver was her sacred metal — the "tears of the Moon." Her primary temple in Cusco was lined with silver to reflect moonlight. During lunar eclipses, when the Moon appeared to be devoured by a heavenly jaguar, the Inca would shout, throw spears, and sacrifice animals to protect her.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #66ccaa;">
+          <div class="card-ey">Chinese</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green);font-family:'Libre Baskerville',serif;margin-bottom:6px;">Chang'e — Lady of the Moon Palace</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Chang'e (嫦娥) drank an elixir of immortality intended for her husband, the archer Hou Yi, and floated up to the Moon where she lives in the Cold Jade Palace with a jade rabbit who endlessly pounds the elixir of life with a mortar and pestle. She is a figure of loneliness, longing, and eternal beauty. The Mid-Autumn Festival — held on the full moon of the 8th lunar month — is celebrated in her honor with mooncakes. NASA named the Chinese lunar program after her.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #88ccff;">
+          <div class="card-ey">Mayan</div>
+          <div style="font-size:16px;font-weight:700;color:var(--blue-sci);font-family:'Libre Baskerville',serif;margin-bottom:6px;">Ix Chel — Lady Rainbow</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Ix Chel (Ix = Lady; Chel = Rainbow) appeared in two forms — a young, sensual woman associated with fertility and the weaving of time, and a powerful old woman with claws and a serpent headdress associated with floods and destruction. She was goddess of medicine, midwifery, weaving, and the moon. She was often depicted with a rabbit, the classic symbol of lunar fertility. Her sacred island was Cozumel, "Island of the Swallows," the most important pilgrimage site in the Mayan world.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #ffaa88;">
+          <div class="card-ey">Egyptian</div>
+          <div style="font-size:16px;font-weight:700;color:#b87040;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Khonsu · Thoth · Isis</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Egypt was unusual in assigning its primary lunar roles to male gods. Khonsu ("He who traverses the sky") was the son of Amun and Mut, depicted as a mummified youth with a crescent moon — healer and measurer of time. Thoth, the ibis-headed god of wisdom and writing, won five extra days from Khonsu in a dice game — days he gave to the sky goddess Nut so she could give birth to the gods. Isis was sometimes identified as a moon goddess, and the crescent moon became her crown.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #ccccff;">
+          <div class="card-ey">Celtic</div>
+          <div style="font-size:16px;font-weight:700;color:var(--purple);font-family:'Libre Baskerville',serif;margin-bottom:6px;">Arianrhod · Cerridwen · Brigid</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Arianrhod ("Silver Wheel") was the Welsh goddess of the Moon, stars, and the turning of fate — her wheel was the Moon herself, turning the cycles of birth, death, and rebirth. Cerridwen, the crone of transformation, brewed the cauldron of knowledge in the dark of the moon. Brigid bridged the triple aspect — goddess of poetry, healing, and the forge — associated with the waxing moon's creative power. The Celtic calendar was lunar at its core, with months named for trees.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;border-left:3px solid #ffddaa;">
+          <div class="card-ey">Hindu</div>
+          <div style="font-size:16px;font-weight:700;color:#b86000;font-family:'Libre Baskerville',serif;margin-bottom:6px;">Chandra · Soma</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Chandra (चन्द्र, "shining") is the Hindu moon god — young, fair, riding a chariot drawn by antelopes, wearing a crescent on his brow. He married 27 daughters of Daksha — one for each nakshatra (lunar mansion) in the Hindu system. He favored Rohini above the others, and the jealous remaining wives complained to their father, who cursed Chandra to wane. The Moon's monthly waning and waxing is explained by this curse, relieved each fortnight by the god's return. Soma — the sacred ritual drink of the Vedas — and the moon god are often identified as the same.</div>
+        </div>
+      </div>
+
+      <!-- ASTROLOGY -->
+      <div class="card">
+        <div class="card-ey">Astrology</div>
+        <div class="card-title">The Moon in Western and Vedic traditions</div>
+        <div class="card-body">
+          <p>In Western astrology, the Moon governs the inner emotional self — instinct, memory, habit, the subconscious. Where the Sun is who you are, the Moon is how you feel. It rules Cancer, the cardinal water sign, and is exalted in Taurus. It moves faster than any other celestial body in the natal chart, changing signs approximately every 2.5 days. The Moon's placement at birth — its sign, house, and aspects — describes a person's emotional landscape, their relationship to the past and to their mother, their instinctive responses before the rational mind engages.</p>
+          <p>In Vedic (Jyotish) astrology, the Moon holds even greater weight than in Western tradition — many Vedic astrologers consider the Moon sign more important than the Sun sign, because it governs mind (manas) and perception. The 27 nakshatras (lunar mansions) divide the zodiac into 27 sections of 13°20' each, corresponding to the Moon's nightly position over 27 days. Each nakshatra has its own deity, symbol, and archetypal quality. The Moon in Jyotish is the lens through which all of life is experienced.</p>
+          <p>In Chinese astrology, the Moon governs the Yin principle — receptive, interior, feminine, cyclical. In Taoist cosmology, the Moon is pure Yin energy in its most visible form, in constant dialogue with the Yang energy of the Sun. The balance of these two forces — and the Moon's phases as a living record of their relationship — is central to Chinese medicine, divination, and agricultural practice.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+
+      <!-- FEMININE FACTS -->
+      <div class="card" style="background:linear-gradient(160deg,#100818 0%,#1a0e28 100%);border:1px solid rgba(200,160,255,0.15);color:white;">
+        <div class="card-ey" style="color:rgba(200,160,255,0.4);">The feminine Moon</div>
+        <div class="card-title" style="color:#e8d0ff;margin-bottom:12px;">What the science actually shows</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">29.5 days — the coincidence that isn't</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">The average human menstrual cycle is 28–29 days. The lunar synodic cycle is 29.53 days. This near-identity — noticed by every ancient culture — was almost certainly the original motivation for the Moon's deep association with femininity, fertility, and reproductive timing. Whether the resemblance is causal or coincidental is still debated by biologists.</div>
+          </div>
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">The synchronization studies</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">A 2021 peer-reviewed study in <em>Science Advances</em> (Helfrich-Förster et al., Würzburg) analyzed long-term menstrual records from 22 women spanning up to 37 years. Finding: women's cycles intermittently synchronized with the Moon's luminance and gravitational cycles — but not permanently, and the effect decreased with age and with exposure to artificial light. Women who were "night owls" showed no synchronization at all. The pre-2010 records showed stronger synchrony than post-2010, suggesting modern artificial lighting has disrupted an ancient biological clock.</div>
+          </div>
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">Birth rates and the full moon</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">Two large longitudinal studies — encompassing ~250,000 and ~500,000 births respectively — found birth rates elevated by 2–3% above average at the full moon and reduced by the same amount at the new moon. The effect is small but consistent. The scientific community remains divided on whether it is causal or statistical noise.</div>
+          </div>
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">Sleep and the full moon</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">A separate 2021 <em>Science Advances</em> study found that people — urban, rural, indigenous, and non-indigenous alike — fell asleep later and slept less in the days leading up to the full moon. This effect was observed even in urban settings where artificial light outshines moonlight, suggesting a biological clock tuned to the lunar cycle, not just a direct light response.</div>
+          </div>
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">Fertility and lunar timing</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">Multiple studies have found that women with menstrual cycles closest to 29.5 days — the most "lunar" cycles — have the highest likelihood of becoming pregnant. Whether this reflects an adaptive synchronization to moonlight for maximizing fertility windows, or simply that 29.5-day cycles reflect optimal ovulatory timing for independent biological reasons, is unresolved.</div>
+          </div>
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">The word "menstruation"</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">Comes from Latin <em>menses</em> (months) and Greek <em>mene</em> (moon). "Month" itself comes from "moon" — the Old English <em>monath</em>, from <em>mona</em> (moon). In virtually every Indo-European language, the words for Moon, month, and menstruation share the same root. The semantic linkage is 5,000+ years old and pan-cultural.</div>
+          </div>
+
+          <div style="padding:9px;background:rgba(200,160,255,0.06);border-radius:7px;border-left:3px solid rgba(200,160,255,0.4);">
+            <div style="font-weight:700;color:#e8d0ff;margin-bottom:3px;">Monday — the Moon's day</div>
+            <div style="color:rgba(220,200,255,0.6);line-height:1.6;">The seven-day week was organized around the seven classical celestial bodies, each governing one day. Monday = Moon's day (Old English <em>Mōnandæg</em>). In French: <em>lundi</em> (from Luna). In Italian: <em>lunedì</em>. In Spanish: <em>lunes</em>. In virtually every Romance language and many Germanic ones, the second day of the week still carries the Moon's name — a remnant of the ancient lunisolar week embedded in the calendar of nearly every modern nation.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOON IN LANGUAGE -->
+      <div class="card">
+        <div class="card-ey">The Moon in language</div>
+        <div class="card-body" style="font-size:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;font-size:11px;">
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">月</div><div style="color:var(--ink-mut);">Yuè · Chinese</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">月</div><div style="color:var(--ink-mut);">Tsuki · Japanese</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">달</div><div style="color:var(--ink-mut);">Dal · Korean</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">قمر</div><div style="color:var(--ink-mut);">Qamar · Arabic</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">לבנה</div><div style="color:var(--ink-mut);">Levana · Hebrew</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">चन्द्र</div><div style="color:var(--ink-mut);">Chandra · Sanskrit</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">Lune</div><div style="color:var(--ink-mut);">French</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">Mond</div><div style="color:var(--ink-mut);">German</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">Lua</div><div style="color:var(--ink-mut);">Portuguese</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">Ay</div><div style="color:var(--ink-mut);">Turkish</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">Msalaba</div><div style="color:var(--ink-mut);">Swahili</div></div>
+            <div style="padding:6px;background:var(--bg);border-radius:5px;text-align:center;"><div style="font-weight:700;font-size:16px;">Marama</div><div style="color:var(--ink-mut);">Māori</div></div>
+          </div>
+          <div style="padding:8px;background:var(--amber-p);border-radius:7px;font-size:11.5px;color:var(--ink-soft);">The Hebrew word for Moon — <strong>לבנה</strong> (Levana, "the white one") — shares a root with <strong>לבן</strong> (lavan, white) and Lebanon — literally "the white mountain," named for its snow-capped peaks. The Moon, whiteness, and purity travel together across Semitic root systems.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ DISCOURSE ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-discourse">
+
+  <!-- ── NEW DELIBERATION — HABITAT ───────────────────────────── -->
+  <div class="card" style="border:2px solid rgba(200,206,224,0.25);background:linear-gradient(135deg,#080c18 0%,#0e1428 100%);color:white;margin-bottom:20px;">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 9px;border-radius:100px;background:rgba(200,206,224,0.15);color:var(--silver);letter-spacing:0.1em;text-transform:uppercase;">🗳 Deliberation · Open</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(200,206,224,0.35);letter-spacing:0.08em;">Posted March 17, 2026 · @NoahG</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;padding:2px 9px;border-radius:100px;background:rgba(212,168,50,0.15);color:var(--gilt-lt);letter-spacing:0.08em;">🆕 New today</div>
+        </div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:var(--silver-lt);line-height:1.25;max-width:640px;">How should the first permanent lunar base be built? Three serious proposals — and the Moon has an opinion on all of them.</div>
+        <div style="font-size:13px;color:rgba(200,210,230,0.55);line-height:1.65;margin-top:10px;max-width:640px;">Every mission that lands on the Moon brings the question closer. A permanent lunar habitat requires solving radiation, temperature, vacuum, and dust simultaneously — with every kilogram of construction material costing thousands of dollars to launch from Earth. Three fundamentally different approaches have been proposed. Each trades different risks. Which one would you build?</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right;">
+        <div style="font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--silver);" id="vote-total">3</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(200,206,224,0.3);text-transform:uppercase;letter-spacing:0.1em;">contributions</div>
+        <div style="margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(200,206,224,0.3);text-transform:uppercase;letter-spacing:0.08em;">72h remaining</div>
+      </div>
+    </div>
+
+    <!-- Three positions -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;" id="habitat-positions">
+
+      <!-- 3D Printing -->
+      <div class="hab-pos" id="pos-print" onclick="voteHabitat('print')" style="padding:14px;border-radius:9px;border:1px solid rgba(58,122,184,0.3);background:rgba(58,122,184,0.08);cursor:pointer;transition:all 0.15s;position:relative;">
+        <div style="font-size:26px;margin-bottom:8px;">🖨️</div>
+        <div style="font-size:12px;font-weight:700;color:#88ccff;margin-bottom:5px;">3D-Print from regolith</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.55);line-height:1.55;">Print structures using lunar soil as feedstock. ESA and NASA have tested sintering and binding techniques on Earth. Zero imported material for walls. Robots work before humans arrive. Weakness: regolith has never been tested at scale, layer adhesion in vacuum is unproven, and dust contamination jams print heads.</div>
+        <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#88ccff;" id="print-count">1 vote</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;border:1px solid rgba(88,204,255,0.25);color:#88ccff;">Vote →</div>
+        </div>
+      </div>
+
+      <!-- Flat-pack -->
+      <div class="hab-pos" id="pos-flatpack" onclick="voteHabitat('flatpack')" style="padding:14px;border-radius:9px;border:1px solid rgba(21,92,45,0.35);background:rgba(21,92,45,0.1);cursor:pointer;transition:all 0.15s;position:relative;">
+        <div style="font-size:26px;margin-bottom:8px;">📦</div>
+        <div style="font-size:12px;font-weight:700;color:#7fcf95;margin-bottom:5px;">Flat-pack kit-of-parts</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.55);line-height:1.55;">Pre-engineered structural panels, connections, and pressure envelopes launched as compact flat-pack assemblies — think IKEA at 1/6 gravity. Tested materials, predictable assembly, replaceable components. Inflatable inner pressure liner. Weakness: every kg flies from Earth, logistics-heavy, structural connections are failure points in vacuum and thermal cycling.</div>
+        <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#7fcf95;" id="flatpack-count">1 vote</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;border:1px solid rgba(127,207,149,0.25);color:#7fcf95;">Vote →</div>
+        </div>
+      </div>
+
+      <!-- Boring tunnels -->
+      <div class="hab-pos" id="pos-bore" onclick="voteHabitat('bore')" style="padding:14px;border-radius:9px;border:2px solid rgba(212,168,50,0.5);background:rgba(212,168,50,0.1);cursor:pointer;transition:all 0.15s;position:relative;">
+        <div style="font-size:26px;margin-bottom:8px;">⛏️</div>
+        <div style="font-size:12px;font-weight:700;color:var(--gilt-lt);margin-bottom:5px;">Boring — tunnel network</div>
+        <div style="font-size:11px;color:rgba(200,210,230,0.55);line-height:1.55;">Drill and bore into the regolith or existing lava tube systems, creating pressurized underground corridors. The Moon itself becomes the structure — meters of rock shielding radiation, zero thermal cycling, micrometeorite-proof. The Boring Company analogy is not accidental. Weakness: drilling in vacuum with lunar regolith abrasives is mechanically brutal; lava tube integrity is unverified; requires heavy machinery in-situ.</div>
+        <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gilt-lt);" id="bore-count">1 vote · <strong>proposed by @NoahG</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:100px;border:1px solid rgba(212,168,50,0.4);color:var(--gilt-lt);background:rgba(212,168,50,0.08);">Vote →</div>
+        </div>
+        <div style="position:absolute;top:10px;right:10px;font-family:'JetBrains Mono',monospace;font-size:6.5px;padding:2px 6px;border-radius:100px;background:rgba(212,168,50,0.2);color:var(--gilt-lt);letter-spacing:0.08em;">PROPOSED</div>
+      </div>
+    </div>
+
+    <!-- Live vote bar -->
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.35);">Current standing</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(200,206,224,0.3);" id="bar-total">3 total votes</div>
+      </div>
+      <div style="display:flex;height:8px;border-radius:100px;overflow:hidden;gap:2px;" id="vote-bar">
+        <div id="bar-print" style="flex:1;background:#3a7ab8;border-radius:100px;transition:flex 0.4s ease;"></div>
+        <div id="bar-flatpack" style="flex:1;background:#155c2d;border-radius:100px;transition:flex 0.4s ease;"></div>
+        <div id="bar-bore" style="flex:1;background:var(--gilt);border-radius:100px;transition:flex 0.4s ease;"></div>
+      </div>
+      <div style="display:flex;gap:14px;margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(200,206,224,0.4);">
+        <span><span style="color:#88ccff;">●</span> 3D-print <span id="pct-print">33%</span></span>
+        <span><span style="color:#7fcf95;">●</span> Flat-pack <span id="pct-flatpack">33%</span></span>
+        <span><span style="color:var(--gilt-lt);">●</span> Boring <span id="pct-bore">33%</span></span>
+      </div>
+    </div>
+
+    <!-- Framing questions -->
+    <div style="border-top:1px solid rgba(200,206,224,0.08);padding-top:12px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(200,206,224,0.3);margin-bottom:8px;">Questions framing the deliberation</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;color:rgba(200,210,230,0.5);">
+        <div style="padding:7px;background:rgba(255,255,255,0.03);border-radius:6px;">Does the correct answer change depending on whether you're building a 4-person outpost or a 10,000-person settlement?</div>
+        <div style="padding:7px;background:rgba(255,255,255,0.03);border-radius:6px;">Lava tube networks already exist under the lunar surface — does that make boring redundant, or does it validate the underground-is-right thesis entirely?</div>
+        <div style="padding:7px;background:rgba(255,255,255,0.03);border-radius:6px;">3D printing and flat-pack are surface solutions. They share one fatal vulnerability — the regolith dust that wrecked Apollo gear. Does the tunnel approach simply sidestep the hardest engineering problem?</div>
+        <div style="padding:7px;background:rgba(255,255,255,0.03);border-radius:6px;">Is this even a binary choice? Could the answer be boring primary corridors + 3D-printed surface nodes + flat-pack pressurized inflatable interiors as a hybrid system?</div>
+      </div>
+    </div>
+
+    <!-- Add contribution -->
+    <div style="margin-top:14px;border-top:1px solid rgba(200,206,224,0.08);padding-top:12px;display:flex;gap:10px;align-items:flex-start;">
+      <div style="width:30px;height:30px;border-radius:50%;background:rgba(200,206,224,0.1);border:1px solid rgba(200,206,224,0.2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;">👤</div>
+      <div style="flex:1;">
+        <textarea id="hab-reply" placeholder="Add your argument, technical detail, or vote rationale…" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(200,206,224,0.15);border-radius:8px;color:rgba(200,210,230,0.8);font-family:'Nunito',sans-serif;font-size:12.5px;padding:10px 12px;resize:vertical;min-height:64px;outline:none;line-height:1.6;" rows="3"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(200,206,224,0.25);" id="reply-count-label">0 contributions so far · be the first</div>
+          <button onclick="submitHabitatReply()" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;border-radius:6px;background:rgba(200,206,224,0.12);color:var(--silver);border:1px solid rgba(200,206,224,0.2);cursor:pointer;">Post contribution →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reply thread -->
+    <div id="hab-thread" style="margin-top:8px;display:flex;flex-direction:column;gap:7px;"></div>
+  </div>
+
+  <!-- ── EXISTING DELIBERATIONS ──────────────────────────────── -->
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-ey">Other active deliberations</div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--red-p);color:var(--red);">Duel · Round 4</div></div>
+          <div class="di-title">"The Artemis Accords are the beginning of space colonialism — the US is using first-mover advantage to write rules that favor American commercial interests at the expense of the rest of humanity"</div>
+          <div class="di-meta">@space_law_un vs @commercial_space · Score 7–6 · 3h remaining · Most contested duel on Moon page this month</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--red-p);color:var(--red);">Duel · Round 2</div></div>
+          <div class="di-title">"Dennis Hope's legal argument — that the OST forbids national appropriation but not private appropriation — is not as frivolous as mainstream commentary suggests"</div>
+          <div class="di-meta">@space_property_law vs @ost_strict · Score 4–5 · 18h remaining</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--blue-pl);color:var(--blue-sci);">Vote open</div></div>
+          <div class="di-title">Apollo landing sites should have formal protected status equivalent to UNESCO World Heritage — and FORA should formally support this amendment to the Artemis Accords framework</div>
+          <div class="di-meta">441 participants · 6h remaining · 378 ratify / 63 reject</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--amber-p);color:var(--amber);">Amendment · Round 2</div></div>
+          <div class="di-title">Resources tab should include a more explicit section on helium-3 and distinguish between near-term extractables (water ice) and speculative resources (He-3, REEs) — current framing conflates them</div>
+          <div class="di-meta">67 participants · 28h remaining</div>
+        </div>
+        <div class="disc-item">
+          <div class="di-top"><div class="di-type" style="background:var(--blue-pl);color:var(--blue-sci);">Deliberation · Round 1</div></div>
+          <div class="di-title">Should FORA classify the Moon as a "jurisdiction" at all, given it has no government and no residents — or should it be a new category like "commons" or "ungoverned space"?</div>
+          <div class="di-meta">289 participants · 72h remaining · Active</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-ey">Discourse stats · Moon page</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--blue-sci);">11,207</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Contributions</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--purple);">32</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Active deliberations</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--amber);">8</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Live duels</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:7px;"><div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--green);">14</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-mut);">Ratified amendments</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:11.5px;color:var(--ink-soft);background:var(--bg);padding:10px;border-radius:7px;">The Moon page generates more deliberations per new mission announcement than any other FORA jurisdiction. Artemis II launch window and @NoahG's habitat deliberation both opened today.</div>
+        <button style="width:100%;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:10px;border-radius:8px;background:#0a0e1a;color:var(--silver);border:1px solid rgba(200,206,224,0.15);cursor:pointer;margin-top:12px;">Start a deliberation →</button>
+        <button style="width:100%;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:10px;border-radius:8px;background:transparent;color:var(--ink-soft);border:1px solid var(--rule);cursor:pointer;margin-top:8px;">Challenge to a Duel →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Habitat deliberation state
+const habState = {
+  votes: {print:1, flatpack:1, bore:1},
+  userVote: null,
+  replies: [],
+  total: 3
+};
+
+function voteHabitat(choice) {
+  if (habState.userVote === choice) return; // already voted this
+  if (habState.userVote) {
+    habState.votes[habState.userVote]--; // undo previous
+    document.getElementById('pos-'+habState.userVote).style.borderWidth = '1px';
+  }
+  habState.userVote = choice;
+  habState.votes[choice]++;
+  habState.total = habState.votes.print + habState.votes.flatpack + habState.votes.bore;
+
+  // Highlight selected
+  ['print','flatpack','bore'].forEach(k => {
+    const el = document.getElementById('pos-'+k);
+    el.style.borderWidth = k === choice ? '2px' : '1px';
+    el.style.opacity = k === choice ? '1' : '0.7';
+  });
+
+  updateHabitatUI();
+}
+
+function updateHabitatUI() {
+  const t = habState.total;
+  const v = habState.votes;
+
+  document.getElementById('vote-total').textContent = t;
+  document.getElementById('bar-total').textContent = t + ' total votes';
+  document.getElementById('print-count').textContent = v.print + (v.print === 1 ? ' vote' : ' votes');
+  document.getElementById('flatpack-count').textContent = v.flatpack + (v.flatpack === 1 ? ' vote' : ' votes');
+  document.getElementById('bore-count').innerHTML = v.bore + (v.bore === 1 ? ' vote' : ' votes') + ' · <strong>proposed by @NoahG</strong>';
+
+  const pp = Math.round(v.print/t*100);
+  const fp = Math.round(v.flatpack/t*100);
+  const bp = 100 - pp - fp;
+  document.getElementById('pct-print').textContent = pp + '%';
+  document.getElementById('pct-flatpack').textContent = fp + '%';
+  document.getElementById('pct-bore').textContent = bp + '%';
+  document.getElementById('bar-print').style.flex = v.print;
+  document.getElementById('bar-flatpack').style.flex = v.flatpack;
+  document.getElementById('bar-bore').style.flex = v.bore;
+
+  const n = habState.replies.length + 3;
+  document.getElementById('reply-count-label').textContent = (n > 3 ? n : 3) + ' contributions';
+}
+
+function submitHabitatReply() {
+  const ta = document.getElementById('hab-reply');
+  const text = ta.value.trim();
+  if (!text) return;
+
+  const reply = {text, ts: new Date()};
+  habState.replies.push(reply);
+  habState.total++;
+
+  const thread = document.getElementById('hab-thread');
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(200,206,224,0.08);';
+  div.innerHTML = `
+    <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,50,0.15);border:1px solid rgba(212,168,50,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;">👤</div>
+    <div style="flex:1;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gilt-lt);margin-bottom:4px;">@NoahG · just now</div>
+      <div style="font-size:12.5px;color:rgba(200,210,230,0.75);line-height:1.6;">${text}</div>
+    </div>`;
+  thread.insertBefore(div, thread.firstChild);
+  ta.value = '';
+  updateHabitatUI();
+}
+</script>
+
+</div><!-- end page-body -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-source" id="modal-source"></div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+const MODALS = {
+  artemis2:{title:'Artemis II — April 1, 2026',sub:'First crewed lunar mission since Apollo 17, December 1972',body:'<strong>Crew:</strong> Commander Reid Wiseman (NASA), Pilot Victor Glover (NASA — first person of color to reach deep space), Mission Specialists Christina Koch (NASA — first woman to reach deep space) and Jeremy Hansen (CSA — first non-American to reach deep space).<br><br><strong>Mission:</strong> 10-day free-return trajectory around the Moon. No landing. Orion capsule will pass approximately 5,000 miles beyond the lunar far side — the farthest any human has been from Earth since Apollo 17. Tests Orion life support, navigation, and deep space communication systems for future landing missions.<br><br><strong>Status:</strong> Launch window April 1–6, 2026. Delayed from earlier dates by a liquid hydrogen leak during fueling tests and a helium flow issue that required rollback to VAB in late February. Flight Readiness Review passed March 12. Rocket back on pad for final preparations.',source:'Sources: NASA Artemis II page · NASA.gov · NPR March 2026 · Wikipedia Artemis II (updated March 2026)'},
+  distance:{title:'Today: 384,218 km from Earth',sub:'March 17, 2026 · Waning Crescent · 3% illuminated · Moving closer',body:`<style>
+.phase-tip{position:relative;border-bottom:1px dashed #c47f00;color:#c47f00;cursor:help;font-weight:700;}
+.phase-tip .phase-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#0a0e1a;border:1px solid rgba(200,206,224,0.15);border-radius:10px;padding:10px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.phase-tip:hover .phase-pop{display:block;}
+.phase-pop img{width:100%;border-radius:7px;display:block;margin-bottom:7px;}
+.phase-pop-label{font-family:monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(200,206,224,0.6);text-align:center;line-height:1.5;}
+.phase-pop-sub{font-family:monospace;font-size:8px;color:rgba(200,206,224,0.35);text-align:center;margin-top:2px;}
+.phase-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#0a0e1a;}
+</style>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+  <div style="background:#f2f4f8;border-radius:7px;padding:10px;text-align:center;">
+    <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:#3a7ab8;">384,218 km</div>
+    <div style="font-family:monospace;font-size:8px;color:#7a8aaa;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Right now · Mar 17 2026</div>
+  </div>
+  <div style="background:#f2f4f8;border-radius:7px;padding:10px;text-align:center;">
+    <div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:#7a8aaa;">↓ Approaching</div>
+    <div style="font-family:monospace;font-size:8px;color:#7a8aaa;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Perigee Mar 22 · 366,858 km</div>
+  </div>
+</div>
+<p>The Moon is currently a <span class="phase-tip">Waning Crescent<span class="phase-pop"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/2011-07-14_Waning_Crescent_Moon.jpg/480px-2011-07-14_Waning_Crescent_Moon.jpg" alt="Waning Crescent Moon"><div class="phase-pop-label">Waning Crescent</div><div class="phase-pop-sub">3% illuminated · rising before dawn<br>visible low in the eastern sky</div></span></span> — 3% illuminated, 27 days into its lunar cycle. It is moving <strong>toward Earth</strong> right now, reaching its closest point (perigee) on March 22, 2026 at 366,858 km — about 17,000 km closer than today. After that it will begin moving away again toward the next apogee.</p>
+<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin:10px 0;font-size:12px;">
+  <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:6px;">Distance reference points</div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Today (Mar 17)</span><span style="font-weight:700;">384,218 km</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:#3a7ab8;"><span>Perigee (Mar 22)</span><span style="font-weight:700;">366,858 km ← closest</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Average orbit</span><span style="font-weight:700;">384,400 km</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Last apogee (Mar 10)</span><span style="font-weight:700;">~406,300 km</span></div>
+  <div style="display:flex;justify-content:space-between;"><span>All-time range</span><span style="font-weight:700;">356,500 – 406,700 km</span></div>
+</div>
+<p style="margin-top:8px;">Light takes <strong>1.28 seconds</strong> to reach the Moon right now. A round-trip radio signal: <strong>2.56 seconds</strong> — real-time communication is fully possible, unlike Mars (3–22 min each way). The Moon's elliptical orbit means it moves toward and away from Earth by up to ~50,000 km each month. When perigee coincides with a Full Moon, we call it a Supermoon — the Moon appears about 14% larger and 30% brighter. The next Full Moon (April 1–2, 2026) arrives close to perigee, making it a significant Supermoon.</p>`,source:'Source: lunaf.com Moon Phase March 17 2026 · earthsky.org Supermoon 2026 · NASA Lunar Fact Sheet'},
+  ost:{title:'Outer Space Treaty — 118 parties',sub:'Opened Jan 27, 1967 · In force Oct 10, 1967 · Foundational instrument of space law',body:`
+<p>The OST forbids "national appropriation by claim of sovereignty, by means of use or occupation, or by any other means" (Art. II). All major spacefaring nations have ratified it. 118 parties as of October 2025 — plus 20 more who signed but haven't completed ratification.</p>
+<p style="margin:8px 0 4px;"><strong>Core articles:</strong></p>
+<div style="font-size:12px;display:flex;flex-direction:column;gap:4px;margin-bottom:10px;">
+  <div style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #3a7ab8;"><strong>Art. I</strong> — Space is "the province of all mankind," free for exploration by all states</div>
+  <div style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #8b1a1a;"><strong>Art. II</strong> — No sovereignty, use, occupation, or any other means of national appropriation</div>
+  <div style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #155c2d;"><strong>Art. IV</strong> — No WMDs in space; celestial bodies for peaceful purposes only</div>
+  <div style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;"><strong>Art. VI</strong> — States responsible for ALL national activities including private operators</div>
+  <div style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #7a8aaa;"><strong>Art. VII</strong> — States liable for damage caused by their space objects</div>
+  <div style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #7a8aaa;"><strong>Art. IX</strong> — Avoid harmful contamination of celestial bodies; planetary protection</div>
+</div>
+<details style="margin-top:8px;cursor:pointer;">
+  <summary style="font-family:monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#3a7ab8;padding:6px 0;list-style:none;display:flex;align-items:center;gap:6px;"><span>▸</span> Show all 118 parties</summary>
+  <div style="margin-top:8px;font-size:11.5px;line-height:1.9;color:#4a5568;columns:2;gap:14px;">
+Afghanistan · Algeria · Antigua &amp; Barbuda · Argentina · Armenia · Australia · Austria · Azerbaijan · Bahamas · Bahrain · Bangladesh · Barbados · Belarus · Belgium · Benin · Brazil · Brunei · Bulgaria · Burkina Faso · Canada · Chile · China · Colombia · Cuba · Cyprus · Czechia · Denmark · Dominican Republic · Ecuador · Egypt · Estonia · Ethiopia · Finland · France · Germany · Ghana · Greece · Guinea-Bissau · Hungary · Iceland · India · Indonesia · Iran · Iraq · Ireland · Israel · Italy · Japan · Jordan · Kazakhstan · Kenya · Kuwait · Latvia · Lebanon · Libya · Lithuania · Luxembourg · Madagascar · Mali · Malta · Mauritius · Mexico · Mongolia · Montenegro · Morocco · Myanmar · Netherlands · New Zealand · Nicaragua · Niger · Nigeria · North Korea · Norway · Oman · Pakistan · Papua New Guinea · Paraguay · Peru · Philippines · Poland · Portugal · Qatar · Romania · Russia · Rwanda · Saudi Arabia · Senegal · Serbia · Sierra Leone · Singapore · Slovakia · Slovenia · South Africa · South Korea · Spain · Sri Lanka · Sweden · Switzerland · Syria · Thailand · Tonga · Tunisia · Türkiye · Uganda · UK · Ukraine · UAE · Uruguay · USA · Uzbekistan · Venezuela · Vietnam · Zambia
+  </div>
+  <p style="margin-top:6px;font-size:11px;color:#7a8aaa;font-style:italic;">Notably absent from full ratification: Colombia (ratified 2024 with contested interpretive declaration), many small island states and sub-Saharan nations. 20 more nations have signed but not yet ratified.</p>
+</details>`,source:'Source: UN OOSA Treaty Status · Wikipedia Outer Space Treaty · October 2025'},
+  accords:{title:'Artemis Accords — 61 signatories',sub:'Non-binding political commitments · October 2020 · Latest: Oman, January 26 2026',body:`
+<p style="margin-bottom:10px;">Not a treaty — no legal force. Drafted by NASA and the US State Department. Describes itself as operationalizing the Outer Space Treaty for the 21st century. Russia calls it "a blatant attempt to create international space law that favors the United States." <strong>China and Russia have not signed.</strong></p>
+
+<details open style="margin-bottom:8px;">
+  <summary style="font-family:monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#c47f00;cursor:pointer;padding:5px 0;list-style:none;display:flex;align-items:center;gap:6px;"><span>▸</span> Key provisions (hover for detail)</summary>
+  <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px;font-size:12px;">
+    <div class="ap" title="All activities must be exclusively for peaceful purposes, consistent with the Outer Space Treaty." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">☮️ <strong>Peaceful purposes</strong> — All activities for peaceful purposes only</div>
+    <div class="ap" title="Signatories commit to broadly disseminating information about their space policies and mission plans — reducing risk of misunderstanding or accidental conflict." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">📡 <strong>Transparency</strong> — Public disclosure of national space policies and mission plans</div>
+    <div class="ap" title="Systems should be designed to work together — common standards for fuel storage, landing, communications, and power. Makes cooperation practical." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">🔌 <strong>Interoperability</strong> — Common technical standards; systems must work together</div>
+    <div class="ap" title="All reasonable efforts to assist astronauts or personnel in distress, regardless of nationality, consistent with the 1968 Rescue Agreement." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">🚑 <strong>Emergency assistance</strong> — Help anyone in distress in space, regardless of nationality</div>
+    <div class="ap" title="Signatories commit to publicly releasing scientific data from their missions so the entire world can benefit. A significant departure from Cold War secrecy norms." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">🔬 <strong>Open science data</strong> — Release scientific results publicly for the benefit of all</div>
+    <div class="ap" title="Signatories commit to protecting historically significant sites and artifacts — Apollo landing sites, early robotic landers. First international agreement to mention space heritage. Still non-binding." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">🏺 <strong>Heritage protection</strong> — Preserve historically significant sites and artifacts in space</div>
+    <div class="ap" title="Each operator must notify others of the location and nature of their operations and establish 'safety zones' around them to avoid harmful interference. The most contested provision — Russia and China compare it to colonial land enclosure." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #8b1a1a;cursor:help;">⚠️ <strong>Safety zones</strong> <em>(most contested)</em> — Buffer areas around operations; coordination required</div>
+    <div class="ap" title="Extraction of space resources does not inherently constitute national appropriation under OST Art. II. Signatories affirm mining is legal. China and Russia dispute this interpretation." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #8b1a1a;cursor:help;">⛏️ <strong>Resource extraction</strong> <em>(most contested)</em> — Mining affirmed as legal; not national appropriation</div>
+    <div class="ap" title="Commitment to planning for safe, timely disposal of spacecraft at end-of-mission. Limits generation of long-lived orbital debris. A practical sustainability commitment." style="padding:5px 8px;background:#f2f4f8;border-radius:5px;border-left:2px solid #c47f00;cursor:help;">🗑️ <strong>Orbital debris</strong> — Safe spacecraft disposal; minimize long-lived debris</div>
+  </div>
+</details>
+
+<details style="margin-bottom:8px;">
+  <summary style="font-family:monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#3a7ab8;cursor:pointer;padding:5px 0;list-style:none;display:flex;align-items:center;gap:6px;"><span>▸</span> All 61 signatories by region</summary>
+  <div style="margin-top:8px;font-size:12px;display:flex;flex-direction:column;gap:8px;">
+    <div>
+      <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:3px;">🌍 Europe (28)</div>
+      <div style="line-height:1.9;color:#4a5568;">Austria · Belgium · Bulgaria · Cyprus · Czechia · Denmark · Estonia · Finland · France · Germany · Greece · Hungary · Iceland · Italy · Latvia · Liechtenstein · Lithuania · Luxembourg · Netherlands · Norway · Poland · Portugal · Romania · Slovakia · Slovenia · Spain · Sweden · Switzerland · UK · Ukraine</div>
+    </div>
+    <div>
+      <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:3px;">🌏 Asia &amp; Middle East (15)</div>
+      <div style="line-height:1.9;color:#4a5568;">Armenia · Bahrain · Bangladesh · India · Israel · Japan · Malaysia · Oman · Philippines · Saudi Arabia · Singapore · South Korea · Thailand · UAE · Ukraine</div>
+    </div>
+    <div>
+      <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:3px;">🌎 Americas (7)</div>
+      <div style="line-height:1.9;color:#4a5568;">Argentina · Brazil · Canada · Chile · Colombia · Dominican Republic · Ecuador · Mexico · Panama · Peru · United States · Uruguay</div>
+    </div>
+    <div>
+      <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:3px;">🌍 Africa (4)</div>
+      <div style="line-height:1.9;color:#4a5568;">Angola · Nigeria · Rwanda · Senegal</div>
+    </div>
+    <div>
+      <div style="font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.1em;color:#7a8aaa;margin-bottom:3px;">🌊 Oceania (2)</div>
+      <div style="line-height:1.9;color:#4a5568;">Australia · New Zealand</div>
+    </div>
+    <div style="padding:7px;background:#f2f4f8;border-radius:6px;font-size:11.5px;color:#7a8aaa;">
+      <strong style="color:#8b1a1a;">Absent:</strong> Russia, China, India (India is a signatory ✓), Belarus, Pakistan — the nations running or joining the competing ILRS framework. Thailand and Senegal are the only nations signed to both the Accords and ILRS.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary style="font-family:monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#8b1a1a;cursor:pointer;padding:5px 0;list-style:none;display:flex;align-items:center;gap:6px;"><span>▸</span> Original 8 · October 13, 2020</summary>
+  <div style="margin-top:6px;font-size:12px;color:#4a5568;line-height:1.9;">Australia · Canada · Italy · Japan · Luxembourg · UAE · United Kingdom · United States</div>
+</details>`,source:'Source: NASA Artemis Accords · ESA Gateway FAQs Jan 2026 · State Dept Jan 2026 · Wikipedia Artemis Accords'},
+  moonagreement:{title:'Moon Agreement (1979) — 18 parties',sub:'Functionally dead · Common heritage of mankind',body:'The Agreement Governing the Activities of States on the Moon and Other Celestial Bodies was adopted by the UN General Assembly in 1979. It declares the Moon and its resources the "common heritage of mankind" — meaning no nation or private entity can own the resources, and any future exploitation must be governed by an international regime ensuring equitable benefit-sharing.<br><br>The problem: no major spacefaring nation has ratified it. The US, Russia, and China — the nations that matter for lunar resource governance — have all declined. Only 18 states, mostly small and none with lunar capability, have ratified. Its "common heritage" principle was explicitly rejected by spacefaring nations who viewed it as requiring international oversight of resources they wanted to use unilaterally.<br><br>Australia is the only nation to have ratified both the Moon Agreement and the Artemis Accords — creating an interesting tension that legal scholars have noted.',source:'Source: UN OOSA · ASIL Insights on Artemis Accords and Future of Space Law'},
+  ilrs:{title:'ILRS — International Lunar Research Station',sub:'China-Russia · Competing framework to Artemis · South pole target',body:'The International Lunar Research Station is China and Russia\'s competing lunar base program. CNSA and Roscosmos signed a memorandum of understanding in 2021. Pakistan signed an MOU in 2025. Several other nations have expressed interest, including Venezuela, South Africa, and Belarus.<br><br>The ILRS is both a technical program and a geopolitical statement — a competing normative framework for how the Moon should be governed. It explicitly rejects the Artemis Accords\' framework and proposes a different set of norms for ILRS members.<br><br>Technical plan: robotic missions 2026–2030 to the south pole (Chang\'e 7, Luna-Glob, Rover), construction of basic infrastructure 2030–2035, permanent human presence post-2035. Russia\'s progress has been slower than planned following Luna-25\'s crash in 2023.',source:'Source: CNSA-Roscosmos MOU 2021 · Space news March 2026'},
+  ice:{title:'~600 million tonnes — south pole water ice estimate',sub:'LCROSS 2009 confirmation · LRO mapping · Chandrayaan-3 2023',body:'NASA\'s LCROSS mission (2009) crashed into Cabeus crater and detected water vapor in the ejecta plume — the first direct confirmation of water ice at the lunar south pole. The Cabeus crater alone showed approximately 5.6% water by mass in sampled material. LRO\'s LAMP and LEND instruments have mapped hydrogen concentrations across the south polar permanently shadowed regions (PSRs).<br><br>Total ice estimates vary widely: from ~100 million to over 1 billion tonnes. The ~600 million tonne figure is a commonly cited midrange estimate. The ice is patchy, mixed with regolith, and exists at varying depths. No drill has reached the permanently shadowed regions to determine actual depth and purity.<br><br>At the lunar south pole, 10,000 kg of water ice yields ~890 kg of hydrogen + 8,000 kg of oxygen by electrolysis — enough propellant for multiple deep space missions.',source:'Source: NASA LCROSS results 2009 · ISRO Chandrayaan-3 2023 · LRO LAMP/LEND data'},
+  walkers:{title:'12 humans have walked on the Moon',sub:'All Apollo program · All American · All male · 1969–1972',body:'<strong>Apollo 11 (1969):</strong> Neil Armstrong, Buzz Aldrin<br><strong>Apollo 12 (1969):</strong> Pete Conrad, Alan Bean<br><strong>Apollo 14 (1971):</strong> Alan Shepard, Edgar Mitchell<br><strong>Apollo 15 (1971):</strong> David Scott, James Irwin<br><strong>Apollo 16 (1972):</strong> John Young, Charles Duke<br><strong>Apollo 17 (1972):</strong> Eugene Cernan, Harrison Schmitt<br><br>The last human to stand on the Moon was Gene Cernan, December 14, 1972. His parting words: "We leave as we came and, God willing, as we shall return, with peace and hope for all mankind."<br><br>A total of 24 humans have traveled to the Moon\'s vicinity (including command module pilots who orbited but did not land). All were American. All were male. Artemis IV (~2028) will be the first crewed lunar landing since 1972 — the first woman and first person of color on the surface.',source:'Source: NASA Apollo program records'},
+  hope:{title:'5 million acres "sold" — Dennis Hope',sub:'The Lunar Embassy · Zero legal validity · Since 1980',body:'In 1980, Nevada entrepreneur Dennis Hope read Article II of the Outer Space Treaty and noticed it forbids "national appropriation" but says nothing about private individuals. He sent a letter to the UN declaring his ownership of the Moon and received no formal objection. He interpreted the absence of objection as tacit acceptance and began selling lunar plots through his Lunar Embassy Commission at ~$25 per acre.<br><br>By 2025, he claims to have sold over 5 million 1-acre plots to 6+ million buyers in 193 countries. Claimed customers include Jimmy Carter, Ronald Reagan, George H.W. Bush (through aides), and several celebrities. He has also sold land on Mars, Venus, Io, and other bodies.<br><br><strong>Legal status:</strong> Zero. No government recognizes these deeds. No court would enforce them. OST Article VI makes states responsible for ALL national space activities — states cannot authorize what they themselves are prohibited from doing. The deeds are novelty items. You purchased paper.<br><br><strong>The serious version of the argument:</strong> Some academic space law scholarship (e.g., Journal of Air Law and Commerce, 2008) argues that a true private settlement on the Moon — not a state-authorized operator, but a genuinely private entity — might make land claims that no OST provision explicitly prohibits. This argument has no practical application today but is not entirely frivolous in theory.',source:'Source: Wikipedia: Extraterrestrial Real Estate · Journal of Air Law and Commerce (2008) · GovFacts Space Property Rights analysis'},
+  maria:{title:'Maria — the lunar seas',sub:'Dark volcanic basalt plains · Near side dominant',body:'The maria (Latin: seas, singular: mare) are vast plains of solidified basaltic lava that formed when large asteroid impacts punctured the lunar crust 3.5–3.9 billion years ago, allowing magma to flood the basins. They are significantly younger than the surrounding highlands and are much darker — the contrast creates the "Man in the Moon" pattern visible from Earth. 17th-century observers named them after bodies of water (Mare Tranquillitatis, Oceanus Procellarum, etc.) though they contain none. All six Apollo landings targeted the maria for their relatively flat terrain.',source:'Source: NASA Lunar Science Institute · USGS Lunar Atlas'},
+  highlands:{title:'Terrae — the lunar highlands',sub:'Ancient cratered crust · 4.5 Ga · Covers ~83% of surface',body:'The lunar highlands (terrae, from Latin "lands") are the ancient original crust of the Moon — bright, heavily cratered, and mostly composed of anorthosite (calcium-rich plagioclase feldspar). They are approximately 4.5 billion years old — nearly as old as the Moon itself. The heavily cratered terrain records the period of Late Heavy Bombardment (~3.9 Ga) when the inner Solar System was bombarded by asteroids. The far side is almost entirely highlands — it never experienced the large basalt floods that created the near-side maria.',source:'Source: NASA Lunar Science · Apollo sample analysis'},
+  southpole:{title:'South Pole Region',sub:'The most strategically valuable real estate off Earth',body:'The lunar south pole region (80°S to 90°S) is characterized by extreme topography from the South Pole-Aitken basin, the largest impact feature in the Solar System (2,500 km wide, 12 km deep). The rotational axis of the Moon passes through Shackleton Crater (21 km wide, 4.2 km deep) at the pole. The crater interior has been in permanent shadow for ~2 billion years at temperatures of approximately −183°C.<br><br>Key features: Shackleton (21 km), de Gerlache (34 km), Haworth (51 km), Nobile (73 km), Faustini (43 km), Sverdrup (34 km), Cabeus (98 km — where LCROSS confirmed ice), Shoemaker (51 km). The Shackleton-de Gerlache ridge has points with near-continuous solar illumination — ideal for solar-powered operations near ice-bearing craters.',source:'Source: Wikipedia Lunar south pole · LRO south pole atlas · Shackleton crater Wikipedia'},
+  northpole:{title:'North Pole Region',sub:'Less ice than south pole · Explored · Less contested',body:'The lunar north pole region has permanently shadowed craters that may contain water ice, but radar and neutron spectrometer data suggest significantly less ice than the south pole. The terrain is also somewhat less dramatic — the north pole lacks an equivalent of the South Pole-Aitken basin context. Most mission planning has focused on the south pole for this reason. The Lunar Reconnaissance Orbiter has thoroughly mapped both poles.',source:'Source: NASA LRO polar illumination studies'},
+  farside:{title:'The Far Side',sub:'Never faces Earth · First seen 1959 · First landed 2019',body:'The lunar far side never faces Earth due to tidal locking — the Moon rotates once per orbit. Before 1959, no human had ever seen it. Luna 3 (USSR) transmitted the first photographs in 1959, revealing a world almost completely covered in highlands with almost no maria — very different from the near side. The far side also has a significantly thicker crust (~70 km vs ~30-40 km on the near side), a puzzle that remains partially unexplained. Chang\'e 4 (China) made the first far side landing in January 2019, in the Von Kármán crater — a feat requiring a relay satellite (Queqiao) since direct communication with Earth is impossible. Yutu-2 rover is still operating as of 2025, making it the longest-operating lunar rover.',source:'Source: Wikipedia Lunar far side · Chang\'e 4 mission data'},
+  spa:{title:'South Pole–Aitken Basin',sub:'Largest confirmed impact crater in the Solar System',body:'The South Pole-Aitken basin (SPA) is the largest, deepest, and oldest impact crater on the Moon — and one of the largest in the Solar System. It is approximately 2,500 km in diameter (larger than the continental United States) and 12 km deep at its center (56°S, 180°E on the far side). It was formed approximately 4+ billion years ago during the period of heavy bombardment. The lunar south pole sits on an inner ring of the SPA basin, which is why the south polar terrain is so dramatically elevated and rugged. Shackleton Crater sits on this inner ring. SPA basin is a priority science target — its interior provides access to the lower lunar crust and possibly the mantle, which could reveal fundamental information about the Moon\'s formation and differentiation.',source:'Source: Spudis et al. 2008 Geophysical Research Letters · USGS Lunar Atlas'},
+};
+
+function openModal(key){
+  const d=MODALS[key]; if(!d) return;
+  document.getElementById('modal-title').textContent=d.title;
+  document.getElementById('modal-sub').textContent=d.sub||'';
+  document.getElementById('modal-body').innerHTML=d.body;
+  document.getElementById('modal-source').textContent=d.source||'';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+
+function showTab(name,el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

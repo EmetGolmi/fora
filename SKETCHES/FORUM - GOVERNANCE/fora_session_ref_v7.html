@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Session Reference v7</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f2f4f8; --bg2:#e8ebf2; --white:#ffffff;
+  --blue:#1b3a6b; --blue-mid:#254f92; --blue-lt:#3a6abf;
+  --blue-pal:#dde5f5; --blue-vpal:#edf1fb;
+  --gilt:#b8860b; --gilt-lt:#d4a832; --gilt-pal:#f8f0dc; --gilt-rul:rgba(184,134,11,0.25);
+  --ink:#0e1a2e; --ink-mid:#2c3e5a; --ink-soft:#5a6e8a; --ink-mut:#8a9ab8;
+  --rule:rgba(27,58,107,0.1); --rule-lt:rgba(27,58,107,0.05);
+  --green:#1a5c35; --green-p:#e8f5ed; --green-r:#a8d8ba;
+  --red:#8b1a1a; --red-p:#faeaea; --red-r:#dba0a0;
+  --amber:#c47f00; --amber-p:#fdf3dc; --amber-r:rgba(196,127,0,0.28);
+  --purple:#4a1f6e; --purp-p:#f0eaf7; --purp-r:#c8a8e8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:var(--rule);border-radius:3px;}
+
+.sidenav{position:fixed;top:0;left:0;bottom:0;width:220px;background:var(--blue);padding:32px 0 24px;display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.sidenav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:900;color:white;letter-spacing:0.06em;padding:0 24px 4px;}
+.sidenav-logo span{color:var(--gilt-lt);}
+.sidenav-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:0 24px 28px;}
+.sidenav-section{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:18px 24px 8px;}
+.sidenav-link{display:flex;align-items:center;gap:8px;padding:7px 24px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.12s;text-decoration:none;border-left:2px solid transparent;}
+.sidenav-link:hover{color:white;background:rgba(255,255,255,0.06);}
+.sidenav-link.active{color:white;border-left-color:var(--gilt-lt);background:rgba(255,255,255,0.06);}
+.sidenav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);flex-shrink:0;}
+.sidenav-link.active .sidenav-dot{background:var(--gilt-lt);}
+.sidenav-new{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;background:rgba(184,134,11,0.25);color:var(--gilt-lt);padding:1px 5px;border-radius:3px;margin-left:2px;}
+.sidenav-footer{margin-top:auto;padding:16px 24px 0;font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.18);line-height:1.8;}
+
+.main{margin-left:220px;padding:0 0 80px;}
+.doc-section{padding:52px 64px;}
+.bg-white{background:var(--white);}
+.bg-grey{background:var(--bg);}
+
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;}
+.ew-gold{color:var(--gilt);}
+.ew-blue{color:var(--blue-lt);}
+.ew-purple{color:#7c4db8;}
+.section-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.section-desc{font-size:14px;color:var(--ink-soft);max-width:680px;line-height:1.7;margin-bottom:32px;}
+
+/* DESIGN TOKENS */
+.token-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.token-card{border-radius:8px;overflow:hidden;border:1px solid var(--rule);}
+.tc-swatch{height:48px;}
+.tc-body{background:white;padding:10px 12px;}
+.tc-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--ink-mut);text-transform:uppercase;}
+.tc-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);font-weight:600;margin-top:2px;}
+.tc-use{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+
+.type-row{display:grid;grid-template-columns:160px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule-lt);align-items:baseline;}
+.type-row:last-child{border-bottom:none;}
+.tr-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);}
+.tr-sample{color:var(--ink);}
+
+/* COMPONENT TABLE */
+.comp-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.comp-table th{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);background:var(--blue);padding:10px 14px;text-align:left;}
+.comp-table td{padding:11px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table tr:hover td{background:var(--blue-vpal);}
+.comp-name{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:600;}
+.comp-desc{font-size:12.5px;color:var(--ink-soft);line-height:1.55;}
+.comp-note{font-size:11px;color:var(--ink-mut);margin-top:4px;font-style:italic;}
+.status-done{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--green);}
+.status-next{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--amber);}
+.status-later{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);}
+.status-new{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#7c4db8;}
+
+/* ROADMAP */
+.roadmap{display:flex;flex-direction:column;gap:0;}
+.rm-screen{display:grid;grid-template-columns:32px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid var(--rule-lt);}
+.rm-screen:last-child{border-bottom:none;}
+.rm-spine{display:flex;flex-direction:column;align-items:center;padding-top:4px;}
+.rm-node{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.rm-node.done{background:var(--green);}
+.rm-node.next{background:var(--amber);}
+.rm-node.new{background:#7c4db8;}
+.rm-node{background:var(--bg2);border:2px solid var(--rule);}
+.rm-line{width:2px;flex:1;background:var(--rule);margin-top:4px;}
+.rm-line.done{background:var(--green-r);}
+.rm-content{}
+.rm-status{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:6px;}
+.rm-s-done{background:var(--green-p);color:var(--green);}
+.rm-s-next{background:var(--amber-p);color:var(--amber);}
+.rm-s-new{background:var(--purp-p);color:#7c4db8;}
+.rm-s-later{background:var(--bg2);color:var(--ink-mut);}
+.rm-screen-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--blue);margin-bottom:8px;}
+.rm-screen-desc{font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:8px;}
+.rm-col-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.rm-note-card{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:9px 11px;}
+.rm-note-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:3px;}
+.rm-note-text{font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
+.rm-decisions{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.rm-decision{display:flex;gap:8px;align-items:flex-start;}
+.rm-d-icon{font-size:13px;flex-shrink:0;margin-top:1px;}
+.rm-d-text{font-size:12px;color:var(--ink-soft);line-height:1.55;}
+
+/* PENDING */
+.pending-list{display:flex;flex-direction:column;gap:10px;}
+.pending-item{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:start;}
+.pending-icon{font-size:18px;flex-shrink:0;}
+.pending-title{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.pending-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.pending-priority{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;margin-top:2px;}
+.p-next{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.p-later{background:var(--bg2);color:var(--ink-mut);border:1px solid var(--rule);}
+.p-new{background:var(--purp-p);color:#7c4db8;border:1px solid var(--purp-r);}
+
+/* FILE TABLE */
+.file-table-wrap{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;}
+.ft-header{display:grid;grid-template-columns:1.4fr 2.2fr 100px;background:var(--blue);padding:10px 16px;}
+.ft-header-cell{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.ft-group{display:grid;grid-template-columns:1.4fr 2.2fr 100px;background:var(--blue-vpal);padding:8px 16px;border-top:1px solid var(--rule);}
+.ft-group-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);grid-column:1/-1;}
+.ft-row{display:grid;grid-template-columns:1.4fr 2.2fr 100px;padding:11px 16px;border-top:1px solid var(--rule-lt);}
+.ft-row:hover{background:var(--blue-vpal);}
+.ft-row.ft-new{border-left:3px solid #7c4db8;}
+.ft-file{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:500;padding-right:12px;line-height:1.4;}
+.ft-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:12px;}
+.ft-status{font-size:11px;font-weight:600;}
+.ft-status.s-current{color:var(--green);}
+.ft-status.s-new{color:#7c4db8;}
+.ft-status.s-canon{color:var(--green);}
+.ft-status.s-ref{color:var(--blue-lt);}
+.ft-status.s-data{color:var(--amber);}
+.ft-status.s-super{color:var(--ink-mut);font-style:italic;}
+.ft-footer{padding:12px 16px;border-top:1px solid var(--rule-lt);background:var(--white);}
+.ft-footer-text{font-size:11px;color:var(--ink-mut);font-style:italic;}
+
+/* LOCKED DECISIONS */
+.locked-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.locked-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;}
+.lc-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:8px;}
+.lc-tag-lock{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
+.lc-tag-new{background:var(--purp-p);color:#7c4db8;border:1px solid var(--purp-r);}
+.lc-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.lc-text{font-size:12px;color:var(--ink-soft);line-height:1.6;}
+
+/* VERSION BANNER */
+.version-banner{background:var(--blue);padding:32px 64px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;}
+.vb-left{}
+.vb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;}
+.vb-title{font-family:'Libre Baskerville',serif;font-size:36px;font-weight:700;color:white;line-height:1.1;margin-bottom:8px;}
+.vb-sub{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.65;max-width:560px;}
+.vb-stats{display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;min-width:280px;}
+.vbs{background:rgba(255,255,255,0.04);padding:14px 20px;text-align:center;}
+.vbs-num{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:white;}
+.vbs-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-top:3px;}
+</style>
+</head>
+<body>
+
+<!-- SIDENAV -->
+<nav class="sidenav">
+  <div class="sidenav-logo">F<span>O</span>RA</div>
+  <div class="sidenav-sub">Session Ref · v7</div>
+  <div class="sidenav-section">Design</div>
+  <a class="sidenav-link" href="#palette"><span class="sidenav-dot"></span>Color Palette</a>
+  <a class="sidenav-link" href="#type"><span class="sidenav-dot"></span>Typography</a>
+  <a class="sidenav-link" href="#components"><span class="sidenav-dot"></span>Components</a>
+  <a class="sidenav-link" href="#locked"><span class="sidenav-dot"></span>Locked Decisions</a>
+  <div class="sidenav-section">Build</div>
+  <a class="sidenav-link" href="#screens"><span class="sidenav-dot"></span>Screen Status</a>
+  <a class="sidenav-link" href="#pending"><span class="sidenav-dot"></span>Open Items</a>
+  <a class="sidenav-link" href="#files"><span class="sidenav-dot"></span>All Files</a>
+  <div class="sidenav-footer">
+    ERD: v12 · 68 entities<br>
+    Spreadsheet: v25 (v26 needed)<br>
+    Screens: 18 total<br>
+    Sessions: 5 completed
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- VERSION BANNER -->
+  <div class="version-banner">
+    <div class="vb-left">
+      <div class="vb-eyebrow">FORA · Civic Platform · Session Reference</div>
+      <div class="vb-title">Version 7</div>
+      <div class="vb-sub">Session 5 additions: Iran jurisdiction page (full, dashboard version), Iran jurisdiction newspaper layout (exploration), zoning tab + case folder construction permit tips (softened language), session ref v6 → v7. Major conversations: governing philosophy as jurisdiction-layer vs. CivicIssue, endonym/exonym gap as trajectory measurement, US theology exports parallel to Velayat-e Faqih, E pluribus unum. ERD v12 remains current. Pending: IRGC Quds Force NGE page, applicant flow, spreadsheet v26.</div>
+    </div>
+    <div class="vb-stats">
+      <div class="vbs"><div class="vbs-num">16</div><div class="vbs-label">Screens</div></div>
+      <div class="vbs"><div class="vbs-num">68</div><div class="vbs-label">ERD entities</div></div>
+      <div class="vbs"><div class="vbs-num">4</div><div class="vbs-label">Sessions</div></div>
+    </div>
+  </div>
+
+  <!-- COLOR PALETTE -->
+  <div id="palette" class="doc-section bg-white">
+    <div class="section-eyebrow ew-gold">Design System · Canonical</div>
+    <h2 class="section-title">Color Palette</h2>
+    <p class="section-desc">All tokens. Use CSS variables throughout. Never hardcode hex values in component code.</p>
+    <div class="token-grid">
+      <div class="token-card"><div class="tc-swatch" style="background:#1b3a6b;"></div><div class="tc-body"><div class="tc-name">--blue</div><div class="tc-val">#1b3a6b</div><div class="tc-use">Nav, hero, headings, primary UI</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#3a6abf;"></div><div class="tc-body"><div class="tc-name">--blue-lt</div><div class="tc-val">#3a6abf</div><div class="tc-use">Links, accents, secondary buttons</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#edf1fb;"></div><div class="tc-body"><div class="tc-name">--blue-vpal</div><div class="tc-val">#edf1fb</div><div class="tc-use">Card hover, info backgrounds</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#b8860b;"></div><div class="tc-body"><div class="tc-name">--gilt</div><div class="tc-val">#b8860b</div><div class="tc-use">Verified ring, star divider, eyebrows</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#d4a832;"></div><div class="tc-body"><div class="tc-name">--gilt-lt</div><div class="tc-val">#d4a832</div><div class="tc-use">Hero gilt accents, star divider glow</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#f2f4f8;"></div><div class="tc-body"><div class="tc-name">--bg</div><div class="tc-val">#f2f4f8</div><div class="tc-use">Page background</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#155c2d;"></div><div class="tc-body"><div class="tc-name">--green</div><div class="tc-val">#155c2d</div><div class="tc-use">Support, yea, completed, active org</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#8b2020;"></div><div class="tc-body"><div class="tc-name">--red</div><div class="tc-val">#8b2020</div><div class="tc-use">Oppose, nay, killed, urgent</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#c47f00;"></div><div class="tc-body"><div class="tc-name">--amber</div><div class="tc-val">#c47f00</div><div class="tc-use">Pending, warning, zoning live dot</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#c4845a;"></div><div class="tc-body"><div class="tc-name">--terra</div><div class="tc-val">#c4845a</div><div class="tc-use">Forming efforts, soft CTAs</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#2d1a4a;"></div><div class="tc-body"><div class="tc-name">NGE dark purple</div><div class="tc-val">#2d1a4a</div><div class="tc-use">NGE entity pages (militant/paramilitary)</div></div></div>
+      <div class="token-card"><div class="tc-swatch" style="background:#0e1a2e;"></div><div class="tc-body"><div class="tc-name">--ink</div><div class="tc-val">#0e1a2e</div><div class="tc-use">Body text, headings</div></div></div>
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div id="type" class="doc-section bg-grey">
+    <div class="section-eyebrow ew-gold">Design System · Canonical</div>
+    <h2 class="section-title">Typography</h2>
+    <p class="section-desc">Three typefaces. Always from Google Fonts. Never substitute.</p>
+    <div style="background:white;border:1px solid var(--rule);border-radius:10px;overflow:hidden;">
+      <div class="type-row" style="padding:18px 24px 14px;">
+        <div class="tr-label">Libre Baskerville<br><span style="font-size:10px;opacity:0.6;">Serif · Display</span></div>
+        <div class="tr-sample" style="font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--blue);">Headlines · Hero · Tallies · Numbers</div>
+      </div>
+      <div class="type-row" style="padding:14px 24px;">
+        <div class="tr-label">Nunito<br><span style="font-size:10px;opacity:0.6;">Sans · Body</span></div>
+        <div class="tr-sample" style="font-family:'Nunito',sans-serif;font-size:15px;color:var(--ink-soft);">Body copy, card descriptions, meeting notes, contribution text, tooltips. Weights 300–800 all in use.</div>
+      </div>
+      <div class="type-row" style="padding:14px 24px 18px;">
+        <div class="tr-label">JetBrains Mono<br><span style="font-size:10px;opacity:0.6;">Mono · UI Labels</span></div>
+        <div class="tr-sample" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);">NAV · TABS · BADGES · METADATA · DATES · CASE NUMBERS · EYEBROWS</div>
+      </div>
+    </div>
+    <div style="background:white;border:1px solid var(--rule);border-radius:10px;padding:16px 24px;margin-top:12px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:10px;">Star divider — LOCKED</div>
+      <div style="font-size:11px;letter-spacing:0.55em;color:var(--gilt);-webkit-mask-image:linear-gradient(to right,black 92%,transparent 100%);mask-image:linear-gradient(to right,black 92%,transparent 100%);">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+      <div style="font-size:12px;color:var(--ink-soft);margin-top:8px;">Medium stars (11px), letter-spacing 0.55em, gilt color, right-edge fade via mask-image. Applied as ::after pseudo on all hero sections. Never plain or text dividers.</div>
+    </div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div id="components" class="doc-section bg-white">
+    <div class="section-eyebrow ew-gold">Design System · Canonical</div>
+    <h2 class="section-title">Component Library</h2>
+    <p class="section-desc">Core UI components. All locked unless noted. Canonical reference: fora_variant_1.html</p>
+    <table class="comp-table">
+      <thead><tr><th>Component</th><th>Description + Rules</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><div class="comp-name">Nav bar</div></td><td><div class="comp-desc">Sticky, 60px, --blue background, 4px --gilt bottom border. Logo: Libre Baskerville 22px, O in gilt. Right: avatar circle.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Hero section</div></td><td><div class="comp-desc">--blue bg, star divider ::after, decorative ring overlays. All page heroes follow same structure. Cosmic breadcrumb for org/case pages.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Cosmic breadcrumb</div></td><td><div class="comp-desc">The Universe → Laniakea → Earth → US → PA → Philadelphia → Bella Vista. Collapsed by default showing local context. Expand toggle. Reinforces FORA's jurisdictional universality.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Five-tier source badge</div></td><td><div class="comp-desc">🏛 Institution · ✓ Verified · 💬 Perspective · ⚠ Contested · 🔗 External. S/A/B retired. Applied to every contribution card. Tier drives visual weight.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Civic identity marker</div></td><td><div class="comp-desc">Avatar ring: gold = verified, no ring = self-reported. Credential pill below. Branch ribbon (6 colors, armed forces). Contribution wreath (5 awards). Sponsor badge (disclosed, never hidden).</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Steel-man intercept</div></td><td><div class="comp-desc">Triggered before user can submit opposing view. Requires rephrasing opponent's argument in neutral voice. AI evaluates — accept or request revision. Not a blocker for perspective submissions.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Contribution composer</div></td><td><div class="comp-desc">Plain-language type selector: 📊 "I found something" → Evidence · 🔍 "I think this means…" → Perspective · ⚠ "I'm worried this leads to" → Concern · 🔗 "This reminds me of" → Connection. AI nudge if type mismatch detected — never a blocker.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Sentiment gradient</div></td><td><div class="comp-desc">Warmth/cool score (0–1). display_treatment enum: neutral / warm_glow / cool_glow / contested / celebrated. Never shown while reading — list view only.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Org tabs</div></td><td><div class="comp-desc">Sticky below nav at top:124px. Overview / Efforts / Zoning ● / Events / Members / The Record / Sister Orgs. Active tab: gilt bottom border. Zoning shows amber live dot when cases pending.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+        <tr><td><div class="comp-name">Zoning case card</div></td><td><div class="comp-desc">Left colored stripe (red/amber/blue/green by urgency). Address links to case folder. Status badge. 45-day clock. Expandable: submission checklist (✓/◐/○), process stage, BVNA position, action buttons.</div><div class="comp-note">NEW v6: address links to case folder page, not Google Maps</div></td><td><div class="status-new">✓ New v6</div></td></tr>
+        <tr><td><div class="comp-name">NGE entity page</div></td><td><div class="comp-desc">Dark purple (#2d1a4a) hero. 7 tabs: Overview / Power Structure / Timeline / Relationships / Designations / Documents / Current Status. Power structure uses corsproxy photo loading with silhouette fallback (turban or plain). entity_class and power_basis enums drive UI.</div><div class="comp-note">NEW v6: Khamenei successor = turban silhouette. Known figures = real photo via corsproxy.</div></td><td><div class="status-new">✓ New v6</div></td></tr>
+        <tr><td><div class="comp-name">CivicEvent page</div></td><td><div class="comp-desc">3-layer tab structure: Government layer (what happened) / Citizen layer (what community adds) / Analysis layer (scientific method). Psychological Analysis panel with 7-stage scientific method structure. Memorial flame for deceased contributors.</div></td><td><div class="status-new">✓ New v6</div></td></tr>
+        <tr><td><div class="comp-name">Zoning case folder</div></td><td><div class="comp-desc">Full property dossier. Embedded Google Map. Property stats (OPA data). All Philly city system links (Atlas property/zoning/L&I/deeds/history, OPA, ZBA calendar, recordings). Process timeline. Document submission tracker. BVNA position. Construction permit tips sidebar.</div></td><td><div class="status-new">✓ New v6</div></td></tr>
+        <tr><td><div class="comp-name">Memorial profile</div></td><td><div class="comp-desc">deceased=true lifts semi-anonymity. Gilt flame SVG on every contribution in perpetuity. memorial_phrase defaults "May their memory be a blessing" — user sets in advance in any language. Memorial tributes = Perspective-only, uncontestable, steel-man gate suspended. designated_contact_user_id = digital executor.</div></td><td><div class="status-done">✓ Locked</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LOCKED DECISIONS -->
+  <div id="locked" class="doc-section bg-grey">
+    <div class="section-eyebrow ew-gold">Architecture · Canonical</div>
+    <h2 class="section-title">Locked Decisions</h2>
+    <p class="section-desc">These are not open for reconsideration. Build against them.</p>
+    <div class="locked-grid">
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">Platform name</div><div class="lc-text">FORA. All caps. The agora without the A. Civic square. Not Forum Americanum in UI — that's the internal codename.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">Four named sections</div><div class="lc-text">The Commons · The Lyceum · The Ledger · The Square. /square/civics houses Bill Intelligence Dashboard and zoning/civic issue tracking.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">"Effort" = civic campaign</div><div class="lc-text">The word for organized civic campaigns within FORA. Not "petition," not "campaign," not "initiative." Effort. Everywhere.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">local_label field</div><div class="lc-text">Makes FORA jurisdiction-aware. RCO in Philadelphia · Community Board in NYC · ANC in DC. Same schema, different label per jurisdiction. Never hardcoded.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">Variant 1 = canonical</div><div class="lc-text">Civic Charter. fora_variant_1.html is the canonical component reference. Variants 2 and 3 retired. All new screens build from Variant 1 tokens.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">Address entry flow</div><div class="lc-text">Zip code only (not full address). Federal + state free. Local unlocked with street address. 4-stage: ask → reveal → hook → save. Create profile or browse anonymously CTAs.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">Congress.gov API integer format</div><div class="lc-text">119 (integer, not string) for all Congress.gov API calls. Numeric congress number, never "119th" in API parameters.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">FORA's job</div><div class="lc-text">Build the shared description. Not the solution. The Scientific Method as platform architecture: every CivicEvent maps to 7 stages (Observation → Communication). FORA does not adjudicate — it describes.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">NGE photo rules</div><div class="lc-text">Turban silhouette = Khamenei successor only (unknown cleric). Plain silhouette = no public photo / organizational entities. Real photo via corsproxy = all known named individuals. No initials fallback for known people.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">Death badge for Muslim figures</div><div class="lc-text">🪦 tombstone (not ✝ cross). Active Muslim leaders: ☪ crescent. Catholic figures: ✝. Jewish figures: ✡. Death badge: 🪦 universal regardless of religion.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-lock">Locked</span><div class="lc-title">NGE section header plain language</div><div class="lc-text">"What they call themselves — and what others call them." Never "endonym/exonym" in UI.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v6</span><div class="lc-title">Zoning — out of scope language</div><div class="lc-text">Building materials, aesthetics, construction logistics (dumpsters, cranes, noise, duration) are out of scope at the BVNA zoning meeting. Construction permits (dumpster, equipment placement, crane) use "may apply" language — not "required." FORA is not a legal authority.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v6</span><div class="lc-title">Zoning case folder = full dossier</div><div class="lc-text">Each zoning case address links to a dedicated case folder page containing: embedded Google Map, OPA property stats, all Philly city system links (Atlas tabs, ZBA calendar), process timeline, document submission tracker, BVNA position, construction permit tips. Not just Google Maps.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v6</span><div class="lc-title">Notification mailer → FORA targeting</div><div class="lc-text">The PCPC near-neighbor mailed notice (250 ft radius) is replaced by geo-targeted FORA push notifications for registered users. Physical USPS mailer remains as backup for non-FORA residents only. FORA surfaces "You're within 250 ft — FORA has notified you in lieu of mailed notice."</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v7</span><div class="lc-title">Jurisdiction page = governing philosophy home</div><div class="lc-text">A state's governing philosophy lives on its jurisdiction page as a structural/constitutional description — factual, neutral, same treatment as any government's structure. The Islamic Republic's Velayat-e Faqih gets the same container as US constitutional republicanism or Cuban Marxist-Leninism. No special NGE-style page needed for ideology.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v7</span><div class="lc-title">CivicIssue = contested ideology container</div><div class="lc-text">The theological/philosophical questions behind a governing doctrine live as CivicIssues — persistent contested questions FORA describes but doesn't resolve. "Is Velayat-e Faqih legitimate?" and "Is liberal democracy a universal value?" are both CivicIssues. FORA holds the disagreement without adjudicating.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v7</span><div class="lc-title">US exports theology too</div><div class="lc-text">American exceptionalism, liberal democratic capitalism, soft power (jazz, hip-hop, NGOs, democracy promotion) are a theology — not called that by its practitioners. FORA treats US ideological exports symmetrically with Iranian ones. Same jurisdiction page structure, same CivicIssue container for contested questions. The endonym/exonym gap is the measurement of trajectory.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v7</span><div class="lc-title">Newspaper layout = reading view for jurisdictions</div><div class="lc-text">Explored in fora_jurisdiction_iran_newspaper.html. Dashboard = reference view (looking something up). Newspaper = reading view (understanding something). Jurisdiction pages may warrant reading view as default — countries are stories, not just data. Decision pending: universal pattern vs. mode toggle.</div></div>
+
+      <div class="locked-card"><span class="lc-tag lc-tag-new">New v7</span><div class="lc-title">Trajectory removed from Overview tab</div><div class="lc-text">Historical trajectory is its own tab on jurisdiction pages, not part of Overview. Overview = Active crisis + Government structure + Governing philosophy + NGE relations + CivicIssues. Trajectory tab carries the full arc with endonym/exonym divergence at each inflection point.</div></div>
+  <div id="screens" class="doc-section bg-white">
+    <div class="section-eyebrow ew-blue">Build Status</div>
+    <h2 class="section-title">Screen Status</h2>
+    <p class="section-desc">Every screen tracked. Completed, new this session, and remaining.</p>
+    <div class="roadmap">
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Bill Page — US · H.R. 4471</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_bill_us.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Five-tier source badges. 🏛 Institution · ✓ Verified · 💬 Perspective. S/A/B retired.</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Bill Page — Cuba · Ley No. 148</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_bill_cuba.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">EN/ES bilingual. Five-tier source badges.</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Address Entry + Government Stack Reveal</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_entry_flow.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Zip only · Federal/state free · Local unlocked · 4-stage flow</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Home Feed · /feed</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_feed.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">3-column · 5 card types · cohort sentiment bars · steel-man intercept · civic identity markers</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Official Profile · Don Beyer VA-08</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_official_profile.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Photo in circle, gold verified ring · Public + private constituency tabs · Q&A pressure · Cohort alignment</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Community Organization Home · BVNA</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_org_bvna.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">7 tabs · Cosmic breadcrumb · local_label = RCO · Zoning ● tab · Events + crosspost · Gov contacts · Sister orgs</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Effort Page · Bella Vista Slow Zone North</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_effort_page.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Real BVNA data · Timeline · Photo album · Document vault · Gov targets · Related efforts</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-done">✓ Completed</span><div class="rm-screen-title">Contribution Composer</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_composer.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Plain-language type selector · AI nudge (not blocker) · Steel-man gate for opposing views</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 4</span><div class="rm-screen-title">Zoning Tab · BVNA Neighbor View</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_zoning_bvna.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Neighbor view primary · Applicant CTA secondary · Active case cards link to folder pages · FORA replaces USPS mailer for 250-ft geo-targeted notification · Construction permit tips in sidebar</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 4</span><div class="rm-screen-title">Zoning Case Folder · 824 S 8th Street</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_case_824_s8th.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Full property dossier · Embedded Google Map · OPA stats · Atlas (property/zoning/L&I/deeds/history) · ZBA calendar · Process timeline (7 steps) · Doc submission tracker · BVNA position · Construction permit tips</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 4</span><div class="rm-screen-title">CivicEvent Page · Temple Israel Attack</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_civic_event.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">3-layer tabs: Government / Citizen / Analysis · Inline composer with plain-language type selector · Framing comparison panel · Scientific method mapping</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 4</span><div class="rm-screen-title">Psychological Analysis Panel</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_psych_analysis.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">7 scientific method stages · Radicalization pathway diagram · Version history · Memorial flame for Marcus Freeman · ai_generated + community_refined + professional_reviewed booleans</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 4</span><div class="rm-screen-title">NGE Entity Page · Hezbollah</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_nge_hezbollah.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">Dark purple NGE hero · 7 tabs · Power structure with real photos via corsproxy · Venezuela nexus · Designation table · Current status (March 2026: degraded/rebuilding)</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 5</span><div class="rm-screen-title">Iran Jurisdiction Page · Dashboard version</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_jurisdiction_iran.html</div></div><div class="rm-note-card"><div class="rm-note-label">Locked</div><div class="rm-note-text">War alert banner · hero with flag + Persian name · 6-stat ticker · 10 tabs · Active crisis dossier · 4-tier government structure diagram · Governing philosophy + endonym/exonym table · NGE relations · 5 CivicIssues · Sidebar with officials + 3 Supreme Leaders. Trajectory moved to its own tab.</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div><div class="rm-content"><span class="rm-status rm-s-new">✓ New — Session 5</span><div class="rm-screen-title">Iran Jurisdiction Page · Newspaper layout exploration</div><div class="rm-col-grid"><div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_jurisdiction_iran_newspaper.html</div></div><div class="rm-note-card"><div class="rm-note-label">Decision pending</div><div class="rm-note-text">Playfair Display + Source Serif 4 · broadsheet masthead · ticker · 3-column lead story · drop caps + pull quotes · newspaper tables. Question: universal pattern for all jurisdiction pages, or crisis-specific treatment? Reading view vs. reference view toggle?</div></div></div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node" style="background:var(--amber);border:none;"></div><div class="rm-line"></div></div><div class="rm-content"><span class="rm-status rm-s-next">→ Next up</span><div class="rm-screen-title">Applicant Flow · "I'm an applicant"</div><div class="rm-screen-desc">The CTA button exists on the zoning tab. Needs a page: guided 6-step walkthrough of the PCPC process, notification letter generator (Template 1/2), scheduling widget, submission checklist. Works for any Philadelphia applicant, not just BVNA.</div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node" style="background:var(--amber);border:none;"></div><div class="rm-line"></div></div><div class="rm-content"><span class="rm-status rm-s-next">→ Next up</span><div class="rm-screen-title">NGE Entity Page · Iran</div><div class="rm-screen-desc">Hezbollah's creator and supreme authority. Islamic Republic structure, IRGC Quds Force, Velayat-e Faqih. Khamenei succession question. Relationship to Hezbollah distinct from internal Iranian politics.</div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div><div class="rm-content"><span class="rm-status rm-s-later">Later</span><div class="rm-screen-title">Discourse · The Duel + The Pub</div><div class="rm-screen-desc">Structured debate with chess-clock + AI fact-checking (The Duel). Video chat with live AI moderation (The Pub). Steel-man required as entry ticket to The Duel.</div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div><div class="rm-content"><span class="rm-status rm-s-later">Later</span><div class="rm-screen-title">CivicEvent · Reasoning View</div><div class="rm-screen-desc">Page reorganizes by scientific method stage. Enabled when all 7 stages populated. Requires fora_civic_event.html as base.</div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div><div class="rm-content"><span class="rm-status rm-s-later">Later</span><div class="rm-screen-title">Jurisdiction Pages · Israel / Lebanon / Iran / Gaza</div><div class="rm-screen-desc">The geopolitical web behind the Temple Israel case. Each jurisdiction page links to relevant CivicEvents, NGE entities, and legislation.</div></div></div>
+
+      <div class="rm-screen"><div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div><div class="rm-content"><span class="rm-status rm-s-later">Later</span><div class="rm-screen-title">Sponsorship Marketplace</div><div class="rm-screen-desc">Sponsor picker, preset preview, Sadie Hawkins initiation flow, disclosed sponsor label, contribution score display. ERD schema is fully designed.</div></div></div>
+
+    </div>
+  </div>
+
+  <!-- OPEN ITEMS -->
+  <div id="pending" class="doc-section bg-grey">
+    <div class="section-eyebrow ew-gold">Open Items · v6</div>
+    <h2 class="section-title">Open Items</h2>
+    <p class="section-desc">Unresolved questions and pending work. Prioritized by blocking risk.</p>
+    <div class="pending-list">
+
+      <div class="pending-item">
+        <div class="pending-icon">⚔️</div>
+        <div>
+          <div class="pending-title">IRGC Quds Force NGE page</div>
+          <div class="pending-desc">Iran jurisdiction page is built. The direct link from the Hezbollah page ("Created by: IRGC Quds Force →") now needs a destination. Same 7-tab NGE architecture. Quds Force commanders post-Soleimani: Esmail Qaani. Venezuela nexus. Proxy network map (Hezbollah, PMF, Houthis, Hamas). US FTO designation 2019.</div>
+        </div>
+        <div class="pending-priority p-new">Next</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">📰</div>
+        <div>
+          <div class="pending-title">Newspaper vs. dashboard — jurisdiction page decision</div>
+          <div class="pending-desc">Both versions built for Iran. Dashboard = reference view. Newspaper (Playfair + Source Serif 4, broadsheet columns, drop caps, pull quotes) = reading view. Decision: universal pattern for all jurisdiction pages? Mode toggle? Crisis-specific? The newspaper version is better for understanding; the dashboard is better for looking things up. Need a call before building the next jurisdiction.</div>
+        </div>
+        <div class="pending-priority p-new">Decide next</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">🏗</div>
+        <div>
+          <div class="pending-title">Applicant flow page</div>
+          <div class="pending-desc">The "I'm an applicant →" CTA on the zoning tab links nowhere. Needs: 6-step PCPC guided walkthrough, notification letter generator (Template 1 and 2), scheduling widget, submission checklist. Works for all Philadelphia applicants.</div>
+        </div>
+        <div class="pending-priority p-next">Next</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">📋</div>
+        <div>
+          <div class="pending-title">Spreadsheet v26 — ERD v12 fields</div>
+          <div class="pending-desc">Still on v25. Needs: NGE entities (§12a), Psychological layer (§12b), memorial fields on User, Iran jurisdiction page fields (governing_philosophy, endonym, exonym[], trajectory[]). Also needs Iran added as a jurisdiction row.</div>
+        </div>
+        <div class="pending-priority p-next">Next</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">🎨</div>
+        <div>
+          <div class="pending-title">Civic contribution wreath — professional illustration</div>
+          <div class="pending-desc">CSS/SVG approximation was tabled. Concept locked: olive branch, arrows, wheat sheaf, oak crown, fasces bundle (no axe). Needs professional illustrator. Brief at fora_civic_identifiers_brief.md. Must work at 72px, 52px, 36px.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">⚔️</div>
+        <div>
+          <div class="pending-title">The Duel — structured debate wireframe</div>
+          <div class="pending-desc">Steel-man completion required as entry ticket. Chess-clock pacing. Public event, scheduled, hyped. AI fact-checks in real time. Community votes on who argued better — not who they agree with. The Pub (video chat + live moderation) follows after.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">🌍</div>
+        <div>
+          <div class="pending-title">Taiwan + Kosovo editorial policy</div>
+          <div class="pending-desc">Both flagged in governance spreadsheet. Needs a written policy on disputed sovereignty before either can be built as a jurisdiction. Same framework applies to both — and to Palestine/Gaza distinction.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">⚖️</div>
+        <div>
+          <div class="pending-title">Contribution award expiration policy</div>
+          <div class="pending-desc">Do earned civic identity marks expire if a user goes dormant? What triggers loss — and can you re-earn? Noted in identifiers brief as TBD.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">🌐</div>
+        <div>
+          <div class="pending-title">East vs. West / civilizational framing</div>
+          <div class="pending-desc">How does FORA hold multiple civilizational frames (dawah, jihad, caliphate history, Crusades, Inquisition) without adjudicating? The Islamic Conquest framework discussed but not yet built into the platform architecture. Theological and historical framing for the Hezbollah / Iran pages.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+
+      <div class="pending-item">
+        <div class="pending-icon">🇫🇷</div>
+        <div>
+          <div class="pending-title">France tab in governance spreadsheet</div>
+          <div class="pending-desc">Next international jurisdiction. Cohabitation structure, Senate vs. Assemblée Nationale, regional councils.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ALL FILES -->
+  <div id="files" class="doc-section bg-white">
+    <div class="section-eyebrow ew-blue">Output Files · v6</div>
+    <h2 class="section-title">All Output Files</h2>
+    <p class="section-desc">Every canonical file. All at /mnt/user-data/outputs/ unless noted. Purple left border = new this session.</p>
+
+    <div class="file-table-wrap">
+      <div class="ft-header">
+        <div class="ft-header-cell">File</div>
+        <div class="ft-header-cell">Description</div>
+        <div class="ft-header-cell">Status</div>
+      </div>
+
+      <!-- WIREFRAMES -->
+      <div class="ft-group"><div class="ft-group-label">Wireframes</div></div>
+
+      <div class="ft-row"><div class="ft-file">fora_entry_flow.html</div><div class="ft-desc">Address entry → Government stack reveal · 4 stages · zip code · local locked · animated tier reveal</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_feed.html</div><div class="ft-desc">Home Feed · 3-column · 5 card types · cohort sentiment · steel-man · civic identity markers</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_official_profile.html</div><div class="ft-desc">Official Profile · Don Beyer VA-08 · Public + private constituency dashboard · Q&A · voting record</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_bill_us.html</div><div class="ft-desc">Bill Page · H.R. 4471 Broadband Act · Five-tier source badges · Civic scaffold · Cohort sentiment</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_bill_cuba.html</div><div class="ft-desc">Bill Page · Cuba Ley No. 148 · EN/ES bilingual · Five-tier source badges</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_org_bvna.html</div><div class="ft-desc">Community Org home · BVNA · RCO · Overview tab · Efforts · Events + crosspost · Gov contacts · Sister orgs · Cosmic breadcrumb</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_effort_page.html</div><div class="ft-desc">Effort page · Bella Vista Slow Zone North (real data) · Timeline · Photo album · Document vault · Gov targets</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_composer.html</div><div class="ft-desc">Contribution Composer · Plain-language type selector · AI nudge · Steel-man gate</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_signal_v3.html</div><div class="ft-desc">Signal landing page · Star divider · Global civic feed · Country watch list</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_blueprint.html</div><div class="ft-desc">Product blueprint diagram · Four sections · Three pillars</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_sitemap_v2.html</div><div class="ft-desc">Sitemap · 24 screens · 8 modals · 4 official views · 2 entry flows</div><div class="ft-status s-ref">Ref</div></div>
+
+      <div class="ft-group"><div class="ft-group-label">Wireframes · New — Session 5</div></div>
+
+      <div class="ft-row ft-new"><div class="ft-file">fora_jurisdiction_iran.html</div><div class="ft-desc">Iran jurisdiction · Dashboard version · War alert banner · 6-stat hero · 10 tabs · Active crisis · 4-tier gov structure · Governing philosophy · Endonym/exonym table · NGE relations · 5 CivicIssues · Officials sidebar</div><div class="ft-status s-new">✓ New</div></div>
+      <div class="ft-row ft-new"><div class="ft-file">fora_jurisdiction_iran_newspaper.html</div><div class="ft-desc">Iran jurisdiction · Newspaper layout exploration · Playfair + Source Serif 4 · Broadsheet masthead · Ticker · 3-col lead story · Drop caps · Pull quotes · Newspaper tables · Pending decision on universal adoption</div><div class="ft-status s-new">✓ Exploration</div></div>
+
+      <div class="ft-row ft-new"><div class="ft-file">fora_zoning_bvna.html</div><div class="ft-desc">Zoning tab · BVNA neighbor view · Active case cards → folder links · Next meeting · Case types · Construction permit tips · Applicant CTA</div><div class="ft-status s-new">✓ New</div></div>
+      <div class="ft-row ft-new"><div class="ft-file">fora_case_824_s8th.html</div><div class="ft-desc">Zoning case folder · 824 S 8th St · Embedded Google Map · OPA stats · Atlas (5 tabs) · ZBA calendar · Process timeline · Doc tracker · BVNA position · Construction tips</div><div class="ft-status s-new">✓ New</div></div>
+      <div class="ft-row ft-new"><div class="ft-file">fora_civic_event.html</div><div class="ft-desc">CivicEvent · Temple Israel attack Mar 12 2026 · 3-layer tabs · Inline composer · Framing comparison · Scientific method structure</div><div class="ft-status s-new">✓ New</div></div>
+      <div class="ft-row ft-new"><div class="ft-file">fora_psych_analysis.html</div><div class="ft-desc">Psychological Analysis panel · 7 scientific method stages · Radicalization pathway diagram · Version history · Memorial flame (Marcus Freeman)</div><div class="ft-status s-new">✓ New</div></div>
+      <div class="ft-row ft-new"><div class="ft-file">fora_nge_hezbollah.html</div><div class="ft-desc">NGE entity · Hezbollah · Dark purple hero · 7 tabs · Power structure with real photos via corsproxy · Venezuela nexus · Designations · Current status Mar 2026</div><div class="ft-status s-new">✓ New</div></div>
+      <div class="ft-row ft-new"><div class="ft-file">fora_power_structure.jsx</div><div class="ft-desc">React artifact · Hezbollah command structure · corsproxy photo loading · turban/plain silhouette fallbacks · expandable cards · memorial flame</div><div class="ft-status s-new">✓ New</div></div>
+
+      <!-- COMPONENT LIBRARY -->
+      <div class="ft-group"><div class="ft-group-label">Component Library · Canonical = Variant 1. Variants 2 &amp; 3 retired.</div></div>
+
+      <div class="ft-row"><div class="ft-file">fora_variant_1.html</div><div class="ft-desc">Civic Charter · Canonical component set · Five-tier source system · Star divider · Steel-man · Tone intercept · Legitimacy bar</div><div class="ft-status s-canon">✓ Canonical</div></div>
+      <div class="ft-row"><div class="ft-file">fora_ref_civic_commons.html</div><div class="ft-desc">Reference doc · Design system · Five-tier · Star divider · Typography · Color tokens</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_marker_options.html</div><div class="ft-desc">Civic identity marker · Ring system · Gold = verified · Credential pill · Military ribbon · Sponsor badge</div><div class="ft-status s-current">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_marker_exploration.html</div><div class="ft-desc">Six branch ribbons · Veteran distinguisher options · Custom fire/police SVG badges · Retired insignia</div><div class="ft-status s-ref">Ref</div></div>
+      <div class="ft-row"><div class="ft-file">fora_zoning_options.html</div><div class="ft-desc">Three zoning display options — superseded by fora_zoning_bvna.html</div><div class="ft-status s-super">Superseded</div></div>
+
+      <!-- DATA & SCHEMA -->
+      <div class="ft-group"><div class="ft-group-label">Data &amp; Schema</div></div>
+
+      <div class="ft-row ft-new"><div class="ft-file">fora_erd_v12.html</div><div class="ft-desc">ERD v12 · 68 entities · §12a NGE layer (NonGovernmentalEntity, NGEDesignation, NGERelationship) · §12b Psychological layer (PsychologicalAnalysis, PsychologicalContribution, RadicalizationPathway, ScientificMethodMapping, SentimentGradient) · Memorial fields on User</div><div class="ft-status s-new">✓ Current</div></div>
+      <div class="ft-row"><div class="ft-file">fora_erd_v11.html</div><div class="ft-desc">ERD v11 — superseded by v12</div><div class="ft-status s-super">Superseded</div></div>
+      <div class="ft-row"><div class="ft-file">forum_americanum_governance_v25.xlsx</div><div class="ft-desc">Governance spreadsheet · 20+ jurisdictions · 2 open flags (Taiwan, Kosovo) · v26 needed for ERD v12 fields</div><div class="ft-status s-data">⚠ Needs v26</div></div>
+
+      <!-- SESSION REFS -->
+      <div class="ft-group"><div class="ft-group-label">Session References</div></div>
+
+      <div class="ft-row ft-new"><div class="ft-file">fora_session_ref_v7.html</div><div class="ft-desc">This file — design system · screen status · locked decisions · open items · all output files</div><div class="ft-status s-new">You are here</div></div>
+      <div class="ft-row"><div class="ft-file">fora_session_ref_v6.html</div><div class="ft-desc">Previous session ref — superseded</div><div class="ft-status s-super">Superseded</div></div>
+
+      <!-- CONCEPT BRIEFS -->
+      <div class="ft-group"><div class="ft-group-label">Concept Briefs</div></div>
+
+      <div class="ft-row"><div class="ft-file">fora_civic_identifiers_brief.md</div><div class="ft-desc">Civic contribution wreath system · Five elements · Illustrator brief · Branch ribbon colors · Military policy notes</div><div class="ft-status s-ref">For Illustrator</div></div>
+
+      <div class="ft-footer"><div class="ft-footer-text">All files at /mnt/user-data/outputs/ · Current ERD: fora_erd_v12.html (68 entities) · Canonical component: fora_variant_1.html · Governance data: forum_americanum_governance_v25.xlsx (v26 needed) · Session ref: fora_session_ref_v7.html</div></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const links = document.querySelectorAll('.sidenav-link');
+const sections = document.querySelectorAll('[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  links.forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

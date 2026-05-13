@@ -1,0 +1,444 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.feed-wrap { max-width: 720px; margin: 0 auto; padding: 1rem 0; font-family: var(--font-sans); }
+.section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #b8860b; margin-bottom: 10px; }
+.issue-count { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 12px; font-family: var(--font-mono); }
+
+.threshold-explainer { background: var(--color-background-secondary); border-left: 3px solid #1b3a6b; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+.threshold-explainer strong { color: var(--color-text-primary); }
+
+.raise-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 16px; }
+.raise-prompt { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 12px; line-height: 1.5; }
+.raise-prompt strong { color: var(--color-text-primary); }
+textarea { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 13px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); resize: none; min-height: 80px; line-height: 1.6; }
+textarea:focus { outline: none; border-color: #1b3a6b; }
+textarea::placeholder { color: var(--color-text-tertiary); }
+.meta-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.meta-input { flex: 1; min-width: 140px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 7px 10px; font-size: 12px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); }
+.meta-input:focus { outline: none; border-color: #1b3a6b; }
+.meta-input::placeholder { color: var(--color-text-tertiary); }
+.anon-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); cursor: pointer; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); white-space: nowrap; }
+.type-select-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.type-btn { flex: 1; min-width: 100px; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 11px; font-weight: 500; background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; text-align: center; transition: all 0.12s; }
+.type-btn.active-empathy { background: #e8f4fd; border-color: #1b3a6b; color: #1b3a6b; }
+.type-btn.active-practical { background: #e5f0e8; border-color: #155c2d; color: #155c2d; }
+.type-btn.active-accountability { background: #fff3dc; border-color: #b8860b; color: #b8860b; }
+.type-btn.active-opposition { background: #faeaea; border-color: #8b1a1a; color: #8b1a1a; }
+.submit-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+.submit-btn { padding: 8px 20px; background: #1b3a6b; color: white; border: none; border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); }
+
+.issue-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 16px; overflow: visible; }
+.issue-header { padding: 1rem 1.25rem 0.75rem; }
+.issue-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.issue-type-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+.badge-empathy { background: #e8f4fd; color: #1b3a6b; }
+.badge-practical { background: #e5f0e8; color: #155c2d; }
+.badge-accountability { background: #fff3dc; color: #b8860b; }
+.badge-opposition { background: #faeaea; color: #8b1a1a; }
+.issue-author { font-size: 11px; color: var(--color-text-secondary); }
+.issue-author strong { color: var(--color-text-primary); font-weight: 500; }
+.issue-location { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+.issue-body { font-size: 13px; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 14px; }
+
+.action-strip { border-top: 0.5px solid var(--color-border-tertiary); padding: 10px 1.25rem; display: flex; flex-direction: column; gap: 8px; }
+
+.btn-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--border-radius-md); font-size: 12px; font-family: var(--font-sans); cursor: pointer; transition: all 0.15s; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); color: var(--color-text-secondary); }
+.btn:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+
+.btn-share { color: #1b3a6b; border-color: rgba(27,58,107,0.3); background: #edf1fb; }
+.btn-share:hover { background: #dce6f7; }
+
+.btn-concur { color: #155c2d; border-color: rgba(21,92,45,0.3); background: #e5f0e8; font-weight: 500; }
+.btn-concur:hover { background: #d0e8d8; }
+.btn-concur.done { background: #b8860b; border-color: #b8860b; color: white; cursor: default; }
+
+.btn-alert-locked { color: var(--color-text-secondary); border: 0.5px dashed var(--color-border-secondary); background: var(--color-background-secondary); font-size: 11px; }
+.btn-alert-locked:hover { border-color: #1b3a6b; color: #1b3a6b; background: #edf1fb; }
+
+.btn-alert-unlocked { color: white; border-color: #155c2d; background: #155c2d; font-weight: 500; }
+.btn-alert-unlocked:hover { background: #0f3d1e; }
+
+.btn-alerted { color: #155c2d; border-color: rgba(21,92,45,0.3); background: #e5f0e8; cursor: default; font-weight: 500; }
+
+.progress-row { display: flex; align-items: center; gap: 10px; }
+.progress-track { flex: 1; height: 3px; background: var(--color-border-tertiary); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; background: #1b3a6b; }
+.progress-fill.complete { background: #155c2d; }
+.progress-label { font-size: 10px; color: var(--color-text-tertiary); font-family: var(--font-mono); white-space: nowrap; }
+.why-link { font-size: 10px; color: var(--color-text-tertiary); text-decoration: underline; cursor: pointer; white-space: nowrap; }
+.why-link:hover { color: var(--color-text-secondary); }
+
+.why-box { display: none; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; margin-top: 2px; }
+.why-box.open { display: block; }
+.why-box strong { color: var(--color-text-primary); }
+
+.share-panel { display: none; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 12px 14px; margin-top: 4px; }
+.share-panel.open { display: block; }
+.share-panel-title { font-size: 10px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+.share-text-preview { font-size: 11px; color: var(--color-text-secondary); background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 10px; margin-bottom: 10px; line-height: 1.5; font-style: italic; }
+.share-options { display: flex; gap: 6px; flex-wrap: wrap; }
+.share-opt { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 11px; cursor: pointer; background: var(--color-background-secondary); color: var(--color-text-primary); font-family: var(--font-sans); }
+.share-opt:hover { border-color: var(--color-border-primary); }
+.si { width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.si-x { background: #000; color: white; }
+.si-fb { background: #1877f2; color: white; font-weight: 700; }
+.si-wa { background: #25d366; color: white; }
+.si-li { background: #0077b5; color: white; }
+.si-copy { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+
+.alerted-banner { margin: 0 1.25rem 12px; padding: 10px 14px; background: #e5f0e8; border: 0.5px solid rgba(21,92,45,0.2); border-radius: var(--border-radius-md); font-size: 12px; color: #155c2d; line-height: 1.5; display: none; }
+.alerted-banner strong { font-weight: 500; }
+
+.responses-section { background: var(--color-background-secondary); border-top: 0.5px solid var(--color-border-tertiary); border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg); }
+.response-item { padding: 12px 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.response-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.response-body { font-size: 13px; color: var(--color-text-primary); line-height: 1.6; }
+.response-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.resp-btn { font-size: 10px; color: var(--color-text-tertiary); cursor: pointer; padding: 3px 8px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; background: var(--color-background-primary); font-family: var(--font-sans); }
+.resp-btn.share-small { color: #1b3a6b; border-color: rgba(27,58,107,0.25); background: #edf1fb; }
+.resp-share-panel { display: none; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 6px; }
+.resp-share-panel.open { display: block; }
+
+.add-response { padding: 10px 1.25rem 12px; }
+.add-response-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; }
+.add-response-types { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.mini-type { padding: 4px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; font-size: 11px; color: var(--color-text-secondary); cursor: pointer; background: var(--color-background-primary); font-family: var(--font-sans); }
+.mini-type.selected { background: #edf1fb; color: #1b3a6b; border-color: rgba(27,58,107,0.3); }
+.response-input-row { display: flex; gap: 8px; }
+.response-input-row textarea { min-height: 52px; font-size: 12px; }
+.response-submit { padding: 0 14px; background: #1b3a6b; color: white; border: none; border-radius: var(--border-radius-md); font-size: 12px; cursor: pointer; font-family: var(--font-sans); white-space: nowrap; }
+</style>
+
+<div class="feed-wrap">
+
+<div class="section-eyebrow">◆ Neighborhood Issues · Center City · CCRA</div>
+<div class="issue-count">4 active issues · 12 responses · Last activity 2 hours ago</div>
+
+<div class="threshold-explainer">
+  <strong>How this works:</strong> Raise an issue. Your neighbors can <strong>Concur</strong> — confirming they've seen or experienced it too. When 10 neighbors Concur, CCRA is automatically alerted to take action and the issue enters their official record. You can <strong>Share</strong> any issue at any time — including sharing to recruit the Concurrences needed to trigger the alert. We disclose all thresholds and our reasoning publicly. <span class="why-link" onclick="toggleWhy('why-global')" style="display:inline;">Why 10? ›</span>
+  <div class="why-box" id="why-global" style="margin-top:8px;">
+    <strong>Why the threshold is 10:</strong> CCRA's volunteer zoning committee has capacity to formally pursue roughly 3–5 issues per month. A threshold of 10 Concurrences ensures their effort goes where the neighborhood has spoken — not where a single voice is loudest. Issues with 3+ Concurrences are visible to CCRA leadership on their internal dashboard regardless of threshold. Sharing an issue before it reaches 10 is how neighborhoods recruit the Concurrences that trigger action. The threshold is a signal of community confirmation, not a barrier to being heard.
+  </div>
+</div>
+
+<div class="raise-card">
+  <div class="raise-prompt"><strong>What's happening on your block?</strong> Raise an issue for your neighborhood and CCRA to see. Be specific — a block, intersection, or address helps your neighbors find and Concur.</div>
+  <textarea id="new-issue-text" placeholder="Describe the issue. What did you see? Where? What do you think should happen?"></textarea>
+  <div class="type-select-row">
+    <div class="type-btn" onclick="selectType(this,'active-empathy')" data-type="empathy">🤝 With empathy</div>
+    <div class="type-btn" onclick="selectType(this,'active-practical')" data-type="practical">🔧 Practical fix</div>
+    <div class="type-btn" onclick="selectType(this,'active-accountability')" data-type="accountability">📋 Hold accountable</div>
+    <div class="type-btn" onclick="selectType(this,'active-opposition')" data-type="opposition">↔ Different view</div>
+  </div>
+  <div class="meta-row">
+    <input class="meta-input" id="new-name" placeholder="Your name (optional)">
+    <input class="meta-input" id="new-email" placeholder="Email (optional, not shown publicly)">
+    <input class="meta-input" id="new-location" placeholder="Block or intersection">
+    <label class="anon-toggle"><input type="checkbox" id="anon-check"> Post anonymously</label>
+  </div>
+  <div class="submit-row">
+    <button class="submit-btn" onclick="submitIssue()">Post to neighborhood →</button>
+  </div>
+</div>
+
+<div id="issues-feed">
+
+<div class="issue-card" id="card-1">
+  <div class="issue-header">
+    <div class="issue-meta">
+      <span class="issue-type-badge badge-empathy">🤝 With empathy</span>
+      <span class="issue-author"><strong>Sarah M.</strong> · Verified Resident</span>
+      <span class="issue-location">1600 block of Sansom St · 3 hours ago</span>
+    </div>
+    <div class="issue-body">Human feces on the 1600 block of Sansom every morning this week. I want to be clear — the people sleeping here are in crisis. There are no accessible public restrooms within four blocks after 5pm. This is a public health problem and a human dignity problem at the same time. We need bathrooms, not just cleanup.</div>
+  </div>
+
+  <div class="action-strip">
+    <div class="btn-row">
+      <button class="btn btn-share" onclick="togglePanel('sp-1')">↗ Share</button>
+      <button class="btn btn-concur" id="concur-1" onclick="doConcur('concur-1','fill-1','plabel-1','alert-1','banner-1','recruit-panel-1',7,10,'Sansom St open defecation — public health + human dignity issue')">✓ Concur (<span id="ccount-1">7</span>)</button>
+      <button class="btn btn-alert-locked" id="alert-1" onclick="togglePanel('recruit-panel-1')">🔔 3 more neighbors needed — share to get there →</button>
+    </div>
+
+    <div class="share-panel" id="sp-1">
+      <div class="share-panel-title">Share this issue</div>
+      <div class="share-text-preview">"Open defecation on the 1600 block of Sansom — a public health and human dignity issue. Neighbors in Center City: does this affect you too? Concur on FORA to help alert CCRA to take action."</div>
+      <div class="share-options">
+        <div class="share-opt"><span class="si si-x">𝕏</span> Post on X</div>
+        <div class="share-opt"><span class="si si-fb">f</span> Facebook</div>
+        <div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div>
+        <div class="share-opt"><span class="si si-li">in</span> LinkedIn</div>
+        <div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div>
+      </div>
+    </div>
+
+    <div class="share-panel" id="recruit-panel-1">
+      <div class="share-panel-title">Share to recruit Concurrences</div>
+      <div class="share-text-preview">"7 of 10 neighbors have Concurred on a public health issue at 1600 Sansom in Center City. 3 more needed before CCRA is alerted to take action. If this affects you, Concur here: [link]"</div>
+      <div class="share-options">
+        <div class="share-opt"><span class="si si-x">𝕏</span> Post on X</div>
+        <div class="share-opt"><span class="si si-fb">f</span> Facebook</div>
+        <div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div>
+        <div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div>
+      </div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="fill-1" style="width:70%"></div></div>
+      <div class="progress-label" id="plabel-1">7 of 10 Concurrences</div>
+      <span class="why-link" onclick="toggleWhy('why-1')">Why 10? ›</span>
+    </div>
+    <div class="why-box" id="why-1">
+      <strong>Why the threshold is 10:</strong> CCRA's volunteer committee has capacity to formally pursue 3–5 issues per month. 10 Concurrences is the signal that the neighborhood has spoken. Issues with 3+ Concurrences are visible to CCRA leadership regardless. Sharing recruits the Concurrences that trigger action.
+    </div>
+  </div>
+
+  <div class="alerted-banner" id="banner-1">
+    <strong>✓ CCRA has been alerted.</strong> This issue is now on the official record. CCRA's volunteer committee will review it at their next meeting. You'll see a response here when they do.
+    <div style="margin-top:6px;">
+      <div class="share-options" style="flex-wrap:wrap;">
+        <div class="share-opt" style="font-size:11px;"><span class="si si-x">𝕏</span> Share: "10 neighbors Concurred. CCRA alerted."</div>
+        <div class="share-opt" style="font-size:11px;"><span class="si si-wa">💬</span> WhatsApp</div>
+        <div class="share-opt" style="font-size:11px;"><span class="si si-copy">🔗</span> Copy link</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="responses-section">
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-practical">🔧 Practical fix</span>
+        <span class="issue-author"><strong>James K.</strong></span>
+        <span class="issue-location">1 hour ago</span>
+      </div>
+      <div class="response-body">The Dilworth Park restroom is the nearest public option — locked at 9pm. Jefferson Station accessible to ticketholders only. There is nowhere for someone without money to use a bathroom between Broad and 19th after 5pm. Streets Dept could reopen the Suburban Station public restroom — closed "temporarily" in 2019, never reopened.</div>
+      <div class="response-actions">
+        <button class="resp-btn">✓ Concur (4)</button>
+        <button class="resp-btn share-small" onclick="togglePanel('rsp-1a')">↗ Share this response</button>
+      </div>
+      <div class="resp-share-panel" id="rsp-1a">
+        <div class="share-panel-title">Share this response</div>
+        <div class="share-text-preview">"There is nowhere to use a bathroom between Broad and 19th after 5pm in Center City. Suburban Station restroom has been 'temporarily' closed since 2019. — via FORA / CCRA neighborhood issues"</div>
+        <div class="share-options">
+          <div class="share-opt"><span class="si si-x">𝕏</span> X</div>
+          <div class="share-opt"><span class="si si-fb">f</span> Facebook</div>
+          <div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div>
+          <div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-accountability">📋 Hold accountable</span>
+        <span class="issue-author"><strong>Anonymous</strong> · Resident</span>
+        <span class="issue-location">45 min ago</span>
+      </div>
+      <div class="response-body">This block has had 22 311 calls in the last 60 days — all marked "resolved" with no action taken. Office of Homeless Services has an outreach team assigned to this corridor. They have not been seen here in three weeks. Someone needs to ask Squilla's office why the agency response is failing.</div>
+      <div class="response-actions">
+        <button class="resp-btn">✓ Concur (9)</button>
+        <button class="resp-btn share-small" onclick="togglePanel('rsp-1b')">↗ Share this response</button>
+      </div>
+      <div class="resp-share-panel" id="rsp-1b">
+        <div class="share-panel-title">Share this response</div>
+        <div class="share-text-preview">"22 311 calls on 1600 Sansom. All marked resolved. No action taken. Office of Homeless Services outreach team hasn't been seen in 3 weeks. — via FORA / CCRA neighborhood issues"</div>
+        <div class="share-options">
+          <div class="share-opt"><span class="si si-x">𝕏</span> X</div>
+          <div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div>
+          <div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-opposition">↔ Different view</span>
+        <span class="issue-author"><strong>Patricia W.</strong></span>
+        <span class="issue-location">20 min ago</span>
+      </div>
+      <div class="response-body">Bathrooms alone won't solve this. The encampment at 16th and Sansom has grown because outreach has failed. Project HOME has beds available right now. The problem is refusal, not just lack of options. CCRA should be asking why outreach conversion rates are so low, not just requesting more bathrooms.</div>
+      <div class="response-actions">
+        <button class="resp-btn">✓ Concur (3)</button>
+        <button class="resp-btn share-small">↗ Share this response</button>
+      </div>
+    </div>
+
+    <div class="add-response">
+      <div class="add-response-label">Add your perspective</div>
+      <div class="add-response-types">
+        <div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div>
+        <div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div>
+        <div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div>
+        <div class="mini-type" onclick="selectMini(this)">↔ Different view</div>
+      </div>
+      <div class="response-input-row">
+        <textarea placeholder="Add your perspective — name optional below…"></textarea>
+        <button class="response-submit">Post →</button>
+      </div>
+      <div class="meta-row" style="margin-top:6px;">
+        <input class="meta-input" placeholder="Your name (optional)" style="font-size:11px;padding:5px 8px;">
+        <label class="anon-toggle" style="font-size:11px;"><input type="checkbox"> Anonymous</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="issue-card" id="card-2">
+  <div class="issue-header">
+    <div class="issue-meta">
+      <span class="issue-type-badge badge-accountability">📋 Hold accountable</span>
+      <span class="issue-author"><strong>David R.</strong> · Verified Resident</span>
+      <span class="issue-location">1700 block of Chestnut St · Yesterday</span>
+    </div>
+    <div class="issue-body">The streetlight at 17th and Chestnut has been out for 6 weeks. Filed three 311 requests — all closed as "resolved" with the light still out. Safety issue at night. Who do I escalate to when 311 fails?</div>
+  </div>
+
+  <div class="action-strip">
+    <div class="btn-row">
+      <button class="btn btn-share" onclick="togglePanel('sp-2')">↗ Share</button>
+      <button class="btn btn-concur" id="concur-2" onclick="doConcur('concur-2','fill-2','plabel-2','alert-2','banner-2','recruit-panel-2',3,10,'Streetlight out 6 weeks at 17th and Chestnut — 311 failing')">✓ Concur (<span id="ccount-2">3</span>)</button>
+      <button class="btn btn-alert-locked" id="alert-2" onclick="togglePanel('recruit-panel-2')">🔔 7 more neighbors needed — share to get there →</button>
+    </div>
+
+    <div class="share-panel" id="sp-2">
+      <div class="share-panel-title">Share this issue</div>
+      <div class="share-text-preview">"Streetlight out 6 weeks at 17th & Chestnut. 3 x 311 requests — all closed 'resolved.' Light still out. Neighbors: does this affect you? Concur on FORA to alert CCRA."</div>
+      <div class="share-options">
+        <div class="share-opt"><span class="si si-x">𝕏</span> X</div>
+        <div class="share-opt"><span class="si si-fb">f</span> Facebook</div>
+        <div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div>
+        <div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div>
+      </div>
+    </div>
+
+    <div class="share-panel" id="recruit-panel-2">
+      <div class="share-panel-title">Share to recruit Concurrences</div>
+      <div class="share-text-preview">"3 of 10 neighbors have Concurred on a streetlight safety issue at 17th & Chestnut in Center City. 7 more needed before CCRA is alerted. If this affects you, Concur here: [link]"</div>
+      <div class="share-options">
+        <div class="share-opt"><span class="si si-x">𝕏</span> X</div>
+        <div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div>
+        <div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div>
+      </div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="fill-2" style="width:30%"></div></div>
+      <div class="progress-label" id="plabel-2">3 of 10 Concurrences</div>
+      <span class="why-link" onclick="toggleWhy('why-2')">Why 10? ›</span>
+    </div>
+    <div class="why-box" id="why-2">
+      <strong>Why the threshold is 10:</strong> CCRA's volunteer committee has capacity to formally pursue 3–5 issues per month. 10 Concurrences is the signal that the neighborhood has spoken. Issues with 3+ are visible to CCRA leadership regardless.
+    </div>
+  </div>
+
+  <div class="alerted-banner" id="banner-2">
+    <strong>✓ CCRA has been alerted.</strong> This issue is now on the official record.
+  </div>
+
+  <div class="responses-section">
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-practical">🔧 Practical fix</span>
+        <span class="issue-author"><strong>CCRA Zoning Committee</strong> · <span style="background:#edf1fb;color:#1b3a6b;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500;">Official</span></span>
+        <span class="issue-location">18 hours ago</span>
+      </div>
+      <div class="response-body">When 311 fails, email the Streets Department Deputy Commissioner for Infrastructure directly — cc your Council District 1 liaison. CCRA has the contact. Adding this to our next meeting agenda under agency accountability. Can you share your 311 reference numbers?</div>
+      <div class="response-actions">
+        <button class="resp-btn">✓ Concur (5)</button>
+        <button class="resp-btn share-small">↗ Share this response</button>
+      </div>
+    </div>
+    <div class="add-response">
+      <div class="add-response-label">Add your perspective</div>
+      <div class="add-response-types">
+        <div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div>
+        <div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div>
+        <div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div>
+        <div class="mini-type" onclick="selectMini(this)">↔ Different view</div>
+      </div>
+      <div class="response-input-row">
+        <textarea placeholder="Add your perspective…"></textarea>
+        <button class="response-submit">Post →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+function selectType(el, cls) {
+  document.querySelectorAll('.type-btn').forEach(b => b.className = 'type-btn');
+  el.classList.add(cls);
+}
+function selectMini(el) {
+  el.closest('.add-response-types').querySelectorAll('.mini-type').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function togglePanel(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.share-panel, .resp-share-panel').forEach(x => x.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+function toggleWhy(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function doConcur(concurId, fillId, labelId, alertId, bannerId, recruitId, current, threshold, issueTitle) {
+  const btn = document.getElementById(concurId);
+  if (btn.classList.contains('done')) return;
+  btn.classList.add('done');
+  btn.innerHTML = '✓ Concurred';
+  const newCount = current + 1;
+  const remaining = threshold - newCount;
+  const pct = Math.min((newCount / threshold) * 100, 100);
+  document.getElementById(fillId).style.width = pct + '%';
+  document.getElementById(labelId).textContent = newCount + ' of ' + threshold + ' Concurrences';
+  const alertBtn = document.getElementById(alertId);
+  if (newCount >= threshold) {
+    document.getElementById(fillId).classList.add('complete');
+    alertBtn.className = 'btn btn-alerted';
+    alertBtn.textContent = '✓ CCRA alerted — on the record';
+    alertBtn.onclick = null;
+    document.getElementById(labelId).textContent = '✓ 10 of 10 — threshold reached';
+    const banner = document.getElementById(bannerId);
+    if (banner) banner.style.display = 'block';
+  } else {
+    alertBtn.textContent = '🔔 ' + remaining + ' more neighbor' + (remaining === 1 ? '' : 's') + ' needed — share to get there →';
+    const rp = document.getElementById(recruitId);
+    if (rp) {
+      rp.querySelector('.share-text-preview').textContent = '"' + newCount + ' of ' + threshold + ' neighbors have Concurred. ' + remaining + ' more needed before CCRA is alerted. If this affects you, Concur here: [link]"';
+    }
+  }
+}
+function submitIssue() {
+  const text = document.getElementById('new-issue-text').value.trim();
+  if (!text) return;
+  const name = document.getElementById('new-name').value.trim() || 'Anonymous';
+  const loc = document.getElementById('new-location').value.trim() || 'Center City';
+  const anon = document.getElementById('anon-check').checked;
+  const displayName = anon ? 'Anonymous' : name;
+  const activeType = document.querySelector('.type-btn.active-empathy,.type-btn.active-practical,.type-btn.active-accountability,.type-btn.active-opposition');
+  const typeName = activeType ? activeType.dataset.type : 'empathy';
+  const badges = { empathy: ['badge-empathy','🤝 With empathy'], practical: ['badge-practical','🔧 Practical fix'], accountability: ['badge-accountability','📋 Hold accountable'], opposition: ['badge-opposition','↔ Different view'] };
+  const [bc, bl] = badges[typeName];
+  const uid = Date.now();
+  const card = document.createElement('div');
+  card.className = 'issue-card';
+  card.innerHTML = `<div class="issue-header"><div class="issue-meta"><span class="issue-type-badge ${bc}">${bl}</span><span class="issue-author"><strong>${displayName}</strong></span><span class="issue-location">${loc} · Just now</span></div><div class="issue-body">${text}</div></div><div class="action-strip"><div class="btn-row"><button class="btn btn-share">↗ Share</button><button class="btn btn-concur" onclick="doConcur('cc${uid}','cf${uid}','cl${uid}','ca${uid}','cb${uid}','cr${uid}',0,10,'${text.substring(0,40)}')">✓ Concur (<span id="cc${uid}">0</span>)</button><button class="btn btn-alert-locked" id="ca${uid}" onclick="togglePanel('cr${uid}')">🔔 10 more neighbors needed — share to get there →</button></div><div class="share-panel" id="cr${uid}"><div class="share-panel-title">Share to recruit Concurrences</div><div class="share-text-preview">"0 of 10 neighbors have Concurred. 10 more needed before CCRA is alerted. If this affects you, Concur here: [link]"</div><div class="share-options"><div class="share-opt"><span class="si si-x">𝕏</span> X</div><div class="share-opt"><span class="si si-wa">💬</span> WhatsApp</div><div class="share-opt"><span class="si si-copy">🔗</span> Copy link</div></div></div><div class="progress-row"><div class="progress-track"><div class="progress-fill" id="cf${uid}" style="width:0%"></div></div><div class="progress-label" id="cl${uid}">0 of 10 Concurrences</div></div></div><div class="alerted-banner" id="cb${uid}"><strong>✓ CCRA has been alerted.</strong> This issue is now on the official record.</div><div class="responses-section"><div class="add-response"><div class="add-response-label">Add your perspective</div><div class="add-response-types"><div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div><div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div><div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div><div class="mini-type" onclick="selectMini(this)">↔ Different view</div></div><div class="response-input-row"><textarea placeholder="Add your perspective…"></textarea><button class="response-submit">Post →</button></div></div></div>`;
+  document.getElementById('issues-feed').prepend(card);
+  ['new-issue-text','new-name','new-location','new-email'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('anon-check').checked = false;
+  document.querySelectorAll('.type-btn').forEach(b => b.className = 'type-btn');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.btn-share') && !e.target.closest('.btn-alert-locked') && !e.target.closest('.share-panel') && !e.target.closest('.resp-share-panel') && !e.target.closest('.share-small')) {
+    document.querySelectorAll('.share-panel, .resp-share-panel').forEach(x => x.classList.remove('open'));
+  }
+});
+</script>

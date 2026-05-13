@@ -1,0 +1,346 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@300;400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body-wrap{display:block;}
+
+.scene{perspective:1200px;width:280px;margin:0 auto;}
+.card-wrap{width:280px;height:420px;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+.card-wrap.flipped{transform:rotateY(180deg);}
+
+.card-face{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;overflow:hidden;}
+.card-back{transform:rotateY(180deg);}
+
+/* FOIL shimmer */
+.foil{position:absolute;inset:0;border-radius:16px;pointer-events:none;z-index:5;
+  background:linear-gradient(105deg,
+    rgba(255,255,255,0) 0%,
+    rgba(184,134,11,.08) 20%,
+    rgba(255,255,255,.12) 35%,
+    rgba(184,134,11,.06) 50%,
+    rgba(255,255,255,.08) 65%,
+    rgba(139,26,26,.06) 80%,
+    rgba(255,255,255,0) 100%);
+  mix-blend-mode:screen;
+  animation:shimmer 4s ease-in-out infinite;}
+@keyframes shimmer{
+  0%{background-position:0% 0%;}
+  50%{background-position:100% 100%;}
+  100%{background-position:0% 0%;}
+}
+
+/* CARD FRONT */
+.cf-band{background:#1b3a6b;padding:8px 14px 0;border-bottom:3px solid #b8860b;}
+.cf-band-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.cf-series{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.cf-year{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;color:#d4a832;}
+.cf-logo{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;letter-spacing:.1em;padding-bottom:6px;}
+.cf-logo span{color:#d4a832;}
+
+.cf-photo{height:185px;background:linear-gradient(180deg,#1b3a6b 0%,#0d1829 100%);position:relative;overflow:hidden;}
+.cf-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+.cf-photo-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#0d1829);}
+.cf-party-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#003087;}
+
+.cf-seal{position:absolute;top:8px;right:10px;width:44px;height:44px;opacity:.55;}
+
+.cf-nameplate{background:#0d1829;padding:8px 14px 6px;border-bottom:1.5px solid rgba(184,134,11,.3);}
+.cf-name{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;line-height:1.1;margin-bottom:2px;}
+.cf-office{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:#d4a832;}
+
+.cf-stats{background:#0d1829;padding:8px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.cf-stat{text-align:center;padding:4px 2px;}
+.cf-stat+.cf-stat{border-left:1px solid rgba(255,255,255,.06);}
+.cf-sn{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;line-height:1;}
+.cf-sn.g{color:#86efac;}
+.cf-sn.a{color:#d4a832;}
+.cf-sl{font-family:'JetBrains Mono',monospace;font-size:5.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-top:2px;}
+
+.cf-footer{background:#0a1220;padding:5px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.05);}
+.cf-fora{font-family:'Libre Baskerville',serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.18);letter-spacing:.1em;}
+.cf-fora span{color:#b8860b;}
+.cf-flip-hint{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);display:flex;align-items:center;gap:4px;}
+
+/* CARD BACK */
+.cb{background:#f2f4f8;height:100%;}
+.cb-band{background:#1b3a6b;padding:8px 14px;border-bottom:3px solid #b8860b;display:flex;justify-content:space-between;align-items:center;}
+.cb-logo{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:white;letter-spacing:.1em;}
+.cb-logo span{color:#d4a832;}
+.cb-name-sm{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+
+.cb-body{padding:10px 12px;overflow-y:auto;max-height:370px;}
+.cb-body::-webkit-scrollbar{width:3px;}
+.cb-body::-webkit-scrollbar-thumb{background:#b8860b;border-radius:2px;}
+
+.cb-sec{margin-bottom:10px;}
+.cb-sec-hdr{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:#b8860b;padding:4px 0 3px;border-bottom:1px solid #dde5f5;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
+.cb-sec-hdr::before{content:'◆ ';font-size:5px;}
+.info-btn{background:none;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.08em;text-transform:uppercase;color:#b8860b;padding:1px 5px;border:0.5px solid #b8860b;border-radius:3px;}
+
+.cb-row{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-bottom:0.5px solid #f0f3f8;}
+.cb-row:last-child{border-bottom:none;}
+.cb-label{font-family:'Nunito',sans-serif;font-size:10px;color:#5a6e8a;}
+.cb-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:#1b3a6b;font-weight:700;}
+.cb-val.green{color:#27500A;}
+.cb-val.amber{color:#633806;}
+.cb-val.red{color:#791F1F;}
+
+.cb-pill{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;display:inline-block;margin:1px;}
+.cp-blue{background:#E6F1FB;color:#0C447C;border:.5px solid #85B7EB;}
+.cp-green{background:#EAF3DE;color:#27500A;border:.5px solid #97C459;}
+.cp-amber{background:#FAEEDA;color:#633806;border:.5px solid #EF9F27;}
+
+.cb-bill{background:white;border:.5px solid #dde5f5;border-left:4px solid #003087;border-radius:5px;padding:5px 8px;margin-bottom:4px;}
+.cb-bill-id{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.08em;text-transform:uppercase;color:#003087;margin-bottom:1px;}
+.cb-bill-title{font-family:'Nunito',sans-serif;font-size:9.5px;font-weight:600;color:#1b3a6b;line-height:1.3;}
+
+.cb-vote-row{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:.5px solid #f0f3f8;}
+.cb-vote-row:last-child{border-bottom:none;}
+.vp{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.06em;text-transform:uppercase;padding:2px 5px;border-radius:2px;width:32px;text-align:center;flex-shrink:0;}
+.vp-y{background:#EAF3DE;color:#27500A;border:.5px solid #97C459;}
+.vp-n{background:#FCEBEB;color:#791F1F;border:.5px solid #F09595;}
+.vp-m{background:#FAEEDA;color:#633806;border:.5px solid #EF9F27;}
+.cb-vote-title{flex:1;font-family:'Nunito',sans-serif;font-size:9px;font-weight:600;color:#0e1a2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cb-vote-date{font-family:'JetBrains Mono',monospace;font-size:6.5px;color:#8a9ab8;flex-shrink:0;}
+
+.cb-money-box{background:white;border:.5px solid #dde5f5;border-radius:6px;padding:7px 9px;margin-bottom:4px;}
+.cb-money-n{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#1b3a6b;}
+.cb-money-l{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:#8a9ab8;margin-bottom:1px;}
+.cb-money-ctx{font-family:'Nunito',sans-serif;font-size:8.5px;color:#5a6e8a;line-height:1.4;margin-top:2px;}
+
+.cb-no-fund{background:#EAF3DE;border:.5px solid #97C459;border-radius:5px;padding:6px 8px;}
+.cb-no-fund-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:#27500A;margin-bottom:3px;}
+.cb-no-fund-items{font-family:'Nunito',sans-serif;font-size:9.5px;color:#27500A;line-height:1.6;}
+
+.cb-footer{background:#1b3a6b;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;}
+.cb-flip-back{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);cursor:pointer;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:12px;padding:20px;max-width:280px;width:90%;position:relative;}
+.modal-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:16px;color:#5a6e8a;cursor:pointer;line-height:1;}
+.modal-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:#b8860b;margin-bottom:4px;}
+.modal-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#1b3a6b;margin-bottom:8px;}
+.modal-body{font-family:'Nunito',sans-serif;font-size:12px;color:#2c3e5a;line-height:1.7;}
+.modal-body strong{color:#1b3a6b;font-weight:700;}
+.modal-stat{background:#f2f4f8;border-radius:6px;padding:8px 10px;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#1b3a6b;}
+
+/* page layout */
+.page{background:#1a1a2e;min-height:600px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.hint{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);text-align:center;}
+.flip-btn{background:#b8860b;color:white;border:none;border-radius:100px;padding:7px 18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;}
+</style>
+
+<div class="page">
+  <div class="hint">Tap card to flip · Tap ⓘ for context</div>
+
+  <div class="scene">
+    <div class="card-wrap" id="card" onclick="flipCard()">
+
+      <!-- FRONT -->
+      <div class="card-face">
+        <div class="cf-party-bar"></div>
+        <div class="cf-band">
+          <div class="cf-band-top">
+            <span class="cf-series">Pennsylvania · Federal · 2026</span>
+            <span class="cf-year">Civic Series</span>
+          </div>
+          <div class="cf-logo">F<span>O</span>RA</div>
+        </div>
+
+        <div class="cf-photo">
+          <img src="https://www.congress.gov/img/member/F000479_200.jpg" alt="Fetterman"/>
+          <div class="cf-photo-fade"></div>
+          <svg class="cf-seal" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#b8860b" stroke-width="2.5"/>
+            <text x="50" y="36" text-anchor="middle" font-family="serif" font-size="8.5" fill="#d4a832">COMMONWEALTH</text>
+            <text x="50" y="50" text-anchor="middle" font-family="serif" font-size="8" fill="#b8860b">OF</text>
+            <text x="50" y="63" text-anchor="middle" font-family="serif" font-size="8.5" fill="#d4a832">PENNSYLVANIA</text>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(184,134,11,.3)" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <div class="cf-nameplate">
+          <div class="cf-name">John Fetterman</div>
+          <div class="cf-office">U.S. Senator · Pennsylvania · Democrat · Since 2023</div>
+        </div>
+
+        <div class="cf-stats">
+          <div class="cf-stat">
+            <div class="cf-sn g" style="font-size:15px;">1,247<span style="font-size:9px;color:rgba(255,255,255,.3);">/1,364</span></div>
+            <div class="cf-sl">Votes cast</div>
+          </div>
+          <div class="cf-stat">
+            <div class="cf-sn">143</div>
+            <div class="cf-sl">Bills</div>
+          </div>
+          <div class="cf-stat">
+            <div class="cf-sn a">68%</div>
+            <div class="cf-sl">Party-line</div>
+          </div>
+        </div>
+
+        <div class="cf-footer">
+          <span class="cf-fora">F<span>O</span>RA</span>
+          <span class="cf-flip-hint">flip for stats ↻</span>
+        </div>
+
+        <div class="foil"></div>
+      </div>
+
+      <!-- BACK -->
+      <div class="card-face card-back">
+        <div class="cb">
+          <div class="cb-band">
+            <span class="cb-logo">F<span>O</span>RA</span>
+            <span class="cb-name-sm">Fetterman · PA · Federal</span>
+          </div>
+
+          <div class="cb-body">
+
+            <!-- Attendance -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Attendance <button class="info-btn" onclick="openModal('attendance');event.stopPropagation();">ⓘ what is this?</button></div>
+              <div class="cb-row"><span class="cb-label">Votes cast</span><span class="cb-val green">1,247 of 1,364</span></div>
+              <div class="cb-row"><span class="cb-label">Attendance rate</span><span class="cb-val green">91%</span></div>
+              <div class="cb-row"><span class="cb-label">Missed votes</span><span class="cb-val amber">117</span></div>
+              <div class="cb-row"><span class="cb-label">Senate average</span><span class="cb-val">92%</span></div>
+            </div>
+
+            <!-- Party voting -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Party-line voting <button class="info-btn" onclick="openModal('party');event.stopPropagation();">ⓘ what is this?</button></div>
+              <div class="cb-row"><span class="cb-label">Votes with Democrats</span><span class="cb-val">68%</span></div>
+              <div class="cb-row"><span class="cb-label">Independent votes</span><span class="cb-val green">32%</span></div>
+              <div class="cb-row"><span class="cb-label">Senate Dem average</span><span class="cb-val">84%</span></div>
+            </div>
+
+            <!-- Bills -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Active legislation</div>
+              <div class="cb-bill"><div class="cb-bill-id">S. 4045</div><div class="cb-bill-title">Food and Nutrition Act — online delivery standards</div></div>
+              <div class="cb-bill"><div class="cb-bill-id">S. 3947</div><div class="cb-bill-title">REWIRE Act</div></div>
+            </div>
+
+            <!-- Recent votes -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Recent votes</div>
+              <div class="cb-vote-row"><div class="vp vp-y">Yea</div><div class="cb-vote-title">Continuing Resolution</div><div class="cb-vote-date">Mar 14</div></div>
+              <div class="cb-vote-row"><div class="vp vp-n">Nay</div><div class="cb-vote-title">Defense Auth — Border Wall</div><div class="cb-vote-date">Mar 6</div></div>
+              <div class="cb-vote-row"><div class="vp vp-m">Miss</div><div class="cb-vote-title">S.Res 44 — Cancer Awareness</div><div class="cb-vote-date">Feb 12</div></div>
+            </div>
+
+            <!-- Committees -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Committee assignments <button class="info-btn" onclick="openModal('committees');event.stopPropagation();">ⓘ what is this?</button></div>
+              <div class="cb-row"><span class="cb-label">Agriculture, Nutrition & Forestry</span><span class="cb-val" style="font-size:8px;">Member</span></div>
+              <div class="cb-row"><span class="cb-label">Banking, Housing & Urban Affairs</span><span class="cb-val" style="font-size:8px;">Member</span></div>
+              <div class="cb-row"><span class="cb-label">Environment & Public Works</span><span class="cb-val" style="font-size:8px;">Member</span></div>
+              <div class="cb-row"><span class="cb-label">Rules & Administration</span><span class="cb-val" style="font-size:8px;">Member</span></div>
+            </div>
+
+            <!-- Money -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Cost of getting the message out <button class="info-btn" onclick="openModal('money');event.stopPropagation();">ⓘ what is this?</button></div>
+              <div class="cb-money-box">
+                <div class="cb-money-l">2022 Senate campaign total</div>
+                <div class="cb-money-n">$4.2M</div>
+                <div class="cb-money-ctx">Staff, advertising, travel, printing, events. PA Senate average: $6.1M</div>
+              </div>
+              <div style="margin-bottom:4px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:#8a9ab8;margin-bottom:3px;">Top donor industries</div>
+                <div class="cb-row"><span class="cb-label">Finance & Securities</span><span class="cb-val amber">$2.1M</span></div>
+                <div class="cb-row"><span class="cb-label">Tech / Software</span><span class="cb-val amber">$980K</span></div>
+                <div class="cb-row"><span class="cb-label">Health / Pharma</span><span class="cb-val amber">$740K</span></div>
+              </div>
+              <div class="cb-no-fund">
+                <div class="cb-no-fund-label">No donations from</div>
+                <div class="cb-no-fund-items">Oil & Gas · Firearms · Private Prison · Tobacco</div>
+              </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="cb-sec">
+              <div class="cb-sec-hdr">Contact</div>
+              <div class="cb-row"><span class="cb-label">DC Office</span><span class="cb-val" style="font-size:9px;">142 Russell Senate</span></div>
+              <div class="cb-row"><span class="cb-label">Phone</span><span class="cb-val" style="font-size:9px;">(202) 224-4254</span></div>
+              <div class="cb-row"><span class="cb-label">Website</span><span class="cb-val green" style="font-size:9px;">fetterman.senate.gov</span></div>
+            </div>
+
+          </div>
+
+          <div class="cb-footer">
+            <span class="cb-flip-back" onclick="flipCard();event.stopPropagation();">↩ flip to front</span>
+            <span class="cf-fora" style="font-size:9px;">F<span style="color:#b8860b;">O</span>RA · 2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="flip-btn" onclick="flipCard()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+    Flip card
+  </button>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-attendance">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('attendance')">✕</button>
+    <div class="modal-eyebrow">◆ Understanding this stat</div>
+    <div class="modal-title">What does attendance mean?</div>
+    <div class="modal-body">Every senator is expected to show up and vote. <strong>1,247 of 1,364</strong> means Fetterman voted on 1,247 out of 1,364 total votes held while he was in office.<br><br>Missing votes isn't always avoidable — illness, family emergencies, travel conflicts happen. But a pattern of missing votes can signal disengagement from the job.<br><br>Fetterman missed more votes during his 2023 hospitalization for depression, which he disclosed publicly.</div>
+    <div class="modal-stat">PA Senate average attendance: 92% · Fetterman: 91%</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-party">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('party')">✕</button>
+    <div class="modal-eyebrow">◆ Understanding this stat</div>
+    <div class="modal-title">What does party-line voting mean?</div>
+    <div class="modal-body">Party-line voting measures how often a senator votes the same way as the majority of their party.<br><br><strong>68%</strong> means Fetterman voted with most Democrats 68% of the time — and independently 32% of the time. For context, the average Senate Democrat votes with their party 84% of the time.<br><br>Fetterman is notably independent for a Democrat — he has broken with his party on immigration, Israel policy, and several trade votes.</div>
+    <div class="modal-stat">Senate Dem average: 84% · Fetterman: 68% — among the most independent Democrats</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-committees">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('committees')">✕</button>
+    <div class="modal-eyebrow">◆ Understanding this stat</div>
+    <div class="modal-title">What are committee assignments?</div>
+    <div class="modal-body">Before any bill reaches a full Senate vote, it goes through a <strong>committee</strong> — a small group of senators who hold hearings, call witnesses, amend the bill, and decide whether it moves forward.<br><br>A committee chair can kill a bill simply by never scheduling a vote. This is where most of the real legislative work — and legislative blocking — happens.<br><br>Fetterman's Agriculture committee seat means he has a direct say over food, nutrition, farm, and rural policy. His Banking seat gives him influence over financial regulation.</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-money">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('money')">✕</button>
+    <div class="modal-eyebrow">◆ Understanding this stat</div>
+    <div class="modal-title">What is "cost of getting the message out"?</div>
+    <div class="modal-body">Running for Senate costs money — staff salaries, advertising, travel, printing, campaign events, and digital outreach. This is the total amount raised and spent by Fetterman's official campaign committee for his 2022 Senate race.<br><br><strong>$4.2M</strong> is actually below average for a Pennsylvania Senate race ($6.1M average). Most of his funding came from small individual donors and progressive organizations.<br><br>This is <em>not</em> his personal income or salary. Senate salary is $174,000/year.</div>
+    <div class="modal-stat">Source: FEC.gov filings · 2022 cycle · Official campaign committee only</div>
+  </div>
+</div>
+
+<script>
+function flipCard(){
+  document.getElementById('card').classList.toggle('flipped');
+}
+function openModal(id){
+  document.getElementById('modal-'+id).classList.add('open');
+}
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',function(e){
+    if(e.target===this) this.classList.remove('open');
+  });
+});
+</script>

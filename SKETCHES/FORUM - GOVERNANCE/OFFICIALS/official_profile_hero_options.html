@@ -1,0 +1,395 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@300;400;600&display=swap');
+.tabs{display:flex;flex-wrap:wrap;background:#e8ebf2;}
+.tb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px 13px;border:none;background:#e8ebf2;color:#5a6e8a;cursor:pointer;border-bottom:2px solid transparent;}
+.tb.on{background:#1b3a6b;color:white;border-bottom-color:#b8860b;}
+.pn{display:none;}.pn.on{display:grid;grid-template-columns:1fr 220px;gap:24px;padding:16px;background:#e8ebf2;align-items:start;}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:#5a6e8a;text-align:center;padding:4px 0 8px;}
+.phone{border:2px solid #1a1a1a;border-radius:28px;overflow:hidden;}
+nav.n{background:#1b3a6b;border-bottom:2px solid #b8860b;padding:8px 12px;}
+.logo{font-family:'Libre Baskerville',serif;font-size:12px;font-weight:700;color:white;}.logo span{color:#d4a832;}
+.hero{background:#1b3a6b;position:relative;overflow:hidden;}
+.ring{position:absolute;right:-20px;top:-30px;width:160px;height:160px;border-radius:50%;border:16px solid rgba(255,255,255,.025);pointer-events:none;}
+.ring2{position:absolute;right:20px;top:0;width:90px;height:90px;border-radius:50%;border:1px solid rgba(184,134,11,.12);pointer-events:none;}
+.stars{font-size:7px;letter-spacing:.4em;color:#b8860b;white-space:nowrap;overflow:hidden;padding:4px 10px;background:#1b3a6b;}
+.av{width:56px;height:56px;border-radius:50%;background:#254f92;border:2px solid rgba(184,134,11,.5);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#d4a832;flex-shrink:0;overflow:hidden;position:relative;}
+.av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.vb{position:absolute;bottom:-1px;right:-1px;width:14px;height:14px;border-radius:50%;background:#155c2d;border:1.5px solid #1b3a6b;display:flex;align-items:center;justify-content:center;font-size:6px;color:white;}
+.nm{font-family:'Libre Baskerville',serif;font-weight:700;color:white;line-height:1.1;}
+.of{font-family:'Nunito',sans-serif;font-weight:300;color:rgba(255,255,255,.5);}
+.tg{font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:100px;border:1px solid;display:inline-block;}
+.td{background:rgba(29,78,216,.2);border-color:rgba(59,130,246,.3);color:#93c5fd;}
+.tv{background:rgba(21,92,45,.2);border-color:rgba(140,196,160,.3);color:#86efac;}
+.tn{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);color:rgba(255,255,255,.4);}
+.st{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;}
+.sc{background:rgba(255,255,255,.03);padding:8px 10px;}
+.sn{font-family:'Libre Baskerville',serif;color:white;font-weight:700;line-height:1;}
+.sl{font-family:'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.26);margin-top:2px;}
+.pl{font-family:'JetBrains Mono',monospace;font-size:6.5px;padding:2px 6px;border-radius:3px;}
+.pb{background:rgba(55,138,221,.12);border:.5px solid rgba(55,138,221,.3);color:#b5d4f4;}
+.pa{background:rgba(196,127,0,.15);border:.5px solid rgba(196,127,0,.3);color:#FAC775;}
+.pg{background:rgba(21,92,45,.15);border:.5px solid rgba(140,196,160,.3);color:#86efac;}
+.bf{background:#b8860b;border:none;border-radius:100px;padding:8px 0;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:white;width:100%;cursor:pointer;}
+.bq{background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:100px;padding:7px 0;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);width:100%;cursor:pointer;}
+</style>
+
+<div class="tabs">
+  <button class="tb on" onclick="sw('a',this)">A — Classic</button>
+  <button class="tb" onclick="sw('b',this)">B — Stats-first</button>
+  <button class="tb" onclick="sw('c',this)">C — Split</button>
+  <button class="tb" onclick="sw('d',this)">D — Minimal</button>
+  <button class="tb" onclick="sw('e',this)">E — Dark ticker</button>
+  <button class="tb" onclick="sw('f',this)">F — Immersive</button>
+</div>
+
+<!-- A: Classic — photo left, name right, stats below, action panel right column -->
+<div class="pn on" id="pa">
+  <div>
+    <div class="lbl">Desktop</div>
+    <div style="background:#1b3a6b;padding:32px 40px 52px;position:relative;overflow:hidden;">
+      <div class="ring"></div><div class="ring2"></div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:32px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;">← My Government · Federal · Pennsylvania</div>
+          <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:18px;">
+            <div class="av" style="width:72px;height:72px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+            <div>
+              <div class="nm" style="font-size:30px;margin-bottom:4px;">John Fetterman</div>
+              <div class="of" style="font-size:14px;margin-bottom:8px;">U.S. Senator · Pennsylvania</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <span class="tg td" style="font-size:7px;">Democrat</span>
+                <span class="tg tv" style="font-size:7px;">✓ Verified</span>
+                <span class="tg tn" style="font-size:7px;">Since 2023</span>
+                <span class="tg tn" style="font-size:7px;">Election 2028</span>
+              </div>
+            </div>
+          </div>
+          <div class="st" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;">
+            <div class="sc"><div class="sn" style="font-size:22px;">143</div><div class="sl" style="font-size:6px;">Bills</div></div>
+            <div class="sc"><div class="sn" style="font-size:22px;">91%</div><div class="sl" style="font-size:6px;">Votes attended</div></div>
+            <div class="sc"><div class="sn" style="font-size:22px;">12%</div><div class="sl" style="font-size:6px;">Missed</div></div>
+            <div class="sc"><div class="sn" style="font-size:22px;">4</div><div class="sl" style="font-size:6px;">Committees</div></div>
+          </div>
+        </div>
+        <div style="min-width:190px;display:flex;flex-direction:column;gap:7px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:2px;">Committees</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;"><span class="pl pb">Agriculture</span><span class="pl pb">Banking</span><span class="pl pb">Environment</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);">Top donors</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;"><span class="pl pa">Finance·$2.1M</span><span class="pl pa">Tech·$980K</span></div>
+          <button class="bf">+ Follow</button>
+          <button class="bq">Ask a question</button>
+        </div>
+      </div>
+    </div>
+    <div class="stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div>
+    <div class="lbl">Phone</div>
+    <div class="phone">
+      <nav class="n"><span class="logo">F<span>O</span>RA</span></nav>
+      <div class="hero" style="padding:16px 14px 36px;">
+        <div class="ring" style="width:100px;height:100px;right:-10px;top:-20px;border-width:10px;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px;">← Federal · Pennsylvania</div>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:14px;">
+          <div class="av" style="width:64px;height:64px;margin-bottom:10px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+          <div class="nm" style="font-size:20px;margin-bottom:3px;">John Fetterman</div>
+          <div class="of" style="font-size:11px;margin-bottom:7px;">U.S. Senator · Pennsylvania</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;">
+            <span class="tg td" style="font-size:6px;">Democrat</span>
+            <span class="tg tv" style="font-size:6px;">✓ Verified</span>
+            <span class="tg tn" style="font-size:6px;">Since 2023</span>
+          </div>
+        </div>
+        <div class="st" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-bottom:10px;">
+          <div class="sc" style="padding:7px 5px;text-align:center;"><div class="sn" style="font-size:14px;">143</div><div class="sl" style="font-size:5px;">Bills</div></div>
+          <div class="sc" style="padding:7px 5px;text-align:center;"><div class="sn" style="font-size:14px;">91%</div><div class="sl" style="font-size:5px;">Votes</div></div>
+          <div class="sc" style="padding:7px 5px;text-align:center;"><div class="sn" style="font-size:14px;">12%</div><div class="sl" style="font-size:5px;">Missed</div></div>
+          <div class="sc" style="padding:7px 5px;text-align:center;"><div class="sn" style="font-size:14px;">4</div><div class="sl" style="font-size:5px;">Cmtes</div></div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="bf" style="font-size:6px;">+ Follow</button>
+          <button class="bq" style="font-size:6px;">Ask</button>
+        </div>
+      </div>
+      <div class="stars" style="font-size:6px;padding:3px 10px;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</div>
+
+<!-- B: Stats-first — big numbers dominate -->
+<div class="pn" id="pb">
+  <div>
+    <div class="lbl">Desktop</div>
+    <div style="background:#1b3a6b;padding:32px 40px 52px;position:relative;overflow:hidden;">
+      <div class="ring"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:20px;">← My Government · Federal · Pennsylvania</div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;margin-bottom:24px;">
+        <div class="av" style="width:80px;height:80px;font-size:26px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+        <div>
+          <div class="nm" style="font-size:32px;margin-bottom:3px;">John Fetterman</div>
+          <div class="of" style="font-size:13px;margin-bottom:8px;">U.S. Senator · Pennsylvania</div>
+          <div style="display:flex;gap:5px;"><span class="tg td" style="font-size:7px;">Democrat</span><span class="tg tv" style="font-size:7px;">✓ Verified</span><span class="tg tn" style="font-size:7px;">Since 2023 · Election 2028</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:160px;">
+          <button class="bf">+ Follow</button><button class="bq">Ask a question</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;">
+        <div class="sc" style="text-align:center;padding:14px 8px;"><div class="sn" style="font-size:26px;">143</div><div class="sl" style="font-size:6px;">Bills sponsored</div></div>
+        <div class="sc" style="text-align:center;padding:14px 8px;"><div class="sn" style="font-size:26px;">91%</div><div class="sl" style="font-size:6px;">Votes attended</div></div>
+        <div class="sc" style="text-align:center;padding:14px 8px;"><div class="sn" style="font-size:26px;">12%</div><div class="sl" style="font-size:6px;">Missed votes</div></div>
+        <div class="sc" style="text-align:center;padding:14px 8px;"><div class="sn" style="font-size:26px;">4</div><div class="sl" style="font-size:6px;">Committees</div></div>
+        <div class="sc" style="text-align:center;padding:14px 8px;"><div class="sn" style="font-size:26px;">$4.2M</div><div class="sl" style="font-size:6px;">Total raised</div></div>
+        <div class="sc" style="text-align:center;padding:14px 8px;"><div class="sn" style="font-size:26px;">68%</div><div class="sl" style="font-size:6px;">Party votes</div></div>
+      </div>
+    </div>
+    <div class="stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div>
+    <div class="lbl">Phone</div>
+    <div class="phone">
+      <nav class="n"><span class="logo">F<span>O</span>RA</span></nav>
+      <div class="hero" style="padding:14px 12px 32px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div class="av" style="width:48px;height:48px;font-size:16px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+          <div><div class="nm" style="font-size:17px;margin-bottom:2px;">John Fetterman</div><div class="of" style="font-size:10px;">U.S. Senator · PA</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-bottom:10px;">
+          <div class="sc" style="text-align:center;padding:8px 4px;"><div class="sn" style="font-size:16px;">143</div><div class="sl" style="font-size:5px;">Bills</div></div>
+          <div class="sc" style="text-align:center;padding:8px 4px;"><div class="sn" style="font-size:16px;">91%</div><div class="sl" style="font-size:5px;">Votes</div></div>
+          <div class="sc" style="text-align:center;padding:8px 4px;"><div class="sn" style="font-size:16px;">$4.2M</div><div class="sl" style="font-size:5px;">Raised</div></div>
+        </div>
+        <button class="bf" style="font-size:6.5px;">+ Follow Fetterman</button>
+      </div>
+      <div class="stars" style="font-size:6px;padding:3px 10px;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</div>
+
+<!-- C: Split — dark left identity, light right data -->
+<div class="pn" id="pc">
+  <div>
+    <div class="lbl">Desktop</div>
+    <div style="display:grid;grid-template-columns:280px 1fr;min-height:220px;position:relative;overflow:hidden;">
+      <div style="background:#0e1a2e;padding:32px 24px;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);">← Federal · Pennsylvania</div>
+        <div class="av" style="width:72px;height:72px;font-size:22px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+        <div>
+          <div class="nm" style="font-size:22px;margin-bottom:3px;">John Fetterman</div>
+          <div class="of" style="font-size:12px;margin-bottom:8px;">U.S. Senator · Pennsylvania</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;"><span class="tg td" style="font-size:6.5px;">Democrat</span><span class="tg tv" style="font-size:6.5px;">✓ Verified</span></div>
+        </div>
+        <div style="display:flex;gap:6px;"><button class="bf" style="font-size:6.5px;">+ Follow</button><button class="bq" style="font-size:6.5px;">Ask</button></div>
+      </div>
+      <div style="background:#1b3a6b;padding:28px 32px;border-left:1px solid rgba(184,134,11,.2);">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;">
+          <div><div class="sn" style="font-size:28px;">143</div><div class="sl" style="font-size:6px;">Bills sponsored</div></div>
+          <div><div class="sn" style="font-size:28px;">91%</div><div class="sl" style="font-size:6px;">Votes attended</div></div>
+          <div><div class="sn" style="font-size:28px;">$4.2M</div><div class="sl" style="font-size:6px;">Campaign raised</div></div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:14px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:8px;">Committees · Top donors</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;"><span class="pl pb">Agriculture</span><span class="pl pb">Banking</span><span class="pl pb">Environment</span><span class="pl pa">Finance·$2.1M</span><span class="pl pa">Tech·$980K</span></div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:12px;margin-top:12px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:6px;">Industries NOT funding this official</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;"><span class="pl pg">No Oil & Gas</span><span class="pl pg">No Firearms</span><span class="pl pg">No Private Prison</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div>
+    <div class="lbl">Phone</div>
+    <div class="phone">
+      <nav class="n"><span class="logo">F<span>O</span>RA</span></nav>
+      <div style="background:#0e1a2e;padding:14px 12px 10px;display:flex;gap:10px;align-items:center;border-bottom:1px solid rgba(184,134,11,.2);">
+        <div class="av" style="width:52px;height:52px;font-size:17px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+        <div><div class="nm" style="font-size:16px;margin-bottom:2px;">John Fetterman</div><div class="of" style="font-size:10px;margin-bottom:5px;">U.S. Senator · Pennsylvania</div><span class="tg td" style="font-size:6px;">Democrat</span></div>
+      </div>
+      <div style="background:#1b3a6b;padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.03);">
+        <div style="padding:8px 6px;text-align:center;"><div class="sn" style="font-size:16px;">143</div><div class="sl" style="font-size:5px;">Bills</div></div>
+        <div style="padding:8px 6px;text-align:center;border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06);"><div class="sn" style="font-size:16px;">91%</div><div class="sl" style="font-size:5px;">Votes</div></div>
+        <div style="padding:8px 6px;text-align:center;"><div class="sn" style="font-size:16px;">$4.2M</div><div class="sl" style="font-size:5px;">Raised</div></div>
+      </div>
+      <div style="background:#1b3a6b;padding:8px 12px 28px;">
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;"><span class="pl pb" style="font-size:6px;">Agriculture</span><span class="pl pb" style="font-size:6px;">Banking</span><span class="pl pa" style="font-size:6px;">Finance·$2.1M</span></div>
+        <div style="display:flex;gap:5px;"><button class="bf" style="font-size:6px;">+ Follow</button><button class="bq" style="font-size:6px;">Ask</button></div>
+      </div>
+      <div class="stars" style="font-size:6px;padding:3px 10px;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</div>
+
+<!-- D: Minimal -->
+<div class="pn" id="pd">
+  <div>
+    <div class="lbl">Desktop</div>
+    <div style="background:#1b3a6b;padding:40px 48px 52px;position:relative;overflow:hidden;">
+      <div class="ring"></div>
+      <div style="display:grid;grid-template-columns:3px 1fr;gap:0 28px;align-items:stretch;">
+        <div style="background:#b8860b;border-radius:1px;"></div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;">← My Government · Federal</div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;">
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div class="av" style="width:64px;height:64px;font-size:20px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+              <div>
+                <div class="nm" style="font-size:34px;margin-bottom:5px;">John Fetterman</div>
+                <div class="of" style="font-size:14px;margin-bottom:10px;">U.S. Senator · Pennsylvania · Democrat · Since 2023</div>
+                <div style="display:flex;gap:16px;">
+                  <div><span style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;">143</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Bills</div></div>
+                  <div><span style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:white;">91%</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Attendance</div></div>
+                  <div><span style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#d4a832;">$4.2M</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Raised</div></div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:150px;">
+              <button class="bf">+ Follow</button><button class="bq">Ask a question</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div>
+    <div class="lbl">Phone</div>
+    <div class="phone">
+      <nav class="n"><span class="logo">F<span>O</span>RA</span></nav>
+      <div class="hero" style="padding:14px 14px 32px;display:grid;grid-template-columns:2px 1fr;gap:0 12px;align-items:stretch;">
+        <div style="background:#b8860b;border-radius:1px;"></div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:10px;">← Federal · Pennsylvania</div>
+          <div class="av" style="width:56px;height:56px;font-size:18px;margin-bottom:10px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+          <div class="nm" style="font-size:18px;margin-bottom:3px;">John Fetterman</div>
+          <div class="of" style="font-size:10px;margin-bottom:10px;">U.S. Senator · Pennsylvania</div>
+          <div style="display:flex;gap:12px;margin-bottom:10px;">
+            <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;">143</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Bills</div></div>
+            <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;">91%</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Votes</div></div>
+            <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#d4a832;">$4.2M</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Raised</div></div>
+          </div>
+          <button class="bf" style="font-size:6.5px;">+ Follow</button>
+        </div>
+      </div>
+      <div class="stars" style="font-size:6px;padding:3px 10px;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</div>
+
+<!-- E: Dark ticker -->
+<div class="pn" id="pe">
+  <div>
+    <div class="lbl">Desktop</div>
+    <div>
+      <div style="background:#0a1220;border-bottom:1px solid rgba(27,58,107,.5);padding:5px 40px;display:flex;gap:20px;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);">Next vote: <span style="color:rgba(255,255,255,.65);">Senate floor · Apr 3, 2026</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);">Bills this session: <span style="color:rgba(255,255,255,.65);">143</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);">Raised: <span style="color:#d4a832;">$4.2M</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);">Attendance: <span style="color:#86efac;">91%</span></span>
+      </div>
+      <div style="background:#1b3a6b;padding:32px 40px 48px;position:relative;overflow:hidden;">
+        <div class="ring"></div>
+        <div style="display:flex;gap:20px;align-items:flex-start;">
+          <div class="av" style="width:80px;height:80px;font-size:26px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+          <div style="flex:1;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px;">← Federal · Pennsylvania</div>
+            <div class="nm" style="font-size:36px;margin-bottom:4px;">John Fetterman</div>
+            <div class="of" style="font-size:15px;margin-bottom:10px;">U.S. Senator · Pennsylvania</div>
+            <div style="display:flex;gap:5px;margin-bottom:14px;"><span class="tg td" style="font-size:7px;">Democrat</span><span class="tg tv" style="font-size:7px;">✓ Verified</span><span class="tg tn" style="font-size:7px;">Since 2023</span><span class="tg tn" style="font-size:7px;">Election 2028</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              <span class="pl pb">Agriculture</span><span class="pl pb">Banking</span><span class="pl pb">Environment</span>
+              <span class="pl pa">Finance·$2.1M</span><span class="pl pa">Tech·$980K</span>
+              <span class="pl pg">No Oil & Gas</span><span class="pl pg">No Firearms</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:160px;">
+            <button class="bf">+ Follow</button><button class="bq">Ask a question</button>
+          </div>
+        </div>
+      </div>
+      <div class="stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+  <div>
+    <div class="lbl">Phone</div>
+    <div class="phone">
+      <nav class="n"><span class="logo">F<span>O</span>RA</span></nav>
+      <div style="background:#0a1220;padding:4px 10px;display:flex;gap:12px;border-bottom:1px solid rgba(27,58,107,.5);">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:6px;color:rgba(255,255,255,.35);">Attendance: <span style="color:#86efac;">91%</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:6px;color:rgba(255,255,255,.35);">Raised: <span style="color:#d4a832;">$4.2M</span></span>
+      </div>
+      <div class="hero" style="padding:12px 12px 30px;">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+          <div class="av" style="width:50px;height:50px;font-size:16px;"><img src="https://www.congress.gov/img/member/F000479_200.jpg"/><div class="vb">✓</div></div>
+          <div><div class="nm" style="font-size:16px;margin-bottom:2px;">John Fetterman</div><div class="of" style="font-size:10px;margin-bottom:5px;">U.S. Senator · PA</div><span class="tg td" style="font-size:6px;">Democrat</span></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;"><span class="pl pb" style="font-size:6px;">Agriculture</span><span class="pl pb" style="font-size:6px;">Banking</span><span class="pl pa" style="font-size:6px;">Finance·$2.1M</span><span class="pl pg" style="font-size:6px;">No Oil & Gas</span></div>
+        <div style="display:flex;gap:5px;"><button class="bf" style="font-size:6.5px;">+ Follow</button><button class="bq" style="font-size:6.5px;">Ask</button></div>
+      </div>
+      <div class="stars" style="font-size:6px;padding:3px 10px;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</div>
+
+<!-- F: Immersive — name huge, photo full bleed -->
+<div class="pn" id="pf">
+  <div>
+    <div class="lbl">Desktop</div>
+    <div style="background:#0e1a2e;padding:40px 48px 52px;position:relative;overflow:hidden;min-height:220px;">
+      <div class="ring" style="width:400px;height:400px;right:-80px;top:-100px;border-width:40px;opacity:.4;"></div>
+      <div style="position:absolute;top:0;right:0;bottom:0;width:220px;overflow:hidden;opacity:.18;">
+        <img src="https://www.congress.gov/img/member/F000479_200.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top center;"/>
+      </div>
+      <div style="position:relative;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;">← My Government · Federal · Pennsylvania</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:52px;font-weight:700;color:white;line-height:.95;margin-bottom:12px;">John<br>Fetterman</div>
+        <div style="display:flex;gap:24px;align-items:center;margin-bottom:18px;">
+          <div class="of" style="font-size:14px;">U.S. Senator · Pennsylvania</div>
+          <span class="tg td" style="font-size:7px;">Democrat</span>
+          <span class="tg tv" style="font-size:7px;">✓ Verified</span>
+          <span class="tg tn" style="font-size:7px;">Since 2023</span>
+        </div>
+        <div style="display:flex;gap:20px;margin-bottom:16px;">
+          <div><span style="font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:white;">143</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Bills</div></div>
+          <div><span style="font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:white;">91%</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Votes attended</div></div>
+          <div><span style="font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:#d4a832;">$4.2M</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Raised</div></div>
+          <div><span style="font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:white;">4</span><div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Committees</div></div>
+        </div>
+        <div style="display:flex;gap:8px;"><button class="bf" style="max-width:140px;">+ Follow</button><button class="bq" style="max-width:160px;">Ask a question</button></div>
+      </div>
+    </div>
+    <div class="stars" style="background:#0e1a2e;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  </div>
+  <div>
+    <div class="lbl">Phone</div>
+    <div class="phone">
+      <nav class="n" style="background:#0e1a2e;"><span class="logo">F<span>O</span>RA</span></nav>
+      <div style="background:#0e1a2e;padding:14px 14px 30px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;right:0;bottom:0;width:80px;opacity:.15;"><img src="https://www.congress.gov/img/member/F000479_200.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;"/></div>
+        <div style="position:relative;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:10px;">← Federal · Pennsylvania</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:white;line-height:.95;margin-bottom:8px;">John<br>Fetterman</div>
+          <div class="of" style="font-size:10px;margin-bottom:8px;">U.S. Senator · Pennsylvania</div>
+          <div style="display:flex;gap:10px;margin-bottom:10px;">
+            <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;">143</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Bills</div></div>
+            <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;">91%</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Votes</div></div>
+            <div style="text-align:center;"><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#d4a832;">$4.2M</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Raised</div></div>
+          </div>
+          <button class="bf" style="font-size:6.5px;">+ Follow Fetterman</button>
+        </div>
+      </div>
+      <div class="stars" style="background:#0e1a2e;font-size:6px;padding:3px 10px;">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function sw(id,btn){
+  document.querySelectorAll('.pn').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p'+id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>

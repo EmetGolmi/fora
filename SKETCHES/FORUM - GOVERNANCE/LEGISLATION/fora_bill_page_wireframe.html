@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA — Bill Page · Cuba · EN/ES</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:        #0f1f3d;
+  --navy-mid:    #152540;
+  --navy-light:  #1a2e4a;
+  --navy-pale:   #1e3655;
+  --gold:        #c9a84c;
+  --gold-light:  #e0bf6a;
+  --gold-dim:    rgba(201,168,76,0.25);
+  --gold-glow:   rgba(201,168,76,0.07);
+  --paper:       #f7f4ee;
+  --white:       #ffffff;
+  --rule:        rgba(255,255,255,0.07);
+  --rule-gold:   rgba(201,168,76,0.18);
+  --muted:       rgba(255,255,255,0.35);
+  --muted2:      rgba(255,255,255,0.2);
+  --blue:        #4a9eff;
+  --blue-dim:    rgba(74,158,255,0.15);
+  --blue-border: rgba(74,158,255,0.3);
+  --purple:      #a855f7;
+  --purple-dim:  rgba(168,85,247,0.12);
+  --purple-border: rgba(168,85,247,0.28);
+  --green:       #22c55e;
+  --green-dim:   rgba(34,197,94,0.1);
+  --green-border: rgba(34,197,94,0.28);
+  --orange:      #f97316;
+  --orange-dim:  rgba(249,115,22,0.1);
+  --orange-border: rgba(249,115,22,0.28);
+  --red:         #ef4444;
+  --surface:     rgba(255,255,255,0.04);
+  --surface2:    rgba(255,255,255,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── GLOBAL NAV ── */
+.g-nav {
+  height: 50px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex-shrink: 0;
+  background: var(--navy);
+  z-index: 20;
+}
+.g-nav-wordmark {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--white);
+}
+.g-nav-sep { width: 1px; height: 14px; background: var(--gold-dim); }
+.g-nav-context {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.g-nav-crumb { color: var(--muted2); }
+.g-nav-crumb-sep { color: rgba(255,255,255,0.15); }
+.g-nav-current { color: rgba(255,255,255,0.65); }
+.g-nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.g-nav-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  padding: 5px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.g-nav-btn:hover { background: rgba(201,168,76,0.1); }
+.g-nav-follow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.g-nav-follow:hover { color: rgba(255,255,255,0.6); }
+.follow-icon { font-size: 11px; }
+
+/* ── BILL HEADER BAND ── */
+.bill-header {
+  border-bottom: 1px solid var(--rule);
+  padding: 14px 24px 12px;
+  flex-shrink: 0;
+  background: var(--navy-mid);
+}
+.bill-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.bill-id-block { flex-shrink: 0; }
+.bill-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+.bill-chamber {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+.bill-title-block { flex: 1; min-width: 0; }
+.bill-title-en {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.bill-title-es {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.3;
+}
+.bill-status-block {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.bill-status-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+.status-committee { background: var(--orange-dim); color: #fdba74; border: 1px solid var(--orange-border); }
+.bill-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: var(--muted2);
+}
+
+/* progress track */
+.progress-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.prog-step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.prog-node {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+.prog-node.done { background: var(--gold); border-color: var(--gold); }
+.prog-node.current { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 3px rgba(249,115,22,0.2); }
+.prog-line {
+  width: 32px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.1);
+}
+.prog-line.done { background: var(--gold); }
+.prog-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+  margin-left: 4px;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+.prog-label.done { color: rgba(201,168,76,0.7); }
+.prog-label.current { color: #fdba74; }
+
+/* ── BILINGUAL STRIP ── */
+.bilingual-strip {
+  height: 28px;
+  border-bottom: 1px solid var(--rule-gold);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  background: rgba(201,168,76,0.04);
+}
+.bil-flag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  height: 100%;
+  border-right: 1px solid var(--rule-gold);
+}
+.bil-emoji { font-size: 13px; line-height: 1; }
+.bil-lang {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.bil-primary {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(201,168,76,0.45);
+  padding: 0 10px;
+}
+.bil-sep { flex: 1; }
+.bil-source-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.18);
+  padding: 0 16px;
+  text-transform: uppercase;
+}
+.bil-source-note span { color: rgba(201,168,76,0.4); cursor: pointer; }
+.bil-source-note span:hover { color: var(--gold); }
+
+/* ── BODY SPLIT ── */
+.body-split {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── LEFT COLUMN: CONTEXT ── */
+.col-left {
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid linear-gradient(to bottom, var(--gold-dim), transparent);
+  position: relative;
+}
+.col-left::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold-dim) 0%, rgba(255,255,255,0.05) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+.left-scroll {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+  padding: 20px 22px 32px;
+}
+
+/* scaffold */
+.scaffold {
+  margin-bottom: 20px;
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-line { width: 18px; height: 2px; background: var(--blue); }
+.section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #7bb8ff;
+}
+.section-title.purple { color: #c084fc; }
+.section-title.orange { color: #fdba74; }
+.section-title.green { color: #86efac; }
+.section-line.purple { background: var(--purple); }
+.section-line.orange { background: var(--orange); }
+.section-line.green { background: var(--green); }
+.collapse-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+.collapse-btn:hover { color: rgba(255,255,255,0.6); }
+.collapse-arrow { transition: transform 0.2s; font-size: 10px; }
+.collapse-arrow.open { transform: rotate(180deg); }
+
+.scaffold-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.scaffold-card {
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+.scaffold-card.full { grid-column: 1 / -1; }
+.scaffold-card.best { background: var(--green-dim); border-color: var(--green-border); }
+.scaffold-card.worst { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); }
+.scaffold-card.precedent { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+
+.sc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7bb8ff;
+  margin-bottom: 5px;
+}
+.scaffold-card.best .sc-label { color: #86efac; }
+.scaffold-card.worst .sc-label { color: #fca5a5; }
+.scaffold-card.precedent .sc-label { color: rgba(255,255,255,0.3); }
+
+.sc-label-es {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: rgba(201,168,76,0.4);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.sc-text-en {
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.82);
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+.sc-text-es {
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.38);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* source quality strip */
+.source-strip {
+  margin-bottom: 20px;
+}
+.source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.source-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.source-row:hover { background: var(--surface2); }
+.source-tier {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+.tier-s { background: rgba(34,197,94,0.2); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+.tier-a { background: rgba(74,158,255,0.18); color: #7bb8ff; border: 1px solid rgba(74,158,255,0.3); }
+.tier-b { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid var(--gold-dim); }
+.tier-c { background: rgba(249,115,22,0.12); color: #fdba74; border: 1px solid var(--orange-border); }
+.tier-w { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); }
+.source-name {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.source-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  color: var(--muted2);
+  flex-shrink: 0;
+}
+.source-arrow { font-size: 10px; color: var(--muted2); }
+
+.legitimacy-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  border-radius: 3px;
+  margin-top: 6px;
+}
+.leg-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7bb8ff;
+  flex-shrink: 0;
+}
+.leg-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.leg-fill {
+  height: 100%;
+  background: linear-gradient(to right, #4a9eff, #7bb8ff);
+  border-radius: 2px;
+  width: 71%;
+}
+.leg-score {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: #7bb8ff;
+  flex-shrink: 0;
+}
+.leg-note {
+  font-size: 9px;
+  color: var(--muted2);
+}
+
+/* cohort sentiment */
+.sentiment-section {
+  margin-bottom: 20px;
+}
+.cohort-filters {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.cohort-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: none;
+}
+.cohort-chip:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+.cohort-chip.active { border-color: var(--purple-border); background: var(--purple-dim); color: #c084fc; }
+.sentiment-bars { display: flex; flex-direction: column; gap: 7px; }
+.sent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sent-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  width: 52px;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.sent-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.sent-fill { height: 100%; border-radius: 3px; }
+.fill-support { background: linear-gradient(to right, #22c55e, #86efac); }
+.fill-oppose  { background: linear-gradient(to right, #ef4444, #fca5a5); }
+.fill-neutral { background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0.15)); }
+.sent-pct {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.pct-support { color: #86efac; }
+.pct-oppose  { color: #fca5a5; }
+.pct-neutral { color: var(--muted2); }
+.sent-n {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7.5px;
+  color: var(--muted2);
+  margin-top: 4px;
+  text-align: right;
+}
+.cohort-note {
+  font-size: 10px;
+  color: var(--muted2);
+  font-style: italic;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* votes + sponsors */
+.votes-section { margin-bottom: 8px; }
+.sponsor-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
+.sponsor-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.sponsor-row:hover { background: var(--surface2); }
+.sponsor-avatar {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.2);
+  border: 1px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  color: var(--gold);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.sponsor-name { font-size: 12px; color: rgba(255,255,255,0.8); flex: 1; }
+.sponsor-role {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+.vote-tally {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.tally-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+.tally-n {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+.tally-n.yea { color: #86efac; }
+.tally-n.nay { color: #fca5a5; }
+.tally-n.abs { color: var(--muted2); }
+.tally-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+.tally-sep { width: 1px; background: var(--rule); align-self: stretch; }
+
+/* ── RIGHT COLUMN: DISCOURSE ── */
+.col-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(0,0,0,0.12);
+}
+
+.discourse-header {
+  padding: 12px 18px 10px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.disc-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.disc-line { width: 14px; height: 2px; background: var(--green); }
+.disc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #86efac;
+}
+.disc-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--muted2);
+}
+.disc-sort {
+  display: flex;
+  gap: 4px;
+}
+.disc-sort-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted2);
+  background: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.disc-sort-btn.active { border-color: var(--green-border); color: #86efac; background: var(--green-dim); }
+.disc-sort-btn:hover { color: rgba(255,255,255,0.5); }
+
+/* steel-man prompt */
+.steel-man-prompt {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(168,85,247,0.05);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sm-icon { font-size: 14px; flex-shrink: 0; }
+.sm-text {
+  flex: 1;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.4;
+}
+.sm-text strong { color: #c084fc; font-weight: 600; }
+.sm-cta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c084fc;
+  border: 1px solid var(--purple-border);
+  background: var(--purple-dim);
+  padding: 5px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.sm-cta:hover { background: rgba(168,85,247,0.2); }
+
+/* contributions feed */
+.contributions {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contrib {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 11px 13px;
+  transition: border-color 0.15s;
+}
+.contrib:hover { border-color: rgba(255,255,255,0.12); }
+.contrib.steelman { border-left: 3px solid var(--purple); }
+.contrib.flagged { opacity: 0.5; }
+
+.contrib-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.contrib-identity {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.55);
+  flex: 1;
+}
+.contrib-identity strong { color: rgba(255,255,255,0.8); }
+.contrib-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  color: var(--muted2);
+}
+.steelman-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--purple-dim);
+  border: 1px solid var(--purple-border);
+  color: #c084fc;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+.contrib-body-en {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 5px;
+}
+.contrib-body-es {
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.3);
+  font-style: italic;
+  font-weight: 300;
+  padding-top: 5px;
+  border-top: 1px solid var(--rule);
+}
+.contrib-es-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(201,168,76,0.3);
+  margin-bottom: 3px;
+}
+.contrib-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.contrib-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.12s;
+  padding: 0;
+}
+.contrib-action-btn:hover { color: rgba(255,255,255,0.55); }
+.contrib-action-btn.up:hover { color: #86efac; }
+.contrib-action-btn.down:hover { color: #fca5a5; }
+.contrib-score { color: rgba(255,255,255,0.35); font-size: 9px; }
+
+/* tone intercept banner */
+.tone-intercept {
+  padding: 10px 18px;
+  border-top: 1px solid rgba(249,115,22,0.2);
+  background: rgba(249,115,22,0.06);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.tone-icon { font-size: 14px; flex-shrink: 0; }
+.tone-text {
+  flex: 1;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.4;
+}
+.tone-text strong { color: #fdba74; }
+.tone-action {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.tone-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+}
+.tone-revise { background: rgba(249,115,22,0.2); color: #fdba74; border: 1px solid var(--orange-border); }
+.tone-proceed { background: rgba(255,255,255,0.05); color: var(--muted2); border: 1px solid var(--rule); }
+.tone-revise:hover { background: rgba(249,115,22,0.3); }
+
+/* compose block */
+.compose-block {
+  border-top: 1px solid var(--rule);
+  padding: 12px 18px;
+  flex-shrink: 0;
+}
+.compose-wrap {
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+  transition: border-color 0.2s;
+}
+.compose-wrap:focus-within { border-color: var(--gold-dim); }
+.compose-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  color: var(--white);
+  resize: none;
+  min-height: 54px;
+  line-height: 1.5;
+}
+.compose-input::placeholder { color: rgba(255,255,255,0.2); }
+.compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px 8px;
+  border-top: 1px solid var(--rule);
+}
+.compose-hints {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.compose-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+.hint-dot { width: 5px; height: 5px; border-radius: 50%; }
+.hint-dot.source { background: rgba(74,158,255,0.5); }
+.hint-dot.steelman { background: rgba(168,85,247,0.5); }
+.compose-submit {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  padding: 6px 16px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.compose-submit:hover { background: var(--gold-light); }
+.anon-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.07em;
+  color: var(--muted2);
+  text-align: center;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+.anon-note span { color: rgba(201,168,76,0.45); cursor: pointer; }
+
+/* ── WIREFRAME ANNOTATION OVERLAY ── */
+.annotations {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 100;
+  pointer-events: none;
+}
+.ann-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.ann-blue  { background: var(--blue-dim);   border: 1px solid var(--blue-border);   color: #7bb8ff; }
+.ann-purp  { background: var(--purple-dim); border: 1px solid var(--purple-border); color: #c084fc; }
+.ann-green { background: var(--green-dim);  border: 1px solid var(--green-border);  color: #86efac; }
+.ann-gold  { background: var(--gold-glow);  border: 1px solid var(--gold-dim);      color: var(--gold); }
+.ann-orng  { background: var(--orange-dim); border: 1px solid var(--orange-border); color: #fdba74; }
+
+/* collapse animation */
+.collapsible { overflow: hidden; transition: max-height 0.3s ease, opacity 0.25s ease; }
+.collapsible.collapsed { max-height: 0 !important; opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- ── GLOBAL NAV ── -->
+<div class="g-nav">
+  <div class="g-nav-wordmark">FORA</div>
+  <div class="g-nav-sep"></div>
+  <div class="g-nav-context">
+    <span class="g-nav-crumb">Cuba</span>
+    <span class="g-nav-crumb-sep">›</span>
+    <span class="g-nav-crumb">Asamblea Nacional</span>
+    <span class="g-nav-crumb-sep">›</span>
+    <span class="g-nav-current">Ley No. 148 / 2025</span>
+  </div>
+  <div class="g-nav-right">
+    <div class="g-nav-follow">
+      <span class="follow-icon">☆</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;">Follow Bill</span>
+    </div>
+    <button class="g-nav-btn">Share</button>
+  </div>
+</div>
+
+<!-- ── BILL HEADER ── -->
+<div class="bill-header">
+  <div class="bill-header-top">
+    <div class="bill-id-block">
+      <div class="bill-id">Ley No. 148 / 2025</div>
+      <div class="bill-chamber">Asamblea Nacional · Cuba</div>
+    </div>
+    <div class="bill-title-block">
+      <div class="bill-title-en">Housing Allocation and Cooperative Reform Act</div>
+      <div class="bill-title-es">Ley de Asignación de Vivienda y Reforma de Cooperativas</div>
+    </div>
+    <div class="bill-status-block">
+      <div class="bill-status-badge status-committee">In Committee</div>
+      <div class="bill-date">Introduced Mar 4, 2025</div>
+    </div>
+  </div>
+
+  <!-- progress track -->
+  <div class="progress-track">
+    <div class="prog-step">
+      <div class="prog-node done"></div>
+      <div class="prog-label done">Introduced</div>
+    </div>
+    <div class="prog-line done"></div>
+    <div class="prog-step">
+      <div class="prog-node done"></div>
+      <div class="prog-label done">1st Reading</div>
+    </div>
+    <div class="prog-line done"></div>
+    <div class="prog-step">
+      <div class="prog-node current"></div>
+      <div class="prog-label current">Committee</div>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-node"></div>
+      <div class="prog-label">2nd Reading</div>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-node"></div>
+      <div class="prog-label">Floor Vote</div>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-node"></div>
+      <div class="prog-label">Enacted</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BILINGUAL STRIP ── -->
+<div class="bilingual-strip">
+  <div class="bil-flag">
+    <div class="bil-emoji">🇺🇸</div>
+    <div class="bil-lang">EN</div>
+  </div>
+  <div class="bil-primary" style="color:rgba(255,255,255,0.18);font-size:8px;padding:0 12px;">·</div>
+  <div class="bil-flag" style="border-right:none;border-left:1px solid var(--rule-gold);">
+    <div class="bil-emoji">🇨🇺</div>
+    <div class="bil-lang">ES</div>
+  </div>
+  <div class="bil-primary">Bilingual display active</div>
+  <div class="bil-sep"></div>
+  <div class="bil-source-note">Spanish translations: AI-generated · <span id="improve-link" onclick="this.style.color='var(--gold)'">Improve a translation ↗</span></div>
+</div>
+
+<!-- ── BODY SPLIT ── -->
+<div class="body-split">
+
+  <!-- ═══ LEFT: CONTEXT ═══ -->
+  <div class="col-left">
+    <div class="left-scroll">
+
+      <!-- §1 Civic Scaffold -->
+      <div class="scaffold">
+        <div class="section-head">
+          <div class="section-label">
+            <div class="section-line"></div>
+            <div class="section-title">Civic Scaffold</div>
+          </div>
+          <button class="collapse-btn" id="scaffold-toggle" onclick="toggleSection('scaffold-body', this)">
+            <span>Collapse</span>
+            <span class="collapse-arrow open" id="scaffold-arrow">▾</span>
+          </button>
+        </div>
+
+        <div class="collapsible" id="scaffold-body" style="max-height:1000px;">
+          <div class="scaffold-grid">
+
+            <div class="scaffold-card full">
+              <div class="sc-label">What it does</div>
+              <div class="sc-label-es">¿Qué hace?</div>
+              <div class="sc-text-en">Restructures how residential housing is allocated in urban centers, shifting from state-directed assignment to cooperative ownership models. Grants existing tenants legal purchase rights on units occupied for 10+ years.</div>
+              <div class="sc-text-es">Reestructura cómo se asigna la vivienda residencial en centros urbanos, pasando de la asignación estatal a modelos de propiedad cooperativa. Otorga a los inquilinos existentes derechos legales de compra en unidades ocupadas por más de 10 años.</div>
+            </div>
+
+            <div class="scaffold-card">
+              <div class="sc-label">Who it affects</div>
+              <div class="sc-label-es">¿A quién afecta?</div>
+              <div class="sc-text-en">~2.4M urban households currently in state-assigned housing. Municipal housing authorities. Construction cooperatives.</div>
+              <div class="sc-text-es">~2.4M hogares urbanos en vivienda estatal asignada. Autoridades municipales de vivienda. Cooperativas de construcción.</div>
+            </div>
+
+            <div class="scaffold-card">
+              <div class="sc-label">Fiscal note</div>
+              <div class="sc-label-es">Nota fiscal</div>
+              <div class="sc-text-en">Ministry of Finance estimates ₱ 840M revenue from title transfers over 5 years. Implementation cost ~₱ 120M.</div>
+              <div class="sc-text-es">El Ministerio de Finanzas estima ingresos de ₱840M por transferencias de título en 5 años. Costo de implementación ~₱120M.</div>
+            </div>
+
+            <div class="scaffold-card best">
+              <div class="sc-label">Best case</div>
+              <div class="sc-label-es">Mejor escenario</div>
+              <div class="sc-text-en">Builds a generation of property-owning citizens. Incentivizes maintenance. Reduces state administrative burden by ~30%.</div>
+              <div class="sc-text-es">Construye una generación de ciudadanos propietarios. Incentiva el mantenimiento. Reduce la carga administrativa estatal en ~30%.</div>
+            </div>
+
+            <div class="scaffold-card worst">
+              <div class="sc-label">Worst case</div>
+              <div class="sc-label-es">Peor escenario</div>
+              <div class="sc-text-en">Wealthier residents consolidate holdings. Poorer tenants priced out of cooperative structures. Housing inequality accelerates.</div>
+              <div class="sc-text-es">Los residentes más ricos consolidan propiedades. Inquilinos más pobres excluidos de estructuras cooperativas. La desigualdad habitacional se acelera.</div>
+            </div>
+
+            <div class="scaffold-card precedent full">
+              <div class="sc-label">Historical precedent</div>
+              <div class="sc-label-es">Precedente histórico</div>
+              <div class="sc-text-en">Similar to Vietnam's 1993 Land Law reforms, which converted state leaseholds to use-rights certificates and generated $12B in private investment within a decade. Cuba passed a partial version of this in 2011 (Ley No. 65) covering rural land only.</div>
+              <div class="sc-text-es">Similar a las reformas de la Ley de Tierras de Vietnam de 1993. Cuba aprobó una versión parcial en 2011 (Ley No. 65) cubriendo solo tierras rurales.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- §2 Source Quality -->
+      <div class="source-strip">
+        <div class="section-head">
+          <div class="section-label">
+            <div class="section-line orange"></div>
+            <div class="section-title orange">Sources</div>
+          </div>
+          <button class="collapse-btn" onclick="toggleSection('source-body', this)">
+            <span>Collapse</span>
+            <span class="collapse-arrow open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="source-body" style="max-height:600px;">
+          <div class="source-list">
+            <div class="source-row">
+              <div class="source-tier tier-s">S</div>
+              <div class="source-name">Gaceta Oficial de Cuba — Full bill text</div>
+              <div class="source-date">Mar 4 2025</div>
+              <div class="source-arrow">↗</div>
+            </div>
+            <div class="source-row">
+              <div class="source-tier tier-a">A</div>
+              <div class="source-name">Reuters — Cuba housing reform signals economic shift</div>
+              <div class="source-date">Mar 6 2025</div>
+              <div class="source-arrow">↗</div>
+            </div>
+            <div class="source-row">
+              <div class="source-tier tier-b">B</div>
+              <div class="source-name">14ymedio — Análisis: ¿reforma real o cosmética?</div>
+              <div class="source-date">Mar 8 2025</div>
+              <div class="source-arrow">↗</div>
+            </div>
+            <div class="source-row">
+              <div class="source-tier tier-w">⚠</div>
+              <div class="source-name">Miami Herald Op-Ed — Regime uses law to consolidate</div>
+              <div class="source-date">Mar 9 2025</div>
+              <div class="source-arrow">↗</div>
+            </div>
+          </div>
+          <div class="legitimacy-bar" style="margin-top:8px;">
+            <div class="leg-label">Legitimacy score</div>
+            <div class="leg-track"><div class="leg-fill"></div></div>
+            <div class="leg-score">71</div>
+            <div class="leg-note">/ 100 · Scores citations, not claims</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- §3 Cohort Sentiment -->
+      <div class="sentiment-section" style="margin-top:20px;">
+        <div class="section-head">
+          <div class="section-label">
+            <div class="section-line purple"></div>
+            <div class="section-title purple">Cohort Sentiment</div>
+          </div>
+          <button class="collapse-btn" onclick="toggleSection('sentiment-body', this)">
+            <span>Collapse</span>
+            <span class="collapse-arrow open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="sentiment-body" style="max-height:400px;">
+          <div class="cohort-filters">
+            <button class="cohort-chip active">All users</button>
+            <button class="cohort-chip">Cuban diaspora</button>
+            <button class="cohort-chip">Age 25–44</button>
+            <button class="cohort-chip">Homeowners</button>
+            <button class="cohort-chip">Urban</button>
+          </div>
+          <div class="sentiment-bars">
+            <div class="sent-row">
+              <div class="sent-label">Support</div>
+              <div class="sent-track"><div class="sent-fill fill-support" style="width:58%"></div></div>
+              <div class="sent-pct pct-support">58%</div>
+            </div>
+            <div class="sent-row">
+              <div class="sent-label">Oppose</div>
+              <div class="sent-track"><div class="sent-fill fill-oppose" style="width:27%"></div></div>
+              <div class="sent-pct pct-oppose">27%</div>
+            </div>
+            <div class="sent-row">
+              <div class="sent-label">Neutral</div>
+              <div class="sent-track"><div class="sent-fill fill-neutral" style="width:15%"></div></div>
+              <div class="sent-pct pct-neutral">15%</div>
+            </div>
+          </div>
+          <div class="sent-n">n = 1,847 users · Semi-anonymous cohort display</div>
+          <p class="cohort-note">Cuban diaspora cohort shows higher opposition (41%) vs. Cuban residents (19%). Tap a cohort to filter.</p>
+        </div>
+      </div>
+
+      <!-- §4 Sponsors + Votes -->
+      <div class="votes-section" style="margin-top:20px;">
+        <div class="section-head">
+          <div class="section-label">
+            <div class="section-line" style="background:var(--gold)"></div>
+            <div class="section-title" style="color:var(--gold)">Sponsors &amp; Record</div>
+          </div>
+          <button class="collapse-btn" onclick="toggleSection('votes-body', this)">
+            <span>Collapse</span>
+            <span class="collapse-arrow open">▾</span>
+          </button>
+        </div>
+        <div class="collapsible" id="votes-body" style="max-height:400px;">
+          <div class="sponsor-list">
+            <div class="sponsor-row">
+              <div class="sponsor-avatar">MR</div>
+              <div class="sponsor-name">Miguel Díaz-Canel Bermúdez</div>
+              <div class="sponsor-role">Sponsor · President</div>
+            </div>
+            <div class="sponsor-row">
+              <div class="sponsor-avatar">EP</div>
+              <div class="sponsor-name">Esteban Lazo Hernández</div>
+              <div class="sponsor-role">Co-sponsor · Asamblea Chair</div>
+            </div>
+          </div>
+          <div class="vote-tally">
+            <div class="tally-item">
+              <div class="tally-n yea">—</div>
+              <div class="tally-label">Yea</div>
+            </div>
+            <div class="tally-sep"></div>
+            <div class="tally-item">
+              <div class="tally-n nay">—</div>
+              <div class="tally-label">Nay</div>
+            </div>
+            <div class="tally-sep"></div>
+            <div class="tally-item">
+              <div class="tally-n abs" style="font-size:12px;margin-top:3px;">In Committee</div>
+              <div class="tally-label">Floor vote pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /left-scroll -->
+  </div><!-- /col-left -->
+
+  <!-- ═══ RIGHT: DISCOURSE ═══ -->
+  <div class="col-right">
+
+    <div class="discourse-header">
+      <div class="disc-title">
+        <div class="disc-line"></div>
+        <div class="disc-label">Discourse</div>
+        <div class="disc-count" style="margin-left:6px;">84 contributions</div>
+      </div>
+      <div class="disc-sort">
+        <button class="disc-sort-btn active">Top</button>
+        <button class="disc-sort-btn">Recent</button>
+        <button class="disc-sort-btn">Steel-man</button>
+      </div>
+    </div>
+
+    <!-- steel-man prompt -->
+    <div class="steel-man-prompt">
+      <div class="sm-icon">⚖️</div>
+      <div class="sm-text"><strong>Steel-man challenge:</strong> Can you make the strongest possible case for the opposing view before posting your own?</div>
+      <button class="sm-cta">Try it</button>
+    </div>
+
+    <!-- contributions -->
+    <div class="contributions">
+
+      <div class="contrib steelman">
+        <div class="contrib-meta">
+          <div class="contrib-identity"><strong>Teacher · 30s · Havana</strong></div>
+          <div class="steelman-badge">Steel-man</div>
+          <div class="contrib-time">2h ago</div>
+        </div>
+        <div class="contrib-body-en">Even if I oppose this law, the strongest case for it is that state-managed housing has produced a maintenance crisis. Buildings collapse every year. Cooperative ownership creates personal incentive to maintain what you live in. That's a real argument worth taking seriously.</div>
+        <div class="contrib-body-es">
+          <div class="contrib-es-label">ES · AI translation</div>
+          Aunque me opongo a esta ley, el argumento más sólido a su favor es que la vivienda administrada por el estado ha producido una crisis de mantenimiento. Los edificios se derrumban cada año. La propiedad cooperativa crea incentivo personal para mantener donde vives.
+        </div>
+        <div class="contrib-actions">
+          <button class="contrib-action-btn up">▲ <span class="contrib-score">142</span></button>
+          <button class="contrib-action-btn down">▼</button>
+          <button class="contrib-action-btn">Reply</button>
+          <button class="contrib-action-btn">Flag</button>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-meta">
+          <div class="contrib-identity"><strong>Engineer · 40s · Santiago</strong></div>
+          <div class="contrib-time">5h ago</div>
+        </div>
+        <div class="contrib-body-en">The 10-year occupancy requirement is the critical detail. Most Havana tenants have lived in their units for 20+ years. This could be transformative — not cosmetic. The question is whether the cooperative pricing mechanism is set at market rate or subsidized.</div>
+        <div class="contrib-body-es">
+          <div class="contrib-es-label">ES · AI translation</div>
+          El requisito de 10 años de ocupación es el detalle crítico. La mayoría de los inquilinos habaneros han vivido en sus unidades por más de 20 años. Esto podría ser transformador. La pregunta es si el mecanismo de precios cooperativos se fija a tasa de mercado o subsidiado.
+        </div>
+        <div class="contrib-actions">
+          <button class="contrib-action-btn up">▲ <span class="contrib-score">89</span></button>
+          <button class="contrib-action-btn down">▼</button>
+          <button class="contrib-action-btn">Reply</button>
+          <button class="contrib-action-btn">Flag</button>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-meta">
+          <div class="contrib-identity"><strong>Journalist · 50s · Miami</strong></div>
+          <div class="contrib-time">8h ago</div>
+        </div>
+        <div class="contrib-body-en">The precedent from Vietnam is misleading. Vietnam's reforms happened alongside market liberalization. Cuba's reform is isolated — without price signals, cooperative ownership may just replicate the same allocation problems with different paperwork.</div>
+        <div class="contrib-body-es">
+          <div class="contrib-es-label">ES · Community translation · <span style="color:#86efac;">+31 votes</span></div>
+          El precedente de Vietnam es engañoso. Las reformas de Vietnam ocurrieron junto con la liberalización del mercado. La reforma de Cuba está aislada — sin señales de precios, la propiedad cooperativa puede replicar los mismos problemas de asignación con papeleo diferente.
+        </div>
+        <div class="contrib-actions">
+          <button class="contrib-action-btn up">▲ <span class="contrib-score">67</span></button>
+          <button class="contrib-action-btn down">▼</button>
+          <button class="contrib-action-btn">Reply</button>
+          <button class="contrib-action-btn">Flag</button>
+        </div>
+      </div>
+
+      <div class="contrib">
+        <div class="contrib-meta">
+          <div class="contrib-identity"><strong>Student · 20s · Camagüey</strong></div>
+          <div class="contrib-time">12h ago</div>
+        </div>
+        <div class="contrib-body-en">My family has lived in the same apartment for 34 years. This law would let us own it. That changes everything — for the first time we'd have something to pass down. I don't understand why diaspora voices are so loud in opposition when they don't live here.</div>
+        <div class="contrib-body-es">
+          <div class="contrib-es-label">ES · AI translation</div>
+          Mi familia ha vivido en el mismo apartamento por 34 años. Esta ley nos permitiría ser dueños. Eso cambia todo — por primera vez tendríamos algo para heredar. No entiendo por qué las voces de la diáspora se oponen tanto si no viven aquí.
+        </div>
+        <div class="contrib-actions">
+          <button class="contrib-action-btn up">▲ <span class="contrib-score">54</span></button>
+          <button class="contrib-action-btn down">▼</button>
+          <button class="contrib-action-btn">Reply</button>
+          <button class="contrib-action-btn">Flag</button>
+        </div>
+      </div>
+
+    </div><!-- /contributions -->
+
+    <!-- tone intercept -->
+    <div class="tone-intercept">
+      <div class="tone-icon">🌡</div>
+      <div class="tone-text"><strong>Tone check:</strong> Your draft contains language that may read as dismissive of diaspora perspectives. Consider whether this strengthens or weakens your argument.</div>
+      <div class="tone-action">
+        <button class="tone-btn tone-revise">Revise</button>
+        <button class="tone-btn tone-proceed">Post anyway</button>
+      </div>
+    </div>
+
+    <!-- compose -->
+    <div class="compose-block">
+      <div class="compose-wrap">
+        <textarea class="compose-input" placeholder="Add your perspective on Ley No. 148…"></textarea>
+        <div class="compose-footer">
+          <div class="compose-hints">
+            <div class="compose-hint"><div class="hint-dot source"></div>Add a source</div>
+            <div class="compose-hint"><div class="hint-dot steelman"></div>Steel-man first</div>
+          </div>
+          <button class="compose-submit">Post →</button>
+        </div>
+      </div>
+      <div class="anon-note">Posted as: <span>Teacher · 30s · Havana</span> · <span>Change identity</span></div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div><!-- /body-split -->
+
+<!-- zone annotations -->
+<div class="annotations">
+  <div class="ann-chip ann-blue">← Civic Scaffold · expanded default</div>
+  <div class="ann-chip ann-purp">← Cohort Sentiment · filterable</div>
+  <div class="ann-chip ann-orng">← Source Quality · S→D + ⚠</div>
+  <div class="ann-chip ann-green">Discourse · scrolls independently →</div>
+  <div class="ann-chip ann-gold">EN/ES bilingual throughout →</div>
+</div>
+
+<script>
+function toggleSection(id, btn) {
+  const el = document.getElementById(id);
+  const arrow = btn.querySelector('.collapse-arrow');
+  const label = btn.querySelector('span:first-child');
+  if (el.classList.contains('collapsed')) {
+    el.classList.remove('collapsed');
+    arrow.classList.add('open');
+    label.textContent = 'Collapse';
+  } else {
+    el.classList.add('collapsed');
+    arrow.classList.remove('open');
+    label.textContent = 'Expand';
+  }
+}
+
+// cohort chip toggle
+document.querySelectorAll('.cohort-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.cohort-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+// discourse sort toggle
+document.querySelectorAll('.disc-sort-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.disc-sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// tone intercept dismiss
+document.querySelector('.tone-proceed').addEventListener('click', () => {
+  document.querySelector('.tone-intercept').style.display = 'none';
+});
+document.querySelector('.tone-revise').addEventListener('click', () => {
+  document.querySelector('.compose-input').focus();
+  document.querySelector('.tone-intercept').style.display = 'none';
+});
+</script>
+</body>
+</html>

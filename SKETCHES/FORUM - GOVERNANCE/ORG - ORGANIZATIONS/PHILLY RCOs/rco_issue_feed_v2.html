@@ -1,0 +1,389 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.feed-wrap { max-width: 720px; margin: 0 auto; padding: 1rem 0; font-family: var(--font-sans); }
+.section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #b8860b; margin-bottom: 10px; }
+.issue-count { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 12px; font-family: var(--font-mono); }
+
+.threshold-explainer { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-left: 3px solid #1b3a6b; border-radius: 0; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+.threshold-explainer strong { color: var(--color-text-primary); }
+
+.raise-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 16px; }
+.raise-prompt { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 12px; line-height: 1.5; }
+.raise-prompt strong { color: var(--color-text-primary); }
+textarea { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 13px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); resize: none; min-height: 80px; line-height: 1.6; }
+textarea:focus { outline: none; border-color: #1b3a6b; }
+textarea::placeholder { color: var(--color-text-tertiary); }
+.meta-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.meta-input { flex: 1; min-width: 140px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 7px 10px; font-size: 12px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); }
+.meta-input:focus { outline: none; border-color: #1b3a6b; }
+.meta-input::placeholder { color: var(--color-text-tertiary); }
+.anon-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); cursor: pointer; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); white-space: nowrap; }
+.type-select-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.type-btn { flex: 1; min-width: 100px; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 11px; font-weight: 500; background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; text-align: center; transition: all 0.12s; }
+.type-btn.active-empathy { background: #e8f4fd; border-color: #1b3a6b; color: #1b3a6b; }
+.type-btn.active-practical { background: #e5f0e8; border-color: #155c2d; color: #155c2d; }
+.type-btn.active-accountability { background: #fff3dc; border-color: #b8860b; color: #b8860b; }
+.type-btn.active-opposition { background: #faeaea; border-color: #8b1a1a; color: #8b1a1a; }
+.submit-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+.submit-btn { padding: 8px 20px; background: #1b3a6b; color: white; border: none; border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); }
+
+.issue-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 16px; overflow: visible; }
+.issue-header { padding: 1rem 1.25rem 0.75rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.issue-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.issue-type-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+.badge-empathy { background: #e8f4fd; color: #1b3a6b; }
+.badge-practical { background: #e5f0e8; color: #155c2d; }
+.badge-accountability { background: #fff3dc; color: #b8860b; }
+.badge-opposition { background: #faeaea; color: #8b1a1a; }
+.issue-author { font-size: 11px; color: var(--color-text-secondary); }
+.issue-author strong { color: var(--color-text-primary); font-weight: 500; }
+.issue-location { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+.issue-body { font-size: 13px; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 12px; }
+
+.action-row { display: flex; gap: 6px; align-items: flex-start; flex-wrap: wrap; }
+
+.action-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 11px; color: var(--color-text-secondary); background: var(--color-background-secondary); cursor: pointer; font-family: var(--font-sans); transition: all 0.12s; position: relative; }
+.action-btn:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+.action-btn.share-btn { color: #1b3a6b; border-color: rgba(27,58,107,0.3); background: #edf1fb; }
+.action-btn.seen-btn.active { color: #155c2d; border-color: rgba(21,92,45,0.3); background: #e5f0e8; }
+
+.effort-btn-wrap { display: flex; flex-direction: column; gap: 4px; }
+.effort-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: var(--border-radius-md); font-size: 11px; font-family: var(--font-sans); transition: all 0.12s; }
+.effort-btn.locked { background: var(--color-background-secondary); border: 0.5px dashed var(--color-border-tertiary); color: var(--color-text-tertiary); cursor: not-allowed; }
+.effort-btn.unlocked { background: #e5f0e8; border: 0.5px solid rgba(21,92,45,0.3); color: #155c2d; cursor: pointer; }
+
+.threshold-bar-wrap { margin-top: 6px; }
+.threshold-bar-label { font-size: 10px; color: var(--color-text-tertiary); font-family: var(--font-mono); margin-bottom: 3px; display: flex; justify-content: space-between; }
+.threshold-bar-label span { color: var(--color-text-secondary); }
+.threshold-bar-track { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; overflow: hidden; }
+.threshold-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+.bar-progress { background: #1b3a6b; }
+.bar-complete { background: #155c2d; }
+
+.why-link { font-size: 10px; color: var(--color-text-tertiary); text-decoration: underline; cursor: pointer; margin-top: 2px; display: inline-block; }
+.why-link:hover { color: var(--color-text-secondary); }
+
+.why-box { display: none; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 6px; font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; }
+.why-box.open { display: block; }
+.why-box strong { color: var(--color-text-primary); }
+
+.share-modal { display: none; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 14px; z-index: 10; width: 220px; margin-top: 6px; }
+.share-modal.open { display: block; }
+.share-modal-title { font-size: 10px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+.share-option { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; color: var(--color-text-primary); cursor: pointer; }
+.share-option:last-child { border-bottom: none; }
+.share-option:hover { color: #1b3a6b; }
+.share-icon { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+.si-x { background: #000; color: white; font-size: 10px; }
+.si-fb { background: #1877f2; color: white; font-weight: 700; font-size: 10px; }
+.si-li { background: #0077b5; color: white; font-size: 9px; }
+.si-wa { background: #25d366; color: white; font-size: 11px; }
+.si-copy { background: var(--color-background-secondary); color: var(--color-text-primary); font-size: 10px; }
+
+.responses-section { background: var(--color-background-secondary); border-top: 0.5px solid var(--color-border-tertiary); }
+.response-item { padding: 12px 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.response-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.response-body { font-size: 13px; color: var(--color-text-primary); line-height: 1.6; }
+.response-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.response-action { font-size: 10px; color: var(--color-text-tertiary); cursor: pointer; padding: 3px 8px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; background: var(--color-background-primary); font-family: var(--font-sans); }
+.response-action.share-small { color: #1b3a6b; border-color: rgba(27,58,107,0.25); background: #edf1fb; }
+
+.add-response { padding: 10px 1.25rem 12px; }
+.add-response-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; }
+.add-response-types { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.mini-type { padding: 4px 10px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; font-size: 11px; color: var(--color-text-secondary); cursor: pointer; background: var(--color-background-primary); font-family: var(--font-sans); }
+.mini-type.selected { background: #edf1fb; color: #1b3a6b; border-color: rgba(27,58,107,0.3); }
+.response-input-row { display: flex; gap: 8px; }
+.response-input-row textarea { min-height: 52px; font-size: 12px; }
+.response-submit { padding: 0 14px; background: #1b3a6b; color: white; border: none; border-radius: var(--border-radius-md); font-size: 12px; cursor: pointer; font-family: var(--font-sans); white-space: nowrap; }
+</style>
+
+<div class="feed-wrap">
+
+<div class="section-eyebrow">◆ Neighborhood Issues · Center City · CCRA</div>
+<div class="issue-count">4 active issues · 12 responses · Last activity 2 hours ago</div>
+
+<div class="threshold-explainer">
+  <strong>How issues become Efforts:</strong> When 5 neighbors confirm they've seen the same issue, the ⚡ Start an Effort button unlocks — allowing CCRA to formally organize, document, and submit the issue to the relevant city agency or official. The threshold exists so that CCRA's limited volunteer capacity is directed at problems the neighborhood has confirmed, not single reports. <strong>You can always share an issue before the threshold is reached.</strong> We disclose all thresholds and the reasoning behind them publicly.
+</div>
+
+<div class="raise-card">
+  <div class="raise-prompt"><strong>What's happening on your block?</strong> Raise an issue for your neighborhood and RCO to see. Be specific — block, intersection, or address helps.</div>
+  <textarea id="new-issue-text" placeholder="Describe the issue. What did you see? Where? What do you think should happen?"></textarea>
+  <div class="type-select-row">
+    <div class="type-btn" onclick="selectType(this,'active-empathy')" data-type="empathy">🤝 With empathy</div>
+    <div class="type-btn" onclick="selectType(this,'active-practical')" data-type="practical">🔧 Practical fix</div>
+    <div class="type-btn" onclick="selectType(this,'active-accountability')" data-type="accountability">📋 Hold accountable</div>
+    <div class="type-btn" onclick="selectType(this,'active-opposition')" data-type="opposition">↔ Different view</div>
+  </div>
+  <div class="meta-row">
+    <input class="meta-input" id="new-name" placeholder="Your name (optional)">
+    <input class="meta-input" id="new-email" placeholder="Email (optional, not shown publicly)">
+    <input class="meta-input" id="new-location" placeholder="Block or intersection">
+    <label class="anon-toggle"><input type="checkbox" id="anon-check"> Post anonymously</label>
+  </div>
+  <div class="submit-row">
+    <button class="submit-btn" onclick="submitIssue()">Post to neighborhood →</button>
+  </div>
+</div>
+
+<div id="issues-feed">
+
+<div class="issue-card" id="issue-1">
+  <div class="issue-header">
+    <div class="issue-meta">
+      <span class="issue-type-badge badge-empathy">🤝 With empathy</span>
+      <span class="issue-author"><strong>Sarah M.</strong> · Verified Resident</span>
+      <span class="issue-location">1600 block of Sansom St · 3 hours ago</span>
+    </div>
+    <div class="issue-body">Human feces on the 1600 block of Sansom every morning this week. I want to be clear — the people sleeping here are in crisis. There are no accessible public restrooms within four blocks after 5pm. This is a public health problem and a human dignity problem at the same time. We need bathrooms, not just cleanup.</div>
+
+    <div class="action-row">
+      <div style="position:relative;">
+        <button class="action-btn share-btn" onclick="toggleShare('share-1')">↗ Share this issue</button>
+        <div class="share-modal" id="share-1">
+          <div class="share-modal-title">Share this issue</div>
+          <div class="share-option"><span class="share-icon si-x">𝕏</span> Post on X</div>
+          <div class="share-option"><span class="share-icon si-fb">f</span> Share on Facebook</div>
+          <div class="share-option"><span class="share-icon si-li">in</span> Share on LinkedIn</div>
+          <div class="share-option"><span class="share-icon si-wa">💬</span> Send via WhatsApp</div>
+          <div class="share-option"><span class="share-icon si-copy">🔗</span> Copy link</div>
+        </div>
+      </div>
+
+      <button class="action-btn seen-btn" id="seen-1" onclick="confirmSeen('seen-1','bar-1','count-1','effort-1',7,10)">
+        👍 I've seen this too (<span id="count-1">7</span>)
+      </button>
+
+      <div class="effort-btn-wrap">
+        <button class="effort-btn locked" id="effort-1" onclick="tryEffort(this)">⚡ Start an Effort</button>
+        <div class="threshold-bar-wrap">
+          <div class="threshold-bar-label">
+            <span id="bar-label-1">7 of 10 neighbors confirmed</span>
+            <span>Unlocks at 10</span>
+          </div>
+          <div class="threshold-bar-track">
+            <div class="threshold-bar-fill bar-progress" id="bar-1" style="width:70%"></div>
+          </div>
+          <span class="why-link" onclick="toggleWhy('why-1')">Why 10? ›</span>
+          <div class="why-box" id="why-1">
+            <strong>Why the threshold is 10:</strong> CCRA has a volunteer zoning committee of 5 people who review every submitted Effort. A threshold of 10 confirmed neighbors ensures the committee's time is spent on issues that have demonstrated neighborhood support — not single reports that may reflect one person's experience. Lower-threshold issues (3+) are still visible to CCRA leadership on their dashboard. This threshold applies to Efforts only — you can share, respond to, and escalate any issue at any time regardless of confirmation count.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="responses-section">
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-practical">🔧 Practical fix</span>
+        <span class="issue-author"><strong>James K.</strong></span>
+        <span class="issue-location">1 hour ago</span>
+      </div>
+      <div class="response-body">The Dilworth Park restroom is the nearest public option — locked at 9pm. Jefferson Station has a restroom accessible to ticketholders only. There is nowhere for someone without money to use a bathroom between Broad and 19th after 5pm. Streets Dept could unlock the Suburban Station public restroom — it was closed "temporarily" in 2019 and never reopened.</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (4)</button>
+        <button class="response-action share-small">↗ Share this response</button>
+      </div>
+    </div>
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-accountability">📋 Hold accountable</span>
+        <span class="issue-author"><strong>Anonymous</strong> · Resident</span>
+        <span class="issue-location">45 min ago</span>
+      </div>
+      <div class="response-body">This block has had 22 311 calls in the last 60 days — all marked "resolved" with no action taken. Office of Homeless Services has an outreach team assigned to this corridor. They have not been seen here in three weeks. Someone needs to ask Squilla's office why the agency response is failing.</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (9)</button>
+        <button class="response-action share-small">↗ Share this response</button>
+      </div>
+    </div>
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-opposition">↔ Different view</span>
+        <span class="issue-author"><strong>Patricia W.</strong></span>
+        <span class="issue-location">20 min ago</span>
+      </div>
+      <div class="response-body">Bathrooms alone won't solve this. The encampment at 16th and Sansom has grown because outreach has failed. Project HOME has beds available right now. The problem is refusal, not just lack of options. CCRA should be asking the Office of Homeless Services why outreach conversion rates are so low, not just requesting more bathrooms.</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (3)</button>
+        <button class="response-action share-small">↗ Share this response</button>
+      </div>
+    </div>
+    <div class="add-response" style="background:var(--color-background-secondary);">
+      <div class="add-response-label">Add your perspective</div>
+      <div class="add-response-types">
+        <div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div>
+        <div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div>
+        <div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div>
+        <div class="mini-type" onclick="selectMini(this)">↔ Different view</div>
+      </div>
+      <div class="response-input-row">
+        <textarea placeholder="Add your perspective…"></textarea>
+        <button class="response-submit">Post →</button>
+      </div>
+      <div class="meta-row" style="margin-top:6px;">
+        <input class="meta-input" placeholder="Your name (optional)" style="font-size:11px;padding:5px 8px;">
+        <label class="anon-toggle" style="font-size:11px;"><input type="checkbox"> Anonymous</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="issue-card" id="issue-2">
+  <div class="issue-header">
+    <div class="issue-meta">
+      <span class="issue-type-badge badge-accountability">📋 Hold accountable</span>
+      <span class="issue-author"><strong>David R.</strong> · Verified Resident</span>
+      <span class="issue-location">1700 block of Chestnut St · Yesterday</span>
+    </div>
+    <div class="issue-body">The streetlight at 17th and Chestnut has been out for 6 weeks. Filed three 311 requests — all closed as "resolved" with the light still out. Safety issue at night. Who do I escalate to when 311 fails?</div>
+
+    <div class="action-row">
+      <div style="position:relative;">
+        <button class="action-btn share-btn" onclick="toggleShare('share-2')">↗ Share this issue</button>
+        <div class="share-modal" id="share-2">
+          <div class="share-modal-title">Share this issue</div>
+          <div class="share-option"><span class="share-icon si-x">𝕏</span> Post on X</div>
+          <div class="share-option"><span class="share-icon si-fb">f</span> Share on Facebook</div>
+          <div class="share-option"><span class="share-icon si-copy">🔗</span> Copy link</div>
+        </div>
+      </div>
+
+      <button class="action-btn seen-btn" id="seen-2" onclick="confirmSeen('seen-2','bar-2','count-2','effort-2',3,10)">
+        👍 I've seen this too (<span id="count-2">3</span>)
+      </button>
+
+      <div class="effort-btn-wrap">
+        <button class="effort-btn locked" id="effort-2" onclick="tryEffort(this)">⚡ Start an Effort</button>
+        <div class="threshold-bar-wrap">
+          <div class="threshold-bar-label">
+            <span id="bar-label-2">3 of 10 neighbors confirmed</span>
+            <span>Unlocks at 10</span>
+          </div>
+          <div class="threshold-bar-track">
+            <div class="threshold-bar-fill bar-progress" id="bar-2" style="width:30%"></div>
+          </div>
+          <span class="why-link" onclick="toggleWhy('why-2')">Why 10? ›</span>
+          <div class="why-box" id="why-2">
+            <strong>Why the threshold is 10:</strong> CCRA has a volunteer zoning committee of 5 people who review every submitted Effort. A threshold of 10 confirmed neighbors ensures the committee's time is spent on issues that have demonstrated neighborhood support. Lower-threshold issues (3+) are still visible to CCRA leadership on their dashboard. You can share, respond to, and escalate any issue at any time regardless of confirmation count.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="responses-section">
+    <div class="response-item">
+      <div class="response-meta">
+        <span class="issue-type-badge badge-practical">🔧 Practical fix</span>
+        <span class="issue-author"><strong>CCRA Zoning Committee</strong> · <span style="background:#edf1fb;color:#1b3a6b;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500;">Official</span></span>
+        <span class="issue-location">18 hours ago</span>
+      </div>
+      <div class="response-body">When 311 fails, the next step is a direct email to the Streets Department Deputy Commissioner for Infrastructure — cc your Council District 1 liaison. CCRA has the contact. We're adding this to our next meeting agenda under agency accountability. Can you share your 311 reference numbers?</div>
+      <div class="response-actions">
+        <button class="response-action">👍 Helpful (5)</button>
+        <button class="response-action share-small">↗ Share this response</button>
+      </div>
+    </div>
+    <div class="add-response" style="background:var(--color-background-secondary);">
+      <div class="add-response-label">Add your perspective</div>
+      <div class="add-response-types">
+        <div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div>
+        <div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div>
+        <div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div>
+        <div class="mini-type" onclick="selectMini(this)">↔ Different view</div>
+      </div>
+      <div class="response-input-row">
+        <textarea placeholder="Add your perspective…"></textarea>
+        <button class="response-submit">Post →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+function selectType(el, cls) {
+  document.querySelectorAll('.type-btn').forEach(b => b.className = 'type-btn');
+  el.classList.add(cls);
+}
+function selectMini(el) {
+  el.closest('.add-response-types').querySelectorAll('.mini-type').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleShare(id) {
+  const m = document.getElementById(id);
+  if (!m) return;
+  const isOpen = m.classList.contains('open');
+  document.querySelectorAll('.share-modal').forEach(x => x.classList.remove('open'));
+  if (!isOpen) m.classList.add('open');
+}
+function toggleWhy(id) {
+  const box = document.getElementById(id);
+  if (box) box.classList.toggle('open');
+}
+function tryEffort(btn) {
+  if (btn.classList.contains('locked')) {
+    btn.style.animation = 'none';
+    btn.style.borderColor = '#8b1a1a';
+    btn.style.color = '#8b1a1a';
+    setTimeout(() => { btn.style.borderColor = ''; btn.style.color = ''; }, 600);
+  }
+}
+function confirmSeen(seenId, barId, countId, effortId, current, threshold) {
+  const seenBtn = document.getElementById(seenId);
+  if (seenBtn.classList.contains('active')) return;
+  seenBtn.classList.add('active');
+  const newCount = current + 1;
+  document.getElementById(countId).textContent = newCount;
+  const pct = Math.min((newCount / threshold) * 100, 100);
+  const bar = document.getElementById(barId);
+  bar.style.width = pct + '%';
+  const labelId = barId.replace('bar-', 'bar-label-');
+  const labelEl = document.getElementById(labelId);
+  if (labelEl) labelEl.firstChild.textContent = newCount + ' of ' + threshold + ' neighbors confirmed';
+  if (newCount >= threshold) {
+    bar.classList.remove('bar-progress');
+    bar.classList.add('bar-complete');
+    const effortBtn = document.getElementById(effortId);
+    effortBtn.classList.remove('locked');
+    effortBtn.classList.add('unlocked');
+    effortBtn.onclick = null;
+    effortBtn.textContent = '⚡ Start an Effort — threshold reached';
+    if (labelEl) labelEl.innerHTML = '<span style="color:#155c2d;font-weight:500;">✓ Threshold reached — Effort unlocked</span><span></span>';
+  }
+}
+function submitIssue() {
+  const text = document.getElementById('new-issue-text').value.trim();
+  if (!text) return;
+  const name = document.getElementById('new-name').value.trim() || 'Anonymous';
+  const loc = document.getElementById('new-location').value.trim() || 'Center City';
+  const anon = document.getElementById('anon-check').checked;
+  const displayName = anon ? 'Anonymous' : name;
+  const activeType = document.querySelector('.type-btn.active-empathy,.type-btn.active-practical,.type-btn.active-accountability,.type-btn.active-opposition');
+  const typeName = activeType ? activeType.dataset.type : 'empathy';
+  const badges = { empathy: ['badge-empathy','🤝 With empathy'], practical: ['badge-practical','🔧 Practical fix'], accountability: ['badge-accountability','📋 Hold accountable'], opposition: ['badge-opposition','↔ Different view'] };
+  const [badgeClass, badgeLabel] = badges[typeName];
+  const uid = 'new-' + Date.now();
+  const card = document.createElement('div');
+  card.className = 'issue-card';
+  card.innerHTML = `<div class="issue-header"><div class="issue-meta"><span class="issue-type-badge ${badgeClass}">${badgeLabel}</span><span class="issue-author"><strong>${displayName}</strong></span><span class="issue-location">${loc} · Just now</span></div><div class="issue-body">${text}</div><div class="action-row"><button class="action-btn share-btn">↗ Share this issue</button><button class="action-btn seen-btn" onclick="confirmSeen('s${uid}','b${uid}','c${uid}','e${uid}',0,10)">👍 I've seen this too (<span id="c${uid}">0</span>)</button><div class="effort-btn-wrap" id="s${uid}"><button class="effort-btn locked" id="e${uid}" onclick="tryEffort(this)">⚡ Start an Effort</button><div class="threshold-bar-wrap"><div class="threshold-bar-label"><span id="b${uid}-label">0 of 10 neighbors confirmed</span><span>Unlocks at 10</span></div><div class="threshold-bar-track"><div class="threshold-bar-fill bar-progress" id="b${uid}" style="width:0%"></div></div><span class="why-link" onclick="toggleWhy('w${uid}')">Why 10? ›</span><div class="why-box" id="w${uid}"><strong>Why the threshold is 10:</strong> CCRA has a volunteer zoning committee of 5 people who review every submitted Effort. A threshold of 10 ensures the committee's time is spent on issues with demonstrated neighborhood support. You can share or respond to any issue at any time.</div></div></div></div></div><div class="responses-section"><div class="add-response" style="background:var(--color-background-secondary);"><div class="add-response-label">Add your perspective</div><div class="add-response-types"><div class="mini-type" onclick="selectMini(this)">🤝 With empathy</div><div class="mini-type" onclick="selectMini(this)">🔧 Practical fix</div><div class="mini-type" onclick="selectMini(this)">📋 Hold accountable</div><div class="mini-type" onclick="selectMini(this)">↔ Different view</div></div><div class="response-input-row"><textarea placeholder="Add your perspective…"></textarea><button class="response-submit">Post →</button></div></div></div>`;
+  document.getElementById('issues-feed').prepend(card);
+  document.getElementById('new-issue-text').value = '';
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-location').value = '';
+  document.getElementById('new-email').value = '';
+  document.getElementById('anon-check').checked = false;
+  document.querySelectorAll('.type-btn').forEach(b => b.className = 'type-btn');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.share-btn') && !e.target.closest('.share-modal')) {
+    document.querySelectorAll('.share-modal').forEach(x => x.classList.remove('open'));
+  }
+});
+</script>

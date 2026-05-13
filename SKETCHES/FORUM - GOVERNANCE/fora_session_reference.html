@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Session Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f0f1f3;
+  --white:    #ffffff;
+  --navy:     #0d1b35;
+  --navy-mid: #1e3460;
+  --navy-pal: #e8edf5;
+  --gold:     #b8860b;
+  --gold-lt:  #d4a832;
+  --gold-pal: #f8f0dc;
+  --gold-rul: rgba(184,134,11,0.25);
+  --ink:      #1a1f2e;
+  --ink-mid:  #3d4558;
+  --ink-soft: #6b7390;
+  --ink-mut:  #9ba3be;
+  --rule:     rgba(13,27,53,0.09);
+  --rule-lt:  rgba(13,27,53,0.04);
+  --green:    #15613a;
+  --green-p:  #edf7f1;
+  --green-r:  #b3dcc5;
+  --red:      #b91c1c;
+  --red-p:    #fef2f2;
+  --red-r:    #fecaca;
+  --blue:     #1e40af;
+  --blue-p:   #eff6ff;
+  --blue-r:   #bfdbfe;
+  --purple:   #5b21b6;
+  --purp-p:   #f5f3ff;
+  --purp-r:   #ddd6fe;
+  --orange:   #c2410c;
+  --orng-p:   #fff7ed;
+  --orng-r:   #fed7aa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+/* NAV */
+.sidenav {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 220px;
+  background: var(--navy);
+  padding: 32px 0 24px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+}
+.sidenav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 0.06em;
+  padding: 0 24px 6px;
+}
+.sidenav-logo span { color: var(--gold-lt); }
+.sidenav-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  padding: 0 24px 28px;
+}
+.sidenav-section {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  padding: 18px 24px 8px;
+}
+.sidenav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 24px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.12s;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+.sidenav-link:hover { color: white; background: rgba(255,255,255,0.05); }
+.sidenav-link.active { color: var(--gold-lt); border-left-color: var(--gold-lt); background: rgba(184,134,11,0.08); }
+.sidenav-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.5; flex-shrink: 0; }
+.sidenav-bottom {
+  margin-top: auto;
+  padding: 20px 24px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  line-height: 1.6;
+}
+
+/* MAIN */
+.main {
+  margin-left: 220px;
+  min-height: 100vh;
+}
+
+/* HERO */
+.doc-hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+  padding: 52px 56px 44px;
+}
+.doc-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.doc-eyebrow::before { content: ''; display: block; width: 20px; height: 2px; background: var(--gold); }
+.doc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 44px;
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  margin-bottom: 12px;
+}
+.doc-subtitle {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  max-width: 640px;
+  margin-bottom: 28px;
+}
+.doc-meta-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule-lt);
+}
+.doc-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.doc-meta-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+}
+.doc-meta-val { font-size: 13px; font-weight: 600; color: var(--navy); }
+.doc-meta-sep { width: 1px; height: 32px; background: var(--rule); }
+
+/* SECTIONS */
+.doc-section {
+  padding: 52px 56px;
+  border-bottom: 1px solid var(--rule);
+}
+.doc-section:last-child { border-bottom: none; }
+.doc-section.bg-white { background: var(--white); }
+.doc-section.bg-grey { background: var(--bg); }
+.doc-section.bg-navy { background: var(--navy); }
+
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-eyebrow::before { content: ''; display: block; width: 16px; height: 2px; background: currentColor; opacity: 0.6; }
+.ew-gold { color: var(--gold); }
+.ew-blue { color: var(--blue); }
+.ew-purple { color: var(--purple); }
+.ew-green { color: var(--green); }
+.ew-white { color: rgba(255,255,255,0.5); }
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.doc-section.bg-navy .section-title { color: white; }
+.section-desc {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 36px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+.doc-section.bg-navy .section-desc { color: rgba(255,255,255,0.4); }
+
+/* COLOR PALETTE */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.swatch {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.swatch-color { height: 64px; }
+.swatch-info {
+  padding: 10px 12px;
+  background: white;
+}
+.swatch-name { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+.swatch-hex { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-mut); }
+.swatch-use { font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; }
+
+/* TYPE SPECIMENS */
+.type-stack { display: flex; flex-direction: column; gap: 24px; }
+.type-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 24px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+}
+.type-meta { }
+.type-meta-name { font-size: 12.5px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.type-meta-detail { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-mut); line-height: 1.6; }
+.type-specimen { }
+
+/* COMPONENT LIBRARY */
+.component-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.component-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.component-card.full { grid-column: 1 / -1; }
+.comp-header {
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--rule-lt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.comp-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+.comp-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--navy-pal);
+  color: var(--navy);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+.comp-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.comp-note {
+  font-size: 11px;
+  color: var(--ink-mut);
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* actual components rendered */
+.pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  font-size: 11px; font-weight: 600;
+  padding: 4px 13px;
+  border-radius: 100px;
+}
+.pill-navy { background: var(--navy); color: white; }
+.pill-navy-outline { background: white; color: var(--navy); border: 1.5px solid var(--navy); }
+.pill-gold-outline { background: white; color: var(--gold); border: 1.5px solid var(--gold-rul); }
+.pill-committee { background: var(--orng-p); color: var(--orange); border: 1px solid var(--orng-r); }
+.pill-enacted { background: var(--green-p); color: var(--green); border: 1px solid var(--green-r); }
+.pill-active { background: var(--blue-p); color: var(--blue); border: 1px solid var(--blue-r); }
+
+.tier-row { display: flex; gap: 6px; align-items: center; }
+.tier {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 700;
+}
+.t-s { background: #dcfce7; color: #15803d; }
+.t-a { background: var(--blue-p); color: #1d4ed8; }
+.t-b { background: #fef9c3; color: #a16207; }
+.t-c { background: #ffedd5; color: #c2410c; }
+.t-w { background: var(--red-p); color: var(--red); }
+.tier-note { font-size: 11px; color: var(--ink-soft); }
+
+.bar-demo { padding: 12px 16px; background: var(--blue-p); border: 1px solid var(--blue-r); border-radius: 10px; display: flex; align-items: center; gap: 12px; }
+.bar-label { font-size: 12px; font-weight: 600; color: var(--blue); }
+.bar-track { flex: 1; height: 6px; background: #bfdbfe; border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(to right, var(--blue), #60a5fa); border-radius: 3px; }
+.bar-score { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; color: var(--blue); }
+
+.sm-demo { background: var(--purp-p); border: 1px solid var(--purp-r); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; }
+.sm-demo-icon { font-size: 18px; }
+.sm-demo-body { flex: 1; }
+.sm-demo-title { font-size: 12px; font-weight: 700; color: var(--purple); }
+.sm-demo-sub { font-size: 11px; color: rgba(91,33,182,0.6); }
+.sm-demo-btn { font-size: 11px; font-weight: 600; background: var(--purple); color: white; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+.tone-demo { background: var(--orng-p); border: 1px solid var(--orng-r); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; }
+.tone-demo-icon { font-size: 16px; }
+.tone-demo-title { font-size: 12px; font-weight: 700; color: var(--orange); }
+.tone-demo-sub { font-size: 11px; color: #7c2d12; }
+.tone-demo-btns { display: flex; gap: 6px; margin-top: 8px; }
+.tone-btn-rev { font-size: 11px; font-weight: 600; background: var(--orange); color: white; border: none; border-radius: 100px; padding: 4px 12px; cursor: pointer; }
+.tone-btn-pro { font-size: 11px; font-weight: 500; background: white; color: var(--ink-soft); border: 1.5px solid var(--rule); border-radius: 100px; padding: 4px 12px; cursor: pointer; }
+
+.bil-demo { background: var(--gold-pal); border: 1px solid var(--gold-rul); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+.bil-tag-d { display: flex; align-items: center; gap: 6px; background: white; border: 1px solid var(--gold-rul); border-radius: 100px; padding: 4px 12px; }
+.bil-flag { font-size: 13px; }
+.bil-code { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: var(--gold); }
+.bil-dot { color: var(--gold-rul); }
+.bil-note-d { font-size: 11.5px; color: #7a6020; }
+.bil-link { color: var(--gold); font-weight: 600; cursor: pointer; }
+
+.scaffold-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.scaf-d {
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  background: var(--bg);
+}
+.scaf-d.best { background: var(--green-p); border-color: var(--green-r); }
+.scaf-d.worst { background: var(--red-p); border-color: var(--red-r); }
+.scaf-d-label { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px; }
+.lbl-blue { color: var(--blue); }
+.lbl-green { color: var(--green); }
+.lbl-red { color: var(--red); }
+.scaf-d-en { font-size: 11.5px; line-height: 1.55; color: var(--ink-mid); margin-bottom: 6px; }
+.scaf-d-es { font-size: 10.5px; font-style: italic; color: var(--ink-mut); border-top: 1px dashed var(--rule); padding-top: 6px; }
+
+.progress-demo { display: flex; align-items: center; margin-bottom: 4px; }
+.pd-node { width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--rule); background: white; flex-shrink: 0; }
+.pd-node.done { background: var(--navy); border-color: var(--navy); }
+.pd-node.current { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 3px rgba(194,65,12,0.15); }
+.pd-line { flex: 1; height: 2px; background: var(--rule); }
+.pd-line.done { background: var(--navy); }
+.pd-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mut); margin: 0 5px; white-space: nowrap; }
+.pd-label.done { color: var(--navy); }
+.pd-label.current { color: var(--orange); }
+
+.tally-demo { display: flex; background: white; border: 1.5px solid var(--navy); border-radius: 10px; overflow: hidden; }
+.td-cell { flex: 1; padding: 12px 0; text-align: center; border-right: 1px solid var(--rule); }
+.td-cell:last-child { border-right: none; }
+.td-num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; line-height: 1; margin-bottom: 3px; }
+.td-num.yea { color: var(--green); }
+.td-num.nay { color: var(--red); }
+.td-num.pend { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400; color: var(--ink-mut); margin-top: 6px; }
+.td-lbl { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mut); }
+
+.cohort-demo { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip-d { font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 100px; border: 1.5px solid var(--rule); background: white; color: var(--ink-soft); cursor: pointer; }
+.chip-d.active { background: var(--navy); border-color: var(--navy); color: white; }
+
+.sent-demo { display: flex; flex-direction: column; gap: 8px; }
+.sd-row { display: flex; align-items: center; gap: 10px; }
+.sd-lbl { font-size: 12px; font-weight: 500; color: var(--ink-soft); width: 56px; flex-shrink: 0; }
+.sd-track { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.sd-fill { height: 100%; border-radius: 4px; }
+.fill-s { background: linear-gradient(to right, #15803d, #86efac); }
+.fill-o { background: linear-gradient(to right, #b91c1c, #fca5a5); }
+.fill-n { background: linear-gradient(to right, #9ca3af, #e5e7eb); }
+.sd-pct { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700; width: 38px; text-align: right; }
+.pct-s { color: var(--green); }
+.pct-o { color: var(--red); }
+.pct-n { color: var(--ink-mut); }
+
+/* ROADMAP */
+.roadmap { display: flex; flex-direction: column; gap: 0; }
+.rm-screen {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0;
+  position: relative;
+}
+.rm-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4px;
+}
+.rm-node {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+.rm-node.done { background: var(--gold-lt); border-color: var(--gold-lt); }
+.rm-node.next { background: white; border-color: white; box-shadow: 0 0 0 4px rgba(255,255,255,0.12); }
+.rm-line { flex: 1; width: 2px; background: rgba(255,255,255,0.08); margin-top: 4px; margin-bottom: -2px; }
+.rm-line.done { background: rgba(184,134,11,0.4); }
+.rm-content {
+  padding: 0 0 36px 16px;
+}
+.rm-status {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 100px;
+}
+.rm-s-done { background: rgba(184,134,11,0.2); color: var(--gold-lt); }
+.rm-s-next { background: rgba(255,255,255,0.12); color: white; }
+.rm-s-later { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+.rm-screen-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.rm-screen-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  max-width: 540px;
+}
+.rm-decisions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rm-decision {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+}
+.rm-d-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.rm-d-text { font-size: 12.5px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+.rm-d-text strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+.rm-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.rm-note-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.rm-note-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 6px;
+}
+.rm-note-text { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.55; }
+
+/* DIRECTION GUIDE */
+.direction-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.dir-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.dir-preview { height: 80px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; letter-spacing: 0.08em; }
+.dir-preview.dark { background: #0f1f3d; color: #c9a84c; }
+.dir-preview.light { background: #f0f2f0; color: #1a4731; }
+.dir-preview.edit { background: #ffffff; color: #0d1b35; }
+.dir-body { background: white; padding: 14px 16px; }
+.dir-name { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.dir-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 10px; }
+.dir-file {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mut);
+  background: var(--bg);
+  padding: 5px 9px;
+  border-radius: 5px;
+  display: block;
+}
+.dir-verdict {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 100px;
+  margin-top: 8px;
+}
+.verdict-current { background: var(--green-p); color: var(--green); border: 1px solid var(--green-r); }
+.verdict-archived { background: var(--bg); color: var(--ink-mut); border: 1px solid var(--rule); }
+
+/* PENDING */
+.pending-list { display: flex; flex-direction: column; gap: 10px; }
+.pending-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+}
+.pending-icon { font-size: 18px; flex-shrink: 0; }
+.pending-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.pending-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.pending-priority {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 100px;
+  align-self: flex-start;
+}
+.p-now { background: var(--red-p); color: var(--red); border: 1px solid var(--red-r); }
+.p-next { background: var(--orng-p); color: var(--orange); border: 1px solid var(--orng-r); }
+.p-later { background: var(--bg); color: var(--ink-mut); border: 1px solid var(--rule); }
+
+/* SPACING SCALE */
+.spacing-grid { display: flex; flex-direction: column; gap: 8px; }
+.space-row { display: flex; align-items: center; gap: 16px; }
+.space-bar { background: var(--navy); border-radius: 2px; height: 12px; }
+.space-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-mut); width: 36px; }
+.space-note { font-size: 11.5px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<!-- SIDENAV -->
+<nav class="sidenav">
+  <div class="sidenav-logo">F<span>O</span>RA</div>
+  <div class="sidenav-sub">Session Reference</div>
+
+  <div class="sidenav-section">Design System</div>
+  <a class="sidenav-link" href="#colors"><span class="sidenav-dot"></span>Color Palette</a>
+  <a class="sidenav-link" href="#type"><span class="sidenav-dot"></span>Typography</a>
+  <a class="sidenav-link" href="#spacing"><span class="sidenav-dot"></span>Spacing Scale</a>
+  <a class="sidenav-link" href="#components"><span class="sidenav-dot"></span>Components</a>
+  <a class="sidenav-link" href="#directions"><span class="sidenav-dot"></span>Design Directions</a>
+
+  <div class="sidenav-section">Wireframe Roadmap</div>
+  <a class="sidenav-link active" href="#roadmap"><span class="sidenav-dot"></span>Screen Roadmap</a>
+  <a class="sidenav-link" href="#pending"><span class="sidenav-dot"></span>Open Decisions</a>
+  <a class="sidenav-link" href="#files"><span class="sidenav-dot"></span>Output Files</a>
+
+  <div class="sidenav-bottom">
+    Generated Mar 13, 2026<br>
+    FORA design session<br>
+    Bill Page → confirmed Split C
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HERO -->
+  <div class="doc-hero">
+    <div class="doc-eyebrow">FORA · Design System &amp; Wireframe Roadmap</div>
+    <h1 class="doc-title">Session Reference</h1>
+    <p class="doc-subtitle">Everything decided today — palette, typography, components, and the full wireframe roadmap — so you can pick up exactly where you left off.</p>
+    <div class="doc-meta-row">
+      <div class="doc-meta-item">
+        <span class="doc-meta-label">Session date</span>
+        <span class="doc-meta-val">March 13, 2026</span>
+      </div>
+      <div class="doc-meta-sep"></div>
+      <div class="doc-meta-item">
+        <span class="doc-meta-label">Active direction</span>
+        <span class="doc-meta-val">Editorial · Navy + Gold on Grey</span>
+      </div>
+      <div class="doc-meta-sep"></div>
+      <div class="doc-meta-item">
+        <span class="doc-meta-label">Bill page layout</span>
+        <span class="doc-meta-val">Split C — confirmed</span>
+      </div>
+      <div class="doc-meta-sep"></div>
+      <div class="doc-meta-item">
+        <span class="doc-meta-label">Screens completed</span>
+        <span class="doc-meta-val">1 of 7</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLORS -->
+  <div id="colors" class="doc-section bg-white">
+    <div class="section-eyebrow ew-gold">Design System · 01</div>
+    <h2 class="section-title">Color Palette</h2>
+    <p class="section-desc">Navy and gold over white and light grey. Semantic colors are consistent across all components — never swap them ad-hoc.</p>
+
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0d1b35"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Navy</div>
+          <div class="swatch-hex">#0d1b35</div>
+          <div class="swatch-use">Primary fills, headings, borders</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1e3460"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Navy Mid</div>
+          <div class="swatch-hex">#1e3460</div>
+          <div class="swatch-use">Hover states on navy fills</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#e8edf5"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Navy Pale</div>
+          <div class="swatch-hex">#e8edf5</div>
+          <div class="swatch-use">Hover tints, historical precedent card</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#b8860b"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gold</div>
+          <div class="swatch-hex">#b8860b</div>
+          <div class="swatch-use">Accents, eyebrows, bilingual label</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#d4a832"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gold Light</div>
+          <div class="swatch-hex">#d4a832</div>
+          <div class="swatch-use">Sidenav active, hover gold states</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#f8f0dc"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gold Pale</div>
+          <div class="swatch-hex">#f8f0dc</div>
+          <div class="swatch-use">Bilingual ribbon, ES translation cards</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#f0f1f3;border:1px solid #e0e2e6"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Background Grey</div>
+          <div class="swatch-hex">#f0f1f3</div>
+          <div class="swatch-use">Page background, card insets</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#ffffff;border:1px solid #e0e2e6"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">White</div>
+          <div class="swatch-hex">#ffffff</div>
+          <div class="swatch-use">Cards, nav, hero, compose block</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#15613a"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Semantic · Green</div>
+          <div class="swatch-hex">#15613a · bg #edf7f1</div>
+          <div class="swatch-use">Support, best case, Yea votes</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#b91c1c"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Semantic · Red</div>
+          <div class="swatch-hex">#b91c1c · bg #fef2f2</div>
+          <div class="swatch-use">Oppose, worst case, Nay votes</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1e40af"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Semantic · Blue</div>
+          <div class="swatch-hex">#1e40af · bg #eff6ff</div>
+          <div class="swatch-use">Scaffold cards, legitimacy score</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#5b21b6"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Semantic · Purple</div>
+          <div class="swatch-hex">#5b21b6 · bg #f5f3ff</div>
+          <div class="swatch-use">Steel-man prompt, badge</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#c2410c"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Semantic · Orange</div>
+          <div class="swatch-hex">#c2410c · bg #fff7ed</div>
+          <div class="swatch-use">Tone intercept, "In Committee" status</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div id="type" class="doc-section bg-grey">
+    <div class="section-eyebrow ew-blue">Design System · 02</div>
+    <h2 class="section-title">Typography</h2>
+    <p class="section-desc">Three-font stack. Playfair for gravity and editorial character. DM Sans for clarity. DM Mono for data and labels — never use it for prose.</p>
+
+    <div class="type-stack">
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta-name">Playfair Display</div>
+          <div class="type-meta-detail">Usage: Page titles, section headings, bill title, tally numbers<br>Weights: 700 (heading), 900 (display)<br>Sizes: 44px hero · 30px section · 22px bill title</div>
+        </div>
+        <div class="type-specimen">
+          <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--navy);letter-spacing:-0.02em;line-height:1.1;">Housing Allocation<br>Reform Act</div>
+        </div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta-name">DM Sans</div>
+          <div class="type-meta-detail">Usage: Body copy, contributions, nav links, buttons, labels<br>Weights: 300 (italic ES) · 400 (body) · 500 (UI) · 600 (strong)<br>Sizes: 13–15px body · 12px secondary</div>
+        </div>
+        <div class="type-specimen">
+          <p style="font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;color:var(--ink-mid);">The 10-year occupancy requirement is the critical detail. Most Havana tenants have lived in their units for 20+ years. The question is whether cooperative pricing is set at market rate or subsidized.</p>
+          <p style="font-family:'DM Sans',sans-serif;font-size:13px;font-style:italic;font-weight:300;color:var(--ink-mut);margin-top:8px;">El requisito de 10 años de ocupación es el detalle crítico.</p>
+        </div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta-name">DM Mono</div>
+          <div class="type-meta-detail">Usage: Bill IDs, eyebrows, breadcrumbs, dates, tier badges, hex values, metadata labels<br>Weights: 300–500<br>Sizes: 9–12px · always uppercase for labels</div>
+        </div>
+        <div class="type-specimen" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);">Civic Scaffold · Orientation before opinion</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--navy);">Ley No. 148 / 2025</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink-mut);">Introduced Mar 4, 2025 · Asamblea Nacional</div>
+          <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--blue);">71 <span style="font-size:11px;font-weight:300;color:#93c5fd;">/ 100</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPACING -->
+  <div id="spacing" class="doc-section bg-white">
+    <div class="section-eyebrow ew-gold">Design System · 03</div>
+    <h2 class="section-title">Spacing Scale</h2>
+    <p class="section-desc">Generous spacing is the soul of this design. When in doubt, add more room — especially on section dividers and card interiors.</p>
+    <div class="spacing-grid">
+      <div class="space-row"><div class="space-label">4px</div><div class="space-bar" style="width:4px"></div><div class="space-note">Gap between icon and label, tight inline spacing</div></div>
+      <div class="space-row"><div class="space-label">8px</div><div class="space-bar" style="width:8px"></div><div class="space-note">Between meta items, small chip gap</div></div>
+      <div class="space-row"><div class="space-label">12px</div><div class="space-bar" style="width:12px"></div><div class="space-note">Scaffold card gap, source row gap</div></div>
+      <div class="space-row"><div class="space-label">16px</div><div class="space-bar" style="width:16px"></div><div class="space-note">Card padding (inner), contribution gap</div></div>
+      <div class="space-row"><div class="space-label">24px</div><div class="space-bar" style="width:24px"></div><div class="space-note">Component gap within column</div></div>
+      <div class="space-row"><div class="space-label">36px</div><div class="space-bar" style="width:36px"></div><div class="space-note">Between sections within column</div></div>
+      <div class="space-row"><div class="space-label">48px</div><div class="space-bar" style="width:48px"></div><div class="space-note">Page horizontal padding, hero vertical padding</div></div>
+      <div class="space-row"><div class="space-label">52px</div><div class="space-bar" style="width:52px"></div><div class="space-note">Section block vertical padding</div></div>
+    </div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div id="components" class="doc-section bg-grey">
+    <div class="section-eyebrow ew-purple">Design System · 04</div>
+    <h2 class="section-title">Component Library</h2>
+    <p class="section-desc">Every pattern used across the Bill Page wireframe. All components are interactive — chips, sort buttons, collapse toggles.</p>
+
+    <div class="component-grid">
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Status Pills</span><span class="comp-tag">Global</span></div>
+        <div class="comp-body">
+          <div class="pill-row">
+            <span class="pill pill-navy">Bill ID</span>
+            <span class="pill pill-navy-outline">Follow Bill</span>
+            <span class="pill pill-gold-outline">Share</span>
+          </div>
+          <div class="pill-row">
+            <span class="pill pill-committee">In Committee</span>
+            <span class="pill pill-enacted">Enacted</span>
+            <span class="pill pill-active">On Floor</span>
+          </div>
+          <div class="comp-note">Bill ID tag always navy-filled. Legislative status tags use semantic colors. Action buttons use outline variants.</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Source Tier Badges</span><span class="comp-tag">The Record</span></div>
+        <div class="comp-body">
+          <div class="tier-row">
+            <div class="tier t-s">S</div>
+            <div class="tier t-a">A</div>
+            <div class="tier t-b">B</div>
+            <div class="tier t-c">C</div>
+            <div class="tier t-w">⚠</div>
+          </div>
+          <div class="tier-note">S = primary source (gov, official). A = major wire/academic. B = independent press. C = advocacy. ⚠ = flagged framing.</div>
+          <div class="comp-note">28px × 28px, 8px radius. Colors are semantic — S always green, ⚠ always red. Never reuse for other meaning.</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Legitimacy Score Bar</span><span class="comp-tag">Sources</span></div>
+        <div class="comp-body">
+          <div class="bar-demo">
+            <div class="bar-label">Legitimacy Score</div>
+            <div class="bar-track"><div class="bar-fill" style="width:71%"></div></div>
+            <div class="bar-score">71</div>
+            <div style="font-size:10px;color:#93c5fd;">/ 100</div>
+          </div>
+          <div class="comp-note">Always blue. Always says "scores citations, not claims." Scale: 0–100. Appears after source list, not before.</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Steel-Man Banner</span><span class="comp-tag">Discourse</span></div>
+        <div class="comp-body">
+          <div class="sm-demo">
+            <div class="sm-demo-icon">⚖️</div>
+            <div class="sm-demo-body">
+              <div class="sm-demo-title">Steel-man challenge</div>
+              <div class="sm-demo-sub">Before posting, articulate the strongest case for the view you oppose.</div>
+            </div>
+            <button class="sm-demo-btn">Try it</button>
+          </div>
+          <div class="comp-note">Always purple. Pinned below Discourse header. Never dismissible. "Try it" opens a compose mode pre-prompted for steel-manning.</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Tone Intercept</span><span class="comp-tag">Discourse</span></div>
+        <div class="comp-body">
+          <div class="tone-demo">
+            <div class="tone-demo-icon">🌡</div>
+            <div>
+              <div class="tone-demo-title">Tone check</div>
+              <div class="tone-demo-sub">Your draft may read as dismissive. Consider whether this strengthens your argument.</div>
+              <div class="tone-demo-btns">
+                <button class="tone-btn-rev">Revise draft</button>
+                <button class="tone-btn-pro">Post anyway</button>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note">Always orange. Fires between contributions feed and compose box. Two exits: Revise (focuses textarea, hides banner) or Post anyway (dismisses).</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Bilingual Strip</span><span class="comp-tag">Global · Cuba</span></div>
+        <div class="comp-body">
+          <div class="bil-demo">
+            <div class="bil-tag-d">
+              <span class="bil-flag">🇺🇸</span><span class="bil-code">EN</span>
+              <span class="bil-dot">·</span>
+              <span class="bil-flag">🇨🇺</span><span class="bil-code">ES</span>
+            </div>
+            <span class="bil-note-d">Bilingual display active · <span class="bil-link">Improve ↗</span></span>
+          </div>
+          <div class="comp-note">Gold-tinted bg (#f8f0dc). Appears below bill hero, above body split. Each jurisdiction gets its own paired languages per ERD v8 CivicLanguage schema.</div>
+        </div>
+      </div>
+
+      <div class="component-card full">
+        <div class="comp-header"><span class="comp-name">Civic Scaffold Cards</span><span class="comp-tag">Left Column</span></div>
+        <div class="comp-body">
+          <div class="scaffold-demo">
+            <div class="scaf-d">
+              <div class="scaf-d-label lbl-blue">What it does</div>
+              <div class="scaf-d-en">Restructures housing allocation in urban centers, shifting from state-directed assignment to cooperative ownership.</div>
+              <div class="scaf-d-es">Reestructura la asignación de vivienda en centros urbanos.</div>
+            </div>
+            <div class="scaf-d">
+              <div class="scaf-d-label lbl-blue">Fiscal note</div>
+              <div class="scaf-d-en">Est. ₱840M revenue from title transfers over 5 years. Implementation cost ~₱120M.</div>
+              <div class="scaf-d-es">Ingresos estimados de ₱840M en 5 años.</div>
+            </div>
+            <div class="scaf-d best">
+              <div class="scaf-d-label lbl-green">Best case</div>
+              <div class="scaf-d-en">Builds property-owning citizens. Incentivizes maintenance. Reduces state burden ~30%.</div>
+              <div class="scaf-d-es">Construye propietarios. Incentiva el mantenimiento.</div>
+            </div>
+            <div class="scaf-d worst">
+              <div class="scaf-d-label lbl-red">Worst case</div>
+              <div class="scaf-d-en">Wealthier residents consolidate. Poorer tenants priced out. Inequality accelerates.</div>
+              <div class="scaf-d-es">Los ricos consolidan. La desigualdad se acelera.</div>
+            </div>
+          </div>
+          <div class="comp-note">2-column grid. Every card has EN body + ES block separated by dashed rule. "Full" cells span both columns (What it does, Historical precedent). Best case = green tint, Worst = red tint, Historical = navy pale.</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Progress Track</span><span class="comp-tag">Bill Hero</span></div>
+        <div class="comp-body">
+          <div class="progress-demo">
+            <div class="pd-step" style="display:flex;align-items:center">
+              <div class="pd-node done"></div><div class="pd-label done">Introduced</div>
+            </div>
+            <div class="pd-line done"></div>
+            <div class="pd-step" style="display:flex;align-items:center">
+              <div class="pd-node done"></div><div class="pd-label done">1st Reading</div>
+            </div>
+            <div class="pd-line done"></div>
+            <div class="pd-step" style="display:flex;align-items:center">
+              <div class="pd-node current"></div><div class="pd-label current">Committee</div>
+            </div>
+            <div class="pd-line"></div>
+            <div class="pd-step" style="display:flex;align-items:center">
+              <div class="pd-node"></div><div class="pd-label">Floor Vote</div>
+            </div>
+          </div>
+          <div class="comp-note">Done = navy filled. Current = orange with glow ring. Future = empty with light border. Lines between nodes match node state to their left.</div>
+        </div>
+      </div>
+
+      <div class="component-card">
+        <div class="comp-header"><span class="comp-name">Vote Tally Block</span><span class="comp-tag">Sponsors</span></div>
+        <div class="comp-body">
+          <div class="tally-demo">
+            <div class="td-cell"><div class="td-num yea">247</div><div class="td-lbl">Yea</div></div>
+            <div class="td-cell"><div class="td-num nay">68</div><div class="td-lbl">Nay</div></div>
+            <div class="td-cell"><div class="td-num pend">In Committee</div><div class="td-lbl">Floor vote pending</div></div>
+          </div>
+          <div class="comp-note">White fill with navy outline border. Playfair Display for numbers. Yea = green, Nay = red, pending state shows italic DM Mono text. Never navy-filled (illegible).</div>
+        </div>
+      </div>
+
+      <div class="component-card full">
+        <div class="comp-header"><span class="comp-name">Cohort Sentiment</span><span class="comp-tag">Left Column</span></div>
+        <div class="comp-body">
+          <div class="cohort-demo" style="margin-bottom:14px;">
+            <button class="chip-d active">All users</button>
+            <button class="chip-d">Cuban diaspora</button>
+            <button class="chip-d">Age 25–44</button>
+            <button class="chip-d">Homeowners</button>
+          </div>
+          <div class="sent-demo">
+            <div class="sd-row"><div class="sd-lbl">Support</div><div class="sd-track"><div class="sd-fill fill-s" style="width:58%"></div></div><div class="sd-pct pct-s">58%</div></div>
+            <div class="sd-row"><div class="sd-lbl">Oppose</div><div class="sd-track"><div class="sd-fill fill-o" style="width:27%"></div></div><div class="sd-pct pct-o">27%</div></div>
+            <div class="sd-row"><div class="sd-lbl">Neutral</div><div class="sd-track"><div class="sd-fill fill-n" style="width:15%"></div></div><div class="sd-pct pct-n">15%</div></div>
+          </div>
+          <div class="comp-note">Chips: navy active state, outline idle. Bars: 10px height, gradient fills. Numbers in DM Mono 700. Always show n= count. Active cohort filters all three bars. Gold-left-border callout for notable cohort splits.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DIRECTIONS -->
+  <div id="directions" class="doc-section bg-white">
+    <div class="section-eyebrow ew-green">Design System · 05</div>
+    <h2 class="section-title">Design Directions</h2>
+    <p class="section-desc">Three directions were explored today. The editorial grey direction is active. The others are archived but available if direction changes.</p>
+    <div class="direction-grid">
+      <div class="dir-card">
+        <div class="dir-preview dark">FORA</div>
+        <div class="dir-body">
+          <div class="dir-name">Dark Navy</div>
+          <div class="dir-desc">Deep navy background, gold accents, monospaced editorial feel. High contrast. Better for night reading, signal dashboard aesthetic.</div>
+          <span class="dir-file">fora_bill_page_wireframe.html</span>
+          <div class="dir-verdict verdict-archived">Archived · v1</div>
+        </div>
+      </div>
+      <div class="dir-card">
+        <div class="dir-preview light">FORA</div>
+        <div class="dir-body">
+          <div class="dir-name">Donezo Light</div>
+          <div class="dir-desc">White cards on grey bg, green as primary action color, SaaS dashboard energy. Rounded corners, soft shadows, pill buttons.</div>
+          <span class="dir-file">fora_bill_page_light.html</span>
+          <div class="dir-verdict verdict-archived">Archived · v2</div>
+        </div>
+      </div>
+      <div class="dir-card">
+        <div class="dir-preview edit">FORA</div>
+        <div class="dir-body">
+          <div class="dir-name">Editorial Grey ✓</div>
+          <div class="dir-desc">Playfair Display headings, navy + gold on #f0f1f3 grey, spacious ZeroCost-inspired layout. Civic gravity meets modern readability.</div>
+          <span class="dir-file">fora_bill_page_editorial.html</span>
+          <div class="dir-verdict verdict-current">Active direction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="roadmap" class="doc-section bg-navy">
+    <div class="section-eyebrow ew-white">Wireframe Roadmap · 01</div>
+    <h2 class="section-title">Screen Roadmap</h2>
+    <p class="section-desc">7 screens total. 1 done. The remaining 6 are sequenced by dependency — each screen unlocks decisions needed for the next.</p>
+
+    <div class="roadmap">
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node done"></div><div class="rm-line done"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-done">✓ Completed</span>
+          <div class="rm-screen-title">Bill Page — Split Layout</div>
+          <div class="rm-screen-desc">The design anchor for the product. Establishes the split-column pattern, bilingual system, civic scaffold, discourse feed, tone intercept, and source quality system. All future screens inherit from this.</div>
+          <div class="rm-col-grid">
+            <div class="rm-note-card"><div class="rm-note-label">File</div><div class="rm-note-text">fora_bill_page_editorial.html</div></div>
+            <div class="rm-note-card"><div class="rm-note-label">Key decisions locked</div><div class="rm-note-text">Split C layout · EN/ES bilingual display · Scaffold expanded by default · Tone intercept placement</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node next"></div><div class="rm-line"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-next">→ Next up</span>
+          <div class="rm-screen-title">Official Profile</div>
+          <div class="rm-screen-desc">The verified official page. Mirror of the Bill Page in structure — left side is the civic record (biography, voting history, term info, committee memberships), right side is the discourse + Q&A feed. Needs the official badge system and the "Post as Official" CTA for verified account holders.</div>
+          <div class="rm-decisions">
+            <div class="rm-decision">
+              <div class="rm-d-icon">🏛</div>
+              <div class="rm-d-text"><strong>Civic Resume integration:</strong> How does the official's BAML-parsed CivicProfile surface on this page? Full CV tab or inline summary?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">✅</div>
+              <div class="rm-d-text"><strong>Verified badge treatment:</strong> How prominent is the official verification? Twitter-style checkmark, or a full "Official Account" banner?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">📊</div>
+              <div class="rm-d-text"><strong>Voting record display:</strong> Does the voting history use a timeline, a filtered table, or a chart? How does it handle abstentions and absences?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">💬</div>
+              <div class="rm-d-text"><strong>Q&A vs. discourse:</strong> Officials get a different right-column than citizens — Q&A where constituents ask questions and officials respond. How does this differ from standard discourse?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-later">Later</span>
+          <div class="rm-screen-title">Home Feed</div>
+          <div class="rm-screen-desc">The personalized civic wall. Populated after address lookup → government stack → follow prompt. Cards surface bills, official activity, sentiment shifts, and upcoming elections from the user's full government stack.</div>
+          <div class="rm-decisions">
+            <div class="rm-decision">
+              <div class="rm-d-icon">🃏</div>
+              <div class="rm-d-text"><strong>Card taxonomy:</strong> How many card types are there? Bill card, official action card, election card, sentiment alert card — do they all look different or share a unified shell?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">📍</div>
+              <div class="rm-d-text"><strong>Jurisdiction filter:</strong> Users follow officials across many levels (federal → local). Does the feed have a jurisdiction rail or is everything blended with tags?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">🆕</div>
+              <div class="rm-d-text"><strong>First-visit empty state:</strong> The address lookup → stack → follow flow determines whether the feed is populated. How do we handle the zero-state gracefully?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-later">Later</span>
+          <div class="rm-screen-title">Government Stack</div>
+          <div class="rm-screen-desc">The address lookup result — the full stack from President to school board. This is the entry moment for every new user and arguably the most important first impression in the product. Designed in v2 entry wireframe but needs editorial direction applied.</div>
+          <div class="rm-decisions">
+            <div class="rm-decision">
+              <div class="rm-d-icon">🗺</div>
+              <div class="rm-d-text"><strong>Map integration:</strong> Does the stack reveal include a live district map or is it purely a list?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">📋</div>
+              <div class="rm-d-text"><strong>Stack depth:</strong> The 22-layer LA stack vs. 8-layer NYC stack — how does the UI handle wildly different jurisdiction depths without breaking layout?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-later">Later</span>
+          <div class="rm-screen-title">Compose + Tone Intercept Flow</div>
+          <div class="rm-screen-desc">The full contribute flow — from blank compose to posted contribution. Includes steel-man prompt modal, source attachment, semi-anonymous identity selection, and the tone intercept at various trigger thresholds. The most interaction-dense wireframe.</div>
+          <div class="rm-decisions">
+            <div class="rm-decision">
+              <div class="rm-d-icon">🎭</div>
+              <div class="rm-d-text"><strong>Identity picker UX:</strong> "Teacher · 30s · Havana" — how does a user set and change this? Onboarding flow, settings, or inline picker in compose?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">🔗</div>
+              <div class="rm-d-text"><strong>Source attachment:</strong> When a user clicks "Add a source" — is it a URL paste, a search, or a FORA-internal source selector?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">⏱</div>
+              <div class="rm-d-text"><strong>Forced pause mechanic:</strong> The design doc specifies a forced pause with an opposing article before posting certain content. How does this render — modal, inline expansion, or timed delay?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node"></div><div class="rm-line"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-later">Later</span>
+          <div class="rm-screen-title">Civic Resume</div>
+          <div class="rm-screen-desc">The user's civic identity page — occupation, expertise areas, civic participation history. Parsed by BAML from uploaded credentials into a CivicProfile. Shown semi-anonymously in discourse, fully on this page for the account holder.</div>
+          <div class="rm-decisions">
+            <div class="rm-decision">
+              <div class="rm-d-icon">🪪</div>
+              <div class="rm-d-text"><strong>BAML parse UI:</strong> How does the credential upload and parsing flow surface to the user? Progress state, parsed output review, edit mode?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">👁</div>
+              <div class="rm-d-text"><strong>Public vs. private view:</strong> What does another user see when they click your identity in a contribution vs. what you see on your own profile?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-screen">
+        <div class="rm-spine"><div class="rm-node"></div><div class="rm-line" style="background:transparent"></div></div>
+        <div class="rm-content">
+          <span class="rm-status rm-s-later">Later</span>
+          <div class="rm-screen-title">Constituency Dashboard (Official Only)</div>
+          <div class="rm-screen-desc">Private view for verified officials. Aggregated constituent sentiment by bill, issue, and demographic cohort. The Twitter/X intelligence layer — officials see their pulse without individual user data. This is the "other customer" of FORA.</div>
+          <div class="rm-decisions">
+            <div class="rm-decision">
+              <div class="rm-d-icon">📊</div>
+              <div class="rm-d-text"><strong>Sentiment aggregation granularity:</strong> Do officials see sentiment broken down by district, by demographic, by issue area — or all three at once?</div>
+            </div>
+            <div class="rm-decision">
+              <div class="rm-d-icon">🔒</div>
+              <div class="rm-d-text"><strong>Privacy architecture:</strong> How does the UI make clear that individual user identities are never exposed? Trust-building transparency layer needed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPEN DECISIONS -->
+  <div id="pending" class="doc-section bg-white">
+    <div class="section-eyebrow ew-gold">Wireframe Roadmap · 02</div>
+    <h2 class="section-title">Open Decisions</h2>
+    <p class="section-desc">Things that need a call before or during the next wireframe session. Prioritized by how much they block other work.</p>
+
+    <div class="pending-list">
+      <div class="pending-item">
+        <div class="pending-icon">🎨</div>
+        <div>
+          <div class="pending-title">Lock or explore the active design direction</div>
+          <div class="pending-desc">The editorial grey direction is strong but hasn't been formally locked. If you want to explore a fourth direction (e.g. pure white with navy, no grey at all) now is the time before it propagates to 6 more screens.</div>
+        </div>
+        <div class="pending-priority p-now">Now</div>
+      </div>
+      <div class="pending-item">
+        <div class="pending-icon">🧭</div>
+        <div>
+          <div class="pending-title">Official Profile wireframe sequence</div>
+          <div class="pending-desc">The Official Profile is the next screen and it carries the most unresolved questions (verified badge, Q&A vs. discourse, voting record display). Recommend resolving these in a design conversation before opening the wireframe file.</div>
+        </div>
+        <div class="pending-priority p-now">Now</div>
+      </div>
+      <div class="pending-item">
+        <div class="pending-icon">🌍</div>
+        <div>
+          <div class="pending-title">Taiwan editorial policy</div>
+          <div class="pending-desc">Blocked in the spreadsheet. Needs a written policy on how FORA handles disputed sovereignty before Taiwan can be built as a jurisdiction. Kosovo follows the same framework.</div>
+        </div>
+        <div class="pending-priority p-next">Next</div>
+      </div>
+      <div class="pending-item">
+        <div class="pending-icon">📋</div>
+        <div>
+          <div class="pending-title">Spreadsheet v26 — language pairs baked in</div>
+          <div class="pending-desc">ERD v8 added CivicLanguage and data_sovereignty_tier. The Architecture Patterns tab and all country tabs need these fields added. Straightforward but needs a session.</div>
+        </div>
+        <div class="pending-priority p-next">Next</div>
+      </div>
+      <div class="pending-item">
+        <div class="pending-icon">🇫🇷</div>
+        <div>
+          <div class="pending-title">France tab</div>
+          <div class="pending-desc">Next international jurisdiction after Germany and Canada. Cohabitation structure, Senate vs. Assemblée Nationale, regional councils. Designated as next international.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+      <div class="pending-item">
+        <div class="pending-icon">🇨🇳</div>
+        <div>
+          <div class="pending-title">China / PRC tab</div>
+          <div class="pending-desc">Blocked pending Taiwan policy. Once resolved, covers PRC national + HK SAR (already in City-States) + Macau SAR. Complex NPC/CPPCC dual structure.</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+      <div class="pending-item">
+        <div class="pending-icon">⚡</div>
+        <div>
+          <div class="pending-title">activation_trigger on Office records</div>
+          <div class="pending-desc">The field exists on CivicBody. Needs to be added to the Office entity in ERD v9 to support time-based office activation (e.g. LA Measure G transition timeline).</div>
+        </div>
+        <div class="pending-priority p-later">Later</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTPUT FILES -->
+  <div id="files" class="doc-section bg-grey">
+    <div class="section-eyebrow ew-blue">Wireframe Roadmap · 03</div>
+    <h2 class="section-title">All Output Files</h2>
+    <p class="section-desc">Every file generated across this session. Open from /mnt/user-data/outputs/.</p>
+
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:var(--navy);border-radius:10px 10px 0 0;padding:10px 16px;">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);">File</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);">Description</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);">Status</div>
+      </div>
+      <!-- rows -->
+      <div style="display:flex;flex-direction:column;gap:1px;">
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_bill_page_editorial.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Bill Page · Editorial grey direction · Split layout · Cuba bilingual</div>
+          <div style="font-size:11px;font-weight:600;color:var(--green);">✓ Active</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_bill_page_light.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Bill Page · Donezo-inspired light SaaS direction · Green palette</div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink-mut);">Archived</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_bill_page_wireframe.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Bill Page · Original dark navy version</div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink-mut);">Archived</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_bill_layout_picker.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Layout picker · Three diagrams (A: Long Scroll, B: Tabbed, C: Split)</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);">Ref</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_erd_v8.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Entity Relationship Diagram v8 · 33 entities · Language + Recording section</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);">Current ERD</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">forum_americanum_governance_v25.xlsx</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Governance spreadsheet · 37 tabs · All jurisdictions researched</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);">Current Data</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">forum_americanum_sitemap_v1.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Sitemap · 24 screens · 8 modals · 4 official views · 2 entry flows</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);">Current</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">forum_americanum_wireframe_entry_v2.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">Address entry → Government stack · 3 interactive states</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);">Current</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_signal_refined.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">FORA Signal landing · Navy + gold · Global feed · Country watch list</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);">Ref</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr 120px;gap:0;background:white;padding:12px 16px;border:1px solid var(--rule);border-top:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);font-weight:500;padding-right:16px;">fora_session_reference.html</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.5;padding-right:16px;">This file — design system + wireframe roadmap</div>
+          <div style="font-size:11px;font-weight:600;color:var(--navy);">You are here</div>
+        </div>
+      </div>
+      <div style="background:white;border:1px solid var(--rule);border-top:none;border-radius:0 0 10px 10px;padding:12px 16px;">
+        <div style="font-size:11px;color:var(--ink-mut);font-style:italic;">All files at /mnt/user-data/outputs/ · ERD at fora_erd_v8.html · Governance data at forum_americanum_governance_v25.xlsx</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// highlight active nav link on scroll
+const links = document.querySelectorAll('.sidenav-link');
+const sections = document.querySelectorAll('[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  links.forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

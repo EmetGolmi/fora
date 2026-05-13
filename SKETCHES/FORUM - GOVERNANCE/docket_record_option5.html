@@ -1,0 +1,174 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains Mono:wght@400;700&family=Nunito:wght@400;600&display=swap');
+.phone { width: 300px; margin: 16px auto; border: 2px solid #1a1a1a; border-radius: 36px; overflow: hidden; background: #f0f3f8; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+.nav { background: #1b3a6b; border-bottom: 3px solid #b8860b; padding: 12px 16px; }
+.logo { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: white; }
+.logo span { color: #d4a832; }
+.body { padding: 14px; background: #f0f3f8; max-height: 520px; overflow-y: auto; }
+.body::-webkit-scrollbar { width: 3px; }
+.body::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 2px; }
+
+.toggle-header { border-left: 2px solid #b8860b; padding-left: 10px; margin-bottom: 12px; cursor: pointer; }
+.toggle-title { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: #1b3a6b; line-height: 1.1; margin-bottom: 3px; }
+.toggle-switch { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; color: #b8860b; cursor: pointer; }
+.toggle-switch:hover { color: #1b3a6b; }
+
+.card { background: white; border-radius: 8px; margin-bottom: 7px; border: 0.5px solid #dde5f5; overflow: hidden; display: flex; cursor: pointer; }
+.card:hover { background: #f8faff; }
+.cc { padding: 9px 11px; flex: 1; }
+.lid { font-family: 'JetBrains Mono', monospace; font-size: 6.5px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.tt { font-family: 'Nunito', sans-serif; font-size: 10.5px; font-weight: 600; color: #1b3a6b; line-height: 1.3; margin-bottom: 3px; }
+.st { font-family: 'JetBrains Mono', monospace; font-size: 6.5px; }
+.badge-up { font-family: 'JetBrains Mono', monospace; font-size: 6px; letter-spacing: 0.08em; text-transform: uppercase; background: #fff3cd; color: #856404; border: 0.5px solid #f5c842; border-radius: 100px; padding: 1px 6px; display: inline-block; margin-bottom: 3px; }
+.badge-re { font-family: 'JetBrains Mono', monospace; font-size: 6px; letter-spacing: 0.08em; text-transform: uppercase; background: #f0f3f8; color: #5a6e8a; border: 0.5px solid #dde5f5; border-radius: 100px; padding: 1px 6px; display: inline-block; margin-bottom: 3px; }
+.load-more { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; color: #b8860b; text-align: center; padding: 10px; cursor: pointer; border: 0.5px dashed #b8860b; border-radius: 6px; margin-top: 4px; }
+.load-more:hover { background: rgba(184,134,11,0.05); }
+.count-line { font-family: 'JetBrains Mono', monospace; font-size: 6.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; text-align: right; margin-bottom: 8px; }
+</style>
+
+<div class="phone">
+  <div class="nav"><span class="logo">F<span>O</span>RA</span></div>
+  <div class="body" id="feedBody">
+
+    <div class="toggle-header">
+      <div class="toggle-title" id="feedTitle">On the Docket</div>
+      <div class="toggle-switch" id="switchLink" onclick="toggleFeed()">switch to The Record →</div>
+    </div>
+
+    <div id="docket-feed">
+      <div class="count-line" id="docketCount">3 upcoming actions</div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#004C54;"></div>
+        <div class="cc">
+          <div class="badge-up">Vote · Apr 3, 2026</div>
+          <div class="lid" style="color:#004C54;">Philadelphia · 260241</div>
+          <div class="tt">Short-term rental licensing — notice to building residents</div>
+          <div class="st" style="color:#185FA5;">Before Council · as of Mar 19, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#003087;"></div>
+        <div class="cc">
+          <div class="badge-up">Hearing · Apr 7, 2026</div>
+          <div class="lid" style="color:#003087;">Pennsylvania · SB 1235</div>
+          <div class="tt">PA Board of Probation and Parole — further provisions</div>
+          <div class="st" style="color:#185FA5;">In Committee · as of Feb 14, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#B22234;"></div>
+        <div class="cc">
+          <div class="badge-up">Committee · Apr 14, 2026</div>
+          <div class="lid" style="color:#B22234;">Federal · S. 3947</div>
+          <div class="tt">REWIRE Act</div>
+          <div class="st" style="color:#b8860b;">Under Review · as of Feb 26, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="record-feed" style="display:none;">
+      <div class="count-line">16 bills · showing 6</div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#004C54;"></div>
+        <div class="cc">
+          <div class="badge-re">Mar 19, 2026</div>
+          <div class="lid" style="color:#004C54;">Philadelphia · 260247</div>
+          <div class="tt">National LGBTQ Health Awareness Week declaration</div>
+          <div class="st" style="color:#2d6a2d;">Adopted · Mar 19, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#B22234;"></div>
+        <div class="cc">
+          <div class="badge-re">Mar 10, 2026</div>
+          <div class="lid" style="color:#B22234;">Federal · S. 4045</div>
+          <div class="tt">Food and Nutrition Act — online and delivery standards</div>
+          <div class="st" style="color:#b8860b;">Under Review · as of Mar 10, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#004C54;"></div>
+        <div class="cc">
+          <div class="badge-re">Mar 19, 2026</div>
+          <div class="lid" style="color:#004C54;">Philadelphia · 260245</div>
+          <div class="tt">Also naming the 5100 Block of Chester Avenue as "Paul Ellis Hill Way"</div>
+          <div class="st" style="color:#8b1a1a;">Final Passage · Mar 19, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#003087;"></div>
+        <div class="cc">
+          <div class="badge-re">Feb 14, 2026</div>
+          <div class="lid" style="color:#003087;">Pennsylvania · HB 2303</div>
+          <div class="tt">Short-term rentals — temporary lodging penalties</div>
+          <div class="st" style="color:#185FA5;">In Committee · as of Feb 14, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#B22234;"></div>
+        <div class="cc">
+          <div class="badge-re">Feb 05, 2026</div>
+          <div class="lid" style="color:#B22234;">Federal · S. 3796</div>
+          <div class="tt">Ohio River Restoration Program Act of 2026</div>
+          <div class="st" style="color:#b8860b;">Under Review · as of Feb 05, 2026</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="width:8px;flex-shrink:0;background:#004C54;"></div>
+        <div class="cc">
+          <div class="badge-re">Mar 19, 2026</div>
+          <div class="lid" style="color:#004C54;">Philadelphia · 260246</div>
+          <div class="tt">Honoring schools of the Fourth Council District</div>
+          <div class="st" style="color:#2d6a2d;">Adopted · Mar 19, 2026</div>
+        </div>
+      </div>
+
+      <div class="load-more" onclick="loadMore()">↓ Load more bills</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let onDocket = true;
+
+function toggleFeed() {
+  onDocket = !onDocket;
+  document.getElementById('docket-feed').style.display = onDocket ? 'block' : 'none';
+  document.getElementById('record-feed').style.display = onDocket ? 'none' : 'block';
+  document.getElementById('feedTitle').textContent = onDocket ? 'On the Docket' : 'The Record';
+  document.getElementById('switchLink').textContent = onDocket ? 'switch to The Record →' : 'switch to On the Docket →';
+  document.getElementById('feedBody').scrollTop = 0;
+}
+
+function loadMore() {
+  const feed = document.getElementById('record-feed');
+  const btn = feed.querySelector('.load-more');
+  const extra = [
+    {rail:'#003087', lid:'Pennsylvania · HB 205', title:'Licensing of drivers — determination of incompetency', st:'In Committee · as of Jan 28, 2026', color:'#185FA5', date:'Jan 28, 2026'},
+    {rail:'#004C54', lid:'Philadelphia · 260242', title:'Deed to Philadelphia Authority for Industrial Development — 5928-30 Germantown Ave', st:'Before Council · as of Mar 19, 2026', color:'#185FA5', date:'Mar 19, 2026'},
+    {rail:'#B22234', lid:'Federal · S. 3900', title:'Iran Human Rights, Internet Freedom, and Accountability Act of 2026', st:'Under Review · as of Feb 24, 2026', color:'#b8860b', date:'Feb 24, 2026'},
+  ];
+  extra.forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '7px';
+    card.innerHTML = `<div style="width:8px;flex-shrink:0;background:${b.rail};"></div><div class="cc"><div class="badge-re">${b.date}</div><div class="lid" style="color:${b.rail};">${b.lid}</div><div class="tt">${b.title}</div><div class="st" style="color:${b.color};">${b.st}</div></div>`;
+    feed.insertBefore(card, btn);
+  });
+  btn.textContent = '★ All bills loaded';
+  btn.style.color = '#2d6a2d';
+  btn.style.borderColor = '#a3cfbb';
+  btn.onclick = null;
+}
+</script>
