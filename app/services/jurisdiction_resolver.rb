@@ -240,7 +240,7 @@ class JurisdictionResolver
   def fetch_philadelphia_officials(lat, lng, zip)
     statewide        = fetch_phl_statewide_officials
     citywide         = fetch_phl_citywide_officials
-    council_district = fetch_phl_council_district_official(zip)
+    council_district = fetch_phl_council_district_official(lat, lng, zip)
 
     statewide + citywide + council_district
   end
@@ -276,8 +276,14 @@ class JurisdictionResolver
     mayor + PHILLY_APPOINTED + at_large
   end
 
-  def fetch_phl_council_district_official(zip)
-    district = PHL_ZIP_TO_COUNCIL_DISTRICT[zip.to_s]
+  # Philadelphia ArcGIS REST endpoint for council district point-in-polygon lookup.
+  # Falls back to zip-based map if the spatial query fails.
+  PHL_COUNCIL_DISTRICTS_URL = "https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/" \
+                               "services/City_Council_Districts_2024/FeatureServer/0/query"
+
+  def fetch_phl_council_district_official(lat, lng, zip)
+    district = fetch_council_district_from_coords(lat, lng) ||
+               PHL_ZIP_TO_COUNCIL_DISTRICT[zip.to_s]
     return [] unless district
 
     sql = "SELECT first_name, last_name, office, office_label, district, party " \
@@ -287,6 +293,26 @@ class JurisdictionResolver
     return [] unless response.success?
 
     (response.parsed_response["rows"] || []).map { |row| normalize_phl_official(row) }
+  end
+
+  def fetch_council_district_from_coords(lat, lng)
+    response = self.class.get(PHL_COUNCIL_DISTRICTS_URL, query: {
+      geometry:       "#{lng},#{lat}",
+      geometryType:   "esriGeometryPoint",
+      inSR:           "4326",
+      spatialRel:     "esriSpatialRelIntersects",
+      outFields:      "*",
+      returnGeometry: "false",
+      f:              "json"
+    })
+    return nil unless response.success?
+
+    attrs = response.parsed_response.dig("features", 0, "attributes") || {}
+    # Field name varies by ArcGIS layer version; try common variants
+    raw = attrs["DISTRICT"] || attrs["district"] || attrs["COUNCILDISTRICT"] || attrs["councildistrict"]
+    raw&.to_i&.nonzero?
+  rescue StandardError
+    nil
   end
 
   OFFICE_LABELS = {
