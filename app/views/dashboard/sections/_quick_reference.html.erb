@@ -1,8 +1,3 @@
-<%#
-  STUB — Phase 2: this content will be resolved dynamically from
-  the address (Census Tract → trash day, GIS → nearest stations, etc).
-  MVP hardcodes Bella Vista / 19147 / D2 values.
-%>
 <section class="section-anchor qref-anchor" id="qref">
   <div class="section-eyebrow">★ Quick Reference · For your kitchen cabinet</div>
   <div class="section-heading">The numbers and places you'll need before you need them</div>
@@ -12,73 +7,162 @@
   <div class="qref">
     <div class="qref-header">
       <div class="qref-h-icon">★</div>
-      <div class="qref-h-title"><%= @address %> · Quick Reference</div>
-      <div class="qref-h-sub">19147 · Bella Vista · D2</div>
+      <div class="qref-h-title-block">
+        <div class="qref-h-title"><%= @address %> · Quick Reference</div>
+        <div class="qref-h-sub">
+          <%= @jurisdiction[:zip] %> · <%= @jurisdiction[:neighborhood].presence || @jurisdiction[:city] %> · District <%= @jurisdiction[:district] %>
+        </div>
+      </div>
       <div class="qref-actions">
         <button class="qref-btn" onclick="window.print()">🖨 Print</button>
+        <button class="qref-btn qref-collapse-btn" onclick="toggleQRef()" aria-label="Collapse quick reference">▼</button>
       </div>
     </div>
 
-    <div class="qref-body">
-      <div class="qref-item">
-        <div class="qref-label">Poison Control · 24/7</div>
-        <div class="qref-phone"><%= phone_link("18002221222", "1-800-222-1222") %></div>
-        <div class="qref-meta">Free · Free language line</div>
-      </div>
-      <div class="qref-item">
-        <div class="qref-label">Trash &amp; Recycling</div>
-        <div class="qref-value">Wednesday morning</div>
-        <div class="qref-meta">Recycling alternating · check phila.gov for next date</div>
-      </div>
-      <div class="qref-item">
-        <div class="qref-label">Nearest Hospital</div>
-        <div class="qref-value">Pennsylvania Hospital</div>
-        <div class="qref-meta">
-          <%= address_link("800 Spruce St, Philadelphia, PA 19107", display_text: "800 Spruce St") %>
-          · 0.6 mi · ER 24/7
-        </div>
-      </div>
-      <div class="qref-item">
-        <div class="qref-label">Nearest Police</div>
-        <div class="qref-value">3rd District</div>
-        <div class="qref-meta">
-          <%= address_link("11th and Wharton, Philadelphia, PA", display_text: "11th &amp; Wharton".html_safe) %>
-          · 0.4 mi · <%= phone_link("2156863030", "(215) 686-3030") %>
-        </div>
-      </div>
-    </div>
+    <div id="qref-body" class="qref-content">
 
-    <div class="qref-divider"></div>
+      <%# ── 911 band ─────────────────────────────────────────────────── %>
+      <div class="qref-911-band">
+        <span class="qref-911-label">🚨 IN AN EMERGENCY · CALL 911</span>
+        <span class="qref-911-sub">Fire · Medical emergency · Crime in progress</span>
+      </div>
 
-    <div class="qref-body">
-      <div class="qref-item">
-        <div class="qref-label">Nearest Fire Station</div>
-        <div class="qref-value">Engine 1 / Ladder 5</div>
-        <div class="qref-meta">
-          <%= address_link("9th and Bainbridge, Philadelphia, PA", display_text: "9th &amp; Bainbridge".html_safe) %>
-          · 0.2 mi
+      <%# ── Always-on emergency lines ───────────────────────────────── %>
+      <div class="qref-section">
+        <div class="qref-section-title">Always-on emergency lines</div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">☎</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Poison Control · 24/7</span>
+            <%= phone_link("18002221222", "1-800-222-1222") %>
+            <span class="qref-row-meta">Free · Free language line</span>
+          </div>
+        </div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🔥</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Smell gas? · PGW</span>
+            <%= phone_link("2152351212", "215-235-1212") %>
+            <span class="qref-row-meta">Don't flip switches · call from outside · <a href="https://www.nfpa.org/Public-Education/Staying-safe/Safety-equipment/Natural-gas-safety" target="_blank" rel="noopener" class="qref-link">NFPA natural gas safety</a></span>
+          </div>
         </div>
       </div>
-      <div class="qref-item">
-        <div class="qref-label">City Services · 24/7</div>
-        <div class="qref-phone"><%= phone_link("311", "311") %></div>
-        <div class="qref-meta">Or text 311 from your phone</div>
+
+      <%# ── Local public safety infrastructure ─────────────────────── %>
+      <div class="qref-section">
+        <div class="qref-section-title">Local public safety infrastructure</div>
+
+        <% if ENV["GOOGLE_MAPS_STATIC_API_KEY"].present? %>
+          <% enc = CGI.escape(@address.to_s) %>
+          <img src="https://maps.googleapis.com/maps/api/staticmap?center=<%= enc %>&zoom=15&size=640x140&scale=2&maptype=roadmap&markers=color:red%7Clabel:H%7C<%= enc %>&markers=color:blue%7Clabel:E%7C800+Spruce+St,Philadelphia,PA&markers=color:orange%7Clabel:F%7C9th+and+Bainbridge,Philadelphia,PA&markers=color:blue%7Clabel:P%7C11th+and+Wharton,Philadelphia,PA&key=<%= ENV["GOOGLE_MAPS_STATIC_API_KEY"] %>"
+               class="qref-map" alt="Emergency services near your address">
+        <% end %>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🏥</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Pennsylvania Hospital · ER 24/7</span>
+            <%= address_link("800 Spruce St, Philadelphia, PA 19107", display_text: "800 Spruce St") %>
+            <span class="qref-row-meta">0.6 mi</span>
+          </div>
+        </div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🚒</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Engine 1 / Ladder 5</span>
+            <%= address_link("9th and Bainbridge, Philadelphia, PA", display_text: "9th & Bainbridge") %>
+            <span class="qref-row-meta">0.2 mi</span>
+          </div>
+        </div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🚔</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">3rd District Police</span>
+            <%= address_link("11th and Wharton, Philadelphia, PA", display_text: "11th & Wharton") %>
+            · <%= phone_link("2156863030", "(215) 686-3030") %>
+            <span class="qref-row-meta">0.4 mi</span>
+          </div>
+        </div>
       </div>
-      <div class="qref-item">
-        <div class="qref-label">Power Outage · PECO</div>
-        <div class="qref-phone"><%= phone_link("18008414141", "1-800-841-4141") %></div>
-        <div class="qref-meta">Or text "OUT" to 697-326</div>
+
+      <%# ── Utilities ────────────────────────────────────────────────── %>
+      <div class="qref-section">
+        <div class="qref-section-title">Utilities</div>
+        <div class="qref-utilities-grid">
+          <div class="qref-utility">
+            <span class="qref-row-icon">⚡</span>
+            <div class="qref-row-content">
+              <span class="qref-row-label">Power outage · PECO</span>
+              <%= phone_link("18008414141", "1-800-841-4141") %>
+              <span class="qref-row-meta">Or text "OUT" to 697-326</span>
+            </div>
+          </div>
+          <div class="qref-utility">
+            <span class="qref-row-icon">💧</span>
+            <div class="qref-row-content">
+              <span class="qref-row-label">Water emergency · PWD</span>
+              <%= phone_link("2156856300", "(215) 685-6300") %>
+              <span class="qref-row-meta">Main break · sewage backup</span>
+            </div>
+          </div>
+        </div>
+        <div class="qref-shutdown-note">
+          Know where your water shut-off valve is before you need it. <a href="https://www.ready.gov/water" target="_blank" rel="noopener" class="qref-link">ready.gov/home-water · FEMA home water preparedness</a>
+        </div>
       </div>
-      <div class="qref-item">
-        <div class="qref-label">Water Emergency · PWD</div>
-        <div class="qref-phone"><%= phone_link("2156856300", "(215) 685-6300") %></div>
-        <div class="qref-meta">Main break · sewage backup</div>
+
+      <%# ── City services ────────────────────────────────────────────── %>
+      <div class="qref-section">
+        <div class="qref-section-title">City services</div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">☎</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">311 · call or text</span>
+            <a href="https://atlas.phila.gov/<%= CGI.escape(@address.to_s) %>/nearby-activity/311" target="_blank" rel="noopener" class="qref-link">See recent 311 activity near your address →</a>
+          </div>
+        </div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🗑</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Trash &amp; recycling · Wednesday morning</span>
+            <span class="qref-row-meta">Recycling alternating · <a href="https://www.phila.gov/services/trash-recycling-city-upkeep/recycling/bulk-and-specialty-pickups/" target="_blank" rel="noopener" class="qref-link">specialty &amp; bulk pickups</a></span>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <%# ── Your civic info ─────────────────────────────────────────── %>
+      <div class="qref-section">
+        <div class="qref-section-title">Your civic info</div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🏛</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Mark Squilla · Council District 1</span>
+            City Hall Rm 332 · <%= phone_link("2156863458", "(215) 686-3458") %> · <a href="mailto:mark.squilla@phila.gov" class="qref-link">mark.squilla@phila.gov</a>
+            <span class="qref-row-meta">Term 2023–2027</span>
+          </div>
+        </div>
+
+        <div class="qref-row">
+          <span class="qref-row-icon">🗳</span>
+          <div class="qref-row-content">
+            <span class="qref-row-label">Polling place · Ward 2, Division 10</span>
+            St. Maron's Church · <%= address_link("1013 Ellsworth St, Philadelphia, PA", display_text: "1013 Ellsworth St") %>
+            <span class="qref-row-meta">7am–8pm on election day</span>
+          </div>
+        </div>
+      </div>
+
+    </div><%# /qref-content %>
 
     <div class="qref-footer">
-      <div class="qref-footer-text">Sources: City of Philadelphia, PWD, PECO, AAPCC · Updated May 2026</div>
-      <div class="qref-footer-meta">FORA · Free forever</div>
+      <div class="qref-footer-text">Sources: City of Philadelphia, PWD, PECO, PGW, NFPA, FEMA, AAPCC · Updated May 2026 · GO BIRDS</div>
     </div>
   </div>
 </section>
