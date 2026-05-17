@@ -182,8 +182,9 @@
                 <span class="off-bill-status off-bill-status--<%= bill["status_code"] %>"><%= bill["status"] %></span>
               </div>
               <div class="off-bill-title">
-                <% if bill["legistar_url"].present? %>
-                  <a href="<%= bill["legistar_url"] %>" target="_blank" rel="noopener"><%= bill["title"] %></a>
+                <% bill_href = bill["fora_bill_id"].present? ? "/bills/#{bill["fora_bill_id"]}" : bill["legistar_url"] %>
+                <% if bill_href.present? %>
+                  <a href="<%= bill_href %>" <%= bill["fora_bill_id"].blank? ? 'target="_blank" rel="noopener"' : '' %>><%= bill["title"] %></a>
                 <% else %>
                   <%= bill["title"] %>
                 <% end %>
@@ -551,8 +552,9 @@
             <span class="off-bill-status off-bill-status--<%= bill["status_code"] %>"><%= bill["status"] %></span>
           </div>
           <div class="off-bill-title">
-            <% if bill["legistar_url"].present? %>
-              <a href="<%= bill["legistar_url"] %>" target="_blank" rel="noopener"><%= bill["title"] %></a>
+            <% bill_href = bill["fora_bill_id"].present? ? "/bills/#{bill["fora_bill_id"]}" : bill["legistar_url"] %>
+            <% if bill_href.present? %>
+              <a href="<%= bill_href %>" <%= bill["fora_bill_id"].blank? ? 'target="_blank" rel="noopener"' : '' %>><%= bill["title"] %></a>
             <% else %>
               <%= bill["title"] %>
             <% end %>

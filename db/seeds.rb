@@ -185,6 +185,47 @@ johnson.assign_attributes(
 johnson.save!
 puts "Seeded: #{johnson.full_name} (#{johnson.office_title})"
 
+# ── Philadelphia City Council — Squilla sponsored legislation ────────────────
+phl_bag_bill = CivicBill.find_or_initialize_by(source: 'phl_council', external_id: 'phl-bill-250733')
+phl_bag_bill.assign_attributes(
+  jurisdiction:  'philadelphia',
+  identifier:    'Bill 250733',
+  title:         'Bring Your Own Bag Act — 10-cent paper bag fee',
+  status:        'Signed into law',
+  status_date:   Date.new(2025, 11, 13),
+  bill_stage:    'became_law',
+  full_text_url: 'https://phila.legistar.com/LegislationDetail.aspx?ID=7759179',
+  sponsors:      [{ 'name' => 'Mark Squilla', 'district' => '1' }]
+)
+phl_bag_bill.save!
+
+phl_preservation_bill = CivicBill.find_or_initialize_by(source: 'phl_council', external_id: 'phl-bill-251030')
+phl_preservation_bill.assign_attributes(
+  jurisdiction:  'philadelphia',
+  identifier:    'Bill 251030',
+  title:         'Historic Preservation Ordinance — Nomination Procedure Reform',
+  status:        'In committee — being revised',
+  status_date:   Date.new(2025, 11, 20),
+  bill_stage:    'committee',
+  full_text_url: 'https://phila.legistar.com/LegislationDetail.aspx?ID=7806452',
+  sponsors:      [{ 'name' => 'Mark Squilla', 'district' => '1' }]
+)
+phl_preservation_bill.save!
+
+phl_sixers_bill = CivicBill.find_or_initialize_by(source: 'phl_council', external_id: 'phl-bill-250242')
+phl_sixers_bill.assign_attributes(
+  jurisdiction:  'philadelphia',
+  identifier:    'Bill 250242',
+  title:         'Sixers Arena Repeal',
+  status:        'Introduced',
+  status_date:   Date.new(2025, 3, 20),
+  bill_stage:    'introduced',
+  full_text_url: 'https://phila.legistar.com/LegislationDetail.aspx?ID=7643217',
+  sponsors:      [{ 'name' => 'Mark Squilla', 'district' => '1' }]
+)
+phl_sixers_bill.save!
+puts "Seeded: Philadelphia City Council bills (250733, 251030, 250242)"
+
 # ── Philadelphia City Council — District 1 ──
 squilla = Person.find_or_initialize_by(slug: 'msquilla-phl-d1')
 squilla.assign_attributes(
@@ -254,6 +295,7 @@ squilla.assign_attributes(
     'sponsored_bills' => [
       {
         'bill_number'   => '250733',
+        'fora_bill_id'  => phl_bag_bill.id.to_s,
         'title'         => 'Bring Your Own Bag Act — 10-cent paper bag fee',
         'summary'       => 'Requires all Philadelphia retailers to charge customers at least 10 cents per paper bag. Designed to reduce single-use bag consumption after the city\'s 2021 plastic bag ban caused paper bag use to triple.',
         'status'        => 'Signed into law',
@@ -264,22 +306,24 @@ squilla.assign_attributes(
       },
       {
         'bill_number'      => '251030',
+        'fora_bill_id'     => phl_preservation_bill.id.to_s,
         'title'            => 'Historic Preservation Ordinance — Nomination Procedure Reform',
         'summary'          => 'Would add a second step to the Philadelphia Historical Commission nomination process, requiring the full Commission to vote before a nomination can be reviewed, and giving property owners 30 days\' advance notice. Proponents call it fair notice; preservationists call it a demolition loophole.',
         'status'           => 'In committee — being revised',
         'status_code'      => 'committee',
         'introduced_date'  => '2025-11-20',
-        'legistar_url'     => 'https://phila.legistar.com/LegislationDetail.aspx?ID=7759179',
+        'legistar_url'     => 'https://phila.legistar.com/LegislationDetail.aspx?ID=7806452',
         'note'             => 'Philadelphia Planning Commission placed a 45-day hold in December 2025. 30+ preservation organizations have opposed the bill. Squilla has said changes will be made. Rules Committee hearings expected 2026. Directly relevant to the Washington Square West court ruling.'
       },
       {
         'bill_number'      => '250242',
+        'fora_bill_id'     => phl_sixers_bill.id.to_s,
         'title'            => 'Sixers Arena Repeal',
         'summary'          => 'Three bills to repeal the 2024 legislation authorizing the Philadelphia 76ers to build a new arena along East Market Street in Center City, after the team reached a new deal to remain at the Wells Fargo Center.',
         'status'           => 'Introduced',
         'status_code'      => 'introduced',
         'introduced_date'  => '2025-03-20',
-        'legistar_url'     => 'https://phila.legistar.com',
+        'legistar_url'     => 'https://phila.legistar.com/LegislationDetail.aspx?ID=7643217',
         'note'             => 'Three companion bills: 250242, 250243, 250244. Filed after Sixers/Comcast Spectacor deal to stay at the sports complex.'
       }
     ]
