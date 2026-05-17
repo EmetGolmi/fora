@@ -250,6 +250,38 @@ squilla.assign_attributes(
         'source' => 'Axios Philadelphia',
         'date'   => '2026-01-20'
       }
+    ],
+    'sponsored_bills' => [
+      {
+        'bill_number'   => '250733',
+        'title'         => 'Bring Your Own Bag Act — 10-cent paper bag fee',
+        'summary'       => 'Requires all Philadelphia retailers to charge customers at least 10 cents per paper bag. Designed to reduce single-use bag consumption after the city\'s 2021 plastic bag ban caused paper bag use to triple.',
+        'status'        => 'Signed into law',
+        'status_code'   => 'law',
+        'signed_date'   => '2025-11-13',
+        'legistar_url'  => 'https://phila.legistar.com/LegislationDetail.aspx?ID=7759179',
+        'note'          => 'Became law without Mayor Parker\'s signature. Took effect January 2026. Food trucks and take-out orders are exempt. Businesses keep the fee revenue — no city revenue collected.'
+      },
+      {
+        'bill_number'      => '251030',
+        'title'            => 'Historic Preservation Ordinance — Nomination Procedure Reform',
+        'summary'          => 'Would add a second step to the Philadelphia Historical Commission nomination process, requiring the full Commission to vote before a nomination can be reviewed, and giving property owners 30 days\' advance notice. Proponents call it fair notice; preservationists call it a demolition loophole.',
+        'status'           => 'In committee — being revised',
+        'status_code'      => 'committee',
+        'introduced_date'  => '2025-11-20',
+        'legistar_url'     => 'https://phila.legistar.com/LegislationDetail.aspx?ID=7759179',
+        'note'             => 'Philadelphia Planning Commission placed a 45-day hold in December 2025. 30+ preservation organizations have opposed the bill. Squilla has said changes will be made. Rules Committee hearings expected 2026. Directly relevant to the Washington Square West court ruling.'
+      },
+      {
+        'bill_number'      => '250242',
+        'title'            => 'Sixers Arena Repeal',
+        'summary'          => 'Three bills to repeal the 2024 legislation authorizing the Philadelphia 76ers to build a new arena along East Market Street in Center City, after the team reached a new deal to remain at the Wells Fargo Center.',
+        'status'           => 'Introduced',
+        'status_code'      => 'introduced',
+        'introduced_date'  => '2025-03-20',
+        'legistar_url'     => 'https://phila.legistar.com',
+        'note'             => 'Three companion bills: 250242, 250243, 250244. Filed after Sixers/Comcast Spectacor deal to stay at the sports complex.'
+      }
     ]
   }
 )

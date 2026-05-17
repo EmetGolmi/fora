@@ -169,6 +169,34 @@
         </div>
         <% end %>
 
+        <%# Sponsored legislation %>
+        <% _bills = official.extra_data&.dig("sponsored_bills") %>
+        <% if _bills.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ Legislation</div>
+          <h2 class="dp-section-title">Sponsored Legislation</h2>
+          <% _bills.each do |bill| %>
+            <div class="off-bill-item">
+              <div class="off-bill-header">
+                <span class="off-bill-number"><%= bill["bill_number"] %></span>
+                <span class="off-bill-status off-bill-status--<%= bill["status_code"] %>"><%= bill["status"] %></span>
+              </div>
+              <div class="off-bill-title">
+                <% if bill["legistar_url"].present? %>
+                  <a href="<%= bill["legistar_url"] %>" target="_blank" rel="noopener"><%= bill["title"] %></a>
+                <% else %>
+                  <%= bill["title"] %>
+                <% end %>
+              </div>
+              <div class="off-bill-summary"><%= bill["summary"] %></div>
+              <% if bill["note"].present? %>
+                <div class="off-bill-note"><%= bill["note"] %></div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+
         <%# Upcoming Events %>
         <% if official.upcoming_events.present? %>
         <div class="dp-section">
@@ -506,6 +534,33 @@
           <div class="off-news-meta">
             <%= item["source"] %><% if item["date"].present? %> · <%= Date.parse(item["date"]).strftime("%B %-d, %Y") rescue item["date"] %><% end %>
           </div>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <!-- Section 4c · Sponsored legislation -->
+    <% _bills_m = official.extra_data&.dig("sponsored_bills") %>
+    <% if _bills_m.present? %>
+    <div style="padding:16px 20px; background:white; border-bottom:1px solid #e8ecf4;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Legislation</div>
+      <% _bills_m.each do |bill| %>
+        <div class="off-bill-item">
+          <div class="off-bill-header">
+            <span class="off-bill-number"><%= bill["bill_number"] %></span>
+            <span class="off-bill-status off-bill-status--<%= bill["status_code"] %>"><%= bill["status"] %></span>
+          </div>
+          <div class="off-bill-title">
+            <% if bill["legistar_url"].present? %>
+              <a href="<%= bill["legistar_url"] %>" target="_blank" rel="noopener"><%= bill["title"] %></a>
+            <% else %>
+              <%= bill["title"] %>
+            <% end %>
+          </div>
+          <div class="off-bill-summary"><%= bill["summary"] %></div>
+          <% if bill["note"].present? %>
+            <div class="off-bill-note"><%= bill["note"] %></div>
+          <% end %>
         </div>
       <% end %>
     </div>
