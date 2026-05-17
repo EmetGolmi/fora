@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   get  "dashboard/result/:job_id",   to: "dashboard#result"
   get  "dashboard/bills",            to: "dashboard#bills"
 
-  get "bills/:id",          to: "bills#show",         as: :bill
+  get  "bills/:id",          to: "bills#show",         as: :bill
+  get  "bills/:bill_id/comments", to: "bill_comments#index",  as: :bill_comments
+  post "bills/:bill_id/comments", to: "bill_comments#create"
   get "eo/:id",             to: "executive_orders#show", as: :executive_order
 
   # Friendly slug URLs for specific officials

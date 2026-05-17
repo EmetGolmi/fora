@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_12_235335) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_17_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "bill_comments", force: :cascade do |t|
+    t.boolean "anonymous", default: false, null: false
+    t.text "body", null: false
+    t.bigint "civic_bill_id", null: false
+    t.datetime "created_at", null: false
+    t.uuid "jurisdiction_id"
+    t.string "occupation"
+    t.string "perspective_type", null: false
+    t.string "photo_url"
+    t.string "session_token", null: false
+    t.string "stance", default: "undecided", null: false
+    t.datetime "updated_at", null: false
+    t.index ["civic_bill_id"], name: "index_bill_comments_on_civic_bill_id"
+    t.index ["session_token"], name: "index_bill_comments_on_session_token"
+    t.index ["stance"], name: "index_bill_comments_on_stance"
+  end
 
   create_table "civic_bills", force: :cascade do |t|
     t.string "bill_stage", default: "introduced"
@@ -216,6 +233,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_12_235335) do
     t.index ["address_key"], name: "index_resolved_rcos_on_address_key", unique: true
   end
 
+  add_foreign_key "bill_comments", "civic_bills"
   add_foreign_key "issue_concurrences", "neighborhood_issues"
   add_foreign_key "issue_responses", "neighborhood_issues"
   add_foreign_key "official_finance_summaries", "civic_representatives"

@@ -1,4 +1,6 @@
 class CivicBill < ApplicationRecord
+  has_many :bill_comments, foreign_key: :civic_bill_id, dependent: :destroy
+
   validates :source, presence: true
   validates :external_id, presence: true, uniqueness: { scope: :source }
   validates :jurisdiction, presence: true
