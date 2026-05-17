@@ -277,9 +277,10 @@ class JurisdictionResolver
   end
 
   # Philadelphia ArcGIS REST endpoint for council district point-in-polygon lookup.
-  # Falls back to zip-based map if the spatial query fails.
+  # Verified 2026-05-16: service is Council_Districts_2024, fields are district (string)
+  # and district_num (integer). Falls back to zip-based map if the spatial query fails.
   PHL_COUNCIL_DISTRICTS_URL = "https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/" \
-                               "services/City_Council_Districts_2024/FeatureServer/0/query"
+                               "services/Council_Districts_2024/FeatureServer/0/query"
 
   def fetch_phl_council_district_official(lat, lng, zip)
     district = fetch_council_district_from_coords(lat, lng) ||
@@ -301,16 +302,15 @@ class JurisdictionResolver
       geometryType:   "esriGeometryPoint",
       inSR:           "4326",
       spatialRel:     "esriSpatialRelIntersects",
-      outFields:      "*",
+      outFields:      "district_num,district",
       returnGeometry: "false",
       f:              "json"
     })
     return nil unless response.success?
 
     attrs = response.parsed_response.dig("features", 0, "attributes") || {}
-    # Field name varies by ArcGIS layer version; try common variants
-    raw = attrs["DISTRICT"] || attrs["district"] || attrs["COUNCILDISTRICT"] || attrs["councildistrict"]
-    raw&.to_i&.nonzero?
+    # district_num is an integer field; district is the string equivalent
+    (attrs["district_num"] || attrs["district"])&.to_i&.nonzero?
   rescue StandardError
     nil
   end
