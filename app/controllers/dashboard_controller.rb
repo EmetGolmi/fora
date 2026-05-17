@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
 
     @address      = data[:address]
     @jurisdiction = data[:jurisdiction]
-    @today        = Date.today
+    @today        = Time.current.in_time_zone("America/New_York").to_date
 
     otd_entries          = OnThisDayEntry.for_today
     @on_this_day_event   = otd_entries.events.order(is_featured: :desc, year: :desc).first

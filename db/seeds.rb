@@ -207,7 +207,7 @@ squilla.assign_attributes(
   office_phone:                 '(215) 686-3458',
   office_address:               'Room 580, City Hall, Philadelphia, PA 19107',
   office_hours:                 'Mon–Fri 9am–5pm',
-  website_url:                  'https://phlcouncil.com/mark-squilla/',
+  website_url:                  'https://phlcouncil.com/marksquilla/',
   contact_url:                  'https://phlcouncil.com/mark-squilla/contact/',
   photo_url:                    'https://phlcouncil.com/wp-content/uploads/2020/02/Councilmember-Mark-Squilla.jpg',
   twitter_handle:               'MarkSquilla',
@@ -222,7 +222,36 @@ squilla.assign_attributes(
     { name: 'Commerce & Economic Development',          role: 'chair'  },
     { name: 'Licenses & Inspections',                   role: 'member' },
     { name: 'Streets & Services',                       role: 'member' }
-  ]
+  ],
+  extra_data: {
+    'instagram_url' => 'https://www.instagram.com/marksquillaphl/',
+    'news_items' => [
+      {
+        'title'  => 'Public-Private Market East Advisory Group Partnership Gets to Work',
+        'url'    => 'https://www.phila.gov/2026-03-19-public-private-market-east-advisory-group-partnership-gets-to-work/',
+        'source' => 'City of Philadelphia',
+        'date'   => '2026-03-19'
+      },
+      {
+        'title'  => 'Historic Preservation Bill Passes — Commission Squilla Designation',
+        'url'    => 'https://billypenn.com/2025/12/24/historic-preservation-bill-commission-squilla-designation/',
+        'source' => 'Billy Penn',
+        'date'   => '2025-12-24'
+      },
+      {
+        'title'  => 'Jeannette Jackson Mummers Parade String Band Philadelphia',
+        'url'    => 'https://www.cbsnews.com/philadelphia/news/jeannette-jackson-mummers-parade-string-band-philadelphia/',
+        'source' => 'CBS News Philadelphia',
+        'date'   => '2025-01-01'
+      },
+      {
+        'title'  => 'City Flag Redesign',
+        'url'    => 'https://www.axios.com/local/philadelphia/2026/01/20/city-flag-redesign',
+        'source' => 'Axios Philadelphia',
+        'date'   => '2026-01-20'
+      }
+    ]
+  }
 )
 squilla.save!
 puts "Seeded: #{squilla.full_name} (#{squilla.office_title})"

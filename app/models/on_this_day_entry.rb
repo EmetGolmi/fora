@@ -7,7 +7,7 @@ class OnThisDayEntry < ApplicationRecord
   validates :verified,   inclusion: { in: %w[confirmed review unverified] }
 
   scope :for_date,   ->(date) { where(month: date.month, day: date.day) }
-  scope :for_today,  -> { for_date(Date.current) }
+  scope :for_today,  -> { for_date(Time.current.in_time_zone("America/New_York").to_date) }
   scope :featured,   -> { where(is_featured: true) }
   scope :events,     -> { where(entry_type: "event") }
   scope :births,     -> { where(entry_type: "birth") }
