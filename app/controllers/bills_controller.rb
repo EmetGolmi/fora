@@ -23,7 +23,31 @@ class BillsController < ApplicationController
 
   private
 
+  def build_bill_prompt(bill)
+    parts = []
+    parts << "Bill: #{bill.identifier} (#{bill.jurisdiction})"
+    parts << "Title: #{bill.title}"
+    parts << "Status: #{bill.status}"
+    parts << "Sponsors: #{bill.sponsors.map { |s| s['name'] }.join(', ')}" if bill.sponsors.present?
+    parts << "Session: #{bill.session_identifier}" if bill.respond_to?(:session_identifier) && bill.session_identifier.present?
+
+    if bill.summary.present?
+      parts << "Legislative summary: #{bill.summary}"
+    end
+
+    if bill.raw_data.present?
+      raw      = bill.raw_data.is_a?(String) ? JSON.parse(bill.raw_data) : bill.raw_data
+      abstract = raw.dig("abstracts", 0, "abstract") ||
+                 raw.dig("abstract") ||
+                 raw.dig("description")
+      parts << "Bill abstract: #{abstract}" if abstract.present?
+    end
+
+    parts.join("\n")
+  end
+
   def fetch_ai_summary
+    context  = build_bill_prompt(@bill)
     response = HTTParty.post(
       "https://api.anthropic.com/v1/messages",
       headers: {
@@ -38,7 +62,7 @@ class BillsController < ApplicationController
         messages: [
           {
             role:    "user",
-            content: "For this legislation: '#{@bill.title}' (Status: #{@bill.status}) — respond with exactly two paragraphs separated by the exact string ' || ' (space pipe pipe space). First paragraph: what this bill does in 2-3 plain sentences. Second paragraph: 2-3 sentences about possible effects using may/could/might. Do not use any headers, labels, bullet points, or markdown. Example format: This bill does X. It also does Y. || This may affect people by Z. It could also lead to W."
+            content: "For this legislation:\n#{context}\n\nRespond with exactly two paragraphs separated by the exact string ' || ' (space pipe pipe space). First paragraph: what this bill does in 2-3 plain sentences. Second paragraph: 2-3 sentences about possible effects using may/could/might. Do not use any headers, labels, bullet points, or markdown. Example format: This bill does X. It also does Y. || This may affect people by Z. It could also lead to W."
           }
         ]
       }.to_json

@@ -56,20 +56,52 @@ class OpenStatesService
   end
 
   def normalize(bill)
-    action_text = bill["latest_action_description"].to_s
+    action_text  = bill["latest_action_description"].to_s
+    session_str  = bill["session"] || bill["legislative_session"] || ""
+    session_year = session_str.match(/(\d{4})/)[1] rescue "2025"
     {
-      source:      "openstates",
-      external_id: bill["id"],
-      title:       bill["title"],
-      identifier:  bill["identifier"],
-      status:      action_text.presence || "Unknown",
-      bill_stage:  extract_bill_stage(action_text),
-      status_date: bill["latest_action_date"],
-      summary:     extract_summary(bill),
-      sponsors:    extract_sponsors(bill),
-      subjects:    bill["subject"] || [],
-      votes:       extract_votes(bill)
+      source:             "openstates",
+      external_id:        bill["id"],
+      title:              bill["title"],
+      identifier:         bill["identifier"],
+      status:             action_text.presence || "Unknown",
+      bill_stage:         extract_bill_stage(action_text),
+      status_date:        bill["latest_action_date"],
+      summary:            extract_summary(bill),
+      sponsors:           extract_sponsors(bill),
+      subjects:           bill["subject"] || [],
+      votes:              extract_votes(bill),
+      session_identifier: session_str.presence,
+      full_text_url:      build_pa_url(bill["identifier"], session_year),
+      raw_data:           bill
     }
+  end
+
+  def build_pa_url(identifier, session_year)
+    return nil unless identifier =~ /\A([HS])([BR])\s+(\d+)\z/i
+    body   = Regexp.last_match(1).upcase
+    type   = Regexp.last_match(2).upcase
+    number = Regexp.last_match(3)
+    "https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm" \
+      "?syear=#{session_year}&sind=0&body=#{body}&type=#{type}&bn=#{number}"
+  end
+
+  def refresh_bill(bill)
+    api_key = ENV["OPENSTATES_API_KEY"]
+    response = HTTParty.get(
+      "https://v3.openstates.org/bills/#{bill.external_id}",
+      query:   { include: %w[sponsorships abstracts votes sources].join(",") },
+      headers: { "X-API-KEY" => api_key }
+    )
+    return unless response.success?
+
+    data   = response.parsed_response
+    attrs  = normalize(data)
+    # Don't clobber curated_effects in raw_data
+    if bill.raw_data.is_a?(Hash) && bill.raw_data["curated_effects"].present?
+      attrs[:raw_data] = attrs[:raw_data].merge("curated_effects" => bill.raw_data["curated_effects"])
+    end
+    bill.update!(attrs.except(:source, :external_id))
   end
 
   def extract_bill_stage(text)
