@@ -25,6 +25,64 @@ class OpenStatesService
     end
   end
 
+  # Batch-refresh a collection of bills using the list endpoint (100/request).
+  # Returns { ok: N, rate_limited: N, not_found: N }.
+  def refresh_bills(bills)
+    counts = { ok: 0, rate_limited: 0, not_found: 0 }
+    identifiers_to_bill = bills.index_by(&:identifier)
+
+    identifiers_to_bill.each_slice(50) do |slice|
+      identifiers = slice.map(&:first)
+      response = self.class.get("/bills", query: {
+        jurisdiction: "Pennsylvania",
+        per_page:     identifiers.size,
+        include:      "sponsorships,abstracts,votes,sources"
+      }.merge(
+        # OpenStates doesn't support multi-identifier in one call, so we page
+      ), headers: headers)
+
+      if response.code == 429
+        counts[:rate_limited] += slice.size
+        raise RateLimitError, "OpenStates 429 — daily quota exceeded"
+      end
+      next unless response.success?
+
+      (response.parsed_response["results"] || []).each do |data|
+        bill = identifiers_to_bill[data["identifier"]]
+        next counts[:not_found] += 1 unless bill
+
+        attrs = normalize(data)
+        if bill.raw_data.is_a?(Hash) && bill.raw_data["curated_effects"].present?
+          attrs[:raw_data] = attrs[:raw_data].merge("curated_effects" => bill.raw_data["curated_effects"])
+        end
+        bill.update!(attrs.except(:source, :external_id))
+        counts[:ok] += 1
+      end
+    end
+    counts
+  end
+
+  # Single-bill refresh by OpenStates ID. Raises RateLimitError on 429.
+  def refresh_bill(bill)
+    response = self.class.get(
+      "/bills/#{bill.external_id}",
+      query:   { include: "sponsorships,abstracts,votes,sources" },
+      headers: headers
+    )
+    raise RateLimitError, "OpenStates 429 — daily quota exceeded" if response.code == 429
+    return false unless response.success?
+
+    data  = response.parsed_response
+    attrs = normalize(data)
+    if bill.raw_data.is_a?(Hash) && bill.raw_data["curated_effects"].present?
+      attrs[:raw_data] = attrs[:raw_data].merge("curated_effects" => bill.raw_data["curated_effects"])
+    end
+    bill.update!(attrs.except(:source, :external_id))
+    true
+  end
+
+  RateLimitError = Class.new(StandardError)
+
   private
 
   def headers
@@ -84,24 +142,6 @@ class OpenStatesService
     number = Regexp.last_match(3)
     "https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm" \
       "?syear=#{session_year}&sind=0&body=#{body}&type=#{type}&bn=#{number}"
-  end
-
-  def refresh_bill(bill)
-    api_key = ENV["OPENSTATES_API_KEY"]
-    response = HTTParty.get(
-      "https://v3.openstates.org/bills/#{bill.external_id}",
-      query:   { include: %w[sponsorships abstracts votes sources].join(",") },
-      headers: { "X-API-KEY" => api_key }
-    )
-    return unless response.success?
-
-    data   = response.parsed_response
-    attrs  = normalize(data)
-    # Don't clobber curated_effects in raw_data
-    if bill.raw_data.is_a?(Hash) && bill.raw_data["curated_effects"].present?
-      attrs[:raw_data] = attrs[:raw_data].merge("curated_effects" => bill.raw_data["curated_effects"])
-    end
-    bill.update!(attrs.except(:source, :external_id))
   end
 
   def extract_bill_stage(text)
