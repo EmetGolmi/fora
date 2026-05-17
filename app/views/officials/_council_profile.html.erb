@@ -60,6 +60,11 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
               </a>
             <% end %>
+            <% if official.extra_data&.dig("instagram_url").present? %>
+              <a href="<%= official.extra_data["instagram_url"] %>" target="_blank" rel="noopener" class="dp-social-link" title="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+            <% end %>
             <button onclick="navigator.share ? navigator.share({title:'<%= official.full_name %> — FORA', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)" class="dp-social-link" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;" title="Share this profile">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:rgba(255,255,255,0.55);"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             </button>
@@ -143,6 +148,23 @@
           <% chair_cmte = official.committees.find { |c| c['role'].to_s.downcase == 'chair' } %>
           <% if chair_cmte %>
             <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#5a6e8a; background:#f7f9fc; border-radius:6px; padding:8px 10px; margin-top:6px; border-left:2px solid #378add; line-height:1.5;">Committee chair roles show where your rep's power actually sits. <%= official.last_name %> chairs <em><%= chair_cmte['name'] %></em> — that's where district development decisions originate.</div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <%# News articles %>
+        <% _news = official.extra_data&.dig("news_items") %>
+        <% if _news.present? %>
+        <div class="dp-section">
+          <div class="dp-section-eyebrow">◆ In the News</div>
+          <h2 class="dp-section-title">Recent Coverage</h2>
+          <% _news.each do |item| %>
+            <div class="off-news-item">
+              <a href="<%= item["url"] %>" target="_blank" rel="noopener" class="off-news-title"><%= item["title"] %></a>
+              <div class="off-news-meta">
+                <%= item["source"] %><% if item["date"].present? %> · <%= Date.parse(item["date"]).strftime("%B %-d, %Y") rescue item["date"] %><% end %>
+              </div>
+            </div>
           <% end %>
         </div>
         <% end %>
@@ -406,6 +428,11 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
         <% end %>
+        <% if official.extra_data&.dig("instagram_url").present? %>
+          <a href="<%= official.extra_data["instagram_url"] %>" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4); line-height:0; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        <% end %>
       </div>
       <% if official.contact_url.present? %>
         <a href="<%= official.contact_url %>" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none;">Contact Office ↗</a>
@@ -463,6 +490,22 @@
           <span style="font-family:'Nunito',sans-serif; font-size:10px; padding:2px 8px; border-radius:8px; font-weight:500; flex-shrink:0;
             background:<%= is_chair ? '#faeeda' : '#f0f3f8' %>;
             color:<%= is_chair ? '#633806' : '#5a6e8a' %>;"><%= c['role'].capitalize %></span>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <!-- Section 4b · News articles -->
+    <% _news_m = official.extra_data&.dig("news_items") %>
+    <% if _news_m.present? %>
+    <div style="padding:16px 20px; background:white; border-bottom:1px solid #e8ecf4;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ In the News</div>
+      <% _news_m.each do |item| %>
+        <div class="off-news-item">
+          <a href="<%= item["url"] %>" target="_blank" rel="noopener" class="off-news-title"><%= item["title"] %></a>
+          <div class="off-news-meta">
+            <%= item["source"] %><% if item["date"].present? %> · <%= Date.parse(item["date"]).strftime("%B %-d, %Y") rescue item["date"] %><% end %>
+          </div>
         </div>
       <% end %>
     </div>
