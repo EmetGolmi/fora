@@ -208,7 +208,20 @@ phl_preservation_bill.assign_attributes(
   status_date:   Date.new(2025, 11, 20),
   bill_stage:    'committee',
   full_text_url: 'https://phila.legistar.com/LegislationDetail.aspx?ID=7806452',
-  sponsors:      [{ 'name' => 'Mark Squilla', 'district' => '1' }]
+  sponsors:      [{ 'name' => 'Mark Squilla', 'district' => '1' }],
+  raw_data: {
+    'curated_effects' => <<~TEXT.strip
+      If this bill passes as written, the 30-day window between a nomination filing and the Historical Commission's first hearing — during which a property currently receives immediate protection — becomes an opening for demolition. A developer who learns a nomination is coming could file a permit application, begin site prep, or even start demolition before the Commission has a chance to act. The bill also introduces a 90-day auto-approval provision: if the Historical Commission does not act on a pending permit application within 90 days, the permit is deemed approved automatically. No such automatic approval exists under current law. Together, these two provisions could make it significantly easier to demolish buildings that would otherwise qualify for historic protection — what preservation groups have called a "demolition loophole."
+
+      For homeowners who already own a historically designated property, this bill changes relatively little — the Commission's review of renovation and alteration permits for already-designated structures is largely unchanged. The bill's effects fall primarily on the nomination process: it becomes harder to add new properties to the historic register, and easier to move against them before protection can take hold.
+
+      The development industry is the bill's most vocal supporter. The Building Industry Association of Philadelphia describes it as a bill that "improves the notification process for historic preservation nominations," and BIA president Sarina Rose has stated publicly that current nomination practices are financially hindering "not just deep-pocketed interests, but homeowners and working class Joes." Even some critics of Philadelphia's existing preservation rules — including groups frustrated by the costs of the Washington Square West historic district for homeowners — say the bill goes too far in the wrong direction. As one opponent put it: "While this bill is a boon to developers, it doesn't help ordinary Philadelphians."
+
+      The deeper civic question is about the scale and character of Philadelphia itself. Only about 5% of the city currently has historic designation protections. The city's building stock — predominantly two- and three-story brick rowhomes — represents a form of naturally occurring affordable housing: a 2025 economic analysis by PlaceEconomics found that apartments in older buildings rent for less than those in new ones, and that protecting them maintains housing density and neighborhood stability. Replacing that stock with larger structures adds density without adding affordability — and adds load to infrastructure that was not built for it. Philadelphia's water and sewer systems include pipes dating to the 18th and 19th centuries. Preservation is, in part, infrastructure policy.
+
+      The bill is currently being revised in committee. What emerges from that revision will determine whether it reforms the process or weakens the protections.
+    TEXT
+  }
 )
 phl_preservation_bill.save!
 

@@ -14,6 +14,11 @@ class BillsController < ApplicationController
     else
       fetch_ai_summary
     end
+
+    if @bill.raw_data&.dig("curated_effects").present?
+      @effects         = @bill.raw_data["curated_effects"]
+      @effects_curated = true
+    end
   end
 
   private
