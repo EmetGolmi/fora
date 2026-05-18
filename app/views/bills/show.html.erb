@@ -266,6 +266,14 @@
       </label>
     </div>
 
+    <input type="url" id="cv-link"
+           style="width:100%;box-sizing:border-box;
+                  background:rgba(255,255,255,0.06);
+                  border:1px solid rgba(255,255,255,0.15);
+                  border-radius:8px;color:white;
+                  font-size:12px;padding:8px 12px;margin-bottom:1rem;"
+           placeholder="Link (optional — paste a news article, document, or source)">
+
     <button class="cv-submit-btn" id="cv-submit"
             onclick="submitBillComment()">
       Share your take &#8594;
@@ -365,7 +373,8 @@
           perspective_type: selectedPersp,
           body:             body,
           occupation:       (document.getElementById('cv-occupation')?.value || '').trim() || null,
-          anonymous:        document.getElementById('cv-anon')?.checked ?? true
+          anonymous:        document.getElementById('cv-anon')?.checked ?? true,
+          link_url:         (document.getElementById('cv-link')?.value || '').trim() || null
         }
       })
     })
@@ -381,6 +390,8 @@
         if (countEl) countEl.textContent = '0';
         var occEl = document.getElementById('cv-occupation');
         if (occEl) occEl.value = '';
+        var linkEl = document.getElementById('cv-link');
+        if (linkEl) linkEl.value = '';
         document.querySelectorAll('.cv-stance-btn').forEach(function(b) {
           b.className = 'cv-stance-btn';
         });
@@ -438,6 +449,7 @@
         '<span class="cv-comment-date">' + escHtml(c.created_at) + '</span>' +
       '</div>' +
       '<div class="cv-comment-body">' + escHtml(c.body) + '</div>' +
+      (c.link_url ? '<div style="margin-top:6px;"><a href="' + escHtml(c.link_url) + '" target="_blank" rel="noopener noreferrer" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:0.06em;color:rgba(184,134,11,0.8);text-decoration:none;word-break:break-all;">' + escHtml(c.link_url) + '</a></div>' : '') +
     '</div>';
   }
 

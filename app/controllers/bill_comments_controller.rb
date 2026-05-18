@@ -15,6 +15,7 @@ class BillCommentsController < ApplicationController
         body:             c.body,
         display_name:     c.display_name,
         anonymous:        c.anonymous,
+        link_url:         c.link_url,
         created_at:       c.created_at.strftime("%B %-d, %Y"),
         is_mine:          c.session_token == @session_token
       }
@@ -35,6 +36,7 @@ class BillCommentsController < ApplicationController
           body:             @comment.body,
           display_name:     @comment.display_name,
           anonymous:        @comment.anonymous,
+          link_url:         @comment.link_url,
           created_at:       @comment.created_at.strftime("%B %-d, %Y"),
           is_mine:          true
         }
@@ -58,7 +60,7 @@ class BillCommentsController < ApplicationController
 
   def comment_params
     params.require(:bill_comment).permit(
-      :stance, :perspective_type, :body, :occupation, :anonymous, :photo_url
+      :stance, :perspective_type, :body, :occupation, :anonymous, :photo_url, :link_url
     )
   end
 end
