@@ -1,4 +1,534 @@
-  <h1>Results coming</h1>
-  <p>div_count: <%= @div_count %></p>
-  <p>ward_count: <%= @ward_count %></p>
-  <p>city_count: <%= @city_count %></p>
+<%# ═══════════════════════════════════════════════════════
+     FORA · Pre-Ballot Metrics · May 19, 2026
+     Route: GET /votemay19/results
+     Variables from VoteController#results:
+       @div_count, @ward_count, @city_count
+       @race_data  — hash: race => [{candidate:, count:, pct:}]
+       @ward_divisions — array: [{division:, count:}]
+       @my_selections  — hash: governor/lt_governor/us_rep/pa_state_rep/ballot_q1/ballot_q2
+       @ward, @division
+       @polling_place_name, @polling_place_address
+       @too_few — true if @div_count < 5
+═══════════════════════════════════════════════════════ %>
+
+<% content_for :head do %>
+<style>
+:root {
+  --blue:      #1b3a6b;
+  --blue-lt:   #3a6abf;
+  --blue-pl:   #dde5f5;
+  --blue-xs:   #f0f4fb;
+  --gilt:      #b8860b;
+  --gilt-lt:   #d4a832;
+  --gilt-pl:   #f8f0dc;
+  --ink:       #0e1a2e;
+  --ink-soft:  #5a6e8a;
+  --ink-mut:   #8a9ab8;
+  --bg:        #f2f4f8;
+  --white:     #ffffff;
+  --rule:      rgba(27,58,107,0.1);
+  --green:     #155c2d;
+  --green-p:   #e5f0e8;
+  --scarlet:   #8b1a1a;
+  --eagles:    #004C54;
+  --eagles-lt: #006b75;
+  --eagles-p:  #e0f2f3;
+  --silver:    #A5ACAF;
+  --font-serif:'Libre Baskerville',serif;
+  --font-mono: 'JetBrains Mono',monospace;
+  --font-ui:   'Nunito',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6;}
+
+/* ── CONFETTI ── */
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;}
+
+/* ── HERO ── */
+.hero{background:var(--eagles);padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,107,117,0.6) 0%,transparent 70%);}
+.hero::after{content:'🦅';position:absolute;font-size:180px;opacity:0.06;top:-20px;right:-20px;line-height:1;pointer-events:none;}
+.hero-eyebrow{font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:10px;position:relative;}
+.hero-title{font-family:var(--font-serif);font-size:clamp(28px,5vw,48px);font-weight:700;color:white;margin-bottom:6px;position:relative;line-height:1.1;}
+.hero-title span{color:var(--silver);}
+.hero-sub{font-size:14px;color:rgba(255,255,255,0.6);position:relative;margin-bottom:20px;}
+.hero-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;position:relative;margin-bottom:20px;}
+.hero-badge{font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:3px;font-weight:700;}
+.hb-confirmed{background:rgba(165,172,175,0.2);color:var(--silver);border:1px solid rgba(165,172,175,0.3);}
+.hb-ward{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);}
+.hb-date{background:rgba(184,134,11,0.25);color:var(--gilt-lt);border:1px solid rgba(184,134,11,0.3);}
+.hero-share-row{display:flex;justify-content:center;align-items:center;gap:8px;position:relative;}
+.hero-share-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);}
+.hero-share-btn{width:34px;height:34px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.12s;}
+.hero-share-btn:hover{background:rgba(255,255,255,0.2);transform:translateY(-1px);}
+
+/* ── PAGE ── */
+.page{max-width:960px;margin:0 auto;padding:28px 20px 80px;}
+.sec-eyebrow{font-family:var(--font-mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:3px;}
+.sec-title{font-family:var(--font-serif);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+hr.rule{border:none;border-top:1px solid var(--rule);margin:32px 0;}
+
+/* ── TURNOUT CARD ── */
+.turnout-card{background:var(--blue);border-radius:12px;padding:24px;margin-bottom:28px;position:relative;overflow:hidden;}
+.turnout-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 100%,rgba(0,76,84,0.4) 0%,transparent 60%);}
+.turnout-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;position:relative;margin-bottom:20px;}
+.turnout-stat{text-align:center;}
+.ts-num{font-family:var(--font-serif);font-size:36px;font-weight:700;color:white;line-height:1;margin-bottom:4px;}
+.ts-num.eagles-color{color:#69d5de;}
+.ts-label{font-family:var(--font-mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);}
+.ts-sub{font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;font-family:var(--font-mono);}
+.turnout-bar-wrap{position:relative;}
+.turnout-bar-label{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9px;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;}
+.turnout-bar-track{height:10px;background:rgba(255,255,255,0.08);border-radius:5px;overflow:hidden;}
+.turnout-bar-fill{height:100%;background:linear-gradient(90deg,var(--eagles) 0%,#69d5de 100%);border-radius:5px;transition:width 1.5s cubic-bezier(0.16,1,0.3,1);position:relative;}
+.turnout-bar-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:white;border-radius:2px;box-shadow:0 0 8px rgba(255,255,255,0.8);animation:bar-pulse 1.5s ease-in-out infinite;}
+@keyframes bar-pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* ── YOUR BALLOT ── */
+.ballot-summary{background:white;border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:28px;}
+.bs-header{background:var(--blue-xs);border-bottom:1px solid var(--rule);padding:12px 20px;display:flex;align-items:center;gap:10px;}
+.bs-header-title{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink);}
+.bs-header-sub{font-family:var(--font-mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-left:auto;}
+.bs-row{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--rule);}
+.bs-row:last-child{border-bottom:none;}
+.bs-race{font-family:var(--font-mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);width:190px;flex-shrink:0;}
+.bs-pick{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink);flex:1;}
+.bs-party{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.bs-party.dem{background:var(--blue);}
+.bs-party.rep{background:var(--scarlet);}
+.bs-party.yes{background:var(--green);}
+.bs-party.no{background:var(--scarlet);}
+.bs-share{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.bs-share-btn{width:26px;height:26px;border-radius:4px;border:1px solid var(--rule);background:var(--bg);color:var(--ink-mut);font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.1s;}
+.bs-share-btn:hover{border-color:var(--blue-lt);color:var(--blue);background:var(--blue-pl);}
+
+/* ── RACE RESULTS ── */
+.division-header{background:var(--blue);border-radius:10px 10px 0 0;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.dh-title{font-family:var(--font-serif);font-size:15px;font-weight:700;color:white;}
+.dh-sub{font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.08em;color:rgba(255,255,255,0.45);text-transform:uppercase;}
+.dh-count{margin-left:auto;font-family:var(--font-serif);font-size:22px;font-weight:700;color:white;line-height:1;}
+.dh-count-label{font-family:var(--font-mono);font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-align:right;}
+.race-result{background:white;border:1px solid var(--rule);border-top:none;padding:14px 20px;}
+.race-result:last-child{border-radius:0 0 10px 10px;}
+.rr-race-label{font-family:var(--font-mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;}
+.rr-bars{display:flex;flex-direction:column;gap:6px;}
+.rr-bar-row{display:flex;align-items:center;gap:10px;}
+.rr-bar-row.leading .rr-cand-name{color:var(--blue);font-weight:700;}
+.rr-bar-row.leading-q .rr-cand-name{color:var(--green);font-weight:700;}
+.rr-cand-name{font-size:12px;font-weight:600;color:var(--ink);width:160px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rr-bar-track{flex:1;height:8px;background:var(--bg);border:1px solid var(--rule);border-radius:4px;overflow:hidden;}
+.rr-bar-fill{height:100%;border-radius:4px;width:0%;transition:width 1.2s cubic-bezier(0.16,1,0.3,1);}
+.bar-dem{background:var(--blue);}
+.bar-rep{background:var(--scarlet);}
+.bar-yes{background:var(--green);}
+.bar-no{background:var(--scarlet);}
+.bar-wi{background:#6b4c8a;}
+.rr-pct{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--ink);width:36px;text-align:right;flex-shrink:0;}
+.rr-n{font-family:var(--font-mono);font-size:9px;color:var(--ink-mut);width:40px;flex-shrink:0;}
+
+/* ── TOO FEW ── */
+.too-few-notice{background:var(--gilt-pl);border:1px solid rgba(184,134,11,0.2);border-radius:10px;padding:20px 24px;text-align:center;margin-bottom:28px;}
+.too-few-notice p{font-size:13px;color:var(--ink-soft);line-height:1.65;}
+.too-few-notice strong{color:var(--ink);}
+
+/* ── WARD GRID ── */
+.ward-comparison{background:white;border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:28px;}
+.wc-header{background:var(--blue-xs);border-bottom:1px solid var(--rule);padding:12px 20px;}
+.wc-title{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.wc-sub{font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+.wc-divisions{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:1px;background:var(--rule);}
+.wc-div{background:white;padding:12px 16px;transition:background 0.1s;}
+.wc-div:hover{background:var(--blue-xs);}
+.wc-div.yours{background:var(--eagles-p);outline:2px solid var(--eagles);outline-offset:-2px;}
+.wc-div-label{font-family:var(--font-mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.wc-div.yours .wc-div-label{color:var(--eagles);}
+.wc-div-count{font-family:var(--font-serif);font-size:22px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:2px;}
+.wc-div.yours .wc-div-count{color:var(--eagles);}
+.wc-div-bar-track{height:3px;background:var(--rule);border-radius:2px;overflow:hidden;margin-top:4px;}
+.wc-div-bar-fill{height:100%;background:var(--blue);border-radius:2px;transition:width 1s ease;}
+.wc-div.yours .wc-div-bar-fill{background:var(--eagles);}
+
+/* ── POLLING REMINDER ── */
+.polling-strip{background:var(--eagles);padding:14px 24px;display:flex;align-items:center;gap:20px;border-radius:10px;margin-bottom:28px;}
+.ps-icon{font-size:22px;flex-shrink:0;}
+.ps-left{flex:1;}
+.ps-title{font-family:var(--font-serif);font-size:15px;font-weight:700;color:white;margin-bottom:2px;}
+.ps-addr{font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:0.04em;}
+.ps-dir-row{display:flex;gap:6px;margin-top:8px;}
+.ps-btn{font-family:var(--font-mono);font-size:8.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:3px;text-decoration:none;border:1px solid rgba(255,255,255,0.2);color:white;background:rgba(255,255,255,0.1);transition:all 0.1s;}
+.ps-btn:hover{background:rgba(255,255,255,0.2);}
+.ps-hours{text-align:right;flex-shrink:0;}
+.ps-hours-num{font-family:var(--font-serif);font-size:20px;font-weight:700;color:white;}
+.ps-hours-label{font-family:var(--font-mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+
+/* ── SHARE CARD ── */
+.share-card{background:var(--blue);border-radius:12px;padding:24px;text-align:center;position:relative;overflow:hidden;}
+.share-card::before{content:'🦅';position:absolute;font-size:120px;opacity:0.05;bottom:-10px;left:-10px;line-height:1;}
+.sc-eyebrow{font-family:var(--font-mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;}
+.sc-title{font-family:var(--font-serif);font-size:22px;font-weight:700;color:white;margin-bottom:6px;}
+.sc-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;}
+.sc-buttons{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.sc-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-family:var(--font-ui);font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.12s;}
+.sc-btn:hover{background:rgba(255,255,255,0.2);transform:translateY(-1px);}
+.sc-btn.copy-btn{color:var(--gilt-lt);border-color:rgba(184,134,11,0.3);}
+
+.disclaimer{font-family:var(--font-mono);font-size:9px;color:var(--ink-mut);letter-spacing:0.04em;line-height:1.7;text-align:center;padding:16px 24px;border-top:1px solid var(--rule);margin-top:32px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{opacity:0;animation:fadeUp 0.6s ease forwards;}
+.fade-up:nth-child(1){animation-delay:0.1s;}
+.fade-up:nth-child(2){animation-delay:0.25s;}
+.fade-up:nth-child(3){animation-delay:0.4s;}
+.fade-up:nth-child(4){animation-delay:0.55s;}
+.fade-up:nth-child(5){animation-delay:0.7s;}
+
+@media(max-width:640px){
+  .turnout-grid{grid-template-columns:1fr 1fr;}
+  .bs-race{width:120px;font-size:8px;}
+  .rr-cand-name{width:100px;}
+  .polling-strip{flex-direction:column;align-items:flex-start;}
+  .wc-divisions{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+<% end %>
+
+<%# ── CONFETTI ── %>
+<canvas id="confetti-canvas"></canvas>
+
+<%# ── HERO ── %>
+<div class="hero">
+  <div class="hero-eyebrow">Pennsylvania Primary · May 19, 2026 · Philadelphia</div>
+  <div class="hero-title">Fly Eagles Fly! <span>🦅</span></div>
+  <div class="hero-sub">Your pre-ballot is cast. Now go make it real — polls open 7 AM tomorrow.</div>
+  <div class="hero-badges">
+    <span class="hero-badge hb-confirmed">✓ 6 of 6 Races Selected</span>
+    <span class="hero-badge hb-ward">Ward <%= @ward %> · Division <%= @division %></span>
+    <span class="hero-badge hb-date">May 19, 2026</span>
+  </div>
+  <div class="hero-share-row">
+    <span class="hero-share-label">Share</span>
+    <a class="hero-share-btn" id="share-x" href="#" target="_blank">𝕏</a>
+    <a class="hero-share-btn" id="share-fb" href="#" target="_blank">f</a>
+    <a class="hero-share-btn" id="share-threads" href="#" target="_blank">@</a>
+    <a class="hero-share-btn" id="share-wa" href="#" target="_blank">💬</a>
+    <button class="hero-share-btn" id="share-copy" onclick="copyHeroShare()">⎘</button>
+  </div>
+</div>
+
+<%# ── PAGE ── %>
+<div class="page">
+
+  <%# ── TURNOUT TRACKER ── %>
+  <div class="fade-up">
+    <div class="sec-eyebrow">Live · Updates every 60 seconds</div>
+    <div class="sec-title">Pre-Ballot Turnout · Philadelphia</div>
+    <div class="turnout-card">
+      <div class="turnout-grid">
+        <div class="turnout-stat">
+          <div class="ts-num eagles-color"><%= @div_count %></div>
+          <div class="ts-label">Your Division</div>
+          <div class="ts-sub">Ward <%= @ward %> · Div <%= @division %></div>
+        </div>
+        <div class="turnout-stat">
+          <div class="ts-num"><%= @ward_count %></div>
+          <div class="ts-label">Your Ward</div>
+          <div class="ts-sub">Ward <%= @ward %> · all divisions</div>
+        </div>
+        <div class="turnout-stat">
+          <div class="ts-num"><%= number_with_delimiter(@city_count) %></div>
+          <div class="ts-label">Philadelphia</div>
+          <div class="ts-sub">city-wide pre-ballots</div>
+        </div>
+      </div>
+      <div class="turnout-bar-wrap">
+        <div class="turnout-bar-label">
+          <span>Your Division · Ward <%= @ward %> Div <%= @division %></span>
+          <span id="turnout-pct-label"><%= @div_count %> pre-ballots cast</span>
+        </div>
+        <div class="turnout-bar-track">
+          <div class="turnout-bar-fill" id="turnout-bar" style="width:0%"
+               data-count="<%= @div_count %>"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── YOUR BALLOT SUMMARY ── %>
+  <div class="fade-up">
+    <div class="sec-eyebrow">Your Pre-Ballot · Private to You</div>
+    <div class="sec-title">What You Selected</div>
+    <div class="ballot-summary">
+      <div class="bs-header">
+        <div class="bs-header-title">Pennsylvania Primary · May 19, 2026</div>
+        <div class="bs-header-sub">6 races · Ward <%= @ward %> Div <%= @division %></div>
+      </div>
+      <% selections = [
+        { race: 'Governor',              key: :governor,     party: 'dem' },
+        { race: 'Lt. Governor',          key: :lt_governor,  party: 'dem' },
+        { race: 'U.S. Rep · 5th District', key: :us_rep,    party: 'dem' },
+        { race: 'PA State Rep · 182nd',  key: :pa_state_rep, party: 'dem' },
+        { race: 'Ballot Question 1',     key: :ballot_q1,    party: 'yes' },
+        { race: 'Ballot Question 2',     key: :ballot_q2,    party: 'yes' },
+      ] %>
+      <% selections.each do |s| %>
+        <% pick = @my_selections[s[:key]] %>
+        <% next if pick.blank? %>
+        <% party = pick == 'no' ? 'no' : s[:party] %>
+        <% display_pick = pick.to_s.start_with?('write-in:') ? 'Write-in: ' + pick.sub('write-in:','').strip : pick %>
+        <% share_text = CGI.escape("I'm pre-voting #{display_pick} for #{s[:race]} in Philadelphia's May 19 primary. Make your voice heard — fora.center/votemay19 #PhillyVotes") %>
+        <div class="bs-row">
+          <div class="bs-race"><%= s[:race] %></div>
+          <div class="bs-party <%= party %>"></div>
+          <div class="bs-pick"><%= display_pick %></div>
+          <div class="bs-share">
+            <a class="bs-share-btn" href="https://twitter.com/intent/tweet?text=<%= share_text %>" target="_blank">𝕏</a>
+            <a class="bs-share-btn" href="https://www.facebook.com/sharer/sharer.php?u=https://fora.center&quote=<%= share_text %>" target="_blank">f</a>
+            <a class="bs-share-btn" href="https://www.threads.net/intent/post?text=<%= share_text %>" target="_blank">@</a>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <%# ── DIVISION RESULTS ── %>
+  <div class="fade-up">
+    <div class="sec-eyebrow">Anonymous Aggregate · No household data · Division is the smallest unit shown</div>
+    <div class="sec-title">How Ward <%= @ward %>, Division <%= @division %> Is Leaning</div>
+
+    <% if @too_few %>
+      <div class="too-few-notice">
+        <p><strong>Not enough data yet.</strong><br>
+        Your division has <%= @div_count %> pre-ballot<%= @div_count == 1 ? '' : 's' %> cast so far.
+        We show race breakdowns once at least 5 people in your division have cast a pre-ballot —
+        to protect privacy and avoid misleading results from very small samples.
+        Share the page to get your neighbors participating!</p>
+      </div>
+    <% else %>
+      <div class="results-section">
+        <div class="division-header">
+          <div>
+            <div class="dh-title">Ward <%= @ward %> · Division <%= @division %></div>
+            <div class="dh-sub"><%= @div_count %> pre-ballots · Anonymous aggregate · Individual votes never shown</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="dh-count"><%= @div_count %></div>
+            <div class="dh-count-label">pre-ballots</div>
+          </div>
+        </div>
+
+        <% race_labels = {
+          'governor'    => 'Governor of Pennsylvania',
+          'lt_governor' => 'Lieutenant Governor',
+          'us_rep'      => 'U.S. Representative · 5th District',
+          'pa_state_rep'=> 'PA State Representative · 182nd District',
+          'ballot_q1'   => 'Ballot Question 1 · Retirement Savings',
+          'ballot_q2'   => 'Ballot Question 2 · Youth Services',
+        } %>
+
+        <% @race_data.each_with_index do |(race, candidates), idx| %>
+          <% next if candidates.empty? %>
+          <div class="race-result" <%= idx == @race_data.size - 1 ? 'style="border-radius:0 0 10px 10px;"'.html_safe : '' %>>
+            <div class="rr-race-label"><%= race_labels[race] || race %></div>
+            <div class="rr-bars">
+              <% candidates.each_with_index do |c, ci| %>
+                <% is_question = race.start_with?('ballot_q') %>
+                <% bar_class = is_question ? (c[:candidate] == 'yes' ? 'bar-yes' : 'bar-no') : (c[:candidate].downcase.include?('write') ? 'bar-wi' : (c[:candidate].downcase.include?('garrity') || c[:candidate].downcase.include?('ventre') || c[:candidate].downcase.include?('richey') ? 'bar-rep' : 'bar-dem')) %>
+                <% leading_class = ci == 0 ? (is_question ? 'leading-q' : 'leading') : '' %>
+                <div class="rr-bar-row <%= leading_class %>">
+                  <div class="rr-cand-name"><%= c[:candidate] == 'yes' ? 'YES' : c[:candidate] == 'no' ? 'NO' : c[:candidate] %></div>
+                  <div class="rr-bar-track">
+                    <div class="rr-bar-fill <%= bar_class %>" style="width:0%"
+                         data-target="<%= c[:pct] %>"></div>
+                  </div>
+                  <div class="rr-pct"><%= c[:pct] %>%</div>
+                  <div class="rr-n"><%= c[:count] %></div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# ── WARD GRID ── %>
+  <div class="fade-up">
+    <div class="sec-eyebrow">Ward <%= @ward %> · All Divisions · Pre-ballot activity</div>
+    <div class="sec-title">Pre-Ballot Activity Across Your Ward</div>
+    <div class="ward-comparison">
+      <div class="wc-header">
+        <div class="wc-title">Ward <%= @ward %> · Philadelphia</div>
+        <div class="wc-sub">Pre-ballots cast by division · Your division highlighted · Anonymous counts only</div>
+      </div>
+      <% if @ward_divisions.empty? %>
+        <div style="padding:20px 24px;font-size:13px;color:var(--ink-mut);font-family:var(--font-mono);">No division data yet for this ward.</div>
+      <% else %>
+        <% max_count = @ward_divisions.map { |d| d[:count] }.max.to_f %>
+        <div class="wc-divisions" id="ward-divisions">
+          <% @ward_divisions.each do |d| %>
+            <% yours = d[:division].to_s == @division.to_s %>
+            <% bar_pct = max_count > 0 ? ((d[:count] / max_count) * 100).round : 0 %>
+            <div class="wc-div <%= yours ? 'yours' : '' %>">
+              <div class="wc-div-label">Div <%= d[:division] %><%= yours ? ' · You' : '' %></div>
+              <div class="wc-div-count"><%= d[:count] %></div>
+              <div class="wc-div-bar-track">
+                <div class="wc-div-bar-fill" style="width:0%" data-target="<%= bar_pct %>"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ── POLLING REMINDER ── %>
+  <div class="fade-up">
+    <div class="polling-strip">
+      <div class="ps-icon">📍</div>
+      <div class="ps-left">
+        <div class="ps-title"><%= @polling_place_name %></div>
+        <div class="ps-addr"><%= @polling_place_address %></div>
+        <% if @polling_place_address.present? && @polling_place_address != 'to find your polling place' %>
+          <% addr_enc = CGI.escape(@polling_place_address) %>
+          <div class="ps-dir-row">
+            <a class="ps-btn" href="https://maps.apple.com/?daddr=<%= addr_enc %>" target="_blank">🍎 Apple</a>
+            <a class="ps-btn" href="https://www.google.com/maps/dir/?api=1&destination=<%= addr_enc %>" target="_blank">🗺 Google</a>
+            <a class="ps-btn" href="https://waze.com/ul?q=<%= addr_enc %>" target="_blank">🔵 Waze</a>
+          </div>
+        <% end %>
+      </div>
+      <div class="ps-hours">
+        <div class="ps-hours-num">7–8</div>
+        <div class="ps-hours-label">AM to PM · May 19</div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── SHARE CARD ── %>
+  <div class="fade-up">
+    <div class="share-card">
+      <div class="sc-eyebrow">Make your voice louder</div>
+      <div class="sc-title">Get your neighbors to the polls</div>
+      <div class="sc-sub">
+        Ward <%= @ward %>, Division <%= @division %> has <%= @div_count %> pre-ballot<%= @div_count == 1 ? '' : 's' %> cast.
+        Every share matters — polls open 7 AM tomorrow.
+      </div>
+      <div class="sc-buttons">
+        <a class="sc-btn" id="sc-x" href="#" target="_blank">𝕏 Share on X</a>
+        <a class="sc-btn" id="sc-fb" href="#" target="_blank">f Facebook</a>
+        <a class="sc-btn" id="sc-wa" href="#" target="_blank">💬 WhatsApp</a>
+        <a class="sc-btn" id="sc-threads" href="#" target="_blank">@ Threads</a>
+        <button class="sc-btn copy-btn" onclick="copyDivisionShare()">⎘ Copy Link</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Pre-ballot data is anonymous and aggregated at the division level. No individual votes are stored or displayed.<br>
+    Division is the smallest unit ever shown — approximately 200 registered voters.<br>
+    This is a planning and engagement tool only. It does not represent or predict official election results.<br>
+    Your official vote is cast at your polling place on May 19, 2026. · FORA · fora.center
+  </div>
+
+</div>
+
+<script>
+// ── Confetti (Eagles colors)
+(function() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#004C54','#69d5de','#A5ACAF','#b8860b','#ffffff','#1b3a6b'];
+  const pieces = Array.from({length:120},()=>({
+    x:Math.random()*canvas.width, y:-20-Math.random()*canvas.height,
+    w:6+Math.random()*8, h:3+Math.random()*5,
+    r:Math.random()*Math.PI*2,
+    vx:(Math.random()-0.5)*2.5, vy:2+Math.random()*4,
+    vr:(Math.random()-0.5)*0.15,
+    color:colors[Math.floor(Math.random()*colors.length)], alpha:1
+  }));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    frame++;
+    let active=0;
+    pieces.forEach(p=>{
+      if(p.alpha<=0)return;
+      active++;
+      p.x+=p.vx; p.y+=p.vy; p.r+=p.vr;
+      if(frame>120)p.alpha-=0.008;
+      ctx.save(); ctx.globalAlpha=p.alpha;
+      ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+      if(p.y>canvas.height){p.y=-20;p.x=Math.random()*canvas.width;if(frame>60)p.alpha=0;}
+    });
+    if(active>0)requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+})();
+
+// ── Animate bars
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    document.querySelectorAll('.rr-bar-fill').forEach(function(b){
+      b.style.width=(b.dataset.target||0)+'%';
+    });
+    // Turnout bar — relative to a soft max (10 pre-ballots feels "full" early on)
+    var divCount=parseInt(document.getElementById('turnout-bar')?.dataset.count||0);
+    var pct=Math.min(Math.round((divCount/10)*100),100);
+    var bar=document.getElementById('turnout-bar');
+    if(bar)bar.style.width=pct+'%';
+    // Ward division bars
+    document.querySelectorAll('.wc-div-bar-fill').forEach(function(b){
+      b.style.transition='width 0.8s ease';
+      b.style.width=(b.dataset.target||0)+'%';
+    });
+  },400);
+});
+
+// ── Share text
+var ward    = '<%= @ward %>';
+var division= '<%= @division %>';
+var divCount= <%= @div_count %>;
+
+var heroShareText = encodeURIComponent(
+  'I just cast my pre-ballot for Philadelphia\'s May 19 primary \uD83E\uDD85 ' +
+  'Ward '+ward+', Division '+division+'. Make your voice heard \u2014 fora.center/votemay19 #PhillyVotes #FlyEaglesFly'
+);
+var divShareText = encodeURIComponent(
+  'Ward '+ward+', Division '+division+' has '+divCount+' pre-ballot'+(divCount===1?'':'s')+' cast ahead of tomorrow\'s Philadelphia primary. ' +
+  'Add yours \u2014 fora.center/votemay19 #PhillyVotes'
+);
+
+document.getElementById('share-x').href       = 'https://twitter.com/intent/tweet?text='+heroShareText;
+document.getElementById('share-fb').href      = 'https://www.facebook.com/sharer/sharer.php?u=https://fora.center/votemay19&quote='+heroShareText;
+document.getElementById('share-threads').href = 'https://www.threads.net/intent/post?text='+heroShareText;
+document.getElementById('share-wa').href      = 'https://wa.me/?text='+heroShareText;
+document.getElementById('sc-x').href          = 'https://twitter.com/intent/tweet?text='+divShareText;
+document.getElementById('sc-fb').href         = 'https://www.facebook.com/sharer/sharer.php?u=https://fora.center/votemay19&quote='+divShareText;
+document.getElementById('sc-wa').href         = 'https://wa.me/?text='+divShareText;
+document.getElementById('sc-threads').href    = 'https://www.threads.net/intent/post?text='+divShareText;
+
+function copyHeroShare(){
+  navigator.clipboard.writeText(
+    'I just cast my pre-ballot for Philadelphia\'s May 19 primary 🦅 '+
+    'Ward '+ward+', Division '+division+'. Make your voice heard — fora.center/votemay19 #PhillyVotes #FlyEaglesFly'
+  ).then(function(){
+    var btn=document.getElementById('share-copy');
+    btn.textContent='✓'; setTimeout(function(){btn.textContent='⎘';},2000);
+  });
+}
+
+function copyDivisionShare(){
+  navigator.clipboard.writeText(
+    'Ward '+ward+', Division '+division+' has '+divCount+' pre-ballot'+(divCount===1?'':'s')+' cast ahead of tomorrow\'s Philadelphia primary. '+
+    'Add yours — fora.center/votemay19 #PhillyVotes'
+  ).then(function(){alert('Copied!');});
+}
+</script>
