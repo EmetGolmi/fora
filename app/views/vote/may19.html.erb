@@ -27,6 +27,8 @@
   --font-serif:'Libre Baskerville',serif;
   --font-mono: 'JetBrains Mono',monospace;
   --font-ui:   'Nunito',sans-serif;
+  --purple:    #4a1a7a;
+  --purple-p:  #f0e8f8;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -3302,19 +3304,16 @@ const totalRaces = 6; // governor, ltgov, congress, q1, q2
 
 function integratedVote(race, cand, el, isQuestion) {
   if(isQuestion) { selectBallotQ(race, cand); return; }
-  // Clear all options in this race
-  document.getElementById('ivs-'+race).querySelectorAll('.ivs-option').forEach(o=>{
-    o.classList.remove('ivs-selected','ivs-selected-q');
-  });
-  // Select this one
-  el.classList.add(isQuestion ? 'ivs-selected-q' : 'ivs-selected');
+  const ivsBlock = document.getElementById('ivs-'+race);
+  if(ivsBlock) {
+    ivsBlock.querySelectorAll('.ivs-option').forEach(o=>o.classList.remove('ivs-selected','ivs-selected-q'));
+    ivsBlock.querySelectorAll('.ivs-writein-row').forEach(r=>r.classList.remove('ivs-selected'));
+    ivsBlock.querySelectorAll('.ivs-notable-writein').forEach(n=>n.classList.remove('ivs-selected'));
+  }
+  el.classList.add('ivs-selected');
   preVote[race] = cand;
-
-  // Update status pill
   const status = document.getElementById('ivs-status-'+race);
-  status.textContent = '✓ ' + (candLabels[cand]||cand);
-  status.classList.add('done');
-
+  if(status) { status.textContent = '✓ ' + (candLabels[cand]||cand); status.classList.add('done'); }
   updateCastBar();
 }
 
@@ -3468,7 +3467,8 @@ function selectWriteIn(race, el) {
   const ivsBlock = document.getElementById('ivs-' + race);
   ivsBlock.querySelectorAll('.ivs-option').forEach(o => o.classList.remove('ivs-selected','ivs-selected-q'));
   ivsBlock.querySelectorAll('.ivs-writein-row').forEach(r => r.classList.remove('ivs-selected'));
-  
+  ivsBlock.querySelectorAll('.ivs-notable-writein').forEach(n => n.classList.remove('ivs-selected'));
+
   el.classList.add('ivs-selected');
   
   // Focus the input
