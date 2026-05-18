@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_18_022701) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_18_195459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -214,6 +214,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_022701) do
     t.string "website_url"
     t.index ["office_type"], name: "index_people_on_office_type"
     t.index ["slug"], name: "index_people_on_slug", unique: true
+  end
+
+  create_table "pre_ballots", force: :cascade do |t|
+    t.string "ballot_q1"
+    t.string "ballot_q2"
+    t.datetime "created_at", null: false
+    t.string "division", null: false
+    t.string "election_slug", default: "pa_primary_20260519", null: false
+    t.string "governor"
+    t.string "lt_governor"
+    t.string "pa_state_rep"
+    t.string "session_token_hash", null: false
+    t.datetime "updated_at", null: false
+    t.string "us_rep"
+    t.string "ward", null: false
+    t.string "zip_code"
+    t.index ["election_slug"], name: "idx_preballot_election"
+    t.index ["session_token_hash", "election_slug"], name: "idx_preballot_session_election", unique: true
+    t.index ["ward", "division", "election_slug"], name: "idx_preballot_geography"
   end
 
   create_table "resolved_addresses", force: :cascade do |t|

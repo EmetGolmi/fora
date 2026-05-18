@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   get  "about",     to: "pages#about",    as: :about
-  get  "votemay19", to: "vote#may19",     as: :votemay19
+  get  "votemay19",         to: "vote#may19",    as: :votemay19
+  post "votemay19/cast",    to: "vote#cast",     as: :votemay19_cast
+  get  "votemay19/results", to: "vote#results",  as: :votemay19_results
 
   root "dashboard#index"
   get  "dashboard",                  to: "dashboard#show",   as: :dashboard
