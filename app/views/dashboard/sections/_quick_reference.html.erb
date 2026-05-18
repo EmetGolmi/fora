@@ -87,16 +87,9 @@
 
           <%# Right column — map %>
           <% if ENV["GOOGLE_MAPS_STATIC_API_KEY"].present? %>
-            <%
-              enc         = CGI.escape(@address.to_s)
-              twemoji     = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72"
-              icon_home   = CGI.escape("#{twemoji}/1f3e0.png")
-              icon_hosp   = CGI.escape("#{twemoji}/1f3e5.png")
-              icon_fire   = CGI.escape("#{twemoji}/1f692.png")
-              icon_police = CGI.escape("#{twemoji}/1f694.png")
-            %>
+            <% enc = CGI.escape(@address.to_s) %>
             <div class="qref-infra-map-col">
-              <img src="https://maps.googleapis.com/maps/api/staticmap?size=640x400&scale=2&maptype=roadmap&markers=icon:<%= icon_home %>%7C<%= enc %>&markers=icon:<%= icon_hosp %>%7C800+Spruce+St,Philadelphia,PA+19107&markers=icon:<%= icon_fire %>%7C9th+St+%26+Bainbridge,Philadelphia,PA&markers=icon:<%= icon_police %>%7C11th+St+%26+Wharton,Philadelphia,PA&visible=<%= enc %>&visible=800+Spruce+St,Philadelphia,PA+19107&visible=9th+St+%26+Bainbridge,Philadelphia,PA&visible=11th+St+%26+Wharton,Philadelphia,PA&key=<%= ENV["GOOGLE_MAPS_STATIC_API_KEY"] %>"
+              <img src="https://maps.googleapis.com/maps/api/staticmap?size=640x400&scale=2&maptype=roadmap&markers=color:red%7C<%= enc %>&markers=color:blue%7Clabel:H%7C800+Spruce+St,Philadelphia,PA+19107&markers=color:orange%7Clabel:F%7C9th+St+%26+Bainbridge,Philadelphia,PA&markers=color:purple%7Clabel:P%7C11th+St+%26+Wharton,Philadelphia,PA&visible=<%= enc %>&visible=800+Spruce+St,Philadelphia,PA+19107&visible=9th+St+%26+Bainbridge,Philadelphia,PA&visible=11th+St+%26+Wharton,Philadelphia,PA&key=<%= ENV["GOOGLE_MAPS_STATIC_API_KEY"] %>"
                    class="qref-infra-map" alt="Emergency services map">
             </div>
           <% end %>
