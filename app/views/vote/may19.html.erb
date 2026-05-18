@@ -1,16 +1,11 @@
-<%# ═══════════════════════════════════════════════════════════
-     FORA · Philadelphia Primary · May 19, 2026
-     Route: GET /votemay19
-     Polling place: Our Lady of Lebanon Maronite Cathedral
-                    1000 Ellsworth St, Philadelphia PA 19147
-     Address mockup: 916 S Delhi St, 19147 (Bella Vista)
-     Note: polling place address will be dynamic via
-           GOOGLE_CIVIC_API_KEY once user address lookup is wired.
-     Last updated: May 18, 2026
-═══════════════════════════════════════════════════════════ %>
-
-<% content_for :head do %>
-  <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Vote · Philadelphia Primary · May 19, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
 :root {
   --blue:     #1b3a6b;
   --blue-md:  #254f92;
@@ -1178,6 +1173,28 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
   transition: all 0.12s;
 }
 .compose-submit:hover { background: var(--blue-md); }
+/* ═══ COMPOSE LINK INPUT ═══ */
+.compose-link-input {
+  width: 100%;
+  border: 1px solid var(--rule-md);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--ink-soft);
+  background: var(--bg);
+  outline: none;
+  margin-top: 5px;
+  margin-bottom: 0;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+.compose-link-input:focus {
+  border-color: var(--blue-lt);
+  background: var(--white);
+}
+.compose-link-input::placeholder { color: var(--ink-mut); }
+
 /* ═══ INTEGRATED VOTE SELECTOR ═══ */
 .integrated-vote-selector {
   border-top: 2px solid var(--blue);
@@ -1564,8 +1581,16 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
 .ivs-notable-writein.ivs-selected .nwi-share-row { display: flex; }
 
 </style>
-<% end %>
+</head>
+<body>
 
+<!-- ═══════════════ FORA NAV — CLEAN ═══════════════ -->
+<nav class="fora-nav">
+  <a class="nav-wordmark" href="#">F<em>O</em>RA</a>
+  <a class="nav-about" href="#">About</a>
+</nav>
+
+<!-- ═══════════════ TICKER ═══════════════ -->
 <div class="ticker">
   <div class="ticker-inner">
     <span class="ti"><span class="tl">PA PRIMARY</span>May 19, 2026 · Polls open 7AM–8PM · If you're in line by 8PM you can vote</span>
@@ -1758,6 +1783,9 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
               </div>
             </div>
             <textarea class="compose-textarea" placeholder="Add a source, a perspective, or a concern about this race. Be specific — link to evidence where you can."></textarea>
+            <input type="url" class="compose-link-input"
+                placeholder="🔗 Paste a link — article, social post, source (optional)"
+                oninput="this.dataset.val=this.value">
             <div class="compose-footer">
               <div class="compose-hint">All contributions are public and attached to your FORA civic identity. Contributions are upvoted by the community — the most useful rise first.</div>
               <button class="compose-submit" onclick="submitComment('gov', this)">Post</button>
@@ -1772,7 +1800,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
         <span class="party-vote-instr">Vote for 1</span>
       </div>
       <div class="cand-cards">
-        <div class="cand-card" onclick="openProfile(event,this)" style="grid-column:1/-1;">
+        <div class="cand-card" onclick="openProfile(event,this)" style="grid-column:1/-1;" data-profile-url="/officials/usa/pa/governor">
           
           <div class="cc-profile-arrow">View Profile</div>
           <div class="cc-top">
@@ -2048,6 +2076,9 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
               </div>
             </div>
             <textarea class="compose-textarea" placeholder="Add a source, a perspective, or a concern about this race. Be specific — link to evidence where you can."></textarea>
+            <input type="url" class="compose-link-input"
+                placeholder="🔗 Paste a link — article, social post, source (optional)"
+                oninput="this.dataset.val=this.value">
             <div class="compose-footer">
               <div class="compose-hint">All contributions are public and attached to your FORA civic identity. Contributions are upvoted by the community — the most useful rise first.</div>
               <button class="compose-submit" onclick="submitComment('ltgov', this)">Post</button>
@@ -2320,6 +2351,9 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
               </div>
             </div>
             <textarea class="compose-textarea" placeholder="Add a source, a perspective, or a concern about this race. Be specific — link to evidence where you can."></textarea>
+            <input type="url" class="compose-link-input"
+                placeholder="🔗 Paste a link — article, social post, source (optional)"
+                oninput="this.dataset.val=this.value">
             <div class="compose-footer">
               <div class="compose-hint">All contributions are public and attached to your FORA civic identity. Contributions are upvoted by the community — the most useful rise first.</div>
               <button class="compose-submit" onclick="submitComment('congress', this)">Post</button>
@@ -2777,6 +2811,9 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
               </div>
             </div>
             <textarea class="compose-textarea" placeholder="Add a source, a perspective, or a concern about this race. Be specific — link to evidence where you can."></textarea>
+            <input type="url" class="compose-link-input"
+                placeholder="🔗 Paste a link — article, social post, source (optional)"
+                oninput="this.dataset.val=this.value">
             <div class="compose-footer">
               <div class="compose-hint">All contributions are public and attached to your FORA civic identity. Contributions are upvoted by the community — the most useful rise first.</div>
               <button class="compose-submit" onclick="submitComment('senate', this)">Post</button>
@@ -2989,6 +3026,9 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
               </div>
             </div>
             <textarea class="compose-textarea" placeholder="Add a source, a perspective, or a concern about this race. Be specific — link to evidence where you can."></textarea>
+            <input type="url" class="compose-link-input"
+                placeholder="🔗 Paste a link — article, social post, source (optional)"
+                oninput="this.dataset.val=this.value">
             <div class="compose-footer">
               <div class="compose-hint">All contributions are public and attached to your FORA civic identity. Contributions are upvoted by the community — the most useful rise first.</div>
               <button class="compose-submit" onclick="submitComment('rep', this)">Post</button>
@@ -3319,14 +3359,17 @@ function submitComment(tid,btn) {
   const el = document.createElement('div');
   el.className = 'comment-row';
   el.style.animation = 'fadeIn 0.3s ease';
+  const linkVal = (compose.querySelector('.compose-link-input')?.value || '').trim();
   el.innerHTML = `<div class="comment-avatar" style="background:var(--gilt-pl);color:var(--gilt);">Y</div>
     <div class="comment-bubble">
       <div class="comment-meta"><span class="comment-name">You</span><span class="comment-type ct-${type}">${typeLabel}</span><span class="comment-time">Just now</span></div>
       <div class="comment-text">${text.replace(/</g,'&lt;')}</div>
+      ${linkVal ? '<div style="margin-top:5px;"><a href="' + linkVal + '" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:9px;color:var(--blue-lt);text-decoration:none;word-break:break-all;">🔗 ' + linkVal + '</a></div>' : ''}
       <div class="comment-actions"><button class="comment-vote-btn" onclick="concurComment(this)">▲ Concur <span>0</span></button></div>
     </div>`;
   compose.parentNode.insertBefore(el, compose);
   ta.value = '';
+  const linkInp = compose.querySelector('.compose-link-input'); if(linkInp) linkInp.value = '';
   const hdr = document.getElementById('ask-thread-'+tid).querySelector('.ask-thread-count');
   const m = hdr.textContent.match(/(\d+)/);
   if(m) hdr.textContent = `${parseInt(m[1])+1} community contributions · Tap to expand`;
@@ -3441,16 +3484,28 @@ function openProfile(event, card) {
     <div style="padding:20px 24px;">
       <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;">About this candidate</div>
       <div style="font-size:13px;color:var(--ink-soft);line-height:1.65;margin-bottom:16px;">${bioEl?bioEl.textContent:'Full biography coming soon.'}</div>
-      <div style="background:var(--blue-xs);border:1px solid var(--blue-pl);border-radius:6px;padding:12px 16px;">
-        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:4px;">FORA Official Profile · In Development</div>
-        <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Full profiles — voting record, donor history, social media, sponsored legislation, and community discourse — will live at <strong>fora.center/officials/[name]</strong>. Each candidate is being added as a permanent official in the FORA platform.</div>
-        <button disabled style="margin-top:10px;padding:7px 16px;background:var(--blue);color:white;border:none;border-radius:4px;font-family:var(--font-ui);font-size:12px;font-weight:700;cursor:not-allowed;opacity:0.5;">Profile In Progress</button>
+      <div id="pm-profile-block" style="background:var(--blue-xs);border:1px solid var(--blue-pl);border-radius:6px;padding:12px 16px;">
+        <div id="pm-profile-label" style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:4px;">FORA Official Profile · In Development</div>
+        <div id="pm-profile-desc" style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Full profiles — voting record, donor history, social media, sponsored legislation, and community discourse — will live at fora.center/officials/[name].</div>
+        <div id="pm-profile-btn-wrap" style="margin-top:10px;"><button disabled style="padding:7px 16px;background:var(--blue);color:white;border:none;border-radius:4px;font-family:var(--font-ui);font-size:12px;font-weight:700;cursor:not-allowed;opacity:0.5;">Profile In Progress</button></div>
       </div>
     </div>
   </div>`;
   modal.addEventListener('click',e=>{if(e.target===modal){modal.style.opacity='0';setTimeout(()=>modal.remove(),200);}});
   document.body.appendChild(modal);
   requestAnimationFrame(()=>{modal.style.opacity='1';modal.querySelector('div').style.transform='translateY(0)';});
+
+  // Wire profile link — use real URL if card has data-profile-url
+  const profileUrl = card.dataset.profileUrl;
+  const btnWrap = modal.querySelector('#pm-profile-btn-wrap');
+  const labelEl = modal.querySelector('#pm-profile-label');
+  if(profileUrl && btnWrap) {
+    if(labelEl) { labelEl.textContent = 'FORA Official Profile'; }
+    modal.querySelector('#pm-profile-desc').textContent = 'This official has a full profile on FORA — voting record, donor history, social media, sponsored legislation, and community discourse.';
+    btnWrap.innerHTML = '<a href="' + profileUrl + '" style="display:inline-block;margin-top:0;padding:7px 16px;background:var(--blue);color:white;border:none;border-radius:4px;font-family:var(--font-ui);font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;">View Full Profile →</a>';
+  } else if(btnWrap) {
+    btnWrap.innerHTML = '<button disabled style="padding:7px 16px;background:var(--blue);color:white;border:none;border-radius:4px;font-family:var(--font-ui);font-size:12px;font-weight:700;cursor:not-allowed;opacity:0.5;">Profile In Progress</button>';
+  }
 }
 
 // ── Keyframes ──
@@ -3579,3 +3634,5 @@ function selectNotableWritein(race, slug, name, el) {
 }
 
 </script>
+</body>
+</html>
