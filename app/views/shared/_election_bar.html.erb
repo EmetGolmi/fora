@@ -1,0 +1,32 @@
+<% if Date.today >= Date.new(2026, 5, 18) && Date.today <= Date.new(2026, 5, 19) %>
+  <% is_election_day = Date.today == Date.new(2026, 5, 19) %>
+  <a href="<%= votemay19_path %>" class="fora-election-bar">
+    <div class="feb-pulse"></div>
+    <div class="feb-left">
+      <span class="feb-verb"><%= is_election_day ? "Today is Election Day" : "Vote Tomorrow, May 19" %></span>
+      <span class="feb-sep">·</span>
+      <span class="feb-cta"><%= is_election_day ? "Polls open 7 AM – 8 PM · Click to see your ballot" : "Pennsylvania Primary · Philadelphia · Click to learn more & cast a mock-ballot" %></span>
+    </div>
+    <div class="feb-right">
+      <% if is_election_day %>
+        <span class="feb-countdown" id="feb-countdown"></span>
+        <script>
+          (function(){
+            function tick(){
+              var c=new Date();c.setHours(20,0,0,0);
+              var d=Math.max(0,c-new Date());
+              if(!d){document.getElementById('feb-countdown').textContent='Polls closed';return;}
+              var h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
+              var p=function(n){return String(n).padStart(2,'0');};
+              document.getElementById('feb-countdown').textContent=p(h)+':'+p(m)+':'+p(s)+' until polls close';
+            }
+            tick();setInterval(tick,1000);
+          })();
+        </script>
+      <% else %>
+        <span class="feb-opens">Polls open 7 AM tomorrow</span>
+      <% end %>
+      <span class="feb-arrow">Learn More &amp; Mock-Vote →</span>
+    </div>
+  </a>
+<% end %>
