@@ -106,6 +106,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # Candidates
+  get '/candidates/chris-rabb', to: 'candidates#chris_rabb', as: 'candidate_chris_rabb'
+  get '/candidates/:slug',      to: 'candidates#show',       as: 'candidate'
+
   # Business formation guide
   get  "market/newllc",       to: "market/new_llc#index", as: :new_llc
   get  "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
