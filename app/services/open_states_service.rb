@@ -66,7 +66,7 @@ class OpenStatesService
   def refresh_bill(bill)
     response = self.class.get(
       "/bills/#{bill.external_id}",
-      query:   { include: "sponsorships,abstracts,votes,sources" },
+      query:   { include: %w[sponsorships abstracts votes sources] },
       headers: headers
     )
     raise RateLimitError, "OpenStates 429 — daily quota exceeded" if response.code == 429
