@@ -3342,27 +3342,55 @@ function updateCastBar() {
 
 function castPreBallot() {
   if(Object.keys(preVote).length < totalRaces) return;
-  // Validate any write-ins have a name
+
+  // Validate write-ins have names
   for(const [race, val] of Object.entries(preVote)) {
     if(val === 'write-in:') {
       const input = document.getElementById('ivs-writein-input-' + race);
       if(input) { input.focus(); input.style.borderColor = 'var(--scarlet)'; }
-      showToast('Please enter a write-in candidate name for ' + (raceLabels[race]||race));
+      showToast('Please enter a write-in name for ' + (raceLabels[race]||race));
       return;
     }
   }
-  const btn = document.getElementById('cast-bar-btn');
-  btn.textContent = '🦅 Fly Eagles Fly! See you at the polls.';
-  btn.style.background = '#004C54';
-  btn.style.boxShadow = '0 0 24px rgba(0,76,84,0.8)';
-  btn.classList.add('cast-done');
-  btn.disabled = true;
-  document.getElementById('cast-progress-fill').style.background = 'var(--green-lt)';
-  document.getElementById('cast-progress-fill').style.background = '#004C54';
-  document.getElementById('cast-progress-label').textContent = 'Pre-ballot cast · Fly Eagles Fly! See you at the polls May 19 🦅';
 
-  // Show a toast
-  showToast('🦅 Fly Eagles Fly! Pre-ballot saved. See you at the polls May 19.');
+  const btn = document.getElementById('cast-bar-btn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+
+  fetch('/votemay19/cast', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrf
+    },
+    body: JSON.stringify({
+      governor:     preVote.governor    || null,
+      lt_governor:  preVote.ltgov      || null,
+      us_rep:       preVote.congress   || null,
+      pa_state_rep: preVote.rep        || null,
+      ballot_q1:    preVote.q1         || null,
+      ballot_q2:    preVote.q2         || null
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(data.success) {
+      window.location.href = '/votemay19/results';
+    } else {
+      btn.style.background = '#004C54';
+      btn.disabled = false;
+      btn.textContent = 'Go Birds! \uD83E\uDD85';
+      showToast((data.errors || ['Something went wrong.']).join(', '));
+    }
+  })
+  .catch(() => {
+    btn.style.background = '#004C54';
+    btn.disabled = false;
+    btn.textContent = 'Go Birds! \uD83E\uDD85';
+    showToast('Network error — try again.');
+  });
 }
 
 // ── Share ──
