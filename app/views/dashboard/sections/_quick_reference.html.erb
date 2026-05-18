@@ -53,38 +53,46 @@
       <div class="qref-section">
         <div class="qref-section-title">Local public safety infrastructure</div>
 
-        <% if ENV["GOOGLE_MAPS_STATIC_API_KEY"].present? %>
-          <% enc = CGI.escape(@address.to_s) %>
-          <img src="https://maps.googleapis.com/maps/api/staticmap?size=640x160&scale=2&maptype=roadmap&markers=color:red%7Clabel:H%7C<%= enc %>&markers=color:blue%7Clabel:E%7C800+Spruce+St,Philadelphia,PA+19107&markers=color:orange%7Clabel:F%7C9th+St+%26+Bainbridge+St,Philadelphia,PA&markers=color:blue%7Clabel:P%7C11th+St+%26+Wharton+St,Philadelphia,PA&visible=<%= enc %>&visible=800+Spruce+St,Philadelphia,PA+19107&visible=9th+St+%26+Bainbridge+St,Philadelphia,PA&visible=11th+St+%26+Wharton+St,Philadelphia,PA&key=<%= ENV["GOOGLE_MAPS_STATIC_API_KEY"] %>"
-               class="qref-map" alt="Emergency services near your address">
-        <% end %>
+        <div class="qref-infra-grid">
+          <%# Left column — text rows %>
+          <div class="qref-infra-rows">
+            <div class="qref-row">
+              <span class="qref-row-icon">🏥</span>
+              <div class="qref-row-content">
+                <span class="qref-row-label">Pennsylvania Hospital · ER 24/7</span>
+                <%= address_link("800 Spruce St, Philadelphia, PA 19107", display_text: "800 Spruce St") %>
+                <span class="qref-row-meta">0.6 mi</span>
+              </div>
+            </div>
 
-        <div class="qref-row">
-          <span class="qref-row-icon">🏥</span>
-          <div class="qref-row-content">
-            <span class="qref-row-label">Pennsylvania Hospital · ER 24/7</span>
-            <%= address_link("800 Spruce St, Philadelphia, PA 19107", display_text: "800 Spruce St") %>
-            <span class="qref-row-meta">0.6 mi</span>
-          </div>
-        </div>
+            <div class="qref-row">
+              <span class="qref-row-icon">🚒</span>
+              <div class="qref-row-content">
+                <span class="qref-row-label">Engine 1 / Ladder 5</span>
+                <%= address_link("9th and Bainbridge, Philadelphia, PA", display_text: "9th & Bainbridge") %>
+                <span class="qref-row-meta">0.2 mi</span>
+              </div>
+            </div>
 
-        <div class="qref-row">
-          <span class="qref-row-icon">🚒</span>
-          <div class="qref-row-content">
-            <span class="qref-row-label">Engine 1 / Ladder 5</span>
-            <%= address_link("9th and Bainbridge, Philadelphia, PA", display_text: "9th & Bainbridge") %>
-            <span class="qref-row-meta">0.2 mi</span>
+            <div class="qref-row">
+              <span class="qref-row-icon">🚔</span>
+              <div class="qref-row-content">
+                <span class="qref-row-label">3rd District Police</span>
+                <%= address_link("11th and Wharton, Philadelphia, PA", display_text: "11th & Wharton") %>
+                · <%= phone_link("2156863030", "(215) 686-3030") %>
+                <span class="qref-row-meta">0.4 mi</span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="qref-row">
-          <span class="qref-row-icon">🚔</span>
-          <div class="qref-row-content">
-            <span class="qref-row-label">3rd District Police</span>
-            <%= address_link("11th and Wharton, Philadelphia, PA", display_text: "11th & Wharton") %>
-            · <%= phone_link("2156863030", "(215) 686-3030") %>
-            <span class="qref-row-meta">0.4 mi</span>
-          </div>
+          <%# Right column — map %>
+          <% if ENV["GOOGLE_MAPS_STATIC_API_KEY"].present? %>
+            <% enc = CGI.escape(@address.to_s) %>
+            <div class="qref-infra-map-col">
+              <img src="https://maps.googleapis.com/maps/api/staticmap?size=640x400&scale=2&maptype=roadmap&markers=color:red%7Clabel:H%7C<%= enc %>&markers=color:blue%7Clabel:E%7C800+Spruce+St,Philadelphia,PA+19107&markers=color:orange%7Clabel:F%7C9th+St+%26+Bainbridge,Philadelphia,PA&markers=color:blue%7Clabel:P%7C11th+St+%26+Wharton,Philadelphia,PA&visible=<%= enc %>&visible=800+Spruce+St,Philadelphia,PA+19107&visible=9th+St+%26+Bainbridge,Philadelphia,PA&visible=11th+St+%26+Wharton,Philadelphia,PA&key=<%= ENV["GOOGLE_MAPS_STATIC_API_KEY"] %>"
+                   class="qref-infra-map" alt="Emergency services map">
+            </div>
+          <% end %>
         </div>
       </div>
 
