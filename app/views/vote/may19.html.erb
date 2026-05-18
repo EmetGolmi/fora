@@ -1893,7 +1893,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
             <div class="ivs-dot dem"></div>
             <div class="ivs-labels">
               <div class="ivs-cand">Josh Shapiro</div>
-              <div class="ivs-meta">Democrat · Incumbent Governor</div>
+              <div class="ivs-meta">Democrat · Incumbent Governor <span style="font-family:var(--font-mono);font-size:8px;color:var(--ink-mut);letter-spacing:0.04em;">· Registered Democrats only</span></div>
             </div>
             <div class="ivs-share-row" id="ivs-share-governor-shapiro">
               <span class="ivs-share-label">Share your pick →</span>
@@ -1908,7 +1908,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
             <div class="ivs-dot rep"></div>
             <div class="ivs-labels">
               <div class="ivs-cand">Stacy Garrity</div>
-              <div class="ivs-meta">Republican · PA State Treasurer</div>
+              <div class="ivs-meta">Republican · PA State Treasurer <span style="font-family:var(--font-mono);font-size:8px;color:var(--ink-mut);letter-spacing:0.04em;">· Registered Republicans only</span></div>
             </div>
             <div class="ivs-share-row" id="ivs-share-governor-garrity">
               <span class="ivs-share-label">Share your pick →</span>
@@ -2147,7 +2147,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
             <div class="ivs-dot dem"></div>
             <div class="ivs-labels">
               <div class="ivs-cand">Austin Davis</div>
-              <div class="ivs-meta">Democrat · Incumbent Lt. Governor</div>
+              <div class="ivs-meta">Democrat · Incumbent Lt. Governor <span style="font-family:var(--font-mono);font-size:8px;color:var(--ink-mut);letter-spacing:0.04em;">· Registered Democrats only</span></div>
             </div>
             <div class="ivs-share-row" id="ivs-share-ltgov-davis" style="display:none;">
               <span class="ivs-share-label">Share your pick:</span>
@@ -2162,7 +2162,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
             <div class="ivs-dot rep"></div>
             <div class="ivs-labels">
               <div class="ivs-cand">John Ventre</div>
-              <div class="ivs-meta">Republican · Westmoreland County</div>
+              <div class="ivs-meta">Republican · Westmoreland County <span style="font-family:var(--font-mono);font-size:8px;color:var(--ink-mut);letter-spacing:0.04em;">· Registered Republicans only</span></div>
             </div>
             <div class="ivs-share-row" id="ivs-share-ltgov-ventre" style="display:none;">
               <span class="ivs-share-label">Share your pick:</span>
@@ -2177,7 +2177,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
             <div class="ivs-dot rep"></div>
             <div class="ivs-labels">
               <div class="ivs-cand">Jason Richey</div>
-              <div class="ivs-meta">Republican · Allegheny County</div>
+              <div class="ivs-meta">Republican · Allegheny County <span style="font-family:var(--font-mono);font-size:8px;color:var(--ink-mut);letter-spacing:0.04em;">· Registered Republicans only</span></div>
             </div>
             <div class="ivs-share-row" id="ivs-share-ltgov-richey" style="display:none;">
               <span class="ivs-share-label">Share your pick:</span>
@@ -2573,7 +2573,7 @@ hr.rule { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
             </div>
           </div>
           <div style="padding:10px 18px;background:var(--bg);border-top:1px solid var(--rule);font-size:11px;color:var(--ink-mut);font-family:var(--font-mono);letter-spacing:0.04em;">
-            Republican candidate Nick Manganaro (Montgomery) is running — but as a registered Democrat, you vote in the Democratic primary only. Scanlon faces no Democratic primary challenger. She will face Manganaro in November.
+            Nick Manganaro (R, Montgomery County) is also on the November general election ballot. In today's primary, Democrats vote for Scanlon and Republicans vote for Manganaro — each party votes its own ballot.
           </div>
       
           
@@ -3559,9 +3559,11 @@ function selectBallotQ(qid, choice) {
 function selectNotableWritein(race, slug, name, el) {
   // Deselect all options and write-ins in this race
   const ivsBlock = document.getElementById('ivs-' + race);
-  ivsBlock.querySelectorAll('.ivs-option').forEach(o => o.classList.remove('ivs-selected','ivs-selected-q'));
-  ivsBlock.querySelectorAll('.ivs-writein-row').forEach(r => r.classList.remove('ivs-selected'));
-  ivsBlock.querySelectorAll('.ivs-notable-writein').forEach(n => n.classList.remove('ivs-selected'));
+  if(ivsBlock) {
+    ivsBlock.querySelectorAll('.ivs-option').forEach(o => o.classList.remove('ivs-selected','ivs-selected-q'));
+    ivsBlock.querySelectorAll('.ivs-writein-row').forEach(r => r.classList.remove('ivs-selected'));
+    ivsBlock.querySelectorAll('.ivs-notable-writein').forEach(n => n.classList.remove('ivs-selected'));
+  }
   
   el.classList.add('ivs-selected');
   preVote[race] = 'write-in:' + name;
