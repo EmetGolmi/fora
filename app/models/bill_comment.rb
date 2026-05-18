@@ -3,11 +3,11 @@ class BillComment < ApplicationRecord
 
   STANCES = %w[support oppose amend undecided].freeze
   PERSPECTIVE_TYPES = %w[
-    affects_property
-    follow_money
-    history_matters
-    due_process
-    what_may_happen
+    personal_stake
+    community_impact
+    fiscal_accountability
+    historical_context
+    prediction
   ].freeze
 
   validates :civic_bill_id,    presence: true
