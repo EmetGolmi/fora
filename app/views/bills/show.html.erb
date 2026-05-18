@@ -79,6 +79,54 @@
     .cv-stance-row { gap:6px; }
     .cv-stance-btn { min-width:80px; font-size:8px; }
   }
+
+  .cv-share-panel {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+  }
+  .cv-share-preview {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .cv-share-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gilt, #b8860b);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .cv-share-buttons { display:flex; gap:6px; flex-wrap:wrap; }
+  .cv-share-btn {
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.12s;
+    line-height: 1;
+  }
+  .cv-share-btn:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.3); }
+  .cv-share-x    { color: white; }
+  .cv-share-li   { color: #0a66c2; border-color: rgba(10,102,194,0.3); }
+  .cv-share-fb   { color: #1877f2; border-color: rgba(24,119,242,0.3); }
+  .cv-share-wa   { color: #25d366; border-color: rgba(37,211,102,0.3); }
+  .cv-share-ig   { color: #e1306c; border-color: rgba(225,48,108,0.3); }
+  .cv-share-tt   { color: #ff0050; border-color: rgba(255,0,80,0.3);   }
+  .cv-share-copy { color: var(--gilt,#b8860b); border-color: rgba(184,134,11,0.3); }
 </style>
 <% end %>
 
@@ -280,6 +328,7 @@
     </button>
     <div id="cv-error"   class="cv-error"   style="display:none;"></div>
     <div id="cv-success" class="cv-success" style="display:none;"></div>
+    <div id="cv-share-panel-container"></div>
   </div>
 
   <%# ── COMMENTS FEED ─────────────────────────────────── %>
@@ -295,11 +344,74 @@
 
 <script>
 (function() {
-  var billId      = '<%= @bill.id %>';
-  var commentsUrl = '/bills/' + billId + '/comments';
-  var csrfToken   = document.querySelector('meta[name="csrf-token"]')?.content;
+  var billId         = '<%= @bill.id %>';
+  var billIdentifier = '<%= j @bill.identifier.to_s %>';
+  var billTitle      = '<%= j @bill.title.to_s[0..80] %>';
+  var commentsUrl    = '/bills/' + billId + '/comments';
+  var csrfToken      = document.querySelector('meta[name="csrf-token"]')?.content;
   var selectedStance = null;
   var selectedPersp  = null;
+
+  // Share state — populated after a successful post
+  var shareText = '';
+  var shareUrl  = '';
+  var shareTitle = '';
+
+  function buildSharePanel(commentBody) {
+    shareUrl   = 'https://fora.center/bills/' + billId;
+    shareTitle = 'My take on ' + billIdentifier + ' via FORA';
+    shareText  = 'My take on ' + billIdentifier + ' — ' +
+                 billTitle.substring(0, 60) + ':\n\n"' +
+                 commentBody.substring(0, 200) +
+                 (commentBody.length > 200 ? '...' : '') +
+                 '"\n\n— via FORA · fora.center/bills/' + billId;
+
+    var preview = '&ldquo;' + escHtml(commentBody.substring(0, 200)) +
+                  (commentBody.length > 200 ? '&hellip;' : '') + '&rdquo;';
+
+    var tUrl  = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText);
+    var liUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' +
+                encodeURIComponent(shareUrl) + '&summary=' + encodeURIComponent(shareText);
+    var fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' +
+                encodeURIComponent(shareUrl) + '&quote=' + encodeURIComponent(shareText);
+    var waUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText);
+
+    var container = document.getElementById('cv-share-panel-container');
+    if (!container) return;
+    container.innerHTML =
+      '<div class="cv-share-panel">' +
+        '<div class="cv-share-preview">' + preview + '</div>' +
+        '<div class="cv-share-label">Share your take</div>' +
+        '<div class="cv-share-buttons">' +
+          '<button class="cv-share-btn cv-share-x"  onclick="window.open(\'' + tUrl  + '\',\'_blank\')">&#120143;</button>' +
+          '<button class="cv-share-btn cv-share-li" onclick="window.open(\'' + liUrl + '\',\'_blank\')">in</button>' +
+          '<button class="cv-share-btn cv-share-fb" onclick="window.open(\'' + fbUrl + '\',\'_blank\')">f</button>' +
+          '<button class="cv-share-btn cv-share-wa" onclick="window.open(\'' + waUrl + '\',\'_blank\')">&#128172;</button>' +
+          '<button class="cv-share-btn cv-share-ig" onclick="shareViaMobile(\'Instagram\')">&#128247;</button>' +
+          '<button class="cv-share-btn cv-share-tt" onclick="shareViaMobile(\'TikTok\')">&#9835;</button>' +
+          '<button class="cv-share-btn cv-share-copy" id="cv-copy-btn" onclick="copyToClipboard()">&#128203; Copy</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  window.shareViaMobile = function(platform) {
+    if (navigator.share) {
+      navigator.share({ title: shareTitle, text: shareText, url: shareUrl }).catch(function() {});
+    } else {
+      copyToClipboard(platform + ' share copied to clipboard');
+    }
+  };
+
+  window.copyToClipboard = function(label) {
+    navigator.clipboard.writeText(shareText + '\n' + shareUrl).then(function() {
+      var btn = document.getElementById('cv-copy-btn');
+      if (btn) {
+        var orig = btn.textContent;
+        btn.textContent = label || 'Copied!';
+        setTimeout(function() { btn.textContent = orig; }, 2000);
+      }
+    });
+  };
 
   window.selectStance = function(stance, btn) {
     document.querySelectorAll('.cv-stance-btn').forEach(function(b) {
@@ -333,6 +445,8 @@
 
     if (errorEl)   errorEl.style.display   = 'none';
     if (successEl) successEl.style.display = 'none';
+    var panelContainer = document.getElementById('cv-share-panel-container');
+    if (panelContainer) panelContainer.innerHTML = '';
 
     if (!selectedStance) {
       if (errorEl) {
@@ -385,6 +499,7 @@
           successEl.textContent = 'Your take has been posted.';
           successEl.style.display = 'block';
         }
+        buildSharePanel(data.comment.body);
         if (bodyEl) bodyEl.value = '';
         var countEl = document.getElementById('cv-char-count');
         if (countEl) countEl.textContent = '0';
