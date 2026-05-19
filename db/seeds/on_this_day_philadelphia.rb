@@ -9,13 +9,13 @@
 # WINDOW: May 12 → July 4 (54 days).
 #
 # COVERAGE STATUS:
-#   May (May 12-31)       22 entries across 16 of 20 days (80%)
+#   May (May 12-31)       23 entries across 17 of 20 days (85%)
 #   June (June 1-30)      9 entries across 6 of 30 days  (20%)
 #   July (July 1-4)       4 entries across 3 of 4 days   (75%)
-#   TOTAL                 35 entries across 25 of 54 days (46%)
+#   TOTAL                 36 entries across 26 of 54 days (48%)
 #
 # DAYS STILL NEEDING RESEARCH:
-#   May:  19, 21, 22, 23, 25, 26, 27
+#   May:  21, 22, 23, 25, 26, 27
 #   June: 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 15, 16, 17, 20,
 #         21, 22, 23, 24, 25, 26, 27, 28, 29, 30
 #   July: 3
@@ -178,6 +178,22 @@ ON_THIS_DAY_ENTRIES = [
     neighborhood: "Upper Darby",
     is_featured: true,
     sources: [{ label: "Tina Fey · Wikipedia", url: "https://en.wikipedia.org/wiki/Tina_Fey" }],
+    verified: :confirmed
+  },
+
+  # ── MAY 19 ──────────────────────────────────────────────────────
+  {
+    month: 5, day: 19, year: 1925,
+    entry_type: :birth,
+    title: "Born today: Malcolm X",
+    body: "Malcolm Little — later Malcolm X, later el-Hajj Malik el-Shabazz — was born on this day in Omaha, Nebraska. He grew up poor, lost his father young, watched his mother institutionalized, cycled through foster homes, and ended up in a Boston prison at 21 for burglary. He came out transformed. In 1954, he was sent to Philadelphia to build what became Temple Number 12 in West Philadelphia — one of the Nation of Islam's most active East Coast outposts. He used the city as a laboratory for the organizing skills that would carry him to Harlem's Temple Number 7 and then to national prominence as the Nation of Islam's most powerful voice. He broke with the NOI in 1964, converted to orthodox Sunni Islam after a pilgrimage to Mecca, and was assassinated at 39 in February 1965. He left behind a city — Philadelphia — that still wrestles with his questions: about power, about self-determination, about what freedom actually requires.",
+    neighborhood: "West Philadelphia",
+    is_featured: true,
+    sources: [
+      { label: "Wikipedia", url: "https://en.wikipedia.org/wiki/Malcolm_X" },
+      { label: "West Philadelphia Collaborative History (UPenn GSE)", url: "https://collaborativehistory.gse.upenn.edu/stories/malcolm-x-part-i-malcolm-little%E2%80%99s-coming-age" },
+      { label: "PBS American Experience", url: "https://www.pbs.org/wgbh/americanexperience/films/malcolm/" }
+    ],
     verified: :confirmed
   },
 
