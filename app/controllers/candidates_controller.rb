@@ -3,6 +3,10 @@ class CandidatesController < ApplicationController
     render 'candidates/chris_rabb'
   end
 
+  def john_allante_mcauley
+    render 'candidates/john_allante_mcauley'
+  end
+
   def show
     # Future: look up candidate by slug from DB
     # For now, 404 any slug that isn't chris-rabb

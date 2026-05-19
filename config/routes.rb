@@ -107,7 +107,8 @@ Rails.application.routes.draw do
   end
 
   # Candidates
-  get '/candidates/chris-rabb', to: 'candidates#chris_rabb', as: 'candidate_chris_rabb'
+  get '/candidates/chris-rabb',           to: 'candidates#chris_rabb',           as: 'candidate_chris_rabb'
+  get '/candidates/john-allante-mcauley', to: 'candidates#john_allante_mcauley', as: 'candidate_john_allante_mcauley'
   get '/candidates/:slug',      to: 'candidates#show',       as: 'candidate'
 
   # Business formation guide
