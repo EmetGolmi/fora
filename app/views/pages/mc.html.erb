@@ -1,6 +1,6 @@
 <%
   # ── helpers ────────────────────────────────────────────────────────────────
-  STATUS_LABELS = {
+  status_labels = {
     'near_extinct_in_region'              => ['Near Extinct in Region',      '#fdf0f0', '#a71d1d'],
     'critically_declining'                => ['Critically Declining',         '#fdf4f0', '#b84c00'],
     'critically_endangered'               => ['Critically Endangered',        '#fdf4f0', '#b84c00'],
@@ -25,7 +25,7 @@
     'legally_persecuted'                  => ['Legally Persecuted',           '#fdf0f0', '#a71d1d'],
   }.freeze
 
-  TYPE_LABELS = {
+  type_labels = {
     'non_muslim'      => 'Non-Muslim',
     'muslim_minority' => 'Muslim Minority',
     'ethnic'          => 'Ethnic',
@@ -33,7 +33,7 @@
     'historical'      => 'Historical',
   }.freeze
 
-  TYPE_STYLES = {
+  type_styles = {
     'non_muslim'      => 'background:#e6f1fb;color:#0c447c;border-color:#b3d0f0;',
     'muslim_minority' => 'background:#e8f5e9;color:#1b5e20;border-color:#c8e6c9;',
     'ethnic'          => 'background:#fff3e0;color:#7a4000;border-color:#ffcc80;',
@@ -240,7 +240,7 @@ html{scroll-behavior:smooth;}
 
     <% @communities.each do |c| %>
       <%
-        s_info  = STATUS_LABELS[c['status']] || [c['status'].to_s.tr('_',' ').capitalize, '#f0f0f0', '#444']
+        s_info  = status_labels[c['status']] || [c['status'].to_s.tr('_',' ').capitalize, '#f0f0f0', '#444']
         p_val   = pct.call(c)
         bw      = bar_width.call(c)
         has_pop = c['peak_population'] || c['current_population']
@@ -277,8 +277,8 @@ html{scroll-behavior:smooth;}
           <%# type + status badges %>
           <div class="mc-badges">
             <% types.each do |t| %>
-              <span class="mc-type-badge" style="<%= TYPE_STYLES[t] || '' %>">
-                <%= TYPE_LABELS[t] || t %>
+              <span class="mc-type-badge" style="<%= type_styles[t] || '' %>">
+                <%= type_labels[t] || t %>
               </span>
             <% end %>
             <span class="mc-status-badge" style="background:<%= s_info[1] %>;color:<%= s_info[2] %>;">
