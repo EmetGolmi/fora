@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Vote Tomorrow · Philadelphia Primary · May 19, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:     #1b3a6b;
+  --blue-md:  #254f92;
+  --blue-lt:  #3a6abf;
+  --blue-pl:  #dde5f5;
+  --blue-xs:  #f0f4fb;
+  --gilt:     #b8860b;
+  --gilt-lt:  #d4a832;
+  --gilt-pl:  #f8f0dc;
+  --ink:      #0e1a2e;
+  --ink-soft: #5a6e8a;
+  --ink-mut:  #8a9ab8;
+  --bg:       #f2f4f8;
+  --white:    #ffffff;
+  --rule:     rgba(27,58,107,0.1);
+  --rule-md:  rgba(27,58,107,0.18);
+  --green:    #155c2d;
+  --green-p:  #e5f0e8;
+  --green-lt: #27a24f;
+  --purple:   #2d1a4a;
+  --purple-p: #ede6f7;
+  --scarlet:  #8b1a1a;
+  --scarlet-p:#faeaea;
+  --amber:    #c47f00;
+  --amber-p:  #fff3dc;
+  --ticker-bg:#0a0f1a;
+  --font-serif:'Libre Baskerville',serif;
+  --font-mono: 'JetBrains Mono',monospace;
+  --font-ui:   'Nunito',sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6;}
+
+/* ═══ FORA TOP NAV ═══ */
+.fora-nav {
+  background: var(--blue);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  gap: 0;
+}
+
+.nav-wordmark {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  margin-right: 24px;
+}
+.nav-wordmark em { color: var(--gilt-lt); font-style: normal; }
+
+.nav-tabs {
+  display: flex;
+}
+.nav-tab {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.12s;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.85); }
+.nav-tab.active { color: var(--gilt-lt); border-bottom-color: var(--gilt-lt); }
+
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+/* ═══ VOTE RIBBON — THE NEW ELEMENT ═══ */
+.vote-ribbon {
+  background: var(--scarlet);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  height: 44px;
+  position: sticky;
+  top: 48px;
+  z-index: 199;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.ribbon-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: white;
+  animation: pulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.5;transform:scale(0.7);}
+}
+
+.ribbon-text {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.03em;
+}
+
+.ribbon-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+
+.ribbon-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+
+.ribbon-hours {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ribbon-hours-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); }
+.ribbon-hours-val { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: white; }
+
+.ribbon-cta {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-vote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  color: var(--scarlet);
+  border: none;
+  border-radius: 4px;
+  padding: 7px 16px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: all 0.15s;
+}
+.btn-vote:hover { background: var(--gilt-pl); }
+
+.btn-polling {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.btn-polling:hover { background: rgba(255,255,255,0.25); }
+
+.ribbon-countdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rc-num {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+  padding: 2px 7px;
+  min-width: 30px;
+  text-align: center;
+  line-height: 1.2;
+}
+.rc-label { font-family: var(--font-mono); font-size: 7px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); text-align: center; margin-top: 1px; }
+.rc-unit { display: flex; flex-direction: column; align-items: center; }
+.rc-sep { font-family: var(--font-serif); font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+
+/* ═══ TICKER ═══ */
+.ticker {
+  background: var(--ticker-bg);
+  height: 30px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.ticker-inner {
+  display: flex;
+  gap: 0;
+  animation: scroll 50s linear infinite;
+  white-space: nowrap;
+}
+@keyframes scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+.ti { padding: 0 32px 0 0; font-family: var(--font-mono); font-size: 9.5px; color: rgba(255,255,255,0.48); letter-spacing: 0.04em; }
+.ti-label { color: var(--gilt-lt); font-weight: 700; margin-right: 6px; }
+
+/* ═══ CLOSED PRIMARY ALERT ═══ */
+.closed-primary-alert {
+  background: var(--amber-p);
+  border-bottom: 2px solid var(--amber);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cpa-icon { font-size: 18px; flex-shrink: 0; }
+.cpa-title { font-family: var(--font-serif); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.cpa-body { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.cpa-link { color: var(--blue-lt); text-decoration: none; font-weight: 600; }
+.cpa-link:hover { text-decoration: underline; }
+
+/* ═══ MAIN LAYOUT ═══ */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  background: var(--blue);
+  border-radius: 12px;
+  padding: 32px 36px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.hero-left {}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gilt-lt);
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.hero-body {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 16px;
+}
+
+.hero-facts {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-fact {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 5px;
+  padding: 8px 14px;
+}
+.hf-label { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 3px; }
+.hf-value { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--gilt-lt); line-height: 1; }
+.hf-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+.hero-right {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 16px 20px;
+  min-width: 200px;
+}
+.hr-title { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+.hr-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 12px; color: rgba(255,255,255,0.65); }
+.hr-item:last-child { border-bottom: none; }
+.hr-item strong { color: white; font-weight: 700; }
+.hr-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* ═══ SECTION HEADERS ═══ */
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-bottom: 5px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+
+hr.rule { border: none; border-top: 1px solid var(--rule); margin: 36px 0; }
+
+/* ═══ OFFICE EXPLAINER CARDS ═══ */
+.offices-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.office-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.office-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 22px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+}
+.office-card-header:hover { background: var(--blue-xs); }
+.office-card.open .office-card-header { background: var(--blue-xs); border-bottom: 1px solid var(--rule); }
+
+.office-icon-wrap {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.office-card-meta { flex: 1; }
+.office-level-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 4px;
+}
+.office-card-name {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.office-card-tagline {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.office-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.contested-badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+.contested { background: var(--scarlet-p); color: var(--scarlet); }
+.uncontested { background: var(--bg); color: var(--ink-mut); border: 1px solid var(--rule); }
+.contested-dem { background: var(--blue-pl); color: var(--blue); }
+
+.expand-arrow {
+  font-size: 12px;
+  color: var(--ink-mut);
+  transition: transform 0.2s;
+}
+.office-card.open .expand-arrow { transform: rotate(180deg); }
+
+.office-card-body {
+  display: none;
+  padding: 20px 22px;
+}
+.office-card.open .office-card-body { display: block; }
+
+.explainer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.explainer-block {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  padding: 14px 16px;
+}
+.eb-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.eb-body {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+.eb-body strong { color: var(--ink); }
+
+.explainer-block.full { grid-column: 1 / -1; }
+.explainer-block.blue-tint { background: var(--blue-xs); border-color: var(--blue-pl); }
+
+/* Candidates list */
+.candidates-section { margin-top: 16px; }
+.cands-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.party-block { margin-bottom: 14px; }
+.party-header {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.ph-dem { background: var(--blue-pl); color: var(--blue); }
+.ph-rep { background: var(--scarlet-p); color: var(--scarlet); }
+.ph-both { background: var(--bg); color: var(--ink-mut); border: 1px solid var(--rule); }
+
+.candidate-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--white);
+  margin-bottom: 6px;
+  transition: background 0.12s;
+}
+.candidate-row:hover { background: var(--bg); }
+.cr-left { flex: 1; }
+.cr-name { font-family: var(--font-serif); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.cr-detail { font-size: 11px; color: var(--ink-mut); font-family: var(--font-mono); letter-spacing: 0.04em; margin-bottom: 4px; }
+.cr-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.55; }
+.cr-links { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.cr-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--rule-md);
+  color: var(--ink-mut);
+  text-decoration: none;
+  transition: all 0.12s;
+  background: var(--bg);
+}
+.cr-link:hover { background: var(--blue-pl); color: var(--blue); border-color: var(--blue-pl); }
+.cr-link.website { background: var(--blue-pl); color: var(--blue); border-color: rgba(27,58,107,0.2); }
+
+.no-candidates {
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  font-size: 12px;
+  color: var(--ink-mut);
+  font-family: var(--font-mono);
+}
+
+/* Power indicators */
+.power-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.power-label { font-size: 12px; color: var(--ink-soft); flex: 1; }
+.power-bar { width: 120px; height: 6px; background: var(--bg); border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+.power-fill { height: 100%; background: var(--blue); border-radius: 3px; }
+
+/* Ballot questions */
+.ballot-q {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+}
+.bq-num {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 6px;
+}
+.bq-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.bq-what {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+.bq-who {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 11px;
+}
+.bq-who-item { }
+.bwi-label { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-mut); margin-bottom: 3px; }
+.bwi-value { color: var(--ink); font-weight: 600; }
+
+/* "What to ask" box */
+.ask-box {
+  background: var(--gilt-pl);
+  border: 1px solid rgba(184,134,11,0.2);
+  border-left: 3px solid var(--gilt);
+  border-radius: 5px;
+  padding: 12px 16px;
+  margin-top: 14px;
+}
+.ask-box-title { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gilt); margin-bottom: 6px; font-weight: 700; }
+.ask-box ul { padding-left: 16px; }
+.ask-box li { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 2px; }
+
+/* What skills we need */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: var(--green-p);
+  color: var(--green);
+  border: 1px solid rgba(21,92,45,0.15);
+}
+
+/* Quick guide at bottom */
+.quick-guide {
+  background: var(--blue);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-top: 40px;
+}
+.qg-title { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: white; margin-bottom: 16px; }
+.qg-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.qg-step {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 7px;
+  padding: 14px;
+}
+.qg-num { font-family: var(--font-serif); font-size: 24px; font-weight: 700; color: var(--gilt-lt); margin-bottom: 6px; line-height: 1; }
+.qg-head { font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px; }
+.qg-body { font-size: 11px; color: rgba(255,255,255,0.55); line-height: 1.55; }
+.qg-link { display: inline-block; margin-top: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt-lt); text-decoration: none; }
+.qg-link:hover { text-decoration: underline; }
+
+/* Sticky bottom bar on mobile */
+.vote-sticky {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--scarlet);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 300;
+  box-shadow: 0 -4px 20px rgba(139,26,26,0.3);
+}
+.vs-text { font-family: var(--font-serif); font-size: 15px; font-weight: 700; color: white; }
+.vs-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.vs-btn {
+  background: white;
+  color: var(--scarlet);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 22px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(27,58,107,0.15); border-radius: 3px; }
+
+@media (max-width: 700px) {
+  .explainer-grid { grid-template-columns: 1fr; }
+  .qg-steps { grid-template-columns: 1fr 1fr; }
+  .hero { flex-direction: column; }
+  .fora-nav { gap: 0; }
+  .nav-tab:not(.active) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     FORA TOP NAV
+═══════════════════════════════════════ -->
+<nav class="fora-nav">
+  <a class="nav-wordmark" href="#">F<em>O</em>RA</a>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Dashboard</div>
+    <div class="nav-tab">Legislation</div>
+    <div class="nav-tab">Issues</div>
+    <div class="nav-tab">Events</div>
+    <div class="nav-tab">Discourse</div>
+  </div>
+  <div class="nav-right">
+    <a href="https://atlas.phila.gov/voting" target="_blank" style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;">📍 Find My Polling Place</a>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,0.15);"></div>
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;">👤</div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     VOTE RIBBON — NEW PERSISTENT ELEMENT
+═══════════════════════════════════════ -->
+<div class="vote-ribbon">
+  <div class="ribbon-pulse"></div>
+  <div>
+    <div class="ribbon-text">Pennsylvania Primary · Tomorrow, Tuesday May 19</div>
+    <div class="ribbon-sub">Philadelphia voters · Closed primary · All registered party members eligible</div>
+  </div>
+
+  <div class="ribbon-divider"></div>
+
+  <div class="ribbon-hours">
+    <div class="ribbon-hours-label">Polls</div>
+    <div class="ribbon-hours-val">7 AM – 8 PM</div>
+  </div>
+
+  <div class="ribbon-divider"></div>
+
+  <div class="ribbon-countdown">
+    <div class="rc-unit"><div class="rc-num" id="rc-h">17</div><div class="rc-label">hrs</div></div>
+    <div class="rc-sep">:</div>
+    <div class="rc-unit"><div class="rc-num" id="rc-m">42</div><div class="rc-label">min</div></div>
+    <div class="rc-sep">:</div>
+    <div class="rc-unit"><div class="rc-num" id="rc-s">00</div><div class="rc-label">sec</div></div>
+  </div>
+
+  <div class="ribbon-cta">
+    <a class="btn-polling" href="https://atlas.phila.gov/voting" target="_blank">📍 Find My Polling Place</a>
+    <a class="btn-vote" href="https://atlas.phila.gov/voting" target="_blank">🗳 VOTE TOMORROW</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TICKER
+═══════════════════════════════════════ -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ti"><span class="ti-label">PA PRIMARY</span>May 19, 2026 · Polls open 7AM–8PM · If you're in line by 8PM you can vote</span>
+    <span class="ti"><span class="ti-label">CLOSED PRIMARY</span>Registered Democrats vote Dem ballot · Registered Republicans vote Rep ballot · Independents vote on ballot questions only</span>
+    <span class="ti"><span class="ti-label">GOVERNOR</span>Josh Shapiro (D) uncontested · Stacy Garrity (R) uncontested</span>
+    <span class="ti"><span class="ti-label">3RD DISTRICT CONGRESS</span>4-way Democratic primary to replace retiring Rep. Dwight Evans · Stanford · Street · Rabb · Griffith</span>
+    <span class="ti"><span class="ti-label">MAIL-IN</span>Completed ballots must be received by 8PM on Election Day · Postmarks do not count</span>
+    <span class="ti"><span class="ti-label">BALLOT QUESTIONS</span>Philadelphia voters weigh in on city retirement savings program and youth services office</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ti"><span class="ti-label">PA PRIMARY</span>May 19, 2026 · Polls open 7AM–8PM · If you're in line by 8PM you can vote</span>
+    <span class="ti"><span class="ti-label">CLOSED PRIMARY</span>Registered Democrats vote Dem ballot · Registered Republicans vote Rep ballot · Independents vote on ballot questions only</span>
+    <span class="ti"><span class="ti-label">GOVERNOR</span>Josh Shapiro (D) uncontested · Stacy Garrity (R) uncontested</span>
+    <span class="ti"><span class="ti-label">3RD DISTRICT CONGRESS</span>4-way Democratic primary to replace retiring Rep. Dwight Evans · Stanford · Street · Rabb · Griffith</span>
+    <span class="ti"><span class="ti-label">MAIL-IN</span>Completed ballots must be received by 8PM on Election Day · Postmarks do not count</span>
+    <span class="ti"><span class="ti-label">BALLOT QUESTIONS</span>Philadelphia voters weigh in on city retirement savings program and youth services office</span>
+  </div>
+</div>
+
+<!-- CLOSED PRIMARY ALERT -->
+<div class="closed-primary-alert">
+  <div class="cpa-icon">⚠️</div>
+  <div>
+    <div class="cpa-title">Pennsylvania is a closed primary state — your party registration decides your ballot.</div>
+    <div class="cpa-body">Registered Democrats vote only on Democratic candidates. Registered Republicans vote only on Republican candidates. If you registered as Independent or with a third party, you cannot vote for candidates tomorrow — but you <em>can</em> vote on Philadelphia's ballot questions. <a class="cpa-link" href="https://www.pavoterservices.pa.gov/pages/voterregistrationstatus.aspx" target="_blank">Check your registration status →</a></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE CONTENT
+═══════════════════════════════════════ -->
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Pennsylvania Primary Election · Philadelphia</div>
+      <div class="hero-title">What's on Your Ballot Tomorrow</div>
+      <div class="hero-body">This is not a city election. Tomorrow's primary is for state and federal offices — the people who represent Philadelphia in Harrisburg and Washington. Every race below is explained in plain language: what the job actually is, what power it has, what you should ask before you vote.</div>
+      <div class="hero-facts">
+        <div class="hero-fact">
+          <div class="hf-label">Election Day</div>
+          <div class="hf-value">May 19</div>
+          <div class="hf-sub">Tuesday, 2026</div>
+        </div>
+        <div class="hero-fact">
+          <div class="hf-label">Polls Open</div>
+          <div class="hf-value">7 AM</div>
+          <div class="hf-sub">Close at 8 PM</div>
+        </div>
+        <div class="hero-fact">
+          <div class="hf-label">Mail-In Deadline</div>
+          <div class="hf-value">8 PM</div>
+          <div class="hf-sub">Must be received, not postmarked</div>
+        </div>
+        <div class="hero-fact">
+          <div class="hf-label">Type</div>
+          <div class="hf-value">Primary</div>
+          <div class="hf-sub">Closed · Party registration required</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hr-title">What's on the ballot</div>
+      <div class="hr-item"><div class="hr-dot" style="background:var(--gilt-lt);"></div>Governor (statewide)</div>
+      <div class="hr-item"><div class="hr-dot" style="background:var(--gilt-lt);"></div>Lieutenant Governor</div>
+      <div class="hr-item"><div class="hr-dot" style="background:var(--gilt-lt);"></div>U.S. Representative (your district)</div>
+      <div class="hr-item"><div class="hr-dot" style="background:var(--gilt-lt);"></div>PA State Senator (some districts)</div>
+      <div class="hr-item"><div class="hr-dot" style="background:var(--gilt-lt);"></div>PA State Representative</div>
+      <div class="hr-item"><div class="hr-dot" style="background:rgba(255,255,255,0.3);"></div>State Committee Members</div>
+      <div class="hr-item"><div class="hr-dot" style="background:rgba(255,255,255,0.3);"></div>Ward Executive Committee</div>
+      <div class="hr-item"><div class="hr-dot" style="background:var(--amber);"></div>Philadelphia Ballot Questions</div>
+    </div>
+  </div>
+
+  <!-- OFFICES: EXPLAINED -->
+  <div class="section-eyebrow">Plain-Language Voter Guide</div>
+  <div class="section-title">Every Office on Tomorrow's Ballot, Explained</div>
+  <div class="section-desc">Think of each of these as a job posting. We'll tell you what the job actually does, what power it holds, what skills the person needs, and who is running in Philadelphia. Click any office to expand the full guide.</div>
+
+  <div class="offices-grid">
+
+    <!-- ══ GOVERNOR ══ -->
+    <div class="office-card open" id="card-gov">
+      <div class="office-card-header" onclick="toggleCard('card-gov')">
+        <div class="office-icon-wrap" style="background:#1b3a6b;">🏛</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Pennsylvania · Statewide · 4-Year Term</div>
+          <div class="office-card-name">Governor of Pennsylvania</div>
+          <div class="office-card-tagline">The chief executive of Pennsylvania state government — sets the state budget, signs or vetoes every law, commands the National Guard, and appoints hundreds of judges and officials.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge uncontested">Uncontested Primary</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">The Governor is Pennsylvania's equivalent of a CEO — running a state government with 80,000+ employees and a $45+ billion annual budget. Every agency from PennDOT to the Department of Education to the state police reports up to the Governor. If something breaks in Pennsylvania, the Governor is accountable.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Signs or vetoes every bill</strong> the legislature passes. <strong>Controls the state budget</strong> proposal. <strong>Appoints state Supreme Court justices</strong> to fill vacancies. <strong>Activates the National Guard.</strong> <strong>Issues pardons.</strong> Can declare disaster emergencies, close schools, and mobilize state resources during crises.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Skills you'd require if you were hiring</div>
+            <div class="eb-body">Executive management of large organizations. Budget negotiation. Ability to work across party lines to pass legislation. Crisis leadership. Understanding of education, criminal justice, infrastructure, and healthcare policy. A track record you can verify.</div>
+          </div>
+          <div class="explainer-block blue-tint">
+            <div class="eb-label">Why this race matters to Philadelphia</div>
+            <div class="eb-body">The Governor controls how much state funding Philadelphia schools receive. The Governor appoints members of the Philadelphia school board. State police resources, highway funding, gun law enforcement — all run through the Governor's office. Philadelphia is the largest city in the state and gets significant resources from Harrisburg.</div>
+          </div>
+          <div class="explainer-block full">
+            <div class="eb-label">What power looks like in practice</div>
+            <div class="eb-body">Gov. Wolf used emergency powers to close Pennsylvania schools and businesses during COVID. Gov. Shapiro has used executive orders to protect abortion access, expand broadband, and redirect state funds to education. A Governor who vetoes school funding bills or expands charter schools can reshape education in Philadelphia for a generation. The Governor also sets PA's position on federal policy — infrastructure dollars, climate money, healthcare waivers all run through the Governor's office.</div>
+          </div>
+        </div>
+        <div class="ask-box">
+          <div class="ask-box-title">📋 Questions to ask before you vote for Governor</div>
+          <ul>
+            <li>How has this person handled a real budget or large organization? What was the outcome?</li>
+            <li>What is their position on Philadelphia school funding — how much and through what mechanism?</li>
+            <li>Have they supported or opposed legislation that affects gun policy, policing, or housing in Pennsylvania?</li>
+            <li>Who are their top campaign donors? What industries are bankrolling this campaign?</li>
+            <li>What is their record on reproductive rights, given Pennsylvania's role as a refuge state for abortion access?</li>
+          </ul>
+        </div>
+        <div class="candidates-section">
+          <div class="cands-label">Tomorrow's candidates in Philadelphia</div>
+          <div class="party-block">
+            <div class="party-header ph-dem">Democrat</div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Josh Shapiro</div>
+                <div class="cr-detail">Montgomery County · Incumbent Governor · Uncontested</div>
+                <div class="cr-desc">Elected Governor in 2022 after serving as Pennsylvania Attorney General. Known for aggressive consumer protection work, prosecuting Catholic Church sex abuse cases, and filing suit against the Trump administration on multiple policy fronts during his first term. His 2026 bid is uncontested in the primary — he'll face the Republican nominee in November.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="https://www.shapiroforpa.com" target="_blank">🌐 Website</a>
+                  <a class="cr-link" href="https://twitter.com/JoshShapiroPA" target="_blank">𝕏 Twitter</a>
+                  <a class="cr-link" href="https://www.instagram.com/joshshapiropa" target="_blank">📷 Instagram</a>
+                  <a class="cr-link" href="https://www.opencampaignfinance.com/pa" target="_blank">💰 Campaign Finance</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="party-block">
+            <div class="party-header ph-rep">Republican</div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Stacy Garrity</div>
+                <div class="cr-detail">Bradford County · PA State Treasurer · Uncontested</div>
+                <div class="cr-desc">U.S. Army Reserve Brigadier General and Pennsylvania's current State Treasurer. First elected Treasurer in 2020, re-elected in 2024. Has focused her campaign on state government spending and financial transparency. Uncontested in the Republican primary — will face Shapiro in November.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="https://www.stacygarrity.com" target="_blank">🌐 Website</a>
+                  <a class="cr-link" href="https://twitter.com/stacygarrity" target="_blank">𝕏 Twitter</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LIEUTENANT GOVERNOR ══ -->
+    <div class="office-card" id="card-ltgov">
+      <div class="office-card-header" onclick="toggleCard('card-ltgov')">
+        <div class="office-icon-wrap" style="background:#254f92;">🤝</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Pennsylvania · Statewide · 4-Year Term</div>
+          <div class="office-card-name">Lieutenant Governor</div>
+          <div class="office-card-tagline">The Governor's second-in-command. Steps in if the Governor can't serve. Presides over the state Senate and chairs several important boards.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge uncontested">D: Uncontested · R: 2 Candidates</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">Think of the Lt. Governor as a deputy who also has their own job. In Pennsylvania, the Lt. Governor presides over the state Senate (can cast tie-breaking votes), chairs the Board of Pardons (reviews clemency applications for people in prison), and heads the Pennsylvania Emergency Management Agency (PEMA). They also take over as Governor if the Governor resigns, is removed, or dies in office.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Board of Pardons chair</strong> — significant power over who gets released from prison or has their record cleared. <strong>Presides over the PA Senate</strong> and can cast tie-breaking votes. <strong>Emergency management oversight.</strong> <strong>Full Governor powers</strong> if needed. The Lt. Governor position is often an important stepping stone — Austin Davis is widely expected to run for Governor in 2030.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Skills you'd require if you were hiring</div>
+            <div class="eb-body">Political experience, legislative knowledge, ability to manage complex government functions, steady crisis leadership, and a public record you can examine. Their position on criminal justice reform matters given the Board of Pardons role.</div>
+          </div>
+          <div class="explainer-block blue-tint">
+            <div class="eb-label">Why it matters to Philadelphia</div>
+            <div class="eb-body">Philadelphia has the highest incarceration rate of any large American city. The Lt. Governor chairing the Board of Pardons means they have real influence over clemency decisions that affect Philadelphians inside the state prison system. Emergency management also touches Philadelphia directly during disasters or public health crises.</div>
+          </div>
+        </div>
+        <div class="ask-box">
+          <div class="ask-box-title">📋 Questions to ask before you vote for Lt. Governor</div>
+          <ul>
+            <li>What is their stated position on criminal justice reform and clemency — who should get a second chance?</li>
+            <li>Have they worked with or in state government before? What specifically did they accomplish?</li>
+            <li>Do they align with the Governor they'd serve under? A Lt. Governor who clashes with the Governor creates paralysis.</li>
+          </ul>
+        </div>
+        <div class="candidates-section">
+          <div class="cands-label">Tomorrow's candidates in Philadelphia</div>
+          <div class="party-block">
+            <div class="party-header ph-dem">Democrat</div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Austin Davis</div>
+                <div class="cr-detail">Allegheny County · Incumbent Lt. Governor · Uncontested</div>
+                <div class="cr-desc">Elected Lt. Governor alongside Shapiro in 2022. Former PA House member representing McKeesport. The first Black Lt. Governor in Pennsylvania history. Running for re-election uncontested in the Democratic primary.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="https://www.austindavispa.com" target="_blank">🌐 Website</a>
+                  <a class="cr-link" href="https://twitter.com/AustinDavisPA" target="_blank">𝕏 Twitter</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="party-block">
+            <div class="party-header ph-rep">Republican · Contested Primary</div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">John Ventre</div>
+                <div class="cr-detail">Westmoreland County</div>
+                <div class="cr-desc">Former Homeland Security official and author. Has appeared on conservative media. Running on a platform emphasizing border security and fiscal conservatism.</div>
+                <div class="cr-links"><a class="cr-link" href="https://johnventre.com" target="_blank">🌐 Website</a></div>
+              </div>
+            </div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Jason Richey</div>
+                <div class="cr-detail">Allegheny County · Attorney</div>
+                <div class="cr-desc">Pittsburgh attorney who previously ran for Governor in 2022. Running as a more moderate Republican alternative. Has focused on economic development and veterans' issues.</div>
+                <div class="cr-links"><a class="cr-link" href="https://www.jasonrichey.com" target="_blank">🌐 Website</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ U.S. REPRESENTATIVE ══ -->
+    <div class="office-card" id="card-congress">
+      <div class="office-card-header" onclick="toggleCard('card-congress')">
+        <div class="office-icon-wrap" style="background:#2d1a4a;">🇺🇸</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Federal · 2-Year Term · Philadelphia has 3 Congressional Districts</div>
+          <div class="office-card-name">U.S. Representative (Congress)</div>
+          <div class="office-card-tagline">Your member of the U.S. House of Representatives. Votes on every federal law — taxes, healthcare, immigration, military spending, foreign aid. This is the most direct line between Philadelphia and Washington.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge contested">3rd District: 4-Way Dem Primary</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">Your U.S. Representative is one of 435 members of the House of Representatives. They vote on every federal law — including the federal budget, healthcare legislation, immigration policy, foreign aid, and gun laws. They also sit on committees that oversee specific areas of government. A single representative can introduce legislation, hold hearings, and bring federal dollars back to their district.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Votes on all federal legislation.</strong> <strong>Controls federal appropriations</strong> through committee work — earmarks for Philadelphia projects come through here. <strong>Oversight of federal agencies</strong> including ICE, the VA, the FDA, and more. <strong>Confirms or blocks</strong> key executive appointees through committees. The margin in the House is thin — one representative's vote can determine whether legislation passes.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Skills you'd require if you were hiring</div>
+            <div class="eb-body">Legislative experience or deep policy expertise. A track record of constituent services — helping people navigate federal agencies. Ability to work in coalition. Clear positions on federal issues. Willingness to show up, attend votes, and hold town halls. Committee assignment ambition — the most powerful reps chair committees.</div>
+          </div>
+          <div class="explainer-block blue-tint">
+            <div class="eb-label">Which district are you in?</div>
+            <div class="eb-body"><strong>District 2:</strong> Northeast Philadelphia and parts of North Philadelphia east of Broad St. (Brendan Boyle, D, uncontested)<br><strong>District 3:</strong> West Philadelphia, Center City, parts of North Philly — open seat, contested 4-way primary replacing retiring Rep. Dwight Evans<br><strong>District 5:</strong> Parts of Philadelphia including South Philadelphia, Southwest Philadelphia (Mary Gay Scanlon, D, uncontested) <a class="cpa-link" href="https://www.house.gov/representatives/find-your-representative" target="_blank">→ Find your district</a></div>
+          </div>
+          <div class="explainer-block full">
+            <div class="eb-label">Why the 3rd District race is the one to watch</div>
+            <div class="eb-body">Rep. Dwight Evans is retiring after 40+ years in public service — 14 of them in Congress. This open seat covers some of Philadelphia's most diverse and densely populated neighborhoods: West Philadelphia, Cobbs Creek, Brewerytown, parts of North and Center City. Four Democrats are competing to replace him. <strong>Whoever wins the primary almost certainly wins in November</strong> — this district is heavily Democratic. This is the most consequential Philadelphia primary race tomorrow.</div>
+          </div>
+        </div>
+        <div class="ask-box">
+          <div class="ask-box-title">📋 Questions to ask before you vote for U.S. Representative</div>
+          <ul>
+            <li>Have they actually passed legislation, or just introduced bills that went nowhere?</li>
+            <li>What is their position on ICE enforcement and immigration? Will they push back on federal overreach?</li>
+            <li>Where do they stand on the federal budget — specifically Medicaid, Social Security, and housing vouchers that affect Philadelphia?</li>
+            <li>What committee do they want to serve on — and does it match Philadelphia's biggest needs?</li>
+            <li>Who is funding their campaign? Federal PAC money can come from industries with business before Congress.</li>
+            <li>Do they support Palestinian human rights? This has become a litmus test issue in West Philadelphia specifically.</li>
+            <li>What has their relationship been with community organizations in the district?</li>
+          </ul>
+        </div>
+        <div class="candidates-section">
+          <div class="cands-label">3rd District — Democratic Primary (the key race)</div>
+          <div class="party-block">
+            <div class="party-header ph-dem">Democrat · Vote for 1</div>
+
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Ala Stanford</div>
+                <div class="cr-detail">9th Ward · Surgeon, Health Equity Advocate</div>
+                <div class="cr-desc">Pediatric surgeon who founded the Black Doctors COVID-19 Consortium during the pandemic, administering over 75,000 vaccines in Black communities across Philadelphia. A political newcomer with massive name recognition in the district. Her campaign centers on healthcare access, economic opportunity, and community investment. Widely considered a frontrunner.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="https://alastanford.com" target="_blank">🌐 Website</a>
+                  <a class="cr-link" href="https://twitter.com/DrAlaStanford" target="_blank">𝕏 Twitter</a>
+                  <a class="cr-link" href="https://www.instagram.com/dralastanford" target="_blank">📷 Instagram</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Sharif Street</div>
+                <div class="cr-detail">11th Ward · PA State Senator</div>
+                <div class="cr-desc">Pennsylvania State Senator representing parts of North Philadelphia since 2016. Son of former Philadelphia Mayor John Street. Chair of the PA Democratic Party. Has built legislative experience in Harrisburg on criminal justice, education, and economic development. Would be leaving a safe Senate seat to pursue this race.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="https://sharifstreet.com" target="_blank">🌐 Website</a>
+                  <a class="cr-link" href="https://twitter.com/SharifStreet" target="_blank">𝕏 Twitter</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Chris Rabb</div>
+                <div class="cr-detail">9th Ward · PA State Representative (200th District)</div>
+                <div class="cr-desc">State Representative since 2017, representing parts of Germantown and Mt. Airy. Known as one of the most progressive members of the PA House — has championed reproductive rights, criminal justice reform, and environmental justice. Running on a platform of radical accountability and grassroots organizing. Has drawn the most progressive endorsements in the race.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="https://chrisrabb.com" target="_blank">🌐 Website</a>
+                  <a class="cr-link" href="https://twitter.com/RepChrisRabb" target="_blank">𝕏 Twitter</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Shaun Griffith</div>
+                <div class="cr-detail">48th Ward · Attorney, Commonwealth Employee</div>
+                <div class="cr-desc">Attorney and operations manager of USA Tax Service on Ridge Avenue. Has worked for the Commonwealth of Pennsylvania for nearly 15 years. A political newcomer who says he entered the race after growing alarm over "authoritarian governance, disparagement of immigrants and minorities, and flagrant environmental degradation." His campaign is the least funded of the four.</div>
+                <div class="cr-links">
+                  <a class="cr-link website" href="#" target="_blank">🌐 Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="party-block">
+            <div class="party-header ph-rep">Republican · 3rd District</div>
+            <div class="no-candidates">No Republican candidates filed for this race. The Democratic primary winner will be uncontested in November.</div>
+          </div>
+
+          <div style="margin-top:16px;">
+            <div class="cands-label">Other Philadelphia Congressional Races</div>
+            <div class="party-block">
+              <div class="party-header ph-both">2nd District (NE Philly + N. Philly east of Broad)</div>
+              <div class="candidate-row">
+                <div class="cr-left">
+                  <div class="cr-name">Brendan Boyle <span style="font-size:11px;color:var(--ink-mut);">(D, incumbent, uncontested)</span></div>
+                  <div class="cr-detail">58th Ward · U.S. Representative since 2015</div>
+                  <div class="cr-desc">Northeast Philadelphia native, son of a janitor, former PA state rep. Has served on Ways & Means Committee. Known for constituent services and working-class economic advocacy.</div>
+                  <div class="cr-links"><a class="cr-link website" href="https://boyle.house.gov" target="_blank">🌐 Official Site</a><a class="cr-link" href="https://twitter.com/RepBrendanBoyle" target="_blank">𝕏 Twitter</a></div>
+                </div>
+              </div>
+            </div>
+            <div class="party-block">
+              <div class="party-header ph-both">5th District (South/SW Philly, W. Philly portions)</div>
+              <div class="candidate-row">
+                <div class="cr-left">
+                  <div class="cr-name">Mary Gay Scanlon <span style="font-size:11px;color:var(--ink-mut);">(D, incumbent, uncontested)</span></div>
+                  <div class="cr-detail">Delaware County · U.S. Representative since 2018</div>
+                  <div class="cr-desc">Former civil rights attorney. Serves on the House Judiciary Committee. Has been a consistent vote on gun safety, voting rights, and healthcare. Parts of Southwest Philadelphia fall in this district.</div>
+                  <div class="cr-links"><a class="cr-link website" href="https://scanlon.house.gov" target="_blank">🌐 Official Site</a><a class="cr-link" href="https://twitter.com/RepMGS" target="_blank">𝕏 Twitter</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PA STATE SENATOR ══ -->
+    <div class="office-card" id="card-senate">
+      <div class="office-card-header" onclick="toggleCard('card-senate')">
+        <div class="office-icon-wrap" style="background:#155c2d;">🏛</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Pennsylvania · 4-Year Term · Not all districts on ballot this year</div>
+          <div class="office-card-name">Pennsylvania State Senator</div>
+          <div class="office-card-tagline">Pennsylvania's upper legislative chamber. Passes state laws, confirms the Governor's appointments, and controls the state budget alongside the House. Half the Senate is on the ballot every two years.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge contested-dem">2nd · 4th · 8th Districts</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">Pennsylvania has 50 state senators. They write and vote on state laws, confirm the Governor's appointments to state agencies and courts, and negotiate the state budget each year. A state senator has a larger constituency than a state rep but still represents a specific geographic area. They serve 4-year terms, so these choices last.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Votes on state law</strong> — everything from tenant protections to gun regulations to education funding formulas. <strong>Confirms judicial appointments.</strong> <strong>Budget power</strong> — the Senate must pass the annual state budget. <strong>Investigative committees</strong> can subpoena records and hold agencies accountable. Committee chairs hold especially concentrated power.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Skills you'd require if you were hiring</div>
+            <div class="eb-body">Legislative experience or deep expertise in a specific policy area. Track record of passing bills, not just introducing them. Constituent services history. Willingness to negotiate. Transparency about their positions on the big issues — school funding, housing, criminal justice, reproductive rights.</div>
+          </div>
+          <div class="explainer-block blue-tint">
+            <div class="eb-label">Which districts are in Philadelphia?</div>
+            <div class="eb-body"><strong>2nd District:</strong> Christine Tartaglione, D, uncontested. Northeast Philadelphia areas.<br><strong>4th District:</strong> Contested — Art Haywood vs. Mike Cogbill (D). Covers parts of Montgomery County and Philadelphia's northwest.<br><strong>8th District:</strong> Contested — Anthony Hardy Williams vs. David Goldsmith Jr. (D). Covers parts of West Philadelphia and Delaware County.</div>
+          </div>
+        </div>
+        <div class="ask-box">
+          <div class="ask-box-title">📋 Questions to ask before you vote for State Senator</div>
+          <ul>
+            <li>What bills have they actually passed — not just sponsored — during their time in office?</li>
+            <li>How do they vote on education funding for Philadelphia schools vs. charter schools?</li>
+            <li>What is their position on rent control, eviction protections, and housing investment?</li>
+            <li>Have they voted consistently with their stated positions, or do they vote differently once the cameras are off?</li>
+            <li>What is their relationship with the local Democratic Party organization? Are they independent or a machine candidate?</li>
+          </ul>
+        </div>
+        <div class="candidates-section">
+          <div class="cands-label">Philadelphia-area State Senate races</div>
+          <div class="party-block">
+            <div class="party-header ph-dem">4th District · Democratic Primary (Contested)</div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Art Haywood</div>
+                <div class="cr-detail">Montgomery County · Incumbent State Senator</div>
+                <div class="cr-desc">State Senator since 2014. Has focused on criminal justice reform, mental health services, and gun violence prevention. Chairs the Health and Human Services Committee. One of the leading voices on police accountability in the state Senate.</div>
+                <div class="cr-links"><a class="cr-link website" href="https://www.senatorhaywood.com" target="_blank">🌐 Website</a><a class="cr-link" href="https://twitter.com/SenatorHaywood" target="_blank">𝕏 Twitter</a></div>
+              </div>
+            </div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Mike Cogbill</div>
+                <div class="cr-detail">Philadelphia · Challenger</div>
+                <div class="cr-desc">Running against incumbent Haywood. Challenger candidate — limited public profile available. Check candidate's website and local endorsements to assess platform and background.</div>
+                <div class="cr-links"><a class="cr-link" href="#" target="_blank">🌐 Website</a></div>
+              </div>
+            </div>
+          </div>
+          <div class="party-block">
+            <div class="party-header ph-dem">8th District · Democratic Primary (Contested)</div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">Anthony Hardy Williams</div>
+                <div class="cr-detail">Philadelphia · Incumbent State Senator</div>
+                <div class="cr-desc">State Senator since 1998 — one of Pennsylvania's most senior legislators. Has been a prominent advocate for education reform, including school choice. Former candidate for Governor (2010) and Mayor (2015). Long track record to examine.</div>
+                <div class="cr-links"><a class="cr-link website" href="https://www.senatowilliams.com" target="_blank">🌐 Website</a><a class="cr-link" href="https://twitter.com/SenAHWilliams" target="_blank">𝕏 Twitter</a></div>
+              </div>
+            </div>
+            <div class="candidate-row">
+              <div class="cr-left">
+                <div class="cr-name">David Goldsmith Jr.</div>
+                <div class="cr-detail">Delaware County · Challenger</div>
+                <div class="cr-desc">Challenger to incumbent Williams in the 8th District. Running from the Delaware County portion of this cross-county district. Check campaign website for platform specifics.</div>
+                <div class="cr-links"><a class="cr-link" href="#" target="_blank">🌐 Website</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PA STATE REPRESENTATIVE ══ -->
+    <div class="office-card" id="card-rep">
+      <div class="office-card-header" onclick="toggleCard('card-rep')">
+        <div class="office-icon-wrap" style="background:#3a6abf;">📋</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Pennsylvania · 2-Year Term · 20+ Philadelphia Districts on Ballot</div>
+          <div class="office-card-name">Pennsylvania State Representative</div>
+          <div class="office-card-tagline">Your closest link to state government. Represents your neighborhood in Harrisburg. Votes on every state law — housing, schools, wages, criminal justice. All 203 seats are up every two years.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge contested-dem">Some Contested Primaries</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">Pennsylvania has 203 state representatives — one for roughly every 65,000 residents. They write state laws, vote on the state budget, and provide direct constituent services to people in their district. Your state rep's office can help you navigate state agencies — unemployment, driver's licenses, state benefits, and state contracts. They're also the people you call when a local issue needs a state response.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Votes on all state legislation.</strong> Democrats currently hold a one-seat majority — every seat matters. <strong>Committee work</strong> shapes which bills even get a vote. <strong>Constituent services</strong> — your rep's office intervenes with state agencies on your behalf. <strong>District resources</strong> — state grants and projects are often directed by your rep. <strong>Local presence</strong> you can actually access.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Skills you'd require if you were hiring</div>
+            <div class="eb-body">Community presence and accessibility. Knowledge of local issues. Ability to navigate Harrisburg — committee work and coalition-building matter more than speeches. A track record of showing up — attendance records, town halls, response to constituent requests. Clear positions on housing, schools, public safety, and workers' rights.</div>
+          </div>
+          <div class="explainer-block blue-tint">
+            <div class="eb-label">How to find your district</div>
+            <div class="eb-body">Philadelphia has roughly 25 state house districts. Your district is determined by your home address. Use the PA voter registration lookup or the <a class="cpa-link" href="https://www.legis.state.pa.us/cfdocs/legis/home/findyourlegislator/" target="_blank">PA Legislature District Finder →</a> to find your specific representative and who is on your primary ballot. Some districts have contested primaries — those are listed by ward on the official candidates page.</div>
+          </div>
+          <div class="explainer-block full">
+            <div class="eb-label">Contested Philadelphia State House primaries to watch</div>
+            <div class="eb-body">
+              <strong>185th District:</strong> Regina Young vs. Joe Sackor (Democratic primary) · Parts of Northwest/North Philadelphia<br>
+              <strong>192nd District:</strong> Morgan Cephas (incumbent) vs. D'Angelo Virgo (Democratic primary) · Parts of West Philadelphia<br>
+              <strong>195th District:</strong> Kenneth Walker Jr. vs. Keith Harris vs. Sierra McNeil (3-way Democratic primary) · Parts of Southwest Philadelphia<br>
+              <strong>200th District:</strong> DeShawnda Williams vs. Chris Johnson vs. Qasim Rashad (3-way Democratic primary) · Parts of North/West Philadelphia<br>
+              <strong>170th District:</strong> Rob Gurtcheff (D) vs. Martina White (R) — incumbent White is a Republican in a district that has flipped competitive
+            </div>
+          </div>
+        </div>
+        <div class="ask-box">
+          <div class="ask-box-title">📋 Questions to ask before you vote for State Rep</div>
+          <ul>
+            <li>Have you ever seen this person at a community meeting, school board hearing, or neighborhood event?</li>
+            <li>What bills have they introduced or passed? Check the PA Legislature website — it's all public.</li>
+            <li>What is their attendance record for floor votes in Harrisburg?</li>
+            <li>Who endorses them — neighborhood groups, unions, civic associations, or political machine leaders?</li>
+            <li>Do they respond to constituent calls and emails? Try calling their office before the election.</li>
+            <li>Where do they stand on Philadelphia's housing crisis — rent stabilization, tenant protections, anti-displacement?</li>
+          </ul>
+        </div>
+        <div style="background:var(--blue-xs);border:1px solid var(--blue-pl);border-radius:6px;padding:14px 16px;margin-top:10px;">
+          <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:6px;">Full Candidate List</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">All 20+ Philadelphia state house district candidates are listed on the official ballot. Because your ballot depends on your home address, use the <strong>official sample ballot lookup</strong> to see exactly who is on your ballot. <a class="cpa-link" href="https://vote.phila.gov/voting/voting-at-the-polls/sample-ballots/" target="_blank">→ Find your sample ballot at vote.phila.gov</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STATE COMMITTEE ══ -->
+    <div class="office-card" id="card-statecom">
+      <div class="office-card-header" onclick="toggleCard('card-statecom')">
+        <div class="office-icon-wrap" style="background:#c47f00;">🎯</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Party Internal · PA Democratic / Republican State Committee</div>
+          <div class="office-card-name">Member of State Committee</div>
+          <div class="office-card-tagline">The internal governing body of the political party. These people shape the party's platform, endorse candidates, and control party resources. Most voters have never heard of this office. It matters more than you think.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge contested-dem">Multiple Contested Races</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">State committee members are the internal board of directors for the Democratic or Republican Party in Pennsylvania. They set the party's platform, vote on party endorsements, control party funds, and make party rules. These are not government positions — you don't get a government salary. But they shape who the party supports and how it operates. The committee votes on party chair and can influence what issues the party prioritizes.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Party endorsements</strong> — committee members collectively decide which candidates the party backs in competitive primaries. <strong>Party platform</strong> — they approve the positions the party officially takes. <strong>Party chair election</strong> — they vote for the state party chair, who manages field operations and messaging. <strong>Rules changes</strong> — can reform or entrench how the party operates. A progressive bloc on the committee can push the party left; a machine bloc can protect incumbents.</div>
+          </div>
+          <div class="explainer-block full">
+            <div class="eb-label">Why most voters skip this and why they shouldn't</div>
+            <div class="eb-body">These positions are filled by political insiders when ordinary voters don't show up. Progressive candidates and reform-minded citizens who win state committee seats can shift how the Democratic Party operates in Philadelphia and Pennsylvania — who it endorses, what it fights for, how it spends money. Machine politicians fill these seats when nobody else runs. The people who control the party infrastructure often have more long-term influence than any single elected official. <strong>If you care about reforming the party from within, this is where you do it.</strong></div>
+          </div>
+        </div>
+        <div class="ask-box">
+          <div class="ask-box-title">📋 Questions to ask</div>
+          <ul>
+            <li>Are they an insider protecting the status quo or someone pushing for party reform?</li>
+            <li>What specific change to party operations or platform do they want to make?</li>
+            <li>Who recruited them to run — ward leaders, reform organizations, or did they come up themselves?</li>
+            <li>Check endorsements: which state committee candidates are backed by reform groups like Reclaim Philadelphia, Philadelphia DSA, or the ward machine?</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;margin-top:10px;">
+          <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;">Full Candidate Lists</div>
+          <div style="font-size:12px;color:var(--ink-soft);">State Committee races by district are on the official candidate page. <a class="cpa-link" href="https://vote.phila.gov/voting/candidates-for-office/" target="_blank">→ Full list at vote.phila.gov</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ WARD EXECUTIVE COMMITTEE ══ -->
+    <div class="office-card" id="card-ward">
+      <div class="office-card-header" onclick="toggleCard('card-ward')">
+        <div class="office-icon-wrap" style="background:#8a9ab8;">🏘</div>
+        <div class="office-card-meta">
+          <div class="office-level-tag">Hyper-Local · Party Internal · Elected by Division</div>
+          <div class="office-card-name">Ward Executive Committee Member</div>
+          <div class="office-card-tagline">The most local political position that exists. These are the people who staff polling places, knock on doors, and decide who the ward endorses. Most seats go uncontested because nobody runs.</div>
+        </div>
+        <div class="office-card-right">
+          <span class="contested-badge uncontested">Often Uncontested</span>
+          <div class="expand-arrow">▼</div>
+        </div>
+      </div>
+      <div class="office-card-body">
+        <div class="explainer-grid">
+          <div class="explainer-block">
+            <div class="eb-label">What this job actually is</div>
+            <div class="eb-body">Ward committee members are the ground-level organizers of the political party. Each ward is divided into divisions (precincts), and each division elects 2 committee members. They staff their polling place on election day, do get-out-the-vote work, and collectively the ward committee votes on who to endorse in local races. The committee also elects the ward leader — one of the most powerful local political figures in Philadelphia.</div>
+          </div>
+          <div class="explainer-block">
+            <div class="eb-label">Real power this office holds</div>
+            <div class="eb-body"><strong>Ward endorsements</strong> — committee members vote on who the ward backs. In heavily Democratic Philadelphia wards, an endorsement can determine who wins a local race. <strong>Election day operations</strong> — they run the polling place and manage turnout. <strong>Ward leader selection</strong> — the committee elects the ward leader, who has significant patronage and political power. <strong>Party gatekeeping</strong> — machine-controlled wards can freeze out challengers; reform committee members can break that open.</div>
+          </div>
+          <div class="explainer-block full blue-tint">
+            <div class="eb-label">The most important thing to know</div>
+            <div class="eb-body"><strong>Most of these seats go uncontested because nobody runs.</strong> In many Philadelphia divisions, you can run for ward committee and win with just a handful of write-in votes. If you or someone you know wants to build political power from the ground up, running for ward committee is one of the most effective and underused strategies available to ordinary citizens. Reform organizations like Reclaim Philadelphia have deliberately targeted ward committee seats to reshape who controls the party machine.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;margin-top:10px;">
+          <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;">Find Your Division's Candidates</div>
+          <div style="font-size:12px;color:var(--ink-soft);">Ward Executive Committee candidates are listed by ward and division. <a class="cpa-link" href="https://vote.phila.gov/media/2026_Final_Democratic_CP_Candidates.pdf" target="_blank">→ Download the full PDF from vote.phila.gov</a></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /offices-grid -->
+
+  <!-- ═══ BALLOT QUESTIONS ═══ -->
+  <hr class="rule">
+  <div class="section-eyebrow">Philadelphia Only</div>
+  <div class="section-title">Ballot Questions</div>
+  <div class="section-desc">These questions appear on every Philadelphia voter's ballot — regardless of party registration. Independents and third-party voters who can't vote on candidates CAN vote on these questions. Read them carefully. They change city law permanently.</div>
+
+  <div class="ballot-q">
+    <div class="bq-num">Question 1</div>
+    <div class="bq-title">Should Philadelphia create a city-run retirement savings program?</div>
+    <div class="bq-what">
+      <strong>Plain language:</strong> This question asks whether the City of Philadelphia should create and administer a retirement savings program for workers whose employers don't offer one. If approved, the city would set up an automatic enrollment retirement account system — workers could opt out, but would be automatically enrolled. Small businesses and gig workers who currently have no 401(k) or pension would gain access to a city-managed retirement savings vehicle.
+    </div>
+    <div class="bq-what">
+      <strong>What YES means:</strong> The city creates the program and can require certain employers to participate. Workers get automatic access to a retirement savings account.
+    </div>
+    <div class="bq-what">
+      <strong>What NO means:</strong> No city-run program. Workers without employer-sponsored retirement benefits continue to have no automatic option.
+    </div>
+    <div style="margin-top:10px;">
+      <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;">Who supports / who opposes</div>
+      <div style="font-size:12px;color:var(--ink-soft);">Supported by labor unions and progressive advocacy groups who argue too many Philadelphia workers — particularly in service industries — have no retirement savings at all. Some small business groups have raised concerns about administrative burden. The program would be voluntary for workers but would require city oversight infrastructure.</div>
+    </div>
+  </div>
+
+  <div class="ballot-q">
+    <div class="bq-num">Question 2</div>
+    <div class="bq-title">Should the city make permanent the office that monitors youth services?</div>
+    <div class="bq-what">
+      <strong>Plain language:</strong> Philadelphia has an office that monitors programs serving children and youth — foster care, juvenile justice, youth development, and related services. This question asks whether that oversight office should be made permanent in the city charter, rather than existing only at the discretion of the administration.
+    </div>
+    <div class="bq-what">
+      <strong>What YES means:</strong> The youth services oversight office is protected by the charter — future administrations cannot eliminate it without a new vote of the people.
+    </div>
+    <div class="bq-what">
+      <strong>What NO means:</strong> The office remains subject to being defunded or eliminated by future mayors without a public vote.
+    </div>
+    <div style="margin-top:10px;">
+      <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;">Context</div>
+      <div style="font-size:12px;color:var(--ink-soft);">Philadelphia has faced significant scrutiny over child welfare failures. Making an oversight body permanent in the charter means it can't be quietly eliminated under budget pressure or political convenience. Charter amendments require voter approval to undo, creating a structural accountability guarantee.</div>
+    </div>
+  </div>
+
+  <!-- ═══ QUICK GUIDE ═══ -->
+  <div class="quick-guide">
+    <div class="qg-title">Four things to do before 8 PM tomorrow</div>
+    <div class="qg-steps">
+      <div class="qg-step">
+        <div class="qg-num">1</div>
+        <div class="qg-head">Find your polling place</div>
+        <div class="qg-body">Enter your address on the official lookup. Your polling place may have changed since the last election.</div>
+        <a class="qg-link" href="https://atlas.phila.gov/voting" target="_blank">atlas.phila.gov/voting →</a>
+      </div>
+      <div class="qg-step">
+        <div class="qg-num">2</div>
+        <div class="qg-head">Look up your sample ballot</div>
+        <div class="qg-body">Your exact ballot depends on your address. Knowing what's on it before you walk in saves time and confusion.</div>
+        <a class="qg-link" href="https://vote.phila.gov/voting/voting-at-the-polls/sample-ballots/" target="_blank">vote.phila.gov →</a>
+      </div>
+      <div class="qg-step">
+        <div class="qg-num">3</div>
+        <div class="qg-head">Check your registration</div>
+        <div class="qg-body">If you're registered as Independent or third party, you can only vote on ballot questions — not candidates. Verify your party now.</div>
+        <a class="qg-link" href="https://www.pavoterservices.pa.gov/pages/voterregistrationstatus.aspx" target="_blank">Check status →</a>
+      </div>
+      <div class="qg-step">
+        <div class="qg-num">4</div>
+        <div class="qg-head">Bring ID if it's your first vote</div>
+        <div class="qg-body">First-time voters at a polling location must show ID — driver's license, passport, utility bill, or similar. Returning voters at the same location do not need ID.</div>
+        <a class="qg-link" href="https://vote.phila.gov/voting/voting-at-the-polls/voter-id/" target="_blank">ID rules →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Source attribution -->
+  <div style="margin-top:24px;padding:14px 0;border-top:1px solid var(--rule);display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
+    <div style="font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);">Sources</div>
+    <a href="https://vote.phila.gov/voting/candidates-for-office/" target="_blank" style="font-family:var(--font-mono);font-size:9px;color:var(--blue-lt);text-decoration:none;">vote.phila.gov · Official Candidate List</a>
+    <a href="https://www.nbcphiladelphia.com/news/politics/pa-primary-election-guide-check-your-registration-key-races-to-watch/4393949/" target="_blank" style="font-family:var(--font-mono);font-size:9px;color:var(--blue-lt);text-decoration:none;">NBC10 Philadelphia · Primary Guide</a>
+    <a href="https://www.axios.com/local/philadelphia/2026/05/15/primary-election-philadelphia-guide-2026" target="_blank" style="font-family:var(--font-mono);font-size:9px;color:var(--blue-lt);text-decoration:none;">Axios Philadelphia</a>
+    <a href="https://whyy.org/articles/pennsylvania-election-2026-primary-voter-guide-deadlines/" target="_blank" style="font-family:var(--font-mono);font-size:9px;color:var(--blue-lt);text-decoration:none;">WHYY Voter Guide</a>
+    <a href="https://www.spotlightpa.org/news/2026/04/pennsylvania-primary-election-day-2026-voter-information-registration-elections/" target="_blank" style="font-family:var(--font-mono);font-size:9px;color:var(--blue-lt);text-decoration:none;">Spotlight PA</a>
+    <div style="margin-left:auto;font-family:var(--font-mono);font-size:8px;color:var(--ink-mut);">Last verified May 18, 2026</div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Sticky vote bar -->
+<div class="vote-sticky">
+  <div>
+    <div class="vs-text">🗳 Polls open tomorrow · May 19 · 7 AM – 8 PM</div>
+    <div class="vs-sub">Pennsylvania Primary · Philadelphia · Polls open 7am, close 8pm</div>
+  </div>
+  <a class="vs-btn" href="https://atlas.phila.gov/voting" target="_blank">Find My Polling Place →</a>
+</div>
+
+<script>
+// Toggle office cards
+function toggleCard(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+// Live countdown to 7 AM May 19 2026
+function updateCountdown() {
+  const target = new Date('2026-05-19T07:00:00');
+  const now = new Date();
+  const diff = Math.max(0, target - now);
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const pad = n => String(n).padStart(2,'0');
+  const hEl = document.getElementById('rc-h');
+  const mEl = document.getElementById('rc-m');
+  const sEl = document.getElementById('rc-s');
+  if(hEl) hEl.textContent = pad(h);
+  if(mEl) mEl.textContent = pad(m);
+  if(sEl) sEl.textContent = pad(s);
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>

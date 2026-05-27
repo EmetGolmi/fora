@@ -1,0 +1,253 @@
+
+<style>
+.wrap{max-width:660px;display:flex;flex-direction:column;gap:2rem;padding:1rem 0;}
+.concept-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;}
+.concept-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:.25rem;}
+.concept-desc{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.5;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:1rem 0;}
+
+.diamond-row{font-size:11px;font-weight:500;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;margin-bottom:.75rem;}
+.diamond{color:var(--color-text-tertiary);}
+.section-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:.25rem;}
+.sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem;}
+
+/* CONCEPT A — Position first, then perspective */
+.pos-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;}
+.pos-btn{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 6px;text-align:center;cursor:pointer;background:var(--color-background-primary);transition:all .12s;}
+.pos-btn:hover{background:var(--color-background-secondary);}
+.pos-btn.active-support{border-color:#1a7a4a;border-width:1.5px;background:#eaf3de;}
+.pos-icon{font-size:16px;margin-bottom:4px;}
+.pos-label{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.pos-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px;}
+
+.persp-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;}
+.persp-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;}
+.persp-chip{font-size:12px;padding:6px 12px;border-radius:100px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px;}
+.persp-chip:hover{border-color:var(--color-border-primary);color:var(--color-text-primary);}
+.persp-chip.active{border-color:#185FA5;background:#e6f1fb;color:#185FA5;}
+.persp-chip i{font-size:14px;}
+
+textarea{width:100%;min-height:80px;resize:vertical;font-size:13px;padding:10px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);}
+.submit-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.submit-btn{font-size:12px;padding:7px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;font-weight:500;}
+.submit-btn.primary{background:#1b3a6b;color:white;border-color:#1b3a6b;}
+.anon-check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;margin-left:auto;}
+
+/* CONCEPT B — Stake + What may happen */
+.stake-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem;}
+.stake-btn{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 8px;cursor:pointer;background:var(--color-background-primary);}
+.stake-btn:hover{background:var(--color-background-secondary);}
+.stake-icon{font-size:15px;color:var(--color-text-secondary);margin-bottom:4px;}
+.stake-label{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.stake-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px;}
+
+.stance-row{display:flex;gap:6px;margin-bottom:1rem;}
+.stance-pill{flex:1;text-align:center;padding:8px 4px;border-radius:100px;border:0.5px solid var(--color-border-secondary);font-size:12px;font-weight:500;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);}
+.stance-pill:hover{background:var(--color-background-secondary);}
+.stance-pill.s-support{border-color:#1a7a4a;color:#1a7a4a;background:#eaf3de;}
+.stance-pill.s-oppose{border-color:#a32d2d;color:#a32d2d;background:#fcebeb;}
+.stance-pill.s-amend{border-color:#854f0b;color:#854f0b;background:#faeeda;}
+.stance-pill.s-undecided{border-color:var(--color-border-secondary);color:var(--color-text-secondary);}
+
+/* CONCEPT C — Concur on existing + minimal post */
+.comment-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:8px;background:var(--color-background-secondary);}
+.cc-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.cc-avatar{width:26px;height:26px;border-radius:50%;background:var(--color-background-info);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--color-text-info);}
+.cc-name{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.cc-stance{font-size:10px;padding:2px 8px;border-radius:100px;font-weight:500;}
+.cc-stance.oppose{background:#fcebeb;color:#a32d2d;}
+.cc-stance.support{background:#eaf3de;color:#1a7a4a;}
+.cc-stance.predict{background:#e6f1fb;color:#185FA5;}
+.cc-text{font-size:13px;color:var(--color-text-primary);line-height:1.5;margin-bottom:8px;}
+.cc-actions{display:flex;align-items:center;gap:12px;}
+.cc-action{font-size:11px;color:var(--color-text-secondary);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.cc-action:hover{color:var(--color-text-primary);}
+.cc-action i{font-size:13px;}
+.cc-concur-count{font-size:11px;font-weight:500;color:var(--color-text-secondary);}
+
+.add-prediction{border:0.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:12px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--color-text-secondary);font-size:13px;}
+.add-prediction i{font-size:16px;}
+</style>
+
+<div class="wrap">
+
+  <div>
+    <div class="concept-label">Concept A</div>
+    <div class="concept-title">Position first, then perspective</div>
+    <div class="concept-desc">User picks a stance (support/oppose/amend/undecided) before choosing how they see it. Creates real data. Forces clarity without demanding a comment.</div>
+    <div class="card">
+      <div class="diamond-row"><span class="diamond">&#9670;</span> Civic Voice</div>
+      <div class="section-title">Your take on Bill 251030</div>
+      <div class="sub">Where do you stand?</div>
+
+      <div class="pos-row">
+        <div class="pos-btn active-support" onclick="togglePos(this)">
+          <div class="pos-icon"><i class="ti ti-circle-check" style="color:#1a7a4a"></i></div>
+          <div class="pos-label">Support</div>
+          <div class="pos-sub">Pass it</div>
+        </div>
+        <div class="pos-btn" onclick="togglePos(this)">
+          <div class="pos-icon"><i class="ti ti-circle-x" style="color:#a32d2d"></i></div>
+          <div class="pos-label">Oppose</div>
+          <div class="pos-sub">Reject it</div>
+        </div>
+        <div class="pos-btn" onclick="togglePos(this)">
+          <div class="pos-icon"><i class="ti ti-git-branch" style="color:#854f0b"></i></div>
+          <div class="pos-label">Amend</div>
+          <div class="pos-sub">Change it</div>
+        </div>
+        <div class="pos-btn" onclick="togglePos(this)">
+          <div class="pos-icon"><i class="ti ti-help" style="color:var(--color-text-secondary)"></i></div>
+          <div class="pos-label">Undecided</div>
+          <div class="pos-sub">Still forming</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sub" style="margin-bottom:8px;">How do you see it?</div>
+      <div class="persp-row">
+        <div class="persp-chip" onclick="toggleChip(this)"><i class="ti ti-home" aria-hidden="true"></i>Affects my property</div>
+        <div class="persp-chip active" onclick="toggleChip(this)"><i class="ti ti-eye" aria-hidden="true"></i>Follow the money</div>
+        <div class="persp-chip" onclick="toggleChip(this)"><i class="ti ti-building" aria-hidden="true"></i>History matters</div>
+        <div class="persp-chip" onclick="toggleChip(this)"><i class="ti ti-scale" aria-hidden="true"></i>Due process</div>
+        <div class="persp-chip" onclick="toggleChip(this)"><i class="ti ti-arrow-right" aria-hidden="true"></i>What may happen</div>
+      </div>
+
+      <textarea placeholder="What do you see coming? What do you know from your block, your trade, your history here?"></textarea>
+      <div class="submit-row">
+        <button class="submit-btn primary">Share your take</button>
+        <label class="anon-check"><input type="checkbox" checked style="margin:0;width:14px;height:14px;"> Post anonymously</label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="concept-label">Concept B</div>
+    <div class="concept-title">Stake + stance + prediction</div>
+    <div class="concept-desc">Surfaces the "what may happen" frame prominently. Lets users declare their relationship to the bill before commenting. Good for contested legislation with diverse affected parties.</div>
+    <div class="card">
+      <div class="diamond-row"><span class="diamond">&#9670;</span> Civic Voice</div>
+      <div class="section-title">Your take on Bill 251030</div>
+      <div class="sub" style="margin-bottom:8px;">What's your stake?</div>
+
+      <div class="stake-row">
+        <div class="stake-btn">
+          <div class="stake-icon"><i class="ti ti-home" aria-hidden="true"></i></div>
+          <div class="stake-label">Property owner</div>
+          <div class="stake-sub">In District 1</div>
+        </div>
+        <div class="stake-btn">
+          <div class="stake-icon"><i class="ti ti-hammer" aria-hidden="true"></i></div>
+          <div class="stake-label">Tradesperson</div>
+          <div class="stake-sub">In the industry</div>
+        </div>
+        <div class="stake-btn">
+          <div class="stake-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+          <div class="stake-label">Neighbor</div>
+          <div class="stake-sub">Near affected area</div>
+        </div>
+        <div class="stake-btn">
+          <div class="stake-icon"><i class="ti ti-building-community" aria-hidden="true"></i></div>
+          <div class="stake-label">Civic org</div>
+          <div class="stake-sub">RCO / nonprofit</div>
+        </div>
+        <div class="stake-btn">
+          <div class="stake-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
+          <div class="stake-label">Developer</div>
+          <div class="stake-sub">Active in Philly</div>
+        </div>
+        <div class="stake-btn">
+          <div class="stake-icon"><i class="ti ti-user" aria-hidden="true"></i></div>
+          <div class="stake-label">Resident</div>
+          <div class="stake-sub">Philadelphia</div>
+        </div>
+      </div>
+
+      <div class="sub" style="margin-bottom:8px;">Where do you stand?</div>
+      <div class="stance-row">
+        <div class="stance-pill s-support">&#10003; Support</div>
+        <div class="stance-pill s-oppose">&#10005; Oppose</div>
+        <div class="stance-pill s-amend">&#8644; Amend</div>
+        <div class="stance-pill s-undecided">? Undecided</div>
+      </div>
+
+      <textarea placeholder="What do you predict will happen if this passes? What do you know that the Planning Commission doesn't?"></textarea>
+      <div class="submit-row">
+        <button class="submit-btn primary">Share your take</button>
+        <label class="anon-check"><input type="checkbox" checked style="margin:0;width:14px;height:14px;"> Post anonymously</label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="concept-label">Concept C</div>
+    <div class="concept-title">Concur on existing takes + add predictions</div>
+    <div class="concept-desc">Lowest barrier to entry. Most people don't comment — they agree. Show existing takes with concur counts, stance badges, and a dedicated "What may happen" thread for predictions.</div>
+    <div class="card">
+      <div class="diamond-row"><span class="diamond">&#9670;</span> Civic Voice</div>
+      <div class="section-title">What people are saying</div>
+      <div class="sub">Bill 251030 &middot; 14 takes &middot; District 1</div>
+
+      <div class="comment-card">
+        <div class="cc-meta">
+          <div class="cc-avatar">MV</div>
+          <div class="cc-name">Resident, Bella Vista</div>
+          <div class="cc-stance oppose">Opposes</div>
+        </div>
+        <div class="cc-text">I watched three rowhomes on my block get gutted after the owners got advance notice of a zoning appeal. This is the same playbook. A 30-day window is a demolition window.</div>
+        <div class="cc-actions">
+          <div class="cc-action"><i class="ti ti-thumb-up" aria-hidden="true"></i> Concur <span class="cc-concur-count">(23)</span></div>
+          <div class="cc-action"><i class="ti ti-arrow-right" aria-hidden="true"></i> Different view</div>
+          <div class="cc-action"><i class="ti ti-message" aria-hidden="true"></i> Reply</div>
+        </div>
+      </div>
+
+      <div class="comment-card">
+        <div class="cc-meta">
+          <div class="cc-avatar" style="background:var(--color-background-warning);color:var(--color-text-warning);">JR</div>
+          <div class="cc-name">Contractor, Old City</div>
+          <div class="cc-stance support">Supports</div>
+        </div>
+        <div class="cc-text">I had a client lose a permit to a surprise nomination filed the same morning they broke ground. No notice, no recourse. Fair process matters for small builders too.</div>
+        <div class="cc-actions">
+          <div class="cc-action"><i class="ti ti-thumb-up" aria-hidden="true"></i> Concur <span class="cc-concur-count">(11)</span></div>
+          <div class="cc-action"><i class="ti ti-arrow-right" aria-hidden="true"></i> Different view</div>
+          <div class="cc-action"><i class="ti ti-message" aria-hidden="true"></i> Reply</div>
+        </div>
+      </div>
+
+      <div class="comment-card">
+        <div class="cc-meta">
+          <div class="cc-avatar" style="background:#e6f1fb;color:#185fa5;">AK</div>
+          <div class="cc-name">Preservation architect</div>
+          <div class="cc-stance predict">Predicts</div>
+        </div>
+        <div class="cc-text">The 90-day auto-approval is the sleeper provision. Most people are focused on the 30-day notice. But if the Commission misses a deadline on a permit application — which happens — the permit is automatically approved. That is a major structural shift.</div>
+        <div class="cc-actions">
+          <div class="cc-action"><i class="ti ti-thumb-up" aria-hidden="true"></i> Concur <span class="cc-concur-count">(41)</span></div>
+          <div class="cc-action"><i class="ti ti-arrow-right" aria-hidden="true"></i> Different view</div>
+          <div class="cc-action"><i class="ti ti-message" aria-hidden="true"></i> Reply</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="add-prediction">
+        <i class="ti ti-plus" aria-hidden="true"></i>
+        Add your take &mdash; support, oppose, predict what happens, or share what you know
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePos(el){
+  el.closest('.pos-row').querySelectorAll('.pos-btn').forEach(b=>b.classList.remove('active-support'));
+  el.classList.add('active-support');
+}
+function toggleChip(el){
+  el.classList.toggle('active');
+}
+</script>
