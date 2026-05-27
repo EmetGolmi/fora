@@ -1,0 +1,447 @@
+<%
+  # ── helpers ────────────────────────────────────────────────────────────────
+  STATUS_LABELS = {
+    'near_extinct_in_region'              => ['Near Extinct in Region',      '#fdf0f0', '#a71d1d'],
+    'critically_declining'                => ['Critically Declining',         '#fdf4f0', '#b84c00'],
+    'critically_endangered'               => ['Critically Endangered',        '#fdf4f0', '#b84c00'],
+    'critically_endangered_in_homeland'   => ['Critically Endangered',        '#fdf4f0', '#b84c00'],
+    'genocide_survivor'                   => ['Genocide Survivor',            '#f5e0e0', '#7a1a1a'],
+    'diaspora_majority'                   => ['Diaspora Majority',            '#e8eef8', '#1b3a6b'],
+    'effectively_extinct_in_country'      => ['Effectively Extinct',          '#eeeeee', '#2c2c2c'],
+    'extinct_in_region'                   => ['Extinct in Region',            '#e8e8e8', '#1a1a1a'],
+    'near_extinction'                     => ['Near Extinction',              '#fdf0f0', '#a71d1d'],
+    'actively_persecuted'                 => ['Actively Persecuted',          '#fdf0f0', '#a71d1d'],
+    'cultural_suppression'                => ['Cultural Suppression',         '#fff8e8', '#7a5200'],
+    'displaced_and_suppressed'            => ['Displaced & Suppressed',       '#f5ede0', '#6b3d00'],
+    'existential_risk_post_2024'          => ['Existential Risk',             '#fdf0f0', '#a71d1d'],
+    'diaspora_endangered'                 => ['Diaspora Endangered',          '#e8eef8', '#1b3a6b'],
+    'systematically_suppressed'           => ['Systematically Suppressed',    '#fff0e0', '#804000'],
+    'stateless_marginalized'              => ['Stateless & Marginalized',     '#f0f0f0', '#444444'],
+    'criminalized_in_majority_of_region'  => ['Criminalized in Region',       '#f3e8fa', '#5a1a8a'],
+    'persecuted_stable'                   => ['Persecuted — Stable',          '#fff8e0', '#7a5500'],
+    'targeted_in_some_regions'            => ['Targeted in Some Regions',     '#fff3e0', '#914a00'],
+    'sites_destroyed_culture_under_attack'=> ['Sites Destroyed',              '#f5e0e0', '#7a1a1a'],
+    'structurally_discriminated'          => ['Structural Discrimination',    '#fff0e0', '#7a4000'],
+    'legally_persecuted'                  => ['Legally Persecuted',           '#fdf0f0', '#a71d1d'],
+  }.freeze
+
+  TYPE_LABELS = {
+    'non_muslim'      => 'Non-Muslim',
+    'muslim_minority' => 'Muslim Minority',
+    'ethnic'          => 'Ethnic',
+    'identity'        => 'Sexual & Gender',
+    'historical'      => 'Historical',
+  }.freeze
+
+  TYPE_STYLES = {
+    'non_muslim'      => 'background:#e6f1fb;color:#0c447c;border-color:#b3d0f0;',
+    'muslim_minority' => 'background:#e8f5e9;color:#1b5e20;border-color:#c8e6c9;',
+    'ethnic'          => 'background:#fff3e0;color:#7a4000;border-color:#ffcc80;',
+    'identity'        => 'background:#f3e5f5;color:#4a148c;border-color:#e1bee7;',
+    'historical'      => 'background:#fff8e1;color:#e65100;border-color:#ffe082;',
+  }.freeze
+
+  fp = ->(n) {
+    return '—' if n.nil?
+    n = n.to_i
+    return n.to_s if n < 1_000
+    return "#{(n / 1_000.0).round}K"     if n < 1_000_000
+    "#{(n / 1_000_000.0).round(n < 10_000_000 ? 1 : 0)}M"
+  }
+
+  pct = ->(c) {
+    return c['percent_change'] if c['percent_change']
+    pk, cu = c['peak_population'].to_f, c['current_population'].to_f
+    return nil if pk.zero?
+    ((cu - pk) / pk * 100).round(1)
+  }
+
+  bar_width = ->(c) {
+    pk = c['peak_population'].to_f
+    cu = c['current_population'].to_f
+    return nil if pk.zero?
+    [[(cu / pk * 100), 0.3].max, 100].min.round(2)
+  }
+
+  # filter counts
+  count_for = ->(f) {
+    f == 'all' ? @communities.size : @communities.count { |c| c['type'].include?(f) }
+  }
+
+  filters = [
+    ['all',           'All'],
+    ['non_muslim',    'Non-Muslim'],
+    ['muslim_minority','Muslim minorities'],
+    ['ethnic',        'Ethnic'],
+    ['identity',      'Sexual & Gender'],
+    ['historical',    'Historical'],
+  ]
+%>
+<% content_for(:title) { "Minority Consent · FORA" } %>
+
+<% content_for :head do %>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+/* ── HERO ── */
+.mc-hero{background:#1b3a6b;padding:44px 24px 40px;position:relative;overflow:hidden;}
+.mc-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(184,134,11,0.10) 0%,transparent 55%);pointer-events:none;}
+.mc-hero-inner{max-width:1100px;margin:0 auto;position:relative;}
+.mc-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.26em;text-transform:uppercase;color:#d4a832;margin-bottom:10px;}
+.mc-title{font-family:'Libre Baskerville',serif;font-size:38px;font-weight:700;color:#ffffff;line-height:1.1;margin-bottom:8px;}
+.mc-hero-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);margin-bottom:20px;}
+.mc-hero-desc{font-family:'Nunito',sans-serif;font-size:14.5px;color:rgba(255,255,255,0.60);max-width:640px;line-height:1.78;}
+.mc-hero-rule{width:48px;height:3px;background:linear-gradient(to right,#b8860b,#d4a832);border-radius:2px;margin:22px 0 0;}
+
+/* ── FILTER BAR ── */
+.mc-filters{background:#ffffff;border-bottom:1px solid rgba(27,58,107,0.13);position:sticky;top:60px;z-index:100;}
+.mc-filters-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none;}
+.mc-filters-inner::-webkit-scrollbar{display:none;}
+.mc-filter-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.10em;text-transform:uppercase;padding:14px 15px;border:none;background:none;cursor:pointer;color:#5a6e8a;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s,border-color 0.12s;}
+.mc-filter-btn:hover{color:#1b3a6b;}
+.mc-filter-btn.active{color:#1b3a6b;border-bottom-color:#b8860b;font-weight:700;}
+.mc-count{display:inline-block;font-size:8px;background:#f0f4fb;color:#254f92;padding:1px 5px;border-radius:8px;margin-left:4px;}
+
+/* ── GRID ── */
+.mc-grid-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 0;}
+.mc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;}
+@media(max-width:920px){.mc-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:580px){.mc-grid{grid-template-columns:1fr;}}
+
+/* ── CARD ── */
+.mc-card{background:#ffffff;border-radius:8px;border:1px solid rgba(27,58,107,0.10);overflow:hidden;transition:box-shadow 0.15s,transform 0.15s;}
+.mc-card:hover{box-shadow:0 6px 24px rgba(27,58,107,0.12);transform:translateY(-1px);}
+.mc-card[style*="display:none"]{display:none!important;}
+
+/* card color bar */
+.mc-card-bar{height:4px;}
+
+/* card body */
+.mc-card-body{padding:18px 18px 6px;}
+
+/* header row */
+.mc-card-hdr{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px;}
+.mc-card-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mc-card-name{font-family:'Libre Baskerville',serif;font-size:14.5px;font-weight:700;color:#0e1a2e;line-height:1.25;margin-bottom:3px;}
+.mc-card-sub{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;line-height:1.4;font-style:italic;}
+
+/* israel badge in header */
+.mc-il-badge{display:inline-flex;align-items:center;gap:3px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:#e8f5e9;color:#155c2d;border:1px solid #c8e6c9;border-radius:3px;padding:2px 6px;margin-top:5px;white-space:nowrap;}
+
+/* type + status badges */
+.mc-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;}
+.mc-type-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.09em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid;}
+.mc-status-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:3px;}
+
+/* pop stats */
+.mc-pop{border-top:1px solid rgba(27,58,107,0.07);padding:11px 0 0;margin-bottom:11px;}
+.mc-pop-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.mc-pop-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:#8a9ab8;}
+.mc-pop-pct{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#c23b3b;}
+.mc-pop-pct.positive{color:#155c2d;}
+.mc-pop-nums{font-family:'JetBrains Mono',monospace;font-size:9px;color:#2c3e5a;margin-bottom:6px;line-height:1.5;}
+.mc-pop-bar{height:5px;background:#f0f3f8;border-radius:3px;overflow:hidden;}
+.mc-pop-bar-fill{height:100%;border-radius:3px;}
+.mc-pop-note{font-family:'Nunito',sans-serif;font-size:11px;color:#8a9ab8;line-height:1.55;margin-top:6px;font-style:italic;}
+
+/* human scale fact — details/summary */
+.mc-fact{border-top:1px solid rgba(27,58,107,0.07);margin-bottom:0;}
+.mc-fact summary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;padding:10px 0 10px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+.mc-fact summary::-webkit-details-marker{display:none;}
+.mc-fact summary::after{content:'▼';font-size:7px;opacity:0.6;transition:transform 0.15s;}
+.mc-fact[open] summary::after{transform:rotate(180deg);}
+.mc-fact-text{font-family:'Nunito',sans-serif;font-size:12.5px;color:#2c3e5a;line-height:1.75;padding:0 0 12px;}
+
+/* language section */
+.mc-lang{border-top:1px solid rgba(27,58,107,0.07);padding:11px 0 12px;}
+.mc-lang-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:9px;}
+.mc-lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.mc-lang-cell{background:#f5f7fb;border-radius:5px;padding:8px 10px;}
+.mc-lang-cell.full{grid-column:1/-1;}
+.mc-lang-cell-lbl{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.12em;text-transform:uppercase;color:#8a9ab8;margin-bottom:3px;}
+.mc-lang-cell-val{font-family:'Nunito',sans-serif;font-size:12px;color:#2c3e5a;line-height:1.45;}
+
+/* israel connection */
+.mc-israel{border-top:1px solid rgba(27,58,107,0.07);margin-bottom:0;}
+.mc-israel summary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:#155c2d;padding:10px 0 10px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+.mc-israel summary::-webkit-details-marker{display:none;}
+.mc-israel summary::after{content:'▼';font-size:7px;opacity:0.6;transition:transform 0.15s;}
+.mc-israel[open] summary::after{transform:rotate(180deg);}
+.mc-israel-body{background:#e8f5e9;border-radius:5px;padding:10px 12px;margin-bottom:12px;}
+.mc-israel-text{font-family:'Nunito',sans-serif;font-size:12px;color:#1b3a1e;line-height:1.65;}
+
+/* resources */
+.mc-resources{border-top:1px solid rgba(27,58,107,0.07);padding:11px 0 4px;}
+.mc-resources-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:8px;}
+.mc-resources ul{list-style:none;}
+.mc-resources li{margin-bottom:4px;}
+.mc-resources a{font-family:'Nunito',sans-serif;font-size:12px;color:#254f92;text-decoration:none;display:flex;align-items:flex-start;gap:5px;line-height:1.4;}
+.mc-resources a::before{content:'↗';font-size:10px;color:#8a9ab8;flex-shrink:0;margin-top:1px;}
+.mc-resources a:hover{text-decoration:underline;}
+
+/* card padding bottom */
+.mc-card-foot{padding-bottom:14px;}
+
+/* empty state */
+.mc-empty{text-align:center;padding:64px 24px;grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8a9ab8;letter-spacing:0.12em;text-transform:uppercase;}
+
+/* ── FOOTER ── */
+.mc-footer{background:#1b3a6b;margin-top:60px;padding:44px 24px 52px;}
+.mc-footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start;}
+.mc-footer-section-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.22em;text-transform:uppercase;color:#d4a832;margin-bottom:10px;}
+.mc-footer-text{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.75;}
+.mc-footer-text a{color:rgba(212,168,50,0.85);text-decoration:none;}
+.mc-footer-text a:hover{text-decoration:underline;}
+.mc-footer-sources ul{list-style:none;}
+.mc-footer-sources li{margin-bottom:5px;}
+.mc-footer-sources a{font-family:'Nunito',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none;transition:color 0.12s;}
+.mc-footer-sources a:hover{color:rgba(255,255,255,0.8);}
+.mc-footer-rule{width:40px;height:2px;background:#b8860b;border-radius:2px;margin:24px 0 0;}
+@media(max-width:680px){
+  .mc-title{font-size:26px;}
+  .mc-footer-inner{grid-template-columns:1fr;}
+  .mc-lang-grid{grid-template-columns:1fr;}
+}
+</style>
+<% end %>
+
+<%# ── HERO ──────────────────────────────────────────────────────────────── %>
+<div class="mc-hero">
+  <div class="mc-hero-inner">
+    <div class="mc-eyebrow">fora.center/mc</div>
+    <h1 class="mc-title">Minority Consent</h1>
+    <div class="mc-hero-sub">24 communities · Middle East · Central Asia · North Africa</div>
+    <p class="mc-hero-desc">A reference on the religious and ethnic minorities whose histories, languages, and populations have been erased, displaced, or eliminated across the greater Middle East — and who remain largely invisible in mainstream discourse about the region.</p>
+    <div class="mc-hero-rule"></div>
+  </div>
+</div>
+
+<%# ── FILTER BAR ─────────────────────────────────────────────────────────── %>
+<div class="mc-filters">
+  <div class="mc-filters-inner">
+    <% filters.each do |key, label| %>
+      <button
+        class="mc-filter-btn<%= key == 'all' ? ' active' : '' %>"
+        data-filter="<%= key %>">
+        <%= label %><span class="mc-count"><%= count_for.call(key) %></span>
+      </button>
+    <% end %>
+  </div>
+</div>
+
+<%# ── GRID ───────────────────────────────────────────────────────────────── %>
+<div class="mc-grid-wrap">
+  <div class="mc-grid" id="mc-grid">
+
+    <% if @communities.empty? %>
+      <div class="mc-empty">No communities loaded.</div>
+    <% end %>
+
+    <% @communities.each do |c| %>
+      <%
+        s_info  = STATUS_LABELS[c['status']] || [c['status'].to_s.tr('_',' ').capitalize, '#f0f0f0', '#444']
+        p_val   = pct.call(c)
+        bw      = bar_width.call(c)
+        has_pop = c['peak_population'] || c['current_population']
+        types   = c['type'] || []
+        color   = c['color'] || '#1b3a6b'
+        clight  = c['color_light'] || '#e6f1fb'
+        has_il  = c['israel_connection'].present?
+        fact    = c['human_scale_fact'].to_s
+      %>
+      <div
+        class="mc-card"
+        data-types="<%= types.join(' ') %>"
+        id="mc-<%= c['id'] %>">
+
+        <%# colored top bar %>
+        <div class="mc-card-bar" style="background:<%= color %>;"></div>
+
+        <div class="mc-card-body">
+
+          <%# header %>
+          <div class="mc-card-hdr">
+            <div class="mc-card-num" style="background:<%= clight %>;color:<%= color %>;">
+              <%= c['number'] %>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div class="mc-card-name"><%= c['name'] %></div>
+              <div class="mc-card-sub"><%= c['subtitle'] %></div>
+              <% if has_il %>
+                <span class="mc-il-badge">◇ Israel connection</span>
+              <% end %>
+            </div>
+          </div>
+
+          <%# type + status badges %>
+          <div class="mc-badges">
+            <% types.each do |t| %>
+              <span class="mc-type-badge" style="<%= TYPE_STYLES[t] || '' %>">
+                <%= TYPE_LABELS[t] || t %>
+              </span>
+            <% end %>
+            <span class="mc-status-badge" style="background:<%= s_info[1] %>;color:<%= s_info[2] %>;">
+              <%= s_info[0] %>
+            </span>
+          </div>
+
+          <%# population stats %>
+          <% if has_pop %>
+            <div class="mc-pop">
+              <div class="mc-pop-meta">
+                <span class="mc-pop-lbl">Population</span>
+                <% if p_val %>
+                  <span class="mc-pop-pct<%= p_val >= 0 ? ' positive' : '' %>">
+                    <%= p_val >= 0 ? '+' : '' %><%= p_val %>%
+                  </span>
+                <% end %>
+              </div>
+              <div class="mc-pop-nums">
+                <%= fp.call(c['peak_population']) %>
+                <% if c['peak_year'] %>(<%= c['peak_year'] %>)<% end %>
+                → <%= fp.call(c['current_population']) %>
+                <% if c['current_year'] %>(<%= c['current_year'] %>)<% end %>
+              </div>
+              <% if bw %>
+                <div class="mc-pop-bar">
+                  <div class="mc-pop-bar-fill" style="width:<%= bw %>%;background:<%= color %>;"></div>
+                </div>
+              <% end %>
+              <% if c['note_on_numbers'].present? %>
+                <div class="mc-pop-note"><%= c['note_on_numbers'] %></div>
+              <% end %>
+            </div>
+          <% elsif c['note_on_numbers'].present? %>
+            <div class="mc-pop">
+              <div class="mc-pop-note" style="margin-top:0;"><%= c['note_on_numbers'] %></div>
+            </div>
+          <% end %>
+
+          <%# human scale fact %>
+          <% if fact.present? %>
+            <details class="mc-fact">
+              <summary>◆ Human Scale</summary>
+              <p class="mc-fact-text"><%= fact %></p>
+            </details>
+          <% end %>
+
+          <%# language section %>
+          <div class="mc-lang">
+            <div class="mc-lang-lbl">◆ Language & Script</div>
+            <div class="mc-lang-grid">
+              <% if c['native_language'].present? %>
+                <div class="mc-lang-cell">
+                  <div class="mc-lang-cell-lbl">Native Language</div>
+                  <div class="mc-lang-cell-val"><%= c['native_language'] %></div>
+                </div>
+              <% end %>
+              <% if c['native_script'].present? %>
+                <div class="mc-lang-cell">
+                  <div class="mc-lang-cell-lbl">Native Script</div>
+                  <div class="mc-lang-cell-val"><%= c['native_script'] %></div>
+                </div>
+              <% end %>
+              <% if c['language_vitality'].present? && c['language_vitality'] != 'N/A' %>
+                <div class="mc-lang-cell full">
+                  <div class="mc-lang-cell-lbl">Language Vitality</div>
+                  <div class="mc-lang-cell-val"><%= c['language_vitality'] %></div>
+                </div>
+              <% end %>
+              <% ab = c['arabization_status'].to_s; if ab.present? && !ab.start_with?('N/A') %>
+                <div class="mc-lang-cell full">
+                  <div class="mc-lang-cell-lbl">Arabization / Cultural Pressure</div>
+                  <div class="mc-lang-cell-val"><%= ab %></div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <%# israel connection %>
+          <% if has_il %>
+            <details class="mc-israel">
+              <summary>◇ Israel Connection</summary>
+              <div class="mc-israel-body">
+                <div class="mc-israel-text"><%= c['israel_connection'] %></div>
+              </div>
+            </details>
+          <% end %>
+
+          <%# resources %>
+          <% if c['resources'].present? %>
+            <div class="mc-resources">
+              <div class="mc-resources-lbl">◆ Resources</div>
+              <ul>
+                <% c['resources'].each do |r| %>
+                  <li>
+                    <a href="<%= r['url'] %>" target="_blank" rel="noopener noreferrer">
+                      <%= r['label'] %>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+        </div><%# /mc-card-body %>
+        <div class="mc-card-foot"></div>
+
+      </div><%# /mc-card %>
+    <% end %>
+
+  </div><%# /mc-grid %>
+</div><%# /mc-grid-wrap %>
+
+<%# ── FOOTER ─────────────────────────────────────────────────────────────── %>
+<footer class="mc-footer">
+  <div class="mc-footer-inner">
+
+    <div>
+      <div class="mc-footer-section-lbl">◆ Methodology</div>
+      <p class="mc-footer-text">
+        Population figures are drawn from academic demography, UN refugee agency reports, government census data where available, and peer-reviewed scholarship on minority communities. Where no contemporary census exists — as with stateless or criminalized populations — figures represent best scholarly estimates with noted uncertainty. Percentage changes reflect relative decline within the specific geographic region documented, not global diaspora totals. The word "consent" in <em>Minority Consent</em> is intentional: these communities did not consent to their erasure.
+      </p>
+      <div class="mc-footer-rule"></div>
+    </div>
+
+    <div class="mc-footer-sources">
+      <div class="mc-footer-section-lbl">◆ Primary Sources</div>
+      <ul>
+        <li><a href="https://www.unhcr.org" target="_blank" rel="noopener">UNHCR — refugee & displacement data</a></li>
+        <li><a href="https://www.minorityrights.org" target="_blank" rel="noopener">Minority Rights Group International</a></li>
+        <li><a href="https://www.hrw.org" target="_blank" rel="noopener">Human Rights Watch — country reports</a></li>
+        <li><a href="https://www.uscirf.gov" target="_blank" rel="noopener">US Commission on International Religious Freedom</a></li>
+        <li><a href="https://www.ethnologue.com" target="_blank" rel="noopener">Ethnologue — language vitality data</a></li>
+        <li><a href="https://www.jewishvirtuallibrary.org" target="_blank" rel="noopener">Jewish Virtual Library</a></li>
+        <li><a href="https://www.icc-cpi.int" target="_blank" rel="noopener">International Criminal Court — cultural heritage cases</a></li>
+      </ul>
+      <p class="mc-footer-text" style="margin-top:20px;">
+        Corrections, additions, or community perspectives welcome:<br>
+        <a href="mailto:arkitectnoah@gmail.com">arkitectnoah@gmail.com</a>
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<%# ── FILTER JS (vanilla only) ───────────────────────────────────────────── %>
+<script>
+(function () {
+  var btns  = document.querySelectorAll('.mc-filter-btn');
+  var cards = document.querySelectorAll('.mc-card');
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      var f = btn.dataset.filter;
+
+      cards.forEach(function (card) {
+        var types = card.dataset.types ? card.dataset.types.split(' ') : [];
+        card.style.display = (f === 'all' || types.indexOf(f) !== -1) ? '' : 'none';
+      });
+    });
+  });
+}());
+</script>
