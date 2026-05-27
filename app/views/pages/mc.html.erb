@@ -335,6 +335,138 @@ html{scroll-behavior:smooth;}
             </div>
           <% end %>
 
+          <%# population timeline chart %>
+          <%
+            chart_points = []
+            if c['timeline_data']
+              c['timeline_data'].each do |t|
+                chart_points << { year: t['year'].to_i, pop: t['pop'].to_i } if t['pop']
+              end
+            end
+            if c['peak_population'] && c['peak_year']
+              unless chart_points.any? { |p| p[:year] == c['peak_year'].to_i }
+                chart_points << { year: c['peak_year'].to_i, pop: c['peak_population'].to_i }
+              end
+            end
+            if c['current_population'] && c['current_year']
+              unless chart_points.any? { |p| p[:year] == c['current_year'].to_i }
+                chart_points << { year: c['current_year'].to_i, pop: c['current_population'].to_i }
+              end
+            end
+            chart_points = chart_points.select { |p| p[:pop] && p[:pop] > 0 }.sort_by { |p| p[:year] }
+            has_chart = chart_points.length >= 2
+
+            if has_chart
+              chart_w  = 280; chart_h = 80
+              pad_l    = 36;  pad_r   = 10; pad_t = 8; pad_b = 20
+
+              years      = chart_points.map { |p| p[:year] }
+              pops       = chart_points.map { |p| p[:pop]  }
+              year_min   = years.min
+              year_max   = [years.max, c['current_year'].to_i].max
+              year_range = [year_max - year_min, 1].max
+
+              log_pops  = pops.map  { |p| Math.log10([p, 1].max) }
+              log_min   = log_pops.min
+              log_max   = [log_pops.max, log_min + 0.1].max
+              log_range = log_max - log_min
+
+              x_for = ->(yr)  { pad_l + (yr - year_min).to_f / year_range * (chart_w - pad_l - pad_r) }
+              y_for = ->(pop) { pad_t + (1 - (Math.log10([pop, 1].max) - log_min) / log_range) * (chart_h - pad_t - pad_b) }
+
+              polyline_pts = chart_points.map { |p| "#{x_for.call(p[:year]).round(1)},#{y_for.call(p[:pop]).round(1)}" }.join(' ')
+
+              event_xs = []
+              if c['key_destruction_events']
+                c['key_destruction_events'].each do |ev|
+                  yr = ev['year'].to_i
+                  event_xs << { x: x_for.call(yr).round(1), label: yr.to_s } if yr >= year_min && yr <= year_max
+                end
+              end
+            end
+          %>
+          <% if has_chart %>
+          <div class="mc-chart-wrap" style="margin:10px 0 4px;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;
+              text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;">
+              ◆ Population over time
+            </div>
+            <svg viewBox="0 0 <%= chart_w %> <%= chart_h %>"
+                 width="100%" height="<%= chart_h %>"
+                 style="display:block;overflow:visible;"
+                 role="img"
+                 aria-label="Population timeline for <%= c['name'] %>">
+
+              <%# destruction event lines %>
+              <% event_xs.each do |ev| %>
+                <line x1="<%= ev[:x] %>" y1="<%= pad_t %>"
+                      x2="<%= ev[:x] %>" y2="<%= chart_h - pad_b %>"
+                      stroke="#d85a30" stroke-width="1"
+                      stroke-dasharray="2,2" opacity="0.6"/>
+                <text x="<%= ev[:x] %>" y="<%= chart_h - pad_b + 9 %>"
+                      font-size="6" fill="#d85a30" text-anchor="middle"
+                      font-family="JetBrains Mono, monospace">
+                  <%= ev[:label] %>
+                </text>
+              <% end %>
+
+              <%# y-axis gridlines %>
+              <% [1000, 10000, 100000, 1000000, 10000000].each do |grid_pop| %>
+                <% if grid_pop >= pops.min * 0.1 && grid_pop <= pops.max * 10 %>
+                  <% gy = y_for.call(grid_pop).round(1) %>
+                  <% if gy >= pad_t && gy <= chart_h - pad_b %>
+                    <line x1="<%= pad_l %>" y1="<%= gy %>"
+                          x2="<%= chart_w - pad_r %>" y2="<%= gy %>"
+                          stroke="currentColor" opacity="0.08" stroke-width="0.5"/>
+                    <text x="<%= pad_l - 2 %>" y="<%= gy + 3 %>"
+                          font-size="6" fill="currentColor" opacity="0.4"
+                          text-anchor="end" font-family="JetBrains Mono, monospace">
+                      <%= grid_pop >= 1_000_000 ? "#{grid_pop / 1_000_000}M" : grid_pop >= 1_000 ? "#{grid_pop / 1_000}k" : grid_pop %>
+                    </text>
+                  <% end %>
+                <% end %>
+              <% end %>
+
+              <%# dashed connecting line %>
+              <polyline points="<%= polyline_pts %>"
+                        fill="none"
+                        stroke="<%= c['color'] %>"
+                        stroke-width="1.5"
+                        stroke-dasharray="4,3"
+                        opacity="0.5"/>
+
+              <%# data point dots %>
+              <% chart_points.each do |pt| %>
+                <circle cx="<%= x_for.call(pt[:year]).round(1) %>"
+                        cy="<%= y_for.call(pt[:pop]).round(1) %>"
+                        r="3" fill="<%= c['color'] %>"
+                        stroke="white" stroke-width="1"/>
+              <% end %>
+
+              <%# year labels at first and last points %>
+              <% if chart_points.length >= 2 %>
+                <text x="<%= x_for.call(chart_points.first[:year]).round(1) %>"
+                      y="<%= chart_h - pad_b + 9 %>"
+                      font-size="7" fill="currentColor" opacity="0.5"
+                      text-anchor="middle" font-family="JetBrains Mono, monospace">
+                  <%= chart_points.first[:year] %>
+                </text>
+                <text x="<%= [x_for.call(chart_points.last[:year]).round(1), chart_w - pad_r - 2].min %>"
+                      y="<%= chart_h - pad_b + 9 %>"
+                      font-size="7" fill="currentColor" opacity="0.5"
+                      text-anchor="middle" font-family="JetBrains Mono, monospace">
+                  <%= chart_points.last[:year] %>
+                </text>
+              <% end %>
+
+            </svg>
+            <div style="font-size:9px;color:var(--ink-mut);margin-top:2px;">
+              Dots = known data points. Dashed line = trajectory.
+              <span style="color:#d85a30;">Orange lines = key destruction events.</span>
+            </div>
+          </div>
+          <% end %>
+
           <%# human scale fact %>
           <% if fact.present? %>
             <details class="mc-fact">
