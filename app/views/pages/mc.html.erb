@@ -255,6 +255,23 @@ html{scroll-behavior:smooth;}
         data-types="<%= types.join(' ') %>"
         id="mc-<%= c['id'] %>">
 
+        <%# community image %>
+        <% if c['wikimedia_image'] %>
+          <div style="height:160px;overflow:hidden;background:#e8e5dc;position:relative;">
+            <img src="<%= c['wikimedia_image'] %>"
+                 alt="<%= c['image_caption'] %>"
+                 loading="lazy"
+                 style="width:100%;height:100%;object-fit:cover;display:block;"
+                 onerror="this.parentElement.style.display='none'">
+            <div style="position:absolute;bottom:0;left:0;right:0;
+              padding:5px 10px;background:rgba(0,0,0,0.55);
+              font-size:10px;color:rgba(255,255,255,0.85);line-height:1.4;">
+              <%= c['image_caption'] %>
+              <span style="opacity:0.6;"> / <%= c['image_credit'] %></span>
+            </div>
+          </div>
+        <% end %>
+
         <%# colored top bar %>
         <div class="mc-card-bar" style="background:<%= color %>;"></div>
 
@@ -356,6 +373,36 @@ html{scroll-behavior:smooth;}
               <% end %>
             </div>
           </div>
+
+          <%# script sample %>
+          <% if c['script_sample'] %>
+            <div style="margin:12px 0;padding:12px;background:var(--bg);
+              border-radius:6px;border:1px solid #e0ddd5;">
+              <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;
+                text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;">
+                ◆ Native script
+              </div>
+              <div style="font-size:28px;line-height:1.4;margin-bottom:6px;
+                direction:<%= c['script_direction'] || 'ltr' %>;
+                color:<%= c['color'] %>;">
+                <%= c['script_sample'] %>
+              </div>
+              <% if c['script_sample_transliteration'] %>
+                <div style="font-size:11px;color:var(--ink-soft);
+                  font-style:italic;margin-bottom:4px;">
+                  "<%= c['script_sample_transliteration'] %>"
+                </div>
+              <% end %>
+              <div style="font-size:11px;color:var(--ink-mut);line-height:1.5;">
+                <%= c['script_sample_note'] %>
+              </div>
+              <% if c['script_render_warning'] %>
+                <div style="font-size:10px;color:#b84c00;margin-top:4px;">
+                  ⚠ <%= c['script_render_warning'] %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
 
           <%# israel connection %>
           <% if has_il %>
