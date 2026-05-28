@@ -23,6 +23,11 @@
     'sites_destroyed_culture_under_attack'=> ['Sites Destroyed',              '#f5e0e0', '#7a1a1a'],
     'structurally_discriminated'          => ['Structural Discrimination',    '#fff0e0', '#7a4000'],
     'legally_persecuted'                  => ['Legally Persecuted',           '#fdf0f0', '#a71d1d'],
+    'active_atrocity'                     => ['Active Atrocity',              '#fdf0f0', '#a71d1d'],
+    'extinct_in_country'                  => ['Extinct in Country',           '#e8e8e8', '#1a1a1a'],
+    'complex_multiple_persecutions'       => ['Multiple Persecutions',        '#fdf4f0', '#b84c00'],
+    'persecuted_growing'                  => ['Persecuted — Growing',         '#e8f5e9', '#155c2d'],
+    'growing_but_persecuted'              => ['Growing but Persecuted',       '#e8f5e9', '#155c2d'],
   }.freeze
 
   type_labels = {
@@ -76,6 +81,14 @@
     ['identity',      'Sexual & Gender'],
     ['historical',    'Historical'],
   ]
+
+  regions_order = ['mena_central_asia', 'south_southeast_asia', 'sub_saharan_africa']
+  region_labels = {
+    'mena_central_asia'    => 'Middle East, North Africa & Central Asia',
+    'south_southeast_asia' => 'South & Southeast Asia',
+    'sub_saharan_africa'   => 'Sub-Saharan Africa',
+  }
+  communities_by_region = @communities.group_by { |c| c['region'] || 'mena_central_asia' }
 %>
 <% content_for(:title) { "Minority Consent · FORA" } %>
 
@@ -204,6 +217,13 @@ html{scroll-behavior:smooth;}
   .mc-lang-grid{grid-template-columns:1fr;}
 }
 
+/* ── REGION DIVIDERS ── */
+.mc-region-divider{display:flex;align-items:baseline;justify-content:space-between;padding:28px 0 12px;border-top:2px solid #1b3a6b;margin-top:20px;}
+.mc-region-divider:first-child{border-top:none;margin-top:0;padding-top:0;}
+.mc-region-label{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#1b3a6b;}
+.mc-region-count{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:#8a9ab8;}
+@media(max-width:580px){.mc-region-divider{flex-direction:column;gap:4px;}.mc-region-label{font-size:15px;}}
+
 /* ── MAP SECTION ── */
 .mc-map-section{background:#0e1a2e;padding:40px 24px 32px;}
 .mc-map-inner{max-width:1100px;margin:0 auto;}
@@ -227,7 +247,7 @@ html{scroll-behavior:smooth;}
   <div class="mc-hero-inner">
     <div class="mc-eyebrow">fora.center/mc</div>
     <h1 class="mc-title">Minority Consent</h1>
-    <div class="mc-hero-sub">27 communities · Middle East · Central Asia · North Africa</div>
+    <div class="mc-hero-sub">32 communities · Middle East · Central Asia · North Africa · Sub-Saharan Africa</div>
     <p class="mc-hero-desc">A reference on the religious and ethnic minorities whose histories, languages, and populations have been erased, displaced, or eliminated across the greater Middle East — and who remain largely invisible in mainstream discourse about the region.</p>
     <div class="mc-hero-rule"></div>
   </div>
@@ -274,13 +294,22 @@ html{scroll-behavior:smooth;}
 
 <%# ── GRID ───────────────────────────────────────────────────────────────── %>
 <div class="mc-grid-wrap">
-  <div class="mc-grid" id="mc-grid">
 
-    <% if @communities.empty? %>
-      <div class="mc-empty">No communities loaded.</div>
-    <% end %>
+  <% if @communities.empty? %>
+    <div class="mc-empty">No communities loaded.</div>
+  <% end %>
 
-    <% @communities.each do |c| %>
+  <% regions_order.each do |region| %>
+    <% next unless communities_by_region[region]&.any? %>
+    <% region_communities = communities_by_region[region] %>
+
+    <div class="mc-region-divider" data-region="<%= region %>">
+      <div class="mc-region-label"><%= region_labels[region] %></div>
+      <div class="mc-region-count"><%= region_communities.length %> communities documented</div>
+    </div>
+
+    <div class="mc-grid mc-region-grid" data-region="<%= region %>">
+    <% region_communities.each do |c| %>
       <%
         s_info  = status_labels[c['status']] || [c['status'].to_s.tr('_',' ').capitalize, '#f0f0f0', '#444']
         p_val   = pct.call(c)
@@ -636,8 +665,9 @@ html{scroll-behavior:smooth;}
 
       </div><%# /mc-card %>
     <% end %>
+    </div><%# /mc-region-grid %>
+  <% end %>
 
-  </div><%# /mc-grid %>
 </div><%# /mc-grid-wrap %>
 
 <%# ── FOOTER ─────────────────────────────────────────────────────────────── %>
@@ -649,6 +679,15 @@ html{scroll-behavior:smooth;}
       <p class="mc-footer-text">
         Population figures are drawn from academic demography, UN refugee agency reports, government census data where available, and peer-reviewed scholarship on minority communities. Where no contemporary census exists — as with stateless or criminalized populations — figures represent best scholarly estimates with noted uncertainty. Percentage changes reflect relative decline within the specific geographic region documented, not global diaspora totals. The word "consent" in <em>Minority Consent</em> is intentional: these communities did not consent to their erasure.
       </p>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(27,58,107,0.18);border-radius:6px;font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;">
+        <strong style="color:rgba(255,255,255,0.75);">Geographic scope:</strong> This project began documenting
+        communities in the Middle East, North Africa, and Central Asia —
+        the lands of the former Ottoman, Persian, and Byzantine empires.
+        It has expanded to include South/Southeast Asia and Sub-Saharan Africa
+        where the same patterns of enforced religious uniformity, systematic
+        persecution, and demographic erasure are documented. The pattern is
+        not regional. It is a logic.
+      </div>
       <div class="mc-footer-rule"></div>
     </div>
 
@@ -688,6 +727,17 @@ html{scroll-behavior:smooth;}
       cards.forEach(function (card) {
         var types = card.dataset.types ? card.dataset.types.split(' ') : [];
         card.style.display = (f === 'all' || types.indexOf(f) !== -1) ? '' : 'none';
+      });
+
+      document.querySelectorAll('.mc-region-grid').forEach(function (grid) {
+        var visible = Array.from(grid.querySelectorAll('.mc-card')).some(function (card) {
+          return card.style.display !== 'none';
+        });
+        grid.style.display = visible ? '' : 'none';
+        var divider = grid.previousElementSibling;
+        if (divider && divider.classList.contains('mc-region-divider')) {
+          divider.style.display = visible ? '' : 'none';
+        }
       });
     });
   });
