@@ -203,6 +203,22 @@ html{scroll-behavior:smooth;}
   .mc-footer-inner{grid-template-columns:1fr;}
   .mc-lang-grid{grid-template-columns:1fr;}
 }
+
+/* ── MAP SECTION ── */
+.mc-map-section{background:#0e1a2e;padding:40px 24px 32px;}
+.mc-map-inner{max-width:1100px;margin:0 auto;}
+.mc-map-hdr{margin-bottom:18px;}
+.mc-map-desc{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);margin:8px 0 14px;line-height:1.6;}
+.mc-map-modes{display:flex;flex-wrap:wrap;gap:6px;}
+.mc-map-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.10em;text-transform:uppercase;padding:6px 12px;border:1px solid rgba(255,255,255,0.18);border-radius:3px;background:none;color:rgba(255,255,255,0.50);cursor:pointer;transition:all 0.12s;}
+.mc-map-btn.active{background:#b8860b;border-color:#b8860b;color:#fff;}
+.mc-map-btn:hover:not(.active){border-color:rgba(255,255,255,0.45);color:rgba(255,255,255,0.85);}
+#mc-map-root{position:relative;width:100%;overflow:hidden;border-radius:6px;margin-top:4px;}
+#mc-map-svg svg{width:100%;height:auto;display:block;background:#162032;}
+#mc-map-tip{position:absolute;display:none;background:rgba(14,26,46,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:5px;padding:9px 13px;font-family:'Nunito',sans-serif;font-size:12px;color:#fff;pointer-events:none;max-width:220px;line-height:1.6;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.mc-map-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;color:rgba(255,255,255,0.40);}
+.mc-map-legend-bar{width:140px;height:7px;border-radius:2px;background:linear-gradient(to right,#f5f0e8,#d4832a,#b02828,#5a0000);}
+.mc-map-legend-nd{margin-left:8px;}
 </style>
 <% end %>
 
@@ -211,9 +227,35 @@ html{scroll-behavior:smooth;}
   <div class="mc-hero-inner">
     <div class="mc-eyebrow">fora.center/mc</div>
     <h1 class="mc-title">Minority Consent</h1>
-    <div class="mc-hero-sub">24 communities · Middle East · Central Asia · North Africa</div>
+    <div class="mc-hero-sub">27 communities · Middle East · Central Asia · North Africa</div>
     <p class="mc-hero-desc">A reference on the religious and ethnic minorities whose histories, languages, and populations have been erased, displaced, or eliminated across the greater Middle East — and who remain largely invisible in mainstream discourse about the region.</p>
     <div class="mc-hero-rule"></div>
+  </div>
+</div>
+
+<%# ── MAP ────────────────────────────────────────────────────────────────── %>
+<div class="mc-map-section">
+  <div class="mc-map-inner">
+    <div class="mc-map-hdr">
+      <div class="mc-eyebrow" style="color:#d4a832;">◆ The emptied lands</div>
+      <p class="mc-map-desc">Estimated decline of non-Muslim minority populations since 1948, by country. Hover a country for details.</p>
+      <div class="mc-map-modes">
+        <button class="mc-map-btn active" onclick="setMapMode('all')">All minorities</button>
+        <button class="mc-map-btn" onclick="setMapMode('jewish')">Jewish</button>
+        <button class="mc-map-btn" onclick="setMapMode('christian')">Christian</button>
+        <button class="mc-map-btn" onclick="setMapMode('other')">Yazidi · Zoroastrian · Hindu/Sikh</button>
+      </div>
+    </div>
+    <div id="mc-map-root">
+      <div id="mc-map-svg"></div>
+      <div id="mc-map-tip"></div>
+    </div>
+    <div class="mc-map-legend">
+      <span>No decline</span>
+      <div class="mc-map-legend-bar"></div>
+      <span>−100%</span>
+      <span class="mc-map-legend-nd">◻ No data</span>
+    </div>
   </div>
 </div>
 
@@ -648,6 +690,184 @@ html{scroll-behavior:smooth;}
         card.style.display = (f === 'all' || types.indexOf(f) !== -1) ? '' : 'none';
       });
     });
+  });
+}());
+</script>
+
+<%# ── CHOROPLETH MAP JS ───────────────────────────────────────────────────── %>
+<script>
+(function () {
+  var NAMES = {4:'Afghanistan',12:'Algeria',48:'Bahrain',364:'Iran',368:'Iraq',376:'Israel',400:'Jordan',414:'Kuwait',422:'Lebanon',434:'Libya',504:'Morocco',512:'Oman',586:'Pakistan',634:'Qatar',682:'Saudi Arabia',760:'Syria',788:'Tunisia',792:'Turkey',818:'Egypt',887:'Yemen'};
+
+  var MODES = {
+    all: { data: {
+      4:   {n:'Hindu/Sikh + Jewish',                  p48:705000,  pN:51,      dc:-99.99, note:'Hindu/Sikh population collapsed after the 2021 Taliban return; Jewish community long gone.'},
+      12:  {n:'Jewish',                               p48:140000,  pN:50,      dc:-99.96, note:'Algerian Jews fled en masse after independence in 1962.'},
+      48:  {n:'Jewish',                               p48:1500,    pN:37,      dc:-97.5,  note:"Bahrain's ancient Jewish community has dwindled to a few dozen."},
+      364: {n:'Jewish + Zoroastrian',                 p48:380000,  pN:34000,   dc:-91,    note:'Jews −91.5%; Zoroastrians lost ~90% of their community over 70 years.'},
+      368: {n:'Jewish + Christian + Yazidi + Mandaean',p48:2350000,pN:520000,  dc:-78,    note:'Iraq lost its Jews (−99.99%), 80% of its Christians, half its Yazidis, and 95% of its Mandaeans.'},
+      414: {n:'Jewish',                               p48:200,     pN:0,       dc:-100,   note:"Kuwait's tiny Jewish community is gone."},
+      422: {n:'Jewish + Maronite Christian',          p48:1109000, pN:900029,  dc:-19,    note:'Jews nearly gone; Maronite Christians declining as share of population amid emigration.'},
+      434: {n:'Jewish',                               p48:38000,   pN:1,       dc:-99.99, note:"Libya's 38,000 Jews were expelled after 1967; the last died in 2002."},
+      504: {n:'Jewish',                               p48:265000,  pN:2500,    dc:-99.1,  note:'Moroccan Jews largely emigrated to Israel and France.'},
+      512: {n:'Jewish',                               p48:1000,    pN:0,       dc:-100,   note:"Oman's Jewish community is gone."},
+      586: {n:'Jewish + Hindu',                       p48:2002500, pN:1500200, dc:-25,    note:'Partition-era Hindus fled in millions; Pakistan\'s Jewish community is essentially gone.'},
+      634: {n:'Jewish',                               p48:500,     pN:0,       dc:-100,   note:"Qatar's tiny Jewish community has dispersed."},
+      682: {n:'Non-Muslim minorities',                p48:1000,    pN:0,       dc:-100,   note:'Saudi Arabia prohibits non-Muslim religious practice; no recognized minority community survives.'},
+      760: {n:'Jewish + Christian',                   p48:1230000, pN:500017,  dc:-59,    note:'Jews −99.9%; Christians −55% from war, emigration, and persecution.'},
+      788: {n:'Jewish',                               p48:105000,  pN:1000,    dc:-99,    note:'Tunisian Jews emigrated post-independence and after 1967.'},
+      792: {n:'Jewish + Greek Orthodox',              p48:180000,  pN:18000,   dc:-90,    note:'Jews −81%; Greek Orthodox −97% via population exchange and discrimination.'},
+      818: {n:'Jewish + Coptic',                      p48:2075000, pN:10000010,dc:-10,    note:'Jews −99.99% (75,000 → 10). Copts grew from 2M to 11M but face ongoing sectarian violence.'},
+      887: {n:'Jewish',                               p48:55000,   pN:4,       dc:-99.99, note:"Yemen's ancient Jewish community is effectively gone — 4 remain."}
+    }},
+    jewish: { data: {
+      4:   {n:'Jewish', p48:5000,   pN:1,     dc:-99.98, note:"Afghanistan's Jewish community has vanished."},
+      12:  {n:'Jewish', p48:140000, pN:50,    dc:-99.96, note:'Algerian Jews fled en masse after independence in 1962.'},
+      48:  {n:'Jewish', p48:1500,   pN:37,    dc:-97.5,  note:'A few dozen remain in Bahrain today.'},
+      364: {n:'Jewish', p48:100000, pN:8500,  dc:-91.5,  note:'Iranian Jews: from 100,000 to ~8,500 after the Islamic Revolution.'},
+      368: {n:'Jewish', p48:150000, pN:5,     dc:-99.99, note:"Baghdad once had 150,000 Jews — one of the world's oldest communities. 5 remain."},
+      400: {n:'Jewish', p48:1000,   pN:0,     dc:-100,   note:"Jordan's small Jewish community was expelled after 1948."},
+      414: {n:'Jewish', p48:200,    pN:0,     dc:-100,   note:"Kuwait's tiny Jewish community has dispersed."},
+      422: {n:'Jewish', p48:9000,   pN:29,    dc:-99.7,  note:"Lebanon's Jewish community dwindled from 9,000 to fewer than 30."},
+      434: {n:'Jewish', p48:38000,  pN:1,     dc:-99.99, note:"Libya's 38,000-strong community was entirely expelled."},
+      504: {n:'Jewish', p48:265000, pN:2500,  dc:-99.1,  note:"Morocco hosted the Arab world's largest Jewish population."},
+      512: {n:'Jewish', p48:1000,   pN:0,     dc:-100,   note:"Oman's Jewish community is entirely gone."},
+      586: {n:'Jewish', p48:2500,   pN:200,   dc:-92,    note:"Karachi once had a small Jewish community; nearly gone."},
+      634: {n:'Jewish', p48:500,    pN:0,     dc:-100,   note:"Qatar's Jewish community has dispersed."},
+      682: {n:'Jewish', p48:1000,   pN:0,     dc:-100,   note:'No Jewish community permitted in Saudi Arabia.'},
+      760: {n:'Jewish', p48:30000,  pN:17,    dc:-99.9,  note:"Syria's Jewish quarter in Damascus is empty; 17 remain."},
+      788: {n:'Jewish', p48:105000, pN:1000,  dc:-99,    note:"Tunisia's Jewish community: from 105,000 to ~1,000."},
+      792: {n:'Jewish', p48:80000,  pN:15000, dc:-81.3,  note:"Turkey retains the region's largest Jewish community outside Israel."},
+      887: {n:'Jewish', p48:55000,  pN:4,     dc:-99.99, note:"Yemen's Jewish community — one of the world's oldest — is down to 4 people."}
+    }},
+    christian: { data: {
+      368: {n:'Chaldean/Assyrian/Syriac',   p48:600000,  pN:200000,   dc:-67, note:"Iraq's Christians fled war, ISIS genocide, and persistent targeting."},
+      760: {n:'Syriac/Greek Orthodox',      p48:1200000, pN:500000,   dc:-58, note:"Syria's Christian communities halved by civil war and mass emigration."},
+      792: {n:'Greek Orthodox + Armenian',  p48:120000,  pN:5000,     dc:-96, note:"Turkey's Christians: from 120,000 to ~5,000 after decades of discrimination."},
+      422: {n:'Maronite Christian',         p48:1100000, pN:900000,   dc:-18, note:"Lebanon's Christians declined from majority to plurality as emigration accelerates."},
+      818: {n:'Coptic Christian',           p48:2000000, pN:11000000, dc:0,   note:'Copts grew in absolute numbers to ~11M but face ongoing sectarian violence and discrimination.'},
+      887: {n:'Christian (various)',        p48:5000,    pN:200,      dc:-96, note:"Yemen's tiny Christian community has effectively disappeared."}
+    }},
+    other: { data: {
+      4:   {n:'Hindu + Sikh',       p48:700000,  pN:50,      dc:-99.99, note:"Afghanistan's Hindu and Sikh communities, once ~700,000, are essentially gone after the Taliban's return."},
+      368: {n:'Yazidi + Mandaean',  p48:650000,  pN:252000,  dc:-61,    note:'Yazidis lost half their population to ISIS genocide in 2014; Mandaeans lost 95% to targeted violence.'},
+      364: {n:'Zoroastrian',        p48:280000,  pN:25000,   dc:-91,    note:"Iran's Zoroastrian heartland — birthplace of the faith — has lost 90% of its community to emigration and assimilation."},
+      586: {n:'Hindu minority',     p48:2000000, pN:1500000, dc:-25,    note:"Pakistan's Hindu minority, reduced by partition-era flight, faces ongoing discrimination and forced conversions."}
+    }}
+  };
+
+  var currentMode = 'all';
+  var svgEl = null, geoData = null;
+
+  function fmt(n) {
+    if (!n || n === 0) return '\u2014';
+    if (n < 1000) return '' + n;
+    if (n < 1000000) return Math.round(n / 1000) + 'K';
+    return (n / 1000000).toFixed(1) + 'M';
+  }
+
+  function declineColor(dc) {
+    if (dc >= 0) return '#c8d8c0';
+    var t = Math.min(Math.abs(dc) / 100, 1);
+    var stops = [
+      [0,    [245, 240, 232]],
+      [0.20, [232, 176,  80]],
+      [0.50, [210,  80,  26]],
+      [0.80, [150,  20,  20]],
+      [1.0,  [ 60,   0,   0]]
+    ];
+    var lo = stops[stops.length - 2], hi = stops[stops.length - 1];
+    for (var i = 0; i < stops.length - 1; i++) {
+      if (t >= stops[i][0] && t <= stops[i + 1][0]) { lo = stops[i]; hi = stops[i + 1]; break; }
+    }
+    var tl = (hi[0] === lo[0]) ? 1 : (t - lo[0]) / (hi[0] - lo[0]);
+    return 'rgb(' +
+      Math.round(lo[1][0] + tl * (hi[1][0] - lo[1][0])) + ',' +
+      Math.round(lo[1][1] + tl * (hi[1][1] - lo[1][1])) + ',' +
+      Math.round(lo[1][2] + tl * (hi[1][2] - lo[1][2])) + ')';
+  }
+
+  function buildMap(topo) {
+    geoData = topo;
+    var container = document.getElementById('mc-map-svg');
+    container.innerHTML = '';
+    var W = container.clientWidth || 960;
+    var H = Math.round(W * 0.52);
+
+    var projection = d3.geoNaturalEarth1().scale(W / 6.3).translate([W / 2, H / 2]);
+    var pathFn = d3.geoPath().projection(projection);
+    var countries = topojson.feature(topo, topo.objects.countries);
+
+    svgEl = d3.select('#mc-map-svg').append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    svgEl.append('g').selectAll('path')
+      .data(countries.features)
+      .join('path')
+        .attr('d', pathFn)
+        .attr('fill', function(d) {
+          var rec = MODES[currentMode].data[d.id];
+          return rec ? declineColor(rec.dc) : '#1e2d42';
+        })
+        .attr('stroke', '#0e1a2e')
+        .attr('stroke-width', 0.4)
+        .on('mousemove', function(event, d) {
+          var rec = MODES[currentMode].data[d.id];
+          if (!rec) return;
+          var tip = document.getElementById('mc-map-tip');
+          var rootEl = document.getElementById('mc-map-root');
+          var rect = rootEl.getBoundingClientRect();
+          var x = event.clientX - rect.left + 12;
+          var y = event.clientY - rect.top - 10;
+          tip.style.display = 'block';
+          tip.style.left = Math.min(x, rect.width - 234) + 'px';
+          tip.style.top  = Math.max(y, 4) + 'px';
+          var dcStr = rec.dc >= 0 ? 'Grew / stable' : ('\u2212' + Math.abs(rec.dc).toFixed(1) + '% decline');
+          var dcColor = rec.dc >= 0 ? '#8bc48a' : '#e08040';
+          tip.innerHTML =
+            '<strong style="font-size:13px;">' + (NAMES[d.id] || d.id) + '</strong><br>' +
+            '<span style="opacity:0.65;font-size:11px;">' + rec.n + '</span><br>' +
+            '<span style="color:' + dcColor + ';font-weight:700;">' + dcStr + '</span><br>' +
+            '<span style="opacity:0.6;font-size:11px;">~' + fmt(rec.p48) + ' (1948) \u2192 ~' + fmt(rec.pN) + ' (now)</span><br>' +
+            '<span style="opacity:0.5;font-size:11px;">' + rec.note + '</span>';
+        })
+        .on('mouseleave', function() {
+          document.getElementById('mc-map-tip').style.display = 'none';
+        });
+  }
+
+  window.setMapMode = function(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mc-map-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('onclick') === "setMapMode('" + mode + "')");
+    });
+    if (!svgEl || !geoData) return;
+    svgEl.selectAll('path').attr('fill', function(d) {
+      var rec = MODES[mode].data[d.id];
+      return rec ? declineColor(rec.dc) : '#1e2d42';
+    });
+    document.getElementById('mc-map-tip').style.display = 'none';
+  };
+
+  function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src; s.onload = cb;
+    document.head.appendChild(s);
+  }
+
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js', function() {
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js', function() {
+      fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+        .then(function(r) { return r.json(); })
+        .then(buildMap);
+    });
+  });
+
+  window.addEventListener('resize', function() {
+    if (!svgEl || !geoData) return;
+    svgEl = null;
+    buildMap(geoData);
   });
 }());
 </script>
