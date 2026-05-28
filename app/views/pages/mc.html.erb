@@ -395,7 +395,7 @@ html{scroll-behavior:smooth;}
                 <span class="mc-pop-lbl">Population</span>
                 <% if p_val %>
                   <span class="mc-pop-pct<%= p_val >= 0 ? ' positive' : '' %>">
-                    <%= p_val >= 0 ? '+' : '' %><%= p_val %>%
+                    <% if p_val == 0 %>stable<% elsif p_val > 0 %>+<%= p_val %>% growth<% else %><%= p_val.abs %>% decline<% end %>
                   </span>
                 <% end %>
               </div>
@@ -768,7 +768,7 @@ html{scroll-behavior:smooth;}
       760: {n:'Jewish + Christian',                   p48:1230000, pN:500017,  dc:-59,    note:'Jews −99.9%; Christians −55% from war, emigration, and persecution.'},
       788: {n:'Jewish',                               p48:105000,  pN:1000,    dc:-99,    note:'Tunisian Jews emigrated post-independence and after 1967.'},
       792: {n:'Jewish + Greek Orthodox',              p48:180000,  pN:18000,   dc:-90,    note:'Jews −81%; Greek Orthodox −97% via population exchange and discrimination.'},
-      818: {n:'Jewish + Coptic',                      p48:2075000, pN:10000010,dc:-10,    note:'Jews −99.99% (75,000 → 10). Copts grew from 2M to 11M but face ongoing sectarian violence.'},
+      818: {n:'Egypt', p48:2275000, pN:15000000, dc:-560, note:"Copts: 10–12M (10% of population, down from ~20%). Jews: 6 remain in Cairo — all female (down from 75,000 in 1948). Bahá'í: 2,000–3,000 — not legally recognized; face ID card denial and workplace harassment. Shia Muslims: 800k–2M — unrecognized. Converts from Islam to Christianity: 50,000–4M estimated — illegal. Greek Orthodox and Armenian communities reduced to hundreds. Nubian people displaced from homeland by Aswan Dam 1964."},
       887: {n:'Jewish',                               p48:55000,   pN:4,       dc:-99.99, note:"Yemen's ancient Jewish community is effectively gone — 4 remain."},
       360: {n:'Christians, Ahmadiyya, indigenous faiths', p48:5000000,  pN:29600000, dc:-492, note:"29.6M Christians (10.5% of population). Six official religions exclude Judaism, Ahmadiyya, Bahá'í. Church permits denied for decades. 6.5M-member HKBP Batak church monitored and opposed."},
       462: {n:'All non-Muslim minorities (legally impossible)', p48:0, pN:0, dc:100, note:'Constitution bans non-Muslim citizenship (Art 9d). Last Buddhist sultan converted entire population to Islam in 1153 CE. Zero indigenous non-Muslims legally exist. Underground Christian converts face imprisonment.'},
@@ -796,14 +796,15 @@ html{scroll-behavior:smooth;}
       792: {n:'Jewish', p48:80000,  pN:15000, dc:-81.3,  note:"Turkey retains the region's largest Jewish community outside Israel."},
       887: {n:'Jewish', p48:55000,  pN:4,     dc:-99.99, note:"Yemen's Jewish community — one of the world's oldest — is down to 4 people."},
       231: {n:'Beta Israel (Ethiopian Jews)', p48:80000, pN:12000, dc:-85, note:'Beta Israel maintained Jewish practice in complete isolation for 1,500+ years. Operations Moses (1984) and Solomon (1991) airlifted ~90,000 to Israel. ~12,000 remain — many Falash Mura (crypto-Jews returning to Judaism).'},
-      566: {n:'Igbo Jewish community',        p48:0,     pN:15000, dc:0,   note:"3,000–30,000 Igbo Jews across 26 synagogues. Claim descent from Jewish traders via Syria/Libya/Ethiopia ~740 CE. Israel has not officially recognized the community. Growing annually."}
+      566: {n:'Igbo Jewish community',        p48:0,     pN:15000, dc:0,   note:"3,000–30,000 Igbo Jews across 26 synagogues. Claim descent from Jewish traders via Syria/Libya/Ethiopia ~740 CE. Israel has not officially recognized the community. Growing annually."},
+      818: {n:'Egypt', p48:75000, pN:6, dc:100, note:"75,000 Jews in 1948. Nasser expelled community after 1956 Suez Crisis; property nationalized. Today: 6 Jews remain in Cairo — all female, all elderly. The Karaite Jewish community (a distinct sect) was also expelled. The Ben Ezra Synagogue in Old Cairo — one of the world's oldest — still stands but has no congregation."}
     }},
     christian: { data: {
       368: {n:'Chaldean/Assyrian/Syriac',   p48:600000,  pN:200000,   dc:-67, note:"Iraq's Christians fled war, ISIS genocide, and persistent targeting."},
       760: {n:'Syriac/Greek Orthodox',      p48:1200000, pN:500000,   dc:-58, note:"Syria's Christian communities halved by civil war and mass emigration."},
       792: {n:'Greek Orthodox + Armenian',  p48:120000,  pN:5000,     dc:-96, note:"Turkey's Christians: from 120,000 to ~5,000 after decades of discrimination."},
       422: {n:'Maronite Christian',         p48:1100000, pN:900000,   dc:-18, note:"Lebanon's Christians declined from majority to plurality as emigration accelerates."},
-      818: {n:'Coptic Christian',           p48:2000000, pN:11000000, dc:0,   note:'Copts grew in absolute numbers to ~11M but face ongoing sectarian violence and discrimination.'},
+      818: {n:'Egypt', p48:2200000, pN:12000000, dc:-445, note:'Coptic Orthodox: 10–12M — grew in absolute terms but fell from ~20% to ~10% of population. Regular church attacks: 2011 Maspero massacre (28 killed by army), 2017 Palm Sunday bombings (49 killed at two churches). Church construction requires presidential approval — can take decades. Converts from Islam face apostasy laws and family violence. Estimated 50,000–4M secret converts.'},
       887: {n:'Christian (various)',        p48:5000,    pN:200,      dc:-96, note:"Yemen's tiny Christian community has effectively disappeared."},
       360: {n:'Protestant & Catholic (Batak, Papuan, others)', p48:5000000,  pN:29600000, dc:-492, note:"29.6M Christians — growing but squeezed. Church permits denied for decades. Converts from Islam face severest persecution. HKBP Batak church: 6.5M members, largest Protestant church in SE Asia."},
       566: {n:'Christian (45% of population)',               p48:15000000, pN:95000000, dc:-533, note:'5,000+ killed in 2024. Boko Haram: 37,500 killed since 2009. Fulani militias: 55% of Middle Belt Christian deaths 2019–23. 12 Sharia states restrict church construction.'},
@@ -817,7 +818,8 @@ html{scroll-behavior:smooth;}
       586: {n:'Hindu minority',     p48:2000000, pN:1500000, dc:-25,    note:"Pakistan's Hindu minority, reduced by partition-era flight, faces ongoing discrimination and forced conversions."},
       462: {n:'Buddhist (historical) / all minorities',     p48:100000,  pN:0,        dc:100,  note:'Buddhist civilization 1,500+ years — erased in 1153 CE when sultan converted entire population by decree. Today: zero non-Muslim citizens possible by constitution. Most complete religious erasure in modern history.'},
       360: {n:"Ahmadiyya, Bahá'í, indigenous faiths",       p48:500000,  pN:800000,   dc:-60,  note:"Ahmadiyya banned from preaching 2008. Bahá'í unprotected — cannot legally marry or register religion. 12 million followers of 1,200 indigenous faiths legally unrecognized. Only 6 religions have state protection."},
-      566: {n:'Animist, Sufi, Igbo Jews',                   p48:20000000,pN:30000000, dc:-50,  note:'Traditional religion: 10M+ practitioners targeted by both Boko Haram and evangelical Christianity. Sufi Muslims: 30M+ facing Wahhabi attacks on shrines and leaders. Igbo Jews: 26 synagogues, unrecognized.'}
+      566: {n:'Animist, Sufi, Igbo Jews',                   p48:20000000,pN:30000000, dc:-50,  note:'Traditional religion: 10M+ practitioners targeted by both Boko Haram and evangelical Christianity. Sufi Muslims: 30M+ facing Wahhabi attacks on shrines and leaders. Igbo Jews: 26 synagogues, unrecognized.'},
+      818: {n:'Egypt', p48:500000, pN:4000000, dc:-700, note:"Bahá'í: 2,000–3,000 — not recognized by Egyptian law; cannot obtain ID cards listing their religion; excluded from civil marriage. Shia Muslims: 800k–2M — unrecognized, face discrimination. Greek Orthodox: reduced from ~100,000 to a few hundred. Armenian community: genocide survivors reduced to hundreds in Cairo/Alexandria. Nubian people: 100,000 displaced from homeland flooded by Aswan Dam 1964; article 236 promises return — never implemented."}
     }},
     africa_asia: { data: {
       360: {n:'Christians, Ahmadiyya, indigenous faiths', p48:5000000,  pN:29600000, dc:-492, note:"29.6M Christians (10.5%). Six official religions; all others unprotected. Ahmadiyya banned 2008. Church permits denied for decades. HKBP Batak church: 6.5M members."},
@@ -897,7 +899,7 @@ html{scroll-behavior:smooth;}
           tip.style.display = 'block';
           tip.style.left = Math.min(x, rect.width - 234) + 'px';
           tip.style.top  = Math.max(y, 4) + 'px';
-          var dcStr = rec.dc >= 0 ? 'Grew / stable' : ('\u2212' + Math.abs(rec.dc).toFixed(1) + '% decline');
+          var dcStr = rec.dc >= 0 ? 'Grew / stable' : (Math.abs(rec.dc).toFixed(1) + '% decline');
           var dcColor = rec.dc >= 0 ? '#8bc48a' : '#e08040';
           tip.innerHTML =
             '<strong style="font-size:13px;">' + (NAMES[d.id] || d.id) + '</strong><br>' +
