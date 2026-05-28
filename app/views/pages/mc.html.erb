@@ -258,12 +258,13 @@ html{scroll-behavior:smooth;}
   <div class="mc-map-inner">
     <div class="mc-map-hdr">
       <div class="mc-eyebrow" style="color:#d4a832;">◆ The emptied lands</div>
-      <p class="mc-map-desc">Estimated decline of non-Muslim minority populations since 1948, by country. Hover a country for details.</p>
+      <p class="mc-map-desc">Each country shaded by % decline or growth in minority population since 1948. Now includes Sub-Saharan Africa and Southeast Asia. Hover any country for details.</p>
       <div class="mc-map-modes">
         <button class="mc-map-btn active" onclick="setMapMode('all')">All minorities</button>
         <button class="mc-map-btn" onclick="setMapMode('jewish')">Jewish</button>
         <button class="mc-map-btn" onclick="setMapMode('christian')">Christian</button>
         <button class="mc-map-btn" onclick="setMapMode('other')">Yazidi · Zoroastrian · Hindu/Sikh</button>
+        <button class="mc-map-btn" onclick="setMapMode('africa_asia')">Africa &amp; Asia</button>
       </div>
     </div>
     <div id="mc-map-root">
@@ -747,7 +748,7 @@ html{scroll-behavior:smooth;}
 <%# ── CHOROPLETH MAP JS ───────────────────────────────────────────────────── %>
 <script>
 (function () {
-  var NAMES = {4:'Afghanistan',12:'Algeria',48:'Bahrain',364:'Iran',368:'Iraq',376:'Israel',400:'Jordan',414:'Kuwait',422:'Lebanon',434:'Libya',504:'Morocco',512:'Oman',586:'Pakistan',634:'Qatar',682:'Saudi Arabia',760:'Syria',788:'Tunisia',792:'Turkey',818:'Egypt',887:'Yemen'};
+  var NAMES = {4:'Afghanistan',12:'Algeria',48:'Bahrain',364:'Iran',368:'Iraq',376:'Israel',400:'Jordan',414:'Kuwait',422:'Lebanon',434:'Libya',504:'Morocco',512:'Oman',586:'Pakistan',634:'Qatar',682:'Saudi Arabia',760:'Syria',788:'Tunisia',792:'Turkey',818:'Egypt',887:'Yemen',231:'Ethiopia',360:'Indonesia',462:'Maldives',566:'Nigeria',729:'Sudan',50:'Bangladesh'};
 
   var MODES = {
     all: { data: {
@@ -768,7 +769,12 @@ html{scroll-behavior:smooth;}
       788: {n:'Jewish',                               p48:105000,  pN:1000,    dc:-99,    note:'Tunisian Jews emigrated post-independence and after 1967.'},
       792: {n:'Jewish + Greek Orthodox',              p48:180000,  pN:18000,   dc:-90,    note:'Jews −81%; Greek Orthodox −97% via population exchange and discrimination.'},
       818: {n:'Jewish + Coptic',                      p48:2075000, pN:10000010,dc:-10,    note:'Jews −99.99% (75,000 → 10). Copts grew from 2M to 11M but face ongoing sectarian violence.'},
-      887: {n:'Jewish',                               p48:55000,   pN:4,       dc:-99.99, note:"Yemen's ancient Jewish community is effectively gone — 4 remain."}
+      887: {n:'Jewish',                               p48:55000,   pN:4,       dc:-99.99, note:"Yemen's ancient Jewish community is effectively gone — 4 remain."},
+      360: {n:'Christians, Ahmadiyya, indigenous faiths', p48:5000000,  pN:29600000, dc:-492, note:"29.6M Christians (10.5% of population). Six official religions exclude Judaism, Ahmadiyya, Bahá'í. Church permits denied for decades. 6.5M-member HKBP Batak church monitored and opposed."},
+      462: {n:'All non-Muslim minorities (legally impossible)', p48:0, pN:0, dc:100, note:'Constitution bans non-Muslim citizenship (Art 9d). Last Buddhist sultan converted entire population to Islam in 1153 CE. Zero indigenous non-Muslims legally exist. Underground Christian converts face imprisonment.'},
+      566: {n:'Christians, Igbo Jews, animists',       p48:15000000, pN:95000000, dc:-533, note:"5,000+ Christians killed in 2024. 12 northern states under sharia. Boko Haram, Fulani militias. Igbo Jewish community: 26 synagogues, 3,000–30,000 people. Saudi-funded Wahhabi ideology transforming northern Islam since 1980s."},
+      729: {n:'Nuba Christians & non-Arab minorities', p48:3000000,  pN:2700000,  dc:10,   note:'30 years of government aerial bombardment of Nuba Mountains Christians. 165+ churches destroyed in 2023 civil war. Arabization campaign explicit state policy. Al-Bashir indicted by ICC for genocide.'},
+      231: {n:'Beta Israel (Jews) — now mostly in Israel', p48:5000000, pN:12000,  dc:99,   note:'Beta Israel: 100,000+ Jews in Ethiopia 1980s, now ~12,000 remaining. Operations Moses/Solomon airlifted ~90,000 to Israel. OLA/OLF attacks on Orthodox Christians in Oromia: 144+ killed in 2024.'}
     }},
     jewish: { data: {
       4:   {n:'Jewish', p48:5000,   pN:1,     dc:-99.98, note:"Afghanistan's Jewish community has vanished."},
@@ -788,7 +794,9 @@ html{scroll-behavior:smooth;}
       760: {n:'Jewish', p48:30000,  pN:17,    dc:-99.9,  note:"Syria's Jewish quarter in Damascus is empty; 17 remain."},
       788: {n:'Jewish', p48:105000, pN:1000,  dc:-99,    note:"Tunisia's Jewish community: from 105,000 to ~1,000."},
       792: {n:'Jewish', p48:80000,  pN:15000, dc:-81.3,  note:"Turkey retains the region's largest Jewish community outside Israel."},
-      887: {n:'Jewish', p48:55000,  pN:4,     dc:-99.99, note:"Yemen's Jewish community — one of the world's oldest — is down to 4 people."}
+      887: {n:'Jewish', p48:55000,  pN:4,     dc:-99.99, note:"Yemen's Jewish community — one of the world's oldest — is down to 4 people."},
+      231: {n:'Beta Israel (Ethiopian Jews)', p48:80000, pN:12000, dc:-85, note:'Beta Israel maintained Jewish practice in complete isolation for 1,500+ years. Operations Moses (1984) and Solomon (1991) airlifted ~90,000 to Israel. ~12,000 remain — many Falash Mura (crypto-Jews returning to Judaism).'},
+      566: {n:'Igbo Jewish community',        p48:0,     pN:15000, dc:0,   note:"3,000–30,000 Igbo Jews across 26 synagogues. Claim descent from Jewish traders via Syria/Libya/Ethiopia ~740 CE. Israel has not officially recognized the community. Growing annually."}
     }},
     christian: { data: {
       368: {n:'Chaldean/Assyrian/Syriac',   p48:600000,  pN:200000,   dc:-67, note:"Iraq's Christians fled war, ISIS genocide, and persistent targeting."},
@@ -796,13 +804,29 @@ html{scroll-behavior:smooth;}
       792: {n:'Greek Orthodox + Armenian',  p48:120000,  pN:5000,     dc:-96, note:"Turkey's Christians: from 120,000 to ~5,000 after decades of discrimination."},
       422: {n:'Maronite Christian',         p48:1100000, pN:900000,   dc:-18, note:"Lebanon's Christians declined from majority to plurality as emigration accelerates."},
       818: {n:'Coptic Christian',           p48:2000000, pN:11000000, dc:0,   note:'Copts grew in absolute numbers to ~11M but face ongoing sectarian violence and discrimination.'},
-      887: {n:'Christian (various)',        p48:5000,    pN:200,      dc:-96, note:"Yemen's tiny Christian community has effectively disappeared."}
+      887: {n:'Christian (various)',        p48:5000,    pN:200,      dc:-96, note:"Yemen's tiny Christian community has effectively disappeared."},
+      360: {n:'Protestant & Catholic (Batak, Papuan, others)', p48:5000000,  pN:29600000, dc:-492, note:"29.6M Christians — growing but squeezed. Church permits denied for decades. Converts from Islam face severest persecution. HKBP Batak church: 6.5M members, largest Protestant church in SE Asia."},
+      566: {n:'Christian (45% of population)',               p48:15000000, pN:95000000, dc:-533, note:'5,000+ killed in 2024. Boko Haram: 37,500 killed since 2009. Fulani militias: 55% of Middle Belt Christian deaths 2019–23. 12 Sharia states restrict church construction.'},
+      729: {n:'Nuba Christians & Coptic',                    p48:3000000,  pN:2700000,  dc:10,   note:'Nuba Mountains: 30 years of government bombing. 165+ churches destroyed in 2023 civil war. Christians ~5.4% of 50M population. Khartoum church airstrike killed 11 in December 2024.'},
+      231: {n:'Ethiopian Orthodox & Protestant',             p48:8000000,  pN:60000000, dc:-650, note:'Ethiopia is majority-Christian (~43% Orthodox). OLA/OLF attacks on Orthodox Christians in Oromia: 144+ killed in 2024. Protestant converts face hostility from Orthodox establishment. Axum massacre 2020: 750+ killed.'}
     }},
     other: { data: {
       4:   {n:'Hindu + Sikh',       p48:700000,  pN:50,      dc:-99.99, note:"Afghanistan's Hindu and Sikh communities, once ~700,000, are essentially gone after the Taliban's return."},
       368: {n:'Yazidi + Mandaean',  p48:650000,  pN:252000,  dc:-61,    note:'Yazidis lost half their population to ISIS genocide in 2014; Mandaeans lost 95% to targeted violence.'},
       364: {n:'Zoroastrian',        p48:280000,  pN:25000,   dc:-91,    note:"Iran's Zoroastrian heartland — birthplace of the faith — has lost 90% of its community to emigration and assimilation."},
-      586: {n:'Hindu minority',     p48:2000000, pN:1500000, dc:-25,    note:"Pakistan's Hindu minority, reduced by partition-era flight, faces ongoing discrimination and forced conversions."}
+      586: {n:'Hindu minority',     p48:2000000, pN:1500000, dc:-25,    note:"Pakistan's Hindu minority, reduced by partition-era flight, faces ongoing discrimination and forced conversions."},
+      462: {n:'Buddhist (historical) / all minorities',     p48:100000,  pN:0,        dc:100,  note:'Buddhist civilization 1,500+ years — erased in 1153 CE when sultan converted entire population by decree. Today: zero non-Muslim citizens possible by constitution. Most complete religious erasure in modern history.'},
+      360: {n:"Ahmadiyya, Bahá'í, indigenous faiths",       p48:500000,  pN:800000,   dc:-60,  note:"Ahmadiyya banned from preaching 2008. Bahá'í unprotected — cannot legally marry or register religion. 12 million followers of 1,200 indigenous faiths legally unrecognized. Only 6 religions have state protection."},
+      566: {n:'Animist, Sufi, Igbo Jews',                   p48:20000000,pN:30000000, dc:-50,  note:'Traditional religion: 10M+ practitioners targeted by both Boko Haram and evangelical Christianity. Sufi Muslims: 30M+ facing Wahhabi attacks on shrines and leaders. Igbo Jews: 26 synagogues, unrecognized.'}
+    }},
+    africa_asia: { data: {
+      360: {n:'Christians, Ahmadiyya, indigenous faiths', p48:5000000,  pN:29600000, dc:-492, note:"29.6M Christians (10.5%). Six official religions; all others unprotected. Ahmadiyya banned 2008. Church permits denied for decades. HKBP Batak church: 6.5M members."},
+      462: {n:'All non-Muslim minorities',                p48:100000,   pN:0,        dc:100,  note:'Constitution bans non-Muslim citizenship. Buddhist civilization erased in 1153 CE by royal decree. Zero indigenous non-Muslims legally possible. Underground Christian converts face imprisonment.'},
+      566: {n:'Christians, Igbo Jews, animists, Sufi',   p48:15000000, pN:95000000, dc:-533, note:"5,000+ Christians killed in 2024. Boko Haram: 37,500 killed since 2009. Saudi-funded Wahhabi transformation of northern Nigerian Islam since 1980s. 26 Igbo Jewish synagogues."},
+      729: {n:'Nuba Christians & non-Arab minorities',   p48:3000000,  pN:2700000,  dc:10,   note:'Nuba Mountains Christians bombed for 30 years. 165+ churches destroyed in 2023 civil war. Arabization explicit state policy. Al-Bashir ICC genocide indictment.'},
+      231: {n:'Beta Israel Jews & Orthodox Christians',  p48:5000000,  pN:12000,    dc:99,   note:'Beta Israel: ~90,000 airlifted to Israel via Operations Moses & Solomon. 12,000 remain. OLA attacks on Orthodox Christians in Oromia: 144+ killed 2024.'},
+      586: {n:'Hindu, Sikh, Christian, Ahmadi',          p48:6000000,  pN:3600000,  dc:40,   note:'Hindus/Sikhs: 15%→2% since Partition. Ahmadis: constitutionally non-Muslim. Blasphemy law weaponized against Christians. Forced conversions of Hindu girls documented.'},
+      50:  {n:'Hindu & Buddhist',                        p48:3000000,  pN:1500000,  dc:50,   note:'Hindus: 30%→8% since Partition. Anti-Hindu pogroms during 1971 Liberation War and repeatedly since. Buddhist Chakma people facing land seizure in Chittagong Hill Tracts.'}
     }}
   };
 
