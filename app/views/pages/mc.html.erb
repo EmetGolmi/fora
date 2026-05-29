@@ -89,6 +89,35 @@
     'sub_saharan_africa'   => 'Sub-Saharan Africa',
   }
   communities_by_region = @communities.group_by { |c| c['region'] || 'mena_central_asia' }
+
+  @demographics ||= begin
+    JSON.parse(File.read(Rails.root.join('app','data','three_era_demographics.json')))
+  rescue
+    {}
+  end
+
+  # map community id → ISO 3166-1 numeric string for demographics lookup
+  dem_iso = {
+    'coptic'                       => '818',
+    'maronite'                     => '422',
+    'chaldean_assyrian'            => '368',
+    'yazidi'                       => '368',
+    'mandaean'                     => '368',
+    'zoroastrian'                  => '364',
+    'bahai'                        => '364',
+    'hindu_sikh_afghanistan'       => '4',
+    'ahmadi_muslim'                => '586',
+    'alevi_muslim'                 => '792',
+    'armenian'                     => '792',
+    'alawite'                      => '760',
+    'indonesian_christian'         => '360',
+    'maldives_minority'            => '462',
+    'nigerian_christian'           => '566',
+    'sudanese_christian'           => '729',
+    'ethiopian_religious_minority' => '231',
+    'beta_israel'                  => '231',
+    'oromia_orthodox'              => '231',
+  }
 %>
 <% content_for(:title) { "Minority Consent · FORA" } %>
 
@@ -235,10 +264,26 @@ html{scroll-behavior:smooth;}
 .mc-map-btn:hover:not(.active){border-color:rgba(255,255,255,0.45);color:rgba(255,255,255,0.85);}
 #mc-map-root{position:relative;width:100%;overflow:hidden;border-radius:6px;margin-top:4px;}
 #mc-map-svg svg{width:100%;height:auto;display:block;background:#162032;}
-#mc-map-tip{position:absolute;display:none;background:rgba(14,26,46,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:5px;padding:9px 13px;font-family:'Nunito',sans-serif;font-size:12px;color:#fff;pointer-events:none;max-width:220px;line-height:1.6;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+#mc-map-tip{position:absolute;display:none;background:rgba(14,26,46,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:5px;padding:9px 13px;font-family:'Nunito',sans-serif;font-size:12px;color:#fff;pointer-events:none;max-width:260px;line-height:1.6;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
 .mc-map-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;color:rgba(255,255,255,0.40);}
 .mc-map-legend-bar{width:140px;height:7px;border-radius:2px;background:linear-gradient(to right,#f5f0e8,#d4832a,#b02828,#5a0000);}
 .mc-map-legend-nd{margin-left:8px;}
+
+/* ── DEMOGRAPHICS ── */
+.mc-dem{border-top:1px solid rgba(27,58,107,0.07);margin-bottom:0;}
+.mc-dem summary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:#5a6e8a;padding:10px 0 10px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+.mc-dem summary::-webkit-details-marker{display:none;}
+.mc-dem summary::after{content:'▼';font-size:7px;opacity:0.6;transition:transform 0.15s;}
+.mc-dem[open] summary::after{transform:rotate(180deg);}
+.mc-dem-body{padding:0 0 12px;}
+.mc-dem-era{margin-bottom:10px;}
+.mc-dem-era:last-child{margin-bottom:0;}
+.mc-dem-era-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1b3a6b;margin-bottom:4px;}
+.mc-dem-era-note{font-family:'Nunito',sans-serif;font-size:11px;color:#8a9ab8;font-style:italic;margin-bottom:4px;line-height:1.45;}
+.mc-dem-group{display:flex;align-items:baseline;gap:5px;font-size:11.5px;margin-bottom:2px;flex-wrap:wrap;}
+.mc-dem-group-name{font-family:'Nunito',sans-serif;color:#2c3e5a;font-weight:600;}
+.mc-dem-group-pct{font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6e8a;}
+.mc-dem-group-note{font-family:'Nunito',sans-serif;font-size:10px;color:#8a9ab8;font-style:italic;}
 </style>
 <% end %>
 
@@ -621,6 +666,36 @@ html{scroll-behavior:smooth;}
             </div>
           <% end %>
 
+          <%# three-era demographics %>
+          <%
+            dem_key  = dem_iso[c['id']]
+            dem_data = dem_key && @demographics[dem_key]
+          %>
+          <% if dem_data %>
+            <details class="mc-dem">
+              <summary>◆ Religious history — three eras</summary>
+              <div class="mc-dem-body">
+                <% dem_data['eras'].each do |era| %>
+                  <div class="mc-dem-era">
+                    <div class="mc-dem-era-lbl"><%= era['label'] %></div>
+                    <% if era['note'].present? %>
+                      <div class="mc-dem-era-note"><%= era['note'] %></div>
+                    <% end %>
+                    <% era['groups'].each do |g| %>
+                      <div class="mc-dem-group">
+                        <span class="mc-dem-group-name"><%= g['name'] %></span>
+                        <span class="mc-dem-group-pct"><%= g['pct'] %>%</span>
+                        <% if g['note'].present? %>
+                          <span class="mc-dem-group-note">— <%= g['note'] %></span>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </details>
+          <% end %>
+
           <%# israel connection %>
           <% if has_il %>
             <details class="mc-israel">
@@ -743,6 +818,15 @@ html{scroll-behavior:smooth;}
     });
   });
 }());
+</script>
+
+<%# ── DEMOGRAPHICS DATA ───────────────────────────────────────────────────── %>
+<script>
+var DEMOGRAPHICS = <%= begin
+  JSON.parse(File.read(Rails.root.join('app','data','three_era_demographics.json'))).to_json
+rescue
+  '{}'
+end.html_safe %>;
 </script>
 
 <%# ── CHOROPLETH MAP JS ───────────────────────────────────────────────────── %>
@@ -897,16 +981,28 @@ html{scroll-behavior:smooth;}
           var x = event.clientX - rect.left + 12;
           var y = event.clientY - rect.top - 10;
           tip.style.display = 'block';
-          tip.style.left = Math.min(x, rect.width - 234) + 'px';
+          tip.style.left = Math.min(x, rect.width - 274) + 'px';
           tip.style.top  = Math.max(y, 4) + 'px';
           var dcStr = rec.dc >= 0 ? 'Grew / stable' : (Math.abs(rec.dc).toFixed(1) + '% decline');
           var dcColor = rec.dc >= 0 ? '#8bc48a' : '#e08040';
+          var demData = DEMOGRAPHICS[String(d.id)];
+          var demHtml = '';
+          if (demData && demData.eras) {
+            demHtml += '<hr style="border:none;border-top:1px solid rgba(255,255,255,0.12);margin:7px 0 5px;">';
+            demHtml += '<span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.4;">Religious history</span>';
+            demData.eras.forEach(function(era) {
+              demHtml += '<br><span style="font-size:10px;font-weight:700;opacity:0.75;display:block;margin-top:4px;">' + era.label + '</span>';
+              era.groups.slice(0, 4).forEach(function(g) {
+                demHtml += '<span style="font-size:10px;opacity:0.6;">' + g.name + ' <b>' + g.pct + '%</b></span><br>';
+              });
+            });
+          }
           tip.innerHTML =
             '<strong style="font-size:13px;">' + (NAMES[d.id] || d.id) + '</strong><br>' +
             '<span style="opacity:0.65;font-size:11px;">' + rec.n + '</span><br>' +
             '<span style="color:' + dcColor + ';font-weight:700;">' + dcStr + '</span><br>' +
             '<span style="opacity:0.6;font-size:11px;">~' + fmt(rec.p48) + ' (1948) \u2192 ~' + fmt(rec.pN) + ' (now)</span><br>' +
-            '<span style="opacity:0.5;font-size:11px;">' + rec.note + '</span>';
+            '<span style="opacity:0.5;font-size:11px;">' + rec.note + '</span>' + demHtml;
         })
         .on('mouseleave', function() {
           document.getElementById('mc-map-tip').style.display = 'none';
