@@ -49,6 +49,8 @@ html{scroll-behavior:smooth;}
 .ijdb-title span{color:#d4a832;}
 .ijdb-hero-sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:22px;}
 .ijdb-hero-desc{font-family:'Nunito',sans-serif;font-size:15px;color:rgba(255,255,255,0.60);max-width:680px;line-height:1.8;}
+.ijdb-hero-desc p{margin-bottom:14px;}
+.ijdb-hero-desc p:last-child{margin-bottom:0;}
 .ijdb-hero-rule{width:44px;height:3px;background:linear-gradient(to right,#b8860b,#d4a832);border-radius:2px;margin:28px 0 0;}
 
 /* ── TOTALS ── */
@@ -67,7 +69,9 @@ html{scroll-behavior:smooth;}
 .ijdb-filter-row{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none;padding:8px 0;}
 .ijdb-filter-row::-webkit-scrollbar{display:none;}
 .ijdb-filter-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;padding:0 14px 0 2px;white-space:nowrap;flex-shrink:0;}
-.ijdb-filter-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 13px;border:none;background:none;cursor:pointer;color:#5a6e8a;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s,border-color 0.12s;}
+.ijdb-filter-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 13px;border:none;background:none;cursor:pointer;color:#5a6e8a;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s,border-color 0.12s;text-decoration:none;display:inline-block;}
+.ijdb-bill-link{color:#d4a832;text-decoration:underline;}
+.ijdb-bill-link:hover{color:#ffffff;}
 .ijdb-filter-btn:hover{color:#1b3a6b;}
 .ijdb-filter-btn.active{color:#1b3a6b;border-bottom-color:#b8860b;font-weight:700;}
 .ijdb-filter-divider{border-top:1px solid rgba(27,58,107,0.07);}
@@ -154,6 +158,13 @@ html{scroll-behavior:smooth;}
 </style>
 <% end %>
 
+<%
+  _bl = ->(t, s) {
+    b = CivicBill.where("title ILIKE ?", "%#{s}%").first
+    b ? link_to(t, bill_path(b), class: "ijdb-bill-link") : t.html_safe
+  }
+%>
+
 <%# ── HERO ── %>
 <div class="ijdb-hero">
   <div class="ijdb-hero-inner">
@@ -163,11 +174,15 @@ html{scroll-behavior:smooth;}
       Islamic Jihad<br>Cost Database
     </h1>
     <div class="ijdb-hero-sub"><%= IjdbEntry::CATEGORIES.length %> cost categories · <%= @entries.size %> documented line items</div>
-    <p class="ijdb-hero-desc">
-      A civic accounting of what Islamic jihadist terrorism has cost <%= city_label %> since September 11, 2001.
-      Transportation. Screening. Law enforcement. Biological defense. Intelligence. Venues.
-      Every dollar here was spent because a specific, named ideology declared war on civilian life.
-    </p>
+    <div class="ijdb-hero-desc">
+      <p>On September 11, 2001, a foreign society with a specific, named ideology declared war on our civilian life. Every American has been paying the cost.</p>
+      <p>Philadelphia answered — not with a single act of resistance, but with a quarter-century of quiet, bureaucratic adaptation.</p>
+      <p>Anthrax arrived in the mail. USPS budgets went up. Jihadists targeted transit infrastructure. SEPTA installed cameras, bag checks, and blast-resistant trash cans. Hospitals that had never heard the phrase "mass casualty bioterrorism plan" wrote one. Universities hired emergency management directors. The federal government passed legislation after legislation — <%= _bl.("the PATRIOT Act", "PATRIOT") %>, <%= _bl.("the Homeland Security Act", "Homeland Security Act") %>, <%= _bl.("the REAL ID Act", "REAL ID") %>, <%= _bl.("the Intelligence Reform and Terrorism Prevention Act", "Intelligence Reform") %> — each one redirecting time, money, and political attention away from something else.</p>
+      <p>Away from teaching these kids how to read. Away from treating addiction. Away from fixing the schools.</p>
+      <p>$94 million through the <%= _bl.("DHS Nonprofit Security Grant Program", "Nonprofit Security") %> has recently gone to protecting Jewish American community facilities from antisemitic violence rooted in the same ideology. Churches have been burnt to the ground. Every stadium now does bag checks. Every school now does active threat drills. ICE now monitors networks that didn't exist in American cities twenty years ago.</p>
+      <p>This page tries to count what that cost actually is. Not to relitigate the response our government has taken, administration after administration — but because a democracy that cannot account for what it spent, and what it gave up, cannot make better decisions next time.</p>
+      <p>Transportation. Screening. Law enforcement. Biological defense. Intelligence. Venues. Every dollar redirected from prosperity to protection. Every hour spent on jihad was an hour that wasn't spent fixing our city. Because they declared war on us, we had to answer.</p>
+    </div>
     <div class="ijdb-hero-rule"></div>
   </div>
 </div>
@@ -181,13 +196,13 @@ html{scroll-behavior:smooth;}
       <div class="ijdb-total-note">Documented and estimated spending since 2001. Classified and gap items not included.</div>
     </div>
     <div class="ijdb-total-card">
-      <div class="ijdb-total-eyebrow">◆ Philadelphia share — federal total</div>
+      <div class="ijdb-total-eyebrow">◆ Philadelphia's share of the federal total</div>
       <div class="ijdb-total-value"><%= fed_fmt %>+</div>
       <div class="ijdb-total-note">Philly's ~0.48% population share × $8T+ in national homeland security / war-on-terror spending since 9/11.</div>
     </div>
     <div class="ijdb-total-card">
       <div class="ijdb-total-eyebrow">◆ Unquantified costs</div>
-      <div class="ijdb-total-value classified">Not yet calculated</div>
+      <div class="ijdb-total-value classified">This is why FORA exists.</div>
       <div class="ijdb-total-note">Opportunity cost, psychological cost, and classified programs are real but not yet counted. This is a gap, not an absence.</div>
     </div>
   </div>
@@ -198,22 +213,14 @@ html{scroll-behavior:smooth;}
   <div class="ijdb-filter-section">
     <div class="ijdb-filter-row">
       <span class="ijdb-filter-lbl">Category</span>
-      <button class="ijdb-filter-btn active" data-cat="all">All</button>
+      <%= link_to "All", city_ijdb_path(city: @city),
+            class: "ijdb-filter-btn#{params[:category].blank? ? ' active' : ''}" %>
       <% IjdbEntry::CATEGORIES.each do |cat| %>
         <% next unless @entries_by_category[cat]&.any? %>
-        <button class="ijdb-filter-btn" data-cat="<%= cat %>">
-          <%= category_icons[cat] %> <%= IjdbEntry::CATEGORY_LABELS[cat] %>
-        </button>
-      <% end %>
-    </div>
-    <div class="ijdb-filter-row ijdb-filter-divider">
-      <span class="ijdb-filter-lbl">Confidence</span>
-      <button class="ijdb-filter-btn active" data-conf="all">All</button>
-      <% IjdbEntry::CONFIDENCES.each do |conf| %>
-        <% next unless @entries.any? { |e| e.confidence == conf } %>
-        <button class="ijdb-filter-btn" data-conf="<%= conf %>">
-          <%= IjdbEntry::CONFIDENCE_LABELS[conf] %>
-        </button>
+        <%= link_to city_ijdb_path(city: @city, category: cat),
+              class: "ijdb-filter-btn#{params[:category] == cat ? ' active' : ''}" do %>
+          <%= category_icons[cat] %> <%= cat.humanize %>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -222,11 +229,9 @@ html{scroll-behavior:smooth;}
 <%# ── LEDGER ── %>
 <div class="ijdb-ledger-wrap">
   <% IjdbEntry::CATEGORIES.each do |cat| %>
-    <% cat_entries = @entries_by_category[cat]&.select { |e|
-         (params[:cat].blank? || params[:cat] == cat) &&
-         (params[:conf].blank? || params[:conf] == e.confidence)
-       } %>
-    <% next unless cat_entries&.any? %>
+    <% next if params[:category].present? && params[:category] != cat %>
+    <% cat_entries = @entries_by_category[cat] || [] %>
+    <% next unless cat_entries.any? %>
 
     <div class="ijdb-category-section" data-cat="<%= cat %>">
       <div class="ijdb-category-hdr">
@@ -393,45 +398,3 @@ html{scroll-behavior:smooth;}
   </div>
 </footer>
 
-<%# ── FILTER JS ── %>
-<script>
-(function() {
-  var activeCat  = 'all';
-  var activeConf = 'all';
-
-  function applyFilters() {
-    document.querySelectorAll('.ijdb-entry').forEach(function(el) {
-      var cat  = el.dataset.cat;
-      var conf = el.dataset.conf;
-      var show = (activeCat  === 'all' || activeCat  === cat) &&
-                 (activeConf === 'all' || activeConf === conf);
-      el.style.display = show ? '' : 'none';
-    });
-    // Hide empty category sections
-    document.querySelectorAll('.ijdb-category-section').forEach(function(sec) {
-      var visible = Array.from(sec.querySelectorAll('.ijdb-entry')).some(function(e) {
-        return e.style.display !== 'none';
-      });
-      sec.style.display = visible ? '' : 'none';
-    });
-  }
-
-  document.querySelectorAll('.ijdb-filter-btn[data-cat]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.ijdb-filter-btn[data-cat]').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      activeCat = btn.dataset.cat;
-      applyFilters();
-    });
-  });
-
-  document.querySelectorAll('.ijdb-filter-btn[data-conf]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.ijdb-filter-btn[data-conf]').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      activeConf = btn.dataset.conf;
-      applyFilters();
-    });
-  });
-}());
-</script>
