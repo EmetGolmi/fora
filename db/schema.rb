@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_18_195459) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_30_100002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -71,6 +71,69 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_195459) do
     t.datetime "updated_at", null: false
     t.index ["external_ids"], name: "index_civic_representatives_on_external_ids", using: :gin
     t.index ["ocd_division_id"], name: "index_civic_representatives_on_ocd_division_id"
+  end
+
+  create_table "ijdb_comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "author_name"
+    t.bigint "author_user_id"
+    t.text "body", null: false
+    t.string "city", null: false
+    t.string "country", default: "usa"
+    t.datetime "created_at", null: false
+    t.uuid "ijdb_entry_id"
+    t.index ["city", "country"], name: "index_ijdb_comments_on_city_and_country"
+    t.index ["ijdb_entry_id"], name: "index_ijdb_comments_on_ijdb_entry_id"
+  end
+
+  create_table "ijdb_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "amount_high_cents"
+    t.bigint "amount_low_cents"
+    t.string "amount_unit", default: "usd"
+    t.string "category", null: false
+    t.string "city", null: false
+    t.string "confidence"
+    t.string "contributor_attribution"
+    t.bigint "contributor_id"
+    t.string "country", default: "usa"
+    t.datetime "created_at", null: false
+    t.integer "date_range_end"
+    t.integer "date_range_start"
+    t.text "description"
+    t.integer "display_order"
+    t.string "entity_name"
+    t.boolean "foia_candidate", default: false
+    t.string "foia_topic_template"
+    t.string "scope"
+    t.date "source_date"
+    t.string "source_title"
+    t.string "source_url"
+    t.string "subcategory"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "verified_at"
+    t.string "verified_by"
+    t.index ["category"], name: "index_ijdb_entries_on_category"
+    t.index ["city", "country"], name: "index_ijdb_entries_on_city_and_country"
+    t.index ["confidence"], name: "index_ijdb_entries_on_confidence"
+    t.index ["display_order"], name: "index_ijdb_entries_on_display_order"
+    t.index ["foia_candidate"], name: "index_ijdb_entries_on_foia_candidate"
+  end
+
+  create_table "ijdb_foia_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "agency"
+    t.string "city"
+    t.datetime "created_at", null: false
+    t.date "filed_at"
+    t.uuid "ijdb_entry_id"
+    t.text "letter_text"
+    t.string "requester_name"
+    t.date "response_received_at"
+    t.text "response_summary"
+    t.string "status", default: "drafted"
+    t.string "topic_key"
+    t.index ["city"], name: "index_ijdb_foia_requests_on_city"
+    t.index ["ijdb_entry_id"], name: "index_ijdb_foia_requests_on_ijdb_entry_id"
+    t.index ["status"], name: "index_ijdb_foia_requests_on_status"
   end
 
   create_table "issue_concurrences", force: :cascade do |t|
@@ -255,6 +318,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_195459) do
   end
 
   add_foreign_key "bill_comments", "civic_bills"
+  add_foreign_key "ijdb_comments", "ijdb_entries"
+  add_foreign_key "ijdb_foia_requests", "ijdb_entries"
   add_foreign_key "issue_concurrences", "neighborhood_issues"
   add_foreign_key "issue_responses", "neighborhood_issues"
   add_foreign_key "official_finance_summaries", "civic_representatives"

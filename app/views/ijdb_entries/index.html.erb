@@ -1,0 +1,437 @@
+<%
+  city_label    = @city.capitalize
+  country_label = "USA"
+  total_low_fmt  = @city_total_low  >= 1e9 ? "$#{(@city_total_low  / 1e9).round(1)}B" : "$#{(@city_total_low  / 1e6).round.to_i}M"
+  total_high_fmt = @city_total_high >= 1e9 ? "$#{(@city_total_high / 1e9).round(1)}B" : "$#{(@city_total_high / 1e6).round.to_i}M"
+  fed_fmt        = @federal_share   >= 1e9 ? "$#{(@federal_share   / 1e9).round.to_i}B" : "$#{(@federal_share / 1e6).round.to_i}M"
+
+  confidence_colors = {
+    "documented"  => ["#e8f5e9", "#155c2d"],
+    "estimated"   => ["#e8eef8", "#1b3a6b"],
+    "partial"     => ["#fff8e0", "#7a5500"],
+    "classified"  => ["#f3e8fa", "#5a1a8a"],
+    "gap"         => ["#f0f0f0", "#444444"],
+  }
+
+  category_icons = {
+    "transportation"        => "✈",
+    "screening_equipment"   => "⊗",
+    "law_enforcement"       => "⬡",
+    "private_sector"        => "◈",
+    "biological"            => "⌬",
+    "venues_infrastructure" => "◻",
+    "intelligence"          => "◎",
+    "current_ongoing"       => "●",
+    "opportunity_cost"      => "↩",
+    "social_psychological"  => "◇",
+  }
+%>
+<% content_for(:title) { "IJDB — #{city_label} · FORA" } %>
+
+<%# OG / Twitter meta tags %>
+<% content_for :head do %>
+<meta property="og:title"       content="IJDB — <%= city_label %>: The Cost of Jihadist Threat">
+<meta property="og:description" content="A documented ledger of what Islamic jihadist terrorism has cost <%= city_label %> since 2001. Quantified, unquantified, and classified — all in one place.">
+<meta property="og:type"        content="website">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="IJDB — <%= city_label %>: Full Cost Ledger">
+<meta name="twitter:description"content="Transportation. Screening. Law enforcement. Biological defense. The full accounting of jihadist threat costs in <%= city_label %>.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+/* ── HERO ── */
+.ijdb-hero{background:#0e1a2e;padding:52px 24px 44px;position:relative;overflow:hidden;}
+.ijdb-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 85% 30%,rgba(184,134,11,0.08) 0%,transparent 60%);pointer-events:none;}
+.ijdb-hero-inner{max-width:1100px;margin:0 auto;position:relative;}
+.ijdb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:#d4a832;margin-bottom:12px;}
+.ijdb-title{font-family:'Libre Baskerville',serif;font-size:36px;font-weight:700;color:#ffffff;line-height:1.1;margin-bottom:10px;}
+.ijdb-title span{color:#d4a832;}
+.ijdb-hero-sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:22px;}
+.ijdb-hero-desc{font-family:'Nunito',sans-serif;font-size:15px;color:rgba(255,255,255,0.60);max-width:680px;line-height:1.8;}
+.ijdb-hero-rule{width:44px;height:3px;background:linear-gradient(to right,#b8860b,#d4a832);border-radius:2px;margin:28px 0 0;}
+
+/* ── TOTALS ── */
+.ijdb-totals{background:#0e1a2e;padding:0 24px 44px;}
+.ijdb-totals-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.ijdb-total-card{background:rgba(27,58,107,0.30);border:1px solid rgba(212,168,50,0.18);border-radius:8px;padding:20px 22px;}
+.ijdb-total-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.20em;text-transform:uppercase;color:rgba(255,255,255,0.40);margin-bottom:8px;}
+.ijdb-total-value{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:#d4a832;line-height:1.1;}
+.ijdb-total-value.classified{font-size:16px;color:rgba(255,255,255,0.40);}
+.ijdb-total-note{font-family:'Nunito',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);margin-top:6px;line-height:1.5;}
+@media(max-width:700px){.ijdb-totals-inner{grid-template-columns:1fr;}}
+
+/* ── FILTERS ── */
+.ijdb-filter-bar{background:#ffffff;border-bottom:1px solid rgba(27,58,107,0.10);position:sticky;top:60px;z-index:100;}
+.ijdb-filter-section{max-width:1100px;margin:0 auto;padding:0 24px;}
+.ijdb-filter-row{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none;padding:8px 0;}
+.ijdb-filter-row::-webkit-scrollbar{display:none;}
+.ijdb-filter-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;padding:0 14px 0 2px;white-space:nowrap;flex-shrink:0;}
+.ijdb-filter-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 13px;border:none;background:none;cursor:pointer;color:#5a6e8a;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s,border-color 0.12s;}
+.ijdb-filter-btn:hover{color:#1b3a6b;}
+.ijdb-filter-btn.active{color:#1b3a6b;border-bottom-color:#b8860b;font-weight:700;}
+.ijdb-filter-divider{border-top:1px solid rgba(27,58,107,0.07);}
+
+/* ── LEDGER ── */
+.ijdb-ledger-wrap{max-width:1100px;margin:0 auto;padding:32px 24px 0;}
+.ijdb-category-section{margin-bottom:40px;}
+.ijdb-category-hdr{display:flex;align-items:baseline;gap:10px;padding:14px 0 10px;border-top:2px solid #1b3a6b;margin-bottom:0;}
+.ijdb-category-icon{font-size:14px;color:#1b3a6b;flex-shrink:0;}
+.ijdb-category-name{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:#1b3a6b;}
+.ijdb-category-count{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.07em;color:#8a9ab8;text-transform:uppercase;}
+
+/* ── ENTRY ROWS ── */
+.ijdb-entry{border:1px solid rgba(27,58,107,0.10);border-radius:7px;background:#ffffff;margin-bottom:10px;overflow:hidden;}
+.ijdb-entry.foia-flag{border-left:3px solid #d4a832;}
+.ijdb-entry-summary{display:grid;grid-template-columns:1fr auto auto;align-items:start;gap:12px;padding:14px 16px;cursor:pointer;}
+.ijdb-entry-main{}
+.ijdb-entry-title{font-family:'Libre Baskerville',serif;font-size:13.5px;font-weight:700;color:#0e1a2e;line-height:1.35;margin-bottom:4px;}
+.ijdb-entry-entity{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#8a9ab8;}
+.ijdb-entry-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.ijdb-conf-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:700;}
+.ijdb-foia-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.10em;text-transform:uppercase;background:#fff8e0;color:#7a5500;border:1px solid #e6c830;border-radius:3px;padding:2px 6px;}
+.ijdb-date-range{font-family:'JetBrains Mono',monospace;font-size:9px;color:#aaa;}
+.ijdb-entry-amount{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#1b3a6b;text-align:right;white-space:nowrap;}
+.ijdb-entry-amount.classified{font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a1a8a;letter-spacing:0.08em;}
+.ijdb-entry-amount.gap{font-family:'JetBrains Mono',monospace;font-size:10px;color:#666;letter-spacing:0.08em;}
+.ijdb-toggle{font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a9ab8;padding-top:2px;flex-shrink:0;transition:transform 0.15s;}
+[open] .ijdb-toggle{transform:rotate(180deg);}
+
+/* ── EXPANDED DETAIL ── */
+.ijdb-entry-detail{border-top:1px solid rgba(27,58,107,0.07);padding:16px 18px 18px;background:#fafbfd;}
+.ijdb-desc{font-family:'Nunito',sans-serif;font-size:13.5px;color:#2c3e5a;line-height:1.80;margin-bottom:14px;}
+.ijdb-source-row{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:#f0f3f8;border-radius:5px;font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;}
+.ijdb-source-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:#8a9ab8;flex-shrink:0;margin-top:2px;}
+.ijdb-source-link{color:#254f92;text-decoration:none;}
+.ijdb-source-link:hover{text-decoration:underline;}
+.ijdb-foia-prompt{margin-top:12px;padding:10px 14px;background:#fffce8;border:1px solid #e6c830;border-radius:5px;display:flex;align-items:center;gap:10px;}
+.ijdb-foia-text{font-family:'Nunito',sans-serif;font-size:12px;color:#6b4800;line-height:1.5;}
+.ijdb-foia-link{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:#7a5500;text-decoration:none;border:1px solid #c8a800;border-radius:3px;padding:4px 10px;white-space:nowrap;flex-shrink:0;}
+.ijdb-foia-link:hover{background:#fff8c0;}
+
+/* ── BEFORE / AFTER ── */
+.ijdb-ba-section{max-width:1100px;margin:48px auto 0;padding:0 24px 48px;}
+.ijdb-ba-inner{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid rgba(27,58,107,0.12);border-radius:8px;overflow:hidden;}
+.ijdb-ba-col{padding:28px 28px 32px;}
+.ijdb-ba-col.before{background:#f5f7fb;}
+.ijdb-ba-col.after{background:#0e1a2e;}
+.ijdb-ba-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px;}
+.ijdb-ba-col.before .ijdb-ba-lbl{color:#8a9ab8;}
+.ijdb-ba-col.after  .ijdb-ba-lbl{color:#d4a832;}
+.ijdb-ba-list{list-style:none;}
+.ijdb-ba-list li{font-family:'Nunito',sans-serif;font-size:13px;line-height:1.75;padding:5px 0;border-bottom:1px solid rgba(27,58,107,0.07);}
+.ijdb-ba-col.before .ijdb-ba-list li{color:#2c3e5a;border-bottom-color:rgba(27,58,107,0.07);}
+.ijdb-ba-col.after  .ijdb-ba-list li{color:rgba(255,255,255,0.65);border-bottom-color:rgba(255,255,255,0.06);}
+.ijdb-ba-list li::before{content:"›  ";color:#8a9ab8;font-weight:700;}
+.ijdb-ba-col.after .ijdb-ba-list li::before{color:#d4a832;}
+@media(max-width:680px){.ijdb-ba-inner{grid-template-columns:1fr;}}
+
+/* ── COMMENTS ── */
+.ijdb-comments-section{max-width:1100px;margin:0 auto;padding:0 24px 60px;}
+.ijdb-comments-hdr{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#1b3a6b;margin-bottom:20px;padding-top:32px;border-top:2px solid #1b3a6b;}
+.ijdb-comment-form{background:#f5f7fb;border-radius:7px;padding:20px 22px;margin-bottom:28px;}
+.ijdb-comment-form textarea{width:100%;min-height:80px;font-family:'Nunito',sans-serif;font-size:13px;color:#1a1a1a;border:1px solid rgba(27,58,107,0.18);border-radius:5px;padding:10px 12px;resize:vertical;outline:none;}
+.ijdb-comment-form input{width:100%;font-family:'Nunito',sans-serif;font-size:13px;color:#1a1a1a;border:1px solid rgba(27,58,107,0.18);border-radius:5px;padding:9px 12px;outline:none;margin-top:8px;}
+.ijdb-comment-submit{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:#1b3a6b;color:#ffffff;border:none;border-radius:4px;padding:10px 20px;cursor:pointer;}
+.ijdb-comment-submit:hover{background:#254f92;}
+.ijdb-comment-list{list-style:none;}
+.ijdb-comment-item{padding:14px 0;border-bottom:1px solid rgba(27,58,107,0.07);}
+.ijdb-comment-author{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#8a9ab8;margin-bottom:6px;}
+.ijdb-comment-body{font-family:'Nunito',sans-serif;font-size:13px;color:#2c3e5a;line-height:1.70;}
+
+/* ── FOOTER ── */
+.ijdb-footer{background:#1b3a6b;padding:36px 24px 44px;}
+.ijdb-footer-inner{max-width:1100px;margin:0 auto;font-family:'Nunito',sans-serif;font-size:12.5px;color:rgba(255,255,255,0.50);line-height:1.70;}
+.ijdb-footer-inner a{color:rgba(212,168,50,0.80);text-decoration:none;}
+.ijdb-footer-inner a:hover{text-decoration:underline;}
+.ijdb-footer-rule{width:40px;height:2px;background:#b8860b;border-radius:2px;margin-bottom:16px;}
+
+@media(max-width:640px){
+  .ijdb-title{font-size:26px;}
+  .ijdb-entry-summary{grid-template-columns:1fr auto;}
+  .ijdb-toggle{display:none;}
+}
+</style>
+<% end %>
+
+<%# ── HERO ── %>
+<div class="ijdb-hero">
+  <div class="ijdb-hero-inner">
+    <div class="ijdb-eyebrow">fora.center/usa/<%= @city %>/ijdb</div>
+    <h1 class="ijdb-title">
+      <span><%= city_label %></span><br>
+      Islamic Jihad<br>Cost Database
+    </h1>
+    <div class="ijdb-hero-sub"><%= IjdbEntry::CATEGORIES.length %> cost categories · <%= @entries.size %> documented line items</div>
+    <p class="ijdb-hero-desc">
+      A civic accounting of what Islamic jihadist terrorism has cost <%= city_label %> since September 11, 2001.
+      Transportation. Screening. Law enforcement. Biological defense. Intelligence. Venues.
+      Every dollar here was spent because a specific, named ideology declared war on civilian life.
+    </p>
+    <div class="ijdb-hero-rule"></div>
+  </div>
+</div>
+
+<%# ── TOTALS ── %>
+<div class="ijdb-totals">
+  <div class="ijdb-totals-inner">
+    <div class="ijdb-total-card">
+      <div class="ijdb-total-eyebrow">◆ Quantified local cost</div>
+      <div class="ijdb-total-value"><%= total_low_fmt %>–<%= total_high_fmt %></div>
+      <div class="ijdb-total-note">Documented and estimated spending since 2001. Classified and gap items not included.</div>
+    </div>
+    <div class="ijdb-total-card">
+      <div class="ijdb-total-eyebrow">◆ Philadelphia share — federal total</div>
+      <div class="ijdb-total-value"><%= fed_fmt %>+</div>
+      <div class="ijdb-total-note">Philly's ~0.48% population share × $8T+ in national homeland security / war-on-terror spending since 9/11.</div>
+    </div>
+    <div class="ijdb-total-card">
+      <div class="ijdb-total-eyebrow">◆ Unquantified costs</div>
+      <div class="ijdb-total-value classified">Not yet calculated</div>
+      <div class="ijdb-total-note">Opportunity cost, psychological cost, and classified programs are real but not yet counted. This is a gap, not an absence.</div>
+    </div>
+  </div>
+</div>
+
+<%# ── FILTER BAR ── %>
+<div class="ijdb-filter-bar">
+  <div class="ijdb-filter-section">
+    <div class="ijdb-filter-row">
+      <span class="ijdb-filter-lbl">Category</span>
+      <button class="ijdb-filter-btn active" data-cat="all">All</button>
+      <% IjdbEntry::CATEGORIES.each do |cat| %>
+        <% next unless @entries_by_category[cat]&.any? %>
+        <button class="ijdb-filter-btn" data-cat="<%= cat %>">
+          <%= category_icons[cat] %> <%= IjdbEntry::CATEGORY_LABELS[cat] %>
+        </button>
+      <% end %>
+    </div>
+    <div class="ijdb-filter-row ijdb-filter-divider">
+      <span class="ijdb-filter-lbl">Confidence</span>
+      <button class="ijdb-filter-btn active" data-conf="all">All</button>
+      <% IjdbEntry::CONFIDENCES.each do |conf| %>
+        <% next unless @entries.any? { |e| e.confidence == conf } %>
+        <button class="ijdb-filter-btn" data-conf="<%= conf %>">
+          <%= IjdbEntry::CONFIDENCE_LABELS[conf] %>
+        </button>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%# ── LEDGER ── %>
+<div class="ijdb-ledger-wrap">
+  <% IjdbEntry::CATEGORIES.each do |cat| %>
+    <% cat_entries = @entries_by_category[cat]&.select { |e|
+         (params[:cat].blank? || params[:cat] == cat) &&
+         (params[:conf].blank? || params[:conf] == e.confidence)
+       } %>
+    <% next unless cat_entries&.any? %>
+
+    <div class="ijdb-category-section" data-cat="<%= cat %>">
+      <div class="ijdb-category-hdr">
+        <span class="ijdb-category-icon"><%= category_icons[cat] %></span>
+        <span class="ijdb-category-name"><%= IjdbEntry::CATEGORY_LABELS[cat] %></span>
+        <span class="ijdb-category-count"><%= cat_entries.length %> item<%= cat_entries.length == 1 ? '' : 's' %></span>
+      </div>
+
+      <% cat_entries.each do |entry| %>
+        <%
+          conf_style = confidence_colors[entry.confidence] || ["#f0f0f0", "#444"]
+          conf_bg, conf_fg = conf_style
+        %>
+        <details
+          class="ijdb-entry<%= entry.foia_candidate? ? ' foia-flag' : '' %>"
+          data-cat="<%= cat %>"
+          data-conf="<%= entry.confidence %>">
+
+          <summary class="ijdb-entry-summary">
+            <div class="ijdb-entry-main">
+              <div class="ijdb-entry-title"><%= entry.title %></div>
+              <div class="ijdb-entry-entity"><%= entry.entity_name %></div>
+              <div class="ijdb-entry-meta">
+                <span class="ijdb-conf-badge"
+                      style="background:<%= conf_bg %>;color:<%= conf_fg %>;">
+                  <%= entry.confidence_label %>
+                </span>
+                <% if entry.foia_candidate? %>
+                  <span class="ijdb-foia-badge">⚑ FOIA candidate</span>
+                <% end %>
+                <% if entry.date_range_start %>
+                  <span class="ijdb-date-range">
+                    <%= entry.date_range_start %>–<%= entry.date_range_end || "present" %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+            <div class="ijdb-entry-amount<%= %w[classified gap].include?(entry.confidence) ? " #{entry.confidence}" : '' %>">
+              <% if entry.formatted_range %>
+                <%= entry.formatted_range %>
+              <% else %>
+                <%= entry.confidence == "classified" ? "Classified" : "Uncounted" %>
+              <% end %>
+            </div>
+            <div class="ijdb-toggle">▼</div>
+          </summary>
+
+          <div class="ijdb-entry-detail">
+            <% if entry.description.present? %>
+              <p class="ijdb-desc"><%= entry.description %></p>
+            <% end %>
+            <% if entry.source_title.present? || entry.source_url.present? %>
+              <div class="ijdb-source-row">
+                <span class="ijdb-source-lbl">Source</span>
+                <span>
+                  <% if entry.source_url.present? %>
+                    <a href="<%= entry.source_url %>" target="_blank" rel="noopener noreferrer"
+                       class="ijdb-source-link"><%= entry.source_title.presence || entry.source_url %></a>
+                  <% else %>
+                    <%= entry.source_title %>
+                  <% end %>
+                  <% if entry.source_date %>
+                    <span style="color:#aaa;margin-left:6px;font-size:10px;"><%= entry.source_date.strftime("%b %Y") %></span>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+            <% if entry.foia_candidate? %>
+              <div class="ijdb-foia-prompt">
+                <div class="ijdb-foia-text">
+                  <strong>⚑ FOIA candidate</strong> — This cost has never been publicly documented.
+                  A FOIA request to the relevant agency could surface it.
+                </div>
+                <%= link_to "Draft a request →",
+                    new_city_ijdb_foia_path(city: @city, entry_id: entry.id),
+                    class: "ijdb-foia-link" %>
+              </div>
+            <% end %>
+          </div>
+
+        </details>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%# ── BEFORE / AFTER ── %>
+<div class="ijdb-ba-section">
+  <div class="ijdb-ba-inner">
+    <div class="ijdb-ba-col before">
+      <div class="ijdb-ba-lbl">◆ Before — September 10, 2001</div>
+      <ul class="ijdb-ba-list">
+        <li>PHL security managed by private contractors; no federal screeners</li>
+        <li>No liquid restrictions on flights</li>
+        <li>SEPTA had no counter-terrorism unit or bomb detection capability</li>
+        <li>No FBI-JTTF terrorism task force embedded at PPD</li>
+        <li>No biohazard detection at post offices or mail facilities</li>
+        <li>Lincoln Financial opened in 2003 — no vehicle barrier requirements in original design</li>
+        <li>No DHS — the agency did not exist</li>
+        <li>No FISA court expansion; NSA metadata collection on Americans not yet authorized</li>
+      </ul>
+    </div>
+    <div class="ijdb-ba-col after">
+      <div class="ijdb-ba-lbl">◆ After — the permanent condition</div>
+      <ul class="ijdb-ba-list">
+        <li>~1,200 TSA federal officers at PHL; every traveler screened</li>
+        <li>3-1-1 liquid rule applies to every flight from every gate, permanently</li>
+        <li>SEPTA operates 4,000+ cameras, explosives detection, and a CT unit</li>
+        <li>PPD Counter-Terrorism Task Force permanently embedded in FBI-JTTF</li>
+        <li>USPS Biohazard Detection System installed at every major mail processing center</li>
+        <li>Bollards, barriers, and magnetometers at every major stadium and arena</li>
+        <li>DHS is now the third-largest federal department; $60B+/year budget</li>
+        <li>FISA Section 702 enables bulk surveillance; NSA can access Comcast customer data</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<%# ── COMMENTS ── %>
+<div class="ijdb-comments-section">
+  <% if notice.present? %>
+    <div style="padding:10px 14px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:5px;font-family:'Nunito',sans-serif;font-size:13px;color:#155c2d;margin-bottom:16px;"><%= notice %></div>
+  <% end %>
+  <% if alert.present? %>
+    <div style="padding:10px 14px;background:#fdf0f0;border:1px solid #f5c6c6;border-radius:5px;font-family:'Nunito',sans-serif;font-size:13px;color:#a32d2d;margin-bottom:16px;"><%= alert %></div>
+  <% end %>
+
+  <div class="ijdb-comments-hdr">◆ Community notes</div>
+
+  <%= form_with model: @new_comment,
+        url: city_ijdb_comments_path(city: @city),
+        class: "ijdb-comment-form",
+        local: true do |f| %>
+    <%= f.text_area  :body,        placeholder: "Add a note, correction, or additional source…" %>
+    <%= f.text_field :author_name, placeholder: "Your name (optional — leave blank to post anonymously)" %>
+    <%= f.submit "Post note", class: "ijdb-comment-submit" %>
+  <% end %>
+
+  <% if @comments.any? %>
+    <ul class="ijdb-comment-list">
+      <% @comments.each do |c| %>
+        <li class="ijdb-comment-item">
+          <div class="ijdb-comment-author">
+            <%= c.display_author %> ·
+            <span style="opacity:0.6;"><%= c.created_at.strftime("%b %d, %Y") %></span>
+          </div>
+          <div class="ijdb-comment-body"><%= c.body %></div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<%# ── FOOTER ── %>
+<footer class="ijdb-footer">
+  <div class="ijdb-footer-inner">
+    <div class="ijdb-footer-rule"></div>
+    <p>
+      IJDB — Islamic Jihad Cost Database. A civic accounting project by
+      <a href="/">FORA</a>. All figures represent best available public estimates;
+      classified items are noted as such. FOIA requests welcome.
+      Corrections: <a href="mailto:arkitectnoah@gmail.com">arkitectnoah@gmail.com</a>
+    </p>
+  </div>
+</footer>
+
+<%# ── FILTER JS ── %>
+<script>
+(function() {
+  var activeCat  = 'all';
+  var activeConf = 'all';
+
+  function applyFilters() {
+    document.querySelectorAll('.ijdb-entry').forEach(function(el) {
+      var cat  = el.dataset.cat;
+      var conf = el.dataset.conf;
+      var show = (activeCat  === 'all' || activeCat  === cat) &&
+                 (activeConf === 'all' || activeConf === conf);
+      el.style.display = show ? '' : 'none';
+    });
+    // Hide empty category sections
+    document.querySelectorAll('.ijdb-category-section').forEach(function(sec) {
+      var visible = Array.from(sec.querySelectorAll('.ijdb-entry')).some(function(e) {
+        return e.style.display !== 'none';
+      });
+      sec.style.display = visible ? '' : 'none';
+    });
+  }
+
+  document.querySelectorAll('.ijdb-filter-btn[data-cat]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.ijdb-filter-btn[data-cat]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll('.ijdb-filter-btn[data-conf]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.ijdb-filter-btn[data-conf]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeConf = btn.dataset.conf;
+      applyFilters();
+    });
+  });
+}());
+</script>

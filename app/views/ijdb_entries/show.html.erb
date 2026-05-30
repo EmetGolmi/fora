@@ -1,0 +1,144 @@
+<%
+  conf_colors = {
+    "documented"  => ["#e8f5e9", "#155c2d"],
+    "estimated"   => ["#e8eef8", "#1b3a6b"],
+    "partial"     => ["#fff8e0", "#7a5500"],
+    "classified"  => ["#f3e8fa", "#5a1a8a"],
+    "gap"         => ["#f0f0f0", "#444444"],
+  }
+  conf_bg, conf_fg = conf_colors[@entry.confidence] || ["#f0f0f0", "#444"]
+%>
+<% content_for(:title) { "#{@entry.title} · IJDB #{@city.capitalize} · FORA" } %>
+
+<% content_for :head do %>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+.ijdb-show-wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px;}
+.ijdb-back{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:#8a9ab8;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:28px;}
+.ijdb-back:hover{color:#1b3a6b;}
+.ijdb-show-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.20em;text-transform:uppercase;color:#b8860b;margin-bottom:10px;}
+.ijdb-show-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:#0e1a2e;line-height:1.25;margin-bottom:12px;}
+.ijdb-show-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+.ijdb-conf-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:3px;font-weight:700;}
+.ijdb-foia-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.10em;text-transform:uppercase;background:#fff8e0;color:#7a5500;border:1px solid #e6c830;border-radius:3px;padding:3px 8px;}
+.ijdb-entity-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#8a9ab8;}
+.ijdb-amount-block{background:#f5f7fb;border:1px solid rgba(27,58,107,0.10);border-radius:7px;padding:18px 22px;margin-bottom:24px;}
+.ijdb-amount-row{display:flex;align-items:baseline;gap:10px;}
+.ijdb-amount-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;}
+.ijdb-amount-val{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:#1b3a6b;}
+.ijdb-scope-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;text-transform:uppercase;letter-spacing:0.08em;background:#e6f1fb;color:#0c447c;border-radius:3px;padding:2px 7px;margin-left:8px;}
+.ijdb-desc-section{margin-bottom:24px;}
+.ijdb-section-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:10px;}
+.ijdb-desc-body{font-family:'Nunito',sans-serif;font-size:14.5px;color:#2c3e5a;line-height:1.85;}
+.ijdb-source-block{background:#f0f3f8;border-radius:6px;padding:14px 16px;margin-bottom:24px;}
+.ijdb-source-title{font-family:'Nunito',sans-serif;font-size:13px;color:#2c3e5a;margin-bottom:4px;}
+.ijdb-source-link{font-family:'Nunito',sans-serif;font-size:12px;color:#254f92;word-break:break-all;}
+.ijdb-foia-cta{background:#fffce8;border:1px solid #e6c830;border-radius:7px;padding:18px 20px;margin-bottom:28px;}
+.ijdb-foia-cta-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#7a5500;margin-bottom:8px;}
+.ijdb-foia-cta-body{font-family:'Nunito',sans-serif;font-size:13px;color:#5a3800;line-height:1.65;margin-bottom:12px;}
+.ijdb-foia-cta-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.10em;text-transform:uppercase;color:#ffffff;background:#7a5500;border-radius:4px;padding:8px 16px;text-decoration:none;display:inline-block;}
+.ijdb-foia-cta-link:hover{background:#b8860b;}
+.ijdb-comments-hdr{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#1b3a6b;margin-bottom:16px;padding-top:24px;border-top:1px solid rgba(27,58,107,0.10);}
+.ijdb-comment-form textarea,.ijdb-comment-form input{width:100%;font-family:'Nunito',sans-serif;font-size:13px;border:1px solid rgba(27,58,107,0.18);border-radius:5px;padding:9px 12px;outline:none;margin-bottom:8px;color:#1a1a1a;}
+.ijdb-comment-form textarea{min-height:72px;resize:vertical;}
+.ijdb-comment-submit{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;background:#1b3a6b;color:#fff;border:none;border-radius:4px;padding:9px 18px;cursor:pointer;}
+.ijdb-comment-item{padding:12px 0;border-bottom:1px solid rgba(27,58,107,0.07);}
+.ijdb-comment-author{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.07em;text-transform:uppercase;color:#8a9ab8;margin-bottom:5px;}
+.ijdb-comment-body{font-family:'Nunito',sans-serif;font-size:13px;color:#2c3e5a;line-height:1.70;}
+</style>
+<% end %>
+
+<div class="ijdb-show-wrap">
+  <%= link_to "← back to #{@city.capitalize} IJDB", city_ijdb_path(city: @city), class: "ijdb-back" %>
+
+  <div class="ijdb-show-eyebrow">
+    <%= @entry.category_label %> · IJDB <%= @city.capitalize %>
+  </div>
+  <h1 class="ijdb-show-title"><%= @entry.title %></h1>
+  <div class="ijdb-show-meta">
+    <span class="ijdb-conf-badge" style="background:<%= conf_bg %>;color:<%= conf_fg %>;">
+      <%= @entry.confidence_label %>
+    </span>
+    <% if @entry.foia_candidate? %>
+      <span class="ijdb-foia-badge">⚑ FOIA candidate</span>
+    <% end %>
+    <% if @entry.entity_name.present? %>
+      <span class="ijdb-entity-lbl"><%= @entry.entity_name %></span>
+    <% end %>
+    <% if @entry.date_range_start %>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#aaa;">
+        <%= @entry.date_range_start %>–<%= @entry.date_range_end || "present" %>
+      </span>
+    <% end %>
+  </div>
+
+  <div class="ijdb-amount-block">
+    <div class="ijdb-amount-lbl">◆ Estimated cost</div>
+    <div class="ijdb-amount-row">
+      <span class="ijdb-amount-val">
+        <% if @entry.formatted_range %>
+          <%= @entry.formatted_range %>
+        <% else %>
+          <%= @entry.confidence == "classified" ? "Classified" : "Gap — uncounted" %>
+        <% end %>
+      </span>
+      <% if @entry.scope.present? %>
+        <span class="ijdb-scope-lbl"><%= @entry.scope.to_s.humanize %></span>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @entry.description.present? %>
+    <div class="ijdb-desc-section">
+      <div class="ijdb-section-lbl">◆ Description</div>
+      <p class="ijdb-desc-body"><%= @entry.description %></p>
+    </div>
+  <% end %>
+
+  <% if @entry.source_title.present? || @entry.source_url.present? %>
+    <div class="ijdb-source-block">
+      <div class="ijdb-section-lbl">◆ Source</div>
+      <% if @entry.source_title.present? %>
+        <div class="ijdb-source-title"><%= @entry.source_title %></div>
+      <% end %>
+      <% if @entry.source_url.present? %>
+        <a href="<%= @entry.source_url %>" target="_blank" rel="noopener noreferrer"
+           class="ijdb-source-link"><%= @entry.source_url %></a>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @entry.foia_candidate? %>
+    <div class="ijdb-foia-cta">
+      <div class="ijdb-foia-cta-title">⚑ FOIA candidate — this cost is undisclosed</div>
+      <p class="ijdb-foia-cta-body">
+        The information behind this line item has never been publicly reported.
+        A Freedom of Information Act request to the relevant agency could surface the actual costs.
+        We've drafted a template request you can file directly.
+      </p>
+      <%= link_to "Draft a FOIA request →",
+          new_city_ijdb_foia_path(city: @city, entry_id: @entry.id),
+          class: "ijdb-foia-cta-link" %>
+    </div>
+  <% end %>
+
+  <%# Comments %>
+  <div class="ijdb-comments-hdr">◆ Notes on this entry</div>
+  <%= form_with model: @new_comment,
+        url: city_ijdb_comments_path(city: @city),
+        class: "ijdb-comment-form",
+        local: true do |f| %>
+    <%= f.hidden_field :ijdb_entry_id, value: @entry.id %>
+    <%= f.text_area  :body,        placeholder: "Add a note, correction, or additional source…" %>
+    <%= f.text_field :author_name, placeholder: "Your name (optional)" %>
+    <%= f.submit "Post note", class: "ijdb-comment-submit" %>
+  <% end %>
+  <% @comments.each do |c| %>
+    <div class="ijdb-comment-item">
+      <div class="ijdb-comment-author">
+        <%= c.display_author %> · <%= c.created_at.strftime("%b %d, %Y") %>
+      </div>
+      <div class="ijdb-comment-body"><%= c.body %></div>
+    </div>
+  <% end %>
+</div>

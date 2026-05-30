@@ -1076,3 +1076,5 @@ ON_THIS_DAY_ENTRIES.each do |entry|
 end
 
 puts "OnThisDayEntry: #{created} created, #{updated} updated"
+
+load Rails.root.join("db/seeds/ijdb_philadelphia.rb")

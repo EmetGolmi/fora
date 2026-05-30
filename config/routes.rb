@@ -116,4 +116,15 @@ Rails.application.routes.draw do
   # Business formation guide
   get  "market/newllc",       to: "market/new_llc#index", as: :new_llc
   get  "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
+
+  # ── IJDB — Islamic Jihad Database ──────────────────────────────────────────
+  # /usa/:city/ijdb
+  # Specific routes BEFORE the parameterized /:id catch-all
+  scope '/usa/:city/ijdb' do
+    get  '/',          to: 'ijdb_entries#index',        as: :city_ijdb
+    post '/comments',  to: 'ijdb_comments#create',      as: :city_ijdb_comments
+    get  '/foia/new',  to: 'ijdb_foia_requests#new',    as: :new_city_ijdb_foia
+    post '/foia',      to: 'ijdb_foia_requests#create', as: :city_ijdb_foia
+    get  '/:id',       to: 'ijdb_entries#show',         as: :city_ijdb_entry
+  end
 end
