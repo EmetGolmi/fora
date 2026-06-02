@@ -177,7 +177,7 @@ html{scroll-behavior:smooth;}
 <%
   max_cents = @max_agency_cents > 0 ? @max_agency_cents : 1.0
 
-  AGENCY_DISPLAY = {
+  agency_display = {
     "DOD/OCO"             => { name: "DOD — Overseas Contingency Ops",        desc: "Afghanistan, Iraq, Syria war funding; ATFP bases" },
     "VA"                  => { name: "Veterans Administration",                desc: "Post-9/11 veteran care, disability, mental health" },
     "DHS"                 => { name: "DHS — Entire department",                desc: "TSA, CBP, FEMA, Secret Service, Coast Guard, CISA" },
@@ -189,10 +189,10 @@ html{scroll-behavior:smooth;}
     "DOE/NNSA"            => { name: "DOE — NNSA / Radiological Security",     desc: "Nuclear material security, dirty bomb detection, NEST teams" },
     "HHS/CDC"             => { name: "HHS / CDC — Biodefense",                 desc: "BARDA, SNS stockpile, bioterrorism preparedness" },
     "USPS/Postal Service" => { name: "USPS — Mail security program",           desc: "BDS network, irradiation, anthrax response & cleanup" },
-  }.freeze
+  }
 
-  CONF_LABEL = { "documented" => "Public", "estimated" => "Public", "partial" => "Partial", "classified" => "Classified" }.freeze
-  CONF_CLASS = { "documented" => "documented", "estimated" => "documented", "partial" => "partial", "classified" => "classified" }.freeze
+  conf_label = { "documented" => "Public", "estimated" => "Public", "partial" => "Partial", "classified" => "Classified" }
+  conf_class = { "documented" => "documented", "estimated" => "documented", "partial" => "partial", "classified" => "classified" }
 %>
 <div class="nat-section">
   <div class="nat-section-hdr">◆ Agency breakdown</div>
@@ -209,9 +209,9 @@ html{scroll-behavior:smooth;}
     <tbody>
       <% @agency_entries.sort_by { |e| -(e.amount_low_cents || 0) }.each do |entry| %>
         <%
-          display = AGENCY_DISPLAY[entry.entity_name] || { name: entry.title, desc: entry.description }
-          pct     = entry.amount_low_cents ? [[(entry.amount_low_cents.to_f / max_cents * 100).round, 1].max, 100].min : 0
-          conf    = entry.confidence
+          display    = agency_display[entry.entity_name] || { name: entry.title, desc: entry.description }
+          pct        = entry.amount_low_cents ? [[(entry.amount_low_cents.to_f / max_cents * 100).round, 1].max, 100].min : 0
+          conf       = entry.confidence
           amount_str = entry.amount_low_cents ? "~#{entry.formatted_range.to_s.sub(/\A[≥≤]\s*/, '')}" : nil
         %>
         <tr>
@@ -227,7 +227,7 @@ html{scroll-behavior:smooth;}
             <% end %>
           </td>
           <td>
-            <span class="nat-tag <%= CONF_CLASS[conf] %>"><%= CONF_LABEL[conf] || conf.capitalize %></span>
+            <span class="nat-tag <%= conf_class[conf] %>"><%= conf_label[conf] || conf.capitalize %></span>
           </td>
           <td class="nat-bar-cell">
             <div class="nat-bar-wrap">
