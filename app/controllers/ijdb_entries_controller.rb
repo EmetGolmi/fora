@@ -19,7 +19,7 @@ class IjdbEntriesController < ApplicationController
     { value: "$2.3T", label: "Overseas contingency ops (DOD)", sub: "Afghanistan, Iraq, Syria, OCO",         color: "gilt" },
     { value: "$260B", label: "CT spending peak year",          sub: "2008 · 16× the pre-9/11 baseline",      color: "gilt" },
     { value: "15%",   label: "Of discretionary budget",        sub: "2002–17 avg · Stimson Center",          color: "gilt" },
-    { value: "~100",  label: "Jihadi-caused U.S. deaths",      sub: "2002–17 on U.S. soil · ~6/year",       color: "red"  },
+    { value: "3,121+", label: "Jihadi-caused U.S. deaths",      sub: "including 9/11 · 121 post-9/11 on U.S. soil · updated 2025", color: "red", modal_id: "deaths-modal" },
   ].freeze
 
   def national

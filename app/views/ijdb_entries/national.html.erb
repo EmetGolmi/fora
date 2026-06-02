@@ -33,6 +33,9 @@ html{scroll-behavior:smooth;}
 @media(max-width:500px){.nat-stats-grid{grid-template-columns:1fr;}}
 .nat-stat-card{background:rgba(27,58,107,0.35);border:1px solid rgba(212,168,50,0.15);border-radius:8px;padding:20px 22px;}
 .nat-stat-card.red{background:rgba(120,30,30,0.35);border-color:rgba(220,50,50,0.25);}
+.nat-stat-card.is-clickable{cursor:pointer;transition:transform 0.12s,box-shadow 0.12s,border-color 0.12s;}
+.nat-stat-card.is-clickable:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.30);}
+.nat-stat-card.red.is-clickable:hover{border-color:rgba(220,50,50,0.55);}
 .nat-stat-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;}
 .nat-stat-card .nat-stat-eyebrow{color:rgba(255,255,255,0.35);}
 .nat-stat-card.red .nat-stat-eyebrow{color:rgba(255,160,160,0.60);}
@@ -155,7 +158,8 @@ html{scroll-behavior:smooth;}
 <div class="nat-stats-section">
   <div class="nat-stats-grid">
     <% @stats.each do |s| %>
-      <div class="nat-stat-card<%= s[:color] == 'red' ? ' red' : '' %>">
+      <div class="nat-stat-card<%= ' red' if s[:color] == 'red' %><%= ' is-clickable' if s[:modal_id] %>"
+           <% if s[:modal_id] %>data-modal="<%= s[:modal_id] %>"<% end %>>
         <div class="nat-stat-eyebrow">◆ <%= s[:label] %></div>
         <div class="nat-stat-value"><%= s[:value] %></div>
         <div class="nat-stat-sub"><%= s[:sub] %></div>
@@ -351,6 +355,17 @@ html{scroll-behavior:smooth;}
     </p>
   </div>
 </div>
+
+<%= render 'ijdb/deaths_modal' %>
+
+<script>
+  document.querySelectorAll('[data-modal]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var dlg = document.getElementById(el.dataset.modal);
+      if (dlg) dlg.showModal();
+    });
+  });
+</script>
 
 <%# ── FOOTER ── %>
 <footer class="nat-footer">

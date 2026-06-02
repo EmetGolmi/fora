@@ -1,0 +1,163 @@
+<%# app/views/ijdb/_deaths_modal.html.erb %>
+
+<% content_for :head do %>
+<style>
+/* ── DEATHS MODAL ── */
+#deaths-modal{border:none;padding:0;border-radius:10px;max-width:700px;width:90vw;box-shadow:0 24px 80px rgba(0,0,0,0.50);overflow:hidden;}
+#deaths-modal::backdrop{background:rgba(0,0,0,0.70);backdrop-filter:blur(3px);}
+.dm-header{background:#0e1a2e;padding:28px 28px 24px;position:relative;}
+.dm-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:#d4a832;margin-bottom:10px;}
+.dm-headline{font-family:'Libre Baskerville',serif;font-size:38px;font-weight:700;color:#ff7070;line-height:1.0;margin-bottom:6px;}
+.dm-subtitle{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
+.dm-close{position:absolute;top:18px;right:20px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;}
+.dm-close:hover{color:#ffffff;background:rgba(255,255,255,0.08);}
+.dm-body{background:#ffffff;padding:28px 28px 24px;max-height:70vh;overflow-y:auto;}
+
+/* breakdown cols */
+.dm-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+@media(max-width:520px){.dm-split{grid-template-columns:1fr;}}
+.dm-col{background:#f5f7fb;border-radius:7px;padding:18px 18px 16px;}
+.dm-col-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:8px;}
+.dm-col-value{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:#0e1a2e;line-height:1.0;margin-bottom:6px;}
+.dm-col-label{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;margin-bottom:10px;}
+.dm-bullets{list-style:none;padding:0;margin:0;}
+.dm-bullets li{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#4a5a72;padding:3px 0;border-bottom:1px solid rgba(27,58,107,0.07);display:flex;justify-content:space-between;}
+.dm-bullets li:last-child{border-bottom:none;}
+
+/* attacks table */
+.dm-section-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.20em;text-transform:uppercase;color:#b8860b;margin-bottom:12px;}
+.dm-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.dm-table th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#8a9ab8;padding:6px 8px 6px 0;border-bottom:2px solid #1b3a6b;text-align:left;}
+.dm-table th:last-child{text-align:right;padding-right:0;}
+.dm-table td{font-family:'Nunito',sans-serif;font-size:12.5px;color:#2c3e5a;padding:9px 8px 9px 0;border-bottom:1px solid rgba(27,58,107,0.07);vertical-align:top;}
+.dm-table td:last-child{text-align:right;padding-right:0;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;white-space:nowrap;}
+.dm-table tr:last-child td{border-bottom:none;}
+.dm-table .dm-yr{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b8860b;font-weight:700;white-space:nowrap;}
+.dm-table .dm-perp{font-size:11px;color:#8a9ab8;display:block;margin-top:1px;}
+.dm-deaths-high{color:#c0392b !important;}
+
+/* methodology + sources */
+.dm-rule{border:none;border-top:1px solid rgba(27,58,107,0.10);margin:4px 0 20px;}
+.dm-methodology{background:#fffbf0;border:1px solid rgba(184,134,11,0.20);border-radius:6px;padding:14px 16px;margin-bottom:20px;}
+.dm-methodology p{font-family:'Nunito',sans-serif;font-size:12px;color:#5a4a1a;line-height:1.75;margin:0;}
+.dm-sources-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:#b8860b;margin-bottom:8px;}
+.dm-sources{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;line-height:1.85;}
+.dm-sources a{color:#1b3a6b;text-decoration:none;}
+.dm-sources a:hover{text-decoration:underline;}
+</style>
+<% end %>
+
+<dialog id="deaths-modal" aria-labelledby="dm-title">
+
+  <div class="dm-header">
+    <button class="dm-close" onclick="document.getElementById('deaths-modal').close()" aria-label="Close">✕</button>
+    <div class="dm-eyebrow">◆ Islamic Jihad Cost Database · Deaths</div>
+    <div class="dm-headline" id="dm-title">3,121+</div>
+    <p class="dm-subtitle">Jihadi-caused deaths on American soil — September 11, 2001 through January 2025</p>
+  </div>
+
+  <div class="dm-body">
+
+    <%# ── BREAKDOWN ── %>
+    <div class="dm-split">
+      <div class="dm-col">
+        <div class="dm-col-eyebrow">September 11, 2001</div>
+        <div class="dm-col-value">2,977</div>
+        <div class="dm-col-label">Official victim count · 9/11 Commission</div>
+        <ul class="dm-bullets">
+          <li><span>World Trade Center</span><span>2,753</span></li>
+          <li><span>Pentagon</span><span>184</span></li>
+          <li><span>Flight 93 · Shanksville PA</span><span>40</span></li>
+        </ul>
+      </div>
+      <div class="dm-col">
+        <div class="dm-col-eyebrow">Post-9/11 · U.S. soil</div>
+        <div class="dm-col-value">121+</div>
+        <div class="dm-col-label">2002 – January 2025</div>
+        <ul class="dm-bullets">
+          <li><span>Tracked by New America Foundation</span><span>107</span></li>
+          <li><span>New Orleans · Jan 1, 2025</span><span>+14</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <%# ── NOTABLE ATTACKS ── %>
+    <div class="dm-section-lbl">Notable post-9/11 attacks</div>
+    <table class="dm-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Attack</th>
+          <th>Deaths</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dm-yr">2016</td>
+          <td>Pulse nightclub, Orlando FL<span class="dm-perp">Omar Mateen</span></td>
+          <td class="dm-deaths-high">49</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2025</td>
+          <td>New Year's Day, New Orleans LA<span class="dm-perp">Shamsud-Din Jabbar · ISIS-inspired · FBI update Jan 14</span></td>
+          <td class="dm-deaths-high">14</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2015</td>
+          <td>San Bernardino, CA<span class="dm-perp">Syed Farook &amp; Tashfeen Malik</span></td>
+          <td class="dm-deaths-high">14</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2009</td>
+          <td>Fort Hood, TX<span class="dm-perp">Nidal Hasan · U.S. Army Major</span></td>
+          <td>13</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2017</td>
+          <td>Halloween truck attack, New York City<span class="dm-perp">Sayfullo Saipov</span></td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2015</td>
+          <td>Military recruiting center, Chattanooga TN<span class="dm-perp">Mohammad Abdulazeez</span></td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2013</td>
+          <td>Boston Marathon<span class="dm-perp">Dzhokhar &amp; Tamerlan Tsarnaev</span></td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2019</td>
+          <td>Naval Air Station Pensacola, FL<span class="dm-perp">Mohammed Alshamrani · Saudi Air Force</span></td>
+          <td>3</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="dm-rule">
+
+    <%# ── METHODOLOGY ── %>
+    <div class="dm-methodology">
+      <p>
+        <strong>Counting methodology:</strong> The 3,121+ figure combines the official 9/11 victim count
+        (2,977 per the 9/11 Commission) with post-9/11 domestic deaths tracked by the New America
+        Foundation and the FBI's January 14, 2025 update on the New Orleans attack.
+        The Global Terrorism Database (GTD / Fondapol) uses similar methodology.
+        Deaths from overseas U.S. military operations are not included.
+        The post-9/11 count covers attacks meeting the FBI and GTD definition of
+        jihadist-motivated violence on U.S. soil.
+      </p>
+    </div>
+
+    <%# ── SOURCES ── %>
+    <div class="dm-sources-lbl">Sources</div>
+    <div class="dm-sources">
+      <a href="https://www.newamerica.org/in-depth/terrorism-in-america/" target="_blank" rel="noopener">New America Foundation, "Terrorism in America After 9/11"</a>
+      · <a href="https://govinfo.gov/app/details/GPO-911REPORT" target="_blank" rel="noopener">9/11 Commission Report (2004)</a>
+      · Fondapol / Global Terrorism Database (GTD)
+      · FBI Field Office New Orleans, official update January 14, 2025
+    </div>
+
+  </div>
+</dialog>
