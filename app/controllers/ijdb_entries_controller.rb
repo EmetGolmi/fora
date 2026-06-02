@@ -11,6 +11,25 @@ class IjdbEntriesController < ApplicationController
   FEDERAL_ANTITERROR_TOTAL_CENTS = 8_000_000_000_000 * 100
 
   before_action :set_location
+  skip_before_action :set_location, only: :national
+
+  NATIONAL_STATS = [
+    { value: "~$8T",  label: "Total estimated CT spending",    sub: "2002–2022 · Brown Univ. Costs of War",  color: "gilt" },
+    { value: "$1.1T", label: "Homeland security spending",     sub: "DHS-related programs, 2002–2022",       color: "gilt" },
+    { value: "$2.3T", label: "Overseas contingency ops (DOD)", sub: "Afghanistan, Iraq, Syria, OCO",         color: "gilt" },
+    { value: "$260B", label: "CT spending peak year",          sub: "2008 · 16× the pre-9/11 baseline",      color: "gilt" },
+    { value: "15%",   label: "Of discretionary budget",        sub: "2002–17 avg · Stimson Center",          color: "gilt" },
+    { value: "~100",  label: "Jihadi-caused U.S. deaths",      sub: "2002–17 on U.S. soil · ~6/year",       color: "red"  },
+  ].freeze
+
+  def national
+    @country = "usa"
+    all = IjdbEntry.national.by_category
+    @agency_entries = all.reject { |e| e.entity_name == "USPS" }
+    @mail_entries   = all.select { |e| e.entity_name == "USPS" }
+    @stats = NATIONAL_STATS
+    @max_agency_cents = @agency_entries.map { |e| e.amount_low_cents.to_i }.max.to_f
+  end
 
   def index
     @entries = IjdbEntry.for_city(@city, @country).by_category

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_30_100002) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_01_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -90,7 +90,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_100002) do
     t.bigint "amount_low_cents"
     t.string "amount_unit", default: "usd"
     t.string "category", null: false
-    t.string "city", null: false
+    t.string "city"
     t.string "confidence"
     t.string "contributor_attribution"
     t.bigint "contributor_id"

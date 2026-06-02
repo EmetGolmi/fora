@@ -118,6 +118,9 @@ Rails.application.routes.draw do
   get  "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
 
   # ── IJDB — Islamic Jihad Database ──────────────────────────────────────────
+  # National route BEFORE the city-scoped block (fixed path wins over :city param)
+  get '/usa/ijdb', to: 'ijdb_entries#national', as: :national_ijdb
+
   # /usa/:city/ijdb
   # Specific routes BEFORE the parameterized /:id catch-all
   scope '/usa/:city/ijdb' do

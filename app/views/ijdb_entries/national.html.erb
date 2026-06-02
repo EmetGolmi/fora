@@ -1,0 +1,344 @@
+<% content_for(:title) { "The Jihad Tax · FORA" } %>
+
+<% content_for :head do %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+/* ── HERO ── */
+.nat-hero{background:#0e1a2e;padding:52px 24px 44px;position:relative;overflow:hidden;}
+.nat-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 85% 30%,rgba(184,134,11,0.08) 0%,transparent 60%);pointer-events:none;}
+.nat-inner{max-width:1100px;margin:0 auto;position:relative;}
+.nat-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.20em;text-transform:uppercase;color:rgba(255,255,255,0.30);margin-bottom:16px;}
+.nat-breadcrumb a{color:rgba(255,255,255,0.30);text-decoration:none;}
+.nat-breadcrumb a:hover{color:#d4a832;}
+.nat-breadcrumb span{color:#d4a832;}
+.nat-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:#d4a832;margin-bottom:12px;}
+.nat-title{font-family:'Libre Baskerville',serif;font-size:44px;font-weight:700;color:#ffffff;line-height:1.05;margin-bottom:14px;}
+.nat-title em{color:#d4a832;font-style:normal;}
+.nat-subtitle{font-family:'Nunito',sans-serif;font-size:15px;color:rgba(255,255,255,0.55);max-width:700px;line-height:1.80;margin-bottom:28px;}
+.nat-rule{width:44px;height:3px;background:linear-gradient(to right,#b8860b,#d4a832);border-radius:2px;}
+
+/* ── CAVEAT BANNER ── */
+.nat-caveat-wrap{background:#0e1a2e;padding:0 24px 28px;}
+.nat-caveat{max-width:1100px;margin:0 auto;background:rgba(184,134,11,0.08);border:1px solid rgba(212,168,50,0.25);border-radius:7px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
+.nat-caveat i{font-size:18px;color:#d4a832;flex-shrink:0;margin-top:1px;}
+.nat-caveat-text{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.50);line-height:1.70;}
+
+/* ── STATS GRID ── */
+.nat-stats-section{background:#0e1a2e;padding:0 24px 44px;}
+.nat-stats-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:800px){.nat-stats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.nat-stats-grid{grid-template-columns:1fr;}}
+.nat-stat-card{background:rgba(27,58,107,0.35);border:1px solid rgba(212,168,50,0.15);border-radius:8px;padding:20px 22px;}
+.nat-stat-card.red{background:rgba(120,30,30,0.35);border-color:rgba(220,50,50,0.25);}
+.nat-stat-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;}
+.nat-stat-card .nat-stat-eyebrow{color:rgba(255,255,255,0.35);}
+.nat-stat-card.red .nat-stat-eyebrow{color:rgba(255,160,160,0.60);}
+.nat-stat-value{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;line-height:1.0;margin-bottom:6px;}
+.nat-stat-card .nat-stat-value{color:#d4a832;}
+.nat-stat-card.red .nat-stat-value{color:#ff7070;}
+.nat-stat-sub{font-family:'Nunito',sans-serif;font-size:11px;line-height:1.5;}
+.nat-stat-card .nat-stat-sub{color:rgba(255,255,255,0.30);}
+.nat-stat-card.red .nat-stat-sub{color:rgba(255,160,160,0.45);}
+
+/* ── CITY LINK STRIP ── */
+.nat-city-strip{background:#f5f7fb;border-bottom:1px solid rgba(27,58,107,0.10);padding:12px 24px;}
+.nat-city-strip-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.nat-city-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;flex-shrink:0;}
+.nat-city-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.07em;text-transform:uppercase;color:#1b3a6b;text-decoration:none;border-bottom:1px solid rgba(27,58,107,0.20);padding-bottom:1px;}
+.nat-city-link:hover{color:#b8860b;border-bottom-color:#b8860b;}
+.nat-city-soon{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.07em;text-transform:uppercase;color:#aab4c4;}
+
+/* ── SECTION WRAPPER ── */
+.nat-section{max-width:1100px;margin:0 auto;padding:40px 24px 0;}
+.nat-section-hdr{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:#b8860b;margin-bottom:16px;}
+.nat-section-title{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:#1b3a6b;margin-bottom:20px;}
+
+/* ── AGENCY TABLE ── */
+.nat-table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+.nat-table th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;padding:8px 12px 8px 0;border-bottom:2px solid #1b3a6b;text-align:left;white-space:nowrap;}
+.nat-table th:last-child,.nat-table td:last-child{padding-right:0;}
+.nat-table tr:hover td{background:rgba(27,58,107,0.03);}
+.nat-table td{padding:14px 12px 14px 0;border-bottom:1px solid rgba(27,58,107,0.07);vertical-align:top;}
+.nat-agency-name{font-family:'Libre Baskerville',serif;font-size:13.5px;font-weight:700;color:#0e1a2e;margin-bottom:3px;}
+.nat-agency-desc{font-family:'Nunito',sans-serif;font-size:12px;color:#5a6e8a;line-height:1.55;}
+.nat-amount{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#1b3a6b;white-space:nowrap;}
+.nat-amount.classified{font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a1a8a;letter-spacing:0.06em;}
+.nat-tag{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:3px;white-space:nowrap;font-weight:700;}
+.nat-tag.documented{background:#e8f5e9;color:#155c2d;}
+.nat-tag.estimated{background:#e8eef8;color:#1b3a6b;}
+.nat-tag.partial{background:#fff8e0;color:#7a5500;}
+.nat-tag.classified{background:#f3e8fa;color:#5a1a8a;}
+.nat-bar-cell{width:140px;}
+.nat-bar-wrap{background:rgba(27,58,107,0.08);border-radius:3px;height:8px;overflow:hidden;}
+.nat-bar-fill{height:100%;border-radius:3px;background:linear-gradient(to right,#1b3a6b,#3a6abf);}
+.nat-bar-pct{font-family:'JetBrains Mono',monospace;font-size:8px;color:#aaa;margin-top:4px;}
+@media(max-width:700px){.nat-bar-cell,.nat-table th:nth-child(3),.nat-table td:nth-child(3){display:none;}}
+
+/* ── MAIL/ANTHRAX CARDS ── */
+.nat-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px;}
+@media(max-width:800px){.nat-cards-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.nat-cards-grid{grid-template-columns:1fr;}}
+.nat-card{background:#ffffff;border:1px solid rgba(27,58,107,0.10);border-radius:7px;padding:18px 18px 20px;}
+.nat-card-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:#b8860b;margin-bottom:8px;}
+.nat-card-value{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:#1b3a6b;margin-bottom:8px;line-height:1.1;}
+.nat-card-desc{font-family:'Nunito',sans-serif;font-size:12.5px;color:#2c3e5a;line-height:1.65;}
+
+/* ── TIMELINE ── */
+.nat-timeline{margin-top:4px;position:relative;padding-left:28px;}
+.nat-timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,#1b3a6b,rgba(27,58,107,0.15));}
+.nat-tl-item{position:relative;margin-bottom:24px;}
+.nat-tl-dot{position:absolute;left:-24px;top:4px;width:10px;height:10px;border-radius:50%;background:#1b3a6b;border:2px solid #ffffff;box-shadow:0 0 0 1px #1b3a6b;}
+.nat-tl-year{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:#b8860b;font-weight:700;margin-bottom:4px;}
+.nat-tl-text{font-family:'Nunito',sans-serif;font-size:13px;color:#2c3e5a;line-height:1.70;}
+.nat-tl-text strong{color:#0e1a2e;}
+
+/* ── CALLOUT BOX ── */
+.nat-callout{background:#f0f3f8;border-left:4px solid #1b3a6b;border-radius:0 7px 7px 0;padding:22px 24px;margin-top:4px;}
+.nat-callout-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#1b3a6b;margin-bottom:14px;}
+.nat-callout p{font-family:'Nunito',sans-serif;font-size:13.5px;color:#2c3e5a;line-height:1.80;margin-bottom:12px;}
+.nat-callout p:last-child{margin-bottom:0;}
+.nat-callout strong{color:#0e1a2e;}
+
+/* ── SOURCES ── */
+.nat-sources{background:#f5f7fb;border-radius:7px;padding:18px 20px;margin-top:4px;}
+.nat-sources-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:10px;}
+.nat-sources-text{font-family:'Nunito',sans-serif;font-size:12px;color:#5a6e8a;line-height:1.85;}
+.nat-sources-text a{color:#254f92;text-decoration:none;}
+.nat-sources-text a:hover{text-decoration:underline;}
+
+/* ── FOOTER ── */
+.nat-footer{background:#1b3a6b;margin-top:60px;padding:36px 24px 44px;}
+.nat-footer-inner{max-width:1100px;margin:0 auto;font-family:'Nunito',sans-serif;font-size:12.5px;color:rgba(255,255,255,0.45);line-height:1.70;}
+.nat-footer-inner a{color:rgba(212,168,50,0.80);text-decoration:none;}
+.nat-footer-inner a:hover{text-decoration:underline;}
+.nat-footer-rule{width:40px;height:2px;background:#b8860b;border-radius:2px;margin-bottom:14px;}
+</style>
+<% end %>
+
+<%# ── HERO ── %>
+<div class="nat-hero">
+  <div class="nat-inner">
+    <div class="nat-breadcrumb">
+      <%= link_to "fora.center", root_path %> ›
+      <span>usa</span> ›
+      <span>The Jihad Tax</span>
+    </div>
+    <div class="nat-eyebrow">Islamic Jihad Cost Database · National</div>
+    <h1 class="nat-title">The <em>Jihad</em> Tax</h1>
+    <p class="nat-subtitle">
+      How much has the United States spent since September 11, 2001 on
+      anti-terrorism — across DOD, DHS, DOE, USPS, Justice, and the
+      intelligence community — and what did we actually buy?
+    </p>
+    <div class="nat-rule"></div>
+  </div>
+</div>
+
+<%# ── CAVEAT BANNER ── %>
+<div class="nat-caveat-wrap">
+  <div class="nat-caveat">
+    <i class="ti ti-alert-triangle"></i>
+    <p class="nat-caveat-text">
+      <strong style="color:rgba(255,255,255,0.65);">Methodology note:</strong>
+      The U.S. does not have a single authoritative counter-terrorism spending figure.
+      The estimates here draw from the Stimson Center (2018), Brown University's Costs
+      of War project, and Congressional Budget Office data. Classified spending is not
+      fully reflected. All figures are nominal, not inflation-adjusted, unless noted.
+    </p>
+  </div>
+</div>
+
+<%# ── STAT CARDS ── %>
+<div class="nat-stats-section">
+  <div class="nat-stats-grid">
+    <% @stats.each do |s| %>
+      <div class="nat-stat-card<%= s[:color] == 'red' ? ' red' : '' %>">
+        <div class="nat-stat-eyebrow">◆ <%= s[:label] %></div>
+        <div class="nat-stat-value"><%= s[:value] %></div>
+        <div class="nat-stat-sub"><%= s[:sub] %></div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%# ── CITY LINK STRIP ── %>
+<div class="nat-city-strip">
+  <div class="nat-city-strip-inner">
+    <span class="nat-city-lbl">City breakdown →</span>
+    <%= link_to "Philadelphia", city_ijdb_path(city: "philadelphia"), class: "nat-city-link" %>
+    <span class="nat-city-soon">New York · Chicago · Los Angeles — coming soon</span>
+  </div>
+</div>
+
+<%# ── AGENCY BREAKDOWN TABLE ── %>
+<% max_cents = @max_agency_cents > 0 ? @max_agency_cents : 1.0 %>
+<div class="nat-section">
+  <div class="nat-section-hdr">◆ Agency breakdown</div>
+  <div class="nat-section-title">Where the money went, 2002–2022</div>
+  <table class="nat-table">
+    <thead>
+      <tr>
+        <th>Agency / Program</th>
+        <th>Est. 2002–2022 spend</th>
+        <th>Transparency</th>
+        <th class="nat-bar-cell">Share</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @agency_entries.sort_by { |e| -(e.amount_low_cents || 0) }.each do |entry| %>
+        <%
+          pct = entry.amount_low_cents ? (entry.amount_low_cents.to_f / max_cents * 100).round : 0
+          conf = entry.confidence
+        %>
+        <tr>
+          <td>
+            <div class="nat-agency-name"><%= entry.title %></div>
+            <div class="nat-agency-desc"><%= entry.description %></div>
+          </td>
+          <td>
+            <% if entry.confidence == "classified" %>
+              <span class="nat-amount classified">Classified</span>
+            <% elsif entry.amount_low_cents %>
+              <span class="nat-amount">~<%= entry.formatted_range %></span>
+            <% end %>
+          </td>
+          <td>
+            <span class="nat-tag <%= conf %>"><%= entry.confidence_label %></span>
+          </td>
+          <td class="nat-bar-cell">
+            <div class="nat-bar-wrap">
+              <div class="nat-bar-fill" style="width:<%= pct %>%;"></div>
+            </div>
+            <div class="nat-bar-pct"><%= pct %>%</div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%# ── MAIL & ANTHRAX DEEP DIVE ── %>
+<div class="nat-section">
+  <div class="nat-section-hdr">◆ Mail & anthrax security</div>
+  <div class="nat-section-title">The postal system as a bioterrorism battlefield</div>
+  <div class="nat-cards-grid">
+    <% @mail_entries.sort_by(&:display_order).each do |entry| %>
+      <div class="nat-card">
+        <div class="nat-card-eyebrow"><%= entry.title %></div>
+        <% if entry.formatted_range %>
+          <div class="nat-card-value"><%= entry.formatted_range %></div>
+        <% end %>
+        <p class="nat-card-desc"><%= entry.description %></p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%# ── TIMELINE ── %>
+<div class="nat-section">
+  <div class="nat-section-hdr">◆ Timeline</div>
+  <div class="nat-section-title">Key spending milestones</div>
+  <div class="nat-timeline">
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2001</div>
+      <p class="nat-tl-text">9/11 and anthrax attacks. Emergency supplemental: <strong>$40B approved within days.</strong> USPS begins BDS engineering. Five postal workers die; Brentwood facility shut down.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2002</div>
+      <p class="nat-tl-text"><strong>DHS created.</strong> Largest U.S. government reorganization since WWII. 22 agencies merged. Pilot BDS installed in Baltimore. National defense spending surges 50% vs. 2001 baseline.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2003</div>
+      <p class="nat-tl-text">Iraq War begins. <strong>742-unit BDS contract</strong> awarded to Northrop Grumman. TSA full-body scanner program begins development.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2005</div>
+      <p class="nat-tl-text"><strong>BDS network complete.</strong> All 282 USPS large facilities equipped. 27 billion mail pieces screened without a false positive. Annual cartridge spend: ~$57M to Cepheid alone.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2008</div>
+      <p class="nat-tl-text"><strong>Spending peak: $260B in a single year.</strong> 16× the pre-9/11 counter-terrorism baseline. Height of simultaneous Afghanistan and Iraq operations.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2013</div>
+      <p class="nat-tl-text">Snowden disclosures. <strong>NSA budget partially revealed: ~$52B annual National Intelligence Program.</strong> First public accounting of bulk surveillance costs.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2017</div>
+      <p class="nat-tl-text">Stimson Center report. First independent accounting of 15-year CT spend: <strong>$2.8T (2002–2017).</strong> Homeland security alone: $979B. Finding: the U.S. lacked any official government-wide tally.</p>
+    </div>
+    <div class="nat-tl-item">
+      <div class="nat-tl-dot"></div>
+      <div class="nat-tl-year">2021</div>
+      <p class="nat-tl-text">Afghanistan withdrawal. Brown University final tally: <strong>$8T total</strong> when veterans care and interest are included. 20-year Afghanistan cost alone exceeded $2T.</p>
+    </div>
+  </div>
+</div>
+
+<%# ── COST-EFFECTIVENESS CALLOUT ── %>
+<div class="nat-section" style="padding-bottom:40px;">
+  <div class="nat-section-hdr">◆ Cost-effectiveness</div>
+  <div class="nat-callout">
+    <div class="nat-callout-title">How to think about cost-effectiveness</div>
+    <p>
+      The Stimson Center estimated that for CT spending to "break even" in lives-saved
+      terms — matching its cost against the value of a statistical human life — it would
+      have needed to prevent <strong>188,740 deaths, or about 11,796 per year.</strong>
+      Actual jihadi-caused deaths on U.S. soil from 2002–2017: 172 total.
+    </p>
+    <p>
+      That's not an argument the spending was wasted — deterrence and disrupted plots are
+      inherently unquantifiable. But it does illustrate the honest difficulty of the
+      cost-benefit question. In the same period, opioid overdoses killed more than
+      <strong>20,000 Americans in a single year (2016)</strong> with a fraction of the
+      federal response.
+    </p>
+    <p>
+      The deeper accounting problem: the U.S. government still does not publish a unified
+      counter-terrorism spending total. This page is an effort toward that transparency.
+    </p>
+  </div>
+</div>
+
+<%# ── SOURCES ── %>
+<div class="nat-section" style="padding-bottom:60px;">
+  <div class="nat-section-hdr">◆ Sources</div>
+  <div class="nat-sources">
+    <div class="nat-sources-lbl">Primary sources</div>
+    <p class="nat-sources-text">
+      <a href="https://www.stimson.org/2018/counterterrorism-spending-protecting-america-while-promoting-efficiencies-and-accountability/" target="_blank" rel="noopener">Stimson Center, "Counterterrorism Spending: Protecting America while Promoting Efficiencies and Accountability" (2018)</a>
+      · <a href="https://watson.brown.edu/costsofwar/" target="_blank" rel="noopener">Brown University, Costs of War Project (2021)</a>
+      · USPS Biohazard Detection System FAQ
+      · Government Executive, "Installation of anthrax detectors at postal facilities nears end" (2005)
+      · Cepheid / Northrop Grumman BDS contracts
+      · <a href="https://govinfo.gov/app/details/GPO-911REPORT" target="_blank" rel="noopener">9/11 Commission Report (2004)</a>
+      · Congressional Budget Office baseline data.
+      <br><br>
+      Estimates where noted. Classified programs not reflected.
+      Page maintained by FORA civic data team. Corrections:
+      <a href="mailto:arkitectnoah@gmail.com">arkitectnoah@gmail.com</a>
+    </p>
+  </div>
+</div>
+
+<%# ── FOOTER ── %>
+<footer class="nat-footer">
+  <div class="nat-footer-inner">
+    <div class="nat-footer-rule"></div>
+    <p>
+      IJDB — Islamic Jihad Cost Database.
+      A civic accounting project by <a href="/">FORA</a>.
+      City-level breakdown: <%= link_to "Philadelphia", city_ijdb_path(city: "philadelphia") %>.
+    </p>
+  </div>
+</footer>

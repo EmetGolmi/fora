@@ -35,7 +35,7 @@ class IjdbEntry < ApplicationRecord
     "gap"         => "Gap — uncounted",
   }.freeze
 
-  SCOPES = %w[local federal_share private classified].freeze
+  SCOPES = %w[local federal federal_share private classified].freeze
 
   AMOUNT_UNITS = %w[usd lives incidents].freeze
 
@@ -43,13 +43,14 @@ class IjdbEntry < ApplicationRecord
   # belongs_to :contributor, class_name: "User", optional: true  # TODO: add when User model exists
 
   validates :title,      presence: true
-  validates :city,       presence: true
+  validates :city,       presence: true, allow_nil: true
   validates :category,   presence: true, inclusion: { in: CATEGORIES }
   validates :confidence, inclusion: { in: CONFIDENCES }, allow_nil: true
   validates :scope,      inclusion: { in: SCOPES },      allow_nil: true
   validates :amount_unit, inclusion: { in: AMOUNT_UNITS }, allow_nil: true
 
   scope :for_city,        ->(city, country = "usa") { where(city: city.to_s.downcase, country: country) }
+  scope :national,        -> { where(city: nil, country: "usa") }
   scope :by_category,     -> { order(Arel.sql("display_order NULLS LAST"), :category, :created_at) }
   scope :foia_candidates, -> { where(foia_candidate: true) }
   scope :quantified,      -> { where.not(amount_low_cents: nil).or(where.not(amount_high_cents: nil)) }
