@@ -1,8 +1,6 @@
 puts "Seeding IJDB — National (USA)..."
 
-IjdbEntry.where(city: nil, country: "usa").delete_all
-
-AGENCY_ROWS = [
+agency_rows = [
   {
     category:          "current_ongoing",
     title:             "DOD — Overseas Contingency Operations",
@@ -208,9 +206,9 @@ AGENCY_ROWS = [
     source_url:        nil,
     display_order:     110,
   },
-].freeze
+]
 
-MAIL_CARDS = [
+mail_cards = [
   {
     category:          "biological",
     title:             "BDS deployment",
@@ -315,12 +313,17 @@ MAIL_CARDS = [
     source_url:        nil,
     display_order:     250,
   },
-].freeze
+]
 
 created = 0
-(AGENCY_ROWS + MAIL_CARDS).each do |attrs|
-  IjdbEntry.create!(attrs.merge(city: nil, country: "usa"))
-  created += 1
+updated = 0
+(agency_rows + mail_cards).each do |attrs|
+  full_attrs = attrs.merge(city: nil, country: "usa")
+  entry = IjdbEntry.find_or_initialize_by(title: full_attrs[:title], city: nil, country: "usa")
+  was_new = entry.new_record?
+  entry.assign_attributes(full_attrs)
+  entry.save!
+  was_new ? created += 1 : updated += 1
 end
 
-puts "IjdbEntry: #{created} created for national (USA)"
+puts "IjdbEntry: #{created} created, #{updated} updated for national (USA)"

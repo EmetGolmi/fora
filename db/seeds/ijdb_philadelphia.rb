@@ -4,8 +4,6 @@
 
 puts "Seeding IJDB — Philadelphia..."
 
-IjdbEntry.where(city: "philadelphia", country: "usa").delete_all
-
 entries = [
   # ── TRANSPORTATION ──────────────────────────────────────────────────────────
   {
@@ -391,9 +389,14 @@ entries = [
 ]
 
 created = 0
+updated = 0
 entries.each do |attrs|
-  IjdbEntry.create!(attrs.merge(city: "philadelphia", country: "usa"))
-  created += 1
+  full_attrs = attrs.merge(city: "philadelphia", country: "usa")
+  entry = IjdbEntry.find_or_initialize_by(title: full_attrs[:title], city: "philadelphia", country: "usa")
+  was_new = entry.new_record?
+  entry.assign_attributes(full_attrs)
+  entry.save!
+  was_new ? created += 1 : updated += 1
 end
 
-puts "IjdbEntry: #{created} created for Philadelphia"
+puts "IjdbEntry: #{created} created, #{updated} updated for Philadelphia"
