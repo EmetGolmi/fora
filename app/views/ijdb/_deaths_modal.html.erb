@@ -3,7 +3,7 @@
 <% content_for :head do %>
 <style>
 /* ── DEATHS MODAL ── */
-#deaths-modal{border:none;padding:0;border-radius:10px;max-width:700px;width:90vw;box-shadow:0 24px 80px rgba(0,0,0,0.50);overflow:hidden;}
+#deaths-modal{border:none;padding:0;border-radius:10px;max-width:720px;width:92vw;box-shadow:0 24px 80px rgba(0,0,0,0.50);overflow:hidden;}
 #deaths-modal::backdrop{background:rgba(0,0,0,0.70);backdrop-filter:blur(3px);}
 .dm-header{background:#0e1a2e;padding:28px 28px 24px;position:relative;}
 .dm-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:#d4a832;margin-bottom:10px;}
@@ -11,37 +11,54 @@
 .dm-subtitle{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
 .dm-close{position:absolute;top:18px;right:20px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;}
 .dm-close:hover{color:#ffffff;background:rgba(255,255,255,0.08);}
-.dm-body{background:#ffffff;padding:28px 28px 24px;max-height:70vh;overflow-y:auto;}
+.dm-body{background:#ffffff;padding:24px 28px 24px;max-height:72vh;overflow-y:auto;}
 
-/* breakdown cols */
-.dm-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
-@media(max-width:520px){.dm-split{grid-template-columns:1fr;}}
-.dm-col{background:#f5f7fb;border-radius:7px;padding:18px 18px 16px;}
-.dm-col-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:8px;}
-.dm-col-value{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:#0e1a2e;line-height:1.0;margin-bottom:6px;}
-.dm-col-label{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;margin-bottom:10px;}
+/* FORA framework strip */
+.dm-fora-strip{border-left:3px solid rgba(192,57,43,0.60);background:rgba(139,0,0,0.05);border-radius:0 6px 6px 0;padding:11px 15px;margin-bottom:22px;}
+.dm-fora-strip p{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a3535;line-height:1.75;margin:0;}
+.dm-fora-strip strong{color:#8b0000;}
+
+/* breakdown cols — 3 col */
+.dm-split{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+@media(max-width:580px){.dm-split{grid-template-columns:1fr 1fr;}}
+@media(max-width:380px){.dm-split{grid-template-columns:1fr;}}
+.dm-col{background:#f5f7fb;border-radius:7px;padding:16px 16px 14px;}
+.dm-col-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:#b8860b;margin-bottom:7px;}
+.dm-col-value{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:#0e1a2e;line-height:1.0;margin-bottom:5px;}
+.dm-col-label{font-family:'Nunito',sans-serif;font-size:11px;color:#5a6e8a;margin-bottom:9px;}
 .dm-bullets{list-style:none;padding:0;margin:0;}
-.dm-bullets li{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#4a5a72;padding:3px 0;border-bottom:1px solid rgba(27,58,107,0.07);display:flex;justify-content:space-between;}
+.dm-bullets li{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5a72;padding:3px 0;border-bottom:1px solid rgba(27,58,107,0.07);display:flex;justify-content:space-between;gap:8px;}
 .dm-bullets li:last-child{border-bottom:none;}
 
 /* attacks table */
-.dm-section-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.20em;text-transform:uppercase;color:#b8860b;margin-bottom:12px;}
+.dm-section-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.20em;text-transform:uppercase;color:#b8860b;margin-bottom:10px;}
 .dm-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
 .dm-table th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#8a9ab8;padding:6px 8px 6px 0;border-bottom:2px solid #1b3a6b;text-align:left;}
 .dm-table th:last-child{text-align:right;padding-right:0;}
 .dm-table td{font-family:'Nunito',sans-serif;font-size:12.5px;color:#2c3e5a;padding:9px 8px 9px 0;border-bottom:1px solid rgba(27,58,107,0.07);vertical-align:top;}
 .dm-table td:last-child{text-align:right;padding-right:0;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;white-space:nowrap;}
 .dm-table tr:last-child td{border-bottom:none;}
-.dm-table .dm-yr{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b8860b;font-weight:700;white-space:nowrap;}
-.dm-table .dm-perp{font-size:11px;color:#8a9ab8;display:block;margin-top:1px;}
+.dm-yr{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b8860b;font-weight:700;white-space:nowrap;}
+.dm-sub{font-size:11px;color:#8a9ab8;display:block;margin-top:2px;}
 .dm-deaths-high{color:#c0392b !important;}
+.dm-perp-line{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;color:#aaa;font-weight:400;margin-top:3px;}
+
+/* group header rows */
+.dm-group-hdr td{background:#f0f3f9 !important;font-family:'JetBrains Mono',monospace !important;font-size:7.5px !important;letter-spacing:0.18em;text-transform:uppercase;color:#5a6e8a !important;padding:7px 0 5px !important;border-bottom:1px solid rgba(27,58,107,0.15) !important;font-weight:700 !important;}
+.dm-group-hdr td:last-child{text-align:left !important;}
+
+/* badges */
+.dm-badge{font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-left:8px;vertical-align:middle;display:inline-block;}
+.dm-badge-borderline{background:#fff3cd;color:#7a5500;}
+.dm-badge-fora{background:#e8eef8;color:#1b3a6b;}
+.dm-badge-abroad{background:#e8f5e9;color:#155c2d;}
 
 /* methodology + sources */
-.dm-rule{border:none;border-top:1px solid rgba(27,58,107,0.10);margin:4px 0 20px;}
-.dm-methodology{background:#fffbf0;border:1px solid rgba(184,134,11,0.20);border-radius:6px;padding:14px 16px;margin-bottom:20px;}
-.dm-methodology p{font-family:'Nunito',sans-serif;font-size:12px;color:#5a4a1a;line-height:1.75;margin:0;}
+.dm-rule{border:none;border-top:1px solid rgba(27,58,107,0.10);margin:4px 0 18px;}
+.dm-methodology{background:#fffbf0;border:1px solid rgba(184,134,11,0.20);border-radius:6px;padding:13px 16px;margin-bottom:18px;}
+.dm-methodology p{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a4a1a;line-height:1.75;margin:0;}
 .dm-sources-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:#b8860b;margin-bottom:8px;}
-.dm-sources{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;line-height:1.85;}
+.dm-sources{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;line-height:1.90;}
 .dm-sources a{color:#1b3a6b;text-decoration:none;}
 .dm-sources a:hover{text-decoration:underline;}
 </style>
@@ -52,86 +69,150 @@
   <div class="dm-header">
     <button class="dm-close" onclick="document.getElementById('deaths-modal').close()" aria-label="Close">✕</button>
     <div class="dm-eyebrow">◆ Islamic Jihad Cost Database · Deaths</div>
-    <div class="dm-headline" id="dm-title">3,121+</div>
+    <div class="dm-headline" id="dm-title">3,800+</div>
     <p class="dm-subtitle">Jihad's American death toll</p>
   </div>
 
   <div class="dm-body">
+
+    <%# ── FORA FRAMEWORK DISCLOSURE ── %>
+    <div class="dm-fora-strip">
+      <p>
+        <strong>FORA editorial framework:</strong> This count extends beyond standard counter-terrorism
+        databases (New America Foundation, GTD) by applying FORA's position that slavery is a form
+        of death. The Little James (1627) represents the earliest documented Islamic-connected
+        enslavement in North American waters. Standard CT databases begin at 9/11; this database
+        begins at 1627.
+      </p>
+    </div>
 
     <%# ── BREAKDOWN ── %>
     <div class="dm-split">
       <div class="dm-col">
         <div class="dm-col-eyebrow">September 11, 2001</div>
         <div class="dm-col-value">2,977</div>
-        <div class="dm-col-label">Official victim count · 9/11 Commission</div>
+        <div class="dm-col-label">Official count · 9/11 Commission</div>
         <ul class="dm-bullets">
           <li><span>World Trade Center</span><span>2,753</span></li>
           <li><span>Pentagon</span><span>184</span></li>
-          <li><span>Flight 93 · Shanksville PA</span><span>40</span></li>
+          <li><span>Flight 93 · Shanksville</span><span>40</span></li>
         </ul>
       </div>
       <div class="dm-col">
         <div class="dm-col-eyebrow">Post-9/11 · U.S. soil</div>
         <div class="dm-col-value">121+</div>
-        <div class="dm-col-label">2002 – January 2025</div>
+        <div class="dm-col-label">2002 – 2025</div>
         <ul class="dm-bullets">
-          <li><span>Tracked by New America Foundation</span><span>107</span></li>
-          <li><span>New Orleans · Jan 1, 2025</span><span>+14</span></li>
+          <li><span>New America Foundation</span><span>107</span></li>
+          <li><span>New Orleans · Jan 2025</span><span>+14</span></li>
+        </ul>
+      </div>
+      <div class="dm-col">
+        <div class="dm-col-eyebrow">Americans abroad</div>
+        <div class="dm-col-value">46+</div>
+        <div class="dm-col-label">October 7, 2023 · Hamas</div>
+        <ul class="dm-bullets">
+          <li><span>U.S. citizens killed in Israel</span><span>46</span></li>
         </ul>
       </div>
     </div>
 
-    <%# ── NOTABLE ATTACKS ── %>
-    <div class="dm-section-lbl">Notable post-9/11 attacks</div>
+    <%# ── ATTACKS TABLE ── %>
+    <div class="dm-section-lbl">All recorded entries</div>
     <table class="dm-table">
       <thead>
         <tr>
           <th>Year</th>
-          <th>Attack</th>
+          <th>Event</th>
           <th>Deaths</th>
         </tr>
       </thead>
       <tbody>
+
+        <%# — Historical (FORA framework) — %>
+        <tr class="dm-group-hdr"><td colspan="3">Historical · FORA framework</td></tr>
+        <tr>
+          <td class="dm-yr">1627</td>
+          <td>
+            Little James — maritime enslavement
+            <span class="dm-badge dm-badge-fora">FORA framework</span>
+            <span class="dm-sub">North African Islamic corsair raid · ~12 enslaved, none returned</span>
+          </td>
+          <td>~12</td>
+        </tr>
+
+        <%# — Post-9/11 domestic — %>
+        <tr class="dm-group-hdr"><td colspan="3">Post-9/11 · domestic attacks</td></tr>
         <tr>
           <td class="dm-yr">2016</td>
-          <td>Pulse nightclub, Orlando FL<span class="dm-perp">Omar Mateen</span></td>
+          <td>Pulse nightclub, Orlando FL<span class="dm-sub">Omar Mateen</span></td>
           <td class="dm-deaths-high">49</td>
         </tr>
         <tr>
-          <td class="dm-yr">2025</td>
-          <td>New Year's Day, New Orleans LA<span class="dm-perp">Shamsud-Din Jabbar · ISIS-inspired · FBI update Jan 14</span></td>
+          <td class="dm-yr">2015</td>
+          <td>San Bernardino, CA<span class="dm-sub">Syed Farook &amp; Tashfeen Malik</span></td>
           <td class="dm-deaths-high">14</td>
         </tr>
         <tr>
-          <td class="dm-yr">2015</td>
-          <td>San Bernardino, CA<span class="dm-perp">Syed Farook &amp; Tashfeen Malik</span></td>
-          <td class="dm-deaths-high">14</td>
+          <td class="dm-yr">2025</td>
+          <td>New Year's Day, New Orleans LA<span class="dm-sub">Shamsud-Din Jabbar · ISIS-inspired · FBI update Jan 14, 2025</span></td>
+          <td>
+            <span class="dm-deaths-high">14</span>
+            <span class="dm-perp-line">+1 perpetrator</span>
+          </td>
         </tr>
         <tr>
           <td class="dm-yr">2009</td>
-          <td>Fort Hood, TX<span class="dm-perp">Nidal Hasan · U.S. Army Major</span></td>
+          <td>Fort Hood, TX<span class="dm-sub">Nidal Hasan · U.S. Army Major</span></td>
           <td>13</td>
         </tr>
         <tr>
           <td class="dm-yr">2017</td>
-          <td>Halloween truck attack, New York City<span class="dm-perp">Sayfullo Saipov</span></td>
+          <td>Halloween truck attack, New York City<span class="dm-sub">Sayfullo Saipov</span></td>
           <td>8</td>
         </tr>
         <tr>
           <td class="dm-yr">2015</td>
-          <td>Military recruiting center, Chattanooga TN<span class="dm-perp">Mohammad Abdulazeez</span></td>
+          <td>Military recruiting center, Chattanooga TN<span class="dm-sub">Mohammad Abdulazeez</span></td>
           <td>5</td>
         </tr>
         <tr>
           <td class="dm-yr">2013</td>
-          <td>Boston Marathon<span class="dm-perp">Dzhokhar &amp; Tamerlan Tsarnaev</span></td>
+          <td>Boston Marathon<span class="dm-sub">Dzhokhar &amp; Tamerlan Tsarnaev</span></td>
           <td>3</td>
         </tr>
         <tr>
           <td class="dm-yr">2019</td>
-          <td>Naval Air Station Pensacola, FL<span class="dm-perp">Mohammed Alshamrani · Saudi Air Force</span></td>
+          <td>Naval Air Station Pensacola, FL<span class="dm-sub">Mohammed Alshamrani · Saudi Air Force</span></td>
           <td>3</td>
         </tr>
+        <tr>
+          <td class="dm-yr">2025</td>
+          <td>Capital Jewish Museum, Washington DC<span class="dm-sub">Elias Rodriguez · shouted "Free Palestine"</span></td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td class="dm-yr">2023</td>
+          <td>
+            Thousand Oaks CA — Paul Kessler
+            <span class="dm-badge dm-badge-borderline">borderline</span>
+            <span class="dm-sub">Loay Alnaji · pro-Palestinian demonstration · charged involuntary manslaughter</span>
+          </td>
+          <td>1</td>
+        </tr>
+
+        <%# — Americans killed abroad — %>
+        <tr class="dm-group-hdr"><td colspan="3">Americans killed abroad</td></tr>
+        <tr>
+          <td class="dm-yr">2023</td>
+          <td>
+            October 7 — Israel
+            <span class="dm-badge dm-badge-abroad">abroad</span>
+            <span class="dm-sub">Hamas attack · 46 U.S. citizens confirmed killed · U.S. State Dept.</span>
+          </td>
+          <td class="dm-deaths-high">46</td>
+        </tr>
+
       </tbody>
     </table>
 
@@ -140,13 +221,15 @@
     <%# ── METHODOLOGY ── %>
     <div class="dm-methodology">
       <p>
-        <strong>Counting methodology:</strong> The 3,121+ figure combines the official 9/11 victim count
-        (2,977 per the 9/11 Commission) with post-9/11 domestic deaths tracked by the New America
-        Foundation and the FBI's January 14, 2025 update on the New Orleans attack.
-        The Global Terrorism Database (GTD / Fondapol) uses similar methodology.
-        Deaths from overseas U.S. military operations are not included.
-        The post-9/11 count covers attacks meeting the FBI and GTD definition of
-        jihadist-motivated violence on U.S. soil.
+        <strong>Counting methodology:</strong>
+        The 3,800+ figure combines: the official 9/11 victim count (2,977); post-9/11 domestic
+        jihadist deaths tracked by the New America Foundation (107) and the FBI New Orleans update
+        of January 14, 2025 (14); 46 Americans killed on October 7, 2023 (U.S. State Department);
+        and approximately 12 persons enslaved aboard the <em>Little James</em> in 1627 under
+        the FORA framework that counts enslavement as death. The Paul Kessler entry is flagged
+        borderline — included under the FORA framework but disputed as to whether it meets the
+        FBI/GTD definition of jihadist violence. The New Orleans perpetrator death (+1) is
+        displayed separately and not included in the victim count.
       </p>
     </div>
 
@@ -157,6 +240,10 @@
       · <a href="https://govinfo.gov/app/details/GPO-911REPORT" target="_blank" rel="noopener">9/11 Commission Report (2004)</a>
       · Fondapol / Global Terrorism Database (GTD)
       · FBI Field Office New Orleans, official update January 14, 2025
+      · U.S. State Department — October 7 American casualties (2023)
+      · <a href="https://www.newenglandhistoricalsociety.com" target="_blank" rel="noopener">New England Historic Genealogical Society — <em>Little James</em> (1627)</a>
+      · Los Angeles Times — Paul Kessler, Loay Alnaji (2023)
+      · Washington Post / FBI statement — Capital Jewish Museum, Elias Rodriguez (2025)
     </div>
 
   </div>
