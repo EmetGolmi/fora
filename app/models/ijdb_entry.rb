@@ -78,7 +78,10 @@ class IjdbEntry < ApplicationRecord
 
     fmt = ->(n) {
       return "—" unless n
-      if n >= 1_000_000_000
+      if n >= 1_000_000_000_000
+        v = n / 1_000_000_000_000.0
+        "$#{v == v.floor ? v.to_i : v.round(1)}T"
+      elsif n >= 1_000_000_000
         v = n / 1_000_000_000.0
         "$#{v == v.floor ? v.to_i : v.round(1)}B"
       elsif n >= 1_000_000

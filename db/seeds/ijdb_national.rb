@@ -65,7 +65,7 @@ agency_rows = [
                        "capabilities, new infrastructure — that persisted long after combat operations ended.",
     amount_low_cents:  900_000_000_000 * 100,
     amount_high_cents: nil,
-    confidence:        "estimated",
+    confidence:        "partial",
     scope:             "federal",
     date_range_start:  2002,
     date_range_end:    2022,

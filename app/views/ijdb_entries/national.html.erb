@@ -174,7 +174,26 @@ html{scroll-behavior:smooth;}
 </div>
 
 <%# ── AGENCY BREAKDOWN TABLE ── %>
-<% max_cents = @max_agency_cents > 0 ? @max_agency_cents : 1.0 %>
+<%
+  max_cents = @max_agency_cents > 0 ? @max_agency_cents : 1.0
+
+  AGENCY_DISPLAY = {
+    "DOD/OCO"             => { name: "DOD — Overseas Contingency Ops",        desc: "Afghanistan, Iraq, Syria war funding; ATFP bases" },
+    "VA"                  => { name: "Veterans Administration",                desc: "Post-9/11 veteran care, disability, mental health" },
+    "DHS"                 => { name: "DHS — Entire department",                desc: "TSA, CBP, FEMA, Secret Service, Coast Guard, CISA" },
+    "DOD/Base"            => { name: "DOD — Base budget increase",             desc: "Pentagon baseline above pre-9/11 trajectory" },
+    "Treasury/Interest"   => { name: "Debt interest on CT spending",           desc: "These wars were funded entirely through borrowing" },
+    "IC/ODNI"             => { name: "Intelligence Community (ODNI/NSA/CIA)",  desc: "National Intelligence Program; SIGINT, HUMINT" },
+    "State/USAID"         => { name: "State Dept / USAID",                     desc: "Anti-Terrorism Assistance (ATA), foreign aid, stabilization" },
+    "DOJ/FBI"             => { name: "DOJ / FBI",                              desc: "JTTF, domestic CT investigations, National Security Division" },
+    "DOE/NNSA"            => { name: "DOE — NNSA / Radiological Security",     desc: "Nuclear material security, dirty bomb detection, NEST teams" },
+    "HHS/CDC"             => { name: "HHS / CDC — Biodefense",                 desc: "BARDA, SNS stockpile, bioterrorism preparedness" },
+    "USPS/Postal Service" => { name: "USPS — Mail security program",           desc: "BDS network, irradiation, anthrax response & cleanup" },
+  }.freeze
+
+  CONF_LABEL = { "documented" => "Public", "estimated" => "Public", "partial" => "Partial", "classified" => "Classified" }.freeze
+  CONF_CLASS = { "documented" => "documented", "estimated" => "documented", "partial" => "partial", "classified" => "classified" }.freeze
+%>
 <div class="nat-section">
   <div class="nat-section-hdr">◆ Agency breakdown</div>
   <div class="nat-section-title">Where the money went, 2002–2022</div>
@@ -190,23 +209,25 @@ html{scroll-behavior:smooth;}
     <tbody>
       <% @agency_entries.sort_by { |e| -(e.amount_low_cents || 0) }.each do |entry| %>
         <%
-          pct = entry.amount_low_cents ? (entry.amount_low_cents.to_f / max_cents * 100).round : 0
-          conf = entry.confidence
+          display = AGENCY_DISPLAY[entry.entity_name] || { name: entry.title, desc: entry.description }
+          pct     = entry.amount_low_cents ? [[(entry.amount_low_cents.to_f / max_cents * 100).round, 1].max, 100].min : 0
+          conf    = entry.confidence
+          amount_str = entry.amount_low_cents ? "~#{entry.formatted_range.to_s.sub(/\A[≥≤]\s*/, '')}" : nil
         %>
         <tr>
           <td>
-            <div class="nat-agency-name"><%= entry.title %></div>
-            <div class="nat-agency-desc"><%= entry.description %></div>
+            <div class="nat-agency-name"><%= display[:name] %></div>
+            <div class="nat-agency-desc"><%= display[:desc] %></div>
           </td>
           <td>
-            <% if entry.confidence == "classified" %>
+            <% if conf == "classified" %>
               <span class="nat-amount classified">Classified</span>
-            <% elsif entry.amount_low_cents %>
-              <span class="nat-amount">~<%= entry.formatted_range %></span>
+            <% elsif amount_str %>
+              <span class="nat-amount"><%= amount_str %></span>
             <% end %>
           </td>
           <td>
-            <span class="nat-tag <%= conf %>"><%= entry.confidence_label %></span>
+            <span class="nat-tag <%= CONF_CLASS[conf] %>"><%= CONF_LABEL[conf] || conf.capitalize %></span>
           </td>
           <td class="nat-bar-cell">
             <div class="nat-bar-wrap">
