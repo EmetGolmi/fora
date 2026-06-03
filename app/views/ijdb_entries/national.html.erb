@@ -2,6 +2,7 @@
 
 <% content_for :head do %>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
@@ -86,9 +87,23 @@ html{scroll-behavior:smooth;}
 .tag-pub{background:#EAF3DE;color:#3B6D11;}
 .tag-part{background:#FAEEDA;color:#854F0B;}
 .tag-class{background:#FCEBEB;color:#A32D2D;}
-.bar-wrap{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
-.bar-bg{width:80px;height:5px;background:rgba(27,58,107,0.12);border-radius:3px;overflow:hidden;flex-shrink:0;}
-.bar-fill{height:100%;border-radius:3px;}
+/* ── DONUT CHART + LEGEND ── */
+.ag-chart-wrap{display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:center;margin-bottom:20px;}
+@media(max-width:700px){.ag-chart-wrap{grid-template-columns:1fr;}.ag-donut-wrap{max-width:240px;}}
+.ag-donut-wrap{width:240px;}
+.ag-legend{display:flex;flex-direction:column;gap:2px;}
+.ag-legend-item{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:5px;cursor:pointer;transition:background 0.10s;}
+.ag-legend-item:hover,.ag-legend-item.is-active{background:rgba(27,58,107,0.07);}
+.ag-legend-color{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+.ag-legend-name{flex:1;font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:600;color:#2c3e5a;line-height:1.2;}
+.ag-legend-amt{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#8a9ab8;white-space:nowrap;text-align:right;}
+.ag-legend-pct{color:#aab4c4;}
+/* ── INSIGHT CALLOUT ── */
+.ag-insight{background:#f0f3f8;border-left:4px solid #1b3a6b;border-radius:0 6px 6px 0;padding:14px 18px;margin-bottom:20px;}
+.ag-insight p{font-family:'Nunito',sans-serif;font-size:13px;color:#2c3e5a;line-height:1.75;margin:0;}
+/* ── ACTIVE TABLE ROW ── */
+.agency-table tbody tr{cursor:pointer;}
+.ag-tr-active td{background:rgba(27,58,107,0.07) !important;}
 .amount{font-size:13px;font-weight:500;color:#1b3a6b;white-space:nowrap;}
 
 /* ── MAIL/ANTHRAX CARDS ── */
@@ -202,69 +217,201 @@ html{scroll-behavior:smooth;}
   </div>
 </div>
 
-<%# ── AGENCY BREAKDOWN TABLE ── %>
+<%# ── AGENCY BREAKDOWN ── %>
 <%
-  max_cents = @max_agency_cents > 0 ? @max_agency_cents : 1.0
-
   agency_display = {
-    "DOD/OCO"             => { name: "DOD — Overseas Contingency Ops",           desc: "Afghanistan, Iraq, Syria war funding; ATFP bases",               bar_color: "#185FA5", est: false },
-    "VA"                  => { name: "Veterans Administration",                   desc: "Post-9/11 veteran care, disability, mental health",               bar_color: "#185FA5", est: false },
-    "DHS"                 => { name: "DHS — Entire department",                   desc: "TSA, CBP, FEMA, Secret Service, Coast Guard, CISA",              bar_color: "#0F6E56", est: false },
-    "Treasury/Interest"   => { name: "Debt interest on CT spending",              desc: "These wars were funded entirely through borrowing",               bar_color: "#A32D2D", est: false, prefix: ">" },
-    "DOD/Base"            => { name: "DOD — Base budget increase",                desc: "Pentagon baseline above pre-9/11 trajectory",                    bar_color: "#BA7517", est: false },
-    "IC/ODNI"             => { name: "Intelligence Community (ODNI / NSA / CIA)", desc: "National Intelligence Program; SIGINT, HUMINT",                  bar_color: "#73726c", est: true },
-    "State/USAID"         => { name: "State Dept / USAID",                        desc: "Anti-Terrorism Assistance (ATA), foreign aid, stabilization",    bar_color: "#185FA5", est: false },
-    "DOJ/FBI"             => { name: "DOJ / FBI",                                 desc: "JTTF, domestic CT investigations, National Security Division",    bar_color: "#BA7517", est: true },
-    "DOE/NNSA"            => { name: "DOE — NNSA / Radiological Security",        desc: "Nuclear material security, dirty bomb detection, NEST teams",     bar_color: "#BA7517", est: true },
-    "HHS/CDC"             => { name: "HHS / CDC — Biodefense",                    desc: "BARDA, SNS stockpile, bioterrorism preparedness",                bar_color: "#0F6E56", est: true },
-    "USPS/Postal Service" => { name: "USPS — Mail security program",              desc: "BDS network, irradiation, anthrax response & cleanup",           bar_color: "#0F6E56", est: true },
+    "DOD/OCO"             => { name: "DOD — Overseas Contingency Ops",           desc: "Afghanistan, Iraq, Syria war funding; ATFP bases",            est: false },
+    "VA"                  => { name: "Veterans Administration",                   desc: "Post-9/11 veteran care, disability, mental health",           est: false },
+    "DHS"                 => { name: "DHS — Entire department",                   desc: "TSA, CBP, FEMA, Secret Service, Coast Guard, CISA",          est: false },
+    "Treasury/Interest"   => { name: "Debt interest on CT spending",              desc: "These wars were funded entirely through borrowing",           est: false, prefix: ">" },
+    "DOD/Base"            => { name: "DOD — Base budget increase",                desc: "Pentagon baseline above pre-9/11 trajectory",                est: false },
+    "IC/ODNI"             => { name: "Intelligence Community (ODNI / NSA / CIA)", desc: "National Intelligence Program; SIGINT, HUMINT",              est: true },
+    "State/USAID"         => { name: "State Dept / USAID",                        desc: "Anti-Terrorism Assistance (ATA), foreign aid, stabilization", est: false },
+    "DOJ/FBI"             => { name: "DOJ / FBI",                                 desc: "JTTF, domestic CT investigations, National Security Division", est: true },
+    "DOE/NNSA"            => { name: "DOE — NNSA / Radiological Security",        desc: "Nuclear material security, dirty bomb detection, NEST teams", est: true },
+    "HHS/CDC"             => { name: "HHS / CDC — Biodefense",                    desc: "BARDA, SNS stockpile, bioterrorism preparedness",            est: true },
+    "USPS/Postal Service" => { name: "USPS — Mail security program",              desc: "BDS network, irradiation, anthrax response & cleanup",       est: true },
   }
-
   conf_label = { "documented" => "Public", "estimated" => "Public", "partial" => "Partial", "classified" => "Classified" }
   conf_class = { "documented" => "tag-pub", "estimated" => "tag-pub", "partial" => "tag-part", "classified" => "tag-class" }
 %>
 <div class="nat-section">
-  <div class="sec-header" style="margin-bottom:12px">
+  <div class="sec-header" style="margin-bottom:20px">
     <div class="sec-eyebrow"><i class="ti ti-building-bank" style="font-size:13px" aria-hidden="true"></i> Agency breakdown</div>
     <div class="sec-title">Where the money went, 2002–2022</div>
     <div class="sec-sub">Estimated cumulative counter-terrorism spending by federal agency. Classified portions not reflected.</div>
   </div>
-  <table class="agency-table" aria-label="Counter-terrorism spending by agency 2002 to 2022">
+
+  <div class="ag-chart-wrap">
+    <div class="ag-donut-wrap">
+      <canvas id="agency-donut" aria-label="Donut chart of CT spending by agency" role="img"></canvas>
+    </div>
+    <div class="ag-legend" id="ag-legend"></div>
+  </div>
+
+  <div class="ag-insight">
+    <p>The most important visual fact: DOD and VA together account for more than half the total. State Dept, DOJ, DOE, HHS, and USPS combined — the entire civilian counter-terrorism apparatus — are less than 4% of the pie. The war machine dwarfs everything else.</p>
+  </div>
+
+  <table class="agency-table" id="agency-table" aria-label="Counter-terrorism spending by agency 2002 to 2022">
     <thead>
       <tr>
         <th>Agency / program</th>
         <th>Est. 2002–2022 spend</th>
         <th>Transparency</th>
-        <th>Share</th>
       </tr>
     </thead>
     <tbody>
-      <% @agency_entries.sort_by { |e| -(e.amount_low_cents || 0) }.each do |entry| %>
+      <% @agency_entries.sort_by { |e| -(e.amount_low_cents || 0) }.each_with_index do |entry, i| %>
         <%
-          display    = agency_display[entry.entity_name] || { name: entry.title, desc: entry.description, bar_color: "#185FA5", est: false }
-          pct        = entry.amount_low_cents ? [[(entry.amount_low_cents.to_f / max_cents * 100).round, 1].max, 100].min : 0
+          display    = agency_display[entry.entity_name] || { name: entry.title, desc: entry.description, est: false }
           conf       = entry.confidence
           prefix     = display[:prefix] || "~"
           raw        = entry.formatted_range.to_s.sub(/\A[≥≤~]\s*/, '')
           amount_str = entry.amount_low_cents ? "#{prefix}#{raw}#{display[:est] ? ' est.' : ''}" : nil
         %>
-        <tr>
+        <tr data-idx="<%= i %>">
           <td>
             <span class="agency-name"><%= display[:name] %></span>
             <span class="agency-desc"><%= display[:desc] %></span>
           </td>
           <td><span class="amount"><%= amount_str %></span></td>
           <td><span class="tag <%= conf_class[conf] %>"><%= conf_label[conf] || conf.capitalize %></span></td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:<%= pct %>%;background:<%= display[:bar_color] %>"></div></div>
-            </div>
-          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
+
+<script>
+(function () {
+  var AGENCIES = [
+    { name: "DOD — Overseas Contingency Ops",   short: "DOD / OCO",    amount: "~$2.3T",       pct: 26.9, color: "#185FA5", val: 2300 },
+    { name: "Veterans Administration",           short: "VA",           amount: "~$2.2T",       pct: 25.7, color: "#0C447C", val: 2200 },
+    { name: "DHS — Entire department",           short: "DHS",          amount: "~$1.1T",       pct: 12.9, color: "#0F6E56", val: 1100 },
+    { name: "Debt interest on CT spending",      short: "Debt interest", amount: ">$1T",         pct: 11.7, color: "#A32D2D", val: 1000 },
+    { name: "DOD — Base budget increase",        short: "DOD / Base",   amount: "~$900B",       pct: 10.5, color: "#378ADD", val:  900 },
+    { name: "Intelligence Community",            short: "Intelligence", amount: "~$700B est.",  pct:  8.2, color: "#888780", val:  700 },
+    { name: "State Dept / USAID",                short: "State/USAID",  amount: "~$138B",       pct:  1.6, color: "#1D9E75", val:  138 },
+    { name: "DOJ / FBI",                         short: "DOJ/FBI",      amount: "~$100B est.",  pct:  1.2, color: "#5DCAA5", val:  100 },
+    { name: "DOE — NNSA / Radiological",         short: "DOE/NNSA",    amount: "~$60B est.",   pct:  0.7, color: "#EF9F27", val:   60 },
+    { name: "HHS / CDC — Biodefense",            short: "HHS/CDC",      amount: "~$50B est.",   pct:  0.6, color: "#BA7517", val:   50 },
+    { name: "USPS — Mail security",              short: "USPS",         amount: "~$2B est.",    pct:  0.0, color: "#B4B2A9", val:    2 }
+  ];
+
+  var selectedIdx = null;
+
+  var centerLabel = {
+    id: 'centerLabel',
+    afterDraw: function (chart) {
+      var ctx = chart.ctx;
+      var ca  = chart.chartArea;
+      var cx  = (ca.left + ca.right)  / 2;
+      var cy  = (ca.top  + ca.bottom) / 2;
+      ctx.save();
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      if (selectedIdx !== null) {
+        var ag = AGENCIES[selectedIdx];
+        ctx.fillStyle = '#8a9ab8';
+        ctx.font = '500 9px "Nunito",sans-serif';
+        ctx.fillText(ag.short, cx, cy - 20);
+        ctx.fillStyle = '#1b3a6b';
+        ctx.font = 'bold 17px "Libre Baskerville",serif';
+        ctx.fillText(ag.amount, cx, cy - 3);
+        ctx.fillStyle = '#8a9ab8';
+        ctx.font = '10px "JetBrains Mono",monospace';
+        ctx.fillText(ag.pct < 0.1 ? '<0.1%' : ag.pct.toFixed(1) + '%', cx, cy + 14);
+      } else {
+        ctx.fillStyle = '#1b3a6b';
+        ctx.font = 'bold 20px "Libre Baskerville",serif';
+        ctx.fillText('~$8T', cx, cy - 8);
+        ctx.fillStyle = '#8a9ab8';
+        ctx.font = '500 10px "Nunito",sans-serif';
+        ctx.fillText('2002\u20132022 total', cx, cy + 10);
+      }
+      ctx.restore();
+    }
+  };
+
+  var chart = new Chart(document.getElementById('agency-donut'), {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data:            AGENCIES.map(function (a) { return a.val; }),
+        backgroundColor: AGENCIES.map(function (a) { return a.color; }),
+        borderWidth:  1.5,
+        borderColor:  '#f5f7fb',
+        hoverOffset:  0,
+        offset:       0
+      }]
+    },
+    options: {
+      responsive:        true,
+      maintainAspectRatio: true,
+      cutout:            '62%',
+      animation:         { duration: 500 },
+      plugins: {
+        legend:  { display: false },
+        tooltip: { enabled: false }
+      },
+      onClick: function (_evt, elements) {
+        if (elements.length) { selectAgency(elements[0].index); }
+        else { deselect(); }
+      }
+    },
+    plugins: [centerLabel]
+  });
+
+  /* ── legend ── */
+  var legendEl = document.getElementById('ag-legend');
+  AGENCIES.forEach(function (ag, i) {
+    var pctStr = ag.pct < 0.1 ? '<0.1%' : ag.pct.toFixed(1) + '%';
+    var item = document.createElement('div');
+    item.className   = 'ag-legend-item';
+    item.dataset.idx = i;
+    item.innerHTML   =
+      '<span class="ag-legend-color" style="background:' + ag.color + '"></span>' +
+      '<span class="ag-legend-name">' + ag.name + '</span>' +
+      '<span class="ag-legend-amt">' + ag.amount + ' &nbsp;<span class="ag-legend-pct">' + pctStr + '</span></span>';
+    item.addEventListener('click', function () { selectAgency(i); });
+    legendEl.appendChild(item);
+  });
+
+  /* ── table rows ── */
+  document.querySelectorAll('#agency-table tbody tr').forEach(function (tr) {
+    tr.addEventListener('click', function () {
+      selectAgency(parseInt(tr.dataset.idx, 10));
+    });
+  });
+
+  /* ── selection ── */
+  function selectAgency(idx) {
+    selectedIdx = (selectedIdx === idx) ? null : idx;
+    applySelection();
+  }
+
+  function deselect() {
+    selectedIdx = null;
+    applySelection();
+  }
+
+  function applySelection() {
+    chart.data.datasets[0].offset = AGENCIES.map(function (_, i) {
+      return i === selectedIdx ? 14 : 0;
+    });
+    chart.update('none');
+
+    document.querySelectorAll('.ag-legend-item').forEach(function (el, i) {
+      el.classList.toggle('is-active', i === selectedIdx);
+    });
+
+    document.querySelectorAll('#agency-table tbody tr').forEach(function (tr) {
+      tr.classList.toggle('ag-tr-active', parseInt(tr.dataset.idx, 10) === selectedIdx);
+    });
+  }
+}());
+</script>
 
 <%# ── MAIL & ANTHRAX DEEP DIVE ── %>
 <%
