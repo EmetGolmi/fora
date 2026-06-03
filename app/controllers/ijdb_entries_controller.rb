@@ -14,11 +14,11 @@ class IjdbEntriesController < ApplicationController
   skip_before_action :set_location, only: :national
 
   NATIONAL_STATS = [
-    { value: "~$8T",  label: "Total estimated CT spending",    sub: "2002–2022 · Brown Univ. Costs of War",  color: "gilt" },
-    { value: "$1.1T", label: "Homeland security spending",     sub: "DHS-related programs, 2002–2022",       color: "gilt" },
-    { value: "$2.3T", label: "Overseas contingency ops (DOD)", sub: "Afghanistan, Iraq, Syria, OCO",         color: "gilt" },
-    { value: "$260B", label: "CT spending peak year",          sub: "2008 · 16× the pre-9/11 baseline",      color: "gilt" },
-    { value: "15%",   label: "Of discretionary budget",        sub: "2002–17 avg · Stimson Center",          color: "gilt" },
+    { value: "~$8T",  label: "Total estimated CT spending",    sub: "2002–2022 · Brown Univ. Costs of War",  color: "gilt", modal_id: "total-ct-modal" },
+    { value: "$1.1T", label: "Homeland security spending",     sub: "DHS-related programs, 2002–2022",       color: "gilt", modal_id: "homeland-sec-modal" },
+    { value: "$2.3T", label: "Overseas contingency ops (DOD)", sub: "Afghanistan, Iraq, Syria, OCO",         color: "gilt", modal_id: "oco-modal" },
+    { value: "$260B", label: "CT spending peak year",          sub: "2008 · 16× the pre-9/11 baseline",      color: "gilt", modal_id: "peak-year-modal" },
+    { value: "15%",   label: "Of discretionary budget",        sub: "2002–17 avg · Stimson Center",          color: "gilt", modal_id: "discretionary-modal" },
     { value: "3,800+", label: "Jihadi-caused U.S. deaths",      sub: "1627 Little James through 2025 · slavery counted as death · FORA framework", color: "red", modal_id: "deaths-modal" },
   ].freeze
 

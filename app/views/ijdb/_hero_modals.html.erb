@@ -1,0 +1,340 @@
+<%# app/views/ijdb/_hero_modals.html.erb %>
+
+<% content_for :head do %>
+<style>
+/* ── HERO MODALS ── */
+.hm-dialog{border:none;padding:0;border-radius:10px;max-width:680px;width:92vw;box-shadow:0 24px 80px rgba(0,0,0,0.50);overflow:hidden;}
+.hm-dialog::backdrop{background:rgba(0,0,0,0.70);backdrop-filter:blur(3px);}
+.hm-header{background:#0e1a2e;padding:28px 28px 22px;position:relative;}
+.hm-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:#d4a832;margin-bottom:10px;}
+.hm-headline{font-family:'Libre Baskerville',serif;font-size:40px;font-weight:700;color:#d4a832;line-height:1.0;margin-bottom:6px;}
+.hm-subtitle{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
+.hm-close{position:absolute;top:18px;right:20px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;}
+.hm-close:hover{color:#fff;background:rgba(255,255,255,0.08);}
+.hm-body{background:#fff;padding:22px 28px 24px;max-height:70vh;overflow-y:auto;}
+/* stat grid */
+.hm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px;margin-bottom:18px;}
+.hm-stat{background:#f5f7fb;border-radius:6px;padding:12px 14px;}
+.hm-stat-val{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#0e1a2e;line-height:1.1;margin-bottom:3px;}
+.hm-stat-lbl{font-family:'Nunito',sans-serif;font-size:11px;color:#5a6e8a;line-height:1.4;}
+/* facts */
+.hm-facts{list-style:none;padding:0;margin:0 0 16px;}
+.hm-facts li{font-family:'Nunito',sans-serif;font-size:12.5px;color:#2c3e5a;padding:7px 0 7px 16px;border-bottom:1px solid rgba(27,58,107,0.07);line-height:1.65;position:relative;}
+.hm-facts li:last-child{border-bottom:none;}
+.hm-facts li::before{content:'›';color:#b8860b;font-weight:700;position:absolute;left:0;top:7px;}
+/* source */
+.hm-source{font-family:'JetBrains Mono',monospace;font-size:9px;color:#aab4c4;letter-spacing:0.04em;margin-bottom:16px;line-height:1.7;}
+/* share bar */
+.hm-share-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding-top:14px;border-top:1px solid rgba(27,58,107,0.08);}
+.hm-share-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#b8860b;margin-right:2px;flex-shrink:0;}
+.hm-share-btn{display:inline-flex;align-items:center;gap:4px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid;cursor:pointer;transition:opacity 0.12s;background:transparent;line-height:1.3;}
+.hm-share-btn:hover{opacity:0.70;}
+.hm-share-x       {border-color:#000;color:#000;}
+.hm-share-linkedin{border-color:#0A66C2;color:#0A66C2;}
+.hm-share-facebook{border-color:#1877F2;color:#1877F2;}
+.hm-share-instagram{border-color:#C13584;color:#C13584;}
+.hm-share-tiktok  {border-color:#333;color:#333;}
+.hm-share-discord {border-color:#5865F2;color:#5865F2;}
+.hm-share-copy    {border-color:#8a9ab8;color:#8a9ab8;}
+/* toast */
+#hm-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:#1b3a6b;color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;padding:9px 22px;border-radius:30px;box-shadow:0 4px 20px rgba(0,0,0,0.25);opacity:0;transition:opacity 0.18s,transform 0.18s;pointer-events:none;z-index:10000;}
+#hm-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<% end %>
+
+<div id="hm-toast">Copied!</div>
+
+<%# ── MODAL 1: ~$8T TOTAL ── %>
+<dialog id="total-ct-modal" class="hm-dialog" aria-labelledby="hm-total-title">
+  <div class="hm-header">
+    <button class="hm-close" onclick="this.closest('dialog').close()" aria-label="Close">✕</button>
+    <div class="hm-eyebrow">◆ Islamic Jihad Cost Database · Total spending</div>
+    <div class="hm-headline" id="hm-total-title">~$8T</div>
+    <p class="hm-subtitle">The full 20-year accounting of American counter-terrorism</p>
+  </div>
+  <div class="hm-body">
+    <div class="hm-stats">
+      <div class="hm-stat"><div class="hm-stat-val">$2.3T</div><div class="hm-stat-lbl">War operations (OCO)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">$2.2T</div><div class="hm-stat-lbl">Veteran care (VA)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">$1.1T</div><div class="hm-stat-lbl">Homeland security (DHS)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">&gt;$1T</div><div class="hm-stat-lbl">Debt interest on war borrowing</div></div>
+    </div>
+    <ul class="hm-facts">
+      <li>No single government document has ever totaled U.S. counter-terrorism spending. This figure was assembled by researchers from 26 separate budget documents.</li>
+      <li>Every war since 9/11 was funded entirely through deficit spending — not the base defense budget. The debt interest alone has passed $1 trillion and compounds indefinitely.</li>
+      <li>Future VA obligations for post-9/11 veterans could add another $2T+ — the $8T figure will keep rising for decades after the wars ended.</li>
+      <li>Equivalent to 40 Marshall Plans (inflation-adjusted), or two years of Japan's entire GDP.</li>
+      <li>The U.S. averaged ~$400B/year on CT — more than the entire UK defense budget, every year, for twenty consecutive years.</li>
+    </ul>
+    <div class="hm-source">Sources: Brown University, Costs of War Project (2021) · Stimson Center, Counterterrorism Spending (2018) · CBO baseline data</div>
+    <div class="hm-share-bar">
+      <span class="hm-share-lbl">Share</span>
+      <button class="hm-share-btn hm-share-x"         data-share="x"><i class="ti ti-brand-x"></i> X</button>
+      <button class="hm-share-btn hm-share-linkedin"   data-share="linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
+      <button class="hm-share-btn hm-share-facebook"   data-share="facebook"><i class="ti ti-brand-facebook"></i> Facebook</button>
+      <button class="hm-share-btn hm-share-instagram"  data-share="instagram"><i class="ti ti-brand-instagram"></i> Instagram</button>
+      <button class="hm-share-btn hm-share-tiktok"     data-share="tiktok"><i class="ti ti-brand-tiktok"></i> TikTok</button>
+      <button class="hm-share-btn hm-share-discord"    data-share="discord"><i class="ti ti-brand-discord"></i> Discord</button>
+      <button class="hm-share-btn hm-share-copy"       data-share="copy"><i class="ti ti-copy"></i> Copy link</button>
+    </div>
+  </div>
+</dialog>
+
+<%# ── MODAL 2: $1.1T HOMELAND SECURITY ── %>
+<dialog id="homeland-sec-modal" class="hm-dialog" aria-labelledby="hm-dhs-title">
+  <div class="hm-header">
+    <button class="hm-close" onclick="this.closest('dialog').close()" aria-label="Close">✕</button>
+    <div class="hm-eyebrow">◆ Islamic Jihad Cost Database · Homeland security</div>
+    <div class="hm-headline" id="hm-dhs-title">$1.1T</div>
+    <p class="hm-subtitle">A department built from scratch in under a year</p>
+  </div>
+  <div class="hm-body">
+    <div class="hm-stats">
+      <div class="hm-stat"><div class="hm-stat-val">2003</div><div class="hm-stat-lbl">Year DHS began operations</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">22</div><div class="hm-stat-lbl">Agencies merged into DHS</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">~240K</div><div class="hm-stat-lbl">DHS employees (2022)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">~$55B</div><div class="hm-stat-lbl">Avg annual appropriation</div></div>
+    </div>
+    <ul class="hm-facts">
+      <li>The Homeland Security Act of 2002 was signed just 13 months after 9/11 — the largest U.S. government reorganization since the National Security Act of 1947, which created the CIA and Joint Chiefs.</li>
+      <li>TSA has screened more than 10 billion passengers since 2002, and the agency alone accounts for roughly $10B/year in DHS spending.</li>
+      <li>CBP, FEMA, the Secret Service, the Coast Guard, and CISA all operate under DHS — agencies with vastly different missions folded under one counter-terrorism umbrella.</li>
+      <li>The 9/11 Commission found all 19 hijackers entered the U.S. legally. DHS was built to detect weapons, not the immigration fraud that actually enabled the attacks.</li>
+      <li>DHS's budget has more than doubled since its founding — from $19B in FY2002 to over $97B requested in FY2024.</li>
+    </ul>
+    <div class="hm-source">Sources: DHS annual budget justifications · 9/11 Commission Report (2004) · Stimson Center (2018)</div>
+    <div class="hm-share-bar">
+      <span class="hm-share-lbl">Share</span>
+      <button class="hm-share-btn hm-share-x"         data-share="x"><i class="ti ti-brand-x"></i> X</button>
+      <button class="hm-share-btn hm-share-linkedin"   data-share="linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
+      <button class="hm-share-btn hm-share-facebook"   data-share="facebook"><i class="ti ti-brand-facebook"></i> Facebook</button>
+      <button class="hm-share-btn hm-share-instagram"  data-share="instagram"><i class="ti ti-brand-instagram"></i> Instagram</button>
+      <button class="hm-share-btn hm-share-tiktok"     data-share="tiktok"><i class="ti ti-brand-tiktok"></i> TikTok</button>
+      <button class="hm-share-btn hm-share-discord"    data-share="discord"><i class="ti ti-brand-discord"></i> Discord</button>
+      <button class="hm-share-btn hm-share-copy"       data-share="copy"><i class="ti ti-copy"></i> Copy link</button>
+    </div>
+  </div>
+</dialog>
+
+<%# ── MODAL 3: $2.3T OCO ── %>
+<dialog id="oco-modal" class="hm-dialog" aria-labelledby="hm-oco-title">
+  <div class="hm-header">
+    <button class="hm-close" onclick="this.closest('dialog').close()" aria-label="Close">✕</button>
+    <div class="hm-eyebrow">◆ Islamic Jihad Cost Database · Overseas wars</div>
+    <div class="hm-headline" id="hm-oco-title">$2.3T</div>
+    <p class="hm-subtitle">The cost of Afghanistan, Iraq, and Syria — before veteran care</p>
+  </div>
+  <div class="hm-body">
+    <div class="hm-stats">
+      <div class="hm-stat"><div class="hm-stat-val">~$825B</div><div class="hm-stat-lbl">Afghanistan (2001–2021)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">~$1.1T</div><div class="hm-stat-lbl">Iraq (2003–present)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">2,461</div><div class="hm-stat-lbl">U.S. military deaths, Afghanistan</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">20 yrs</div><div class="hm-stat-lbl">Length of Afghan war</div></div>
+    </div>
+    <ul class="hm-facts">
+      <li>OCO (Overseas Contingency Operations) funding was always processed as emergency supplementals — never in the base defense budget — making it invisible to routine budget oversight for two decades.</li>
+      <li>At peak (2011): 100,000 U.S. troops in Afghanistan plus 45,000 in Iraq simultaneously — two major ground wars at once, both funded off-budget.</li>
+      <li>America's longest war ended August 30, 2021 — 20 years, 4 months after it began. The Taliban returned to Kabul within days of withdrawal.</li>
+      <li>The Iraq War alone cost more in real dollars than the Marshall Plan — the program that rebuilt all of Western Europe after World War II.</li>
+      <li>Neither war was formally declared by Congress under Article I. Both operated under the 2001 Authorization for Use of Military Force, which has never been repealed.</li>
+    </ul>
+    <div class="hm-source">Sources: Brown University, Costs of War Project (2021) · DOD financial reports · Congressional Research Service</div>
+    <div class="hm-share-bar">
+      <span class="hm-share-lbl">Share</span>
+      <button class="hm-share-btn hm-share-x"         data-share="x"><i class="ti ti-brand-x"></i> X</button>
+      <button class="hm-share-btn hm-share-linkedin"   data-share="linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
+      <button class="hm-share-btn hm-share-facebook"   data-share="facebook"><i class="ti ti-brand-facebook"></i> Facebook</button>
+      <button class="hm-share-btn hm-share-instagram"  data-share="instagram"><i class="ti ti-brand-instagram"></i> Instagram</button>
+      <button class="hm-share-btn hm-share-tiktok"     data-share="tiktok"><i class="ti ti-brand-tiktok"></i> TikTok</button>
+      <button class="hm-share-btn hm-share-discord"    data-share="discord"><i class="ti ti-brand-discord"></i> Discord</button>
+      <button class="hm-share-btn hm-share-copy"       data-share="copy"><i class="ti ti-copy"></i> Copy link</button>
+    </div>
+  </div>
+</dialog>
+
+<%# ── MODAL 4: $260B PEAK YEAR 2008 ── %>
+<dialog id="peak-year-modal" class="hm-dialog" aria-labelledby="hm-peak-title">
+  <div class="hm-header">
+    <button class="hm-close" onclick="this.closest('dialog').close()" aria-label="Close">✕</button>
+    <div class="hm-eyebrow">◆ Islamic Jihad Cost Database · Peak spending</div>
+    <div class="hm-headline" id="hm-peak-title">$260B</div>
+    <p class="hm-subtitle">The year the war machine ran at full throttle — 2008</p>
+  </div>
+  <div class="hm-body">
+    <div class="hm-stats">
+      <div class="hm-stat"><div class="hm-stat-val">$16B</div><div class="hm-stat-lbl">Pre-9/11 annual CT baseline (2001)</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">16×</div><div class="hm-stat-lbl">Multiple vs. 2001 baseline</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">$714M</div><div class="hm-stat-lbl">Spent per day in 2008</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">$17.3B</div><div class="hm-stat-lbl">NASA's entire 2008 budget</div></div>
+    </div>
+    <ul class="hm-facts">
+      <li>The 2008 peak captured the Iraq Surge (2007–09) and the Afghanistan ramp-up simultaneously — both wars at full intensity at the same time.</li>
+      <li>NASA's entire 2008 budget was $17.3B. At 2008 CT spending rates, that was consumed in 24 days.</li>
+      <li>The Iraq Surge worked: violence fell ~90% from its 2007 peak by late 2008. But the model that achieved it cost over $2 billion per week at its height.</li>
+      <li>The U.S. has never returned to pre-9/11 CT spending levels. Even after the Afghanistan withdrawal, DHS alone requested $97B in FY2024 — six times the pre-9/11 total CT budget.</li>
+      <li>The 16× multiple understates the true expansion: the pre-9/11 number excluded intelligence spending. Including CIA/NSA, the real multiple is closer to 10× — but on a much larger base.</li>
+    </ul>
+    <div class="hm-source">Sources: Stimson Center (2018) · DOD financial reports · CBO discretionary baseline · NASA budget history</div>
+    <div class="hm-share-bar">
+      <span class="hm-share-lbl">Share</span>
+      <button class="hm-share-btn hm-share-x"         data-share="x"><i class="ti ti-brand-x"></i> X</button>
+      <button class="hm-share-btn hm-share-linkedin"   data-share="linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
+      <button class="hm-share-btn hm-share-facebook"   data-share="facebook"><i class="ti ti-brand-facebook"></i> Facebook</button>
+      <button class="hm-share-btn hm-share-instagram"  data-share="instagram"><i class="ti ti-brand-instagram"></i> Instagram</button>
+      <button class="hm-share-btn hm-share-tiktok"     data-share="tiktok"><i class="ti ti-brand-tiktok"></i> TikTok</button>
+      <button class="hm-share-btn hm-share-discord"    data-share="discord"><i class="ti ti-brand-discord"></i> Discord</button>
+      <button class="hm-share-btn hm-share-copy"       data-share="copy"><i class="ti ti-copy"></i> Copy link</button>
+    </div>
+  </div>
+</dialog>
+
+<%# ── MODAL 5: 15% DISCRETIONARY ── %>
+<dialog id="discretionary-modal" class="hm-dialog" aria-labelledby="hm-disc-title">
+  <div class="hm-header">
+    <button class="hm-close" onclick="this.closest('dialog').close()" aria-label="Close">✕</button>
+    <div class="hm-eyebrow">◆ Islamic Jihad Cost Database · Budget share</div>
+    <div class="hm-headline" id="hm-disc-title">15%</div>
+    <p class="hm-subtitle">One in seven discretionary dollars, every year for fifteen years</p>
+  </div>
+  <div class="hm-body">
+    <div class="hm-stats">
+      <div class="hm-stat"><div class="hm-stat-val">2002–17</div><div class="hm-stat-lbl">Period of Stimson Center analysis</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">~4%</div><div class="hm-stat-lbl">Pre-9/11 CT share of discretionary</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">~$68B</div><div class="hm-stat-lbl">Avg annual Education Dept budget</div></div>
+      <div class="hm-stat"><div class="hm-stat-val">26</div><div class="hm-stat-lbl">Budget documents Stimson had to compile</div></div>
+    </div>
+    <ul class="hm-facts">
+      <li>The Stimson Center found no federal agency tracked the counter-terrorism total — they had to compile it from 26 separate budget documents published by different departments over 15 years.</li>
+      <li>CT's share of discretionary jumped from ~4% pre-9/11 to 15% — a near-quadrupling — and has never returned to the pre-9/11 level despite the end of major combat operations.</li>
+      <li>The entire Department of Education averages ~$68B/year — CT spending absorbed 1.5 to 2× that amount annually in the 2002–2017 period.</li>
+      <li>Transportation and infrastructure averaged ~$90B/year in the same window — less than two-thirds of the counter-terrorism share of the budget.</li>
+      <li>If CT spending had remained at its pre-9/11 share (4% of discretionary), cumulative 2002–2017 savings would have exceeded $2 trillion.</li>
+    </ul>
+    <div class="hm-source">Sources: Stimson Center, Counterterrorism Spending (2018) · CBO discretionary spending baseline · OMB historical tables</div>
+    <div class="hm-share-bar">
+      <span class="hm-share-lbl">Share</span>
+      <button class="hm-share-btn hm-share-x"         data-share="x"><i class="ti ti-brand-x"></i> X</button>
+      <button class="hm-share-btn hm-share-linkedin"   data-share="linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
+      <button class="hm-share-btn hm-share-facebook"   data-share="facebook"><i class="ti ti-brand-facebook"></i> Facebook</button>
+      <button class="hm-share-btn hm-share-instagram"  data-share="instagram"><i class="ti ti-brand-instagram"></i> Instagram</button>
+      <button class="hm-share-btn hm-share-tiktok"     data-share="tiktok"><i class="ti ti-brand-tiktok"></i> TikTok</button>
+      <button class="hm-share-btn hm-share-discord"    data-share="discord"><i class="ti ti-brand-discord"></i> Discord</button>
+      <button class="hm-share-btn hm-share-copy"       data-share="copy"><i class="ti ti-copy"></i> Copy link</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var PAGE_URL = 'https://fora.center/usa/ijdb';
+
+  /* Platform-appropriate copy per modal */
+  var SHARE = {
+    'total-ct-modal': {
+      x:         'The US spent ~$8 TRILLION on counter-terrorism since 9/11.\n\n$24,000 per American. More than Germany\u2019s GDP. And no government document has ever officially totaled it.\n\nfora.center/usa/ijdb #JihadTax',
+      linkedin:  'FORA\u2019s Islamic Jihad Cost Database documents ~$8 trillion in U.S. counter-terrorism spending from 2002\u20132022.\n\nThe figure \u2014 drawn from Brown University\u2019s Costs of War project and the Stimson Center \u2014 includes war operations ($2.3T), veteran care ($2.2T), DHS ($1.1T), intelligence ($700B est.), and over $1T in debt interest alone.\n\nThe deeper finding: no federal agency has ever published a unified CT spending total. This number had to be assembled from 26 separate budget documents.\n\nFull breakdown: fora.center/usa/ijdb',
+      facebook:  'The US has spent roughly $8 TRILLION on counter-terrorism since 9/11. That\u2019s $24,000 for every American alive today.\n\nAnd the US government has never published a single document adding it all up. Researchers had to piece it together from 26 separate budget files.\n\nSee the full breakdown \u2192 fora.center/usa/ijdb',
+      instagram: '\ud83d\udd34 $8 TRILLION.\n\nThat\u2019s what the US spent on counter-terrorism since 9/11. ~$24,000 for every American alive.\n\nWars. Surveillance. Homeland security. Veteran care. Debt interest on borrowed war money.\n\nAnd the US government NEVER published an official total. Had to be pieced together from 26 budget documents.\n\nLink in bio \u2192 fora.center/usa/ijdb\n\n#JihadTax #FORA #CounterTerrorism #9/11 #Government #Spending #History #Facts',
+      tiktok:    'POV: The US spent $8 TRILLION on counter-terrorism since 9/11 \ud83d\udca0\n\nThat\u2019s $24,000 per American. More than the GDP of Germany.\n\nAnd the government NEVER officially totaled it. Researchers counted it themselves from 26 separate files.\n\nfora.center/usa/ijdb\n\n#JihadTax #government #spending #facts #911 #history #fora',
+      discord:   '**The Jihad Tax \u2014 $8T Total Breakdown** | IJDB\nThe US spent ~$8 trillion on counter-terrorism from 2002\u20132022. No official government total exists \u2014 compiled from 26 separate budget documents.\n\n\ud83d\udd17 fora.center/usa/ijdb'
+    },
+    'homeland-sec-modal': {
+      x:         'DHS has cost $1.1 TRILLION since 9/11.\n\nBuilt in 60 days. 22 agencies merged. 240,000 employees.\n\nThe largest U.S. government reorganization since the CIA was created in 1947 \u2014 assembled in under a year after the worst attack on American soil.\n\nfora.center/usa/ijdb #JihadTax',
+      linkedin:  'The Department of Homeland Security was created in under a year after 9/11 and has since cost over $1.1 trillion.\n\n22 agencies, 240,000 employees, and a $97B FY2024 budget request. The Stimson Center documented this as part of a broader $8T counter-terrorism accounting that no single government document had ever compiled.\n\nFor policy context: all 19 hijackers entered the U.S. legally. DHS was built around weapons screening, not the immigration fraud that actually enabled the attacks \u2014 per the 9/11 Commission.\n\nFull database: fora.center/usa/ijdb',
+      facebook:  '$1.1 TRILLION on homeland security since 9/11.\n\nDHS was created in under a year \u2014 22 agencies merged, 240,000 employees hired. It\u2019s now the third-largest federal department.\n\nAnd yet the 9/11 Commission found that all 19 hijackers entered the US legally. The bureaucracy we built to stop the next attack was designed around the wrong threat model.\n\nFull breakdown \u2192 fora.center/usa/ijdb',
+      instagram: '\ud83d\udd34 $1.1 TRILLION.\n\nThat\u2019s what DHS \u2014 the Department of Homeland Security \u2014 has cost since 9/11.\n\nCreated in 60 days. 22 agencies merged into one. 240,000 employees.\n\nThe 9/11 Commission: all 19 hijackers entered the US LEGALLY.\n\nLink in bio \u2192 fora.center/usa/ijdb\n\n#DHS #HomelandSecurity #JihadTax #FORA #9/11 #Government #Facts #History',
+      tiktok:    'DHS cost $1.1 TRILLION and was built in under a year after 9/11 \ud83d\udca5\n\n22 agencies. 240,000 employees. Built to screen for weapons.\n\nBut all 19 hijackers entered the US legally.\n\nfora.center/usa/ijdb\n\n#DHS #homelandsecurity #JihadTax #facts #government #911',
+      discord:   '**DHS \u2014 $1.1T Since 9/11** | IJDB\n22 agencies merged in under a year. 240,000 employees. Largest U.S. government reorganization since 1947.\n\n\ud83d\udd17 fora.center/usa/ijdb'
+    },
+    'oco-modal': {
+      x:         '$2.3 TRILLION on overseas wars since 9/11.\n\nAfghanistan for 20 years. Iraq for 8. Both at the same time.\n\n100,000 troops in Afghanistan + 45,000 in Iraq \u2014 simultaneously, in 2011.\n\nNeither war was ever formally declared by Congress.\n\nfora.center/usa/ijdb #JihadTax',
+      linkedin:  'Brown University\u2019s Costs of War project estimates $2.3 trillion in U.S. overseas contingency operations from 2001\u20132022 \u2014 Afghanistan ($825B), Iraq ($1.1T), Syria and other theaters.\n\nNeither war was formally declared under Article I of the Constitution. Both operated under the 2001 AUMF, which has never been repealed.\n\nThis figure excludes veteran care ($2.2T additional) and debt interest ($1T+). The full cost exceeds $8T.\n\nDatabase: fora.center/usa/ijdb',
+      facebook:  '$2.3 TRILLION on overseas wars since 9/11 \u2014 and that doesn\u2019t even include veteran care.\n\nAfghanistan: 20 years. Iraq: 8 years of major combat + ongoing. Both wars simultaneously at peak.\n\nThe Iraq War alone cost more than the Marshall Plan \u2014 the program that rebuilt all of Western Europe after WWII.\n\nFull breakdown \u2192 fora.center/usa/ijdb',
+      instagram: '\ud83d\udd34 $2.3 TRILLION on overseas wars since 9/11.\n\nAfghanistan for 20 YEARS. Iraq for 8. Both at the same time.\n\nThis doesn\u2019t even include veteran care ($2.2T more) or debt interest ($1T+).\n\nNeither war was ever formally declared by Congress.\n\nLink in bio \u2192 fora.center/usa/ijdb\n\n#AfghanistanWar #Iraq #JihadTax #FORA #Military #War #Government #History',
+      tiktok:    'The US spent $2.3 TRILLION on overseas wars since 9/11 \ud83e\udd2f\n\nAfghanistan: 20 years. Iraq: 8 years. Both at the same time.\n\nNeither war was declared by Congress.\n\nThis is BEFORE veteran care ($2.2T more) and debt interest ($1T+).\n\nfora.center/usa/ijdb\n\n#war #military #JihadTax #facts #history #government',
+      discord:   '**Overseas Wars \u2014 $2.3T** | IJDB\nAfghanistan + Iraq + Syria OCO spending. 20 years in Afghanistan. Neither war formally declared by Congress.\n\n\ud83d\udd17 fora.center/usa/ijdb'
+    },
+    'peak-year-modal': {
+      x:         'In 2008, the US spent $260 BILLION on counter-terrorism in a single year.\n\nThat\u2019s $714 million per day.\nNASA\u2019s entire 2008 budget: consumed in 24 days.\n16\u00d7 the pre-9/11 baseline.\n\nfora.center/usa/ijdb #JihadTax',
+      linkedin:  'The U.S. counter-terrorism spending peak \u2014 $260 billion in 2008 \u2014 captured simultaneous Iraq Surge and Afghanistan escalation at full intensity.\n\nAt $714M per day, NASA\u2019s entire 2008 budget was surpassed in 24 days. The pre-9/11 CT baseline of ~$16B was exceeded before January was over.\n\nThe institutional expansion built during this period has never been reversed. DHS alone requested $97B in FY2024 \u2014 six times the entire pre-9/11 CT apparatus.\n\nDatabase: fora.center/usa/ijdb',
+      facebook:  'In 2008, America spent $260 BILLION on counter-terrorism in a single year.\n\n$714 million every single day.\n\nThat year, NASA\u2019s entire budget was $17 billion. At 2008 CT rates, that got used up in 24 days.\n\nThe pre-9/11 CT budget was $16B total. We were spending that every 22 days.\n\nFull breakdown \u2192 fora.center/usa/ijdb',
+      instagram: '\ud83d\udd34 $260 BILLION in ONE year (2008).\n\n$714 million per day.\nNASA\u2019s whole budget = 24 days at this rate.\n16\u00d7 the pre-9/11 baseline.\n\nThe Iraq Surge + Afghanistan ramp-up simultaneously. Both wars at full throttle.\n\nLink in bio \u2192 fora.center/usa/ijdb\n\n#JihadTax #FORA #Military #Spending #Iraq #Afghanistan #History #Facts',
+      tiktok:    'The US spent $260 BILLION on counter-terrorism in 2008 alone \ud83d\udca5\n\n$714 million PER DAY.\nNASA\u2019s whole budget lasted 24 days at this pace.\n16x the pre-9/11 level.\n\nfora.center/usa/ijdb\n\n#facts #government #military #spending #JihadTax #history',
+      discord:   '**Peak CT Spending \u2014 $260B in 2008** | IJDB\n$714M/day. 16\u00d7 pre-9/11 baseline. Iraq Surge + Afghanistan simultaneously.\n\n\ud83d\udd17 fora.center/usa/ijdb'
+    },
+    'discretionary-modal': {
+      x:         'For 15 years, ONE IN SEVEN discretionary federal dollars went to counter-terrorism.\n\nThe entire Education Dept averaged ~$68B/yr.\nCT spending absorbed 1.5\u20132\u00d7 that annually.\n\nNo single agency ever tracked the total. Stimson had to compile it from 26 separate documents.\n\nfora.center/usa/ijdb #JihadTax',
+      linkedin:  'The Stimson Center\u2019s landmark 2018 analysis found that counter-terrorism absorbed an average of 15% of the U.S. discretionary budget from 2002\u20132017 \u2014 nearly four times its pre-9/11 share.\n\nKey finding: no federal agency tracked the total. The Stimson team had to compile it from 26 separate budget documents across multiple departments.\n\nFor context: the entire Department of Education averages ~$68B/year. CT spending consumed 1.5\u20132\u00d7 that annually throughout the period.\n\nDatabase: fora.center/usa/ijdb',
+      facebook:  'For 15 years after 9/11, one in every seven federal discretionary dollars went to counter-terrorism.\n\nAnd here\u2019s the wild part: no government agency ever tracked the total. The Stimson Center had to compile the number from 26 separate budget documents \u2014 published by different departments \u2014 just to get an answer.\n\nFull breakdown \u2192 fora.center/usa/ijdb',
+      instagram: '\ud83d\udd34 1 in 7 federal dollars, every year, for 15 years.\n\nThat\u2019s what counter-terrorism consumed of the discretionary budget after 9/11.\n\nNo agency ever officially tracked it. Researchers had to pull it from 26 separate government documents.\n\nThe entire Education Dept budget: half of what CT absorbed annually.\n\nLink in bio \u2192 fora.center/usa/ijdb\n\n#JihadTax #FORA #Government #Budget #Spending #CounterTerrorism #Facts',
+      tiktok:    'After 9/11, 1 in 7 federal dollars went to counter-terrorism EVERY YEAR for 15 years \ud83e\udd2f\n\nAnd no government agency ever officially added it up.\n\nResearchers had to pull it from 26 separate budget documents.\n\nfora.center/usa/ijdb\n\n#government #budget #facts #JihadTax #spending #history',
+      discord:   '**CT Budget Share \u2014 15% of Discretionary** | IJDB\nAverage 2002\u201317. No federal agency tracked the total \u2014 compiled from 26 budget documents by the Stimson Center.\n\n\ud83d\udd17 fora.center/usa/ijdb'
+    }
+  };
+
+  /* ── Share handler ── */
+  document.querySelectorAll('.hm-share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var platform = btn.dataset.share;
+      var dlg      = btn.closest('dialog');
+      var modalId  = dlg ? dlg.id : '';
+      var data     = SHARE[modalId] || {};
+      var url      = PAGE_URL;
+      var text     = data[platform] || '';
+
+      switch (platform) {
+        case 'x':
+          window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
+          break;
+        case 'linkedin':
+          window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url), '_blank', 'width=600,height=500');
+          break;
+        case 'facebook':
+          window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
+          break;
+        case 'instagram':
+          copyAndToast(text + '\n\n' + url);
+          break;
+        case 'tiktok':
+          copyAndToast(text);
+          break;
+        case 'discord':
+          copyAndToast(text);
+          break;
+        case 'copy':
+          copyAndToast(url);
+          break;
+      }
+    });
+  });
+
+  /* ── Backdrop click closes dialog ── */
+  document.querySelectorAll('.hm-dialog').forEach(function (dlg) {
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg) dlg.close();
+    });
+  });
+
+  /* ── Copy + toast ── */
+  function copyAndToast(text) {
+    var toast = document.getElementById('hm-toast');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function () { showToast(toast); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(toast);
+    }
+  }
+
+  function showToast(toast) {
+    toast.classList.add('show');
+    setTimeout(function () { toast.classList.remove('show'); }, 2000);
+  }
+}());
+</script>
