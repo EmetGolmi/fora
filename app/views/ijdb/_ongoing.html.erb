@@ -1,0 +1,349 @@
+<%# app/views/ijdb/_ongoing.html.erb %>
+
+<% content_for :head do %>
+<style>
+/* ── ONGOING SECTION ── */
+.og-wrap{background:#ffffff;border-top:0.5px solid rgba(27,58,107,0.10);}
+.og-inner{max-width:1100px;margin:0 auto;padding:36px 24px 32px;}
+
+/* section header */
+.og-hd{padding-bottom:16px;margin-bottom:16px;border-bottom:0.5px solid rgba(27,58,107,0.10);}
+.og-eyebrow{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#8a9ab8;display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.og-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#1b3a6b;line-height:1.2;margin-bottom:5px;}
+.og-sub{font-family:'Nunito',sans-serif;font-size:13px;color:#5a6e8a;line-height:1.65;max-width:680px;margin-bottom:10px;}
+.og-live{display:inline-flex;align-items:center;gap:5px;background:rgba(163,45,45,0.09);color:#A32D2D;border:1px solid rgba(163,45,45,0.22);border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;}
+.og-pulse-dot{width:6px;height:6px;border-radius:50%;background:#A32D2D;flex-shrink:0;animation:og-pulse 2s ease-in-out infinite;}
+@keyframes og-pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* running total banner */
+.og-banner{display:flex;align-items:stretch;background:#f5f7fb;border:0.5px solid rgba(27,58,107,0.12);border-radius:8px;margin-bottom:24px;overflow:hidden;}
+@media(max-width:560px){.og-banner{flex-direction:column;}.og-banner-div{width:auto;height:1px;}}
+.og-banner-side{flex:1;padding:18px 22px;}
+.og-banner-div{width:1px;background:rgba(27,58,107,0.12);flex-shrink:0;}
+.og-banner-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;margin-bottom:5px;}
+.og-banner-val-danger{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:#A32D2D;line-height:1.0;margin-bottom:5px;}
+.og-banner-val{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:#1b3a6b;line-height:1.0;margin-bottom:5px;}
+.og-banner-note{font-family:'Nunito',sans-serif;font-size:11px;color:#8a9ab8;line-height:1.55;}
+
+/* running ledger */
+.og-ledger{border:0.5px solid rgba(27,58,107,0.12);border-radius:8px;overflow:hidden;margin-bottom:24px;}
+.og-ledger-row{display:flex;align-items:stretch;border-bottom:0.5px solid rgba(27,58,107,0.08);}
+.og-ledger-row:last-child{border-bottom:none;}
+.og-row-bar{width:3px;flex-shrink:0;}
+.og-row-main{flex:1;padding:14px 16px 12px;min-width:0;}
+.og-row-aside{padding:14px 14px 12px 0;text-align:right;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;min-width:100px;flex-shrink:0;}
+.og-row-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#1b3a6b;line-height:1.30;margin-bottom:4px;}
+.og-row-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;}
+.og-row-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;line-height:1.65;margin-bottom:6px;}
+.og-row-src{font-family:'JetBrains Mono',monospace;font-size:9px;color:#aab4c4;}
+.og-row-src a{color:#185FA5;text-decoration:none;}
+.og-row-src a:hover{text-decoration:underline;}
+.og-row-amount{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#1b3a6b;white-space:nowrap;margin-bottom:4px;}
+.og-row-conf{font-family:'JetBrains Mono',monospace;font-size:9px;white-space:nowrap;}
+.og-conf-doc{color:#3B6D11;}
+.og-conf-unc{color:#854F0B;}
+
+/* ledger total row */
+.og-ledger-total{background:#f5f7fb;border-top:1.5px solid rgba(27,58,107,0.14);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:14px 16px;flex-wrap:wrap;}
+.og-total-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:#5a6e8a;margin-bottom:4px;}
+.og-total-note{font-family:'Nunito',sans-serif;font-size:10.5px;color:#8a9ab8;line-height:1.55;max-width:480px;}
+.og-total-val{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:#A32D2D;white-space:nowrap;flex-shrink:0;}
+
+/* bordered cards */
+.og-card{border:0.5px solid rgba(27,58,107,0.12);border-radius:8px;overflow:hidden;margin-bottom:24px;}
+.og-card:last-child{margin-bottom:0;}
+.og-card-amber{border-color:rgba(184,117,23,0.28);}
+.og-card-red{border-color:rgba(163,45,45,0.25);}
+.og-card-head{padding:14px 18px 12px;display:flex;align-items:flex-start;gap:12px;}
+.og-card-amber .og-card-head{background:rgba(239,159,39,0.03);border-bottom:0.5px solid rgba(184,117,23,0.10);}
+.og-card-red .og-card-head{background:rgba(163,45,45,0.02);border-bottom:0.5px solid rgba(163,45,45,0.08);}
+.og-card-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;}
+.og-icon-amber{background:rgba(239,159,39,0.14);color:#BA7517;}
+.og-icon-red{background:rgba(163,45,45,0.10);color:#A32D2D;}
+.og-card-head-body{flex:1;min-width:0;}
+.og-card-head-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.og-card-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#1b3a6b;line-height:1.25;margin-bottom:4px;}
+.og-card-subtitle{font-family:'Nunito',sans-serif;font-size:12px;color:#5a6e8a;line-height:1.5;}
+.og-card-body{padding:16px 18px;}
+.og-bill-link{display:inline-flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 9px;border-radius:20px;border:1px solid rgba(27,58,107,0.22);color:#1b3a6b;text-decoration:none;background:rgba(27,58,107,0.04);}
+.og-bill-link:hover{background:rgba(27,58,107,0.09);}
+
+/* stats grid inside OBBBA card */
+.og-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px;margin-bottom:16px;}
+.og-stat{background:#f5f7fb;border-radius:6px;padding:11px 13px;}
+.og-stat-val{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:#0e1a2e;line-height:1.1;margin-bottom:3px;}
+.og-stat-lbl{font-family:'Nunito',sans-serif;font-size:10.5px;color:#5a6e8a;line-height:1.35;}
+
+/* ICE editorial note */
+.og-editorial{background:#f5f7fb;border-radius:6px;padding:14px 16px;}
+.og-editorial-title{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:#1b3a6b;margin-bottom:7px;}
+.og-editorial-body{font-family:'Libre Baskerville',serif;font-size:12px;color:#4a3520;line-height:1.80;margin:0;}
+
+/* Venezuela chain rows */
+.og-chain-row{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:0.5px solid rgba(163,45,45,0.07);}
+.og-chain-row:last-child{border-bottom:none;}
+.og-chain-num{width:22px;height:22px;border-radius:50%;background:#A32D2D;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.og-chain-body{flex:1;min-width:0;}
+.og-chain-title{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:#1b3a6b;margin-bottom:4px;line-height:1.3;}
+.og-chain-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:#5a6e8a;line-height:1.65;margin-bottom:5px;}
+.og-chain-srcs{font-family:'JetBrains Mono',monospace;font-size:9px;color:#aab4c4;}
+.og-chain-srcs a{color:#A32D2D;text-decoration:none;}
+.og-chain-srcs a:hover{text-decoration:underline;}
+</style>
+<% end %>
+
+<div class="og-wrap">
+  <div class="og-inner">
+
+    <%# ── SECTION HEADER ── %>
+    <div class="og-hd">
+      <div class="og-eyebrow">
+        <i class="ti ti-refresh" style="font-size:12px" aria-hidden="true"></i>
+        IJDB · ongoing · updated May 2026
+      </div>
+      <div class="og-title">The jihad tax, ongoing</div>
+      <div class="og-sub">Brown's $8T covers through FY2022. FORA tracks what's happened since — including the largest DHS funding surge in American history.</div>
+      <div class="og-live">
+        <span class="og-pulse-dot" aria-hidden="true"></span>
+        Live tracking
+      </div>
+    </div>
+
+    <%# ── FORA RUNNING TOTAL BANNER ── %>
+    <div class="og-banner">
+      <div class="og-banner-side">
+        <div class="og-banner-lbl">FORA running estimate · 2001–May 2026</div>
+        <div class="og-banner-val-danger">~$8.4T+</div>
+        <div class="og-banner-note">Brown $8T baseline + $400B+ in documented post-2022 additions</div>
+      </div>
+      <div class="og-banner-div" aria-hidden="true"></div>
+      <div class="og-banner-side">
+        <div class="og-banner-lbl">Brown baseline (through FY2022)</div>
+        <div class="og-banner-val">$8.0T</div>
+        <div class="og-banner-note">last published figure</div>
+      </div>
+    </div>
+
+    <%# ── RUNNING LEDGER TABLE ── %>
+    <div class="og-ledger">
+
+      <%# Row 1 — Brown baseline %>
+      <div class="og-ledger-row">
+        <div class="og-row-bar" style="background:#185FA5;" aria-hidden="true"></div>
+        <div class="og-row-main">
+          <div class="og-row-title">Brown University baseline — post-9/11 wars</div>
+          <div class="og-row-tags"><span class="tag tag-pub">through FY2022</span></div>
+          <div class="og-row-desc">Wars, DHS, veterans obligations, intelligence, debt interest through fiscal year 2022. Does not include physical rebuild costs or future interest on post-2022 debt.</div>
+          <div class="og-row-src">Source: <a href="https://watson.brown.edu/costsofwar/" target="_blank" rel="noopener noreferrer">Brown University Costs of War Project</a></div>
+        </div>
+        <div class="og-row-aside">
+          <div class="og-row-amount">~$8.0T</div>
+          <div class="og-row-conf og-conf-doc">documented</div>
+        </div>
+      </div>
+
+      <%# Row 2 — DHS FY2023–FY2025 %>
+      <div class="og-ledger-row">
+        <div class="og-row-bar" style="background:#0F6E56;" aria-hidden="true"></div>
+        <div class="og-row-main">
+          <div class="og-row-title">DHS annual spending — FY2023, FY2024, FY2025</div>
+          <div class="og-row-tags"><span class="tag tag-pub">post-Brown</span></div>
+          <div class="og-row-desc">~$62B/year in base discretionary DHS spending across three fiscal years. Does not include the OBBBA surge (counted separately below).</div>
+          <div class="og-row-src">Source: <a href="https://www.dhs.gov/dhs-budget" target="_blank" rel="noopener noreferrer">DHS Budget in Brief FY2023–FY2025</a></div>
+        </div>
+        <div class="og-row-aside">
+          <div class="og-row-amount">~$185B</div>
+          <div class="og-row-conf og-conf-doc">documented</div>
+        </div>
+      </div>
+
+      <%# Row 3 — OBBBA %>
+      <div class="og-ledger-row">
+        <div class="og-row-bar" style="background:#EF9F27;" aria-hidden="true"></div>
+        <div class="og-row-main">
+          <div class="og-row-title">One Big Beautiful Bill — DHS appropriation</div>
+          <div class="og-row-tags">
+            <span class="tag tag-part">OBBBA</span>
+            <span class="tag tag-part">July 4, 2025</span>
+          </div>
+          <div class="og-row-desc">$165B for DHS over the next decade. $75B for ICE, $64B for CBP, $46.5B for border wall, $3.2B in new surveillance technology. Available through FY2029. ICE is now the largest-budgeted federal law enforcement agency in the country.</div>
+          <div class="og-row-src">Source: <a href="https://www.dhs.gov/news/2025/07/04/secretary-noem-commends-president-trump-and-one-big-beautiful-bill-signing-law" target="_blank" rel="noopener noreferrer">DHS · OBBBA signing statement, July 4 2025</a></div>
+        </div>
+        <div class="og-row-aside">
+          <div class="og-row-amount">$165B</div>
+          <div class="og-row-conf og-conf-doc">documented · enacted</div>
+        </div>
+      </div>
+
+      <%# Row 4 — Post-10/7 ops %>
+      <div class="og-ledger-row">
+        <div class="og-row-bar" style="background:#A32D2D;" aria-hidden="true"></div>
+        <div class="og-row-main">
+          <div class="og-row-title">Post-10/7 U.S. military operations — Middle East</div>
+          <div class="og-row-tags"><span class="tag tag-class">ongoing</span></div>
+          <div class="og-row-desc">U.S. military costs in support of Israeli and allied operations in Gaza, Lebanon, Yemen, and Iran. Includes munitions transfers, naval deployments, and direct strikes. Through September 2025.</div>
+          <div class="og-row-src">Source: <a href="https://watson.brown.edu/costsofwar/" target="_blank" rel="noopener noreferrer">Brown University Costs of War · Oct 7 update</a></div>
+        </div>
+        <div class="og-row-aside">
+          <div class="og-row-amount">$9.65–$12B</div>
+          <div class="og-row-conf og-conf-doc">documented</div>
+        </div>
+      </div>
+
+      <%# Row 5 — Physical rebuild %>
+      <div class="og-ledger-row">
+        <div class="og-row-bar" style="background:#BA7517;" aria-hidden="true"></div>
+        <div class="og-row-main">
+          <div class="og-row-title">Physical destruction &amp; rebuild — Ground Zero, Pentagon, Pennsylvania</div>
+          <div class="og-row-tags"><span class="tag tag-part">absent from all CT databases</span></div>
+          <div class="og-row-desc">WTC complex rebuild ($14.8B) · Oculus transportation hub ($3.9B) · Lower Manhattan federal recovery grants ($21B) · Emergency worker overtime NYPD/FDNY ($3.6B) · Pentagon reconstruction ($1B) · Memorials ($800M) · Debris removal ($750M) · WTC Cortlandt station ($158M). None of this appears in Brown or any CT spending database.</div>
+          <div class="og-row-src">Source: Port Authority of NY/NJ · FEMA · MTA · DOD facilities · independent audits</div>
+        </div>
+        <div class="og-row-aside">
+          <div class="og-row-amount">~$46B</div>
+          <div class="og-row-conf og-conf-unc">documented · uncategorized</div>
+        </div>
+      </div>
+
+      <%# Total row %>
+      <div class="og-ledger-total">
+        <div>
+          <div class="og-total-lbl">FORA running estimate · 2001–May 2026</div>
+          <div class="og-total-note">Excludes: future veterans' care past 2022 obligations · future debt interest · state/local CT spending · private sector compliance costs · uncounted classified programs</div>
+        </div>
+        <div class="og-total-val">~$8.4T+</div>
+      </div>
+
+    </div>
+
+    <%# ── ONE BIG BEAUTIFUL BILL CARD ── %>
+    <div class="og-card og-card-amber">
+      <div class="og-card-head">
+        <div class="og-card-icon og-icon-amber">
+          <i class="ti ti-gavel" aria-hidden="true"></i>
+        </div>
+        <div class="og-card-head-body">
+          <div class="og-card-head-tags">
+            <span class="tag tag-part">Signed July 4, 2025</span>
+            <%# TODO: replace '#' with bill_path(id: OBBBA_CIVIC_BILL_ID) once OBBBA is seeded in CivicBill %>
+            <a href="#" class="og-bill-link">
+              <i class="ti ti-file-text" style="font-size:10px" aria-hidden="true"></i>
+              View bill on FORA
+            </a>
+          </div>
+          <div class="og-card-title">One Big Beautiful Bill — DHS provisions</div>
+          <div class="og-card-subtitle">The largest single homeland security funding event in U.S. history. $190.6B to DHS through FY2029.</div>
+        </div>
+      </div>
+      <div class="og-card-body">
+        <div class="og-stats-grid">
+          <div class="og-stat">
+            <div class="og-stat-val">$190.6B</div>
+            <div class="og-stat-lbl">Total DHS appropriation · through FY2029</div>
+          </div>
+          <div class="og-stat">
+            <div class="og-stat-val">$75B</div>
+            <div class="og-stat-lbl">ICE alone · largest fed. law enforcement budget</div>
+          </div>
+          <div class="og-stat">
+            <div class="og-stat-val">$64B</div>
+            <div class="og-stat-lbl">CBP · incl. $46.5B border wall</div>
+          </div>
+          <div class="og-stat">
+            <div class="og-stat-val">10,000</div>
+            <div class="og-stat-lbl">New ICE agents · + $10K/yr bonus through 2029</div>
+          </div>
+          <div class="og-stat">
+            <div class="og-stat-val">100,000</div>
+            <div class="og-stat-lbl">ICE detention capacity · daily beds authorized</div>
+          </div>
+          <div class="og-stat">
+            <div class="og-stat-val">$2.7B</div>
+            <div class="og-stat-lbl">New border surveillance · tech + AI/ML systems</div>
+          </div>
+        </div>
+        <div class="og-editorial">
+          <div class="og-editorial-title">Is ICE's OBBBA budget counter-terrorism spending?</div>
+          <p class="og-editorial-body">FORA counts a portion of it — specifically ICE's Homeland Security Investigations division, which targets Hezbollah financing, Iranian IRGC-linked individuals, and jihadist travel document fraud. The Venezuela connection makes this explicit: Hezbollah operatives have used Venezuelan passports to enter the U.S. and Western Europe, making document fraud interdiction a direct counter-terrorism function. ICE's full $75B is not counted here — only the documentable CT-specific subset. This is disclosed and debatable.</p>
+        </div>
+      </div>
+    </div>
+
+    <%# ── VENEZUELA → HEZBOLLAH → BORDER CARD ── %>
+    <div class="og-card og-card-red">
+      <div class="og-card-head">
+        <div class="og-card-icon og-icon-red">
+          <i class="ti ti-passport" aria-hidden="true"></i>
+        </div>
+        <div class="og-card-head-body">
+          <div class="og-card-head-tags">
+            <span class="tag tag-class">active threat · documented 2025</span>
+          </div>
+          <div class="og-card-title">Venezuela → Hezbollah → U.S. border</div>
+          <div class="og-card-subtitle">Why the border is a jihadist threat vector — and why ICE's budget belongs in this ledger</div>
+        </div>
+      </div>
+      <div class="og-card-body" style="padding:0;">
+
+        <div class="og-chain-row">
+          <div class="og-chain-num">1</div>
+          <div class="og-chain-body">
+            <div class="og-chain-title">Maduro regime issues 10,000+ passports to Hezbollah</div>
+            <div class="og-chain-desc">Venezuelan passports grant visa-free access to 130+ countries including 26 EU nations. A former Lebanese lawmaker confirmed Venezuelan authorities placed official state-issued passports at Hezbollah's disposal, enabling operatives to travel as Venezuelan citizens and evade scrutiny applied to Lebanese, Iranian, and Syrian travelers.</div>
+            <div class="og-chain-srcs">
+              <a href="https://alhurra.com/en/10277" target="_blank" rel="noopener noreferrer">Alhurra, January 2026</a>
+              &middot;
+              <a href="https://www.iranintl.com/en/202508078367" target="_blank" rel="noopener noreferrer">Iran International, August 2025</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="og-chain-row">
+          <div class="og-chain-num">2</div>
+          <div class="og-chain-body">
+            <div class="og-chain-title">U.S. Treasury sanctions Venezuelan diplomat for Hezbollah facilitation — 2008</div>
+            <div class="og-chain-desc">Ghazi Nasr Al-Din sanctioned for providing Hezbollah with bank account information and facilitating member travel between Venezuela and the Middle East while serving at Venezuelan embassies in Damascus and Beirut. The passport program has roots in the Chávez era.</div>
+            <div class="og-chain-srcs">
+              <a href="https://jewishonliner.org/p/venezuelas-passport-for-terror-scheme-decade-of-warning-signs" target="_blank" rel="noopener noreferrer">Jewish Onliner, January 2026</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="og-chain-row">
+          <div class="og-chain-num">3</div>
+          <div class="og-chain-body">
+            <div class="og-chain-title">Congressional testimony confirms thousands of passports to Hezbollah-linked individuals</div>
+            <div class="og-chain-desc">In October 2025, former U.S. Treasury official Marshall Billingslea testified that Caracas issued thousands of Venezuelan passports and documents to individuals with suspected Hezbollah ties. Rubio cited Hezbollah's Venezuela foothold as justification for Maduro's capture in January 2026.</div>
+            <div class="og-chain-srcs">
+              <a href="https://thisisbeirut.com.lb/articles/1331612/rubio-vows-to-eliminate-hezbollah-from-venezuela-after-maduro-capture" target="_blank" rel="noopener noreferrer">This Is Beirut, January 2026</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="og-chain-row">
+          <div class="og-chain-num">4</div>
+          <div class="og-chain-body">
+            <div class="og-chain-title">380,000+ Venezuelan nationals crossed the U.S. border 2021–2023</div>
+            <div class="og-chain-desc">CBP data. Against this backdrop, Venezuelan document fraud is an active ICE enforcement priority — and the jihadist travel vector is the reason the border is a counter-terrorism issue, not just an immigration one.</div>
+            <div class="og-chain-srcs">
+              <a href="https://www.iranintl.com/en/202508078367" target="_blank" rel="noopener noreferrer">Iran International, August 2025</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="og-chain-row">
+          <div class="og-chain-num">5</div>
+          <div class="og-chain-body">
+            <div class="og-chain-title">OBBBA funds ICE to interdict exactly this threat</div>
+            <div class="og-chain-desc">ICE's Homeland Security Investigations (HSI) division specifically targets Hezbollah financing networks, Iranian IRGC-linked individuals, Hamas fundraising operations, and fraudulent document schemes used by jihadist-linked travelers. FORA counts the CT-attributable portion of the $75B appropriation.</div>
+            <div class="og-chain-srcs">
+              <a href="https://www.ice.gov/news/releases/statement-acting-ice-director-todd-m-lyons-passage-one-big-beautiful-bill" target="_blank" rel="noopener noreferrer">ICE statement on OBBBA, July 2025</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
