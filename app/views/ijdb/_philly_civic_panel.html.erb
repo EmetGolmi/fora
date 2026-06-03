@@ -1,0 +1,273 @@
+<%# app/views/ijdb/_philly_civic_panel.html.erb — Philadelphia-specific panel %>
+<%# Rendered only when @city == 'philadelphia' %>
+
+<% content_for :head do %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/tabler-icons.min.css">
+<style>
+/* ── PHILLY CIVIC PANEL ── */
+.pcp-wrap{background:#fff;border-bottom:1px solid rgba(27,58,107,0.08);}
+.pcp-inner{max-width:1100px;margin:0 auto;padding:28px 24px 24px;}
+
+/* civic statement */
+.pcp-statement{font-family:'Libre Baskerville',serif;font-size:14px;color:#2c3e5a;line-height:1.85;padding:14px 18px;background:rgba(27,58,107,0.04);border-left:3px solid rgba(27,58,107,0.25);border-radius:0 6px 6px 0;margin-bottom:20px;}
+
+/* highlight grid */
+.pcp-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid rgba(27,58,107,0.12);border-radius:7px;overflow:hidden;margin-bottom:18px;}
+@media(max-width:600px){.pcp-highlights{grid-template-columns:1fr;}}
+.pcp-hl-cell{padding:12px 16px;border-right:0.5px solid rgba(27,58,107,0.10);}
+.pcp-hl-cell:last-child{border-right:none;}
+@media(max-width:600px){.pcp-hl-cell{border-right:none;border-bottom:0.5px solid rgba(27,58,107,0.10);}.pcp-hl-cell:last-child{border-bottom:none;}}
+.pcp-hl-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:#8a9ab8;line-height:1.4;margin-bottom:4px;}
+.pcp-hl-val{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;line-height:1.1;margin-bottom:2px;}
+.pcp-hl-val.pcp-red{color:#A32D2D;}
+.pcp-hl-val.pcp-amber{color:#BA7517;}
+.pcp-hl-note{font-family:'JetBrains Mono',monospace;font-size:9px;color:#8a9ab8;}
+
+/* action strip */
+.pcp-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.pcp-share-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8a9ab8;flex-shrink:0;margin-right:2px;}
+.pcp-sbtn{width:30px;height:30px;border:0.5px solid rgba(27,58,107,0.16);border-radius:5px;background:transparent;color:#5a6e8a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background 0.12s;}
+.pcp-sbtn:hover{background:#f5f7fb;}
+.pcp-copy-btn{font-family:'Nunito',sans-serif;font-size:11px;padding:5px 10px;border:0.5px solid rgba(27,58,107,0.16);border-radius:5px;background:transparent;color:#5a6e8a;cursor:pointer;display:flex;align-items:center;gap:4px;transition:background 0.12s;}
+.pcp-copy-btn:hover{background:#f5f7fb;}
+.pcp-foia-btn{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:7px 14px;border:0.5px solid rgba(184,117,23,0.40);border-radius:5px;background:rgba(184,117,23,0.06);color:#7a5500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.12s;white-space:nowrap;}
+.pcp-foia-btn:hover{background:rgba(184,117,23,0.13);}
+
+/* FOIA dialog */
+#pcp-foia-dlg{border:none;padding:0;border-radius:10px;max-width:600px;width:94vw;box-shadow:0 20px 60px rgba(0,0,0,0.50);overflow:hidden;}
+#pcp-foia-dlg::backdrop{background:rgba(0,0,0,0.65);backdrop-filter:blur(3px);}
+.pcp-dlg-head{background:#0e1a2e;padding:22px 24px 18px;position:relative;}
+.pcp-dlg-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.22em;text-transform:uppercase;color:#d4a832;margin-bottom:8px;}
+.pcp-dlg-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#fff;line-height:1.1;margin-bottom:4px;}
+.pcp-dlg-sub{font-family:'Nunito',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;}
+.pcp-dlg-close{position:absolute;top:16px;right:18px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;}
+.pcp-dlg-close:hover{color:#fff;background:rgba(255,255,255,0.08);}
+.pcp-dlg-body{background:#fff;max-height:74vh;overflow-y:auto;}
+
+/* guide inside dialog */
+.pcp-guide{padding:16px 18px;background:#f5f7fb;border-bottom:0.5px solid rgba(27,58,107,0.10);}
+.pcp-guide p{font-family:'Nunito',sans-serif;font-size:12.5px;color:#2c3e5a;line-height:1.70;margin-bottom:10px;}
+.pcp-guide p:last-child{margin-bottom:0;}
+.pcp-guide strong{color:#1b3a6b;}
+.pcp-tier{display:flex;gap:10px;padding:8px 10px;background:#fff;border:0.5px solid rgba(27,58,107,0.12);border-radius:6px;align-items:flex-start;margin-top:6px;}
+.pcp-tier-num{font-size:11px;font-weight:600;color:#185FA5;background:rgba(24,95,165,0.10);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.pcp-tier-text{font-family:'Nunito',sans-serif;font-size:12px;color:#2c3e5a;line-height:1.55;}
+
+/* caution bar */
+.pcp-caution{padding:10px 18px;background:rgba(184,117,23,0.07);border-bottom:0.5px solid rgba(184,117,23,0.20);font-family:'Nunito',sans-serif;font-size:12px;color:#7a5500;line-height:1.65;display:flex;gap:8px;align-items:flex-start;}
+
+/* form */
+.pcp-form{padding:16px 18px;}
+.pcp-field{margin-bottom:12px;}
+.pcp-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.10em;text-transform:uppercase;color:#5a6e8a;margin-bottom:4px;display:block;font-weight:500;}
+.pcp-field input,.pcp-field select,.pcp-field textarea{width:100%;font-size:13px;padding:8px 10px;border:0.5px solid rgba(27,58,107,0.18);border-radius:5px;background:#f5f7fb;color:#0e1a2e;outline:none;font-family:'Nunito',sans-serif;}
+.pcp-field input:focus,.pcp-field select:focus,.pcp-field textarea:focus{border-color:#185FA5;background:#fff;}
+.pcp-field textarea{resize:vertical;min-height:130px;font-size:12px;line-height:1.65;font-family:'Libre Baskerville',serif;}
+
+/* dialog actions */
+.pcp-dlg-actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px;border-top:0.5px solid rgba(27,58,107,0.08);}
+.pcp-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 14px;border:0.5px solid rgba(27,58,107,0.18);border-radius:5px;background:transparent;color:#5a6e8a;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:background 0.12s;}
+.pcp-btn:hover{background:#f5f7fb;}
+.pcp-btn-navy{background:#1b3a6b;color:#fff;border-color:#1b3a6b;}
+.pcp-btn-navy:hover{background:#254f92;}
+
+/* toast */
+#pcp-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:#1b3a6b;color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;padding:9px 22px;border-radius:30px;opacity:0;transition:opacity 0.18s,transform 0.18s;pointer-events:none;z-index:10000;}
+#pcp-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<% end %>
+
+<div class="pcp-wrap">
+  <div class="pcp-inner">
+
+    <%# ── CIVIC STATEMENT ── %>
+    <p class="pcp-statement">
+      Philadelphia taxpayers, businesses, hospitals, universities, and schools absorbed this cost — not by choice, but in response to a threat imposed on all of us. Beyond what the city spent locally, Philadelphia sent an estimated $36 billion to Washington as its share of the national counter-terrorism effort. It changed how we move, how we learn, how we treat a patient, and how we see each other.
+    </p>
+
+    <%# ── HIGHLIGHT GRID ── %>
+    <div class="pcp-highlights" aria-label="Philadelphia counter-terrorism spending by sector">
+      <div class="pcp-hl-cell">
+        <div class="pcp-hl-lbl">Transportation — PHL, SEPTA, Amtrak</div>
+        <div class="pcp-hl-val pcp-red">$880M–$1.4B</div>
+        <div class="pcp-hl-note">est. · local spend</div>
+      </div>
+      <div class="pcp-hl-cell">
+        <div class="pcp-hl-lbl">Law enforcement, gear &amp; intel</div>
+        <div class="pcp-hl-val pcp-amber">$150M–$250M</div>
+        <div class="pcp-hl-note">DHS grants + city</div>
+      </div>
+      <div class="pcp-hl-cell">
+        <div class="pcp-hl-lbl">Hospitals &amp; universities</div>
+        <div class="pcp-hl-val pcp-amber">$80M–$200M</div>
+        <div class="pcp-hl-note">bioterrorism prep · HPP grants</div>
+      </div>
+    </div>
+
+    <%# ── SHARE + FOIA STRIP ── %>
+    <div class="pcp-actions">
+      <span class="pcp-share-lbl">Share</span>
+      <button class="pcp-sbtn" onclick="pcpShare('twitter')" aria-label="Share on X / Twitter"><i class="ti ti-brand-x" aria-hidden="true"></i></button>
+      <button class="pcp-sbtn" onclick="pcpShare('facebook')" aria-label="Share on Facebook"><i class="ti ti-brand-facebook" aria-hidden="true"></i></button>
+      <button class="pcp-sbtn" onclick="pcpShare('linkedin')" aria-label="Share on LinkedIn"><i class="ti ti-brand-linkedin" aria-hidden="true"></i></button>
+      <button class="pcp-sbtn" onclick="pcpShare('tiktok')" aria-label="Copy link for TikTok"><i class="ti ti-brand-tiktok" aria-hidden="true"></i></button>
+      <button class="pcp-sbtn" onclick="pcpShare('instagram')" aria-label="Copy link for Instagram"><i class="ti ti-brand-instagram" aria-hidden="true"></i></button>
+      <button class="pcp-copy-btn" onclick="pcpShare('copy')">
+        <i class="ti ti-link" style="font-size:12px" aria-hidden="true"></i> Copy link
+      </button>
+      <button class="pcp-foia-btn"
+              onclick="document.getElementById('pcp-foia-dlg').showModal(); pcpUpdatePreview()">
+        <i class="ti ti-file-description" style="font-size:12px" aria-hidden="true"></i>
+        FOIA jawn
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<%# ── FOIA RIGHT-TO-KNOW MODAL ── %>
+<dialog id="pcp-foia-dlg" aria-labelledby="pcp-foia-title">
+  <div class="pcp-dlg-head">
+    <button class="pcp-dlg-close"
+            onclick="document.getElementById('pcp-foia-dlg').close()"
+            aria-label="Close">✕</button>
+    <div class="pcp-dlg-eyebrow">◆ IJDB · Philadelphia · Right-to-Know</div>
+    <div class="pcp-dlg-title" id="pcp-foia-title">FOIA jawn</div>
+    <div class="pcp-dlg-sub">Requesting public records — a guide</div>
+  </div>
+  <div class="pcp-dlg-body">
+
+    <div class="pcp-guide">
+      <p>
+        <strong>Why this matters.</strong> Most numbers on this page are estimates — because no government has ever published a unified accounting of counter-terrorism costs at the city level. Primary source data requires asking for it directly. That's what a Right-to-Know request does.
+      </p>
+      <p><strong>Not everything requires a FOIA. Try these first:</strong></p>
+      <div class="pcp-tier">
+        <div class="pcp-tier-num">1</div>
+        <div class="pcp-tier-text"><strong>USASpending.gov</strong> — search any Philadelphia agency for DHS grant awards. Free, instant, no request needed.</div>
+      </div>
+      <div class="pcp-tier">
+        <div class="pcp-tier-num">2</div>
+        <div class="pcp-tier-text"><strong>Philadelphia Controller's Office</strong> — publishes annual budgets with department-level spending. Many CT line items are already there.</div>
+      </div>
+      <div class="pcp-tier">
+        <div class="pcp-tier-num">3</div>
+        <div class="pcp-tier-text"><strong>File a Right-to-Know request</strong> — only when the above don't have it. Pennsylvania's RTK Law requires a response within 5 business days. This is a legal right, not a burden.</div>
+      </div>
+    </div>
+
+    <div class="pcp-caution">
+      <i class="ti ti-alert-triangle" style="font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+      <span>File strategically. One well-targeted request on a specific question gets better results than a broad one. FORA tracks filed requests and outcomes so the community builds knowledge, not just paperwork.</span>
+    </div>
+
+    <div class="pcp-form">
+      <div class="pcp-field">
+        <label class="pcp-label" for="pcp-name">Your name</label>
+        <input type="text" id="pcp-name" placeholder="Full name" oninput="pcpUpdatePreview()" autocomplete="name" />
+      </div>
+      <div class="pcp-field">
+        <label class="pcp-label" for="pcp-agency">Target agency</label>
+        <select id="pcp-agency" onchange="pcpUpdatePreview()">
+          <option>City of Philadelphia — Controller's Office</option>
+          <option>Philadelphia Police Department</option>
+          <option>Philadelphia International Airport / Division of Aviation</option>
+          <option>SEPTA — Office of Inspector General</option>
+          <option>Philadelphia School District</option>
+          <option>FBI Philadelphia Field Office (federal FOIA — separate process)</option>
+        </select>
+      </div>
+      <div class="pcp-field">
+        <label class="pcp-label" for="pcp-topic">Specific records</label>
+        <select id="pcp-topic" onchange="pcpUpdatePreview()">
+          <option value="linc">Lincoln Financial Field — security design and installation costs</option>
+          <option value="cameras">Surveillance camera network — procurement and operating costs</option>
+          <option value="arabic">Arabic language and jihad ideology training contracts</option>
+          <option value="tactical">Tactical and riot gear procurement post-9/11</option>
+          <option value="ct-general">All counter-terrorism expenditures 2001–present</option>
+          <option value="jttf">JTTF participation — staffing and costs</option>
+        </select>
+      </div>
+      <div class="pcp-field">
+        <label class="pcp-label" for="pcp-preview">Letter — edit freely before copying</label>
+        <textarea id="pcp-preview" rows="9"></textarea>
+      </div>
+    </div>
+
+    <div class="pcp-dlg-actions">
+      <button class="pcp-btn" onclick="document.getElementById('pcp-foia-dlg').close()">Cancel</button>
+      <button class="pcp-btn" onclick="pcpCopyLetter()">
+        <i class="ti ti-copy" style="font-size:11px" aria-hidden="true"></i> Copy letter
+      </button>
+      <button class="pcp-btn pcp-btn-navy" onclick="pcpEmailLetter()">
+        <i class="ti ti-mail" style="font-size:11px" aria-hidden="true"></i> Open in email
+      </button>
+    </div>
+
+  </div>
+</dialog>
+
+<div id="pcp-toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var TOPICS = {
+    'linc':       'all records related to security design, installation costs, and compliance expenditures at Lincoln Financial Field attributable to post-September 11, 2001 requirements, including contracts, DHS grant funds received, and vendor agreements for perimeter security, bag screening, and command center infrastructure',
+    'cameras':    'all records related to procurement, installation, and operating costs of the surveillance camera network deployed in Philadelphia since September 11, 2001, including vendor contracts, DHS Urban Area Security Initiative grant awards, and annual maintenance costs',
+    'arabic':     'all records related to contracts, training programs, and expenditures for Arabic language instruction and jihad ideology awareness training provided to agency personnel since September 11, 2001',
+    'tactical':   'all records related to procurement of tactical and protective equipment — including anti-slash gear, blast suits, and anti-stabbing equipment — purchased since September 11, 2001 using DHS grants or agency funds',
+    'ct-general': 'all records related to counter-terrorism expenditures incurred by your agency from September 11, 2001 through the present, including budget line items, vendor contracts, DHS grant receipts, equipment procurement, and staffing costs',
+    'jttf':       'all records related to agency participation in the Joint Terrorism Task Force since 2001, including staffing costs, overtime, training expenses, and memoranda of understanding with the FBI'
+  };
+
+  function getLetter() {
+    var name   = (document.getElementById('pcp-name').value || '').trim() || '[Your name]';
+    var agency = document.getElementById('pcp-agency').value;
+    var topic  = document.getElementById('pcp-topic').value;
+    return 'To the Records Officer,\n' + agency +
+      '\n\nPursuant to Pennsylvania\'s Right-to-Know Law (65 P.S. § 67.101 et seq.), I hereby request ' +
+      TOPICS[topic] +
+      '.\n\nI am a Philadelphia resident acting in the public interest. I request a fee waiver on the basis that disclosure serves a significant public benefit and will be made publicly available via fora.center, a nonpartisan civic transparency platform.\n\nPlease respond within five business days as required by law.\n\nSincerely,\n' + name;
+  }
+
+  window.pcpUpdatePreview = function () {
+    var el = document.getElementById('pcp-preview');
+    if (el) el.value = getLetter();
+  };
+
+  window.pcpCopyLetter = function () {
+    var text = (document.getElementById('pcp-preview').value || '').trim() || getLetter();
+    navigator.clipboard.writeText(text).then(function () { pcpToast('Letter copied to clipboard'); });
+  };
+
+  window.pcpEmailLetter = function () {
+    var text = (document.getElementById('pcp-preview').value || '').trim() || getLetter();
+    window.open('mailto:?subject=' + encodeURIComponent('Right-to-Know Request — Counter-Terrorism Expenditure Records') + '&body=' + encodeURIComponent(text));
+  };
+
+  var SHARE_TEXT = 'Philadelphia sent an estimated $36B to Washington as its share of the national jihad tax — and spent another $1.5–2.8B locally. Every hospital, university, stadium, and school in the city changed. @foracenter is tracking it all.';
+  var SHARE_URL  = 'https://fora.center/usa/philadelphia/ijdb';
+
+  window.pcpShare = function (platform) {
+    if      (platform === 'twitter')   window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(SHARE_TEXT) + '&url=' + encodeURIComponent(SHARE_URL));
+    else if (platform === 'facebook')  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SHARE_URL));
+    else if (platform === 'linkedin')  window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(SHARE_URL));
+    else if (platform === 'tiktok')    navigator.clipboard.writeText(SHARE_URL).then(function () { pcpToast('Link copied — paste into TikTok caption'); });
+    else if (platform === 'instagram') navigator.clipboard.writeText(SHARE_URL).then(function () { pcpToast('Link copied — paste into Instagram bio or story'); });
+    else                               navigator.clipboard.writeText(SHARE_URL).then(function () { pcpToast('Link copied'); });
+  };
+
+  function pcpToast(msg) {
+    var t = document.getElementById('pcp-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 2800);
+  }
+  window.pcpToast = pcpToast;
+
+  /* close on backdrop click */
+  document.getElementById('pcp-foia-dlg').addEventListener('click', function (e) {
+    if (e.target === this) this.close();
+  });
+}());
+</script>
