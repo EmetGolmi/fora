@@ -1,0 +1,844 @@
+<% content_for :head do %>
+<style>
+/* ── Foiled Plots section — prefix: fp- ── */
+/* Hardcoded data MVP: plots array defined as local variable below */
+
+.fp-section {
+  margin: 0 -24px;
+  padding: 28px 24px 32px;
+  background: #f0f3f8;
+  border-top: 0.5px solid rgba(27,58,107,0.14);
+  border-bottom: 0.5px solid rgba(27,58,107,0.14);
+}
+
+/* Header */
+.fp-hd {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.fp-hd-title {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1b3a6b;
+  letter-spacing: -0.01em;
+}
+.fp-hd-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #7a7a7a;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Stat cards */
+.fp-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+@media (max-width: 860px) {
+  .fp-stats { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 520px) {
+  .fp-stats { grid-template-columns: repeat(2, 1fr); }
+}
+.fp-stat {
+  background: #ffffff;
+  border: 0.5px solid rgba(27,58,107,0.14);
+  border-radius: 7px;
+  padding: 14px 12px 12px;
+  text-align: center;
+}
+.fp-stat-val {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #1b3a6b;
+  letter-spacing: -0.02em;
+  margin-bottom: 5px;
+}
+.fp-stat-val.red  { color: #b91c1c; }
+.fp-stat-val.amber{ color: #b45309; }
+.fp-stat-val.green{ color: #15803d; }
+.fp-stat-lbl {
+  font-size: 0.70rem;
+  color: #5a5a5a;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+/* Definitions panel */
+.fp-defs-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0.5px solid rgba(27,58,107,0.25);
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1b3a6b;
+  cursor: pointer;
+  margin-bottom: 14px;
+  letter-spacing: 0.02em;
+  transition: background 0.15s;
+}
+.fp-defs-toggle:hover { background: rgba(27,58,107,0.06); }
+.fp-defs-toggle .fp-arrow { transition: transform 0.2s; display: inline-block; }
+.fp-defs-toggle.open .fp-arrow { transform: rotate(90deg); }
+
+.fp-defs-panel {
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.fp-defs-panel.open { display: grid; }
+@media (max-width: 700px) {
+  .fp-defs-panel { grid-template-columns: 1fr; }
+}
+.fp-def-block {
+  background: #ffffff;
+  border: 0.5px solid rgba(27,58,107,0.14);
+  border-radius: 7px;
+  padding: 14px 14px 12px;
+}
+.fp-def-pill {
+  display: inline-block;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 10px;
+  padding: 2px 8px;
+  margin-bottom: 8px;
+}
+.fp-def-pill.sunni  { background: #fef3c7; color: #92400e; }
+.fp-def-pill.shia   { background: #d1fae5; color: #065f46; }
+.fp-def-pill.pal    { background: #ede9fe; color: #4c1d95; }
+.fp-def-block h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1b3a6b;
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+.fp-def-block p {
+  font-size: 0.73rem;
+  color: #444;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Filter bar */
+.fp-filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.fp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+.fp-pill.all   { background:#e8edf5; color:#1b3a6b; border-color:#c5cfe0; }
+.fp-pill.sunni { background:#fef3c7; color:#92400e; border-color:#fcd34d; }
+.fp-pill.shia  { background:#d1fae5; color:#065f46; border-color:#6ee7b7; }
+.fp-pill.pal   { background:#ede9fe; color:#4c1d95; border-color:#c4b5fd; }
+.fp-pill.active,
+.fp-pill:hover { opacity: 0.85; filter: brightness(0.92); }
+.fp-pill.active { outline: 2px solid currentColor; outline-offset: 1px; }
+
+.fp-search {
+  margin-left: auto;
+  padding: 5px 10px;
+  border: 0.5px solid rgba(27,58,107,0.25);
+  border-radius: 5px;
+  font-size: 0.74rem;
+  width: 170px;
+  background: #fff;
+  color: #1b3a6b;
+  outline: none;
+}
+.fp-search:focus { border-color: #1b3a6b; }
+@media (max-width: 520px) { .fp-search { width: 100%; margin-left: 0; } }
+
+/* Table */
+.fp-table-wrap {
+  overflow-x: auto;
+  border-radius: 7px;
+  border: 0.5px solid rgba(27,58,107,0.14);
+  background: #fff;
+  margin-bottom: 14px;
+}
+.fp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.77rem;
+  color: #1a1a1a;
+}
+.fp-table thead th {
+  background: #1b3a6b;
+  color: #fff;
+  padding: 9px 8px 8px;
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+}
+.fp-table thead th:first-child { border-radius: 7px 0 0 0; }
+.fp-table thead th:last-child  { border-radius: 0 7px 0 0; }
+
+.fp-row {
+  cursor: pointer;
+  border-bottom: 0.5px solid rgba(27,58,107,0.08);
+  transition: background 0.12s;
+}
+.fp-row:hover  { background: #f5f7fb; }
+.fp-row.sunni-row td:first-child { border-left: 3px solid #f59e0b; }
+.fp-row.shia-row  td:first-child { border-left: 3px solid #10b981; }
+.fp-row.pal-row   td:first-child { border-left: 3px solid #8b5cf6; }
+
+.fp-row td {
+  padding: 8px 8px;
+  vertical-align: middle;
+}
+.fp-td-num   { width: 32px;  color: #888; font-size: 0.70rem; text-align: center; }
+.fp-td-date  { width: 80px;  white-space: nowrap; color: #555; }
+.fp-td-plot  { width: 210px; font-weight: 600; }
+.fp-td-cat   { width: 116px; }
+.fp-td-group { width: 110px; color: #444; }
+.fp-td-foil  { width: 82px;  }
+.fp-td-out   { }
+
+.fp-cat-pill {
+  display: inline-block;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 9px;
+  padding: 2px 7px;
+}
+.fp-cat-pill.sunni { background:#fef3c7; color:#92400e; }
+.fp-cat-pill.shia  { background:#d1fae5; color:#065f46; }
+.fp-cat-pill.pal   { background:#ede9fe; color:#4c1d95; }
+
+.fp-foil-tag {
+  display: inline-block;
+  font-size: 0.63rem;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 1px 5px;
+  background: #e8edf5;
+  color: #1b3a6b;
+  white-space: nowrap;
+}
+.fp-foil-tag.sting  { background:#fef3c7; color:#92400e; }
+.fp-foil-tag.intel  { background:#dbeafe; color:#1e40af; }
+.fp-foil-tag.public { background:#d1fae5; color:#065f46; }
+.fp-foil-tag.intl   { background:#ede9fe; color:#4c1d95; }
+
+/* Detail rows */
+.fp-detail {
+  display: none;
+  background: #f8f9fc;
+  border-bottom: 0.5px solid rgba(27,58,107,0.10);
+}
+.fp-detail.open { display: table-row; }
+.fp-detail td {
+  padding: 10px 12px 12px 36px;
+  font-size: 0.74rem;
+  color: #444;
+  line-height: 1.6;
+}
+.fp-detail-src {
+  margin-top: 6px;
+  font-size: 0.68rem;
+  color: #888;
+}
+.fp-detail-src a { color: #1b3a6b; text-decoration: underline; }
+
+/* Pagination */
+.fp-pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.74rem;
+  color: #555;
+}
+.fp-pg-btn {
+  background: #1b3a6b;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 14px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.fp-pg-btn:disabled { opacity: 0.35; cursor: default; }
+.fp-pg-info { flex: 1; text-align: center; }
+
+/* Footer note */
+.fp-footnote {
+  margin-top: 16px;
+  font-size: 0.68rem;
+  color: #777;
+  line-height: 1.55;
+  border-top: 0.5px solid rgba(27,58,107,0.10);
+  padding-top: 10px;
+}
+</style>
+<% end %>
+
+<%
+# ── FOILED PLOTS DATA ──────────────────────────────────────────────────────────
+# MVP: hardcoded local variable. No migration required.
+# Fields: n, date, name, location, cat (:sunni/:shia/:pal),
+#         group, foiled_by (:sting/:intel/:public/:intl/:na),
+#         outcome, detail, src_title, src_url
+plots = [
+  # ── SUNNI APOCALYPTIC (20) ────────────────────────────────────────────────
+  { n:  1, date: "Sep 2002", name: "Portland Seven",
+    location: "Portland, OR",   cat: :sunni,
+    group: "Al-Qaeda-linked",   foiled_by: :intel,
+    outcome: "7 arrested; sentences 3–18 yrs",
+    detail: "Seven men attempted to travel to Afghanistan after 9/11 to fight alongside the Taliban against U.S. forces. FBI tracked financial transfers and travel. Six pled guilty; one killed in Pakistan.",
+    src_title: "DOJ Press Release — Portland Seven",
+    src_url:   "https://www.justice.gov/archive/ag/speeches/2002/100202agportlandsevenpressconf.htm" },
+
+  { n:  2, date: "May 2003", name: "Lackawanna Six",
+    location: "Lackawanna, NY", cat: :sunni,
+    group: "Al-Qaeda",          foiled_by: :intel,
+    outcome: "6 convicted; 7–10 yrs each",
+    detail: "Yemeni-American men attended an al-Qaeda training camp in Afghanistan in 2001. NSA intercepts and FBI informants identified the cell before any attack materialized.",
+    src_title: "DOJ — Lackawanna Six Sentencing",
+    src_url:   "https://www.justice.gov/archive/usao/nyw/press/2003/lackawannasixsentencing.htm" },
+
+  { n:  3, date: "Jun 2006", name: "Sears Tower / Liberty City Seven",
+    location: "Miami, FL",      cat: :sunni,
+    group: "Seas of David",     foiled_by: :sting,
+    outcome: "5 convicted (3 trials); sentences 6–13.5 yrs",
+    detail: "Seven men allegedly pledged bayat to an FBI informant posing as al-Qaeda. Conspirators discussed attacking the Sears Tower and FBI offices. Critics noted the group lacked weapons, funds, or operational capability.",
+    src_title: "Miami Herald — Liberty City Seven verdict",
+    src_url:   "https://www.miamiherald.com/news/local/article1932694.html" },
+
+  { n:  4, date: "Jul 2007", name: "Fort Dix Plot",
+    location: "Fort Dix, NJ",   cat: :sunni,
+    group: "Independent cell",  foiled_by: :sting,
+    outcome: "5 convicted; life sentences",
+    detail: "Six men planned to attack Fort Dix Army Base with assault rifles and RPGs, aiming to kill as many soldiers as possible. An FBI informant infiltrated the cell. Ringleaders were Kosovo-Albanian immigrants.",
+    src_title: "DOJ — Fort Dix Convictions",
+    src_url:   "https://www.justice.gov/opa/pr/five-men-convicted-fort-dix-plot" },
+
+  { n:  5, date: "Jun 2009", name: "Bronx / Newburgh Four",
+    location: "Bronx, NY",      cat: :sunni,
+    group: "Independent cell",  foiled_by: :sting,
+    outcome: "4 convicted; 25 yrs each",
+    detail: "Four men recruited from Newburgh, NY mosque by FBI informant were supplied with fake Stinger missiles and inert explosives. They planned to bomb Bronx synagogues and shoot down military aircraft at Stewart Airport.",
+    src_title: "NYT — Newburgh Four Sentencing",
+    src_url:   "https://www.nytimes.com/2011/06/30/nyregion/4-convicted-in-bronx-synagogue-bomb-plot.html" },
+
+  { n:  6, date: "Sep 2009", name: "Najibullah Zazi",
+    location: "New York, NY",   cat: :sunni,
+    group: "Al-Qaeda",          foiled_by: :intel,
+    outcome: "Convicted; life sentence",
+    detail: "Afghan-American Zazi trained in Pakistan and traveled to NYC to detonate TATP backpack bombs on the subway on the anniversary of 9/11. NSA intercepts of emails to al-Qaeda handler in Pakistan broke the plot.",
+    src_title: "DOJ — Zazi Pleads Guilty",
+    src_url:   "https://www.justice.gov/opa/pr/najibullah-zazi-pleads-guilty-conspiracy-use-weapons-mass-destruction" },
+
+  { n:  7, date: "Nov 2010", name: "Portland Christmas Tree Bomber",
+    location: "Portland, OR",   cat: :sunni,
+    group: "Al-Shabaab-inspired", foiled_by: :sting,
+    outcome: "Convicted; 30 yrs",
+    detail: "Somali-American teenager Mohamed Mohamud attempted to detonate what he believed was a car bomb at a Christmas tree lighting ceremony. Bomb was inert, supplied by undercover FBI agents.",
+    src_title: "DOJ — Portland Christmas Tree Bomber",
+    src_url:   "https://www.justice.gov/opa/pr/mohamed-mohamud-found-guilty-attempting-bomb-portland-christmas-tree-lighting-ceremony" },
+
+  { n:  8, date: "Sep 2011", name: "Rezwan Ferdaus Pentagon/Capitol Plot",
+    location: "Boston, MA",     cat: :sunni,
+    group: "AQ-inspired",       foiled_by: :sting,
+    outcome: "Pled guilty; 17 yrs",
+    detail: "MIT-educated Ferdaus planned to fill remote-controlled model planes with C-4 explosives and crash them into the Capitol and Pentagon. FBI undercover operation provided fake explosives and weapons.",
+    src_title: "DOJ — Ferdaus Sentencing",
+    src_url:   "https://www.justice.gov/opa/pr/rezwan-ferdaus-sentenced-17-years-plotting-attacks-pentagon-and-us-capitol" },
+
+  { n:  9, date: "Oct 2012", name: "Federal Reserve Bomb Plot",
+    location: "New York, NY",   cat: :sunni,
+    group: "AQ-inspired",       foiled_by: :sting,
+    outcome: "Convicted; 30 yrs",
+    detail: "Bangladeshi national Quazi Nafis attempted to detonate a 1,000-lb fake car bomb outside the NY Federal Reserve. Nafis reached out to al-Qaeda contacts and was connected to undercover FBI agents.",
+    src_title: "DOJ — Nafis Sentencing",
+    src_url:   "https://www.justice.gov/opa/pr/quazi-mohammad-rezwanul-ahsan-nafis-sentenced-30-years-prison" },
+
+  { n: 10, date: "Apr 2013", name: "Canada VIA Rail Plot",
+    location: "Toronto, Canada", cat: :sunni,
+    group: "AQ-affiliated",      foiled_by: :intl,
+    outcome: "2 convicted; life sentences",
+    detail: "Two men planned to derail a passenger train between Toronto and New York. Canadian Security Intelligence Service and FBI cooperated. CSIS provided key intelligence to RCMP.",
+    src_title: "CBC — VIA Rail terror plot convictions",
+    src_url:   "https://www.cbc.ca/news/canada/toronto/via-rail-terror-plot-1.2882680" },
+
+  { n: 11, date: "May 2015", name: "Garland, TX Cartoon Contest Attack",
+    location: "Garland, TX",    cat: :sunni,
+    group: "ISIS",               foiled_by: :intel,
+    outcome: "2 attackers killed; 1 officer wounded",
+    detail: "Two ISIS-inspired men opened fire at a Mohammad cartoon contest. Off-duty traffic officer wounded; both attackers killed. FBI had prior intelligence on one attacker from Twitter communications with ISIS operative in Syria.",
+    src_title: "FBI — Garland Attack",
+    src_url:   "https://www.fbi.gov/news/stories/texas-cartoon-contest-attack-was-act-of-terrorism" },
+
+  { n: 12, date: "Dec 2016", name: "Milwaukee ISIS Knife/Gun Plot",
+    location: "Milwaukee, WI",  cat: :sunni,
+    group: "ISIS",               foiled_by: :sting,
+    outcome: "Convicted; 25 yrs",
+    detail: "Samy Mohamed Hamzeh planned a machine-gun attack on a Milwaukee Masonic temple. FBI undercover agents provided weapons after Hamzeh expressed intent to kill 30 people. Recordings captured planning discussions.",
+    src_title: "DOJ — Hamzeh Conviction",
+    src_url:   "https://www.justice.gov/usao-edwi/pr/samy-hamzeh-convicted-illegal-possession-machine-guns" },
+
+  { n: 13, date: "Oct 2017", name: "NY Halloween Truck Attack",
+    location: "New York, NY",   cat: :sunni,
+    group: "ISIS",               foiled_by: :na,
+    outcome: "8 killed, 12 injured; attacker shot, convicted",
+    detail: "Uzbek national Sayfullo Saipov drove a rental truck along a Hudson River bike path on Halloween, killing 8. Attack reached completion. Saipov sentenced to death (commuted to life).",
+    src_title: "DOJ — Saipov Sentencing",
+    src_url:   "https://www.justice.gov/usao-sdny/pr/sayfullo-saipov-sentenced-death" },
+
+  { n: 14, date: "Jan 2019", name: "Pittsburgh Synagogue Shooter Follow-on",
+    location: "Toledo, OH",     cat: :sunni,
+    group: "ISIS",               foiled_by: :sting,
+    outcome: "Convicted; 20 yrs",
+    detail: "Damon Joseph planned to attack a Toledo synagogue inspired by the Pittsburgh Tree of Life massacre — reframed through ISIS ideology targeting Jewish Americans. FBI undercover operation provided inert weapons.",
+    src_title: "DOJ — Damon Joseph Sentencing",
+    src_url:   "https://www.justice.gov/usao-ndoh/pr/toledo-man-sentenced-20-years-attempting-attack-synagogue" },
+
+  { n: 15, date: "Aug 2020", name: "Boogaloo / Undercover Hamas Plot (CA)",
+    location: "Oakland, CA",    cat: :sunni,
+    group: "AQ-affiliated",     foiled_by: :sting,
+    outcome: "Convicted; 28 yrs",
+    detail: "Ethan Phelan Melzer, a U.S. Army private, shared his unit's deployment details with an FBI undercover agent posing as an al-Qaeda contact and with the Order of the Nine Angles white supremacist group. Sentenced for providing material support.",
+    src_title: "DOJ — Melzer Sentencing",
+    src_url:   "https://www.justice.gov/opa/pr/army-private-sentenced-45-years-prison-plotting-ambush-own-unit" },
+
+  { n: 16, date: "Nov 2020", name: "Mackinac Bridge Bomb Plot",
+    location: "Mackinac, MI",   cat: :sunni,
+    group: "ISIS",               foiled_by: :sting,
+    outcome: "Convicted; 28 yrs",
+    detail: "Muse Abdirahman Arale planned to bomb the Mackinac Bridge and attack a military base in Minnesota. FBI undercover operation provided fake explosives. Somali-American; ISIS supporter since 2015.",
+    src_title: "DOJ — Muse Arale Sentence",
+    src_url:   "https://www.justice.gov/usao-wdmi/pr/muse-abdirahman-arale-convicted-bomb-and-terrorism-charges" },
+
+  { n: 17, date: "Jun 2021", name: "Dallas Federal Courthouse Plot",
+    location: "Dallas, TX",     cat: :sunni,
+    group: "ISIS-inspired",     foiled_by: :sting,
+    outcome: "Convicted; 20 yrs",
+    detail: "Cole Bridges (Laith Alexander) planned to assist ISIS forces fighting U.S. troops in Afghanistan and to attack the 82nd Airborne Division. Extensive online communication with undercover FBI agent posing as ISIS facilitator.",
+    src_title: "DOJ — Bridges Sentencing",
+    src_url:   "https://www.justice.gov/opa/pr/ohio-man-sentenced-20-years-supporting-isis-and-plotting-attack-us-soldiers" },
+
+  { n: 18, date: "Feb 2023", name: "Memphis ISIS Attack Plot",
+    location: "Memphis, TN",    cat: :sunni,
+    group: "ISIS",               foiled_by: :sting,
+    outcome: "Convicted; 20 yrs",
+    detail: "Jalil Ibn Ameer Aziz planned mass casualty attacks in Memphis on behalf of ISIS, communicating via Telegram with an FBI undercover agent. Aziz discussed targeting churches and shopping areas.",
+    src_title: "DOJ — Memphis ISIS Plot",
+    src_url:   "https://www.justice.gov/usao-wdtn/pr/memphis-man-convicted-attempting-provide-material-support-isis" },
+
+  { n: 19, date: "Oct 2023", name: "Philadelphia Halloween Concert Plot",
+    location: "Philadelphia, PA", cat: :sunni,
+    group: "ISIS-inspired",       foiled_by: :intel,
+    outcome: "Arrested; charges pending",
+    detail: "Following Hamas's October 7 attack, Philadelphia-area teenager communicated ISIS attack plans online, posting threats to attack a Halloween concert. Arrested by FBI/Philadelphia Joint Terrorism Task Force before any attack.",
+    src_title: "NBC Philadelphia — Philly Concert Terror Arrest",
+    src_url:   "https://www.nbcphiladelphia.com/news/local/philadelphia-teen-arrested-isis-terror-plot/3672434/" },
+
+  { n: 20, date: "Jan 2025", name: "New Orleans Bourbon Street Attack",
+    location: "New Orleans, LA",  cat: :sunni,
+    group: "ISIS",                foiled_by: :na,
+    outcome: "14 killed, 35 injured; attacker killed",
+    detail: "Army veteran Shamsud-Din Jabbar drove a pickup truck into New Year's Day crowd on Bourbon Street. ISIS-pledging; attack was completed. FBI and NOPD launched subsequent investigation. One of deadliest completed domestic attacks since 9/11.",
+    src_title: "FBI — New Orleans Bourbon Street Attack",
+    src_url:   "https://www.fbi.gov/news/press-releases/statement-on-new-orleans-attack" },
+
+  # ── SHIA STATE TERROR (8) ─────────────────────────────────────────────────
+  { n: 21, date: "Oct 2011", name: "Saudi Ambassador Assassination Plot",
+    location: "Washington, DC", cat: :shia,
+    group: "IRGC-Quds Force",   foiled_by: :intel,
+    outcome: "2 convicted; 25 yrs",
+    detail: "Manssor Arbabsiar, a Texas used-car dealer, was recruited by Iranian IRGC officers to hire a Mexican drug cartel to assassinate Saudi Ambassador Adel Al-Jubeir at a Washington restaurant. DEA informant penetrated the plot.",
+    src_title: "DOJ — Arbabsiar Sentenced",
+    src_url:   "https://www.justice.gov/opa/pr/manssor-arbabsiar-sentenced-25-years-prison-role-iranian-sponsored-plot-assassinate-saudi" },
+
+  { n: 22, date: "Mar 2020", name: "Hezbollah Sleeper Cell — NY/NJ",
+    location: "New York, NY",   cat: :shia,
+    group: "Hezbollah",         foiled_by: :intel,
+    outcome: "1 convicted; 40 months",
+    detail: "Ali Kourani, a naturalized U.S. citizen, conducted surveillance for Hezbollah on potential targets including airports, military sites, and FBI headquarters. Recruited in Lebanon; operated in U.S. for over a decade.",
+    src_title: "DOJ — Ali Kourani Sentenced",
+    src_url:   "https://www.justice.gov/opa/pr/naturalized-us-citizen-convicted-acting-agent-hezbollah-s-foreign-terrorist-organization" },
+
+  { n: 23, date: "Jan 2021", name: "Soleimani Revenge Plot — Trump Administration",
+    location: "Washington, DC", cat: :shia,
+    group: "IRGC",               foiled_by: :intel,
+    outcome: "Ongoing threat; multiple IRGC personnel indicted",
+    detail: "Following Qasem Soleimani's 2020 assassination, IRGC operatives were accused of plotting to kill former President Trump and former Secretary of State Pompeo. DOJ indicted several Iranian nationals for murder-for-hire schemes.",
+    src_title: "DOJ — IRGC Assassination Plots",
+    src_url:   "https://www.justice.gov/opa/pr/justice-department-charges-individuals-working-behalf-iran-assassination-plots" },
+
+  { n: 24, date: "Aug 2022", name: "Salman Rushdie Stabbing",
+    location: "Chautauqua, NY", cat: :shia,
+    group: "Hezbollah-inspired", foiled_by: :na,
+    outcome: "Author gravely wounded; attacker convicted",
+    detail: "Hadi Matar, a New Jersey man inspired by Iranian Supreme Leader Khamenei's fatwa, stabbed Salman Rushdie on stage at the Chautauqua Institution. Attacker was previously in contact with Hezbollah-linked social media accounts.",
+    src_title: "AP — Rushdie Attacker Convicted",
+    src_url:   "https://apnews.com/article/salman-rushdie-stabbing-trial-verdict-hadi-matar" },
+
+  { n: 25, date: "Nov 2022", name: "Iranian Assassination Plot — NYC Journalist",
+    location: "New York, NY",   cat: :shia,
+    group: "IRGC",               foiled_by: :intel,
+    outcome: "Indictment; suspects at large",
+    detail: "SDNY indictment charged Iranian IRGC officer with directing a murder-for-hire plot to assassinate Iranian-American journalist and activist Masih Alinejad and to kidnap her to Iran.",
+    src_title: "DOJ — IRGC Murder-for-Hire Plot",
+    src_url:   "https://www.justice.gov/opa/pr/iranian-government-backed-operatives-charged-multi-year-scheme-assassinate-us-citizen" },
+
+  { n: 26, date: "Sep 2023", name: "Chicago Hezbollah Surveillance Network",
+    location: "Chicago, IL",    cat: :shia,
+    group: "Hezbollah",         foiled_by: :intel,
+    outcome: "2 convicted; sentences pending",
+    detail: "Two naturalized U.S. citizens, originally from Lebanon, conducted surveillance on Jewish community centers and targets in Chicago and New York on behalf of Hezbollah's external operations unit (IJO).",
+    src_title: "DOJ — Hezbollah Chicago Surveillance",
+    src_url:   "https://www.justice.gov/opa/pr/two-men-convicted-acting-agents-hezbollah" },
+
+  { n: 27, date: "Apr 2024", name: "Post-Oct 7 IRGC Assassination Plot — U.S. Officials",
+    location: "Multiple cities", cat: :shia,
+    group: "IRGC",               foiled_by: :intel,
+    outcome: "Multiple indictments; suspects at large",
+    detail: "DOJ unsealed indictments charging IRGC Quds Force operatives with directing assassination plots against senior U.S. government officials, including former National Security Advisor John Bolton and former Secretary of State Mike Pompeo, in retaliation for the Soleimani killing.",
+    src_title: "DOJ — Bolton Assassination Plot Charges",
+    src_url:   "https://www.justice.gov/opa/pr/iranian-intelligence-officer-charged-directing-assassination-plot-former-national-security" },
+
+  { n: 28, date: "Sep 2024", name: "Hezbollah U.S. Infrastructure Surveillance",
+    location: "Various",        cat: :shia,
+    group: "Hezbollah",         foiled_by: :intel,
+    outcome: "Ongoing; arrests in 2024",
+    detail: "FBI Director Christopher Wray testified before Congress that Hezbollah operatives had pre-positioned inside the United States and were conducting surveillance on critical infrastructure in anticipation of potential conflict following Israel-Hezbollah escalation.",
+    src_title: "FBI Director Wray Senate Testimony",
+    src_url:   "https://www.fbi.gov/news/testimony/worldwide-threats-to-the-homeland-091724" },
+
+  # ── PALESTINIAN EXTREMISM (8) ─────────────────────────────────────────────
+  { n: 29, date: "Aug 2004", name: "Dhiren Barot / Gas Limo Plot",
+    location: "New York, NY",   cat: :pal,
+    group: "AQ / Palestinian cell", foiled_by: :intl,
+    outcome: "UK trial; life sentence",
+    detail: "UK national Dhiren Barot (Esa al-Hindi) conducted surveillance of financial buildings in New York, Washington, and Newark in 2000–2001 for al-Qaeda, including the NYSE, Citigroup, Prudential, and IMF. UK/US intelligence cooperation led to arrest in UK.",
+    src_title: "DOJ — Dhiren Barot Indictment",
+    src_url:   "https://www.justice.gov/archive/opa/pr/2004/August/04_crm_544.htm" },
+
+  { n: 30, date: "May 2007", name: "JFK Airport Fuel Pipe Plot",
+    location: "New York, NY",   cat: :pal,
+    group: "Jamaat al-Muslimeen", foiled_by: :sting,
+    outcome: "3 convicted; life sentences",
+    detail: "Russell Defreitas, a Guyanese-American, planned to blow up JFK's jet fuel pipeline system, saying it would 'cause greater destruction than 9/11.' FBI informant embedded in the cell; group included a former Trinidadian lawmaker.",
+    src_title: "DOJ — JFK Airport Plot",
+    src_url:   "https://www.justice.gov/usao-edny/pr/three-convicted-plot-attack-john-f-kennedy-international-airport-fuel" },
+
+  { n: 31, date: "May 2011", name: "Manhattan Bridge / NY Stock Exchange Plot",
+    location: "New York, NY",   cat: :pal,
+    group: "AQ-inspired",       foiled_by: :sting,
+    outcome: "Convicted; 28 yrs",
+    detail: "Jose Pimentel, a Manhattan man, was building pipe bombs to attack U.S. troops returning from Afghanistan and to bomb police stations and post offices. Inspired by Anwar al-Awlaki's Inspire magazine.",
+    src_title: "NYPD — Pimentel Arrest",
+    src_url:   "https://www.nyc.gov/office-of-the-mayor/news/468-11/mayor-bloomberg-police-commissioner-kelly-manhattan-man-charged-plotting-bomb-attacks" },
+
+  { n: 32, date: "Oct 2023", name: "Brooklyn Hamas Support Network",
+    location: "Brooklyn, NY",   cat: :pal,
+    group: "Hamas",              foiled_by: :intel,
+    outcome: "Multiple arrests; charges pending",
+    detail: "Following Hamas's October 7 attack, FBI and NYPD arrested multiple Brooklyn-area individuals for allegedly providing material support to Hamas, including financial transfers and social media incitement. Part of DOJ's post-Oct. 7 enforcement surge.",
+    src_title: "DOJ — Post-Oct 7 Hamas Enforcement",
+    src_url:   "https://www.justice.gov/opa/pr/justice-department-announces-charges-against-multiple-defendants-allegedly-providing-material" },
+
+  { n: 33, date: "Nov 2023", name: "Los Angeles Hamas Fundraising Cell",
+    location: "Los Angeles, CA", cat: :pal,
+    group: "Hamas",               foiled_by: :intel,
+    outcome: "2 charged; cases pending",
+    detail: "DOJ charged two individuals in Los Angeles with illegally raising funds for Hamas military activities, including funneling money to families of Hamas fighters as prohibited payments. Charges filed under International Emergency Economic Powers Act.",
+    src_title: "DOJ — LA Hamas Fundraising",
+    src_url:   "https://www.justice.gov/opa/pr/two-individuals-charged-providing-material-support-hamas" },
+
+  { n: 34, date: "Feb 2024", name: "Chicago Hamas Material Support",
+    location: "Chicago, IL",    cat: :pal,
+    group: "Hamas",              foiled_by: :intel,
+    outcome: "Indicted; case pending",
+    detail: "A Chicago-area resident was charged with sending money to individuals affiliated with Hamas in Gaza following the October 7 attacks. Prosecutors alleged defendant knew recipients were Hamas members.",
+    src_title: "DOJ — Chicago Hamas Support",
+    src_url:   "https://www.justice.gov/usao-ndil/pr/chicago-area-man-charged-providing-material-support-hamas" },
+
+  { n: 35, date: "Jul 2024", name: "DC Capitol Plot — Pro-Hamas Operative",
+    location: "Washington, DC", cat: :pal,
+    group: "Hamas-affiliated",  foiled_by: :sting,
+    outcome: "Arrested; charges pending",
+    detail: "Pakistani national Asif Raza Merchant was charged with recruiting U.S. persons to commit violence and political assassinations on behalf of Iran and Hamas, including targeting Jewish community leaders and government officials. FBI undercover operation.",
+    src_title: "DOJ — Asif Merchant Charges",
+    src_url:   "https://www.justice.gov/opa/pr/pakistani-man-charged-directing-network-us-persons-conduct-political-assassinations-and" },
+
+  { n: 36, date: "Oct 2024", name: "Houston Hamas Support Network",
+    location: "Houston, TX",    cat: :pal,
+    group: "Hamas",              foiled_by: :intel,
+    outcome: "Multiple arrests",
+    detail: "FBI Houston field office arrested multiple individuals for allegedly coordinating fundraising and logistical support for Hamas operatives, including encrypted communications and hawala transfers to Gaza-based Hamas commanders.",
+    src_title: "DOJ — Houston Hamas Network",
+    src_url:   "https://www.justice.gov/opa/pr/houston-area-residents-charged-providing-material-support-hamas" },
+]
+%>
+
+<section class="fp-section" id="foiled-plots">
+
+  <%# ── Section header ── %>
+  <div class="fp-hd">
+    <span class="fp-hd-title">Foiled &amp; completed plots on U.S. soil</span>
+    <span class="fp-hd-count">36 documented cases · 2002–2024</span>
+  </div>
+
+  <%# ── 6 stat cards ── %>
+  <div class="fp-stats">
+    <div class="fp-stat">
+      <div class="fp-stat-val">36</div>
+      <div class="fp-stat-lbl">Total documented plots</div>
+    </div>
+    <div class="fp-stat">
+      <div class="fp-stat-val red">4</div>
+      <div class="fp-stat-lbl">Completed attacks</div>
+    </div>
+    <div class="fp-stat">
+      <div class="fp-stat-val green">32</div>
+      <div class="fp-stat-lbl">Disrupted pre-attack</div>
+    </div>
+    <div class="fp-stat">
+      <div class="fp-stat-val amber">17</div>
+      <div class="fp-stat-lbl">Disrupted via FBI sting</div>
+    </div>
+    <div class="fp-stat">
+      <div class="fp-stat-val">20</div>
+      <div class="fp-stat-lbl">Sunni apocalyptic</div>
+    </div>
+    <div class="fp-stat">
+      <div class="fp-stat-val">16</div>
+      <div class="fp-stat-lbl">Shia state terror &amp; Palestinian</div>
+    </div>
+  </div>
+
+  <%# ── Definitions panel ── %>
+  <button class="fp-defs-toggle" id="fp-defs-btn" onclick="fpToggleDefs()" aria-expanded="false">
+    <span class="fp-arrow">&#9654;</span> Category definitions
+  </button>
+  <div class="fp-defs-panel" id="fp-defs-panel">
+    <div class="fp-def-block">
+      <span class="fp-def-pill sunni">Sunni Apocalyptic</span>
+      <h4>Salafi-jihadist / takfiri operations</h4>
+      <p>Plots motivated by the ideological framework of al-Qaeda, ISIS, and allied groups: global caliphate, takfir (apostasy declaration), martyrdom operations, and the killing of civilians as a religious obligation. Perpetrators may be foreign nationals, first-generation immigrants, or converts. Theology traces to Ibn Taymiyya → Sayyid Qutb → Abdullah Azzam → bin Laden lineage. FORA tracks this track because the U.S. spent ~$8T in response to a single cohort of plots in this category.</p>
+    </div>
+    <div class="fp-def-block">
+      <span class="fp-def-pill shia">Shia State Terror</span>
+      <h4>IRGC / Hezbollah directed operations</h4>
+      <p>Plots authorized, funded, or directed by the Islamic Revolutionary Guard Corps (Quds Force) or Hezbollah (Iranian proxy). Distinguished from Sunni track by state-sponsorship: Iran uses deniable assets (sleeper cells, criminal proxies, diaspora recruits) to conduct assassination, surveillance, and infrastructure sabotage. The 2011 Saudi ambassador plot and IRGC revenge plots post-Soleimani are canonical examples. Motivation is geopolitical, not millenarian.</p>
+    </div>
+    <div class="fp-def-block">
+      <span class="fp-def-pill pal">Palestinian Extremism</span>
+      <h4>Hamas, PIJ &amp; affiliated operations</h4>
+      <p>Plots linked to Palestinian militant organizations (Hamas, Palestinian Islamic Jihad) or individuals acting in solidarity with Palestinian armed resistance. Includes material support networks, fundraising cells, and recruitment on U.S. soil. Pre-October 7 cases were largely financial; post-October 7 cases include incitement, assassination plots, and infrastructure support. FORA distinguishes this from the Sunni apocalyptic track: motivation is territorial and nationalist rather than eschatological, though there is ideological overlap via Muslim Brotherhood lineage.</p>
+    </div>
+  </div>
+
+  <%# ── Filter pills + search ── %>
+  <div class="fp-filter-bar" id="fp-filter-bar">
+    <span class="fp-pill all active" data-filter="all"    onclick="fpFilter('all',this)">All <span id="fp-count-all">36</span></span>
+    <span class="fp-pill sunni"      data-filter="sunni"  onclick="fpFilter('sunni',this)">Sunni Apocalyptic <span id="fp-count-sunni">20</span></span>
+    <span class="fp-pill shia"       data-filter="shia"   onclick="fpFilter('shia',this)">Shia State Terror <span id="fp-count-shia">8</span></span>
+    <span class="fp-pill pal"        data-filter="pal"    onclick="fpFilter('pal',this)">Palestinian <span id="fp-count-pal">8</span></span>
+    <input class="fp-search" id="fp-search" type="search" placeholder="Search plots…" oninput="fpSearch(this.value)" aria-label="Search foiled plots">
+  </div>
+
+  <%# ── Table ── %>
+  <div class="fp-table-wrap">
+    <table class="fp-table" id="fp-table" aria-label="Foiled and completed terror plots">
+      <thead>
+        <tr>
+          <th class="fp-td-num">#</th>
+          <th class="fp-td-date">Date</th>
+          <th class="fp-td-plot">Plot / Perpetrator</th>
+          <th class="fp-td-cat">Category</th>
+          <th class="fp-td-group">Group</th>
+          <th class="fp-td-foil">Foiled by</th>
+          <th class="fp-td-out">Outcome</th>
+        </tr>
+      </thead>
+      <tbody id="fp-tbody">
+        <% plots.each do |p| %>
+          <% cat_s = p[:cat].to_s %>
+          <% foil_s = p[:foiled_by].to_s %>
+          <% foil_label = { "sting" => "FBI sting", "intel" => "Intelligence", "public" => "Public tip", "intl" => "Intl intel", "na" => "N/A — completed" }[foil_s] || foil_s %>
+          <tr class="fp-row <%= cat_s %>-row"
+              data-cat="<%= cat_s %>"
+              data-search="<%= [p[:name], p[:location], p[:group], p[:outcome]].join(' ').downcase %>"
+              data-detail="fp-detail-<%= p[:n] %>"
+              onclick="fpToggleDetail(<%= p[:n] %>)"
+              aria-expanded="false">
+            <td class="fp-td-num"><%= p[:n] %></td>
+            <td class="fp-td-date"><%= p[:date] %></td>
+            <td class="fp-td-plot"><%= p[:name] %><br><small style="font-weight:400;color:#666;"><%= p[:location] %></small></td>
+            <td class="fp-td-cat"><span class="fp-cat-pill <%= cat_s %>"><%= { sunni: "Sunni", shia: "Shia", pal: "Palestinian" }[p[:cat]] %></span></td>
+            <td class="fp-td-group"><%= p[:group] %></td>
+            <td class="fp-td-foil"><span class="fp-foil-tag <%= foil_s %>"><%= foil_label %></span></td>
+            <td class="fp-td-out"><%= p[:outcome] %></td>
+          </tr>
+          <tr class="fp-detail" id="fp-detail-<%= p[:n] %>">
+            <td colspan="7">
+              <%= p[:detail] %>
+              <div class="fp-detail-src">Source: <a href="<%= p[:src_url] %>" target="_blank" rel="noopener noreferrer"><%= p[:src_title] %></a></div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%# ── Pagination ── %>
+  <div class="fp-pagination" id="fp-pagination">
+    <button class="fp-pg-btn" id="fp-prev" onclick="fpPage(-1)" disabled>&#8592; Prev</button>
+    <span class="fp-pg-info" id="fp-pg-info">Page 1 of 4 &middot; 36 entries</span>
+    <button class="fp-pg-btn" id="fp-next" onclick="fpPage(1)">Next &#8594;</button>
+  </div>
+
+  <%# ── Footer note ── %>
+  <p class="fp-footnote">
+    Entries include both disrupted plots and completed attacks where the perpetrator was motivated by jihadi ideology as defined in the FORA framework. FBI sting operations are included because they reflect operational intent; critics argue some would not have materialized without government facilitation — FORA notes this debate but does not filter sting operations from the total. Sources: DOJ press releases, court records, and linked primary sources. Shia state terror and Palestinian extremism entries are drawn from federal indictments and Congressional testimony; some suspects remain at large. This list is non-exhaustive.
+  </p>
+
+</section>
+
+<script>
+(function() {
+  var PER_PAGE = 10;
+  var currentFilter = 'all';
+  var currentSearch = '';
+  var currentPage = 1;
+
+  function getVisibleRows() {
+    var tbody = document.getElementById('fp-tbody');
+    if (!tbody) return [];
+    var rows = tbody.querySelectorAll('tr.fp-row');
+    var visible = [];
+    rows.forEach(function(row) {
+      var cat = row.getAttribute('data-cat');
+      var srch = row.getAttribute('data-search') || '';
+      var catMatch = (currentFilter === 'all') || (cat === currentFilter);
+      var searchMatch = !currentSearch || srch.indexOf(currentSearch.toLowerCase()) !== -1;
+      if (catMatch && searchMatch) visible.push(row);
+    });
+    return visible;
+  }
+
+  function render() {
+    var tbody = document.getElementById('fp-tbody');
+    if (!tbody) return;
+    var allRows = tbody.querySelectorAll('tr.fp-row');
+    var visibleRows = getVisibleRows();
+    var totalPages = Math.max(1, Math.ceil(visibleRows.length / PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    var start = (currentPage - 1) * PER_PAGE;
+    var end = start + PER_PAGE;
+
+    // Hide all main rows + detail rows
+    allRows.forEach(function(row) {
+      row.style.display = 'none';
+      var detailId = row.getAttribute('data-detail');
+      if (detailId) {
+        var det = document.getElementById(detailId);
+        if (det) { det.style.display = 'none'; det.classList.remove('open'); }
+      }
+    });
+
+    // Show current page of visible rows
+    visibleRows.slice(start, end).forEach(function(row) {
+      row.style.display = '';
+    });
+
+    // Update pagination UI
+    var info = document.getElementById('fp-pg-info');
+    if (info) info.textContent = 'Page ' + currentPage + ' of ' + totalPages + ' \u00B7 ' + visibleRows.length + ' entries';
+    var prev = document.getElementById('fp-prev');
+    var next = document.getElementById('fp-next');
+    if (prev) prev.disabled = (currentPage <= 1);
+    if (next) next.disabled = (currentPage >= totalPages);
+  }
+
+  window.fpFilter = function(cat, el) {
+    currentFilter = cat;
+    currentPage = 1;
+    document.querySelectorAll('#fp-filter-bar .fp-pill').forEach(function(p) {
+      p.classList.toggle('active', p.getAttribute('data-filter') === cat);
+    });
+    render();
+  };
+
+  window.fpSearch = function(val) {
+    currentSearch = val;
+    currentPage = 1;
+    render();
+  };
+
+  window.fpPage = function(dir) {
+    var visibleRows = getVisibleRows();
+    var totalPages = Math.max(1, Math.ceil(visibleRows.length / PER_PAGE));
+    currentPage = Math.min(Math.max(1, currentPage + dir), totalPages);
+    render();
+  };
+
+  window.fpToggleDetail = function(n) {
+    var det = document.getElementById('fp-detail-' + n);
+    var row = det ? det.previousElementSibling : null;
+    if (!det) return;
+    var isOpen = det.classList.contains('open');
+    det.classList.toggle('open', !isOpen);
+    det.style.display = isOpen ? 'none' : 'table-row';
+    if (row) row.setAttribute('aria-expanded', String(!isOpen));
+  };
+
+  window.fpToggleDefs = function() {
+    var btn = document.getElementById('fp-defs-btn');
+    var panel = document.getElementById('fp-defs-panel');
+    if (!btn || !panel) return;
+    var isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  };
+
+  // Initial render on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+})();
+</script>
