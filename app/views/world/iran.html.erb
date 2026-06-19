@@ -21,6 +21,8 @@
 }
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
 a{text-decoration:none;color:inherit;}
+.plain-summary a,.nh-lead a,.nge-desc a,.cb-text a{color:var(--blue);border-bottom:1px solid rgba(27,58,107,0.3);}
+.plain-summary a:hover,.nh-lead a:hover{border-bottom-color:var(--blue);}
 
 /* NAV */
 .nav{background:var(--blue);border-bottom:4px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
@@ -162,6 +164,22 @@ a{text-decoration:none;color:inherit;}
 .nge-rel.red{background:var(--red-p);color:var(--red);border-color:var(--red-r);}
 .nge-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
 
+/* ── TERM TOOLTIPS / MODALS ── */
+.term{border-bottom:1px dotted currentColor;cursor:help;position:relative;}
+@media(hover:hover)and(pointer:fine){
+  .term::after{content:attr(data-def);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.92);font-family:'Source Serif 4',serif;font-size:11.5px;font-style:normal;font-weight:400;line-height:1.65;padding:10px 14px;border-radius:7px;border:1px solid rgba(184,134,11,0.3);max-width:280px;width:max-content;white-space:normal;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,0.35);}
+  .term:hover::after{opacity:1;}
+}
+#term-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;}
+.tm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);}
+.tm-box{position:relative;background:#fff;border-radius:14px 14px 0 0;padding:22px 20px 36px;width:100%;max-height:65vh;overflow-y:auto;box-shadow:0 -4px 32px rgba(0,0,0,0.25);}
+.tm-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#0e1a2e;margin-bottom:10px;}
+.tm-def{font-family:'Source Serif 4',serif;font-size:14px;color:#4a5568;line-height:1.75;}
+.tm-close{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;border-radius:6px;border:1px solid rgba(27,58,107,0.2);background:transparent;color:#1b3a6b;cursor:pointer;display:block;}
+
+/* PLAIN SUMMARY */
+.plain-summary{background:rgba(27,58,107,0.05);border:1px solid rgba(27,58,107,0.15);border-radius:8px;padding:14px 16px;font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink-mid);line-height:1.75;margin-bottom:0;}
+
 /* SIDEBAR */
 .sb-block{margin-bottom:24px;}
 .sb-block+.sb-block{padding-top:20px;border-top:1px solid var(--rule);}
@@ -295,6 +313,13 @@ a{text-decoration:none;color:inherit;}
 <div class="juris-body">
   <div class="juris-main">
 
+    <!-- PLAIN LANGUAGE -->
+    <div class="sec-block" style="border-top:none;padding-top:28px;">
+      <div class="plain-summary">
+        <strong>Iran in plain language:</strong> Iran is an Islamic republic governed by a Supreme Leader who holds absolute religious and political authority above all elected institutions. It is the world's primary state sponsor of terrorism, funding and commanding a network of armed proxy groups — <a href="/org/hezbollah">Hezbollah</a>, <a href="/org/hamas">Hamas</a>, the <a href="/org/houthis">Houthis</a>, and the <span class="term" data-def="The IRGC's external operations directorate, responsible for managing Iran's proxy network across the Middle East. Its HQ was destroyed in the 2026 Iran War.">IRGC Quds Force</span> — across the Middle East. In 2026 it fought and lost a war against Israel and the United States, resulting in the assassination of Supreme Leader Ali Khamenei and severe degradation of its military and proxy network. On non-Muslim citizens: Iran's founding doctrine (<span class="term" data-def="Guardianship of the Islamic Jurist. Iran's founding governance doctrine, developed by Ayatollah Khomeini. Holds that supreme political authority must reside in a qualified Islamic scholar until the return of the Hidden Imam.">Velayat-e Faqih</span>) established Islamic theological supremacy over all civic life. Christians, Jews, and Zoroastrians received constitutional recognition as "People of the Book" — protected but structurally subordinate: barred from the offices of Supreme Leader and President, from full inheritance rights, and from senior military command. <span class="term" data-def="A religious minority in Iran not recognized as 'People of the Book' under the Islamic Republic's constitution. Baha'is have faced systematic state persecution since 1979, including execution, imprisonment, and denial of education and employment.">Baha'is</span>, not recognized as People of the Book, have faced systematic state persecution since 1979. Iran's Jewish community — roughly 80,000–100,000 at the time of the revolution, the largest in the Middle East outside Israel — has contracted to an estimated 8,000–10,000 today. The Islamic Republic's founding documents and state rhetoric conflate Judaism with Zionism, a framing that Khomeini embedded from the outset and successive leaders have maintained.
+      </div>
+    </div>
+
     <!-- SECTION: SUCCESSION CRISIS -->
     <div class="sec-block">
       <div class="nh-eyebrow">Active Crisis · Succession</div>
@@ -318,7 +343,7 @@ a{text-decoration:none;color:inherit;}
     <div class="sec-block">
       <div class="nh-eyebrow">Government · Dual Authority</div>
       <h2 class="nh-headline">Who Holds Power?</h2>
-      <p class="nh-lead">Iran operates a hybrid theocratic-republican system in which elected institutions (President, Parliament) exist beneath an unelected Supreme Leader who holds supreme authority over all branches of government, the military, and the judiciary. The IRGC operates as a parallel authority layer largely independent of the civilian government.</p>
+      <p class="nh-lead">Iran operates a hybrid theocratic-republican system in which elected institutions (President, Parliament) exist beneath an unelected Supreme Leader who holds supreme authority over all branches of government, the military, and the judiciary. The <span class="term" data-def="Islamic Revolutionary Guard Corps. Iran's parallel military force, distinct from the conventional army. Commands the Quds Force, Basij, and proxy networks. Answers only to the Supreme Leader. Designated a Foreign Terrorist Organization by the U.S. in 2019.">IRGC</span> operates as a parallel authority layer largely independent of the civilian government.</p>
 
       <table class="auth-table">
         <thead><tr>
@@ -364,7 +389,7 @@ a{text-decoration:none;color:inherit;}
     <div class="sec-block">
       <div class="nh-eyebrow">Doctrine &amp; Philosophy</div>
       <h2 class="nh-headline">Velayat-e Faqih</h2>
-      <p class="nh-lead">Iran's governing philosophy is Velayat-e Faqih — "Guardianship of the Islamic Jurist" — which holds that supreme political authority must reside in a qualified Islamic scholar until the return of the Hidden Imam. Developed by Ayatollah Khomeini, this doctrine forms the constitutional foundation of the Islamic Republic and explicitly subordinates democracy to theological authority.</p>
+      <p class="nh-lead">Iran's governing philosophy is <span class="term" data-def="Guardianship of the Islamic Jurist. Holds that supreme political authority must reside in a qualified Islamic scholar until the return of the Hidden Imam. Developed by Ayatollah Khomeini and enshrined in Iran's constitution.">Velayat-e Faqih</span> — "Guardianship of the Islamic Jurist" — which holds that supreme political authority must reside in a qualified Islamic scholar until the return of the Hidden Imam. Developed by Ayatollah Khomeini, this doctrine forms the constitutional foundation of the Islamic Republic and explicitly subordinates democracy to theological authority.</p>
 
       <div class="philosophy-block">
         <div class="pb-eyebrow">Governing Doctrine</div>
@@ -377,7 +402,7 @@ a{text-decoration:none;color:inherit;}
     <div class="sec-block">
       <div class="nh-eyebrow">Foreign Affairs · Axis of Resistance</div>
       <h2 class="nh-headline">Iran's Proxy Network</h2>
-      <p class="nh-lead">Iran funds, arms, trains, and commands a network of non-governmental entities across the Middle East, collectively termed the "Axis of Resistance." The 2026 Iran War and preceding Israeli strikes significantly degraded this network. Current status reflects post-war conditions as of June 2026.</p>
+      <p class="nh-lead">Iran funds, arms, trains, and commands a network of non-governmental entities across the Middle East, collectively termed the <span class="term" data-def="An Iran-led network of state and non-state actors united by opposition to Israel and U.S. regional influence. Core members: Iran, Hezbollah, Hamas, the Houthis, and the IRGC Quds Force. The 2024–2026 Israeli and U.S. strikes severely degraded the network.">Axis of Resistance</span>. The 2026 Iran War and preceding Israeli strikes significantly degraded this network. Current status reflects post-war conditions as of June 2026.</p>
 
       <div class="nge-grid">
         <div class="nge-card degraded" onclick="window.location='/org/hezbollah'">
@@ -483,17 +508,34 @@ a{text-decoration:none;color:inherit;}
     <div class="sb-block">
       <div class="sb-ey">Cross-Links</div>
       <div class="sb-title">Related Entities</div>
-      <div class="quick-link">→ fora.center/org/hezbollah</div>
-      <div class="quick-link">→ fora.center/org/hamas</div>
-      <div class="quick-link">→ fora.center/org/houthis</div>
-      <div class="quick-link">→ fora.center/org/quds-force</div>
-      <div class="quick-link">→ fora.center/lebanon</div>
-      <div class="quick-link">→ fora.center/gaza</div>
-      <div class="quick-link">→ fora.center/yemen</div>
+      <a href="/org/hezbollah" class="quick-link">→ Hezbollah</a>
+      <a href="/org/hamas" class="quick-link">→ Hamas</a>
+      <a href="/org/houthis" class="quick-link">→ Houthis (Ansar Allah)</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Quds Force <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Lebanon <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Gaza <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Yemen <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
     </div>
 
   </div><!-- /juris-sidebar -->
 </div><!-- /juris-body -->
 
+<script>
+(function(){
+  var terms=document.querySelectorAll('.term');
+  if(!window.matchMedia('(hover:hover)').matches||window.matchMedia('(pointer:coarse)').matches){
+    terms.forEach(function(el){
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        var m=document.getElementById('term-modal');if(m)m.remove();
+        var div=document.createElement('div');div.id='term-modal';
+        div.innerHTML='<div class="tm-backdrop"></div><div class="tm-box"><div class="tm-title">'+el.textContent+'</div><div class="tm-def">'+el.dataset.def+'</div><button class="tm-close" onclick="document.getElementById(\'term-modal\').remove()">Close ✕</button></div>';
+        document.body.appendChild(div);
+        div.querySelector('.tm-backdrop').addEventListener('click',function(){div.remove();});
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>

@@ -20,6 +20,8 @@
 }
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
 a{text-decoration:none;color:inherit;}
+.plain-summary a,.sec-lead a,.pc-text a,.sa-text a,.lc-note a{color:var(--blue-lt);border-bottom:1px solid rgba(58,106,191,0.3);}
+.plain-summary a:hover,.sec-lead a:hover{border-bottom-color:var(--blue-lt);}
 
 /* NAV */
 nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);position:sticky;top:0;z-index:200;}
@@ -136,6 +138,18 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
 .plain-summary{background:var(--nge-p);border:1px solid var(--nge-r);border-radius:8px;padding:12px 14px;font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.7;margin-bottom:14px;}
 .quick-link{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--nge);}
 .quick-link:last-child{border-bottom:none;}
+/* ── TERM TOOLTIPS / MODALS ── */
+.term{border-bottom:1px dotted currentColor;cursor:help;position:relative;}
+@media(hover:hover)and(pointer:fine){
+  .term::after{content:attr(data-def);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.92);font-family:'Source Serif 4',serif;font-size:11.5px;font-style:normal;font-weight:400;line-height:1.65;padding:10px 14px;border-radius:7px;border:1px solid rgba(184,134,11,0.3);max-width:280px;width:max-content;white-space:normal;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,0.35);}
+  .term:hover::after{opacity:1;}
+}
+#term-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;}
+.tm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);}
+.tm-box{position:relative;background:#fff;border-radius:14px 14px 0 0;padding:22px 20px 36px;width:100%;max-height:65vh;overflow-y:auto;box-shadow:0 -4px 32px rgba(0,0,0,0.25);}
+.tm-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#0e1a2e;margin-bottom:10px;}
+.tm-def{font-family:'Source Serif 4',serif;font-size:14px;color:#4a5568;line-height:1.75;}
+.tm-close{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;border-radius:6px;border:1px solid rgba(27,58,107,0.2);background:transparent;color:#1b3a6b;cursor:pointer;display:block;}
 </style>
 </head>
 <body>
@@ -230,7 +244,7 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <!-- PLAIN SUMMARY -->
     <div class="sec" style="padding-top:28px;border-top:none;">
       <div class="plain-summary" style="font-size:13px;">
-        <strong>Hamas in plain language:</strong> Hamas is a Palestinian Islamist movement that has governed the Gaza Strip since 2007. It was founded in 1987 as an offshoot of Egypt's Muslim Brotherhood. It functions simultaneously as a government, a military force, and a social services provider. 39 or more countries and organizations classify it as a terrorist organization. Others, including Turkey, Qatar, and Norway, do not. Hamas launched the October 7, 2023 attack on Israel, which killed approximately 1,200 Israelis and led to an ongoing war that has severely degraded its military and political leadership. The original 1988 Hamas Charter was explicitly antisemitic — it cited the Protocols of the Elders of Zion and included a hadith calling for the killing of Jews. On non-Muslims more broadly, Article 31 offered coexistence "under the shadow of Islam," meaning Christians and Jews could remain as protected but subordinate subjects within an Islamic state — not as equals. Hamas partially walked this back in a 2017 policy document that reframed its opposition as anti-Zionist rather than anti-Jewish, but the 1988 charter was never formally repealed and remains in force alongside it.
+        <strong>Hamas in plain language:</strong> Hamas is a Palestinian Islamist movement that has governed the Gaza Strip since 2007. It was founded in 1987 as an offshoot of Egypt's <span class="term" data-def="An Egyptian Islamist organization founded in 1928 by Hassan al-Banna. The ideological parent of Hamas and numerous other political Islamist movements across the Arab world.">Muslim Brotherhood</span>. It functions simultaneously as a government, a military force, and a social services provider. 39 or more countries and organizations classify it as a <span class="term" data-def="Foreign Terrorist Organization. A designation issued by the U.S. Secretary of State under Immigration and Nationality Act §219. Triggers criminal liability for providing material support and financial sanctions on the designated entity.">terrorist organization</span>. Others, including Turkey, Qatar, and Norway, do not. Hamas launched the October 7, 2023 attack on Israel, which killed approximately 1,200 Israelis and led to an ongoing war that has severely degraded its military and political leadership. The original 1988 Hamas Charter was explicitly antisemitic — it cited the Protocols of the Elders of Zion and included a hadith calling for the killing of Jews. On non-Muslims more broadly, Article 31 offered coexistence "under the shadow of Islam," meaning Christians and Jews could remain as protected but subordinate subjects within an Islamic state — not as equals. Hamas partially walked this back in a 2017 policy document that reframed its opposition as anti-Zionist rather than anti-Jewish, but the 1988 charter was never formally repealed and remains in force alongside it.
       </div>
     </div>
 
@@ -240,10 +254,11 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
       <h2 class="sec-headline">Government, Army, and Hospital — All at Once</h2>
       <p class="sec-lead">Hamas defies simple categorization. It is simultaneously the elected governing authority of 2.3 million Palestinians, a designated terrorist organization responsible for mass civilian casualties, and a provider of schools, hospitals, and social welfare services. Understanding Hamas requires holding all three of these realities at once — not resolving them.</p>
 
+
       <div class="paradox-card">
         <div class="pc-ey">Structural Reality</div>
         <div class="pc-title">The Three Faces of Hamas</div>
-        <div class="pc-text">Hamas operates three distinct functions: (1) a political bureau that conducts diplomacy, negotiates with Israel, and governs Gaza; (2) the Izz al-Din al-Qassam Brigades, its military wing responsible for attacks on Israeli civilians and soldiers; and (3) an extensive social services network including hospitals, schools, and relief programs that predates its political control of Gaza. Most designating governments target the military wing; some designate the entire organization. The question of which "Hamas" is being discussed is central to understanding any policy debate about it.</div>
+        <div class="pc-text">Hamas operates three distinct functions: (1) a political bureau that conducts diplomacy, negotiates with Israel, and governs Gaza; (2) the <span class="term" data-def="The military wing of Hamas, named after Izz al-Din al-Qassam — a Syrian-Palestinian cleric killed by the British in 1935. Responsible for armed operations including the October 7, 2023 attack on Israel.">Izz al-Din al-Qassam Brigades</span>, its military wing responsible for attacks on Israeli civilians and soldiers; and (3) an extensive social services network including hospitals, schools, and relief programs that predates its political control of Gaza. Most designating governments target the military wing; some designate the entire organization. The question of which "Hamas" is being discussed is central to understanding any policy debate about it.</div>
       </div>
     </div>
 
@@ -362,7 +377,7 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <div class="sb-block">
       <div class="sb-ey">Relationships</div>
       <div class="sb-title">Key Connections</div>
-      <div class="data-row"><span class="dr-label">Primary Sponsor</span><span class="dr-val">Iran (historically; strained after Oct 7)</span></div>
+      <div class="data-row"><span class="dr-label">Primary Sponsor</span><span class="dr-val"><a href="/iran" style="color:inherit;border-bottom:1px solid rgba(27,58,107,0.25);">Iran</a> (historically; strained after Oct 7)</span></div>
       <div class="data-row"><span class="dr-label">Host Government</span><span class="dr-val">Qatar (political bureau)</span></div>
       <div class="data-row"><span class="dr-label">Ideological Root</span><span class="dr-val">Muslim Brotherhood (Egypt)</span></div>
       <div class="data-row"><span class="dr-label">Ceasefire Mediator</span><span class="dr-val">Qatar, Egypt, US</span></div>
@@ -372,15 +387,32 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <div class="sb-block">
       <div class="sb-ey">Cross-Links</div>
       <div class="sb-title">Related Pages</div>
-      <div class="quick-link">→ fora.center/iran</div>
-      <div class="quick-link">→ fora.center/gaza</div>
-      <div class="quick-link">→ fora.center/palestine</div>
-      <div class="quick-link">→ fora.center/org/hezbollah</div>
-      <div class="quick-link">→ fora.center/org/muslim-brotherhood</div>
+      <a href="/iran" class="quick-link">→ Iran</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Gaza <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Palestine <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <a href="/org/hezbollah" class="quick-link">→ Hezbollah</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Muslim Brotherhood <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
     </div>
 
   </div><!-- /sidebar -->
 </div><!-- /page-body -->
 
+<script>
+(function(){
+  var terms=document.querySelectorAll('.term');
+  if(!window.matchMedia('(hover:hover)').matches||window.matchMedia('(pointer:coarse)').matches){
+    terms.forEach(function(el){
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        var m=document.getElementById('term-modal');if(m)m.remove();
+        var div=document.createElement('div');div.id='term-modal';
+        div.innerHTML='<div class="tm-backdrop"></div><div class="tm-box"><div class="tm-title">'+el.textContent+'</div><div class="tm-def">'+el.dataset.def+'</div><button class="tm-close" onclick="document.getElementById(\'term-modal\').remove()">Close ✕</button></div>';
+        document.body.appendChild(div);
+        div.querySelector('.tm-backdrop').addEventListener('click',function(){div.remove();});
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>

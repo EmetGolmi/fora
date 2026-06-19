@@ -21,6 +21,8 @@
 }
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
 a{text-decoration:none;color:inherit;}
+.plain-summary a,.sec-lead a,.slogan-note a,.lf-bio a{color:var(--hth-lt);border-bottom:1px solid rgba(46,107,46,0.35);}
+.plain-summary a:hover,.sec-lead a:hover{border-bottom-color:var(--hth-lt);}
 
 nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);position:sticky;top:0;z-index:200;}
 .nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
@@ -133,6 +135,18 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
 .dm-flag{font-size:12px;}
 .dm-name{font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;color:var(--ink);}
 .dm-year{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-left:auto;}
+/* ── TERM TOOLTIPS / MODALS ── */
+.term{border-bottom:1px dotted currentColor;cursor:help;position:relative;}
+@media(hover:hover)and(pointer:fine){
+  .term::after{content:attr(data-def);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.92);font-family:'Source Serif 4',serif;font-size:11.5px;font-style:normal;font-weight:400;line-height:1.65;padding:10px 14px;border-radius:7px;border:1px solid rgba(184,134,11,0.3);max-width:280px;width:max-content;white-space:normal;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,0.35);}
+  .term:hover::after{opacity:1;}
+}
+#term-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;}
+.tm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);}
+.tm-box{position:relative;background:#fff;border-radius:14px 14px 0 0;padding:22px 20px 36px;width:100%;max-height:65vh;overflow-y:auto;box-shadow:0 -4px 32px rgba(0,0,0,0.25);}
+.tm-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#0e1a2e;margin-bottom:10px;}
+.tm-def{font-family:'Source Serif 4',serif;font-size:14px;color:#4a5568;line-height:1.75;}
+.tm-close{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;border-radius:6px;border:1px solid rgba(27,58,107,0.2);background:transparent;color:#1b3a6b;cursor:pointer;display:block;}
 </style>
 </head>
 <body>
@@ -226,7 +240,7 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <!-- PLAIN SUMMARY -->
     <div class="sec" style="border-top:none;">
       <div class="plain-summary">
-        <strong>Houthis in plain language:</strong> The Houthis (officially Ansar Allah) are a Zaydi Shia armed movement from northern Yemen that has governed Sanaa and most of northwestern Yemen since 2014. Founded in 1994 to defend the marginalized Zaydi Shia community, the movement has since become a major geopolitical actor backed by Iran. Since late 2023 they have conducted attacks on commercial shipping in the Red Sea and missile strikes on Israel. Multiple countries and the United Nations designate them as a terrorist organization; others engage with them as the de facto government of Yemen. On non-Muslim neighbors, the Houthis are the most explicit of the three major Axis of Resistance organizations: their official banner — displayed in controlled territory and all formal communications — reads "God is Great, Death to America, Death to Israel, Curse the Jews, Victory to Islam." This is not founding charter language that was later softened or partially walked back, as with Hamas's 1988 charter or Hezbollah's 1985 Open Letter. It is their current, unamended doctrinal statement. Zaydism as a theological tradition is not inherently antisemitic, but the Houthi movement has fused it with Khomeinist ideology that treats Jews and Zionists as synonymous enemies. Yemen once had a historic Jewish community; it no longer meaningfully exists.
+        <strong>Houthis in plain language:</strong> The Houthis (officially Ansar Allah) are a <span class="term" data-def="A branch of Shia Islam predominant in northern Yemen. Zaydis differ from Twelver Shia (the dominant form in Iran) on questions of leadership succession. The Houthi movement draws from Zaydi revivalism but has adopted Khomeinist elements.">Zaydi</span> Shia armed movement from northern Yemen that has governed Sanaa and most of northwestern Yemen since 2014. Founded in 1994 to defend the marginalized Zaydi Shia community, the movement has since become a major geopolitical actor backed by <a href="/iran">Iran</a>. Since late 2023 they have conducted attacks on commercial shipping in the Red Sea and missile strikes on Israel. Multiple countries and the United Nations designate them as a <span class="term" data-def="Foreign Terrorist Organization. A designation issued by the U.S. Secretary of State under INA §219. Triggers criminal liability for providing material support and financial sanctions.">terrorist organization</span>; others engage with them as the de facto government of Yemen. On non-Muslim neighbors, the Houthis are the most explicit of the three major <span class="term" data-def="An Iran-led network of state and non-state actors united by opposition to Israel and U.S. regional influence. Core members: Iran, Hezbollah, Hamas, the Houthis, and the IRGC Quds Force.">Axis of Resistance</span> organizations: their official banner — displayed in controlled territory and all formal communications — reads "God is Great, Death to America, Death to Israel, Curse the Jews, Victory to Islam." This is not founding charter language that was later softened or partially walked back, as with <a href="/org/hamas">Hamas</a>'s 1988 charter or <a href="/org/hezbollah">Hezbollah</a>'s 1985 Open Letter. It is their current, unamended doctrinal statement. <span class="term" data-def="A branch of Shia Islam predominant in northern Yemen. Not inherently antisemitic as a theological tradition — the Houthi movement fused it with Khomeinist ideology that treats Jews and Zionists as synonymous enemies.">Zaydism</span> as a theological tradition is not inherently antisemitic, but the Houthi movement has fused it with <span class="term" data-def="The political ideology of Ayatollah Ruhollah Khomeini. Centers on Velayat-e Faqih (clerical supreme rule), anti-Americanism, anti-Zionism, and Islamic governance as exported by Iran across the Middle East.">Khomeinist</span> ideology that treats Jews and Zionists as synonymous enemies. Yemen once had a historic Jewish community; it no longer meaningfully exists.
       </div>
     </div>
 
@@ -234,7 +248,7 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <div class="sec">
       <div class="sec-ey">Doctrine · Official Slogan</div>
       <h2 class="sec-headline">What Do the Houthis Believe?</h2>
-      <p class="sec-lead">The Houthi movement is rooted in Zaydi Shia revivalism — a movement to restore the theological and political primacy of Yemen's historically marginalized Zaydi community. Over time it adopted Khomeinist elements from Iran, combining Yemeni nationalism, Islamic revivalism, anti-Americanism, and anti-Zionism into a coherent ideology expressed in a six-phrase slogan displayed on their banner.</p>
+      <p class="sec-lead">The Houthi movement is rooted in <span class="term" data-def="A branch of Shia Islam predominant in northern Yemen. Zaydis recognize a different line of succession from Twelver Shia and historically dominated northern Yemen's imamate system until 1962.">Zaydi Shia</span> revivalism — a movement to restore the theological and political primacy of Yemen's historically marginalized Zaydi community. Over time it adopted <span class="term" data-def="The political ideology of Ayatollah Ruhollah Khomeini. Centers on Velayat-e Faqih (clerical supreme rule), anti-Americanism, anti-Zionism, and Islamic governance. Exported by Iran to proxy groups across the Middle East.">Khomeinist</span> elements from <a href="/iran">Iran</a>, combining Yemeni nationalism, Islamic revivalism, anti-Americanism, and anti-Zionism into a coherent ideology expressed in a six-phrase slogan displayed on their banner.</p>
 
       <div class="slogan-card">
         <div class="slogan-text">"God is Great, Death to America, Death to Israel, Curse the Jews, Victory to Islam"</div>
@@ -333,15 +347,32 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <div class="sb-block">
       <div class="sb-ey">Cross-Links</div>
       <div class="sb-title">Related Pages</div>
-      <div class="quick-link">→ fora.center/iran</div>
-      <div class="quick-link">→ fora.center/yemen</div>
-      <div class="quick-link">→ fora.center/org/hamas</div>
-      <div class="quick-link">→ fora.center/org/hezbollah</div>
-      <div class="quick-link">→ fora.center/org/quds-force</div>
+      <a href="/iran" class="quick-link">→ Iran</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Yemen <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <a href="/org/hamas" class="quick-link">→ Hamas</a>
+      <a href="/org/hezbollah" class="quick-link">→ Hezbollah</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Quds Force <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
     </div>
 
   </div>
 </div>
 
+<script>
+(function(){
+  var terms=document.querySelectorAll('.term');
+  if(!window.matchMedia('(hover:hover)').matches||window.matchMedia('(pointer:coarse)').matches){
+    terms.forEach(function(el){
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        var m=document.getElementById('term-modal');if(m)m.remove();
+        var div=document.createElement('div');div.id='term-modal';
+        div.innerHTML='<div class="tm-backdrop"></div><div class="tm-box"><div class="tm-title">'+el.textContent+'</div><div class="tm-def">'+el.dataset.def+'</div><button class="tm-close" onclick="document.getElementById(\'term-modal\').remove()">Close ✕</button></div>';
+        document.body.appendChild(div);
+        div.querySelector('.tm-backdrop').addEventListener('click',function(){div.remove();});
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>

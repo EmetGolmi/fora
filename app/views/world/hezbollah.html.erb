@@ -21,6 +21,8 @@
 }
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
 a{text-decoration:none;color:inherit;}
+.plain-summary a,.sec-lead a,.sp-text a,.cp-text a,.pt-desc a{color:var(--hzb);border-bottom:1px solid rgba(122,92,0,0.3);}
+.plain-summary a:hover,.sec-lead a:hover{border-bottom-color:var(--hzb);}
 
 nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);position:sticky;top:0;z-index:200;}
 .nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
@@ -138,6 +140,18 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
 .dm-flag{font-size:12px;}
 .dm-name{font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;color:var(--ink);}
 .dm-note{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-left:auto;text-align:right;}
+/* ── TERM TOOLTIPS / MODALS ── */
+.term{border-bottom:1px dotted currentColor;cursor:help;position:relative;}
+@media(hover:hover)and(pointer:fine){
+  .term::after{content:attr(data-def);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e1a2e;color:rgba(255,255,255,0.92);font-family:'Source Serif 4',serif;font-size:11.5px;font-style:normal;font-weight:400;line-height:1.65;padding:10px 14px;border-radius:7px;border:1px solid rgba(184,134,11,0.3);max-width:280px;width:max-content;white-space:normal;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,0.35);}
+  .term:hover::after{opacity:1;}
+}
+#term-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;}
+.tm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);}
+.tm-box{position:relative;background:#fff;border-radius:14px 14px 0 0;padding:22px 20px 36px;width:100%;max-height:65vh;overflow-y:auto;box-shadow:0 -4px 32px rgba(0,0,0,0.25);}
+.tm-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:#0e1a2e;margin-bottom:10px;}
+.tm-def{font-family:'Source Serif 4',serif;font-size:14px;color:#4a5568;line-height:1.75;}
+.tm-close{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;border-radius:6px;border:1px solid rgba(27,58,107,0.2);background:transparent;color:#1b3a6b;cursor:pointer;display:block;}
 </style>
 </head>
 <body>
@@ -231,7 +245,7 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <!-- PLAIN SUMMARY -->
     <div class="sec" style="border-top:none;">
       <div class="plain-summary">
-        <strong>Hezbollah in plain language:</strong> Hezbollah is a Lebanese Shia organization that is simultaneously a political party with seats in parliament, a paramilitary force larger than the Lebanese Army, and a provider of schools and hospitals in Lebanon's south. Created by Iran's IRGC in 1982 following Israel's invasion of Lebanon. 27 countries designate it a terrorist organization. It fought Israel in 2006 and again in 2024. Its longtime leader Hassan Nasrallah was killed by Israel on September 27, 2024. The organization has been severely degraded but is actively reorganizing under new Secretary-General Naim Qassem. Hezbollah's founding 1985 Open Letter called explicitly for an Islamic state in Lebanon on the Khomeinist model and used dehumanizing language toward Jews. On non-Muslim Lebanese neighbors — chiefly the country's Christian communities — the document offered conditional coexistence: those who didn't align with "imperialism and Zionism" could remain, but under an Islamic system rather than the existing multi-confessional republic. Christian militias aligned with Israel (primarily the Phalangists) were named enemies. In a 2009 manifesto Hezbollah dropped the demand for an Islamic state and softened its rhetoric, acknowledging Lebanon's confessional reality — but, as with Hamas's 2017 document, the 1985 Open Letter was never formally repealed.
+        <strong>Hezbollah in plain language:</strong> Hezbollah is a Lebanese Shia organization that is simultaneously a political party with seats in parliament, a paramilitary force larger than the Lebanese Army, and a provider of schools and hospitals in Lebanon's south. Created by <a href="/iran">Iran</a>'s <span class="term" data-def="Islamic Revolutionary Guard Corps. Iran's parallel military force that answers only to the Supreme Leader. Created Hezbollah in 1982 and continues to fund, arm, and direct it.">IRGC</span> in 1982 following Israel's invasion of Lebanon. 27 countries designate it a <span class="term" data-def="Foreign Terrorist Organization. A designation issued by the U.S. Secretary of State under INA §219. Triggers criminal liability for providing material support and financial sanctions.">terrorist organization</span>. It fought Israel in 2006 and again in 2024. Its longtime leader Hassan Nasrallah was killed by Israel on September 27, 2024. The organization has been severely degraded but is actively reorganizing under new Secretary-General Naim Qassem. Hezbollah's founding 1985 Open Letter called explicitly for an Islamic state in Lebanon on the <span class="term" data-def="The political ideology of Ayatollah Ruhollah Khomeini. Centers on Velayat-e Faqih (clerical supreme rule), anti-Americanism, anti-Zionism, and the establishment of Islamic governance. The model Iran exported to Hezbollah in 1982.">Khomeinist</span> model and used dehumanizing language toward Jews. On non-Muslim Lebanese neighbors — chiefly the country's Christian communities — the document offered conditional coexistence: those who didn't align with "imperialism and Zionism" could remain, but under an Islamic system rather than the existing multi-confessional republic. Christian militias aligned with Israel (primarily the Phalangists) were named enemies. In a 2009 manifesto Hezbollah dropped the demand for an Islamic state and softened its rhetoric, acknowledging Lebanon's confessional reality — but, as with <a href="/org/hamas">Hamas</a>'s 2017 document, the 1985 Open Letter was never formally repealed.
       </div>
     </div>
 
@@ -239,7 +253,7 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <div class="sec">
       <div class="sec-ey">Leadership · As of June 2026</div>
       <h2 class="sec-headline">Three Leaders in Seven Days — Then Qassem</h2>
-      <p class="sec-lead">In the span of a week in late September and early October 2024, Israel killed Hassan Nasrallah (32 years as Secretary-General) and then Hashem Safieddine (Nasrallah's successor, dead 2 days after taking office). Naim Qassem, deputy secretary-general since 1991, was elected by the Shura Council on October 29, 2024. He faces the dual challenge of rebuilding a shattered command structure while managing an internal power struggle between pragmatic and hardline factions.</p>
+      <p class="sec-lead">In the span of a week in late September and early October 2024, Israel killed Hassan Nasrallah (32 years as Secretary-General) and then Hashem Safieddine (Nasrallah's successor, dead 2 days after taking office). Naim Qassem, deputy secretary-general since 1991, was elected by the <span class="term" data-def="Hezbollah's supreme governing body. A secretive council of senior figures that makes strategic decisions and elects the Secretary-General. Its composition is not publicly disclosed.">Shura Council</span> on October 29, 2024. He faces the dual challenge of rebuilding a shattered command structure while managing an internal power struggle between pragmatic and hardline factions.</p>
 
       <div class="status-panel">
         <span class="sp-icon">⚠️</span>
@@ -360,16 +374,33 @@ nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height
     <div class="sb-block">
       <div class="sb-ey">Cross-Links</div>
       <div class="sb-title">Related Pages</div>
-      <div class="quick-link">→ fora.center/iran</div>
-      <div class="quick-link">→ fora.center/lebanon</div>
-      <div class="quick-link">→ fora.center/org/hamas</div>
-      <div class="quick-link">→ fora.center/org/houthis</div>
-      <div class="quick-link">→ fora.center/org/quds-force</div>
-      <div class="quick-link">→ fora.center/gaza</div>
+      <a href="/iran" class="quick-link">→ Iran</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Lebanon <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <a href="/org/hamas" class="quick-link">→ Hamas</a>
+      <a href="/org/houthis" class="quick-link">→ Houthis (Ansar Allah)</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Quds Force <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Gaza <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
     </div>
 
   </div>
 </div>
 
+<script>
+(function(){
+  var terms=document.querySelectorAll('.term');
+  if(!window.matchMedia('(hover:hover)').matches||window.matchMedia('(pointer:coarse)').matches){
+    terms.forEach(function(el){
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        var m=document.getElementById('term-modal');if(m)m.remove();
+        var div=document.createElement('div');div.id='term-modal';
+        div.innerHTML='<div class="tm-backdrop"></div><div class="tm-box"><div class="tm-title">'+el.textContent+'</div><div class="tm-def">'+el.dataset.def+'</div><button class="tm-close" onclick="document.getElementById(\'term-modal\').remove()">Close ✕</button></div>';
+        document.body.appendChild(div);
+        div.querySelector('.tm-backdrop').addEventListener('click',function(){div.remove();});
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>
