@@ -34,12 +34,13 @@ class SeedFederalExecutive < ActiveRecord::Migration[8.1]
         { name: 'Energy dominance & deregulation',       level: 'medium', color: '#534ab7' }
       ],
       executive_orders: [
-        { number: 'EO 14159', title: 'Declaring a national emergency at the southern border and invoking Title 42 removal authority',                            category: 'Immigration',  date: 'Jan 20, 2025' },
-        { number: 'EO 14154', title: 'Unleashing American energy — lifting restrictions on oil, gas, and coal production on federal lands',                       category: 'Energy',       date: 'Jan 20, 2025' },
-        { number: 'EO 14158', title: 'Establishing the Department of Government Efficiency (DOGE) to audit and reduce federal spending',                          category: 'Gov. Reform',  date: 'Jan 20, 2025' },
-        { number: 'EO 14171', title: 'Restoring maximum pressure on Iran — re-imposing sanctions lifted under Biden and targeting oil exports',                   category: 'Foreign Policy', date: 'Feb 2025'     },
-        { number: 'EO 14257', title: 'Imposing reciprocal tariffs on all US trading partners based on their own tariff and non-tariff barriers',                  category: 'Trade',        date: 'Apr 2025'     },
-        { number: 'EO 14162', title: 'Withdrawing the United States from the Paris Agreement and reviewing all climate-related federal spending commitments',      category: 'Energy',       date: 'Jan 20, 2025' }
+        { slug: '14159', number: 'EO 14159', title: 'Declaring a national emergency at the southern border and invoking Title 42 removal authority',                            category: 'Immigration',    date: 'Jan 20, 2025' },
+        { slug: '14154', number: 'EO 14154', title: 'Unleashing American energy — lifting restrictions on oil, gas, and coal production on federal lands',                       category: 'Energy',         date: 'Jan 20, 2025' },
+        { slug: '14158', number: 'EO 14158', title: 'Establishing the Department of Government Efficiency (DOGE) to audit and reduce federal spending',                          category: 'Gov. Reform',    date: 'Jan 20, 2025' },
+        { slug: '14171', number: 'EO 14171', title: 'Restoring maximum pressure on Iran — re-imposing sanctions lifted under Biden and targeting oil exports',                   category: 'Foreign Policy', date: 'Feb 2025'      },
+        { slug: '14257', number: 'EO 14257', title: 'Imposing reciprocal tariffs on all US trading partners based on their own tariff and non-tariff barriers',                  category: 'Trade',          date: 'Apr 2025'      },
+        { slug: '14162', number: 'EO 14162', title: 'Withdrawing the United States from the Paris Agreement and reviewing all climate-related federal spending commitments',      category: 'Energy',         date: 'Jan 20, 2025' },
+        { slug: '14404', number: 'EO 14404', title: "Imposing Sanctions on Cuba's Revolutionary Armed Forces Business Conglomerate GAESA and Blocking Property of Certain Persons Destabilizing Cuba", category: 'Foreign Policy', date: 'May 1, 2026', official_url: 'https://www.federalregister.gov/documents/2026/05/07/2026-10404/imposing-sanctions-on-cubas-revolutionary-armed-forces' }
       ],
       budget_total_billions: 7300,
       budget_breakdown: {
