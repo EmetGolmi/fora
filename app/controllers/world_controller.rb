@@ -12,4 +12,10 @@ class WorldController < ApplicationController
 
   def hezbollah
   end
+
+  def cuba
+  end
+
+  def gaesa
+  end
 end

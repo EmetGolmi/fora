@@ -1,0 +1,1019 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1b3a6b;--blue-lt:#2a5298;--blue-vp:rgba(27,58,107,0.04);--blue-pl:rgba(27,58,107,0.12);
+  --gilt:#b8860b;--gilt-dk:#8b6914;--gilt-pl:#fdf8ed;--gilt-rul:rgba(184,134,11,0.2);
+  --red:#8b1a1a;--red-lt:#c0392b;--red-p:rgba(139,26,26,0.06);--red-r:rgba(139,26,26,0.18);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.07);--amber-r:rgba(196,127,0,0.2);
+  --green:#155c2d;--green-p:rgba(21,92,45,0.07);--green-r:rgba(21,92,45,0.2);
+  --purple:#2d1a4a;--purple-lt:#f0eaf7;
+  --ink:#0e1a2e;--ink-mid:#1e2d45;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f2f4f8;--white:#ffffff;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+  --teal:#0e6b5e;--teal-lt:#1a9b8a;--teal-p:rgba(14,107,94,0.07);--teal-r:rgba(14,107,94,0.22);
+  --cub:#8b1a1a;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* ── NAV ── */
+.nav{background:var(--blue);border-bottom:4px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;}
+.nav-link.active{color:white;}
+.nav-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;}
+
+/* ── TICKER ── */
+.ticker-bar{height:30px;background:#0a0f1a;border-bottom:1px solid #1b3a6b;display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;background:#7a0c0c;border-right:1px solid #c0392b;}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:white;white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;animation:ticker-scroll 34s linear infinite;white-space:nowrap;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.06);}
+.t-key{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.t-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.tv-r{color:#ff8080;}.tv-w{color:rgba(255,255,255,0.85);}.tv-a{color:#FAC775;}.tv-g{color:#80ffaa;}
+
+/* ── BREAKING BANNER ── */
+.breaking-bar{background:linear-gradient(135deg,#1a0808,#4a0c0c);border-bottom:2px solid var(--red-lt);padding:9px 40px;display:flex;align-items:center;gap:12px;}
+.bb-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;background:var(--red-lt);color:white;padding:3px 8px;border-radius:3px;flex-shrink:0;}
+.bb-text{font-family:'Nunito',sans-serif;font-size:13px;color:white;line-height:1.4;flex:1;}
+.bb-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:rgba(255,255,255,0.3);flex-shrink:0;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#0e1a2e 0%,#1b3566 45%,#0a2040 100%);padding:32px 40px 28px;position:relative;overflow:hidden;}
+.hero-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;position:relative;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.bc-sep{color:rgba(255,255,255,0.15);}.bc-here{color:rgba(255,255,255,0.6);}
+.juris-identity{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+.cuba-flag{display:flex;flex-direction:column;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.15);width:80px;flex-shrink:0;position:relative;}
+.cf-s{height:15px;}.cf-blue{background:#002a8f;}.cf-white{background:#f5f5f5;}.cf-tri{position:absolute;left:0;top:0;width:0;height:0;border-top:37px solid transparent;border-bottom:37px solid transparent;border-left:33px solid #cc0000;}
+.juris-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:white;line-height:0.95;letter-spacing:-0.01em;}
+.juris-sub-en{font-family:'Source Serif 4',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.45);margin-top:4px;}
+.juris-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:6px;}
+.juris-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.jtag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;border:1px solid;}
+.jtag-type{color:rgba(184,134,11,0.9);border-color:rgba(184,134,11,0.3);background:rgba(184,134,11,0.1);}
+.jtag-live{color:rgba(255,180,80,0.9);border-color:rgba(255,180,80,0.3);background:rgba(255,180,80,0.08);}
+.jtag-grey{color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);}
+.jtag-teal{color:rgba(128,255,230,0.8);border-color:rgba(128,255,230,0.2);background:rgba(128,255,230,0.06);}
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.03);padding:11px 14px;cursor:pointer;transition:background 0.12s;}
+.hs:hover{background:rgba(255,255,255,0.09);}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:white;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.27);margin-top:3px;line-height:1.5;}
+.hero-right{display:flex;flex-direction:column;gap:8px;min-width:180px;flex-shrink:0;}
+.btn-primary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;}
+.btn-secondary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;background:transparent;color:rgba(255,255,255,0.7);}
+.btn-teal{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(14,107,94,0.5);cursor:pointer;background:rgba(14,107,94,0.15);color:rgba(128,255,230,0.85);}
+
+/* ── TABS ── */
+.org-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;align-items:center;padding:0 40px;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 15px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s;}
+.tab:hover{color:var(--blue);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+.tab.t-forum{color:var(--teal);}
+.tab.t-forum:hover,.tab.t-forum.active{color:var(--teal);border-bottom-color:var(--teal);}
+.tab[title]{position:relative;}
+.tab[title]:hover::after{content:attr(title);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:rgba(255,255,255,0.9);font-family:'Source Serif 4',serif;font-size:11px;font-style:italic;white-space:nowrap;padding:5px 10px;border-radius:4px;pointer-events:none;z-index:300;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+
+/* ── BODY LAYOUT ── */
+.juris-body{display:grid;grid-template-columns:1fr 280px;gap:0;max-width:1400px;margin:0 auto;padding:0 40px 60px;align-items:start;}
+.juris-main{padding:32px 32px 0 0;min-width:0;}
+.juris-sidebar{padding:32px 0 0;border-left:1px solid var(--rule);padding-left:24px;}
+
+/* Tab panels */
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── SHARED SECTION STYLES ── */
+.sec{margin-bottom:36px;}
+.sec+.sec{padding-top:28px;border-top:1.5px solid rgba(14,26,46,0.1);}
+.nh-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.nh-headline{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#0e0c08;line-height:1.1;margin-bottom:8px;}
+.nh-lead{font-family:'Source Serif 4',serif;font-size:13.5px;color:#5a5448;line-height:1.75;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule);}
+
+/* Context split */
+.context-box{border-radius:10px;overflow:hidden;border:1px solid var(--rule);margin-bottom:16px;}
+.cb-header{background:var(--ink);padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+.cb-split{display:grid;grid-template-columns:1fr 1fr;}
+.cb-col{padding:14px 16px;border-top:3px solid transparent;}
+.cb-col.embargo{border-top-color:var(--red-lt);}
+.cb-col.gov{border-top-color:var(--purple);}
+.cb-col-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:6px;}
+.cb-col-title{font-family:'Libre Baskerville',serif;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.cb-col-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-soft);line-height:1.7;}
+.cb-divider{width:1px;background:var(--rule);}
+
+/* Quote */
+.quote-card{background:var(--gilt-pl);border:1px solid var(--gilt-rul);border-left:4px solid var(--gilt);border-radius:8px;padding:13px 16px;margin-bottom:12px;}
+.qc-text{font-family:'Source Serif 4',serif;font-size:13px;font-style:italic;color:var(--ink-mid);line-height:1.7;margin-bottom:6px;}
+.qc-attr{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);}
+
+/* Info card */
+.info-card{background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:8px;padding:10px 13px;margin-bottom:10px;}
+.ic-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:3px;}
+.ic-val{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink);line-height:1.6;}
+
+/* Note card */
+.note-card{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;}
+.nc-icon{font-size:14px;flex-shrink:0;}
+.nc-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
+
+/* ── GOVT TAB ── */
+.auth-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.auth-table thead tr{background:var(--blue);}
+.auth-table th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.auth-table td{padding:10px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.auth-table tr:last-child td{border-bottom:none;}
+.auth-table tr:hover td{background:var(--bg);}
+.at-office{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.at-badge{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.08em;text-transform:uppercase;padding:1px 6px;border-radius:3px;display:inline-block;}
+.ab-party{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.ab-unelect{color:var(--gilt-dk);background:var(--gilt-pl);border:1px solid var(--gilt-rul);}
+.at-holder{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:1px;}
+.at-meta{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+.at-note{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);}
+
+.rubber-stamp{background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:8px;padding:10px 14px;font-family:'Source Serif 4',serif;font-size:12px;color:var(--ink-soft);line-height:1.65;margin-top:12px;}
+
+/* ── LEGISLATION ── */
+.leg-row{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:13px 16px;margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:box-shadow 0.12s;}
+.leg-row:hover{box-shadow:0 2px 10px rgba(27,58,107,0.08);}
+.leg-year{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--gilt);flex-shrink:0;width:32px;margin-top:2px;}
+.leg-content{flex:1;}
+.leg-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.35;}
+.leg-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:5px;}
+.leg-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.lb{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.07em;text-transform:uppercase;padding:1px 6px;border-radius:3px;border:1px solid;}
+.lb-pass{color:var(--red);background:var(--red-p);border-color:var(--red-r);}
+.lb-unan{color:var(--ink-mut);background:var(--bg);border-color:var(--rule);}
+.lb-civil{color:var(--blue);background:var(--blue-vp);border-color:var(--blue-pl);}
+.lb-econ{color:var(--green);background:var(--green-p);border-color:var(--green-r);}
+.lb-media{color:var(--purple);background:var(--purple-lt);border-color:rgba(45,26,74,0.2);}
+.leg-vote{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);flex-shrink:0;margin-top:2px;text-align:right;}
+.leg-engage{display:flex;gap:6px;margin-top:8px;}
+.le-btn{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;cursor:pointer;border:1px solid var(--rule);background:transparent;color:var(--ink-mut);}
+.le-btn:hover{background:var(--bg);}
+.le-btn.concur{color:var(--green);border-color:var(--green-r);}
+.le-btn.object{color:var(--red);border-color:var(--red-r);}
+
+/* ── CRISIS TAB ── */
+.crisis-timeline{position:relative;padding-left:24px;}
+.crisis-timeline::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--rule);}
+.ct-item{position:relative;margin-bottom:20px;}
+.ct-dot{position:absolute;left:-20px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid var(--white);flex-shrink:0;}
+.ct-dot.red{background:var(--red);}
+.ct-dot.amber{background:var(--amber);}
+.ct-dot.green{background:var(--green);}
+.ct-date{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:3px;}
+.ct-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.35;}
+.ct-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-soft);line-height:1.65;}
+
+/* ── FOREIGN AFFAIRS TAB ── */
+.partner-row{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:flex;gap:14px;margin-bottom:10px;}
+.pr-flag{font-size:24px;flex-shrink:0;}
+.pr-content{flex:1;}
+.pr-name{font-family:'Libre Baskerville',serif;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.pr-role-badge{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:1px 7px;border-radius:3px;border:1px solid;display:inline-block;margin-bottom:6px;}
+.rb-ally{color:var(--green);background:var(--green-p);border-color:var(--green-r);}
+.rb-main{color:var(--blue);background:var(--blue-vp);border-color:var(--blue-pl);}
+.rb-embargo{color:var(--red);background:var(--red-p);border-color:var(--red-r);}
+.rb-complex{color:var(--amber);background:var(--amber-p);border-color:var(--amber-r);}
+.pr-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.6;}
+.pr-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+.pr-stat{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);}
+.pr-stat strong{color:var(--ink);}
+
+/* ── DOCTRINE TAB ── */
+.doctrine-card{background:var(--gilt-pl);border:1px solid var(--gilt-rul);border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+.dc-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.dc-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#0e0c08;margin-bottom:8px;}
+.dc-text{font-family:'Source Serif 4',serif;font-size:13px;color:#5a5448;line-height:1.7;}
+.hist-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--rule-lt);}
+.hist-item:last-child{border-bottom:none;}
+.hi-year{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--gilt);flex-shrink:0;width:44px;line-height:1;}
+.hi-content{flex:1;}
+.hi-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.hi-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.55;}
+
+/* ── FORUM TAB ── */
+.forum-hero{background:linear-gradient(160deg,#0e1a2e,#0a3322);border-radius:12px;padding:22px 26px;margin-bottom:20px;}
+.fh-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:6px;}
+.fh-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:white;line-height:1.1;margin-bottom:8px;}
+.fh-text{font-family:'Source Serif 4',serif;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:16px;}
+.voice-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.voice-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 13px;}
+.vc-icon{font-size:16px;margin-bottom:5px;}
+.vc-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:3px;}
+.vc-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.65);line-height:1.5;}
+.forum-compose{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;margin-bottom:16px;}
+.fc-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:10px;}
+.fc-categories{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.fc-cat{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid var(--rule);background:transparent;color:var(--ink-mut);cursor:pointer;transition:all 0.12s;}
+.fc-cat.selected,.fc-cat:hover{background:var(--blue);color:white;border-color:var(--blue);}
+.fc-textarea{width:100%;border:1px solid var(--rule);border-radius:8px;padding:12px;font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink);resize:vertical;min-height:80px;outline:none;margin-bottom:10px;}
+.fc-textarea:focus{border-color:var(--blue-lt);}
+.fc-footer{display:flex;align-items:center;justify-content:space-between;}
+.fc-anon{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);}
+.fc-submit{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;background:var(--teal);color:white;}
+.story-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:15px 18px;margin-bottom:10px;}
+.sc-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sc-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);font-family:'JetBrains Mono',monospace;font-size:9px;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sc-handle{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink);font-weight:700;}
+.sc-loc{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-left:auto;}
+.sc-category{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--teal-p);border:1px solid var(--teal-r);color:var(--teal);display:inline-block;margin-bottom:7px;}
+.sc-text{font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink);line-height:1.7;margin-bottom:10px;}
+.sc-actions{display:flex;gap:8px;}
+.sca-btn{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;cursor:pointer;border:1px solid var(--rule);background:transparent;color:var(--ink-mut);}
+.sca-btn.concur{color:var(--green);border-color:var(--green-r);}
+.sca-count{font-size:9px;margin-left:2px;}
+
+/* ── RECORD TAB ── */
+.record-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.record-table thead tr{background:var(--ink);}
+.record-table th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.record-table td{padding:10px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.record-table tr:last-child td{border-bottom:none;}
+.record-table tr:hover td{background:var(--bg);}
+.rt-event{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.rt-date{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+.rt-status{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;padding:2px 7px;border-radius:3px;}
+.rs-conf{color:var(--green);background:var(--green-p);border:1px solid var(--green-r);}
+.rs-disp{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.rs-ong{color:var(--blue);background:var(--blue-vp);border:1px solid var(--blue-pl);}
+.rt-source{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--blue-lt);}
+
+/* ── SIDEBAR ── */
+.sb-block{margin-bottom:24px;}
+.sb-block+.sb-block{padding-top:20px;border-top:1px solid var(--rule);}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+.data-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.data-row:last-child{border-bottom:none;}
+.dr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+.dr-val{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;color:var(--ink);text-align:right;max-width:60%;}
+.dr-val.red{color:var(--red);}
+.official-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--rule-lt);}
+.official-row:last-child{border-bottom:none;}
+.or-avatar{width:32px;height:32px;border-radius:50%;background:var(--cub);color:white;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.or-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--ink);}
+.or-role{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;color:var(--ink-mut);margin-top:1px;}
+.or-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-top:3px;margin-right:3px;}
+.ob-party{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.ob-sanction{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.quick-link{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--blue);cursor:pointer;}
+.quick-link:last-child{border-bottom:none;}
+.timeline-item{padding:7px 0;border-bottom:1px solid var(--rule-lt);display:flex;gap:10px;}
+.timeline-item:last-child{border-bottom:none;}
+.ti-year{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;color:var(--gilt);flex-shrink:0;width:32px;}
+.ti-text{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+/* SHARE BUTTON */
+.share-btn{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(184,134,11,0.2);background:rgba(184,134,11,0.04);color:rgba(184,134,11,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;z-index:2;padding:0;}
+.share-btn:hover{background:rgba(184,134,11,0.12);color:rgba(184,134,11,0.8);}
+.share-btn.copied{background:rgba(21,92,45,0.15);border-color:rgba(21,92,45,0.4);color:#155c2d;}
+.quote-card{position:relative;}
+.doctrine-card{position:relative;}
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .nav{padding:0 14px;}
+  .nav-links{gap:14px;}
+  .nav-link{font-size:7px;}
+  .nav-btn{display:none;}
+  .breaking-bar{padding:8px 14px;gap:8px;}
+  .bb-date{display:none;}
+  .bb-text{font-size:11.5px;}
+  .hero{padding:20px 16px 18px;}
+  .hero-inner{flex-wrap:wrap;}
+  .cuba-flag{width:60px;}
+  .cf-s{height:12px;}
+  .cf-tri{border-top:30px solid transparent;border-bottom:30px solid transparent;border-left:26px solid #cc0000;}
+  .juris-name{font-size:28px;}
+  .hero-stats{grid-template-columns:repeat(3,1fr);}
+  .hero-right{display:none;}
+  .org-tabs .tabs-inner{padding:0 12px;}
+  .juris-body{grid-template-columns:1fr;padding:0 16px 40px;}
+  .juris-main{padding:20px 0 0;}
+  .juris-sidebar{border-left:none;border-top:1.5px solid var(--rule);padding-left:0;padding-top:20px;margin-top:10px;}
+  .nh-headline{font-size:20px;}
+  .nh-lead{font-size:13px;}
+  .cb-split{grid-template-columns:1fr;}
+  .cb-divider{display:none;}
+  .voice-grid{grid-template-columns:1fr;}
+  .ap-numbers{grid-template-columns:1fr;}
+  .evidence-grid{grid-template-columns:1fr;}
+  .sh-why-grid{grid-template-columns:1fr;}
+}
+</style>
+
+<nav class="nav">
+  <div class="nav-logo">FORA</div>
+  <div class="nav-links">
+    <span class="nav-link">Governance</span>
+    <span class="nav-link active">World</span>
+    <span class="nav-link">Knowledge</span>
+    <span class="nav-link">Discourse</span>
+  </div>
+  <button class="nav-btn">Sign In</button>
+</nav>
+
+<div class="ticker-bar">
+  <div class="ticker-badge"><span class="ticker-badge-text">Cuba · Crisis</span></div>
+  <div class="ticker-scroll-wrap">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="t-key">Breaking Jun 18</span><span class="t-val tv-a">Communist Party unanimously approves sweeping privatization reforms</span></div>
+      <div class="ticker-item"><span class="t-key">Díaz-Canel</span><span class="t-val tv-w">Acknowledges "slowness, bureaucracy" — not only the blockade</span></div>
+      <div class="ticker-item"><span class="t-key">GAESA</span><span class="t-val tv-r">Sanctioned US May 7, 2026 · $20B alleged in hidden overseas accounts</span></div>
+      <div class="ticker-item"><span class="t-key">China</span><span class="t-val tv-g">$80M emergency aid + 29 cooperation agreements Apr 2026</span></div>
+      <div class="ticker-item"><span class="t-key">Russia</span><span class="t-val tv-w">Putin pledges continued oil shipments despite US pressure</span></div>
+      <div class="ticker-item"><span class="t-key">GDP</span><span class="t-val tv-r">Contraction projected 6.5%–15% · 2026</span></div>
+      <div class="ticker-item"><span class="t-key">Next Election</span><span class="t-val tv-w">National Assembly · 2028</span></div>
+      <div class="ticker-item"><span class="t-key">Breaking Jun 18</span><span class="t-val tv-a">Communist Party unanimously approves sweeping privatization reforms</span></div>
+      <div class="ticker-item"><span class="t-key">Díaz-Canel</span><span class="t-val tv-w">Acknowledges "slowness, bureaucracy" — not only the blockade</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="breaking-bar">
+  <span class="bb-badge">Breaking · Jun 18, 2026</span>
+  <span class="bb-text">Cuba's National Assembly unanimously approved the most significant economic opening since the 1959 revolution — privatization of state enterprises, foreign investment expansion, diaspora engagement. Díaz-Canel: "The situation calls for urgent and necessary changes."</span>
+  <span class="bb-date">Jun 18–19, 2026</span>
+</div>
+
+<div class="hero">
+  <div class="breadcrumb">
+    <span>FORA</span><span class="bc-sep">/</span><span>World</span><span class="bc-sep">/</span><span>Caribbean</span><span class="bc-sep">/</span><span class="bc-here">Cuba</span>
+  </div>
+  <div class="hero-inner">
+    <div style="flex:1;">
+      <div class="juris-identity">
+        <div class="cuba-flag">
+          <div class="cf-s cf-blue"></div><div class="cf-s cf-white"></div><div class="cf-s cf-blue"></div><div class="cf-s cf-white"></div><div class="cf-s cf-blue"></div>
+          <div class="cf-tri"></div>
+        </div>
+        <div>
+          <div class="juris-name">Cuba</div>
+          <div class="juris-sub-en">República de Cuba · Pearl of the Antilles</div>
+          <div class="juris-sub">One-Party Communist State · Caribbean · Est. 1902</div>
+        </div>
+      </div>
+      <div class="juris-tags">
+        <span class="jtag jtag-type">Communist One-Party State</span>
+        <span class="jtag jtag-live">⚠ Economic Crisis 2026</span>
+        <span class="jtag jtag-grey">US Embargo since 1962</span>
+        <span class="jtag jtag-grey">China Strategic Partner</span>
+        <span class="jtag jtag-teal">Cuba Forum Open</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-num">11.2M</div><div class="hs-label">Population<br>2024 est.</div></div>
+        <div class="hs"><div class="hs-num">64</div><div class="hs-label">Years of<br>US Embargo</div></div>
+        <div class="hs"><div class="hs-num" style="color:#FAC775;">470</div><div class="hs-label">Assembly seats<br>All PCC · 2023</div></div>
+        <div class="hs"><div class="hs-num" style="color:#80ffaa;">1.8M</div><div class="hs-label">Cuban-Americans<br>US 2020 Census</div></div>
+        <div class="hs"><div class="hs-num" style="color:#ff8080;">-15%</div><div class="hs-label">GDP worst-case<br>projection 2026</div></div>
+        <div class="hs"><div class="hs-num">1959</div><div class="hs-label">Revolution<br>Year</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <button class="btn-primary">Follow Cuba</button>
+      <button class="btn-secondary">Add to Dashboard</button>
+      <button class="btn-teal">Join Cuba Forum</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="org-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" title="What is this place?" onclick="switchTab('overview',this)">Overview</div>
+    <div class="tab" title="How is it governed?" onclick="switchTab('government',this)">Government</div>
+    <div class="tab" title="What is happening right now?" onclick="switchTab('crisis',this)">Active Crisis</div>
+    <div class="tab" title="How does it relate to the world?" onclick="switchTab('foreign',this)">Foreign Affairs</div>
+    <div class="tab" title="What does Cuba believe?" onclick="switchTab('doctrine',this)">Doctrine &amp; History</div>
+    <div class="tab t-forum" title="Where Cubans, exiles, and the world exchange ideas" onclick="switchTab('forum',this)">Cuba Forum 🌐</div>
+    <div class="tab" title="What is the documented record?" onclick="switchTab('record',this)">The Record</div>
+  </div>
+</div>
+
+<div class="juris-body">
+  <div class="juris-main">
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div id="panel-overview" class="tab-panel active">
+
+      <div class="sec">
+        <div class="nh-eyebrow">Civic Context · What FORA Holds Together</div>
+        <h2 class="nh-headline">Two Causes of Cuban Suffering — Not One</h2>
+        <p class="nh-lead">The Cuban crisis is argued through a single lens depending on who is speaking. American conservatives blame the communist government entirely. Some American progressives and young people blame the US embargo entirely. Both framings miss the documented reality — and both let the Cuban people down by making their suffering a proxy for someone else's argument.</p>
+        <div class="context-box">
+          <div class="cb-header">Two documented causes · FORA presents both as fact, not as political teams</div>
+          <div class="cb-split">
+            <div class="cb-col embargo">
+              <div class="cb-col-label">Cause One</div>
+              <div class="cb-col-title">The US Embargo — Real, 64 Years Old</div>
+              <div class="cb-col-text">The US embargo restricts American trade, investment, and financial transactions with Cuba. Trump administration actions in 2026 blocked fuel deliveries and targeted GAESA specifically. These restrictions create genuine daily hardship for ordinary Cubans — not the ruling elite, who access hard currency regardless. The embargo has not achieved regime change in 64 years. Ordinary people absorb most of its costs.</div>
+            </div>
+            <div class="cb-divider"></div>
+            <div class="cb-col gov">
+              <div class="cb-col-label">Cause Two</div>
+              <div class="cb-col-title">The Government — Acknowledged by Díaz-Canel Himself</div>
+              <div class="cb-col-text">On June 18, 2026, Díaz-Canel told the Communist Party Central Committee that Cuba's crisis cannot be blamed on external pressure alone — citing "slowness, bureaucracy and norms that impede those who want to produce" and "decisions that we have put off." GAESA, the military conglomerate, holds an alleged $18–20B in hidden overseas accounts while Cubans experience fuel shortages and blackouts. These are government decisions, not embargo effects.</div>
+            </div>
+          </div>
+        </div>
+        <div class="quote-card">
+          <button class="share-btn" onclick="foraShare(this)" title="Share" aria-label="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <div class="qc-text">"The situation calls for urgent and necessary changes... obstacles that don't come from outside, nor the blockade — slowness, bureaucracy and norms that impede those who want to produce, decisions that we have put off."</div>
+          <div class="qc-attr">Miguel Díaz-Canel · Communist Party Central Committee · June 18, 2026</div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="nh-eyebrow">Breaking · June 18–19, 2026</div>
+        <h2 class="nh-headline">Historic Reforms — Largest Market Opening Since 1959</h2>
+        <p class="nh-lead">Cuba's Communist Party unanimously approved an emergency economic package featuring unprecedented free-market measures. Backed by Raúl Castro himself. The reforms target six core pillars. Details on specific regulations and implementation timelines have not been published as of June 19, 2026.</p>
+        <div class="info-card" style="background:var(--teal-p);border-color:var(--teal-r);">
+          <div class="ic-label" style="color:var(--teal);">Reform Pillars · Economic &amp; Social Program 2026</div>
+          <div class="ic-val" style="font-size:12px;">Municipal Autonomy · State Enterprise Privatization · Agricultural Reform · Foreign Investment Opening · Private Real Estate Development · Cuban Diaspora Engagement · SME Expansion · Renewable Energy Transition</div>
+        </div>
+        <div class="note-card">
+          <span class="nc-icon">⚠️</span>
+          <span class="nc-text">Cuba has announced economic reforms before — 2010 "lineamientos," 2019 measures — with limited implementation. Independent analysts note the 2026 package announces intent without specific regulations or enforcement mechanisms. FORA tracks outcomes, not announcements. This page updates as implementation is documented.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ GOVERNMENT ═══ -->
+    <div id="panel-government" class="tab-panel">
+
+      <div class="sec">
+        <div class="nh-eyebrow">Government · Structure</div>
+        <h2 class="nh-headline">How Cuba Is Actually Governed</h2>
+        <p class="nh-lead">Cuba is a one-party communist state in which the Communist Party of Cuba (PCC) holds constitutional supremacy over all government institutions. Elections are held, but all candidates must pass through a PCC-controlled nomination process. The National Assembly meets only twice a year; a 31-member Council of State governs the rest of the time. In practice, the Party preselects who may govern.</p>
+
+        <table class="auth-table">
+          <thead><tr>
+            <th>Office</th><th>Selection</th><th>Current Holder</th><th>Note</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="at-office">President &amp; Party First Secretary</div><span class="at-badge ab-party">PCC Supreme</span></td>
+              <td><div class="at-note">National Assembly vote · candidates preselected by PCC</div></td>
+              <td><div class="at-holder">Miguel Díaz-Canel</div><div class="at-meta">Since 2018 · reelected Apr 2023</div></td>
+              <td><div class="at-note">Handpicked successor to Raúl Castro. Does not hold supreme power in the manner of the Castros. US-sanctioned June 2026.</div></td>
+            </tr>
+            <tr>
+              <td><div class="at-office">Prime Minister</div><span class="at-badge ab-party">PCC</span></td>
+              <td><div class="at-note">Designated by National Assembly on president's recommendation</div></td>
+              <td><div class="at-holder">Manuel Marrero Cruz</div><div class="at-meta">Since Dec 2019</div></td>
+              <td><div class="at-note">Former head of Gaviota tourism chain — a GAESA subsidiary. His appointment illustrates the FAR–government overlap.</div></td>
+            </tr>
+            <tr>
+              <td><div class="at-office">National Assembly President</div><span class="at-badge ab-party">PCC</span></td>
+              <td><div class="at-note">Elected by Assembly deputies</div></td>
+              <td><div class="at-holder">Esteban Lazo Hernández</div><div class="at-meta">Since Feb 2013</div></td>
+              <td><div class="at-note">Assembly of 470 deputies — all PCC (442) or PCC-aligned independents (28). Meets twice per year.</div></td>
+            </tr>
+            <tr>
+              <td><div class="at-office">Council of State</div><span class="at-badge ab-unelect">31 Members</span></td>
+              <td><div class="at-note">Elected by National Assembly</div></td>
+              <td><div class="at-holder">Exercises legislative power between sessions</div><div class="at-meta">Governs ~363 days per year</div></td>
+              <td><div class="at-note">The Assembly meets ~2 days per session, twice annually. The Council of State is the effective continuous government.</div></td>
+            </tr>
+            <tr>
+              <td><div class="at-office">Revolutionary Armed Forces (FAR)</div><span class="at-badge ab-unelect">Parallel Authority</span></td>
+              <td><div class="at-note">Senior officers appointed through PCC military structures</div></td>
+              <td><div class="at-holder">Controls GAESA economic empire</div><div class="at-meta">Estimated 37–40% of GDP</div></td>
+              <td><div class="at-note">FAR operates GAESA independently of the civilian budget. No public audit has ever been conducted. Answerable only to PCC leadership.</div></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="rubber-stamp">📋 How voting works in Cuba's National Assembly: Candidates are nominated by the National Candidature Commission — a PCC body. Municipal assemblies may reject individual candidates, but replacements come from a PCC reserve list. To be elected, a candidate needs more than 50% of valid votes in their constituency. All 470 candidates proposed in the 2023 elections were elected. Votes against or abstentions are recorded but have never changed an outcome. The 2023 election recorded the lowest voter turnout since 1993 — 75.8%.</div>
+      </div>
+
+      <div class="sec">
+        <div class="nh-eyebrow">Legislation · What Cuba Actually Passes</div>
+        <h2 class="nh-headline">The Legislative Record</h2>
+        <p class="nh-lead">Cuba's National Assembly is the country's only legislative body, but it meets twice yearly for sessions typically lasting one to two days. Most major decisions are made by the Council of State or the Party between sessions and ratified by the Assembly. Votes are almost always unanimous. What Cuba passes is still consequential — it defines what is legal and what is criminal for 11 million people.</p>
+
+        <div class="leg-row">
+          <div class="leg-year">2026</div>
+          <div class="leg-content">
+            <div class="leg-title">Economic &amp; Social Program 2026 — Market Opening Package</div>
+            <div class="leg-desc">Sweeping privatization reforms: state enterprise privatization, private real estate development, foreign investment opening, diaspora engagement, agricultural reform, SME expansion. The largest market opening since the 1959 revolution.</div>
+            <div class="leg-badges"><span class="lb lb-pass">Passed</span><span class="lb lb-unan">Unanimous</span><span class="lb lb-econ">Economic</span></div>
+            <div class="leg-engage">
+              <button class="le-btn concur">Concur <span class="sca-count">847</span></button>
+              <button class="le-btn object">Object <span class="sca-count">312</span></button>
+              <button class="le-btn">Discuss</button>
+            </div>
+          </div>
+          <div class="leg-vote">470–0<br><span style="font-size:7px;color:var(--ink-mut);">Jun 18, 2026</span></div>
+        </div>
+
+        <div class="leg-row">
+          <div class="leg-year">2023</div>
+          <div class="leg-content">
+            <div class="leg-title">Social Communication Law (Ley 151)</div>
+            <div class="leg-desc">Restricts speech and press freedoms by heavily limiting nonstate media. Establishes vague regulations governing online content. Actively enforced against journalists, activists, and ordinary citizens.</div>
+            <div class="leg-badges"><span class="lb lb-pass">Passed</span><span class="lb lb-unan">Unanimous</span><span class="lb lb-media">Press / Speech</span></div>
+            <div class="leg-engage">
+              <button class="le-btn concur">Concur <span class="sca-count">44</span></button>
+              <button class="le-btn object">Object <span class="sca-count">2,841</span></button>
+              <button class="le-btn">Discuss</button>
+            </div>
+          </div>
+          <div class="leg-vote">470–0<br><span style="font-size:7px;color:var(--ink-mut);">May 2023</span></div>
+        </div>
+
+        <div class="leg-row">
+          <div class="leg-year">2022</div>
+          <div class="leg-content">
+            <div class="leg-title">Código de las Familias — Family Code</div>
+            <div class="leg-desc">Legalized same-sex marriage, adoption by same-sex couples, and expanded protections for women and children. Approved via public referendum — 66.9% in favor. Most progressive family law in Cuban history.</div>
+            <div class="leg-badges"><span class="lb lb-pass">Passed by Referendum</span><span class="lb lb-civil">Civil Rights</span></div>
+            <div class="leg-engage">
+              <button class="le-btn concur">Concur <span class="sca-count">3,220</span></button>
+              <button class="le-btn object">Object <span class="sca-count">891</span></button>
+              <button class="le-btn">Discuss</button>
+            </div>
+          </div>
+          <div class="leg-vote">66.9%<br><span style="font-size:7px;color:var(--ink-mut);">Sep 25, 2022 Referendum</span></div>
+        </div>
+
+        <div class="leg-row">
+          <div class="leg-year">2022</div>
+          <div class="leg-content">
+            <div class="leg-title">Código Penal — New Penal Code</div>
+            <div class="leg-desc">Replaced the 1987 penal code. Expanded criminal penalties including for protest, sedition, and activities deemed counter-revolutionary. Actively used to prosecute July 11, 2021 protest participants.</div>
+            <div class="leg-badges"><span class="lb lb-pass">Passed</span><span class="lb lb-unan">Unanimous</span><span class="lb lb-civil">Criminal Law</span></div>
+            <div class="leg-engage">
+              <button class="le-btn concur">Concur <span class="sca-count">103</span></button>
+              <button class="le-btn object">Object <span class="sca-count">4,107</span></button>
+              <button class="le-btn">Discuss</button>
+            </div>
+          </div>
+          <div class="leg-vote">470–0<br><span style="font-size:7px;color:var(--ink-mut);">May 2022</span></div>
+        </div>
+
+        <div class="leg-row">
+          <div class="leg-year">2019</div>
+          <div class="leg-content">
+            <div class="leg-title">Constitución de la República de Cuba — New Constitution</div>
+            <div class="leg-desc">Replaced the 1976 constitution. Affirmed Communist Party's role as "the leading force in state and society." Introduced the office of President and Prime Minister. Approved by public referendum.</div>
+            <div class="leg-badges"><span class="lb lb-pass">Passed by Referendum</span><span class="lb lb-civil">Constitutional</span></div>
+            <div class="leg-engage">
+              <button class="le-btn concur">Concur <span class="sca-count">1,540</span></button>
+              <button class="le-btn object">Object <span class="sca-count">670</span></button>
+              <button class="le-btn">Discuss</button>
+            </div>
+          </div>
+          <div class="leg-vote">86.8%<br><span style="font-size:7px;color:var(--ink-mut);">Feb 24, 2019 Referendum</span></div>
+        </div>
+
+        <div class="note-card" style="margin-top:14px;">
+          <span class="nc-icon">📋</span>
+          <span class="nc-text">FORA note on Cuban legislation: Cuba's National Assembly votes are almost always unanimous. A unanimous vote does not reflect debate — it reflects a preselected candidate list and a PCC that determines outcomes before sessions begin. The Concur / Object engagement numbers above are from FORA users worldwide, not the Assembly. They are one of the only public signals of what people actually think about each law.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ACTIVE CRISIS ═══ -->
+    <div id="panel-crisis" class="tab-panel">
+
+      <div class="sec">
+        <div class="nh-eyebrow">Active Crisis · 2025–2026</div>
+        <h2 class="nh-headline">Cuba's Worst Economic Crisis in Decades</h2>
+        <p class="nh-lead">Cuba entered 2026 in its most severe economic contraction since the "Special Period" following the Soviet collapse in 1991. The proximate causes are the loss of Venezuelan oil, intensified US sanctions targeting GAESA, fuel scarcity, and rolling nationwide blackouts. The structural cause is a state-controlled economy that has not produced enough food, fuel, or basic goods for its population for years.</p>
+
+        <div class="crisis-timeline">
+          <div class="ct-item">
+            <div class="ct-dot amber"></div>
+            <div class="ct-date">Late 2025</div>
+            <div class="ct-title">Venezuelan Oil Supply Ends</div>
+            <div class="ct-text">The collapse of Venezuela's political arrangement under Maduro ended Cuba's primary oil supply, which had subsidized the island for two decades. Cuba scrambles for replacement fuel. Blackouts become acute — some neighborhoods lose power 12+ hours per day.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-dot red"></div>
+            <div class="ct-date">January 2026</div>
+            <div class="ct-title">Trump Blocks Fuel Deliveries · Mexico Pauses Shipments</div>
+            <div class="ct-text">US pressure on fuel suppliers intensifies. Mexico temporarily halts oil shipments to Cuba after US pressure. Nicaragua cancels visa-free travel for Cuban citizens, closing a major migration route. Cuba faces a fuel emergency.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-dot amber"></div>
+            <div class="ct-date">January 2026</div>
+            <div class="ct-title">China Steps In — $80M Emergency Aid</div>
+            <div class="ct-text">China approves $80M emergency financial aid plus 60,000 tonnes of rice. Chinese Ambassador: "We deeply understand that true friendship is revealed in times of greatest need." Russia pledges continued oil shipments.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-dot red"></div>
+            <div class="ct-date">May 7, 2026</div>
+            <div class="ct-title">US Sanctions GAESA</div>
+            <div class="ct-text">The US formally designates GAESA under Executive Order 14404. Secretary Rubio calls GAESA "a military conglomerate that steals millions in aid for the Cuban people." GAESA Executive President Ania Guillermina Lastres Morera personally sanctioned. Cuba denies GAESA is to blame for the crisis.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-dot green"></div>
+            <div class="ct-date">June 18, 2026</div>
+            <div class="ct-title">Historic Economic Reforms Approved</div>
+            <div class="ct-text">Communist Party unanimously approves sweeping privatization package backed by Raúl Castro. Díaz-Canel acknowledges domestic failures. This is the largest market opening in Cuba's revolutionary history. Implementation details remain unpublished.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-dot amber"></div>
+            <div class="ct-date">Ongoing · June 2026</div>
+            <div class="ct-title">Rolling Blackouts · Food Scarcity · Mass Emigration</div>
+            <div class="ct-text">GDP contraction projected at 6.5%–15% for 2026. Hundreds of thousands have emigrated. Blackouts continue in most provinces. Basic goods remain scarce. Inflation is acute. The Cuban people absorb costs that are a combination of embargo, government dysfunction, and GAESA's extraction of national wealth into hidden accounts.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FOREIGN AFFAIRS ═══ -->
+    <div id="panel-foreign" class="tab-panel">
+
+      <div class="sec">
+        <div class="nh-eyebrow">Foreign Affairs · The Full Picture</div>
+        <h2 class="nh-headline">Cuba Is Not Isolated — It Is Contested</h2>
+        <p class="nh-lead">American political discourse treats Cuba as isolated by the US embargo. The reality is more complex: Cuba has been deeply embedded in a network of geopolitical relationships for 65 years. Russia, China, Venezuela, and others have all been present — providing aid, investment, intelligence partnerships, and political cover. Those relationships have their own costs and conditions. Cuba's foreign affairs are not simply a story of American pressure; they are a story of superpower competition playing out on a small island.</p>
+
+        <div class="partner-row">
+          <div class="pr-flag">🇨🇳</div>
+          <div class="pr-content">
+            <div class="pr-name">China — Primary Patron as of 2025–2026</div>
+            <div class="pr-role-badge rb-main">Strategic Partner</div>
+            <div class="pr-text">Cuba joined China's Belt and Road Initiative in 2018. China is now Cuba's largest trading partner. In January 2026 Xi Jinping approved $80M emergency aid. In April 2026, the two nations signed 29 cooperation agreements covering credit financing, port infrastructure, technology transfer, and biotechnology. China is funding 55+ solar parks across Cuba targeting 2,000 MW — nearly two-thirds of Cuba's current electricity needs. Chinese solar exports to Cuba grew from $5M (2023) to $117M (2025). The Chinese Ambassador called the relationship an "iron friendship."</div>
+            <div class="pr-stats">
+              <span class="pr-stat"><strong>$80M</strong> emergency aid, Jan 2026</span>
+              <span class="pr-stat"><strong>29</strong> cooperation agreements, Apr 2026</span>
+              <span class="pr-stat"><strong>$117M</strong> solar exports, 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="partner-row">
+          <div class="pr-flag">🇷🇺</div>
+          <div class="pr-content">
+            <div class="pr-name">Russia — Historical Patron, Partially Stalled</div>
+            <div class="pr-role-badge rb-ally">Long-Term Ally</div>
+            <div class="pr-text">Russia replaced the USSR as Cuba's primary geopolitical patron after 1991. Putin pledged $1B+ in investment under "Plan 2030" in 2023 and continues oil shipments despite US pressure. Most Russian construction and infrastructure projects have stalled — Cuba cannot service debts, and Russia's resources are consumed by Ukraine. Russia's intelligence relationship with Cuba dates to the Soviet era and continues. Putin has publicly condemned US sanctions in 2026.</div>
+            <div class="pr-stats">
+              <span class="pr-stat"><strong>$1B+</strong> investment pledged (Plan 2030, 2023)</span>
+              <span class="pr-stat"><strong>Most projects stalled</strong> — Ukraine war impact</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="partner-row">
+          <div class="pr-flag">🇺🇸</div>
+          <div class="pr-content">
+            <div class="pr-name">United States — Adversary and Largest Remittance Source</div>
+            <div class="pr-role-badge rb-embargo">Embargo · Since 1962</div>
+            <div class="pr-text">The US maintains a comprehensive trade and financial embargo on Cuba, in effect since 1962. The Obama administration partially normalized relations (2014–2017); Trump reversed this in his first term and significantly escalated pressure in his second term (2025–). The US has simultaneously sanctioned GAESA, blocked fuel deliveries, and indicted former Cuban officials. The 1.8M Cuban-Americans in the US send billions in remittances to family on the island — making the US simultaneously Cuba's adversary and one of its largest sources of hard currency.</div>
+            <div class="pr-stats">
+              <span class="pr-stat"><strong>1962</strong> embargo start</span>
+              <span class="pr-stat"><strong>1.8M</strong> Cuban-Americans</span>
+              <span class="pr-stat"><strong>GAESA sanctioned</strong> May 7, 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="partner-row">
+          <div class="pr-flag">🇻🇪</div>
+          <div class="pr-content">
+            <div class="pr-name">Venezuela — Former Oil Lifeline, Now Disrupted</div>
+            <div class="pr-role-badge rb-complex">Relationship Disrupted</div>
+            <div class="pr-text">Venezuela under Maduro provided subsidized oil to Cuba for over two decades in exchange for Cuban doctors and security advisors — a relationship that propped up both governments. The collapse of Venezuela's political arrangement in late 2025 ended this lifeline, and the loss of Venezuelan oil is the primary trigger of Cuba's current fuel emergency. The Cuba–Venezuela relationship illustrates how authoritarian governments sustain each other — and how dependent that can make their people on political outcomes beyond their control.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DOCTRINE & HISTORY ═══ -->
+    <div id="panel-doctrine" class="tab-panel">
+
+      <div class="sec">
+        <div class="nh-eyebrow">Doctrine · The Ideas Cuba Governs By</div>
+        <h2 class="nh-headline">Marxism-Leninism, Cuban Style</h2>
+        <p class="nh-lead">Cuba's governing ideology draws on Marxism-Leninism as interpreted through the Cuban revolutionary experience — particularly Fidel Castro's synthesis of socialist economics, anti-imperialism, and national sovereignty. It has been adapted repeatedly to survive political shocks: the Soviet collapse, the Special Period, Raúl's partial reforms, and now Díaz-Canel's 2026 market opening.</p>
+
+        <div class="doctrine-card">
+          <button class="share-btn" onclick="foraShare(this)" title="Share" aria-label="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <div class="dc-eyebrow">Core Doctrine</div>
+          <div class="dc-title">The Four Pillars of Cuban Revolutionary Ideology</div>
+          <div class="dc-text">
+            <strong>1. Anti-imperialism</strong> — Cuba frames its entire political existence as resistance to US imperialism. The embargo is the central evidence for this narrative and is used to justify restrictions on civil liberties as "wartime necessities."<br><br>
+            <strong>2. Socialist Economics</strong> — State control of the means of production; social ownership; universal healthcare and education. Cuba has genuine achievements in these areas that coexist with genuine failures in food, housing, and living standards.<br><br>
+            <strong>3. National Sovereignty</strong> — Cuba frames any external criticism as an attack on its sovereignty. This framing has been used to reject human rights pressure from the UN, the US, and Latin American neighbors.<br><br>
+            <strong>4. Fidelismo</strong> — Fidel Castro's personal authority created a governing style based on charisma, revolutionary legitimacy, and mass mobilization. Díaz-Canel lacks this. His 2026 admission of domestic failures is a departure from the Fidelista tradition of blaming external enemies.
+          </div>
+        </div>
+
+        <div class="nh-eyebrow" style="margin-top:24px;">History · A Civilization Timeline</div>
+        <div class="hist-item">
+          <div class="hi-year">1492</div>
+          <div class="hi-content"><div class="hi-title">Columbus arrives. Indigenous Taíno population decimated within decades.</div><div class="hi-text">Cuba becomes Spain's most valuable Caribbean colony. Sugar and tobacco plantations built on enslaved African labor — a system that defines the island's ethnic and economic DNA for centuries.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">1868</div>
+          <div class="hi-content"><div class="hi-title">Ten Years' War — First War of Independence</div><div class="hi-text">Cuban rebels fight Spain for independence. War ends with neither victory nor freedom. Seeds of revolutionary consciousness planted.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">1898</div>
+          <div class="hi-content"><div class="hi-title">Spanish-American War · Cuba "freed" — then occupied</div><div class="hi-text">The US intervenes, defeats Spain, and occupies Cuba. The Platt Amendment grants the US the right to intervene in Cuban affairs at will. Cuban independence is nominal for decades.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">1959</div>
+          <div class="hi-content"><div class="hi-title">Revolution. Castro takes power. Batista flees.</div><div class="hi-text">Fidel Castro's 26th of July Movement overthrows US-backed dictator Fulgencio Batista. Revolution is initially broadly popular. Rapid nationalization of industry alienates the middle class; hundreds of thousands emigrate.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">1961</div>
+          <div class="hi-content"><div class="hi-title">Bay of Pigs. Cuba declares itself socialist.</div><div class="hi-text">US-sponsored invasion fails catastrophically, cementing Castro's legitimacy. Cuba announces it is a socialist state and aligns with the Soviet Union.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">1991</div>
+          <div class="hi-content"><div class="hi-title">Soviet collapse. The Special Period begins.</div><div class="hi-text">Cuba loses ~80% of its import capacity overnight. Food rationing intensifies. The government introduces limited market reforms to survive. GAESA is founded to give the military a hard-currency base.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">2021</div>
+          <div class="hi-content"><div class="hi-title">July 11 Protests — Largest in 60 years</div><div class="hi-text">Mass protests in all Cuban provinces — unprecedented in scope. Chants of "Patria y Vida" ("Homeland and Life") replace the official slogan "Patria o Muerte." Hundreds arrested. Government restores internet access only after international pressure.</div></div>
+        </div>
+        <div class="hist-item">
+          <div class="hi-year">2026</div>
+          <div class="hi-content"><div class="hi-title">Historic market reforms approved · June 18</div><div class="hi-text">Communist Party unanimously approves the largest economic opening since the revolution — acknowledging domestic failures for the first time. Whether implementation follows is Cuba's defining question.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CUBA FORUM ═══ -->
+    <div id="panel-forum" class="tab-panel">
+
+      <div class="forum-hero">
+        <div class="fh-eyebrow">FORA · Cuba Forum · Open to All</div>
+        <div class="fh-title">A Place for Every Cuban Voice — and Every Voice That Cares About Cuba</div>
+        <div class="fh-text">Cuba has been argued about, sanctioned, praised, and condemned for 65 years. This is not another argument. This is the space where Cubans on the island, Cubans in exile, Cuban-Americans, and the world at large exchange ideas, plans, and work toward the question that matters most: what does a prosperous Cuba look like, and how do we get there? The embargo has costs. The government has costs. The Cuban people bear them both. Every voice belongs here.</div>
+        <div class="voice-grid">
+          <div class="voice-card"><div class="vc-icon">🇨🇺</div><div class="vc-label">On the Island</div><div class="vc-desc">Share what daily life looks like — blackouts, food access, what the new reforms mean where you live.</div></div>
+          <div class="voice-card"><div class="vc-icon">✈️</div><div class="vc-label">Exiles &amp; Diaspora</div><div class="vc-desc">Your family left. You left. Your memory of Cuba and your vision for its future both belong here.</div></div>
+          <div class="voice-card"><div class="vc-icon">🌐</div><div class="vc-label">World at Large</div><div class="vc-desc">Investors, solidarity organizations, students, anyone who believes Cuba's future matters.</div></div>
+        </div>
+      </div>
+
+      <!-- COMPOSE -->
+      <div class="forum-compose">
+        <div class="fc-label">Share your story, question, or idea — choose a category</div>
+        <div class="fc-categories">
+          <button class="fc-cat selected">Daily Life</button>
+          <button class="fc-cat">Economy &amp; Work</button>
+          <button class="fc-cat">Family &amp; Emigration</button>
+          <button class="fc-cat">The Reforms</button>
+          <button class="fc-cat">History &amp; Memory</button>
+          <button class="fc-cat">Ideas for Cuba's Future</button>
+          <button class="fc-cat">Question for the Forum</button>
+        </div>
+        <textarea class="fc-textarea" placeholder="Write here. You will appear under your FORA pseudonymous handle — e.g. @cuba.teacher or @miami.cuban.son. FORA protects your identity. Your voice is what matters."></textarea>
+        <div class="fc-footer">
+          <span class="fc-anon">Posted under your anonymous handle · your real name is never shown</span>
+          <button class="fc-submit">Post to Forum</button>
+        </div>
+      </div>
+
+      <!-- SAMPLE STORIES -->
+      <div class="story-card">
+        <div class="sc-header">
+          <div class="sc-avatar">CT</div>
+          <div class="sc-handle">@cuba.teacher.havana</div>
+          <div class="sc-loc">Havana · Verified Resident</div>
+        </div>
+        <div class="sc-category">Daily Life</div>
+        <div class="sc-text">We had 9 hours without power yesterday. The kids couldn't study. I teach third grade. The school has no generator. When people abroad argue about whether the embargo or the government is to blame, I think: both. I live both. The embargo means we can't get parts. The government means the money that should fix this goes somewhere else. Both are real. What I want is for someone to actually fix it.</div>
+        <div class="sc-actions">
+          <button class="sca-btn concur">Concur <span class="sca-count">341</span></button>
+          <button class="sca-btn">Reply</button>
+          <button class="sca-btn">Share</button>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <div class="sc-header">
+          <div class="sc-avatar" style="background:var(--teal);">MD</div>
+          <div class="sc-handle">@miami.daughter.1994</div>
+          <div class="sc-loc">Miami, FL · Cuban-American</div>
+        </div>
+        <div class="sc-category">Family &amp; Emigration</div>
+        <div class="sc-text">My grandmother left in 1961. My mother left in 1994. I was born here. Every time someone tells me the embargo is the problem, I ask: why did my family have to leave? The answer isn't just the embargo. My grandmother left because her business was nationalized. My mother left because there was nothing to eat. These were government decisions. I want Cuba free. I also want Cuba to prosper. Those aren't opposites.</div>
+        <div class="sc-actions">
+          <button class="sca-btn concur">Concur <span class="sca-count">517</span></button>
+          <button class="sca-btn">Reply</button>
+          <button class="sca-btn">Share</button>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <div class="sc-header">
+          <div class="sc-avatar" style="background:var(--purple);">CE</div>
+          <div class="sc-handle">@cuban.engineer.2024</div>
+          <div class="sc-loc">Location withheld</div>
+        </div>
+        <div class="sc-category">Ideas for Cuba's Future</div>
+        <div class="sc-text">The June 18 reforms are real but vague. I've read Díaz-Canel's speech carefully. He's right that bureaucracy and delay are domestic problems. But the reforms still don't mention GAESA. They don't talk about military control of the economy. You can privatize a hundred restaurants and still have GAESA controlling the port, the bank, and the supermarkets. Genuine reform requires touching the FAR's economic empire. Has anyone heard that part discussed?</div>
+        <div class="sc-actions">
+          <button class="sca-btn concur">Concur <span class="sca-count">203</span></button>
+          <button class="sca-btn">Reply</button>
+          <button class="sca-btn">Share</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ THE RECORD ═══ -->
+    <div id="panel-record" class="tab-panel">
+
+      <div class="sec">
+        <div class="nh-eyebrow">The Record · What Is Documented</div>
+        <h2 class="nh-headline">Cuba's Documented Record — Confirmed, Contested, and Ongoing</h2>
+        <p class="nh-lead">FORA's Record tab holds verified facts about what a government has done. Not what it has said, not what its critics allege — what is documented, sourced, and confirmed. Where events are contested, the dispute itself is part of the record. Citizens engage with each item: Concur with the documentation, dispute it, or flag a missing source.</p>
+
+        <table class="record-table">
+          <thead><tr>
+            <th>Event</th><th>Status</th><th>Source</th><th style="width:60px;"></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="rt-event">July 11, 2021 Protests — Mass arrests of demonstrators</div>
+                <div class="rt-date">July 11–August 2021 · All Cuban provinces</div>
+                <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:3px;">Hundreds of protesters arrested following the largest demonstrations in Cuba since 1959. Sentences of up to 25 years issued. UN and international human rights organizations documented the detentions.</div>
+              </td>
+              <td><span class="rt-status rs-conf">Confirmed</span></td>
+              <td><div class="rt-source">Amnesty International · UN Human Rights · Reuters</div></td>
+              <td><button class="sca-btn concur" style="font-size:7px;padding:3px 8px;">Concur</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rt-event">GAESA holds estimated $14.5–20B in undisclosed overseas accounts</div>
+                <div class="rt-date">Reported 2025–2026 · Based on leaked 2023–2024 financial documents</div>
+                <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:3px;">El Nuevo Herald reported leaked internal GAESA documents in 2025. US State Dept. issued its own figure of $20B in its May 2026 sanctions announcement. At least one UCL economist disputes the Herald's figures as inflated. Cuban government does not comment on GAESA's finances.</div>
+              </td>
+              <td><span class="rt-status rs-disp">Disputed Amount</span></td>
+              <td><div class="rt-source">El Nuevo Herald · US State Dept. · UCL Emily Morris (dispute)</div></td>
+              <td><button class="sca-btn" style="font-size:7px;padding:3px 8px;">Flag</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rt-event">Social Communication Law (2023) — enforcement against journalists and activists</div>
+                <div class="rt-date">2023–2026 · Active enforcement</div>
+                <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:3px;">The 2022 Penal Code and 2023 Social Communication Law have been actively enforced against nonstate media, independent journalists, and ordinary citizens posting on social media. CPJ and Freedom House document multiple cases.</div>
+              </td>
+              <td><span class="rt-status rs-conf">Confirmed</span></td>
+              <td><div class="rt-source">Committee to Protect Journalists · Freedom House 2025</div></td>
+              <td><button class="sca-btn concur" style="font-size:7px;padding:3px 8px;">Concur</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rt-event">2022 Family Code — same-sex marriage legalized by public referendum</div>
+                <div class="rt-date">September 25, 2022 · 66.9% in favor</div>
+                <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:3px;">Cuba became the first Caribbean country to legalize same-sex marriage via popular referendum. 66.9% voted in favor. The Family Code also expanded protections for women, children, and elderly. The most progressive family legislation in Cuban history.</div>
+              </td>
+              <td><span class="rt-status rs-conf">Confirmed</span></td>
+              <td><div class="rt-source">Cuban Electoral Commission · Reuters · AP</div></td>
+              <td><button class="sca-btn concur" style="font-size:7px;padding:3px 8px;">Concur</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rt-event">US Embargo — documented impact on medicine and medical equipment access</div>
+                <div class="rt-date">Ongoing · 1962–present</div>
+                <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:3px;">UN General Assembly has voted annually to condemn the US embargo — 185–2 in 2023. China provided 44,000 three-way stopcocks to Cuban hospitals in 2025 — items Cuba cannot obtain internationally due to the embargo. The Cuban government also cites the embargo to deflect from domestic failures; both things are simultaneously true.</div>
+              </td>
+              <td><span class="rt-status rs-conf">Confirmed</span></td>
+              <td><div class="rt-source">UN General Assembly · Peoples Dispatch · AP</div></td>
+              <td><button class="sca-btn concur" style="font-size:7px;padding:3px 8px;">Concur</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rt-event">June 18, 2026 reform package — implementation status</div>
+                <div class="rt-date">Approved June 18, 2026 · Implementation: unknown</div>
+                <div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:3px;">Cuba has announced major economic reforms multiple times (2010, 2019, 2026) with limited follow-through. Specific regulations for the June 2026 package have not been published. FORA tracks implementation outcomes, not announcements. This row updates as implementation is documented.</div>
+              </td>
+              <td><span class="rt-status rs-ong">Ongoing · Tracking</span></td>
+              <td><div class="rt-source">AP · Al Jazeera · CBC · FORA Editorial</div></td>
+              <td><button class="sca-btn" style="font-size:7px;padding:3px 8px;">Watch</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note-card" style="margin-top:16px;">
+          <span class="nc-icon">📌</span>
+          <span class="nc-text">FORA's Record tab is a living document. Citizens can submit documented events for inclusion, flag missing sources, or dispute a record's characterization via the community amendment process. All editorial changes require named sources or explicit uncertainty markers — never stated as fact without a link. No hidden rules govern what appears here.</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /juris-main -->
+
+  <!-- ── SIDEBAR ── -->
+  <div class="juris-sidebar">
+
+    <div class="sb-block">
+      <div class="sb-ey">Key Officials · June 2026</div>
+      <div class="sb-title">Leadership</div>
+      <div class="official-row">
+        <div class="or-avatar">MD</div>
+        <div>
+          <div class="or-name">Miguel Díaz-Canel</div>
+          <div class="or-role">President &amp; Party First Secretary</div>
+          <span class="or-badge ob-party">PCC</span>
+          <span class="or-badge ob-sanction">US-Sanctioned</span>
+        </div>
+      </div>
+      <div class="official-row">
+        <div class="or-avatar" style="background:#555;">RC</div>
+        <div>
+          <div class="or-name">Raúl Castro</div>
+          <div class="or-role">Former President · Still Influential</div>
+          <span class="or-badge ob-party">Backed Jun 2026 Reforms</span>
+        </div>
+      </div>
+      <div class="official-row">
+        <div class="or-avatar" style="background:var(--cub);">AL</div>
+        <div>
+          <div class="or-name">Ania Guillermina Lastres</div>
+          <div class="or-role">GAESA Executive President</div>
+          <span class="or-badge ob-sanction">US-Sanctioned May 2026</span>
+        </div>
+      </div>
+      <div class="official-row">
+        <div class="or-avatar" style="background:var(--blue);">EL</div>
+        <div>
+          <div class="or-name">Esteban Lazo Hernández</div>
+          <div class="or-role">National Assembly President</div>
+          <span class="or-badge ob-party">PCC · since 2013</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Key Facts</div>
+      <div class="sb-title">Cuba at a Glance</div>
+      <div class="data-row"><span class="dr-label">Capital</span><span class="dr-val">Havana</span></div>
+      <div class="data-row"><span class="dr-label">Area</span><span class="dr-val">109,884 km²</span></div>
+      <div class="data-row"><span class="dr-label">Gov. System</span><span class="dr-val">One-Party Communist</span></div>
+      <div class="data-row"><span class="dr-label">Ruling Party</span><span class="dr-val">PCC · since 1959</span></div>
+      <div class="data-row"><span class="dr-label">Assembly</span><span class="dr-val">470 seats · Meets 2×/year</span></div>
+      <div class="data-row"><span class="dr-label">Embargo Start</span><span class="dr-val">1962 (US)</span></div>
+      <div class="data-row"><span class="dr-label">Next Election</span><span class="dr-val">2028</span></div>
+      <div class="data-row"><span class="dr-label">Cuban-Americans</span><span class="dr-val">1.8M in US</span></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">US–Cuba · Key Moments</div>
+      <div class="sb-title">Timeline</div>
+      <div class="timeline-item"><div class="ti-year">1959</div><div class="ti-text">Revolution. Castro takes power.</div></div>
+      <div class="timeline-item"><div class="ti-year">1962</div><div class="ti-text">Embargo begins. Missile Crisis.</div></div>
+      <div class="timeline-item"><div class="ti-year">1991</div><div class="ti-text">USSR collapses. GAESA founded.</div></div>
+      <div class="timeline-item"><div class="ti-year">2015</div><div class="ti-text">Obama–Castro thaw. Embassies reopen.</div></div>
+      <div class="timeline-item"><div class="ti-year">2017</div><div class="ti-text">Trump reverses normalization.</div></div>
+      <div class="timeline-item"><div class="ti-year">2021</div><div class="ti-text">July 11 protests. Hundreds jailed.</div></div>
+      <div class="timeline-item"><div class="ti-year">2025</div><div class="ti-text">Venezuelan oil ends. Crisis deepens.</div></div>
+      <div class="timeline-item"><div class="ti-year">2026</div><div class="ti-text">GAESA sanctioned. Historic reforms Jun 18.</div></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Cross-Links</div>
+      <div class="sb-title">Related Pages</div>
+      <a href="/org/gaesa" class="quick-link">→ GAESA · Cuban Military Conglomerate</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Venezuela <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ Russia <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+      <div class="quick-link" style="color:var(--ink-mut);">→ China <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function foraShare(btn){
+  var card=btn.parentElement;
+  var clone=card.cloneNode(true);
+  clone.querySelectorAll('.share-btn').forEach(function(b){b.remove();});
+  var text=(clone.innerText||clone.textContent).replace(/\s+/g,' ').trim().slice(0,600);
+  var url=window.location.href;
+  if(navigator.share){navigator.share({title:document.title,text:text,url:url}).catch(function(){});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(text+'\n\nFORA · '+document.title+'\n'+url).then(function(){btn.classList.add('copied');setTimeout(function(){btn.classList.remove('copied');},1800);}).catch(function(){});}
+}
+
+function switchTab(name, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// Category pill selection
+document.querySelectorAll('.fc-cat').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.fc-cat').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+</script>

@@ -1,0 +1,752 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f2f4f8;--white:#ffffff;
+  --blue:#1b3a6b;--blue-pl:rgba(27,58,107,0.12);--blue-vp:rgba(27,58,107,0.04);
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;--gilt-rul:rgba(184,134,11,0.22);--gilt-dk:#8b6914;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;--ink-mid:#1e2d45;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.05);
+  --green:#155c2d;--green-p:rgba(21,92,45,0.07);--green-r:rgba(21,92,45,0.2);
+  --red:#8b2020;--red-p:rgba(139,32,32,0.06);--red-r:rgba(139,32,32,0.2);--red-lt:#c0392b;
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.07);--amber-r:rgba(196,127,0,0.2);
+  --gae:#3a3a1a;--gae-lt:#6b6b2e;--gae-p:rgba(58,58,26,0.07);--gae-r:rgba(58,58,26,0.22);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
+a{text-decoration:none;color:inherit;}
+
+nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
+.nav-links{display:flex;gap:6px;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);padding:6px 14px;border-radius:100px;cursor:pointer;}
+.nav-link.active{color:white;background:rgba(255,255,255,0.1);}
+.nav-right{margin-left:auto;}
+
+/* TICKER */
+.ticker-bar{height:28px;background:#0a0f1a;border-bottom:1px solid #1b3a6b;display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;background:#3a3a1a;border-right:1px solid #6b6b2e;}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:white;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;animation:tickscroll 32s linear infinite;white-space:nowrap;}
+@keyframes tickscroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 16px;height:28px;border-right:1px solid rgba(255,255,255,0.05);}
+.t-key{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.t-val{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;}
+.tv-r{color:#ff9090;}.tv-a{color:#FAC775;}.tv-w{color:rgba(255,255,255,0.8);}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1a1a08 0%,#3a3a1a 50%,#252512 100%);padding:36px 48px 28px;position:relative;overflow:hidden;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;display:flex;align-items:center;gap:6px;}
+.bc-sep{color:rgba(255,255,255,0.12);}.bc-here{color:rgba(255,255,255,0.55);}
+.hero-inner{display:flex;gap:32px;align-items:flex-start;position:relative;}
+.entity-identity{flex:1;}
+.entity-icon-wrap{width:84px;height:84px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:36px;background:#3a3a1a;}
+.entity-name{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:white;line-height:0.95;margin-bottom:4px;}
+.entity-full{font-family:'Source Serif 4',serif;font-size:12px;font-style:italic;color:rgba(255,255,255,0.4);margin-bottom:5px;}
+.entity-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.entity-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.etag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 9px;border-radius:100px;border:1px solid;}
+.etag-sanction{color:rgba(255,130,130,0.9);border-color:rgba(255,130,130,0.3);background:rgba(255,100,100,0.08);}
+.etag-mil{color:rgba(184,134,11,0.9);border-color:rgba(184,134,11,0.3);background:rgba(184,134,11,0.08);}
+.etag-grey{color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);}
+.hero-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.02);padding:10px 13px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-top:3px;line-height:1.5;}
+.hero-actions{display:flex;flex-direction:column;gap:8px;min-width:160px;}
+.btn-p{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;}
+.btn-s{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.18);cursor:pointer;background:transparent;color:rgba(255,255,255,0.65);}
+.btn-submit{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(250,199,117,0.4);cursor:pointer;background:rgba(250,199,117,0.1);color:rgba(250,199,117,0.9);}
+
+/* TABS */
+.page-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;padding:0 48px;gap:0;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 15px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s;}
+.tab:hover{color:var(--gae);}
+.tab.active{color:var(--gae);border-bottom-color:var(--gae);font-weight:600;}
+.tab.t-submit{color:var(--amber);}
+.tab.t-submit:hover,.tab.t-submit.active{color:var(--amber);border-bottom-color:var(--amber);}
+
+/* BODY */
+.page-body{display:grid;grid-template-columns:1fr 272px;gap:0;max-width:1380px;margin:0 auto;padding:0 48px 60px;align-items:start;}
+.page-main{padding:32px 28px 0 0;min-width:0;}
+.page-sidebar{padding:32px 0 0;border-left:1px solid var(--rule);padding-left:22px;}
+
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* SHARED */
+.sec{margin-bottom:38px;}
+.sec+.sec{padding-top:28px;border-top:1.5px solid rgba(14,26,46,0.1);}
+.sec-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.sec-headline{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#0e0c08;line-height:1.1;margin-bottom:8px;}
+.sec-lead{font-family:'Source Serif 4',serif;font-size:13.5px;color:#5a5448;line-height:1.75;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule);}
+.plain-summary{background:var(--gae-p);border:1px solid var(--gae-r);border-radius:8px;padding:12px 14px;font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink-mid);line-height:1.7;margin-bottom:16px;}
+.note-card{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;}
+.nc-icon{font-size:14px;flex-shrink:0;}
+.nc-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
+
+/* MONEY FLOW */
+.money-flow{background:linear-gradient(135deg,#0e1a08,#1a3a1a);border-radius:10px;padding:18px 22px;margin-bottom:16px;}
+.mf-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:10px;}
+.mf-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.mf-node{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:8px 12px;text-align:center;}
+.mf-icon{font-size:16px;margin-bottom:3px;}
+.mf-name{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.7);white-space:nowrap;}
+.mf-arrow{font-size:16px;color:rgba(255,255,255,0.25);}
+.mf-leak{background:rgba(139,32,32,0.3);border-color:rgba(200,60,60,0.4);}
+.mf-leak .mf-name{color:rgba(255,150,150,0.8);}
+.mf-footnote{margin-top:10px;font-family:'Source Serif 4',serif;font-size:11.5px;color:rgba(255,255,255,0.4);font-style:italic;}
+
+/* SECTOR GRID */
+.sector-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
+.sector-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;}
+.sc-icon{font-size:20px;margin-bottom:6px;}
+.sc-name{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.sc-desc{font-family:'Nunito',sans-serif;font-size:11px;color:var(--ink-soft);line-height:1.5;margin-bottom:5px;}
+.sc-subs{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);line-height:1.6;}
+
+/* FAMILY TABLE */
+.family-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.family-table thead tr{background:var(--ink);}
+.family-table th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.family-table td{padding:11px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.family-table tr:last-child td{border-bottom:none;}
+.family-table tr:hover td{background:var(--bg);}
+.ft-name{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.ft-role{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);}
+.ft-badge{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 6px;border-radius:3px;display:inline-block;margin-right:4px;}
+.fb-dead{color:#555;background:#f0f0f0;border:1px solid #ddd;}
+.fb-active{color:var(--gae);background:var(--gae-p);border:1px solid var(--gae-r);}
+.fb-sanction{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.fb-family{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.ft-note{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;margin-top:3px;}
+
+/* ASSETS PANEL */
+.assets-panel{background:linear-gradient(135deg,var(--red-p),var(--white));border:1px solid var(--red-r);border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+.ap-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.ap-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:12px;}
+.ap-numbers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ap-num{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;text-align:center;}
+.ap-val{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:var(--red);margin-bottom:2px;}
+.ap-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);line-height:1.5;}
+
+/* ══ SUBMIT TAB ══ */
+.submit-hero{background:linear-gradient(160deg,#1a1a08,#3a3a1a);border-radius:12px;padding:22px 26px;margin-bottom:20px;}
+.sh-eyebrow{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:6px;}
+.sh-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:white;line-height:1.1;margin-bottom:8px;}
+.sh-text{font-family:'Source Serif 4',serif;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:16px;}
+.sh-why-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.sh-why{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 13px;}
+.sw-icon{font-size:16px;margin-bottom:5px;}
+.sw-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:3px;}
+.sw-text{font-family:'Nunito',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.65);line-height:1.5;}
+
+/* SUBMIT FORM */
+.submit-form{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+.sf-section{padding:18px 20px;border-bottom:1px solid var(--rule);}
+.sf-section:last-child{border-bottom:none;}
+.sf-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sf-required{font-size:6.5px;color:var(--red);background:var(--red-p);border:1px solid var(--red-r);padding:1px 5px;border-radius:3px;}
+.sf-optional{font-size:6.5px;color:var(--ink-mut);background:var(--bg);border:1px solid var(--rule);padding:1px 5px;border-radius:3px;}
+
+/* Category pills */
+.sf-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.sf-pill{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px;border-radius:100px;border:1px solid var(--rule);background:transparent;color:var(--ink-mut);cursor:pointer;transition:all 0.12s;}
+.sf-pill.selected,.sf-pill:hover{background:var(--gae);color:white;border-color:var(--gae);}
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--rule);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--bg);}
+.upload-zone:hover{border-color:var(--gilt);background:var(--gilt-pl);}
+.uz-icon{font-size:32px;margin-bottom:8px;}
+.uz-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+.uz-sub{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-mut);margin-bottom:10px;}
+.uz-types{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;color:var(--ink-mut);}
+.uz-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid var(--gilt-rul);background:var(--gilt-pl);color:var(--gilt-dk);cursor:pointer;margin-top:12px;display:inline-block;}
+
+/* Location & context inputs */
+.sf-input{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 13px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);outline:none;background:var(--bg);}
+.sf-input:focus{border-color:var(--gae);}
+.sf-textarea{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 13px;font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink);resize:vertical;min-height:80px;outline:none;background:var(--bg);}
+.sf-textarea:focus{border-color:var(--gae);}
+.sf-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sf-input-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;margin-top:10px;}
+.sf-input-label:first-child{margin-top:0;}
+
+/* Anon toggle */
+.anon-row{display:flex;align-items:center;gap:10px;}
+.anon-toggle{width:36px;height:20px;background:var(--green);border-radius:100px;position:relative;cursor:pointer;flex-shrink:0;}
+.anon-toggle::after{content:'';position:absolute;right:3px;top:3px;width:14px;height:14px;border-radius:50%;background:white;}
+.anon-text{font-family:'Source Serif 4',serif;font-size:12px;color:var(--ink-soft);line-height:1.5;}
+
+/* Submit button */
+.sf-submit-row{display:flex;align-items:center;justify-content:space-between;}
+.sf-submit{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:11px 24px;border-radius:6px;border:none;cursor:pointer;background:var(--gae);color:white;}
+.sf-caveat{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);max-width:280px;line-height:1.5;}
+
+/* SUBMITTED GRID */
+.submitted-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.submitted-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--ink);}
+.submitted-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);}
+.evidence-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;}
+.evidence-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;cursor:pointer;transition:box-shadow 0.12s;}
+.evidence-card:hover{box-shadow:0 3px 14px rgba(27,58,107,0.1);}
+.ec-media{background:var(--bg);height:120px;display:flex;align-items:center;justify-content:center;position:relative;}
+.ec-media-icon{font-size:32px;opacity:0.3;}
+.ec-type-badge{position:absolute;top:7px;left:7px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;color:white;}
+.ecb-photo{background:rgba(14,107,94,0.8);}
+.ecb-video{background:rgba(139,26,26,0.8);}
+.ecb-receipt{background:rgba(184,134,11,0.8);}
+.ec-verified{position:absolute;top:7px;right:7px;font-family:'JetBrains Mono',monospace;font-size:7px;padding:2px 6px;border-radius:3px;background:rgba(21,92,45,0.85);color:white;}
+.ec-body{padding:10px 12px;}
+.ec-category{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gae);margin-bottom:4px;}
+.ec-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink);line-height:1.5;margin-bottom:5px;}
+.ec-meta{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+.ec-actions{display:flex;gap:6px;margin-top:6px;}
+.ec-act{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:100px;border:1px solid var(--rule);background:transparent;color:var(--ink-mut);cursor:pointer;}
+.ec-act.verify{color:var(--green);border-color:var(--green-r);}
+
+/* SIDEBAR */
+.sb-block{margin-bottom:22px;}
+.sb-block+.sb-block{padding-top:18px;border-top:1px solid var(--rule);}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:13.5px;font-weight:700;color:var(--gae);margin-bottom:10px;}
+.data-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.data-row:last-child{border-bottom:none;}
+.dr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mut);}
+.dr-val{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;color:var(--ink);text-align:right;max-width:58%;}
+.dr-val.red{color:var(--red);}
+.quick-link{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--gae);cursor:pointer;}
+.quick-link:last-child{border-bottom:none;}
+.sub-list{border:1px solid var(--rule);border-radius:8px;overflow:hidden;}
+.sub-item{padding:7px 10px;border-bottom:1px solid var(--rule-lt);display:flex;align-items:center;gap:8px;}
+.sub-item:last-child{border-bottom:none;}
+.sub-icon{font-size:12px;}
+.sub-name{font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:600;color:var(--ink);}
+.sub-sector{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-left:auto;}
+.alert-card{background:var(--red-p);border:1px solid var(--red-r);border-radius:8px;padding:10px 13px;margin-bottom:8px;}
+.ac-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:3px;}
+.ac-text{font-family:'Source Serif 4',serif;font-size:12px;color:var(--ink-mid);line-height:1.6;}
+/* SHARE BUTTON */
+.share-btn{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(58,58,26,0.22);background:rgba(58,58,26,0.05);color:rgba(58,58,26,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;z-index:2;padding:0;}
+.share-btn:hover{background:rgba(58,58,26,0.14);color:rgba(58,58,26,0.85);}
+.share-btn.copied{background:rgba(21,92,45,0.15);border-color:rgba(21,92,45,0.4);color:#155c2d;}
+.plain-summary{position:relative;}
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:0 14px;}
+  .nav-links{gap:0;}
+  .nav-link{padding:5px 8px;font-size:7px;}
+  .hero{padding:20px 16px 18px;}
+  .entity-icon-wrap{width:72px;height:72px;font-size:30px;}
+  .entity-name{font-size:26px;}
+  .entity-sub{font-size:7px;}
+  .hero-actions{display:none;}
+  .hero-stats{grid-template-columns:repeat(3,1fr);}
+  .page-tabs .tabs-inner{padding:0 12px;}
+  .page-body{grid-template-columns:1fr;padding:0 16px 40px;}
+  .page-main{padding:20px 0 0;}
+  .page-sidebar{border-left:none;border-top:1.5px solid var(--rule);padding-left:0;padding-top:20px;margin-top:10px;}
+  .sec-headline{font-size:20px;}
+  .sec-lead{font-size:13px;}
+  .plain-summary{font-size:12.5px;}
+  .sector-grid{grid-template-columns:1fr 1fr;}
+  .ap-numbers{grid-template-columns:1fr;}
+  .evidence-grid{grid-template-columns:1fr;}
+  .sh-why-grid{grid-template-columns:1fr;}
+  .family-table{font-size:11.5px;}
+  .family-table th,.family-table td{padding:8px 10px;}
+}
+</style>
+
+<nav>
+  <div class="nav-logo">FORA</div>
+  <div class="nav-links">
+    <span class="nav-link">Governance</span>
+    <span class="nav-link active">World</span>
+    <span class="nav-link">Knowledge</span>
+    <span class="nav-link">Discourse</span>
+  </div>
+  <div class="nav-right"></div>
+</nav>
+
+<div class="ticker-bar">
+  <div class="ticker-badge"><span class="ticker-badge-text">GAESA · Sanctioned</span></div>
+  <div class="ticker-scroll-wrap">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="t-key">US Sanctions</span><span class="t-val tv-r">GAESA sanctioned May 7, 2026 · Executive Order 14404</span></div>
+      <div class="ticker-item"><span class="t-key">Hidden Assets</span><span class="t-val tv-r">$18–20B alleged in overseas accounts · Cubans see none</span></div>
+      <div class="ticker-item"><span class="t-key">GDP Control</span><span class="t-val tv-a">~37% of Cuba's GDP flows through GAESA</span></div>
+      <div class="ticker-item"><span class="t-key">Executive Pres.</span><span class="t-val tv-r">Ania Guillermina Lastres Morera · US-sanctioned May 2026</span></div>
+      <div class="ticker-item"><span class="t-key">Submit Evidence</span><span class="t-val tv-a">Have GAESA receipts, photos, or videos? → Submit tab</span></div>
+      <div class="ticker-item"><span class="t-key">Founded By</span><span class="t-val tv-w">Raúl Castro · 1990s · Special Period</span></div>
+      <div class="ticker-item"><span class="t-key">US Sanctions</span><span class="t-val tv-r">GAESA sanctioned May 7, 2026 · Executive Order 14404</span></div>
+      <div class="ticker-item"><span class="t-key">Hidden Assets</span><span class="t-val tv-r">$18–20B alleged in overseas accounts · Cubans see none</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="breadcrumb">
+    <span>FORA</span><span class="bc-sep">/</span>
+    <span><a href="/cuba" style="color:rgba(255,255,255,0.55);">Cuba</a></span><span class="bc-sep">/</span>
+    <span class="bc-here">GAESA</span>
+  </div>
+  <div class="hero-inner">
+    <div class="entity-identity">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+        <div class="entity-icon-wrap">🪖</div>
+        <div>
+          <div class="entity-name">GAESA</div>
+          <div class="entity-full">Grupo de Administración Empresarial S.A.</div>
+          <div class="entity-sub">Cuban Military Business Conglomerate · Founded 1990s · Havana, Cuba</div>
+        </div>
+      </div>
+      <div class="entity-tags">
+        <span class="etag etag-sanction">US-Sanctioned · May 7, 2026</span>
+        <span class="etag etag-mil">Cuban Armed Forces (FAR)</span>
+        <span class="etag etag-grey">Controls ~37% of Cuba's GDP</span>
+        <span class="etag etag-grey">State Within a State</span>
+        <span class="etag etag-grey">Never publicly audited</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-num" style="color:#ff9090;">$18B+</div><div class="hs-label">Alleged assets<br>leaked docs 2025</div></div>
+        <div class="hs"><div class="hs-num">37%</div><div class="hs-label">Cuba GDP<br>controlled est.</div></div>
+        <div class="hs"><div class="hs-num">90%</div><div class="hs-label">Cuba retail<br>trade est.</div></div>
+        <div class="hs"><div class="hs-num">57+</div><div class="hs-label">Subsidiary<br>companies</div></div>
+        <div class="hs"><div class="hs-num">0</div><div class="hs-label">Public audits<br>ever conducted</div></div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-p">Track GAESA</button>
+      <button class="btn-s">Add to Dashboard</button>
+      <button class="btn-submit" onclick="switchTab('submit',document.querySelector('.t-submit'))">📷 Submit Evidence</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-tabs">
+  <div class="tabs-inner">
+    <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
+    <div class="tab" onclick="switchTab('structure',this)">Structure &amp; Sectors</div>
+    <div class="tab" onclick="switchTab('leadership',this)">Leadership</div>
+    <div class="tab" onclick="switchTab('assets',this)">Hidden Assets</div>
+    <div class="tab" onclick="switchTab('sanctions',this)">Sanctions</div>
+    <div class="tab t-submit" onclick="switchTab('submit',this)">📷 Submit Evidence</div>
+    <div class="tab" onclick="switchTab('record',this)">The Record</div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="page-main">
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div id="panel-overview" class="tab-panel active">
+      <div class="sec">
+        <div class="plain-summary">
+          <button class="share-btn" onclick="foraShare(this)" title="Share" aria-label="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <strong>GAESA in plain language:</strong> GAESA is the Cuban military's business empire. Created by Raúl Castro in the 1990s to give the armed forces a revenue base after the Soviet Union collapsed. It now controls Cuba's hotels, largest bank, biggest port, supermarkets, gas stations, and remittance businesses — roughly 37% of the entire Cuban economy. The Cuban government does not audit GAESA. Its profits go to Cuba's military and ruling elite, not into the national budget. The US sanctioned GAESA on May 7, 2026, calling it a conglomerate that "steals millions in aid for the Cuban people at the behest of the regime." The Cuban government rarely acknowledges GAESA exists.
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-ey">Structural Paradox</div>
+        <h2 class="sec-headline">A Marxist State Running a Corporate Empire — in Secret</h2>
+        <p class="sec-lead">GAESA operates inside a country whose government publicly condemns capitalism, private property, and corporate profit — while itself functioning as an opaque, capitalist-style conglomerate, with subsidiaries incorporated in Panama, Cyprus, and Liberia specifically to move money outside the socialist system it supposedly supports.</p>
+        <div class="money-flow">
+          <div class="mf-label">How money is supposed to flow vs. how it actually flows</div>
+          <div class="mf-flow">
+            <div class="mf-node"><div class="mf-icon">🏨</div><div class="mf-name">Tourism revenue</div></div>
+            <div class="mf-arrow">→</div>
+            <div class="mf-node"><div class="mf-icon">🏦</div><div class="mf-name">GAESA banks</div></div>
+            <div class="mf-arrow">→</div>
+            <div class="mf-node mf-leak"><div class="mf-icon">🌐</div><div class="mf-name">Offshore accounts<br>Panama · Cyprus · Liberia</div></div>
+            <div class="mf-arrow">→</div>
+            <div class="mf-node mf-leak"><div class="mf-icon">⚔️</div><div class="mf-name">FAR military elite</div></div>
+          </div>
+          <div class="mf-footnote">An alleged $14.5–20B sits in undisclosed overseas accounts. GAESA's finances are not in Cuba's national budget. Cubans experience fuel shortages and blackouts.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STRUCTURE ═══ -->
+    <div id="panel-structure" class="tab-panel">
+      <div class="sec">
+        <div class="sec-ey">Economic Control · What GAESA Owns</div>
+        <h2 class="sec-headline">Cuba's Most Profitable Sectors — All Military-Controlled</h2>
+        <p class="sec-lead">GAESA does not publish a corporate map. What is known comes from reporting, defector accounts, and the 2025 leaks revealing the V Department of the FAR — a secret unit that oversees GAESA operations. A 2015 Bloomberg profile described its then-chief as controlling "the largest business empire in Cuba."</p>
+        <div class="sector-grid">
+          <div class="sector-card">
+            <div class="sc-icon">🏨</div>
+            <div class="sc-name">Tourism</div>
+            <div class="sc-desc">Controls most 5-star hotels. Primary hard-currency source. Foreign management companies operate the hotels; GAESA takes the revenue.</div>
+            <div class="sc-subs">Gaviota S.A. · Cubanacán · Gran Caribe</div>
+          </div>
+          <div class="sector-card">
+            <div class="sc-icon">🏦</div>
+            <div class="sc-name">Banking</div>
+            <div class="sc-desc">Controls Cuba's largest bank and key financial infrastructure including remittance processing.</div>
+            <div class="sc-subs">RAFIN S.A. · Banco Financiero Internacional (BFI)</div>
+          </div>
+          <div class="sector-card">
+            <div class="sc-icon">⚓</div>
+            <div class="sc-name">Port Logistics</div>
+            <div class="sc-desc">Operates the Mariel Special Development Zone — Cuba's most modern port, partially built with Chinese investment.</div>
+            <div class="sc-subs">Zona Especial de Desarrollo Mariel</div>
+          </div>
+          <div class="sector-card">
+            <div class="sc-icon">🛒</div>
+            <div class="sc-name">Retail</div>
+            <div class="sc-desc">Operates much of Cuba's retail and supermarket network, including hard-currency stores inaccessible to most Cubans.</div>
+            <div class="sc-subs">TRD Caribe · Cimex</div>
+          </div>
+          <div class="sector-card">
+            <div class="sc-icon">⛽</div>
+            <div class="sc-name">Fuel Distribution</div>
+            <div class="sc-desc">Controls gas stations and fuel distribution while the Cuban population experiences acute shortages.</div>
+            <div class="sc-subs">CUPET (partial)</div>
+          </div>
+          <div class="sector-card">
+            <div class="sc-icon">💸</div>
+            <div class="sc-name">Remittances</div>
+            <div class="sc-desc">Controls remittance processing infrastructure — taking a cut of billions sent from Cuban-Americans to family on the island.</div>
+            <div class="sc-subs">Fincimex (sanctioned 2020) · AIS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LEADERSHIP ═══ -->
+    <div id="panel-leadership" class="tab-panel">
+      <div class="sec">
+        <div class="sec-ey">Leadership · Castro Family Network</div>
+        <h2 class="sec-headline">Who Has Controlled GAESA</h2>
+        <p class="sec-lead">GAESA's leadership has been inseparable from the Castro family since its founding. Its first major leader was Raúl Castro's son-in-law. After his death, the current executive president — already US-sanctioned — manages its international assets.</p>
+
+        <table class="family-table">
+          <thead><tr><th>Name</th><th>Role</th><th>Period</th><th>Connection</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="ft-name">Raúl Castro</div><div class="ft-note">Created GAESA to give the FAR a hard-currency base during the Special Period. Still influential; backed June 2026 privatization reforms.</div></td>
+              <td><span class="ft-badge fb-family">Founder</span></td>
+              <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">1990s–2006<br>as Defense Minister</div></td>
+              <td><div style="font-size:11.5px;color:var(--ink-soft);">Father of Deborah Castro Espín; grandfather of "El Cangrejo"</div></td>
+            </tr>
+            <tr>
+              <td><div class="ft-name">Luis Alberto Rodríguez López-Calleja 🕯</div><div class="ft-note">Led GAESA for ~25 years. Died of heart attack July 1, 2022. Bloomberg (2015): ran "the largest business empire in Cuba, a conglomerate of at least 57 companies." US-sanctioned individually in 2020.</div></td>
+              <td><span class="ft-badge fb-dead">Deceased</span><span class="ft-badge fb-family">Castro Son-in-Law</span></td>
+              <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">~1996–2022</div></td>
+              <td><div style="font-size:11.5px;color:var(--ink-soft);">Married to Raúl Castro's daughter Deborah</div></td>
+            </tr>
+            <tr>
+              <td><div class="ft-name">Ania Guillermina Lastres Morera</div><div class="ft-note">Succeeded López-Calleja after his death. US State Dept. (May 2026) states she is "personally responsible for managing [GAESA's] assets internationally." US-sanctioned May 7, 2026 under EO 14404.</div></td>
+              <td><span class="ft-badge fb-active">Incumbent</span><span class="ft-badge fb-sanction">US-Sanctioned</span></td>
+              <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">2022–present</div></td>
+              <td><div style="font-size:11.5px;color:var(--ink-soft);">Brigadier General; close to FAR leadership</div></td>
+            </tr>
+            <tr>
+              <td><div class="ft-name">Raúl Guillermo Rodríguez Castro ("El Cangrejo")</div><div class="ft-note">Son of Deborah Castro Espín and the late López-Calleja. Multiple reports link him to influential informal roles within GAESA's network. No public confirmation from Cuban authorities.</div></td>
+              <td><span class="ft-badge fb-family">Reported Informal Role</span></td>
+              <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Ongoing · unconfirmed</div></td>
+              <td><div style="font-size:11.5px;color:var(--ink-soft);">Grandson of Raúl Castro</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ HIDDEN ASSETS ═══ -->
+    <div id="panel-assets" class="tab-panel">
+      <div class="sec">
+        <div class="sec-ey">Financial Intelligence · What the Leaks Showed</div>
+        <h2 class="sec-headline">The Numbers — Disputed, But Documented</h2>
+        <p class="sec-lead">GAESA does not publish accounts. What is known comes from two sources: a 2025 leak of internal 2023–2024 financial statements published by El Nuevo Herald, and the US State Department's May 2026 sanctions announcement. The figures differ. At least one economist disputes both as inflated. The Cuban government says nothing.</p>
+        <div class="assets-panel">
+          <div class="ap-title">Three Reported Figures — All Disputed by Cuba</div>
+          <div class="ap-text">All three figures come from outside GAESA. Cuba has never acknowledged GAESA's financial structure publicly. The dispute between the Herald's figure and the UCL economist's assessment is itself part of the documented record — FORA presents the disagreement, not a resolution.</div>
+          <div class="ap-numbers">
+            <div class="ap-num">
+              <div class="ap-val">$18B</div>
+              <div class="ap-label">Current assets · El Nuevo Herald · Leaked documents March 2024</div>
+            </div>
+            <div class="ap-num">
+              <div class="ap-val">$14.5B</div>
+              <div class="ap-label">In undisclosed overseas accounts · Same leaked documents</div>
+            </div>
+            <div class="ap-num">
+              <div class="ap-val">$20B</div>
+              <div class="ap-label">US State Dept. · "Illicit assets in hidden overseas accounts" · May 2026 sanctions</div>
+            </div>
+          </div>
+        </div>
+        <div class="note-card">
+          <span class="nc-icon">⚖️</span>
+          <span class="nc-text">UCL economist Emily Morris has disputed the El Nuevo Herald's figures as inflated. The Economist (March 2026) described GAESA as "on the verge of bankruptcy." These assessments are in conflict. FORA records the disagreement rather than choosing a winner. What is not disputed: GAESA's finances are entirely opaque, zero public audits have ever been conducted, and the profits do not flow into Cuba's national budget.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SANCTIONS ═══ -->
+    <div id="panel-sanctions" class="tab-panel">
+      <div class="sec">
+        <div class="sec-ey">Sanctions · US Action · May 2026</div>
+        <h2 class="sec-headline">GAESA Sanctioned — May 7, 2026</h2>
+        <p class="sec-lead">The United States formally designated GAESA as a sanctioned entity on May 7, 2026, under Executive Order 14404 signed by President Trump on May 1. The State Department administered the designation; Treasury's OFAC enforces it. The designation freezes any US-jurisdiction assets and prohibits American persons from doing business with GAESA or its subsidiaries.</p>
+        <div class="alert-card">
+          <div class="ac-label">US Legal Warning · Active as of May 7, 2026</div>
+          <div class="ac-text">It is a federal violation for US citizens, US entities, or persons in the United States to knowingly provide material support — money, services, personnel, or property — to GAESA or its designated subsidiaries. Doing business with a GAESA hotel, bank, or retail outlet may trigger sanctions exposure. Consult legal counsel before transacting with any GAESA-controlled entity.</div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="sec-ey">Sanctioned Subsidiaries</div>
+          <div class="sub-list" style="margin-top:8px;">
+            <div class="sub-item"><span class="sub-icon">🏦</span><span class="sub-name">Fincimex</span><span class="sub-sector">Sanctioned 2020 · Remittances</span></div>
+            <div class="sub-item"><span class="sub-icon">💳</span><span class="sub-name">AIS</span><span class="sub-sector">Sanctioned · Remittance processing</span></div>
+            <div class="sub-item"><span class="sub-icon">🏨</span><span class="sub-name">GAESA (parent entity)</span><span class="sub-sector">Sanctioned May 7, 2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SUBMIT EVIDENCE ═══ -->
+    <div id="panel-submit" class="tab-panel">
+
+      <div class="submit-hero">
+        <div class="sh-eyebrow">FORA · Citizen Evidence · GAESA</div>
+        <div class="sh-title">Submit Photos, Videos, and Receipts from GAESA Operations</div>
+        <div class="sh-text">GAESA controls Cuba's hotels, stores, gas stations, banks, and more — but refuses to publish any accounts or acknowledge its operations publicly. What people see on the ground is the only evidence that exists. If you have photos, videos, receipts, or documents from GAESA-controlled businesses, submit them here. Every image makes the invisible visible. Submissions are verified by FORA's editorial team before publication.</div>
+        <div class="sh-why-grid">
+          <div class="sh-why"><div class="sw-icon">📸</div><div class="sw-label">Why Photos</div><div class="sw-text">GAESA controls Cuba's most profitable hotels and stores. What do shelves look like? What prices are charged in CUP vs. hard currency? Show us.</div></div>
+          <div class="sh-why"><div class="sw-icon">🎥</div><div class="sw-label">Why Videos</div><div class="sw-text">Video from GAESA gas stations, hotel lobbies, or retail stores documents conditions that contradict official narratives — from both the Cuban government and its critics.</div></div>
+          <div class="sh-why"><div class="sw-icon">🧾</div><div class="sw-label">Why Receipts</div><div class="sw-text">Price data from GAESA-controlled stores reveals the two-tier economy: what Cubans pay in CUP and what tourists pay in hard currency for the same goods.</div></div>
+        </div>
+      </div>
+
+      <!-- SUBMIT FORM -->
+      <div class="submit-form">
+
+        <div class="sf-section">
+          <div class="sf-label">What type of evidence are you submitting? <span class="sf-required">Required</span></div>
+          <div class="sf-pills">
+            <button class="sf-pill selected">📸 Photo</button>
+            <button class="sf-pill">🎥 Video</button>
+            <button class="sf-pill">🧾 Receipt / Document</button>
+            <button class="sf-pill">🗣 Eyewitness Account</button>
+            <button class="sf-pill">📄 Leaked Document</button>
+          </div>
+        </div>
+
+        <div class="sf-section">
+          <div class="sf-label">Which GAESA business does this show? <span class="sf-required">Required</span></div>
+          <div class="sf-pills">
+            <button class="sf-pill">Gaviota Hotel</button>
+            <button class="sf-pill">TRD Caribe Store</button>
+            <button class="sf-pill">Cimex Store</button>
+            <button class="sf-pill">Gas Station</button>
+            <button class="sf-pill">Mariel Port</button>
+            <button class="sf-pill">BFI Bank</button>
+            <button class="sf-pill">Cubanacán</button>
+            <button class="sf-pill">Other GAESA entity</button>
+            <button class="sf-pill">Unknown / Suspected</button>
+          </div>
+        </div>
+
+        <div class="sf-section">
+          <div class="sf-label">Upload your file <span class="sf-required">Required</span></div>
+          <div class="upload-zone">
+            <div class="uz-icon">📁</div>
+            <div class="uz-title">Drag and drop your photo, video, or document</div>
+            <div class="uz-sub">Or click to browse from your device</div>
+            <div class="uz-types">JPG · PNG · MP4 · MOV · PDF · max 100MB per file</div>
+            <div class="uz-btn">Browse Files</div>
+          </div>
+        </div>
+
+        <div class="sf-section">
+          <div class="sf-label">Where and when was this? <span class="sf-optional">Optional but valuable</span></div>
+          <div class="sf-input-row">
+            <div>
+              <div class="sf-input-label">Location (city, neighborhood)</div>
+              <input class="sf-input" type="text" placeholder="e.g. Varadero, Havana Vedado, Mariel">
+            </div>
+            <div>
+              <div class="sf-input-label">Approximate date</div>
+              <input class="sf-input" type="text" placeholder="e.g. June 2026, or just year">
+            </div>
+          </div>
+        </div>
+
+        <div class="sf-section">
+          <div class="sf-label">What does this show? <span class="sf-optional">Optional</span></div>
+          <textarea class="sf-textarea" placeholder="Describe what you're submitting. What is in the photo or video? What does it show about how GAESA operates? Any prices, product availability, or conditions you noticed? The more context you provide, the more useful your submission is."></textarea>
+        </div>
+
+        <div class="sf-section">
+          <div class="sf-label">Your identity</div>
+          <div class="anon-row">
+            <div class="anon-toggle"></div>
+            <div class="anon-text">Your submission is published under your FORA pseudonymous handle (e.g. <strong>@cuba.resident.2026</strong>). Your real name, email, and personal details are never shown. FORA does not share submitter identity with any government. If you are inside Cuba, we strongly recommend submitting through a VPN.</div>
+          </div>
+        </div>
+
+        <div class="sf-section">
+          <div class="sf-submit-row">
+            <div class="sf-caveat">All submissions are reviewed by FORA editors before publication. We verify as much as possible. Submissions that cannot be verified are held, not published. You may be contacted through your FORA handle if we have questions.</div>
+            <button class="sf-submit">Submit Evidence →</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- WHAT'S BEEN SUBMITTED -->
+      <div class="submitted-header">
+        <div class="submitted-title">Recent Citizen Submissions</div>
+        <div class="submitted-count">47 submissions · 31 verified · 16 under review</div>
+      </div>
+
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="ec-media">
+            <div class="ec-media-icon">📸</div>
+            <span class="ec-type-badge ecb-photo">Photo</span>
+            <span class="ec-verified">✓ Verified</span>
+          </div>
+          <div class="ec-body">
+            <div class="ec-category">TRD Caribe Store · Havana</div>
+            <div class="ec-desc">Empty shelves in the CUP section. Full shelves in the hard-currency section of the same store. Same building, two different worlds.</div>
+            <div class="ec-meta">@havana.resident.june · Jun 14, 2026</div>
+            <div class="ec-actions">
+              <button class="ec-act verify">This is accurate</button>
+              <button class="ec-act">Dispute</button>
+            </div>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="ec-media" style="background:#f0f0e8;">
+            <div class="ec-media-icon">🧾</div>
+            <span class="ec-type-badge ecb-receipt">Receipt</span>
+            <span class="ec-verified">✓ Verified</span>
+          </div>
+          <div class="ec-body">
+            <div class="ec-category">Gaviota Hotel · Varadero</div>
+            <div class="ec-desc">Hotel breakfast receipt: $28 USD per person. Cuban minimum wage is ~$9 USD/month. This is 3 months' wages for one meal.</div>
+            <div class="ec-meta">@varadero.worker.2026 · May 2026</div>
+            <div class="ec-actions">
+              <button class="ec-act verify">This is accurate</button>
+              <button class="ec-act">Dispute</button>
+            </div>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="ec-media" style="background:#1a0808;">
+            <div class="ec-media-icon" style="opacity:0.5;">🎥</div>
+            <span class="ec-type-badge ecb-video">Video</span>
+            <div style="position:absolute;bottom:7px;left:7px;font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(255,255,255,0.5);">Under Review</div>
+          </div>
+          <div class="ec-body">
+            <div class="ec-category">Gas Station · Central Havana</div>
+            <div class="ec-desc">Video submitted: GAESA-branded gas station with pumps idle, line of 40+ cars. Attendant says "no hay" (there is none). Under review.</div>
+            <div class="ec-meta">@cuba.driver.2026 · Jun 10, 2026</div>
+            <div class="ec-actions">
+              <button class="ec-act" style="opacity:0.4;cursor:default;">Awaiting verification</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ THE RECORD ═══ -->
+    <div id="panel-record" class="tab-panel">
+      <div class="sec">
+        <div class="sec-ey">The Record · Documented Events</div>
+        <h2 class="sec-headline">What Is Confirmed, What Is Disputed</h2>
+        <p class="sec-lead">FORA's Record tab holds verified facts. Citizens can flag items, submit missing sources, or dispute characterizations through the community amendment process. All claims require named sources or explicit uncertainty markers.</p>
+        <div class="note-card">
+          <span class="nc-icon">📌</span>
+          <span class="nc-text">Because GAESA never publishes accounts and the Cuban government rarely acknowledges its existence, much of this record is built from leaked documents, US government filings, investigative journalism, and citizen submissions. FORA marks source type and confidence level for every entry. No hidden rules govern inclusion here.</span>
+        </div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">GAESA founded by Raúl Castro</span><span class="dr-val">Confirmed · 1990s</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">GAESA controls ~37% of Cuba's GDP</span><span class="dr-val">Disputed range: 30–40%</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">GAESA controls ~90% of Cuba's retail trade</span><span class="dr-val">Reported · unverified exact figure</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">$14.5B in overseas accounts (Herald leak)</span><span class="dr-val">Disputed · UCL economist contests</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">Zero public audits ever conducted</span><span class="dr-val">Confirmed</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">Fincimex sanctioned by US</span><span class="dr-val">Confirmed · 2020</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">GAESA parent entity sanctioned</span><span class="dr-val">Confirmed · May 7, 2026</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">Subsidiaries in Panama, Cyprus, Liberia</span><span class="dr-val">Confirmed · Reporting + US filing</span></div>
+        <div class="data-row" style="padding:10px 0;"><span class="dr-label">Ania Lastres managing overseas assets</span><span class="dr-val">Alleged · US State Dept. May 2026</span></div>
+      </div>
+    </div>
+
+  </div><!-- /page-main -->
+
+  <!-- SIDEBAR -->
+  <div class="page-sidebar">
+
+    <div class="sb-block">
+      <div class="sb-ey">US Sanctions · May 2026</div>
+      <div class="sb-title">Designation Status</div>
+      <div class="alert-card">
+        <div class="ac-label">Sanctioned · May 7, 2026</div>
+        <div class="ac-text">GAESA sanctioned under EO 14404. Secretary Rubio: "A military conglomerate that steals millions in aid for the Cuban people."</div>
+      </div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Entity Profile</div>
+      <div class="sb-title">GAESA at a Glance</div>
+      <div class="data-row"><span class="dr-label">Full Name</span><span class="dr-val">Grupo de Administración Empresarial S.A.</span></div>
+      <div class="data-row"><span class="dr-label">Founded</span><span class="dr-val">~1990s</span></div>
+      <div class="data-row"><span class="dr-label">Founded By</span><span class="dr-val">Raúl Castro</span></div>
+      <div class="data-row"><span class="dr-label">Oversight</span><span class="dr-val">Revolutionary Armed Forces (FAR)</span></div>
+      <div class="data-row"><span class="dr-label">GDP Share</span><span class="dr-val red">~37%</span></div>
+      <div class="data-row"><span class="dr-label">Public Audits</span><span class="dr-val red">Zero ever</span></div>
+      <div class="data-row"><span class="dr-label">Subsidiaries</span><span class="dr-val">57+ companies</span></div>
+      <div class="data-row"><span class="dr-label">Shell Jurisdictions</span><span class="dr-val">Panama · Cyprus · Liberia</span></div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Known Subsidiaries</div>
+      <div class="sb-title">Major Entities</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-icon">🏨</span><span class="sub-name">Gaviota S.A.</span><span class="sub-sector">Tourism</span></div>
+        <div class="sub-item"><span class="sub-icon">🏦</span><span class="sub-name">RAFIN S.A.</span><span class="sub-sector">Finance</span></div>
+        <div class="sub-item"><span class="sub-icon">🏦</span><span class="sub-name">BFI Bank</span><span class="sub-sector">Banking</span></div>
+        <div class="sub-item"><span class="sub-icon">⚓</span><span class="sub-name">Mariel Port Zone</span><span class="sub-sector">Logistics</span></div>
+        <div class="sub-item"><span class="sub-icon">🛒</span><span class="sub-name">TRD Caribe</span><span class="sub-sector">Retail</span></div>
+        <div class="sub-item"><span class="sub-icon">🛒</span><span class="sub-name">Cimex</span><span class="sub-sector">Retail</span></div>
+        <div class="sub-item"><span class="sub-icon">💸</span><span class="sub-name">Fincimex</span><span class="sub-sector">Remittances (sanctioned 2020)</span></div>
+      </div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-ey">Cross-Links</div>
+      <div class="sb-title">Related Pages</div>
+      <a href="/cuba" class="quick-link">→ Cuba</a>
+      <div class="quick-link" style="color:var(--ink-mut);">→ US Cuba Policy <span style="font-size:7px;opacity:0.5;">(coming soon)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function foraShare(btn){
+  var card=btn.parentElement;
+  var clone=card.cloneNode(true);
+  clone.querySelectorAll('.share-btn').forEach(function(b){b.remove();});
+  var text=(clone.innerText||clone.textContent).replace(/\s+/g,' ').trim().slice(0,600);
+  var url=window.location.href;
+  if(navigator.share){navigator.share({title:document.title,text:text,url:url}).catch(function(){});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(text+'\n\nFORA · '+document.title+'\n'+url).then(function(){btn.classList.add('copied');setTimeout(function(){btn.classList.remove('copied');},1800);}).catch(function(){});}
+}
+function switchTab(name, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if(el) el.classList.add('active');
+}
+document.querySelectorAll('.sf-pill').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const parent = this.closest('.sf-section');
+    parent.querySelectorAll('.sf-pill').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+</script>
