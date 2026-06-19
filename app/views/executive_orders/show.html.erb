@@ -59,9 +59,10 @@
 
 <%
   official_profile_path = case @person.office_type
-  when "governor" then pa_governor_path
-  when "mayor"    then philly_mayor_path
-  else                 "#"
+  when "governor"  then pa_governor_path
+  when "mayor"     then philly_mayor_path
+  when "president" then us_president_path
+  else                  "#"
   end
 
   share_url = "https://fora.center/eo/#{@eo['slug']}"
@@ -111,14 +112,466 @@
   </div>
 </div>
 
-<!-- ── BODY ──────────────────────────────────────────────────────────────── -->
+<% if @eo['slug'] == '14404' %>
+<% content_for :head do %>
+<style>
+:root{
+  --blue:#1b3a6b;--blue-lt:#2a5298;--blue-vp:rgba(27,58,107,0.04);--blue-pl:rgba(27,58,107,0.12);
+  --gilt:#b8860b;--gilt-dk:#8b6914;--gilt-pl:#fdf8ed;--gilt-rul:rgba(184,134,11,0.2);
+  --red:#8b1a1a;--red-p:rgba(139,26,26,0.06);--red-r:rgba(139,26,26,0.18);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.07);--amber-r:rgba(196,127,0,0.2);
+  --green:#155c2d;--green-p:rgba(21,92,45,0.07);--green-r:rgba(21,92,45,0.2);
+  --purple:#2d1a4a;--purple-lt:#f0eaf7;
+  --ink:#0e1a2e;--ink-mid:#1e2d45;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f2f4f8;--rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+}
+.eo14-tabs-bar{background:white;border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:10;}
+.eo14-tabs-inner{display:flex;padding:0 40px;overflow-x:auto;}
+.eo14-tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 15px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.12s;}
+.eo14-tab:hover{color:var(--blue);}
+.eo14-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+.eo14-body{display:grid;grid-template-columns:1fr 272px;gap:0;max-width:1180px;margin:0 auto;padding:0 40px 60px;align-items:start;}
+.eo14-main{padding:32px 32px 0 0;min-width:0;}
+.eo14-sidebar{padding:32px 0 0;border-left:1px solid var(--rule);padding-left:24px;}
+.eo14-panel{display:none;}
+.eo14-panel.active{display:block;}
+.sec14{margin-bottom:36px;}
+.sec14+.sec14{padding-top:28px;border-top:1.5px solid rgba(14,26,46,0.1);}
+.nh-ey14{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.nh-hl14{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#0e0c08;line-height:1.1;margin-bottom:8px;}
+.nh-ld14{font-family:'Nunito',sans-serif;font-size:13.5px;color:#5a5448;line-height:1.75;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule);}
+.pc14{background:var(--blue-vp);border:1px solid var(--blue-pl);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin-bottom:16px;}
+.pc14-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:6px;}
+.pc14-txt{font-family:'Nunito',sans-serif;font-size:13.5px;color:var(--ink);line-height:1.75;}
+.sdiv14{display:flex;align-items:center;gap:12px;margin:24px 0;}
+.sdiv14::before,.sdiv14::after{content:'';flex:1;height:1px;background:var(--gilt-rul);}
+.sdiv14-in{font-size:10px;color:var(--gilt-dk);letter-spacing:0.3em;}
+.pr14{background:white;border:1px solid var(--rule);border-radius:8px;padding:14px 16px;margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;}
+.pr14-n{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--gilt);flex-shrink:0;line-height:1;width:24px;}
+.pr14-c{flex:1;}
+.pr14-t{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.35;}
+.pr14-x{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.6;}
+.pr14-b{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.badge14{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.07em;text-transform:uppercase;padding:1px 6px;border-radius:3px;border:1px solid;}
+.b-new{color:var(--red);background:var(--red-p);border-color:var(--red-r);}
+.b-ieepa{color:var(--purple);background:var(--purple-lt);border-color:rgba(45,26,74,0.2);}
+.b-sec{color:var(--amber);background:var(--amber-p);border-color:var(--amber-r);}
+.b-ofac{color:var(--blue);background:var(--blue-vp);border-color:var(--blue-pl);}
+.b-grey{color:var(--ink-mut);background:var(--bg);border-color:var(--rule);}
+.sg14{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.sc14{background:white;border:1px solid var(--rule);border-radius:8px;padding:12px 14px;}
+.sc14-ic{font-size:18px;margin-bottom:5px;}
+.sc14-nm{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.sc14-tx{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+.sc14-rk{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;display:inline-block;margin-top:5px;}
+.rk-hi{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.rk-md{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.rk-xt{color:var(--purple);background:var(--purple-lt);border:1px solid rgba(45,26,74,0.2);}
+.nc14{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;}
+.nc14-ic{font-size:14px;flex-shrink:0;}
+.nc14-tx{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
+.qc14{background:var(--gilt-pl);border:1px solid var(--gilt-rul);border-left:4px solid var(--gilt);border-radius:8px;padding:13px 16px;margin-bottom:12px;}
+.qc14-tx{font-family:'Nunito',sans-serif;font-size:13px;font-style:italic;color:var(--ink-mid);line-height:1.7;margin-bottom:6px;}
+.qc14-at{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);}
+.sdn14{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);margin-bottom:14px;}
+.sdn14 thead tr{background:var(--blue);}
+.sdn14 th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.sdn14 td{padding:10px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.sdn14 tr:last-child td{border-bottom:none;}
+.sdn14 tr:hover td{background:var(--bg);}
+.sdn14-nm{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.sdn14-sb{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);}
+.sdn14-dt{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);}
+.sdn14-tp{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;padding:1px 6px;border-radius:3px;}
+.sdn14-en{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.sdn14-pe{color:var(--purple);background:var(--purple-lt);border:1px solid rgba(45,26,74,0.2);}
+.ag14{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ac14{background:white;border:1px solid var(--rule);border-radius:10px;padding:13px 15px;}
+.ac14-fl{font-size:20px;margin-bottom:6px;}
+.ac14-nm{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ac14-im{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;display:inline-block;margin-bottom:6px;}
+.ai-hi{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
+.ai-md{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.ac14-tx{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
+.tl14{position:relative;padding-left:24px;}
+.tl14::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--rule);}
+.tl14-it{position:relative;margin-bottom:18px;}
+.tl14-dt{position:absolute;left:-20px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid white;}
+.tl14-dt.red{background:var(--red);}
+.tl14-dt.green{background:var(--green);}
+.tl14-dt.amber{background:var(--amber);}
+.tl14-da{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:3px;}
+.tl14-ti{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.35;}
+.tl14-tx{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.65;}
+.dp14{background:linear-gradient(135deg,var(--blue-vp),white);border:1px solid var(--blue-pl);border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+.dp14-lb{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:6px;}
+.dp14-q{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.3;}
+.dp14-ac{display:flex;gap:8px;flex-wrap:wrap;}
+.dp14-btn{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.09em;text-transform:uppercase;padding:7px 14px;border-radius:100px;cursor:pointer;border:1px solid;}
+.dp14-co{color:var(--green);border-color:var(--green-r);background:var(--green-p);}
+.dp14-ob{color:var(--red);border-color:var(--red-r);background:var(--red-p);}
+.dc14{background:white;border:1px solid var(--rule);border-radius:8px;padding:13px 15px;margin-bottom:8px;}
+.dc14-hd{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.dc14-av{width:26px;height:26px;border-radius:50%;background:var(--blue);font-family:'JetBrains Mono',monospace;font-size:8px;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dc14-hn{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink);font-weight:700;}
+.dc14-bg{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;padding:1px 6px;border-radius:3px;background:var(--green-p);border:1px solid var(--green-r);color:var(--green);margin-left:auto;}
+.dc14-tx{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);line-height:1.65;margin-bottom:8px;}
+.dc14-ac{display:flex;gap:6px;}
+.dc14-btn{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:100px;border:1px solid var(--rule);background:transparent;color:var(--ink-mut);cursor:pointer;}
+.sb14{margin-bottom:24px;}
+.sb14+.sb14{padding-top:20px;border-top:1px solid var(--rule);}
+.sb14-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.sb14-ti{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.dr14{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.dr14:last-child{border-bottom:none;}
+.dr14-lb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+.dr14-vl{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;color:var(--ink);text-align:right;max-width:60%;}
+.dr14-rd{color:var(--red)!important;}
+.sr14{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--blue-lt);}
+.sr14:last-child{border-bottom:none;}
+.ql14{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--blue);text-decoration:none;}
+.ql14:last-child{border-bottom:none;}
+.ql14:hover{color:var(--blue-lt);}
+@media(max-width:768px){
+  .eo14-body{grid-template-columns:1fr;padding:0 20px 40px;}
+  .eo14-main{padding:20px 0 0;}
+  .eo14-sidebar{border-left:none;padding-left:0;border-top:1px solid var(--rule);padding-top:20px;margin-top:8px;}
+  .eo14-tabs-inner{padding:0 16px;}
+  .sg14,.ag14{grid-template-columns:1fr;}
+  .sdn14 th:nth-child(3),.sdn14 td:nth-child(3),.sdn14 th:nth-child(5),.sdn14 td:nth-child(5){display:none;}
+}
+</style>
+<% end %>
+
+<!-- ── EO 14404 TABS ─────────────────────────────────────────────────────── -->
+<div class="eo14-tabs-bar">
+  <div class="eo14-tabs-inner">
+    <div class="eo14-tab active" onclick="switchTab14('summary',this)">Summary</div>
+    <div class="eo14-tab" onclick="switchTab14('provisions',this)">Key Provisions</div>
+    <div class="eo14-tab" onclick="switchTab14('designations',this)">Designations</div>
+    <div class="eo14-tab" onclick="switchTab14('impact',this)">Who It Affects</div>
+    <div class="eo14-tab" onclick="switchTab14('timeline',this)">Timeline</div>
+    <div class="eo14-tab" onclick="switchTab14('discourse',this)">Discourse</div>
+  </div>
+</div>
+
+<div class="eo14-body">
+<div class="eo14-main">
+
+  <!-- ═══ SUMMARY ═══ -->
+  <div id="eo14-panel-summary" class="eo14-panel active">
+    <div class="sec14">
+      <div class="pc14">
+        <div class="pc14-lbl">Plain Language Summary</div>
+        <div class="pc14-txt">President Trump signed Executive Order 14404 on May 1, 2026. It does two major things: (1) it creates a new US government authority to sanction any foreign person or company that operates in five key sectors of Cuba's economy — energy, defense, metals and mining, financial services, and security; and (2) it threatens foreign banks and financial institutions with losing access to the US financial system if they process significant transactions for anyone sanctioned under this order. This is called a "secondary sanctions" regime — it goes beyond the existing US embargo on Cuba (the CACR) to put pressure on non-American companies doing business in Cuba.</div>
+      </div>
+    </div>
+    <div class="sec14">
+      <div class="nh-ey14">Why This Order Exists</div>
+      <h2 class="nh-hl14">Maximum Pressure — Extended to the World</h2>
+      <p class="nh-ld14">The US has maintained a comprehensive embargo on Cuba since 1962. That embargo (the Cuban Assets Control Regulations, CACR) only constrains US persons and entities. E.O. 14404 adds a second layer: it uses the International Emergency Economic Powers Act to threaten foreign companies and foreign banks with US sanctions if they do significant business with Cuba's sanctioned sectors. The model is borrowed directly from US secondary sanctions against Russia and Iran.</p>
+      <div class="nc14">
+        <span class="nc14-ic">⚖️</span>
+        <span class="nc14-tx">E.O. 14404 does NOT replace the existing Cuba embargo (CACR). It sits on top of it. The CACR continues to apply to US persons and entities. E.O. 14404 adds new designation authority for foreign persons and creates secondary sanctions risk for foreign financial institutions — even those with no prior US connection to Cuba.</span>
+      </div>
+      <div class="qc14">
+        <div class="qc14-tx">"Cuba is controlled by GAESA — a 'state within a state' that is accountable to no one and hoards the profits from its businesses for the benefit of a small elite."</div>
+        <div class="qc14-at">Secretary of State Marco Rubio · announcing first E.O. 14404 designations · May 7, 2026</div>
+      </div>
+      <div class="sdiv14"><span class="sdiv14-in">✦ ✦ ✦</span></div>
+      <div class="nh-ey14">Context · What Came Before</div>
+      <h2 class="nh-hl14">A Campaign, Not a Single Act</h2>
+      <p class="nh-ld14">E.O. 14404 is the most significant action in a series of escalating Cuba-related measures beginning at the start of Trump's second term. It follows the re-issuance of NSPM-5 in June 2025, which reimposed restrictions Obama had lifted, and a series of fuel supply disruptions targeting Cuba's energy imports.</p>
+      <div class="pr14">
+        <div class="pr14-n">①</div>
+        <div class="pr14-c">
+          <div class="pr14-t">Cuba Assets Control Regulations (CACR) — The Original Embargo</div>
+          <div class="pr14-x">In place since 1962. Prohibits US persons from trading with, investing in, or providing financial services to Cuba. Comprehensive but limited to US persons. E.O. 14404 adds on top.</div>
+          <div class="pr14-b"><span class="badge14 b-ofac">OFAC Administered</span><span class="badge14 b-grey">Since 1962</span></div>
+        </div>
+      </div>
+      <div class="pr14">
+        <div class="pr14-n">②</div>
+        <div class="pr14-c">
+          <div class="pr14-t">NSPM-5 Reissued — June 2025</div>
+          <div class="pr14-x">Trump reissued and amended National Security Presidential Memorandum 5, reinstating restrictions on US tourism and financial flows to Cuba that Obama had loosened. This tightened the primary embargo before 14404 added the secondary layer.</div>
+          <div class="pr14-b"><span class="badge14 b-grey">Jun 2025</span></div>
+        </div>
+      </div>
+      <div class="pr14">
+        <div class="pr14-n">③</div>
+        <div class="pr14-c">
+          <div class="pr14-t">E.O. 14404 — The Secondary Sanctions Layer</div>
+          <div class="pr14-x">Signed May 1, 2026. Creates IEEPA-based designation authority for foreign persons. Adds secondary sanctions risk for foreign financial institutions. First designations issued May 7, 2026 — GAESA, Ania Guillermina Lastres, and Moa Nickel S.A.</div>
+          <div class="pr14-b"><span class="badge14 b-new">New Authority</span><span class="badge14 b-ieepa">IEEPA</span><span class="badge14 b-sec">Secondary Sanctions</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ KEY PROVISIONS ═══ -->
+  <div id="eo14-panel-provisions" class="eo14-panel">
+    <div class="sec14">
+      <div class="nh-ey14">Provisions · What the Order Actually Does</div>
+      <h2 class="nh-hl14">Two Authorities, One Order</h2>
+      <p class="nh-ld14">E.O. 14404 grants the Treasury Secretary and Secretary of State two distinct new powers. The first targets foreign persons in specific Cuban economic sectors. The second targets foreign financial institutions that process transactions for those persons. Together they internationalize US pressure on Cuba beyond what the CACR can reach.</p>
+      <div class="pr14">
+        <div class="pr14-n">1</div>
+        <div class="pr14-c">
+          <div class="pr14-t">Sectoral Designation Authority — Foreign Persons</div>
+          <div class="pr14-x">Authorizes blocking sanctions on any foreign person determined to operate in any of five specified sectors of the Cuban economy. The US can now sanction a Spanish hotel chain, a Canadian mining company, or a Chinese port operator if it operates in a targeted sector — without those companies violating any US rule.</div>
+          <div class="pr14-b"><span class="badge14 b-new">New · No Prior Equivalent</span><span class="badge14 b-ieepa">IEEPA Authority</span></div>
+        </div>
+      </div>
+      <div class="pr14">
+        <div class="pr14-n">2</div>
+        <div class="pr14-c">
+          <div class="pr14-t">Secondary Sanctions on Foreign Financial Institutions (FFIs)</div>
+          <div class="pr14-x">Any foreign bank that processes "significant" transactions for anyone designated under E.O. 14404 may itself be designated — cutting it off from US correspondent accounts and the dollar payment system. This mirrors the Russia E.O. 14114 (2023) model. The FFI does not need to know the transaction is prohibited; significant transactions with blocked parties create exposure.</div>
+          <div class="pr14-b"><span class="badge14 b-sec">Secondary Sanctions</span><span class="badge14 b-new">Extraterritorial Reach</span></div>
+        </div>
+      </div>
+      <div class="sdiv14"><span class="sdiv14-in">✦ ✦ ✦</span></div>
+      <div class="nh-ey14">Five Targeted Sectors</div>
+      <h2 class="nh-hl14">Where the Exposure Lies</h2>
+      <p class="nh-ld14">E.O. 14404 names five sectors where foreign persons face designation risk. Treasury may add sectors in consultation with State. OFAC's FAQ 1256 clarified that operating in these sectors creates elevated sanctions risk.</p>
+      <div class="sg14">
+        <div class="sc14"><div class="sc14-ic">⚡</div><div class="sc14-nm">Energy</div><div class="sc14-tx">Oil, gas, electricity generation, and fuel distribution. Cuba's acute fuel crisis makes this sector politically central. Venezuela's withdrawal as a supplier created openings for new international suppliers — all now at risk.</div><span class="sc14-rk rk-hi">High Exposure</span></div>
+        <div class="sc14"><div class="sc14-ic">⚔️</div><div class="sc14-nm">Defense &amp; Related Materiel</div><div class="sc14-tx">Military equipment, security apparatus support, weapons, and materiel. Directly targets entities that supply or service the Cuban Revolutionary Armed Forces (FAR) — which controls GAESA.</div><span class="sc14-rk rk-hi">High Exposure</span></div>
+        <div class="sc14"><div class="sc14-ic">⛏️</div><div class="sc14-nm">Metals &amp; Mining</div><div class="sc14-tx">Cuba has significant nickel and cobalt reserves. Moa Nickel S.A. — a Sherritt International joint venture with Cuban state — was designated May 7. Sherritt subsequently suspended operations.</div><span class="sc14-rk rk-hi">High Exposure · Moa Nickel Designated</span></div>
+        <div class="sc14"><div class="sc14-ic">🏦</div><div class="sc14-nm">Financial Services</div><div class="sc14-tx">Banking, payments, trade finance, remittances. GAESA was designated under this sector on May 7. Any foreign bank processing payments for GAESA or its subsidiaries faces secondary sanctions risk.</div><span class="sc14-rk rk-xt">Critical · GAESA Designated</span></div>
+        <div class="sc14"><div class="sc14-ic">🔒</div><div class="sc14-nm">Security Sector</div><div class="sc14-tx">Cuba's Ministry of the Interior and security apparatus — designated May 18. Targets surveillance technology providers, security trainers, and intelligence service supporters.</div><span class="sc14-rk rk-md">Medium · MINFAR Designated May 18</span></div>
+        <div class="sc14"><div class="sc14-ic">➕</div><div class="sc14-nm">Additional Sectors (TBD)</div><div class="sc14-tx">Treasury may designate additional sectors in consultation with State. Tourism is the most frequently cited candidate given GAESA's hotel empire, but has not been formally added as of June 2026.</div><span class="sc14-rk rk-md">Watch · Tourism Likely Next</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DESIGNATIONS ═══ -->
+  <div id="eo14-panel-designations" class="eo14-panel">
+    <div class="sec14">
+      <div class="nh-ey14">SDN Designations · Persons &amp; Entities Named</div>
+      <h2 class="nh-hl14">Who Has Been Designated Under E.O. 14404</h2>
+      <p class="nh-ld14">Designations are issued by the State Department and administered by Treasury OFAC. The first wave came May 7 — six days after signing. A second wave came May 18. The State Department has indicated additional designations are ongoing.</p>
+      <table class="sdn14">
+        <thead><tr><th>Entity / Person</th><th>Type</th><th>Sector</th><th>Date</th><th>Key Fact</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="sdn14-nm">GAESA — Grupo de Administración Empresarial S.A.</div><div class="sdn14-sb">Cuban military business conglomerate · ~37–40% of Cuba's GDP</div></td>
+            <td><span class="sdn14-tp sdn14-en">Entity</span></td>
+            <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Financial Services</div></td>
+            <td><div class="sdn14-dt">May 7, 2026</div></td>
+            <td><div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);">Already SDN under CACR since Dec 2020. 14404 adds secondary sanctions risk for foreign parties dealing with it.</div></td>
+          </tr>
+          <tr>
+            <td><div class="sdn14-nm">Ania Guillermina Lastres Morera</div><div class="sdn14-sb">Executive President of GAESA · Brigadier General</div></td>
+            <td><span class="sdn14-tp sdn14-pe">Individual</span></td>
+            <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Financial Services</div></td>
+            <td><div class="sdn14-dt">May 7, 2026</div></td>
+            <td><div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);">State Dept: "Personally responsible for managing GAESA's illicit assets held internationally."</div></td>
+          </tr>
+          <tr>
+            <td><div class="sdn14-nm">Moa Nickel S.A. (MNSA)</div><div class="sdn14-sb">50/50 JV · Sherritt International (Canada) + Cuba's General Nickel Company</div></td>
+            <td><span class="sdn14-tp sdn14-en">Entity</span></td>
+            <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Metals &amp; Mining</div></td>
+            <td><div class="sdn14-dt">May 7, 2026</div></td>
+            <td><div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);">Sherritt suspended operations after designation. Involves expropriated US assets.</div></td>
+          </tr>
+          <tr>
+            <td><div class="sdn14-nm">Ministry of the Revolutionary Armed Forces (MINFAR)</div><div class="sdn14-sb">Cuba's military ministry · Controls FAR and GAESA</div></td>
+            <td><span class="sdn14-tp sdn14-en">Entity</span></td>
+            <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Defense / Security</div></td>
+            <td><div class="sdn14-dt">May 18, 2026</div></td>
+            <td><div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);">MINFAR holdings and subsidiaries now blocked. Entities owned 50%+ by GAESA, MINFAR, or MININT face US sanctions exposure.</div></td>
+          </tr>
+          <tr>
+            <td><div class="sdn14-nm">Cuban gold mining JV + 5 entities + 5 individuals</div><div class="sdn14-sb">Gold sector JV + Cuba's extraterritorial influence network · May 18 wave</div></td>
+            <td><span class="sdn14-tp sdn14-en">Multiple</span></td>
+            <td><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);">Mining / Security</div></td>
+            <td><div class="sdn14-dt">May 18, 2026</div></td>
+            <td><div style="font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);">State Dept: "Sustain the regime's malicious campaign to subvert and destabilize US national security."</div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="nc14">
+        <span class="nc14-ic">⚠️</span>
+        <span class="nc14-tx">OFAC's FAQ 1254 clarified that US secondary sanctions apply to foreign parties dealing with GAESA. OFAC issued a limited non-targeting posture through June 5, 2026 for wind-down transactions — that grace period has now expired. All transactions with GAESA and its 50%+ subsidiaries now carry full sanctions exposure.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ WHO IT AFFECTS ═══ -->
+  <div id="eo14-panel-impact" class="eo14-panel">
+    <div class="sec14">
+      <div class="nh-ey14">Impact · Who Is Affected and How</div>
+      <h2 class="nh-hl14">An Order That Reaches Far Beyond the United States</h2>
+      <p class="nh-ld14">E.O. 14404's secondary sanctions regime is explicitly designed to affect non-American parties. Any non-US company doing significant business in Cuba's targeted sectors risks losing access to the US financial system. This is how the US enforces Cuba policy on the world, not just on Americans.</p>
+      <div class="ag14">
+        <div class="ac14"><div class="ac14-fl">🇪🇸🇩🇪🇮🇹🇫🇷</div><div class="ac14-nm">European Companies &amp; Banks</div><span class="ac14-im ai-hi">High Exposure</span><div class="ac14-tx">European banks processing transactions linked to GAESA or designated entities risk losing US correspondent accounts — effectively exclusion from the dollar payment circuit. Spanish hotel chains operating Gaviota properties are in the direct line of exposure. Bird &amp; Bird advised that "transaction screening due diligence must be immediate and on an ongoing basis."</div></div>
+        <div class="ac14"><div class="ac14-fl">🇨🇦</div><div class="ac14-nm">Canadian Companies</div><span class="ac14-im ai-hi">Already Hit — Sherritt</span><div class="ac14-tx">Sherritt International's Moa Nickel S.A. joint venture was designated May 7. Sherritt suspended operations. Canada has historically been one of Cuba's most significant trade and mining partners — and faces the sharpest immediate impact of any non-American country from E.O. 14404.</div></div>
+        <div class="ac14"><div class="ac14-fl">🇨🇳</div><div class="ac14-nm">China</div><span class="ac14-im ai-md">Strategic Exposure</span><div class="ac14-tx">China has dramatically expanded Cuba investment — solar parks, port infrastructure, financial agreements. Chinese banks processing transactions for GAESA-linked entities face secondary sanctions risk. Whether the US would actually designate a major Chinese state bank is a separate political calculation — but the legal authority now exists under 14404.</div></div>
+        <div class="ac14"><div class="ac14-fl">🇷🇺</div><div class="ac14-nm">Russia</div><span class="ac14-im ai-md">Already Sanctioned Context</span><div class="ac14-tx">Russia is already broadly sanctioned. Its Cuba engagement continues through mechanisms already outside the dollar system. 14404 adds marginal additional pressure, but Russia's Cuba-related transactions were largely outside US reach before the order.</div></div>
+        <div class="ac14"><div class="ac14-fl">🇨🇺</div><div class="ac14-nm">Cuban People</div><span class="ac14-im ai-hi">Indirect · Acute</span><div class="ac14-tx">The Cuban government argues E.O. 14404 harms ordinary Cubans, not the regime. The US argues GAESA's extraction of national wealth is what harms ordinary Cubans, and 14404 is designed to stop that extraction. Both things may be simultaneously true — and the Cuban people absorb the costs. Remittance access and food import channels are at risk from secondary sanctions "de-risking" by foreign banks.</div></div>
+        <div class="ac14"><div class="ac14-fl">🇺🇸</div><div class="ac14-nm">Cuban-Americans</div><span class="ac14-im ai-md">Remittances at Risk</span><div class="ac14-tx">Cuban-Americans send billions annually to family on the island. As foreign banks de-risk to avoid 14404 exposure, the channels through which remittances flow to Cuba narrow — cutting a lifeline for ordinary Cubans whose families are abroad.</div></div>
+      </div>
+      <div class="sdiv14"><span class="sdiv14-in">✦ ✦ ✦</span></div>
+      <div class="nh-ey14">Unintended Effects · What the Order May Cause</div>
+      <h2 class="nh-hl14">Documented Concerns from Legal and Economic Analysts</h2>
+      <p class="nh-ld14">Multiple law firms and policy analysts have documented concerns that E.O. 14404's secondary sanctions may produce effects beyond the intended targets.</p>
+      <div class="pr14"><div class="pr14-n">①</div><div class="pr14-c"><div class="pr14-t">De-risking of Foreign Banks Cuts Remittance Channels</div><div class="pr14-x">Foreign financial institutions, fearing secondary sanctions exposure, may exit Cuba-related business entirely — including remittance processing. This would reduce the flow of money from the US Cuban diaspora to family members on the island, disproportionately hurting ordinary Cubans.</div></div></div>
+      <div class="pr14"><div class="pr14-n">②</div><div class="pr14-c"><div class="pr14-t">Accelerated Chinese Economic Dominance in Cuba</div><div class="pr14-x">If European and Canadian companies exit Cuba to avoid 14404 exposure, China — which already dominates Cuba's solar, port, and biotech sectors — gains market share by default. The order may accelerate exactly the Chinese strategic positioning in Cuba that concerns US national security planners.</div></div></div>
+      <div class="pr14"><div class="pr14-n">③</div><div class="pr14-c"><div class="pr14-t">Tourism Sector Impact — Cubans in Hospitality Lose Wages</div><div class="pr14-x">If GAESA hotel designation causes foreign tour operators and booking platforms to stop selling Cuba packages, the hospitality sector — which employs tens of thousands of Cubans — loses revenue. Whether this pressure reaches GAESA's overseas accounts or ordinary Cuban workers first is contested.</div></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ TIMELINE ═══ -->
+  <div id="eo14-panel-timeline" class="eo14-panel">
+    <div class="sec14">
+      <div class="nh-ey14">Timeline · Order Issuance Through June 2026</div>
+      <h2 class="nh-hl14">What Happened and When</h2>
+      <div class="tl14">
+        <div class="tl14-it"><div class="tl14-dt amber"></div><div class="tl14-da">June 2025</div><div class="tl14-ti">NSPM-5 Reissued — Tightening Primary Embargo</div><div class="tl14-tx">Trump reissues and amends National Security Presidential Memorandum 5, reinstating Obama-era rollbacks. Venezuela oil supply to Cuba begins deteriorating. Cuba enters fuel crisis.</div></div>
+        <div class="tl14-it"><div class="tl14-dt amber"></div><div class="tl14-da">January 2026</div><div class="tl14-ti">Trump Blocks Fuel Deliveries · Venezuelan Oil Ends</div><div class="tl14-tx">US pressure on fuel suppliers intensifies. Venezuela's political arrangement collapses, ending cheap oil to Cuba. Mexico temporarily halts shipments under US pressure. Cuba declares fuel emergency. China steps in with $80M emergency aid.</div></div>
+        <div class="tl14-it"><div class="tl14-dt red"></div><div class="tl14-da">May 1, 2026</div><div class="tl14-ti">E.O. 14404 Signed</div><div class="tl14-tx">President Trump signs E.O. 14404. Grounded in IEEPA, NEA, INA §212(f). Creates new IEEPA-based Cuba sanctions program separate from CACR. White House simultaneously publishes fact sheet.</div></div>
+        <div class="tl14-it"><div class="tl14-dt red"></div><div class="tl14-da">May 7, 2026</div><div class="tl14-ti">First Designations — GAESA, Lastres, Moa Nickel</div><div class="tl14-tx">State Department designates GAESA, Ania Guillermina Lastres Morera, and Moa Nickel S.A. under E.O. 14404. OFAC issues General License and FAQ guidance. Wind-down period through June 5 for GAESA transactions — now expired.</div></div>
+        <div class="tl14-it"><div class="tl14-dt red"></div><div class="tl14-da">May 18, 2026</div><div class="tl14-ti">Second Wave — MINFAR, Security Network</div><div class="tl14-tx">State Department designates MINFAR, a gold mining joint venture, 5 Cuban entities, and 5 individuals connected to Cuba's extraterritorial influence network. Rubio: "I am also designating a Cuban government gold mining joint venture that continues to enrich the Cuban military and elite at the expense of its people."</div></div>
+        <div class="tl14-it"><div class="tl14-dt amber"></div><div class="tl14-da">June 5, 2026</div><div class="tl14-ti">GAESA Wind-Down Period Expires</div><div class="tl14-tx">OFAC's limited non-targeting posture for GAESA wind-down transactions expires. All transactions with GAESA and GAESA 50%+ subsidiaries now carry full secondary sanctions exposure for foreign persons.</div></div>
+        <div class="tl14-it"><div class="tl14-dt green"></div><div class="tl14-da">June 12–18, 2026</div><div class="tl14-ti">Cuba Announces Economic Reforms — Possible Response</div><div class="tl14-tx">Díaz-Canel announces sweeping economic reform package June 12 (later unanimously approved June 18). Cuba's Communist Party approves unprecedented privatization measures. Cuban officials state the decision is "not related to negotiations" with the US — but the timing follows the peak E.O. 14404 pressure period.</div></div>
+        <div class="tl14-it"><div class="tl14-dt" style="background:var(--blue-lt);"></div><div class="tl14-da">Ongoing · June 2026</div><div class="tl14-ti">Additional Designations Expected · Tourism Watch</div><div class="tl14-tx">State Department has signaled ongoing designations. Tourism sector is the most frequently cited next target given GAESA's control of Cuba's hotel industry. FORA tracks new designations as they are announced.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DISCOURSE ═══ -->
+  <div id="eo14-panel-discourse" class="eo14-panel">
+    <div class="sec14">
+      <div class="nh-ey14">Discourse · Community Perspectives</div>
+      <h2 class="nh-hl14">What Do You Think?</h2>
+      <div class="dp14">
+        <div class="dp14-lb">Civic Question · E.O. 14404</div>
+        <div class="dp14-q">Does secondary sanctions pressure on foreign companies doing business in Cuba help free the Cuban people — or does it hurt them?</div>
+        <div class="dp14-ac"><button class="dp14-btn dp14-co">Helps · 1,203</button><button class="dp14-btn dp14-ob">Hurts · 847</button></div>
+      </div>
+      <div class="dp14" style="margin-top:14px;">
+        <div class="dp14-lb">Civic Question · GAESA Designation</div>
+        <div class="dp14-q">Sanctioning GAESA is intended to stop the military elite from extracting Cuba's wealth. But GAESA also controls remittance channels, stores, and banks that ordinary Cubans depend on. Does this designation help or harm the Cuban people first?</div>
+        <div class="dp14-ac"><button class="dp14-btn dp14-co">Helps · 892</button><button class="dp14-btn dp14-ob">Harms · 1,104</button></div>
+      </div>
+      <div class="sdiv14" style="margin-top:24px;"><span class="sdiv14-in">✦ ✦ ✦</span></div>
+      <div class="dc14">
+        <div class="dc14-hd"><div class="dc14-av">MI</div><div class="dc14-hn">@miami.investor.2026</div><span class="dc14-bg">Cuban-American</span></div>
+        <div class="dc14-tx">GAESA has been stealing from the Cuban people since the 1990s. An $18 billion slush fund while people can't find cooking oil. The designation is decades overdue. The Cuban people will not be free until the military's grip on the economy is broken. This order is a step toward that.</div>
+        <div class="dc14-ac"><button class="dc14-btn">Concur 341</button><button class="dc14-btn">Reply</button><button class="dc14-btn">Object 112</button></div>
+      </div>
+      <div class="dc14">
+        <div class="dc14-hd"><div class="dc14-av" style="background:var(--green);">CH</div><div class="dc14-hn">@cuba.havana.resident</div><span class="dc14-bg" style="background:var(--red-p);border-color:var(--red-r);color:var(--red);">On the Island</span></div>
+        <div class="dc14-tx">The store where I buy rice is TRD Caribe. That's GAESA. The bank where my cousin sends remittances goes through GAESA infrastructure. When you sanction GAESA, you're sanctioning the store and the remittance. I understand why the US wants to pressure the regime. But the pressure lands here, on us, before it ever reaches whoever is managing those offshore accounts.</div>
+        <div class="dc14-ac"><button class="dc14-btn">Concur 517</button><button class="dc14-btn">Reply</button><button class="dc14-btn">Object 88</button></div>
+      </div>
+      <div class="dc14">
+        <div class="dc14-hd"><div class="dc14-av" style="background:var(--purple);">TL</div><div class="dc14-hn">@trade.lawyer.dc</div><span class="dc14-bg" style="background:var(--purple-lt);border-color:rgba(45,26,74,0.2);color:var(--purple);">Trade Law</span></div>
+        <div class="dc14-tx">The secondary sanctions architecture of 14404 mirrors Russia E.O. 14114. What happened there: European banks exited Russian transactions entirely rather than manage compliance risk. That didn't collapse Russia — it accelerated Chinese banks filling the gap. If the same pattern holds in Cuba, 14404 may inadvertently accelerate Chinese financial dominance in Havana. Worth watching.</div>
+        <div class="dc14-ac"><button class="dc14-btn">Concur 203</button><button class="dc14-btn">Reply</button><button class="dc14-btn">Object 45</button></div>
+      </div>
+      <div class="sdiv14" style="margin-top:28px;"><span class="sdiv14-in">✦ ✦ ✦</span></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:#b8860b;margin-bottom:6px;">◆ Civic Voice</div>
+      <h2 style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#1b3a6b;margin:0 0 20px;padding-bottom:12px;border-bottom:1px solid rgba(27,58,107,0.09);">Your Take</h2>
+      <div class="bt-card">
+        <div class="bt-eyebrow">◆ How do you see it?</div>
+        <div class="bt-perspective-grid" id="bt-perspectives">
+          <button type="button" class="bt-perspective-btn" data-type="empathy"        data-label="🤝 With empathy">🤝 With empathy</button>
+          <button type="button" class="bt-perspective-btn" data-type="practical"      data-label="🔧 Practical fix">🔧 Practical fix</button>
+          <button type="button" class="bt-perspective-btn" data-type="accountability" data-label="📋 Hold accountable">📋 Hold accountable</button>
+          <button type="button" class="bt-perspective-btn" data-type="opposition"     data-label="↔ Different view">↔ Different view</button>
+        </div>
+        <textarea class="bt-textarea" id="bt-body" rows="4" placeholder="What does <%= j eo_ref %> mean for your community? Be specific — your take is more persuasive when it's grounded in real experience."></textarea>
+        <div class="bt-form-row">
+          <div><input class="bt-input" type="text" id="bt-name" placeholder="Your occupation (optional)"></div>
+          <div style="display:flex;align-items:center;"><div class="bt-checkbox-row" style="margin-bottom:0;"><input type="checkbox" id="bt-anon"><label for="bt-anon">Post anonymously</label></div></div>
+        </div>
+        <div class="photo-attach-wrap">
+          <span class="photo-attach-label">📷 Add a photo (optional)</span>
+          <div class="photo-attach-options">
+            <label class="photo-opt-btn"><input type="file" accept="image/*" style="display:none;" onchange="handleFileUpload(this, 'qa-eo')">📁 Camera roll</label>
+            <span class="photo-opt-divider">or</span>
+            <input type="text" class="photo-link-input" placeholder="🔗 Paste a photo link" oninput="handleLinkInput(this, 'qa-eo')">
+          </div>
+          <div class="photo-preview-area" id="preview-qa-eo" style="display:none;">
+            <img class="photo-preview-img" id="preview-img-qa-eo" src="" alt="Preview" onclick="openLightbox(this.src)">
+            <div class="photo-preview-meta"><span class="photo-preview-name" id="preview-name-qa-eo"></span><button class="photo-remove-btn" onclick="clearPhoto('qa-eo')">✕ Remove</button></div>
+          </div>
+        </div>
+        <button class="bt-submit" onclick="btOpenShare()">Share your take →</button>
+        <div class="bt-share-panel" id="bt-share-panel" hidden>
+          <div class="bt-share-panel-label">Your take — ready to share</div>
+          <div class="bt-share-copy" id="bt-share-copy"></div>
+          <div id="bt-share-photo"></div>
+          <div class="bt-share-btns" id="bt-share-btns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /eo14-main -->
+
+<!-- ── SIDEBAR ── -->
+<div class="eo14-sidebar">
+  <div class="sb14">
+    <div class="sb14-ey">Order Details</div>
+    <div class="sb14-ti">E.O. 14404 at a Glance</div>
+    <div class="dr14"><span class="dr14-lb">Signed</span><span class="dr14-vl">May 1, 2026</span></div>
+    <div class="dr14"><span class="dr14-lb">Signed By</span><span class="dr14-vl">President Trump</span></div>
+    <div class="dr14"><span class="dr14-lb">Legal Authority</span><span class="dr14-vl">IEEPA · NEA · INA §212(f)</span></div>
+    <div class="dr14"><span class="dr14-lb">Federal Register</span><span class="dr14-vl">DCPD-202600302</span></div>
+    <div class="dr14"><span class="dr14-lb">Administered By</span><span class="dr14-vl">State Dept + Treasury OFAC</span></div>
+    <div class="dr14"><span class="dr14-lb">Status</span><span class="dr14-vl" style="color:var(--green);">In Force</span></div>
+    <div class="dr14"><span class="dr14-lb">Primary Embargo</span><span class="dr14-vl">CACR (separate · also active)</span></div>
+  </div>
+  <div class="sb14">
+    <div class="sb14-ey">Designations Made</div>
+    <div class="sb14-ti">SDN Actions</div>
+    <div class="dr14"><span class="dr14-lb">GAESA</span><span class="dr14-vl dr14-rd">Designated May 7</span></div>
+    <div class="dr14"><span class="dr14-lb">Ania Lastres</span><span class="dr14-vl dr14-rd">Designated May 7</span></div>
+    <div class="dr14"><span class="dr14-lb">Moa Nickel S.A.</span><span class="dr14-vl dr14-rd">Designated May 7</span></div>
+    <div class="dr14"><span class="dr14-lb">MINFAR</span><span class="dr14-vl dr14-rd">Designated May 18</span></div>
+    <div class="dr14"><span class="dr14-lb">5 entities + 5 individuals</span><span class="dr14-vl dr14-rd">May 18</span></div>
+    <div class="dr14"><span class="dr14-lb">Wind-down expired</span><span class="dr14-vl dr14-rd">Jun 5, 2026</span></div>
+  </div>
+  <div class="sb14">
+    <div class="sb14-ey">Primary Sources</div>
+    <div class="sb14-ti">Official Texts</div>
+    <div class="sr14">📄 GovInfo.gov · DCPD-202600302</div>
+    <div class="sr14">📄 State.gov · May 7 designation announcement</div>
+    <div class="sr14">📄 State.gov · May 18 designation announcement</div>
+    <div class="sr14">📄 Treasury OFAC · FAQ 1254, 1256</div>
+    <div class="sr14">📄 OFAC General License · May 7, 2026</div>
+  </div>
+  <div class="sb14">
+    <div class="sb14-ey">Cross-Links</div>
+    <div class="sb14-ti">Related Pages</div>
+    <a class="ql14" href="/org/gaesa">→ fora.center/org/gaesa</a>
+    <a class="ql14" href="/cuba">→ fora.center/cuba</a>
+    <a class="ql14" href="https://www.federalregister.gov/documents/2026/05/07/2026-10404/imposing-sanctions-on-cubas-revolutionary-armed-forces" target="_blank" rel="noopener">→ Federal Register · Official Text ↗</a>
+  </div>
+</div><!-- /eo14-sidebar -->
+</div><!-- /eo14-body -->
+
+<script>
+function switchTab14(name, el) {
+  document.querySelectorAll('.eo14-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.eo14-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('eo14-panel-' + name).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+
+<% else %>
+
+<!-- ── BODY (generic) ──────────────────────────────────────────────────────── -->
 <div style="max-width:860px; margin:0 auto; padding:44px 48px 72px;">
 
-  <!-- What This Order Does -->
   <div style="margin-bottom:44px;">
     <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Plain Language</div>
     <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 16px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">What This Order Does</h2>
-
     <% if @summary.present? %>
       <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ AI Analysis</div>
       <p style="font-family:'Nunito',sans-serif; font-size:15px; color:#3a4a5e; line-height:1.75;"><%= @summary %></p>
@@ -130,7 +583,6 @@
     <% end %>
   </div>
 
-  <!-- Who It Affects -->
   <div style="margin-bottom:52px;">
     <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Impact</div>
     <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 16px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">Who It Affects</h2>
@@ -145,64 +597,42 @@
     <% end %>
   </div>
 
-  <!-- Gilt divider -->
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:48px;">
     <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, #b8860b, transparent);"></div>
     <span style="font-size:10px; color:#b8860b; letter-spacing:0.3em;">★</span>
     <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, #b8860b, transparent);"></div>
   </div>
 
-  <!-- Civic Voice -->
   <div>
     <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Civic Voice</div>
     <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 20px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">Your Take</h2>
-
     <div class="bt-card">
       <div class="bt-eyebrow">◆ How do you see it?</div>
-
       <div class="bt-perspective-grid" id="bt-perspectives">
         <button type="button" class="bt-perspective-btn" data-type="empathy"        data-label="🤝 With empathy">🤝 With empathy</button>
         <button type="button" class="bt-perspective-btn" data-type="practical"      data-label="🔧 Practical fix">🔧 Practical fix</button>
         <button type="button" class="bt-perspective-btn" data-type="accountability" data-label="📋 Hold accountable">📋 Hold accountable</button>
         <button type="button" class="bt-perspective-btn" data-type="opposition"     data-label="↔ Different view">↔ Different view</button>
       </div>
-
       <textarea class="bt-textarea" id="bt-body" rows="4"
-        placeholder="What does <%= eo_ref %> mean for your community? Be specific — your take is more persuasive when it's grounded in real experience."></textarea>
-
+        placeholder="What does <%= j eo_ref %> mean for your community? Be specific — your take is more persuasive when it's grounded in real experience."></textarea>
       <div class="bt-form-row">
-        <div>
-          <input class="bt-input" type="text" id="bt-name" placeholder="Your occupation (optional)">
-        </div>
-        <div style="display:flex; align-items:center;">
-          <div class="bt-checkbox-row" style="margin-bottom:0;">
-            <input type="checkbox" id="bt-anon">
-            <label for="bt-anon">Post anonymously</label>
-          </div>
-        </div>
+        <div><input class="bt-input" type="text" id="bt-name" placeholder="Your occupation (optional)"></div>
+        <div style="display:flex; align-items:center;"><div class="bt-checkbox-row" style="margin-bottom:0;"><input type="checkbox" id="bt-anon"><label for="bt-anon">Post anonymously</label></div></div>
       </div>
-
       <div class="photo-attach-wrap">
         <span class="photo-attach-label">📷 Add a photo (optional)</span>
         <div class="photo-attach-options">
-          <label class="photo-opt-btn">
-            <input type="file" accept="image/*" style="display:none;" onchange="handleFileUpload(this, 'qa-eo')">
-            📁 Camera roll
-          </label>
+          <label class="photo-opt-btn"><input type="file" accept="image/*" style="display:none;" onchange="handleFileUpload(this, 'qa-eo')">📁 Camera roll</label>
           <span class="photo-opt-divider">or</span>
           <input type="text" class="photo-link-input" placeholder="🔗 Paste a photo link" oninput="handleLinkInput(this, 'qa-eo')">
         </div>
         <div class="photo-preview-area" id="preview-qa-eo" style="display:none;">
           <img class="photo-preview-img" id="preview-img-qa-eo" src="" alt="Preview" onclick="openLightbox(this.src)">
-          <div class="photo-preview-meta">
-            <span class="photo-preview-name" id="preview-name-qa-eo"></span>
-            <button class="photo-remove-btn" onclick="clearPhoto('qa-eo')">✕ Remove</button>
-          </div>
+          <div class="photo-preview-meta"><span class="photo-preview-name" id="preview-name-qa-eo"></span><button class="photo-remove-btn" onclick="clearPhoto('qa-eo')">✕ Remove</button></div>
         </div>
       </div>
-
       <button class="bt-submit" onclick="btOpenShare()">Share your take →</button>
-
       <div class="bt-share-panel" id="bt-share-panel" hidden>
         <div class="bt-share-panel-label">Your take — ready to share</div>
         <div class="bt-share-copy" id="bt-share-copy"></div>
@@ -214,6 +644,8 @@
 
 </div>
 
+<% end %>
+
 <script>
 (function() {
   var eoRef   = '<%= j eo_ref %>';
@@ -221,7 +653,6 @@
   var selectedType  = 'empathy';
   var selectedLabel = '🤝 With empathy';
 
-  // Perspective buttons
   var grid = document.getElementById('bt-perspectives');
   if (grid) {
     var defaultBtn = grid.querySelector('[data-type="empathy"]');
@@ -236,7 +667,6 @@
     });
   }
 
-  // Photo state
   var photoState = {};
   window.handleFileUpload = function(input, formId) {
     var file = input.files && input.files[0];
@@ -317,7 +747,7 @@
 
     var enc = encodeURIComponent, t240 = shareText.substring(0, 240);
     var platforms = [
-      ['𝕏 / Twitter',  function() { window.open('https://twitter.com/intent/tweet?text=' + enc(t240), '_blank', 'noopener'); }],
+      ['\u{1D54F} / Twitter',  function() { window.open('https://twitter.com/intent/tweet?text=' + enc(t240), '_blank', 'noopener'); }],
       ['Facebook',      function() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc(eoUrl), '_blank', 'noopener'); }],
       ['WhatsApp',      function() { window.open('https://wa.me/?text=' + enc(shareText.substring(0, 300)), '_blank', 'noopener'); }],
       ['LinkedIn',      function() { window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + enc(eoUrl) + '&summary=' + enc(shareText.substring(0, 200)), '_blank', 'noopener'); }],
