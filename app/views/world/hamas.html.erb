@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Hamas · NGE</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f2f4f8;
+  --bg2:     #e8ebf2;
+  --white:   #ffffff;
+  --blue:    #1b3a6b;
+  --blue-lt: #3a6abf;
+  --blue-pl: #dde5f5;
+  --blue-vp: #edf1fb;
+  --gilt:    #b8860b;
+  --gilt-lt: #d4a832;
+  --gilt-pl: #f8f0dc;
+  --gilt-rul:rgba(184,134,11,0.22);
+  --ink:     #0e1a2e;
+  --ink-soft:#5a6e8a;
+  --ink-mut: #8a9ab8;
+  --rule:    rgba(27,58,107,0.1);
+  --rule-lt: rgba(27,58,107,0.05);
+  --green:   #155c2d;
+  --green-p: #e5f0e8;
+  --green-r: #8cc4a0;
+  --red:     #8b2020;
+  --red-p:   #f7eaea;
+  --red-r:   #d4a0a0;
+  --amber:   #c47f00;
+  --amber-p: #fdf3dc;
+  --amber-r: rgba(196,127,0,0.28);
+  --terra:   #8b3a20;
+
+  /* NGE colors */
+  --nge:     #2d1a4a;   /* deep midnight purple for militant entities */
+  --nge-p:   #f0eaf8;
+  --nge-r:   rgba(45,26,74,0.25);
+  --nge-lt:  #6b4a9b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--gilt-rul);border-radius:10px;}
+
+/* ══ NAV ══ */
+nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-links{display:flex;gap:6px;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);padding:6px 14px;border-radius:100px;cursor:pointer;transition:all 0.15s;}
+.nav-link.active{color:white;background:rgba(255,255,255,0.1);}
+.nav-right{margin-left:auto;}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--gilt-pl);border:2px solid var(--gilt-rul);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gilt);font-weight:700;}
+
+/* ══ HERO ══ */
+
+/* ── TICKER ── */
+.ticker-bar{height:30px;background:#0a0f1a;border-bottom:1px solid #1b3a6b;display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;border-right:1px solid;}
+.ticker-badge.crisis{background:#7a1212;border-right-color:#c0392b;}
+.ticker-badge.active{background:#1b3a6b;border-right-color:#2a5298;}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:white;white-space:nowrap;}
+.ticker-scroll-wrap{flex:1;overflow:hidden;}
+.ticker-track{display:flex;align-items:center;animation:ticker-scroll 22s linear infinite;white-space:nowrap;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.06);}
+.ticker-key{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.ticker-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.ticker-val.tv-red{color:#ff8080;}
+.ticker-val.tv-white{color:rgba(255,255,255,0.85);}
+.ticker-val.tv-amber{color:#FAC775;}
+.ticker-val.tv-green{color:#C0DD97;}
+/* ── QUIET TICKER ── */
+.quiet-ticker{height:26px;background:#0e1a2e;border-bottom:1px solid rgba(27,58,107,0.4);display:flex;align-items:center;padding:0 24px;gap:18px;}
+.qt-item{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.qt-item span{color:rgba(255,255,255,0.65);}
+
+
+
+.hero{background:var(--nge);padding:40px 48px 50px;position:relative;overflow:hidden;}
+.hero::after{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;bottom:0;left:0;right:0;height:26px;overflow:hidden;white-space:nowrap;display:flex;align-items:center;padding:0 48px;font-size:11px;letter-spacing:0.55em;color:var(--gilt);-webkit-mask-image:linear-gradient(to right,black 90%,transparent 100%);mask-image:linear-gradient(to right,black 90%,transparent 100%);}
+.hero-ring{position:absolute;right:-80px;top:-100px;width:500px;height:500px;border-radius:50%;border:50px solid rgba(255,255,255,0.015);pointer-events:none;}
+
+.hero-bc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.hero-bc a{color:rgba(255,255,255,0.25);cursor:pointer;}
+.hero-bc a:hover{color:rgba(255,255,255,0.6);}
+.hero-bc-sep{opacity:0.2;}
+.hero-bc-here{color:var(--gilt-lt);}
+
+.hero-inner{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;}
+.hero-left{}
+
+.entity-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.entity-class{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.12);padding:3px 10px;border-radius:3px;}
+.entity-status-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:3px;}
+.status-degraded{background:rgba(196,127,0,0.2);color:#fcd34d;border:1px solid rgba(196,127,0,0.35);}
+.status-active{background:rgba(139,32,32,0.25);color:#fca5a5;border:1px solid rgba(139,32,32,0.4);}
+
+.entity-endonym{font-family:'Libre Baskerville',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.3);margin-bottom:4px;}
+.entity-name{font-family:'Libre Baskerville',serif;font-size:40px;font-weight:700;color:white;line-height:1.0;margin-bottom:6px;}
+.entity-aliases{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;}
+
+.entity-summary{font-family:'Nunito',sans-serif;font-size:14px;font-weight:300;color:rgba(255,255,255,0.55);line-height:1.75;max-width:660px;margin-bottom:18px;}
+.entity-summary .term{border-bottom:1px dashed rgba(184,134,11,0.4);cursor:pointer;color:rgba(255,255,255,0.75);transition:color 0.1s;}
+.entity-summary .term:hover{color:var(--gilt-lt);}
+
+.hero-meta{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;}
+.hm{display:flex;flex-direction:column;gap:2px;}
+.hm-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+.hm-val{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);font-weight:600;}
+
+.power-basis-row{display:flex;gap:6px;flex-wrap:wrap;}
+.pb-chip{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);}
+
+.hero-right{display:flex;flex-direction:column;gap:0;}
+.hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
+.hs{background:rgba(255,255,255,0.03);padding:12px 14px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-top:3px;}
+
+/* ══ TABS ══ */
+.entity-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;padding:0 48px;overflow-x:auto;}
+.etab{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 18px;color:var(--ink-mut);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all 0.15s;}
+.etab.active{color:var(--blue);border-bottom-color:var(--gilt);font-weight:700;}
+.etab:hover{color:var(--blue);}
+
+/* ══ BODY ══ */
+.page-body{display:grid;grid-template-columns:1fr 320px;max-width:1280px;margin:0 auto;}
+.page-main{padding:32px 48px;border-right:1px solid var(--rule);}
+.page-sidebar{padding:28px 24px;background:var(--white);}
+
+/* shared */
+.sec-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.sec-ey::before{content:'◆';font-size:6px;}
+.sec-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:16px;}
+.sec-block{margin-bottom:40px;}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+.sec-link{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-lt);cursor:pointer;}
+
+/* ══ POWER STRUCTURE ══ */
+.power-structure{background:var(--white);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.ps-header{background:var(--nge);padding:14px 18px;}
+.psh-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:3px;}
+.psh-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;}
+.psh-note{font-family:'Nunito',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:3px;}
+.ps-body{padding:16px 18px;}
+.ps-tier{margin-bottom:16px;}
+.ps-tier-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.ps-tier-label::before{content:'';display:inline-block;width:20px;height:1px;background:var(--rule);}
+.ps-tier-label::after{content:'';flex:1;height:1px;background:var(--rule);}
+.ps-tier-items{display:flex;gap:8px;flex-wrap:wrap;}
+.ps-person{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;min-width:160px;}
+.pp-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:2px;}
+.pp-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);}
+.pp-status{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-top:5px;display:inline-block;}
+.st-active{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
+.st-dead{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.st-unknown{background:var(--bg2);color:var(--ink-mut);border:1px solid var(--rule);}
+.st-new{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.ps-council{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;flex:1;}
+.pc-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+.pc-note{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
+.ps-restructure-note{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:11px 14px;margin-top:12px;}
+.prn-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);margin-bottom:4px;}
+.prn-text{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);line-height:1.55;}
+
+/* ══ TIMELINE ══ */
+.timeline{position:relative;padding-left:24px;}
+.timeline::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gilt-rul),var(--rule),transparent);}
+.tl-decade{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:10px;margin-top:20px;position:relative;}
+.tl-decade::before{content:'';position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:7px;height:1px;background:var(--gilt-rul);}
+.tl-item{position:relative;margin-bottom:10px;}
+.tl-dot{position:absolute;left:-21px;top:8px;width:9px;height:9px;border-radius:50%;border:2px solid;flex-shrink:0;}
+.dot-found{background:var(--nge-p);border-color:var(--nge-lt);}
+.dot-attack{background:var(--red-p);border-color:var(--red);}
+.dot-war{background:rgba(139,32,32,0.15);border-color:var(--red);}
+.dot-political{background:var(--blue-vp);border-color:var(--blue-lt);}
+.dot-milestone{background:var(--gilt-pl);border-color:var(--gilt);}
+.dot-degraded{background:var(--amber-p);border-color:var(--amber);}
+.tl-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:11px 13px;transition:box-shadow 0.12s;cursor:pointer;}
+.tl-card:hover{box-shadow:0 3px 12px rgba(27,58,107,0.07);}
+.tl-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;}
+.tl-year{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--blue);flex-shrink:0;min-width:36px;}
+.tl-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:1px;}
+.tt-found{background:var(--nge-p);color:var(--nge-lt);border:1px solid var(--nge-r);}
+.tt-attack{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.tt-war{background:rgba(139,32,32,0.08);color:var(--red);border:1px solid rgba(139,32,32,0.2);}
+.tt-political{background:var(--blue-vp);color:var(--blue-lt);border:1px solid var(--blue-pl);}
+.tt-milestone{background:var(--gilt-pl);color:var(--gilt);border:1px solid var(--gilt-rul);}
+.tt-degraded{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.tl-title{font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;color:var(--ink);flex:1;line-height:1.3;}
+.tl-body{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+.tl-body .term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;}
+.tl-deaths{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--red);margin-top:4px;}
+
+/* ══ IRAN CONNECTION ══ */
+.relationship-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.rc-header{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--rule-lt);}
+.rc-flag{font-size:22px;}
+.rc-entity{flex:1;}
+.rc-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--blue);}
+.rc-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+.rc-strength{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;}
+.rc-confirmed{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
+.rc-assessed{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.rc-alleged{background:var(--bg2);color:var(--ink-soft);border:1px solid var(--rule);}
+.rc-body{padding:12px 16px;}
+.rc-rel-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--nge-lt);margin-bottom:6px;}
+.rc-desc{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+.rc-desc .term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;color:var(--ink);}
+.rc-facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.rc-fact{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:3px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--rule);color:var(--ink-soft);}
+.rc-claimed{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:8px;}
+
+/* ══ DESIGNATIONS ══ */
+.designation-table{width:100%;border-collapse:collapse;}
+.dt-head th{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);padding:0 10px 8px 0;text-align:left;border-bottom:1px solid var(--rule);font-weight:400;}
+.designation-table td{padding:10px 10px 10px 0;border-bottom:1px solid var(--rule-lt);vertical-align:middle;}
+.designation-table tr:last-child td{border-bottom:none;}
+.dd-country{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--ink);white-space:nowrap;}
+.dd-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+.dt-fto{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
+.dt-sanc{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
+.dt-prosc{background:var(--nge-p);color:var(--nge-lt);border:1px solid var(--nge-r);}
+.dd-scope{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);}
+.dd-year{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);white-space:nowrap;}
+
+/* ══ DOCUMENTS ══ */
+.doc-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--rule-lt);}
+.doc-row:last-child{border-bottom:none;}
+.doc-icon{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.doc-body{flex:1;}
+.doc-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:2px;}
+.doc-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);}
+.doc-arrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-mut);cursor:pointer;}
+
+/* ══ SIDEBAR ══ */
+.sb-block{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--rule);}
+.sb-block:last-child{border-bottom:none;}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.sb-ey::before{content:'◆';font-size:5.5px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+.sb-note{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.6;margin-bottom:10px;}
+
+/* connected events */
+.event-row{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--rule-lt);}
+.event-row:last-child{border-bottom:none;}
+.er-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.er-body{flex:1;}
+.er-title{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--blue);line-height:1.3;}
+.er-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:1px;}
+
+/* connected issues */
+.issue-pill{display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--rule);cursor:pointer;transition:all 0.12s;margin-bottom:6px;}
+.issue-pill:hover{background:var(--gilt-pl);border-color:var(--gilt-rul);}
+.ip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ip-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink);}
+
+/* def modal */
+.def-modal{display:none;position:fixed;inset:0;background:rgba(10,18,32,0.75);z-index:600;align-items:center;justify-content:center;}
+.def-modal.open{display:flex;}
+.def-panel{background:var(--white);border-radius:14px;padding:28px;max-width:440px;width:90%;position:relative;}
+.def-close{position:absolute;top:14px;right:18px;font-size:20px;color:var(--ink-mut);cursor:pointer;}
+.def-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px;}
+.def-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.def-body{font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.7;margin-bottom:12px;}
+.def-ex{background:var(--bg);border-radius:8px;padding:11px 13px;border-left:3px solid var(--gilt);}
+.def-ex-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.def-ex-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.55;}
+.term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;transition:color 0.1s;}
+.term:hover{color:var(--gilt);}
+
+/* ══ FLAG & MEDIA ══ */
+.hero-flag{position:absolute;right:48px;top:40px;opacity:0.18;pointer-events:none;}
+.flag-block{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.flag-img{width:120px;height:auto;border-radius:4px;border:1px solid rgba(255,255,255,0.1);}
+.flag-caption{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);line-height:1.6;}
+.flag-caption strong{color:rgba(255,255,255,0.5);display:block;margin-bottom:2px;}
+.photo-grid-nge{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.pg-item{border-radius:8px;overflow:hidden;background:var(--bg2);border:1px solid var(--rule);position:relative;aspect-ratio:16/9;cursor:pointer;transition:box-shadow 0.12s;}
+.pg-item:hover{box-shadow:0 4px 14px rgba(27,58,107,0.1);}
+.pg-item img{width:100%;height:100%;object-fit:cover;display:block;}
+.pg-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(14,26,46,0.88));padding:16px 10px 7px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;color:rgba(255,255,255,0.75);}
+.pg-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:var(--bg2);}
+.pg-pl-icon{font-size:22px;opacity:0.3;}
+.pg-pl-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);text-align:center;padding:0 8px;line-height:1.4;}
+/* NGE person profile */
+.nge-profile-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:flex;gap:14px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.12s;}
+.nge-profile-card:hover{box-shadow:0 4px 14px rgba(27,58,107,0.08);}
+.npc-avatar{width:52px;height:52px;border-radius:50%;background:var(--nge-p);border:2px solid var(--nge-r);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--nge-lt);flex-shrink:0;position:relative;}
+.npc-org-badge{position:absolute;bottom:-3px;right:-3px;background:var(--nge);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:8px;}
+.npc-body{flex:1;}
+.npc-name-row{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
+.npc-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--ink);}
+.npc-org-chip{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--nge-p);color:var(--nge-lt);border:1px solid var(--nge-r);}
+.npc-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:5px;}
+.npc-desc{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.55;}
+.npc-statement{background:var(--bg);border-left:2px solid var(--nge-r);padding:8px 10px;margin-top:8px;border-radius:0 6px 6px 0;}
+.nps-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--nge-lt);margin-bottom:3px;}
+.nps-text{font-family:'Libre Baskerville',serif;font-size:12px;font-style:italic;color:var(--ink-soft);line-height:1.55;}
+.npc-fora-note{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:8px;padding:5px 8px;background:var(--blue-vp);border-radius:4px;display:inline-block;}
+
+.btn-primary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;transition:all 0.12s;}
+.btn-secondary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;background:transparent;color:rgba(255,255,255,0.7);transition:all 0.12s;}
+.btn-red{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,100,100,0.3);cursor:pointer;background:rgba(255,100,100,0.08);color:rgba(255,150,150,0.9);transition:all 0.12s;}
+
+/* ── TAB SECTIONS ── */
+.tab-section{padding:32px 40px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.tab-section:last-child{border-bottom:none;}
+.ts-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gilt);margin-bottom:8px;}
+.ts-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:white;margin-bottom:14px;line-height:1.3;}
+.ts-body{font-size:13.5px;color:rgba(255,255,255,0.65);line-height:1.85;max-width:780px;}
+
+/* ── LEADER CARDS ── */
+.leader-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:16px;}
+.leader-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;}
+.leader-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);flex-shrink:0;border:2px solid rgba(255,255,255,0.12);}
+.leader-name{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:white;margin-bottom:2px;}
+.leader-role{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;}
+.leader-status{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:8px;}
+.leader-status.active{background:rgba(21,92,45,0.3);color:#9FE1CB;border:1px solid rgba(21,92,45,0.4);}
+.leader-status.deceased{background:rgba(139,26,26,0.3);color:#ffaaaa;border:1px solid rgba(139,26,26,0.4);}
+.leader-note{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;}
+
+/* ── INFO CARDS ── */
+.info-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;}
+.ic-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--gilt-lt);margin-bottom:8px;}
+.ic-body{font-size:12.5px;color:rgba(255,255,255,0.6);line-height:1.7;}
+
+/* ── RELATIONSHIP CARDS ── */
+.rel-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;}
+.rc-header{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:white;padding:8px 14px;}
+.rc-body{font-size:12.5px;color:rgba(255,255,255,0.6);padding:12px 14px;line-height:1.7;}
+.rc-status{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;padding:6px 14px;border-top:1px solid rgba(255,255,255,0.06);}
+
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:16px;}
+.tl-item{display:grid;grid-template-columns:16px 1fr;gap:16px;padding:0 0 20px;}
+.tl-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.2);flex-shrink:0;margin-top:3px;}
+.tl-dot.active{background:var(--gilt);border-color:var(--gilt-lt);}
+.tl-content{}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gilt);margin-bottom:4px;}
+.tl-event{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7;}
+
+/* ── FACTS TABLE ── */
+.facts-table{width:100%;border-collapse:collapse;margin-top:12px;}
+.facts-table th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.06);padding:8px 12px;text-align:left;}
+.facts-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12.5px;color:rgba(255,255,255,0.65);vertical-align:top;}
+.facts-table tr:last-child td{border-bottom:none;}
+.ft-key{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);width:160px;}
+
+/* ── RECORD ITEMS ── */
+.record-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+.record-item{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:14px;}
+.ri-tier{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.t1{background:var(--gilt);}
+.t2{background:rgba(55,138,221,0.7);}
+.t3{background:rgba(255,255,255,0.3);}
+.ri-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:white;margin-bottom:4px;}
+.ri-desc{font-size:12.5px;color:rgba(255,255,255,0.6);line-height:1.65;}
+
+/* ── CIVIC ISSUES (from Iran) ── */
+.ci-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+
+.endonym-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;border:1px solid var(--rule);}
+.et-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;}
+.et-end{color:var(--green);}
+.et-exo{color:var(--ink-mut);}
+.et-name{font-family:'Source Serif 4',serif;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.et-source{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);}
+.ci-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:13px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;transition:box-shadow 0.12s;cursor:pointer;}
+.ci-icon{font-size:18px;flex-shrink:0;}
+.ci-title{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.35;}
+.ci-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.5;}
+.ci-count{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-top:5px;}
+.ci-arrow{font-size:14px;color:var(--ink-mut);flex-shrink:0;margin-left:auto;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-links">
+    <span class="nav-link">Feed</span>
+    <span class="nav-link active">Entities</span>
+    <span class="nav-link">Issues</span>
+    <span class="nav-link">Events</span>
+  </div>
+  <div class="nav-right"><div class="nav-avatar">NA</div></div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-badge active"><div class="wa-pulse" style="background:rgba(255,255,255,0.4);animation:none;"></div><span class="ticker-badge-text">HAMAS · SEVERELY DEGRADED</span></div>
+  <div class="ticker-scroll-wrap"><div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-key">Gaza ceasefire</span><span class="ticker-val tv-amber">Phase 1 holding · Oct 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Yahya Sinwar</span><span class="ticker-val tv-red">🕯 Killed Oct 16 2024</span></div>
+    <div class="ticker-item"><span class="ticker-key">Ismail Haniyeh</span><span class="ticker-val tv-red">🕯 Killed Jul 31 2024 · Tehran</span></div>
+    <div class="ticker-item"><span class="ticker-key">Mohammed Deif</span><span class="ticker-val tv-red">🕯 Killed Aug 2024</span></div>
+    <div class="ticker-item"><span class="ticker-key">Military wing</span><span class="ticker-val tv-red">Severely degraded · Gaza</span></div>
+    <div class="ticker-item"><span class="ticker-key">Political bureau</span><span class="ticker-val tv-amber">Qatar / Turkey · Intact</span></div>
+    <div class="ticker-item"><span class="ticker-key">Iran funding</span><span class="ticker-val tv-amber">Disrupted · supply chain cut</span></div>
+    <div class="ticker-item"><span class="ticker-key">Oct 7 2023</span><span class="ticker-val tv-white">1,200 killed · 251 taken hostage</span></div>
+    <div class="ticker-item"><span class="ticker-key">Gaza death toll</span><span class="ticker-val tv-white">70,000+ · Gaza Health Ministry</span></div>
+    <div class="ticker-item"><span class="ticker-key">Gaza ceasefire</span><span class="ticker-val tv-amber">Phase 1 holding · Oct 2025</span></div>
+    <div class="ticker-item"><span class="ticker-key">Yahya Sinwar</span><span class="ticker-val tv-red">🕯 Killed Oct 16 2024</span></div>
+    <div class="ticker-item"><span class="ticker-key">Ismail Haniyeh</span><span class="ticker-val tv-red">🕯 Killed Jul 31 2024 · Tehran</span></div>
+    <div class="ticker-item"><span class="ticker-key">Mohammed Deif</span><span class="ticker-val tv-red">🕯 Killed Aug 2024</span></div>
+    <div class="ticker-item"><span class="ticker-key">Military wing</span><span class="ticker-val tv-red">Severely degraded · Gaza</span></div>
+    <div class="ticker-item"><span class="ticker-key">Political bureau</span><span class="ticker-val tv-amber">Qatar / Turkey · Intact</span></div>
+    <div class="ticker-item"><span class="ticker-key">Iran funding</span><span class="ticker-val tv-amber">Disrupted · supply chain cut</span></div>
+    <div class="ticker-item"><span class="ticker-key">Oct 7 2023</span><span class="ticker-val tv-white">1,200 killed · 251 taken hostage</span></div>
+    <div class="ticker-item"><span class="ticker-key">Gaza death toll</span><span class="ticker-val tv-white">70,000+ · Gaza Health Ministry</span></div>
+  </div></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-ring"></div>
+  <div class="hero-bc">
+    <a href="#">The World</a><span class="hero-bc-sep">/</span>
+    <a href="#">Palestinian Territories</a><span class="hero-bc-sep">/</span>
+    <a href="#">Gaza Strip</a><span class="hero-bc-sep">/</span>
+    <a href="#">Non-Governmental Entities</a><span class="hero-bc-sep">/</span>
+    <span class="hero-bc-here">Hamas — Organization</span>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="entity-eyebrow">
+        <span class="entity-class">Non-Governmental Entity · Militant · Political Party · Sunni Islamist</span>
+        <span class="entity-status-chip status-degraded">⬤ Severely Degraded · Rebuilding</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+        <div style="width:52px;height:34px;border:0.5px solid rgba(255,255,255,0.15);border-radius:2px;flex-shrink:0;background:#006233;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <div style="text-align:center;line-height:1.1;">
+            <div style="font-size:9px;color:white;font-family:'JetBrains Mono',monospace;letter-spacing:0.02em;">حماس</div>
+            <div style="font-size:6px;color:rgba(255,255,255,0.6);font-family:'JetBrains Mono',monospace;margin-top:1px;">☽✦</div>
+          </div>
+        </div>
+        <div>
+          <div class="entity-endonym">حَرَكَة المُقَاوَمَة الإِسْلَامِيَّة — Ḥarakat al-Muqāwamah al-Islāmīyah</div>
+          <div class="entity-name">Hamas</div>
+        </div>
+      </div>
+
+      <div class="entity-aliases">Also: Islamic Resistance Movement · Harakat al-Muqawama al-Islamiya · HAMAS (acronym)</div>
+
+      <div class="entity-summary">
+        A Palestinian <span class="term" onclick="showDef('sunni')">Sunni</span> Islamist organization founded in 1987 during the First Intifada as an offshoot of the <span class="term" onclick="showDef('mb')">Egyptian Muslim Brotherhood</span>. Since 2007, Hamas has governed the <span class="term" onclick="showDef('gaza')">Gaza Strip</span> after winning the 2006 Palestinian legislative elections and seizing control from <span class="term" onclick="showDef('fatah')">Fatah</span> in a brief civil conflict. It is simultaneously a political party, a militant organization (<span class="term" onclick="showDef('qassam')">Izz ad-Din al-Qassam Brigades</span>), a social services network, and the de facto government of 2.3 million Palestinians. Funded primarily by <span class="term" onclick="showDef('iran')">Iran</span> (~$100M/year pre-2023) and <span class="term" onclick="showDef('qatar')">Qatar</span> (~$30M/month for civilian administration). Hamas's relationship with Iran is <em>ideologically unusual</em> — it is a Sunni organization sponsored by a Shia state, a pragmatic alliance of shared opposition to Israel rather than theological alignment.
+        <br><br>
+        On October 7, 2023, Hamas led coordinated attacks into Israel killing 1,200 people and taking 251 hostages — the deadliest day for Jews since the Holocaust. The subsequent Israeli military campaign has killed 70,000+ Palestinians, destroyed Gaza's infrastructure, and decapitated Hamas's military and political leadership. By March 2026 Hamas is severely degraded militarily but its political bureau in Qatar and Turkey remains intact.
+      </div>
+
+      <div class="hero-meta">
+        <div class="hm"><div class="hm-label">Founded</div><div class="hm-val">December 1987 · Gaza</div></div>
+        <div class="hm"><div class="hm-label">Ideology</div><div class="hm-val">Sunni Islamism · Palestinian nationalism · Muslim Brotherhood tradition</div></div>
+        <div class="hm"><div class="hm-label">Political bureau chief</div><div class="hm-val">Yahya Sinwar successor — Khalil al-Hayya · Qatar</div></div>
+        <div class="hm"><div class="hm-label">Military wing</div><div class="hm-val">Izz ad-Din al-Qassam Brigades · Severely degraded</div></div>
+        <div class="hm"><div class="hm-label">Territory controlled</div><div class="hm-val">Gaza Strip (de facto) · West Bank cells · diaspora networks</div></div>
+        <div class="hm"><div class="hm-label">Primary sponsors</div><div class="hm-val">Iran · Qatar · Turkey (political support)</div></div>
+        <div class="hm"><div class="hm-label">Governance status</div><div class="hm-val">De facto Gaza authority — civilian administration partially intact despite war</div></div>
+      </div>
+
+      <div class="power-basis-row">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-right:2px;">Power basis:</span>
+        <span class="pb-chip">Military</span>
+        <span class="pb-chip">Social services</span>
+        <span class="pb-chip">Religious</span>
+        <span class="pb-chip">Territorial (Gaza)</span>
+        <span class="pb-chip">Financial (Iran + Qatar)</span>
+        <span class="pb-chip">Electoral legitimacy (2006)</span>
+        <span class="pb-chip">Diaspora networks</span>
+      </div>
+    </div>
+
+    <div class="hero-right" style="min-width:250px;max-width:290px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:2px;">Sponsors &amp; allied relationships</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(139,26,26,0.3);border:0.5px solid #8b1a1a;color:#ffaaaa;white-space:nowrap;">Iran · ~$100M/yr (pre-2023)</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Qatar · ~$30M/mo civilian admin</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Turkey · Political support</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(196,127,0,0.2);border:0.5px solid #c47f00;color:#FAC775;white-space:nowrap;">IRGC Quds Force · Arms/training</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(196,127,0,0.2);border:0.5px solid #c47f00;color:#FAC775;white-space:nowrap;">PIJ · Coordinated (Gaza)</span>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-top:4px;">FTO Designations</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">US · 1997</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">EU · Military wing · 2003</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">UK · Full org · 2021</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">Israel · Terrorist org</span>
+        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Qatar / Turkey · Not designated</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+        <button class="btn-primary">+ Follow Hamas</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="entity-tabs">
+  <div class="tabs-inner">
+    <div class="etab active" onclick="switchTab('overview',this)">Overview</div>
+    <div class="etab" onclick="switchTab('structure',this)">Leadership</div>
+    <div class="etab" onclick="switchTab('timeline',this)">Timeline</div>
+    <div class="etab" onclick="switchTab('relationships',this)">Relationships</div>
+    <div class="etab" onclick="switchTab('designations',this)">Designations</div>
+    <div class="etab" onclick="switchTab('discourse',this)">Discourse</div>
+    <div class="etab" onclick="switchTab('record',this)">The Record</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="entity-body">
+
+  <!-- ══ OVERVIEW ══ -->
+  <div class="entity-tab-content active" id="tab-overview">
+    <div style="background:rgba(27,58,107,0.25);border:1px solid rgba(27,58,107,0.4);border-radius:8px;padding:12px 16px;margin:24px 40px 0;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:16px;flex-shrink:0;">🗺</div>
+      <div style="font-size:12.5px;color:rgba(255,255,255,0.65);line-height:1.6;">
+        <strong style="color:white;">This is the Hamas organization page</strong> — covering the political bureau, military wing, funding, relationships, and designations.
+        For the Gaza Strip as a jurisdiction — its 2.3 million residents, territory, governance structure, humanitarian situation, and history —
+        see <a href="fora_jurisdiction_gaza.html" style="color:var(--gilt-lt);text-decoration:underline;">Gaza Strip Jurisdiction →</a>
+      </div>
+    </div>
+    <div class="tab-section">
+      <div class="ts-eyebrow">What makes Hamas structurally unusual</div>
+      <div class="ts-title">A Sunni Organization in a Shia Axis — The Hamas Paradox</div>
+      <div class="ts-body">Hamas is the most doctrinally anomalous member of the Axis of Resistance. Every other major Iranian proxy — Hezbollah, the Houthis, the PMF factions — is Shia. Hamas is Sunni. Its ideological lineage runs through the Egyptian Muslim Brotherhood, not the Islamic Revolution. Its founding charter drew on Sunni Islamist tradition. Yet it has received sustained Iranian funding, weapons, and training for decades.
+
+The relationship works because both parties subordinate theology to strategy: Iran sees Hamas as a tool to project power to Israel's borders and destabilize the region; Hamas sees Iran as its most willing weapons supplier. When Hamas backed the Sunni opposition during the Syrian civil war (2012–2017), Iran cut funding and boosted PIJ instead — demonstrating the relationship is transactional, not theological. Hamas reconciled with Iran in 2022 with Iranian mediation.
+
+This structural ambiguity defines Hamas's position in every framework: it is simultaneously a resistance movement (in Palestinian, Arab, and Global South framing), a terrorist organization (in Western and Israeli framing), a governing authority (in its administrative reality in Gaza), and an Iranian proxy (in geopolitical analysis). FORA records all four framings without resolving between them — that resolution is a CivicIssue, not a data point.</div>
+    </div>
+
+    <div class="tab-section">
+      <div class="ts-eyebrow">Organizational structure</div>
+      <div class="ts-title">Two Organizations in One: Political Bureau and Military Wing</div>
+      <div class="ts-body">Hamas operates as two functionally distinct organizations that share ideology, leadership, and funding but present differently to the world. The distinction matters legally: the EU until 2021 only designated the military wing (Izz ad-Din al-Qassam Brigades), leaving the political bureau undesignated and able to maintain diplomatic contacts in Europe.</div>
+
+      <div class="info-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+        <div class="info-card">
+          <div class="ic-title">Political Bureau</div>
+          <div class="ic-body">Based in Qatar (with Turkish presence). Manages diplomacy, ceasefire negotiations, fundraising, international relations. Khalil al-Hayya is current senior figure following Haniyeh's assassination in Tehran July 2024. Conducts negotiations — directly engaged in Oct 2025 Gaza ceasefire talks. The bureau is intact and functioning despite the military campaign.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">Izz ad-Din al-Qassam Brigades</div>
+          <div class="ic-body">Military wing, named after a 1930s Palestinian resistance leader. Based in Gaza tunnel network. Mohammed Deif (commander) killed Aug 2024. Marwan Issa (deputy) killed Mar 2024. The Oct 7 attack was planned and executed by this wing over years of operational security. Severely degraded by 2026 but not destroyed — estimates of 5,000–10,000 remaining fighters in Gaza tunnels.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-section">
+      <div class="ts-eyebrow">Key facts · March 2026</div>
+      <div class="ts-title">Current Status</div>
+      <table class="facts-table">
+        <tr><td class="ft-key">Founded</td><td>December 1987 · Sheikh Ahmed Yassin · Gaza</td></tr>
+        <tr><td class="ft-key">Founding context</td><td>First Intifada (1987–1993) · Offshoot of Egyptian Muslim Brotherhood · Explicitly rejecting PLO's secular nationalism</td></tr>
+        <tr><td class="ft-key">2006 elections</td><td>Won 74 of 132 Palestinian Legislative Council seats — only internationally recognized democratic election in Palestinian territories. Fatah refused to cede power; Hamas seized Gaza by force in 2007 civil conflict.</td></tr>
+        <tr><td class="ft-key">Oct 7 2023</td><td>1,200 Israelis killed (deadliest day for Jews since Holocaust). 251 taken hostage. Hamas, PIJ, and other Gaza factions participated. Planned inside Gaza for 2+ years.</td></tr>
+        <tr><td class="ft-key">Gaza war (2023–2025)</td><td>70,000+ Palestinian deaths (Gaza Health Ministry). 85% of Gaza population displaced. Infrastructure largely destroyed. Oct 2025 ceasefire — Phase 1 holding as of March 2026.</td></tr>
+        <tr><td class="ft-key">Military wing status (Mar 2026)</td><td>Severely degraded. Top 3 military commanders killed. Estimated 5,000–10,000 fighters remain in tunnel network. Cannot project force outside Gaza.</td></tr>
+        <tr><td class="ft-key">Political bureau (Mar 2026)</td><td>Intact in Qatar. Khalil al-Hayya leading. Engaged in hostage negotiations. Iran relationship strained but active.</td></tr>
+        <tr><td class="ft-key">Iran relationship</td><td>Complex. Funding restored post-2022 reconciliation. Oct 7 planned without Iranian foreknowledge (per US intelligence). Iran supply chain disrupted after Feb 2026 Quds Force HQ destruction.</td></tr>
+      </table>
+    </div>
+
+    <div class="tab-section">
+      <div class="ts-eyebrow">Endonym · Exonym · Register</div>
+      <div class="ts-title">What Different Actors Call Hamas</div>
+      <table class="endonym-table">
+        <thead><tr><th>Register</th><th>Name / Label</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td><span class="et-type et-end">Endonym</span></td><td><div class="et-name">Ḥarakat al-Muqāwamah al-Islāmīyah — Islamic Resistance Movement</div></td><td class="et-source">Hamas's own designation — emphasizes resistance and Islamic character simultaneously</td></tr>
+          <tr><td><span class="et-type et-exo">Western / Israeli</span></td><td><div class="et-name">Terrorist organization · Hamas</div></td><td class="et-source">US State Dept (FTO 1997) · EU (2003/2021) · UK (2021) · Israel</td></tr>
+          <tr><td><span class="et-type et-exo">Arab / Palestinian</span></td><td><div class="et-name">Palestinian resistance · The resistance</div></td><td class="et-source">Arab street, particularly during Israeli operations. Qatar official media uses neutral framing.</td></tr>
+          <tr><td><span class="et-type et-exo">Iranian / Axis</span></td><td><div class="et-name">Part of the Axis of Resistance · Islamic resistance</div></td><td class="et-source">Iran state media · Hezbollah · Houthis — emphasizes the pan-resistance framing over Palestinian specificity</td></tr>
+          <tr><td><span class="et-type et-exo">Global South</span></td><td><div class="et-name">Palestinian liberation movement · Resistance</div></td><td class="et-source">South Africa, Venezuela, Bolivia, some UN votes — frames Hamas as anti-colonial resistance rather than terrorist organization</td></tr>
+          <tr><td><span class="et-type et-exo">Palestinian Authority / Fatah</span></td><td><div class="et-name">The coup faction · Illegal authority in Gaza</div></td><td class="et-source">PA framing after 2007 Gaza takeover — delegitimizes Hamas's governance claim</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ LEADERSHIP ══ -->
+  <div class="entity-tab-content" id="tab-structure">
+    <div class="tab-section">
+      <div class="ts-eyebrow">Current leadership · March 2026</div>
+      <div class="ts-title">Political Bureau — Intact in Qatar</div>
+      <div class="leader-grid">
+        <div class="leader-card">
+          <div class="leader-avatar" style="background:#1a3a1a;">KH</div>
+          <div class="leader-info">
+            <div class="leader-name">Khalil al-Hayya</div>
+            <div class="leader-role">Senior Political Bureau Member · Lead negotiator</div>
+            <div class="leader-status active">Active · Qatar</div>
+            <div class="leader-note">Led Hamas in Gaza ceasefire negotiations Oct 2025. Closest to Sinwar ideologically. Seen as likely next political bureau chief.</div>
+          </div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar" style="background:#1a3a1a;">MH</div>
+          <div class="leader-info">
+            <div class="leader-name">Muhammad al-Hayya</div>
+            <div class="leader-role">Political Bureau · External relations</div>
+            <div class="leader-status active">Active</div>
+            <div class="leader-note">Manages international contacts and fundraising networks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ts-eyebrow" style="margin-top:28px;">Killed 2024 — Top leadership decapitated</div>
+      <div class="ts-title" style="color:rgba(255,255,255,0.5);">Memorial — Eliminated Leadership</div>
+      <div class="leader-grid">
+        <div class="leader-card" style="opacity:0.7;border-color:rgba(139,26,26,0.4);">
+          <div class="leader-avatar" style="background:#2a0808;">YS</div>
+          <div class="leader-info">
+            <div class="leader-name">Yahya Sinwar 🕯</div>
+            <div class="leader-role">Hamas leader in Gaza · Mastermind of Oct 7</div>
+            <div class="leader-status deceased">Killed Oct 16 2024 · Rafah · IDF ground operation</div>
+            <div class="leader-note">Chief architect of Oct 7 2023. Spent 22 years in Israeli prison. Released 2011 in prisoner exchange. Built Gaza tunnel network and Oct 7 planning in operational silence. His death marked the end of Hamas's military command generation.</div>
+          </div>
+        </div>
+        <div class="leader-card" style="opacity:0.7;border-color:rgba(139,26,26,0.4);">
+          <div class="leader-avatar" style="background:#2a0808;">IH</div>
+          <div class="leader-info">
+            <div class="leader-name">Ismail Haniyeh 🕯</div>
+            <div class="leader-role">Political Bureau Chief</div>
+            <div class="leader-status deceased">Killed Jul 31 2024 · Tehran · Israel attributed</div>
+            <div class="leader-note">Assassinated in his Tehran guesthouse hours after attending inauguration of Iranian President Pezeshkian. Israel has not officially claimed responsibility. Killed at the height of ceasefire negotiations — widely seen as deliberate disruption.</div>
+          </div>
+        </div>
+        <div class="leader-card" style="opacity:0.7;border-color:rgba(139,26,26,0.4);">
+          <div class="leader-avatar" style="background:#2a0808;">MD</div>
+          <div class="leader-info">
+            <div class="leader-name">Mohammed Deif 🕯</div>
+            <div class="leader-role">Commander, Izz ad-Din al-Qassam Brigades</div>
+            <div class="leader-status deceased">Killed Aug 2024 · Israeli airstrike · Khan Younis</div>
+            <div class="leader-note">Hamas's most senior military commander. Survived 7 prior Israeli assassination attempts. Lost his eye, hand, and leg in earlier strikes. Built and commanded the military wing for 20+ years. His death ended Hamas's most capable military generation.</div>
+          </div>
+        </div>
+        <div class="leader-card" style="opacity:0.7;border-color:rgba(139,26,26,0.4);">
+          <div class="leader-avatar" style="background:#2a0808;">MI</div>
+          <div class="leader-info">
+            <div class="leader-name">Marwan Issa 🕯</div>
+            <div class="leader-role">Deputy Commander, Qassam Brigades</div>
+            <div class="leader-status deceased">Killed Mar 2024 · Israeli airstrike · Deir al-Balah</div>
+            <div class="leader-note">Third-ranking military commander. Killed in underground tunnel complex strike.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TIMELINE ══ -->
+  <div class="entity-tab-content" id="tab-timeline">
+    <div class="tab-section">
+      <div class="ts-eyebrow">1987 — 2026</div>
+      <div class="ts-title">Hamas: Four Decades</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot active"></div><div class="tl-content"><div class="tl-date">December 1987</div><div class="tl-event">Hamas founded by Sheikh Ahmed Yassin during First Intifada as Muslim Brotherhood offshoot. Explicitly rejects PLO's secular nationalism and Oslo framework.</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><div class="tl-date">1990s</div><div class="tl-event">Suicide bombing campaign against Israel. Hamas opposes Oslo Accords (1993). Iran becomes primary weapons supplier. US designates as FTO (1997).</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><div class="tl-date">January 2006</div><div class="tl-event">Hamas wins Palestinian Legislative Council elections with 74 of 132 seats. International community refuses to recognize result unless Hamas recognizes Israel, renounces violence, and accepts prior agreements.</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><div class="tl-date">June 2007</div><div class="tl-event">Hamas seizes Gaza in brief civil war against Fatah. Palestinian Authority retains West Bank; Hamas controls Gaza. Palestinian territory formally split between two rival governments.</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><div class="tl-date">2007–2023</div><div class="tl-event">Gaza under blockade by Israel and Egypt. Three major wars (2008–09, 2012, 2014). Hamas builds tunnel network. Iron Dome development accelerated. Qatar begins civilian funding ($30M/month) with Israeli tacit acceptance to prevent Hamas collapse and Gazan humanitarian catastrophe.</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><div class="tl-date">2012–2017</div><div class="tl-event">Hamas backs Syrian Sunni opposition against Assad. Iran cuts funding. Hamas moves HQ from Damascus to Qatar. Iran shifts support to PIJ as primary Gaza proxy.</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><div class="tl-date">2022</div><div class="tl-event">Hamas reconciles with Iran. Funding restored. Joint operations coordination resumes.</div></div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#8b1a1a;border-color:#c0392b;"></div><div class="tl-content"><div class="tl-date">October 7, 2023</div><div class="tl-event">Hamas-led attack into Israel: 1,200 killed, 251 taken hostage — deadliest day for Jews since the Holocaust. Planned by Qassam Brigades over 2+ years in operational silence. Iran not briefed in advance (US intelligence assessment).</div></div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#8b1a1a;"></div><div class="tl-content"><div class="tl-date">Oct 2023 – Oct 2025</div><div class="tl-event">IDF Gaza campaign. 70,000+ Palestinian deaths. 85% population displaced. All three top military commanders killed (Deif Aug 2024, Issa Mar 2024, Sinwar Oct 2024). Haniyeh assassinated in Tehran Jul 2024. Gaza infrastructure largely destroyed.</div></div></div>
+        <div class="tl-item"><div class="tl-dot active"></div><div class="tl-content"><div class="tl-date">October 2025</div><div class="tl-event">Gaza ceasefire Phase 1 — hostage releases in exchange for Palestinian prisoner releases. Hamas political bureau negotiates from Qatar. Military wing severely degraded but organizationally intact in tunnel network.</div></div></div>
+        <div class="tl-item"><div class="tl-dot active"></div><div class="tl-content"><div class="tl-date">March 2026</div><div class="tl-event">Phase 1 ceasefire holding. Iran-Israel-US war (Operation Epic Fury) disrupts Iranian supply chain to Hamas. Hamas political bureau assessing impact of Axis of Resistance degradation on its own position. Tunnel network remains primary military infrastructure.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RELATIONSHIPS ══ -->
+  <div class="entity-tab-content" id="tab-relationships">
+    <div class="tab-section">
+      <div class="ts-eyebrow">Network mapping</div>
+      <div class="ts-title">Hamas in the Regional Network</div>
+
+      <div class="rel-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="rel-card">
+          <div class="rc-header" style="background:rgba(139,26,26,0.3);">Iran — Primary weapons sponsor</div>
+          <div class="rc-body">Provides ~$100M/year pre-2023 (since reduced). Supplies rockets, training, technical expertise for tunnel construction and drone development. Relationship is <strong>transactional not theological</strong> — Iran is Shia, Hamas is Sunni. When Hamas backed Syrian Sunni rebels (2012–17), Iran cut ties and resumed only after reconciliation. US intelligence assesses Iran had no foreknowledge of Oct 7.</div>
+          <div class="rc-status" style="color:#FAC775;">⬤ Strained · Supply chain disrupted Feb 2026</div>
+        </div>
+        <div class="rel-card">
+          <div class="rc-header" style="background:rgba(27,58,107,0.4);">Qatar — Civilian funding &amp; political host</div>
+          <div class="rc-body">Provides ~$30M/month for Gaza civilian administration (salaries, utilities) with Israeli and US tacit approval as alternative to Hamas collapse. Hosts Hamas political bureau in Doha. Qatar maintains this role because it serves as ceasefire mediator — cannot mediate without direct Hamas contact. Qatar is not an FTO designator of Hamas.</div>
+          <div class="rc-status" style="color:#C0DD97;">⬤ Active · Ongoing ceasefire mediation role</div>
+        </div>
+        <div class="rel-card">
+          <div class="rc-header" style="background:rgba(27,58,107,0.4);">Turkey — Political support</div>
+          <div class="rc-body">Erdoğan has called Hamas leaders by phone, hosted them in Ankara, and refused to designate Hamas as a terrorist organization. Turkey's position: Hamas represents legitimate Palestinian political resistance elected in 2006. This creates friction with NATO allies but Turkey has maintained the position consistently. Not a weapons supplier.</div>
+          <div class="rc-status" style="color:#C0DD97;">⬤ Active · Political and diplomatic</div>
+        </div>
+        <div class="rel-card">
+          <div class="rc-header" style="background:rgba(196,127,0,0.2);">Palestinian Islamic Jihad — Gaza coordination</div>
+          <div class="rc-body">PIJ is Hamas's smaller partner in Gaza — more directly Iranian, more doctrinally rigid. Both participated in Oct 7. Iran boosted PIJ funding during 2012–17 Hamas estrangement. PIJ has fewer fighters (~5,000) but operates with more Iranian direction. Relationship is cooperative-competitive: both share Gaza and anti-Israel objectives but compete for funding and influence.</div>
+          <div class="rc-status" style="color:#FAC775;">⬤ Coordinated · Also severely degraded</div>
+        </div>
+        <div class="rel-card">
+          <div class="rc-header" style="background:rgba(80,19,19,0.3);">Israel — Active conflict relationship</div>
+          <div class="rc-body">Hamas does not recognize Israel's right to exist. Its founding charter called for Israel's destruction (revised 2017 charter softened this slightly). Israel designates Hamas as a terrorist organization and has conducted multiple military campaigns against it. Israel simultaneously allowed Qatar funding because Hamas governance was preferred to chaos. Oct 7 ended this calculation.</div>
+          <div class="rc-status" style="color:#ffaaaa;">⬤ Active conflict · Phase 1 ceasefire holding</div>
+        </div>
+        <div class="rel-card">
+          <div class="rc-header" style="background:rgba(80,19,19,0.3);">Palestinian Authority / Fatah — Rival Palestinian authority</div>
+          <div class="rc-body">PA controls West Bank; Hamas controls Gaza. They are rival governments of the same claimed territory. Multiple reconciliation attempts have failed. PA has cooperated with Israeli security coordination — Hamas calls this collaboration. Hamas sees the PA as a collaborationist authority; the PA sees Hamas as an illegitimate coup government. No unified Palestinian leadership since 2007.</div>
+          <div class="rc-status" style="color:#ffaaaa;">⬤ Hostile · No reconciliation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DESIGNATIONS ══ -->
+  <div class="entity-tab-content" id="tab-designations">
+    <div class="tab-section">
+      <div class="ts-eyebrow">Legal status by jurisdiction</div>
+      <div class="ts-title">Terrorist Designation — A Split World</div>
+      <div class="ts-body" style="margin-bottom:20px;">Hamas's designation status is uniquely divided — more so than almost any other organization. The Western bloc, Israel, and some others designate it as a terrorist organization. Qatar, Turkey, Russia, China, and much of the Global South do not. This split is not merely diplomatic — it reflects a genuine disagreement about whether Hamas represents terrorism or legitimate armed resistance to occupation. FORA records all positions.</div>
+      <table class="facts-table">
+        <thead><tr><th style="width:160px;">Jurisdiction</th><th style="width:120px;">Designation</th><th>Scope</th><th>Date</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>United States</td><td style="color:#ffaaaa;font-weight:700;">Terrorist org (FTO)</td><td>Full organization</td><td>1997</td><td>SDN list. Funding, material support criminalized.</td></tr>
+          <tr><td>European Union</td><td style="color:#ffaaaa;font-weight:700;">Terrorist org</td><td>Full organization (since 2021; military wing only 2003–2021)</td><td>2003 / 2021</td><td>Political bureau was separately designated in 2021.</td></tr>
+          <tr><td>United Kingdom</td><td style="color:#ffaaaa;font-weight:700;">Terrorist org</td><td>Full organization</td><td>2021</td><td>Changed from military-wing-only to full org in 2021.</td></tr>
+          <tr><td>Israel</td><td style="color:#ffaaaa;font-weight:700;">Terrorist org</td><td>Full organization</td><td>1989</td><td>Original designation. Governs all Israeli law enforcement.</td></tr>
+          <tr><td>Qatar</td><td style="color:#C0DD97;font-weight:700;">Not designated</td><td>—</td><td>—</td><td>Hosts Hamas political bureau. Mediates ceasefire talks.</td></tr>
+          <tr><td>Turkey</td><td style="color:#C0DD97;font-weight:700;">Not designated</td><td>—</td><td>—</td><td>Erdoğan has hosted Hamas leaders officially.</td></tr>
+          <tr><td>Russia</td><td style="color:#C0DD97;font-weight:700;">Not designated</td><td>—</td><td>—</td><td>Russia has maintained contact with Hamas political bureau.</td></tr>
+          <tr><td>China</td><td style="color:#C0DD97;font-weight:700;">Not designated</td><td>—</td><td>—</td><td>China has hosted Hamas delegations and calls for Palestinian unity government.</td></tr>
+          <tr><td>UN</td><td style="color:#FAC775;font-weight:700;">Not designated</td><td>—</td><td>—</td><td>No UN Security Council designation — Russia and China would veto. Hamas is not on the UN Consolidated Sanctions List.</td></tr>
+          <tr><td>Jordan</td><td style="color:#ffaaaa;font-weight:700;">Designated / banned</td><td>Hamas political activity banned in Jordan</td><td>1999 (banned)</td><td>Jordan expelled Hamas leadership in 1999. Relations partially normalized but Hamas activities remain restricted.</td></tr>
+          <tr><td>Egypt</td><td style="color:#FAC775;font-weight:700;">Complex</td><td>Court designations reversed; ambiguous status</td><td>Varies</td><td>Egyptian courts have designated and de-designated Hamas. Government maintains working relationship with Hamas for Gaza border management while restricting its activities.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ DISCOURSE ══ -->
+  <div class="entity-tab-content" id="tab-discourse">
+    <div class="tab-section">
+      <div class="ts-eyebrow">Contested questions · FORA does not resolve</div>
+      <div class="ts-title">The Core Disagreements</div>
+      <div class="ci-list">
+        <div class="ci-card"><div class="ci-icon">⚖️</div><div><div class="ci-title">Is Hamas a terrorist organization or a legitimate resistance movement?</div><div class="ci-desc">The designation question is not merely legal — it reflects fundamentally different frameworks for understanding political violence, occupation, and self-determination. Western law, Islamic law, and international law give different answers.</div><div class="ci-count">3,847 contributions · 42 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+        <div class="ci-card"><div class="ci-icon">🗳️</div><div><div class="ci-title">Does Hamas's 2006 electoral mandate confer legitimacy to its governance?</div><div class="ci-desc">Hamas won the only free Palestinian election. It then seized Gaza by force. The international community refused to recognize the result. The PA has not held elections since. What does democratic legitimacy require?</div><div class="ci-count">1,204 contributions · 18 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+        <div class="ci-card"><div class="ci-icon">🧩</div><div><div class="ci-title">Can Hamas be negotiated with toward a two-state solution?</div><div class="ci-desc">Hamas's founding charter rejected Israel's existence. The 2017 revised charter softened but did not eliminate this. Some analysts argue engagement is necessary; others that Hamas's acceptance of a Palestinian state alongside Israel is incompatible with its ideology.</div><div class="ci-count">2,109 contributions · 31 jurisdictions</div></div><div class="ci-arrow">→</div></div>
+        <div class="ci-card"><div class="ci-icon">📊</div><div><div class="ci-title">How should Oct 7 be framed — terrorism, war crime, act of resistance, or all three?</div><div class="ci-desc">The attack killed civilians, took hostages, and was meticulously planned. International law, Israeli law, Palestinian law, and Islamic law each provide different analytical frameworks. Multiple framings can be simultaneously true under different legal systems.</div><div class="ci-count">5,621 contributions · 67 jurisdictions · Highest-traffic CivicIssue</div></div><div class="ci-arrow">→</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RECORD ══ -->
+  <div class="entity-tab-content" id="tab-record">
+    <div class="tab-section">
+      <div class="ts-eyebrow">Primary sources</div>
+      <div class="ts-title">Key Documents &amp; References</div>
+      <div class="record-list">
+        <div class="record-item"><div class="ri-tier t1"></div><div><div class="ri-title">Hamas Charter (1988)</div><div class="ri-desc">Original founding document. Explicitly calls for destruction of Israel and establishment of an Islamic state in all of historic Palestine. Quotes anti-Semitic tropes. Context: written in 1988 at the height of the First Intifada.</div></div></div>
+        <div class="record-item"><div class="ri-tier t2"></div><div><div class="ri-title">Hamas Document on General Principles and Policies (2017)</div><div class="ri-desc">Revised position document. Accepts a Palestinian state along 1967 lines without explicitly recognizing Israel. Does not rescind 1988 charter. Drops some anti-Semitic language while maintaining rejection of Zionism.</div></div></div>
+        <div class="record-item"><div class="ri-tier t2"></div><div><div class="ri-title">US Intelligence Community 2024 Annual Threat Assessment</div><div class="ri-desc">States that Iran "did not orchestrate nor had foreknowledge of" the Oct 7 attack. Key document for understanding the Hamas-Iran relationship's limits.</div></div></div>
+        <div class="record-item"><div class="ri-tier t3"></div><div><div class="ri-title">UN General Assembly Resolution ES-10/21 (Oct 2023)</div><div class="ri-desc">121 countries voted for humanitarian ceasefire in Gaza. 14 against (including US and Israel). 44 abstentions. Not binding. Reflects Global South / Western divide on Hamas framing.</div></div></div>
+        <div class="record-item"><div class="ri-tier t3"></div><div><div class="ri-title">ICJ Provisional Measures (Jan 2024)</div><div class="ri-desc">South Africa v. Israel. ICJ found plausible risk of genocide in Gaza. Did not rule on Oct 7. Ordered Israel to take measures to prevent genocide and allow humanitarian aid. Did not order ceasefire.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /entity-body -->
+
+<!-- DEFINITION DRAWER -->
+<div class="def-drawer" id="def-drawer">
+  <div class="def-inner">
+    <button class="def-close" onclick="closeDef()">✕</button>
+    <div class="def-eyebrow" id="def-eyebrow"></div>
+    <div class="def-title" id="def-title"></div>
+    <div class="def-body" id="def-body"></div>
+  </div>
+</div>
+
+<script>
+const defs = {
+  'sunni': { ey:'Islamic tradition', title:'Sunni Islam', body:'The largest branch of Islam (~85-90% of Muslims worldwide). Sunnis follow the Sunnah (practice) of the Prophet Muhammad as recorded in hadith. Governance legitimacy derives from consensus of the community. Distinct from Shia Islam, which holds that political authority should rest with descendants of the Prophet through Ali. Hamas is Sunni — making it doctrinally distinct from its primary sponsor Iran, which is Shia.' },
+  'mb': { ey:'Islamic political movement', title:'Muslim Brotherhood', body:'Founded in Egypt in 1928 by Hassan al-Banna. The largest and most influential Sunni Islamist political movement. Advocates for governance based on Islamic law through political participation rather than violence. Hamas is an offshoot of the Palestinian Muslim Brotherhood. The Brotherhood is banned in some countries (Egypt, Russia, UAE) and legal in others.' },
+  'gaza': { ey:'Palestinian territory', title:'Gaza Strip', body:'A 41km × 10km strip of land on the Mediterranean coast, bordered by Israel and Egypt. Population ~2.3 million (before Oct 2023 war). Under Israeli blockade since 2007 when Hamas took control. One of the most densely populated territories on Earth. Governed by Hamas as de facto authority.' },
+  'fatah': { ey:'Palestinian political party', title:'Fatah', body:'The secular Palestinian nationalist party founded by Yasser Arafat. Dominant in the PLO and Palestinian Authority. Controls the West Bank. Signed the Oslo Accords (1993) recognizing Israel\'s right to exist in exchange for Palestinian self-governance. Lost the 2006 elections to Hamas. Bitter rivals since 2007 Gaza civil conflict.' },
+  'qassam': { ey:'Military wing', title:'Izz ad-Din al-Qassam Brigades', body:'Hamas\'s military wing, named after a Syrian-born Palestinian cleric killed by British forces in 1935. Founded 1991. Responsible for suicide bombings in the 1990s-2000s, rocket attacks on Israel, tunnel construction, and the Oct 7 2023 attack. Severely degraded 2024-2026 with loss of all top commanders.' },
+  'iran': { ey:'Primary sponsor', title:'Iran / IRGC', body:'Iran has funded and armed Hamas since the 1990s. The relationship is pragmatic not theological — Iran is Shia, Hamas is Sunni. Iran views Hamas as a tool to project power to Israel\'s borders. Funding has varied (~$100M/year at peak) and was cut during 2012-17 when Hamas backed Syrian Sunni rebels. Restored after 2022 reconciliation.' },
+  'qatar': { ey:'Gulf state / mediator', title:'Qatar', body:'Hosts Hamas political bureau in Doha. Provides ~$30M/month for Gaza civilian administration with Israeli tacit approval. Qatar\'s dual role as Hamas host and ceasefire mediator is the reason it can negotiate — it has direct access. Qatar has not designated Hamas as a terrorist organization. A NATO partner and host of US Central Command at Al Udeid Air Base.' },
+  shia:{ey:'Religion · Islam',title:'Shia Islam',body:'One of the two major branches of Islam, comprising approximately 10–15% of the world\'s 1.8 billion Muslims. Shia Islam emerged from a dispute after the Prophet Muhammad\'s death in 632 CE over who should lead the Muslim community. Shia Muslims believe leadership should have remained with the Prophet\'s family — his cousin and son-in-law Ali and his descendants.',ex:'Hezbollah is a Shia organization. Its primary sponsor Iran is approximately 90–95% Shia. Lebanon\'s Shia community (approximately 30–40% of Lebanon\'s population) is Hezbollah\'s primary constituency. Hamas, by contrast, is Sunni — a different Islamic tradition. Their alliance is strategic, not theological.'},
+  iran:{ey:'Jurisdiction · State',title:'Iran · Islamic Republic',body:'A theocratic republic in the Middle East, established after the 1979 Islamic Revolution. Iran is governed by a dual structure: an elected president and parliament, and a Supreme Leader (currently being determined after Khamenei\'s death) who holds ultimate authority over all state institutions, including the military, judiciary, and foreign policy.',ex:'Iran created Hezbollah in 1982, funds it, arms it, and commands it through the IRGC Quds Force. The relationship is theological (Hezbollah\'s Velayat-e Faqih doctrine means it answers to Iran\'s Supreme Leader as a religious obligation) as well as strategic.'},
+  irgc:{ey:'Organization · Military',title:'IRGC — Islamic Revolutionary Guard Corps',body:'The primary military force of the Islamic Republic of Iran, distinct from the regular Iranian Army. Created after the 1979 revolution to protect the Islamic system. The IRGC Quds Force is its external operations branch — responsible for supporting, arming, and training proxy forces including Hezbollah, Hamas, Houthis, and Iraqi Shia militias. Designated a Foreign Terrorist Organization by the US in 2019.',ex:'The IRGC Quds Force is the direct link between Iran\'s Supreme Leader and Hezbollah. Quds Force Commander Qasem Soleimani personally managed Hezbollah\'s regional strategy until his assassination by the US in January 2020. His death severed important personal connective tissue between Tehran and Beirut.'},
+  fto:{ey:'Legal term · US Federal',title:'Foreign Terrorist Organization (FTO)',body:'A designation made by the US Secretary of State under 8 U.S.C. § 1189. An FTO designation makes it a federal crime for US citizens or organizations to knowingly provide "material support or resources" to the group — including money, property, services, personnel, transportation, or training. It also enables deportation of aliens who are members.',ex:'Hezbollah has been an FTO since 1997. The Ghazali investigation centers on whether his contacts with suspected Hezbollah members constituted "material support." Simply knowing Hezbollah members is not sufficient — the prosecution must prove knowing, active support.'},
+  nasrallah:{ey:'Person · Deceased',title:'Hassan Nasrallah',body:'Secretary-General of Hezbollah from 1992 until his assassination on September 27, 2024. Served for 32 years. Widely described as the most powerful non-state actor in the Middle East for much of his tenure. Led Hezbollah through: the 2000 Israeli withdrawal from Lebanon, the 2006 war, the Syria intervention, and the post-October 7 northern front. His death is assessed as the most significant single blow to Hezbollah\'s capabilities since its founding.',ex:'Nasrallah was killed in an Israeli airstrike on Hezbollah\'s headquarters in Beirut\'s southern suburbs. He reportedly died from toxic fumes rather than direct blast injuries. His funeral in February 2025 drew an estimated 450,000–1,400,000 attendees — demonstrating continued popular support despite the organization\'s military defeat.'},
+  qassem:{ey:'Person · Current leader',title:'Naim Qassem',body:'Current Secretary-General of Hezbollah, elected October 29, 2024 following Nasrallah\'s assassination. Had served as deputy secretary-general for over 30 years under Nasrallah. Described by analysts as "a default choice," "weak," and "lacking charisma." Currently working to centralize control of the organization and stabilize after the leadership crisis, with active backing from Iran.',ex:'"There are no longer figures within Hezbollah that could be compared with Nasrallah, or even with Safieddine. Therefore, appointing a new secretary general for Hezbollah would take a while." — Lebanese analyst al-Amin, October 2024. Qassem was ultimately the appointment — confirming the assessment that it would be a default rather than a charismatic successor.'},
+  velayat:{ey:'Theology · Political theory · Iran',title:'Velayat-e Faqih',body:'Literally "Guardianship of the Islamic Jurist." A political-theological doctrine developed by Ayatollah Khomeini that holds that in the absence of the Hidden Imam, a qualified Islamic jurist should govern society. In Iran, this means the Supreme Leader holds ultimate authority above the elected government. For Hezbollah, it means the organization answers to Iran\'s Supreme Leader as a religious obligation — not merely a political or strategic relationship.',ex:'Velayat-e Faqih is what makes the Iran-Hezbollah relationship different from most state-proxy relationships. Most proxy forces follow their sponsor for strategic reasons. Hezbollah follows Iran\'s Supreme Leader because it believes this is religiously required. This means the relationship survives changes in Iranian government — it is tied to the institution of the Supreme Leader, not to any individual.'},
+  amia:{ey:'Event · Terrorism · 1994',title:'AMIA Bombing · Buenos Aires',body:'The bombing of the AMIA (Asociación Mutual Israelita Argentina) Jewish community center in Buenos Aires on July 18, 1994. 85 killed, more than 300 wounded. The deadliest terrorist attack in Argentine history. The first major Hezbollah operation outside Lebanon and the Middle East. Attributed to Hezbollah with Iranian government involvement. As of 2026 — 32 years later — no one has been convicted.',ex:'The AMIA bombing established Hezbollah\'s Latin American presence and its capability to conduct operations globally. Argentine courts have indicted Iranian officials including former President Rafsanjani (deceased) and former Foreign Minister Velayati. The case remains open. Argentina\'s Milei government has vowed to renew the investigation.'},
+  tba:{ey:'Geographic · Security',title:'Tri-Border Area (TBA)',body:'The area where Argentina, Brazil, and Paraguay meet — centered on the cities of Puerto Iguazú (Argentina), Foz do Iguaçu (Brazil), and Ciudad del Este (Paraguay). Home to a large Lebanese diaspora community and historically a hub for informal economic activity, smuggling, counterfeiting, and terrorist financing.',ex:'Hezbollah has maintained financial and logistical networks in the TBA since the 1980s. US Senate testimony estimates the area generates tens of millions in annual revenue for Hezbollah through counterfeiting, narcotics, and trade-based money laundering. Brazil\'s 2024 Operation Trapiche targeted Hezbollah recruitment and financing networks there. Argentinian security minister Bullrich confirmed Hezbollah activity in Chile, Bolivia, and the TBA in June 2025.'}
+};
+
+function showDef(key){
+  const d=defs[key]; if(!d) return;
+  document.getElementById('def-ey').textContent=d.ey;
+  document.getElementById('def-title').textContent=d.title;
+  document.getElementById('def-body').textContent=d.body;
+  document.getElementById('def-ex').textContent=d.ex;
+  document.getElementById('def-modal').classList.add('open');
+}
+function closeDef(e){
+  if(!e||e.target===document.getElementById('def-modal')) document.getElementById('def-modal').classList.remove('open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') document.getElementById('def-modal').classList.remove('open');});
+
+function switchTab(tab,el){
+  const tabs=['overview','structure','timeline','relationships','designations','docs','current'];
+  tabs.forEach(t=>{
+    const el2=document.getElementById('tab-'+t);
+    if(el2) el2.style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('.etab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

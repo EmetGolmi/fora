@@ -117,6 +117,12 @@ Rails.application.routes.draw do
   get  "market/newllc",       to: "market/new_llc#index", as: :new_llc
   get  "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
 
+  # ── World / Jurisdiction & NGE Pages ───────────────────────────────────────
+  get '/iran',          to: 'world#iran'
+  get '/org/hamas',     to: 'world#hamas'
+  get '/org/houthis',   to: 'world#houthis'
+  get '/org/hezbollah', to: 'world#hezbollah'
+
   # ── IJDB — Islamic Jihad Database ──────────────────────────────────────────
   # National route BEFORE the city-scoped block (fixed path wins over :city param)
   get '/usa/ijdb', to: 'ijdb_entries#national', as: :national_ijdb
