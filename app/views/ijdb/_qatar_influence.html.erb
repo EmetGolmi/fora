@@ -1,0 +1,298 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.sec-head{padding:10px 0 8px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.eyebrow{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-danger);margin-bottom:3px}
+.title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.subtitle{font-size:12px;color:var(--color-text-tertiary);margin-top:2px;line-height:1.5}
+.alert-banner{padding:10px 14px;background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-warning);line-height:1.65;margin-bottom:14px;display:flex;gap:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;cursor:pointer;transition:border .1s;border:0.5px solid transparent}
+.stat:hover{border-color:var(--color-border-secondary)}
+.stat.active{border-color:var(--color-border-danger);background:var(--color-background-danger)}
+.sl{font-size:11px;color:var(--color-text-tertiary);line-height:1.3;margin-bottom:4px}
+.sv{font-size:20px;font-weight:500;line-height:1}
+.sn{font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+.cr{color:var(--color-text-danger)}
+.ca{color:#BA7517}
+.cb{color:var(--color-text-info)}
+.cg{color:var(--color-text-success)}
+.cp{color:var(--color-text-secondary)}
+.detail-panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px;display:none}
+.detail-panel.open{display:block}
+.dp-head{padding:12px 16px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dp-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.dp-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.dp-amount{font-size:16px;font-weight:500;text-align:right;flex-shrink:0}
+.dp-body{padding:0}
+.dp-row{padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;gap:12px;align-items:flex-start}
+.dp-row:last-child{border-bottom:none}
+.dp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dp-text{font-size:12px;color:var(--color-text-secondary);line-height:1.6;flex:1}
+.dp-text b{color:var(--color-text-primary);font-weight:500}
+.dp-src{font-size:10px;color:var(--color-text-tertiary);margin-top:4px}
+.dp-src a{color:var(--color-text-info);text-decoration:none}
+.dp-response{padding:12px 16px;background:#EAF3DE;border-top:0.5px solid #C0DD97;font-size:12px;color:#27500A;line-height:1.65}
+.dp-response b{font-weight:500}
+.ledger{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.ledger-row{display:flex;align-items:stretch;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ledger-row:last-child{border-bottom:none}
+.ledger-ind{width:3px;flex-shrink:0}
+.ledger-body{flex:1;padding:10px 14px;min-width:0}
+.ledger-title{font-size:13px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ledger-desc{font-size:11px;color:var(--color-text-secondary);margin-top:3px;line-height:1.5}
+.ledger-src{font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+.ledger-src a{color:var(--color-text-info);text-decoration:none}
+.ledger-right{padding:10px 14px;text-align:right;flex-shrink:0;display:flex;flex-direction:column;justify-content:center}
+.ledger-amt{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
+.ledger-note{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;white-space:nowrap}
+.ltag{display:inline-flex;font-size:10px;font-weight:500;padding:2px 6px;border-radius:20px;white-space:nowrap}
+.lt-doc{background:#EAF3DE;color:#27500A}
+.lt-est{background:#FAEEDA;color:#854F0B}
+.lt-proj{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+.ledger-total{padding:12px 14px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:space-between}
+.lt-label{font-size:12px;font-weight:500;color:var(--color-text-secondary)}
+.lt-note{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.lt-val{font-size:18px;font-weight:500;color:var(--color-text-danger)}
+.jihad-connect{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.jc-head{padding:12px 16px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.jc-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.jc-sub{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.jc-row{padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;gap:12px;align-items:flex-start}
+.jc-row:last-child{border-bottom:none}
+.jc-arrow{font-size:16px;color:var(--color-text-danger);flex-shrink:0;margin-top:1px}
+.jc-body{flex:1}
+.jc-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.jc-chain{font-size:12px;color:var(--color-text-secondary);margin-top:3px;line-height:1.55}
+.jc-cost{font-size:11px;color:var(--color-text-danger);margin-top:4px;display:flex;align-items:center;gap:4px}
+.note{margin-top:12px;padding:10px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);line-height:1.65;display:flex;gap:8px}
+</style>
+
+<h2 class="sr-only">Qatar's American footprint — documented spending in U.S. universities, real estate, lobbying, and media, and how that connects to the jihad budget. Interactive cards expand details for each category.</h2>
+
+<div class="sec-head">
+  <div>
+    <div class="eyebrow"><i class="ti ti-flag" style="font-size:11px" aria-hidden="true"></i> IJDB · Qatar influence · updated May 2026</div>
+    <div class="title">Qatar's American footprint — and what it costs us to counter it</div>
+    <div class="subtitle">Qatar funds Hamas. Qatar is also the largest foreign donor to American universities, owns Manhattan landmarks, and employs the most powerful lobbyists in Washington. Every dollar of U.S. counter-terrorism spending that targets Hamas, Hezbollah, and IRGC-linked networks is partly a response to Qatari-funded radicalization on American soil.</div>
+  </div>
+</div>
+
+<div class="alert-banner">
+  <i class="ti ti-alert-triangle" style="font-size:15px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+  <span><b style="color:var(--color-text-primary)">Important distinction.</b> The documented total of Qatar's U.S. spending is approximately $40–50 billion — not $400 billion. The $500 billion figure is Qatar's projected 10-year investment pledge, not yet spent. FORA tracks documented figures only. The numbers here are large enough on their own merits without inflation.</span>
+</div>
+
+<div class="stats">
+  <div class="stat" id="sc-univ" onclick="toggleDetail('univ')">
+    <div class="sl">Universities — total since 2001</div>
+    <div class="sv cr">$6.3B+</div>
+    <div class="sn">Largest foreign university donor · DoE records</div>
+  </div>
+  <div class="stat" id="sc-re" onclick="toggleDetail('re')">
+    <div class="sl">Real estate — Manhattan alone</div>
+    <div class="sv ca">$6.2B+</div>
+    <div class="sn">Empire State Building · Plaza Hotel · since 2012</div>
+  </div>
+  <div class="stat" id="sc-lobby" onclick="toggleDetail('lobby')">
+    <div class="sl">Lobbying and PR — 2016–2024</div>
+    <div class="sv cb">$260M</div>
+    <div class="sn">7th most among foreign nations · FARA records</div>
+  </div>
+  <div class="stat" id="sc-media" onclick="toggleDetail('media')">
+    <div class="sl">Media and political influence</div>
+    <div class="sv ca">$230M+</div>
+    <div class="sn">Newsmax · Tucker Carlson · Al Jazeera America</div>
+  </div>
+  <div class="stat" id="sc-qia" onclick="toggleDetail('qia')">
+    <div class="sl">QIA total U.S. investments</div>
+    <div class="sv cb">~$45B</div>
+    <div class="sn">Sovereign wealth fund · ~20% of $524B AUM</div>
+  </div>
+  <div class="stat" id="sc-proj" onclick="toggleDetail('proj')">
+    <div class="sl">Pledged future U.S. investment</div>
+    <div class="sv cp">$500B</div>
+    <div class="sn">10-year pledge · not yet spent · QIA 2025</div>
+  </div>
+</div>
+
+<!-- Detail panels -->
+<div class="detail-panel" id="dp-univ">
+  <div class="dp-head">
+    <div><div class="dp-title">Universities — the soft power play</div><div class="dp-sub">Qatar is buying access to the American mind</div></div>
+    <div><div class="dp-amount cr">$6.3B+</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:right">documented · DoE records</div></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-danger)"></div><div class="dp-text"><b>$1.2B in 2025 alone</b> — Qatar tripled its university funding year-over-year. Carnegie Mellon: $936M. Cornell Medical: $163M. Texas A&M: $24M. Northwestern has received $737M since 2008. Its contract with Qatar prohibits students and faculty from criticizing the Qatari government.<div class="dp-src"><a href="https://freebeacon.substack.com/p/qatar-already-the-largest-foreign" target="_blank" rel="noopener">Washington Free Beacon · 2026</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:#BA7517"></div><div class="dp-text"><b>$980M between January 2023 and October 2024</b> — Qatar ramped up university donations after October 7, not despite it. As scrutiny increased, spending accelerated.<div class="dp-src"><a href="https://www.meforum.org/mef-reports/america-for-sale-qatars-40-billion-spending-spree-buys-influence-and-control-of-elite-institutions" target="_blank" rel="noopener">Middle East Forum · July 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:#BA7517"></div><div class="dp-text"><b>Correlation with campus antisemitism.</b> Universities that have taken the most Qatari money have seen the greatest upticks in anti-Israel activity. Northwestern is the canonical case. No definitive causal link established — but correlative evidence is substantial.<div class="dp-src"><a href="https://www.washingtonexaminer.com/in_focus/3916768/what-to-know-qatar-web-of-influence/" target="_blank" rel="noopener">Washington Examiner · 2026</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>Middle East studies programs</b> — much of Qatar's university funding targets Middle East studies departments, many accused of promoting anti-Israel narratives. Qatar is the chief financial backer of the Muslim Brotherhood.<div class="dp-src"><a href="https://thehill.com/opinion/international/5334791-qatars-us-influence-strategy-goes-much-further-than-you-think/" target="_blank" rel="noopener">The Hill · June 2025</a></div></div></div>
+  </div>
+  <div class="dp-response"><b>IJDB connection:</b> FBI post-10/7 enforcement surge — multiple Brooklyn, LA, Chicago, and Houston Hamas support networks arrested 2023–2024 — was partly a response to radicalization that investigators traced to campus environments. The FBI and DHS have both testified that university radicalization is a primary domestic recruitment vector for Palestinian extremism. Qatar-funded campuses are part of the threat landscape our counter-terrorism budget is built to monitor.</div>
+</div>
+
+<div class="detail-panel" id="dp-re">
+  <div class="dp-head">
+    <div><div class="dp-title">Real estate — owning the skyline</div><div class="dp-sub">Qatar Investment Authority · Qatari Diar</div></div>
+    <div><div class="dp-amount ca">$6.2B+</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:right">Manhattan alone · since 2012</div></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-row"><div class="dp-dot" style="background:#BA7517"></div><div class="dp-text"><b>Empire State Building and Plaza Hotel</b> — QIA owns stakes in two of New York's most iconic landmarks. Combined with other Manhattan holdings: $6.2B+ in NYC real estate since 2012.<div class="dp-src"><a href="https://www.meforum.org/mef-reports/america-for-sale-qatars-40-billion-spending-spree-buys-influence-and-control-of-elite-institutions" target="_blank" rel="noopener">Middle East Forum · July 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>~$45B total U.S. investments</b> — QIA's total U.S. portfolio represents ~20% of its $524B in assets under management. Includes real estate, equities, private equity, and infrastructure.<div class="dp-src"><a href="https://www.agbi.com/companies/qatar-investment-authority/" target="_blank" rel="noopener">AGBI · QIA profile 2024</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>$500B 10-year pledge</b> — QIA has committed to investing $500B in the U.S. over the next decade. This is a strategic embedding, not passive investment — Qatar is buying leverage over American financial and political institutions.<div class="dp-src"><a href="https://grokipedia.com/page/Qatar_Investment_Authority" target="_blank" rel="noopener">Grokipedia · QIA profile 2025</a></div></div></div>
+  </div>
+  <div class="dp-response"><b>IJDB connection:</b> Real estate ownership is how Qatar embeds itself in American infrastructure. ICE and FBI counter-terrorism task forces have flagged Qatari Diar and QIA-linked entities in financial surveillance reviews. The IRGC and Hezbollah have used real estate investment networks as money-laundering channels — Qatar's ownership of American landmarks creates complexity in financial intelligence operations.</div>
+</div>
+
+<div class="detail-panel" id="dp-lobby">
+  <div class="dp-head">
+    <div><div class="dp-title">Lobbying and PR — buying Washington</div><div class="dp-sub">FARA filings · OpenSecrets · 2016–2024</div></div>
+    <div><div class="dp-amount cb">$260M</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:right">8 years · 7th most of any foreign nation</div></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-info)"></div><div class="dp-text"><b>$8.4M annually on average 2016–2023</b> — Qatar has employed former U.S. Congress members and cabinet-level officials as lobbyists. Imaad Zuberi, paid ~$10M to secretly lobby the White House and Congress on Qatar's behalf, was sentenced to 12 years for failing to register as a foreign agent.<div class="dp-src"><a href="https://www.meforum.org/mef-reports/america-for-sale-qatars-40-billion-spending-spree-buys-influence-and-control-of-elite-institutions" target="_blank" rel="noopener">Middle East Forum · July 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-info)"></div><div class="dp-text"><b>2024 pivot to conservative media.</b> Since Trump's 2024 win, Qatar ramped up outreach to right-leaning outlets — over half its foreign-agent contacts now target conservative media, up from ~10% before. Qatar paid $180K/month to a firm that secured a Tucker Carlson interview for the Qatari prime minister.<div class="dp-src"><a href="https://www.fischfiles.com/p/qatar-israel-fara-foreign-influence-93-billion-washington-dc" target="_blank" rel="noopener">Fisch Files · October 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>South Carolina political donations.</b> Zuberi donated to Sen. Lindsey Graham and SC Governor Henry McMaster's campaigns. Graham sits on the Senate Armed Services Committee — jurisdiction over the defense budget that funds counter-terrorism operations.<div class="dp-src"><a href="https://www.meforum.org/mef-reports/america-for-sale-qatars-40-billion-spending-spree-buys-influence-and-control-of-elite-institutions" target="_blank" rel="noopener">Middle East Forum · July 2025</a></div></div></div>
+  </div>
+  <div class="dp-response"><b>IJDB connection:</b> Qatar lobbies the same Congressional committees that set the counter-terrorism budget. Qatar also lobbies the executive branch that makes designations of foreign terrorist organizations. Hamas remains un-sanctioned as a Qatari government entity despite Qatar's documented financial support for Hamas leadership — this is not an accident.</div>
+</div>
+
+<div class="detail-panel" id="dp-media">
+  <div class="dp-head">
+    <div><div class="dp-title">Media and political influence</div><div class="dp-sub">Newsmax · Al Jazeera · Tucker Carlson · political donations</div></div>
+    <div><div class="dp-amount ca">$230M+</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:right">documented · multiple channels</div></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-row"><div class="dp-dot" style="background:#BA7517"></div><div class="dp-text"><b>~$50M into Newsmax</b> — A Qatari royal invested approximately $50 million in pro-Trump network Newsmax, leading senior newsroom staff to pressure reporters to soften coverage of Qatar.<div class="dp-src"><a href="https://www.fischfiles.com/p/qatar-israel-fara-foreign-influence-93-billion-washington-dc" target="_blank" rel="noopener">Fisch Files · October 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:#BA7517"></div><div class="dp-text"><b>$180K/month to secure Tucker Carlson interview</b> — Qatar's PR apparatus paid a firm $180,000 per month specifically to arrange favorable media appearances, including an interview with the most-watched political commentator in the U.S.<div class="dp-src"><a href="https://www.fischfiles.com/p/qatar-israel-fara-foreign-influence-93-billion-washington-dc" target="_blank" rel="noopener">Fisch Files · October 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>Al Jazeera America</b> — Qatar launched and funded Al Jazeera America, a U.S.-based news network that operated 2013–2016. The network lost money but served as a diplomatic and influence operation. Al Jazeera remains active globally and has been the primary interview platform for Hamas leadership.</div></div>
+  </div>
+  <div class="dp-response"><b>IJDB connection:</b> A foreign government that funds Hamas is simultaneously buying favorable coverage from the most influential conservative media voices in America — during the same period that Hamas killed 46 Americans. This is the information-operations dimension of the jihad budget: the U.S. spends billions on counter-terrorism while one of Hamas's primary state sponsors buys the narrative.</div>
+</div>
+
+<div class="detail-panel" id="dp-qia">
+  <div class="dp-head">
+    <div><div class="dp-title">Qatar Investment Authority — total U.S. exposure</div><div class="dp-sub">Sovereign wealth fund · ~$524B AUM · est. 2005</div></div>
+    <div><div class="dp-amount cb">~$45B</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:right">~20% of total AUM · current</div></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-info)"></div><div class="dp-text"><b>QIA does not publish its holdings.</b> The $45B U.S. figure is an estimate based on QIA statements (2019 target was $45B from $30B base) and Global SWF analysis that U.S. investments represent ~20% of AUM. Actual figure could be significantly higher.</div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-info)"></div><div class="dp-text"><b>QIA ranks 10th globally</b> by deal activity in H1 2024, deploying ~$2B in that period alone. Its $524B in assets makes it one of the 10 largest sovereign wealth funds in the world — funded entirely by natural gas revenues from a nation of 330,000 citizens.<div class="dp-src"><a href="https://www.agbi.com/companies/qatar-investment-authority/" target="_blank" rel="noopener">AGBI · QIA profile 2024</a></div></div></div>
+  </div>
+  <div class="dp-response"><b>IJDB connection:</b> OFAC (Treasury's sanctions office) and FinCEN (financial crimes enforcement) dedicate significant counter-terrorism budget to monitoring sovereign wealth fund transactions from state sponsors of terrorism. Qatar is a designated Major Non-NATO Ally — which legally constrains how aggressively the U.S. can sanction QIA activities even when those activities benefit Hamas.</div>
+</div>
+
+<div class="detail-panel" id="dp-proj">
+  <div class="dp-head">
+    <div><div class="dp-title">$500B pledge — the coming decade</div><div class="dp-sub">QIA 10-year U.S. investment commitment · 2025</div></div>
+    <div><div class="dp-amount cp">$500B pledged</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:right">not yet spent · projected</div></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>Qatar has pledged to invest $500 billion in the U.S. over the next decade.</b> This commitment was made in 2025 as part of diplomatic engagement with the Trump administration — coinciding with U.S. negotiations over Hamas hostages and the Gaza ceasefire.<div class="dp-src"><a href="https://grokipedia.com/page/Qatar_Investment_Authority" target="_blank" rel="noopener">Grokipedia · QIA profile 2025</a></div></div></div>
+    <div class="dp-row"><div class="dp-dot" style="background:var(--color-text-secondary)"></div><div class="dp-text"><b>This is leverage, not generosity.</b> A $500B investment commitment gives Qatar enormous diplomatic leverage over U.S. policy — including policy toward Hamas. The pledge was announced at the same time Qatar was mediating Hamas hostage negotiations, making the U.S. financially dependent on a Hamas patron.</div></div>
+  </div>
+  <div class="dp-response"><b>IJDB connection:</b> If this pledge materializes, Qatar will become one of the largest single foreign investors in the United States — giving a Hamas-funding government direct financial stakes in American infrastructure, technology, and real estate at a scale that would make targeted counter-terrorism sanctions nearly impossible without economic self-harm.</div>
+</div>
+
+<!-- The connection to the jihad budget -->
+<div class="jihad-connect">
+  <div class="jc-head">
+    <div class="jc-title">The connection — Qatar's spending and our counter-terrorism budget</div>
+    <div class="jc-sub">How Qatari influence operations create costs that appear in the IJDB ledger</div>
+  </div>
+  <div class="jc-row">
+    <div class="jc-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+    <div class="jc-body">
+      <div class="jc-name">University radicalization → post-10/7 domestic enforcement surge</div>
+      <div class="jc-chain">Qatar funds campuses. Campuses radicalize students. Students support Hamas networks. FBI and DHS surge enforcement. 2023–2024: Brooklyn, LA, Chicago, Houston Hamas support arrests. Counter-terrorism budget increases to cover JTTF investigation resources, informants, and prosecutions.</div>
+      <div class="jc-cost"><i class="ti ti-currency-dollar" style="font-size:12px" aria-hidden="true"></i> Estimated cost to U.S.: tens of millions annually in increased domestic CT enforcement</div>
+    </div>
+  </div>
+  <div class="jc-row">
+    <div class="jc-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+    <div class="jc-body">
+      <div class="jc-name">Qatar funds Hamas → Hamas kills Americans → U.S. military response</div>
+      <div class="jc-chain">Qatar has hosted and funded Hamas political leadership since 2012. Hamas killed 46 Americans on October 7, 2023. U.S. military costs in the Middle East post-10/7: $9.65–$12B. Qatar simultaneously mediates the ceasefire while funding the organization that triggered the conflict.</div>
+      <div class="jc-cost"><i class="ti ti-currency-dollar" style="font-size:12px" aria-hidden="true"></i> Direct cost in IJDB ledger: $9.65–$12B in post-10/7 military operations</div>
+    </div>
+  </div>
+  <div class="jc-row">
+    <div class="jc-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+    <div class="jc-body">
+      <div class="jc-name">Lobbying buys protection → counter-terrorism constrained</div>
+      <div class="jc-chain">Qatar lobbies the Armed Services and Foreign Relations committees that set the counter-terrorism budget. Qatar's Major Non-NATO Ally status — maintained through lobbying and investment — legally limits how the U.S. can sanction Qatar even for Hamas financing. The U.S. spends $8.4T fighting jihadism while a Hamas patron operates largely unrestricted inside Washington.</div>
+      <div class="jc-cost"><i class="ti ti-currency-dollar" style="font-size:12px" aria-hidden="true"></i> Unmeasured cost: constrained sanctions reduce counter-terrorism effectiveness</div>
+    </div>
+  </div>
+  <div class="jc-row">
+    <div class="jc-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+    <div class="jc-body">
+      <div class="jc-name">Media buys narrative → public support for counter-terrorism eroded</div>
+      <div class="jc-chain">Qatar-funded media and PR operations (Tucker Carlson, Newsmax, Al Jazeera) soften American public opinion toward Qatar and Hamas. This directly affects political will to maintain the counter-terrorism budget — the $8.4T in IJDB spending requires sustained public and Congressional support that Qatar's influence operations actively undermine.</div>
+      <div class="jc-cost"><i class="ti ti-currency-dollar" style="font-size:12px" aria-hidden="true"></i> Unmeasured cost: narrative operations reduce political support for CT spending</div>
+    </div>
+  </div>
+</div>
+
+<!-- Running comparison -->
+<div class="ledger">
+  <div class="ledger-row">
+    <div class="ledger-ind" style="background:var(--color-text-danger)"></div>
+    <div class="ledger-body">
+      <div class="ledger-title">U.S. counter-terrorism spending — 2001 to May 2026 <span class="ltag lt-doc">Documented</span></div>
+      <div class="ledger-desc">Wars, DHS, veterans care, intelligence, debt interest, physical rebuild, post-2022 additions. The total cost of responding to jihadist violence — including violence funded and enabled by Qatar.</div>
+    </div>
+    <div class="ledger-right"><div class="ledger-amt cr">~$8.4T</div><div class="ledger-note">FORA running estimate</div></div>
+  </div>
+  <div class="ledger-row">
+    <div class="ledger-ind" style="background:#BA7517"></div>
+    <div class="ledger-body">
+      <div class="ledger-title">Qatar documented U.S. spending — all categories <span class="ltag lt-doc">Documented</span></div>
+      <div class="ledger-desc">Universities ($6.3B), Manhattan real estate ($6.2B), QIA total U.S. investments (~$45B), lobbying ($260M), media operations ($230M+), nonprofit think tanks, K-12 schools, and businesses.</div>
+      <div class="ledger-src"><a href="https://www.meforum.org/mef-reports/america-for-sale-qatars-40-billion-spending-spree-buys-influence-and-control-of-elite-institutions" target="_blank" rel="noopener">Middle East Forum · July 2025</a></div>
+    </div>
+    <div class="ledger-right"><div class="ledger-amt ca">~$40–50B</div><div class="ledger-note">MEF analysis · documented</div></div>
+  </div>
+  <div class="ledger-row">
+    <div class="ledger-ind" style="background:var(--color-text-secondary)"></div>
+    <div class="ledger-body">
+      <div class="ledger-title">Qatar pledged future U.S. investment <span class="ltag lt-proj">Projected</span></div>
+      <div class="ledger-desc">QIA's 10-year U.S. investment commitment announced 2025. If realized, would make Qatar one of the largest single foreign investors in American infrastructure — giving a Hamas patron financial leverage over U.S. policy at unprecedented scale.</div>
+    </div>
+    <div class="ledger-right"><div class="ledger-amt cp">$500B</div><div class="ledger-note">not yet spent · pledged</div></div>
+  </div>
+  <div class="ledger-total">
+    <div><div class="lt-label">The ratio — for every dollar Qatar spends in America</div><div class="lt-note">U.S. counter-terrorism spending vs. documented Qatari influence investment</div></div>
+    <div style="text-align:right"><div class="lt-val">168× return</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:1px">$8.4T ÷ $50B</div></div>
+  </div>
+</div>
+
+<div class="note">
+  <i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0;margin-top:1px;color:var(--color-text-warning)" aria-hidden="true"></i>
+  <span><b style="color:var(--color-text-primary)">Editorial note.</b> Qatar is a U.S. Major Non-NATO Ally and hosts Al Udeid Air Base, the largest U.S. military installation in the Middle East. The U.S.-Qatar relationship is one of the most complex in American foreign policy — Qatar simultaneously hosts U.S. forces, funds Hamas, mediates hostage negotiations, and lobbies Congress. FORA tracks the financial facts. The policy judgment is yours. Sources: Middle East Forum (2025), Washington Free Beacon (2024–2026), Washington Examiner (2026), The Hill (2025), AGBI (2024), DOE disclosure records, FARA filings via OpenSecrets.</span>
+</div>
+
+<script>
+var activeDetail = null;
+function toggleDetail(key) {
+  var panels = ['univ','re','lobby','media','qia','proj'];
+  var cards = {univ:'sc-univ',re:'sc-re',lobby:'sc-lobby',media:'sc-media',qia:'sc-qia',proj:'sc-proj'};
+  if (activeDetail === key) {
+    document.getElementById('dp-' + key).classList.remove('open');
+    document.getElementById(cards[key]).classList.remove('active');
+    activeDetail = null;
+  } else {
+    panels.forEach(function(p) {
+      document.getElementById('dp-' + p).classList.remove('open');
+      document.getElementById(cards[p]).classList.remove('active');
+    });
+    document.getElementById('dp-' + key).classList.add('open');
+    document.getElementById(cards[key]).classList.add('active');
+    activeDetail = key;
+    setTimeout(function(){
+      document.getElementById('dp-' + key).scrollIntoView({behavior:'smooth',block:'nearest'});
+    }, 50);
+  }
+}
+</script>
