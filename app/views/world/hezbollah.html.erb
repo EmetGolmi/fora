@@ -3,1267 +3,373 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORA · Hezbollah · Non-Governmental Entity</title>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>FORA · Hezbollah · NGE</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:      #f2f4f8;
-  --bg2:     #e8ebf2;
-  --white:   #ffffff;
-  --blue:    #1b3a6b;
-  --blue-lt: #3a6abf;
-  --blue-pl: #dde5f5;
-  --blue-vp: #edf1fb;
-  --gilt:    #b8860b;
-  --gilt-lt: #d4a832;
-  --gilt-pl: #f8f0dc;
-  --gilt-rul:rgba(184,134,11,0.22);
-  --ink:     #0e1a2e;
-  --ink-soft:#5a6e8a;
-  --ink-mut: #8a9ab8;
-  --rule:    rgba(27,58,107,0.1);
-  --rule-lt: rgba(27,58,107,0.05);
-  --green:   #155c2d;
-  --green-p: #e5f0e8;
-  --green-r: #8cc4a0;
-  --red:     #8b2020;
-  --red-p:   #f7eaea;
-  --red-r:   #d4a0a0;
-  --amber:   #c47f00;
-  --amber-p: #fdf3dc;
-  --amber-r: rgba(196,127,0,0.28);
-  --terra:   #8b3a20;
-
-  /* NGE colors */
-  --nge:     #2d1a4a;   /* deep midnight purple for militant entities */
-  --nge-p:   #f0eaf8;
-  --nge-r:   rgba(45,26,74,0.25);
-  --nge-lt:  #6b4a9b;
-}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+:root{
+  --bg:#f2f4f8;--white:#ffffff;
+  --blue:#1b3a6b;--blue-pl:rgba(27,58,107,0.12);--blue-vp:rgba(27,58,107,0.04);
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;--gilt-rul:rgba(184,134,11,0.22);--gilt-dk:#8b6914;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;--ink-mid:#1e2d45;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.05);
+  --green:#155c2d;--green-p:rgba(21,92,45,0.07);
+  --red:#8b2020;--red-p:rgba(139,32,32,0.06);--red-r:rgba(139,32,32,0.2);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.07);--amber-r:rgba(196,127,0,0.2);
+  /* Hezbollah: yellow-gold with dark backdrop */
+  --hzb:#7a5c00;--hzb-lt:#c4960a;--hzb-p:rgba(122,92,0,0.07);--hzb-r:rgba(122,92,0,0.22);
+}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);}
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-thumb{background:var(--gilt-rul);border-radius:10px;}
+a{text-decoration:none;color:inherit;}
 
-/* ══ NAV ══ */
 nav{background:var(--blue);padding:0 48px;display:flex;align-items:center;height:60px;border-bottom:4px solid var(--gilt);position:sticky;top:0;z-index:200;}
 .nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.1em;margin-right:24px;}
-.nav-logo span{color:var(--gilt-lt);}
 .nav-links{display:flex;gap:6px;}
-.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);padding:6px 14px;border-radius:100px;cursor:pointer;transition:all 0.15s;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.38);padding:6px 14px;border-radius:100px;cursor:pointer;}
 .nav-link.active{color:white;background:rgba(255,255,255,0.1);}
 .nav-right{margin-left:auto;}
-.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--gilt-pl);border:2px solid var(--gilt-rul);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gilt);font-weight:700;}
 
-/* ══ HERO ══ */
-
-/* ── TICKER ── */
-.ticker-bar{height:30px;background:#0a0f1a;border-bottom:1px solid #1b3a6b;display:flex;align-items:center;overflow:hidden;}
-.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;border-right:1px solid;}
-.ticker-badge.crisis{background:#7a1212;border-right-color:#c0392b;}
-.ticker-badge.active{background:#1b3a6b;border-right-color:#2a5298;}
-.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;color:white;white-space:nowrap;}
+/* TICKER */
+.ticker-bar{height:28px;background:#0a0f1a;border-bottom:1px solid #1b3a6b;display:flex;align-items:center;overflow:hidden;}
+.ticker-badge{flex-shrink:0;height:100%;padding:0 12px;display:flex;align-items:center;gap:6px;background:#4a3800;border-right:1px solid var(--hzb-lt);}
+.ticker-badge-text{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:white;}
 .ticker-scroll-wrap{flex:1;overflow:hidden;}
-.ticker-track{display:flex;align-items:center;animation:ticker-scroll 22s linear infinite;white-space:nowrap;}
-@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
-.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:30px;border-right:1px solid rgba(255,255,255,0.06);}
-.ticker-key{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
-.ticker-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
-.ticker-val.tv-red{color:#ff8080;}
-.ticker-val.tv-white{color:rgba(255,255,255,0.85);}
-.ticker-val.tv-amber{color:#FAC775;}
-.ticker-val.tv-green{color:#C0DD97;}
-/* ── QUIET TICKER ── */
-.quiet-ticker{height:26px;background:#0e1a2e;border-bottom:1px solid rgba(27,58,107,0.4);display:flex;align-items:center;padding:0 24px;gap:18px;}
-.qt-item{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
-.qt-item span{color:rgba(255,255,255,0.65);}
+.ticker-track{display:flex;align-items:center;animation:tickscroll 28s linear infinite;white-space:nowrap;}
+@keyframes tickscroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 16px;height:28px;border-right:1px solid rgba(255,255,255,0.05);}
+.t-key{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.t-val{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;}
+.tv-r{color:#ff9090;}.tv-a{color:#FAC775;}.tv-w{color:rgba(255,255,255,0.8);}
 
+/* HERO */
+.hero{background:linear-gradient(160deg,#1a1400 0%,#3a2a00 50%,#1f1800 100%);padding:36px 48px 28px;position:relative;overflow:hidden;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;display:flex;align-items:center;gap:6px;}
+.bc-sep{color:rgba(255,255,255,0.12);}
+.bc-here{color:rgba(255,255,255,0.55);}
+.hero-inner{display:flex;gap:32px;align-items:flex-start;position:relative;}
+.entity-identity{flex:1;}
+.entity-icon-wrap{width:52px;height:52px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;background:#3a2a00;}
+.entity-name{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:white;line-height:0.95;margin-bottom:4px;}
+.entity-name-local{font-family:'Source Serif 4',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.4);margin-bottom:6px;direction:rtl;}
+.entity-sub{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.entity-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.etag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 9px;border-radius:100px;border:1px solid;}
+.etag-fto{color:rgba(255,130,130,0.9);border-color:rgba(255,130,130,0.3);background:rgba(255,100,100,0.08);}
+.etag-type{color:rgba(184,134,11,0.9);border-color:rgba(184,134,11,0.3);background:rgba(184,134,11,0.08);}
+.etag-grey{color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);}
+.etag-degrad{color:rgba(255,160,80,0.9);border-color:rgba(255,160,80,0.3);background:rgba(255,160,80,0.07);}
+.hero-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;margin-top:18px;}
+.hs{background:rgba(255,255,255,0.02);padding:10px 13px;}
+.hs-num{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:white;}
+.hs-label{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-top:3px;line-height:1.5;}
+.hero-actions{display:flex;flex-direction:column;gap:8px;min-width:160px;}
+.btn-p{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;}
+.btn-s{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.18);cursor:pointer;background:transparent;color:rgba(255,255,255,0.65);}
 
+/* TABS */
+.page-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
+.tabs-inner{display:flex;padding:0 48px;gap:0;overflow-x:auto;}
+.tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:14px 15px;cursor:pointer;color:var(--ink-mut);border-bottom:2px solid transparent;white-space:nowrap;}
+.tab:hover{color:var(--hzb);}
+.tab.active{color:var(--hzb);border-bottom-color:var(--hzb);font-weight:600;}
 
-.hero{background:var(--nge);padding:40px 48px 50px;position:relative;overflow:hidden;}
-.hero::after{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;bottom:0;left:0;right:0;height:26px;overflow:hidden;white-space:nowrap;display:flex;align-items:center;padding:0 48px;font-size:11px;letter-spacing:0.55em;color:var(--gilt);-webkit-mask-image:linear-gradient(to right,black 90%,transparent 100%);mask-image:linear-gradient(to right,black 90%,transparent 100%);}
-.hero-ring{position:absolute;right:-80px;top:-100px;width:500px;height:500px;border-radius:50%;border:50px solid rgba(255,255,255,0.015);pointer-events:none;}
+/* BODY */
+.page-body{display:grid;grid-template-columns:1fr 272px;gap:0;max-width:1380px;margin:0 auto;padding:0 48px 60px;align-items:start;}
+.page-main{padding:32px 28px 0 0;min-width:0;}
+.page-sidebar{padding:32px 0 0;border-left:1px solid var(--rule);padding-left:22px;}
+.sec{margin-bottom:40px;}
+.sec+.sec{padding-top:30px;border-top:1.5px solid rgba(14,26,46,0.12);}
+.sec-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt-dk);margin-bottom:5px;}
+.sec-headline{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#0e0c08;line-height:1.1;margin-bottom:8px;}
+.sec-lead{font-family:'Source Serif 4',serif;font-size:13.5px;color:#5a5448;line-height:1.75;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule);}
 
-.hero-bc{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.hero-bc a{color:rgba(255,255,255,0.25);cursor:pointer;}
-.hero-bc a:hover{color:rgba(255,255,255,0.6);}
-.hero-bc-sep{opacity:0.2;}
-.hero-bc-here{color:var(--gilt-lt);}
+.plain-summary{background:var(--hzb-p);border:1px solid var(--hzb-r);border-radius:8px;padding:12px 14px;font-family:'Source Serif 4',serif;font-size:13px;color:var(--ink-mid);line-height:1.7;margin-bottom:14px;}
 
-.hero-inner{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;}
-.hero-left{}
+/* LEADER CARDS */
+.leader-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.leader-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;}
+.lc-avatar{width:38px;height:38px;border-radius:50%;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:9px;}
+.lc-name{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px;line-height:1.3;}
+.lc-role{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:5px;}
+.lc-badge{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 6px;border-radius:3px;display:inline-block;margin-right:3px;margin-bottom:6px;}
+.lb-current{color:var(--hzb);background:var(--hzb-p);border:1px solid var(--hzb-r);}
+.lb-dead{color:#555;background:#f0f0f0;border:1px solid #ddd;}
+.lb-degrad{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.lc-note{font-family:'Nunito',sans-serif;font-size:11px;color:var(--ink-soft);line-height:1.5;margin-top:4px;}
 
-.entity-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.entity-class{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.12);padding:3px 10px;border-radius:3px;}
-.entity-status-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:3px;}
-.status-degraded{background:rgba(196,127,0,0.2);color:#fcd34d;border:1px solid rgba(196,127,0,0.35);}
-.status-active{background:rgba(139,32,32,0.25);color:#fca5a5;border:1px solid rgba(139,32,32,0.4);}
+/* STATUS PANELS */
+.status-panel{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:11px 15px;display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;}
+.sp-icon{font-size:15px;flex-shrink:0;}
+.sp-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
 
-.entity-endonym{font-family:'Libre Baskerville',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.3);margin-bottom:4px;}
-.entity-name{font-family:'Libre Baskerville',serif;font-size:40px;font-weight:700;color:white;line-height:1.0;margin-bottom:6px;}
-.entity-aliases{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;}
+.crisis-panel{background:var(--red-p);border:1px solid var(--red-r);border-radius:8px;padding:11px 15px;display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;}
+.cp-icon{font-size:15px;flex-shrink:0;}
+.cp-text{font-family:'Source Serif 4',serif;font-size:12.5px;color:var(--ink-mid);line-height:1.65;}
 
-.entity-summary{font-family:'Nunito',sans-serif;font-size:14px;font-weight:300;color:rgba(255,255,255,0.55);line-height:1.75;max-width:660px;margin-bottom:18px;}
-.entity-summary .term{border-bottom:1px dashed rgba(184,134,11,0.4);cursor:pointer;color:rgba(255,255,255,0.75);transition:color 0.1s;}
-.entity-summary .term:hover{color:var(--gilt-lt);}
+/* PARALLEL STATE TABLE */
+.ps-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid var(--rule);margin-bottom:14px;}
+.ps-table thead tr{background:var(--ink);}
+.ps-table th{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:9px 14px;text-align:left;font-weight:400;}
+.ps-table td{padding:9px 14px;border-bottom:1px solid var(--rule-lt);vertical-align:top;}
+.ps-table tr:last-child td{border-bottom:none;}
+.ps-table tr:hover td{background:var(--bg);}
+.pt-cat{font-family:'Libre Baskerville',serif;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.pt-desc{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);}
+.pt-status{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;text-transform:uppercase;padding:2px 7px;border-radius:3px;}
+.st-intact{color:var(--green);background:var(--green-p);border:1px solid rgba(21,92,45,0.2);}
+.st-degrad{color:var(--amber);background:var(--amber-p);border:1px solid var(--amber-r);}
+.st-severed{color:var(--red);background:var(--red-p);border:1px solid var(--red-r);}
 
-.hero-meta{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;}
-.hm{display:flex;flex-direction:column;gap:2px;}
-.hm-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.2);}
-.hm-val{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);font-weight:600;}
-
-.power-basis-row{display:flex;gap:6px;flex-wrap:wrap;}
-.pb-chip{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);}
-
-.hero-right{display:flex;flex-direction:column;gap:0;}
-.hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
-.hs{background:rgba(255,255,255,0.03);padding:12px 14px;}
-.hs-num{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;}
-.hs-label{font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-top:3px;}
-
-/* ══ TABS ══ */
-.entity-tabs{background:var(--white);border-bottom:1px solid var(--rule);position:sticky;top:60px;z-index:100;}
-.tabs-inner{display:flex;padding:0 48px;overflow-x:auto;}
-.etab{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 18px;color:var(--ink-mut);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all 0.15s;}
-.etab.active{color:var(--blue);border-bottom-color:var(--gilt);font-weight:700;}
-.etab:hover{color:var(--blue);}
-
-/* ══ BODY ══ */
-.page-body{display:grid;grid-template-columns:1fr 320px;max-width:1280px;margin:0 auto;}
-.page-main{padding:32px 48px;border-right:1px solid var(--rule);}
-.page-sidebar{padding:28px 24px;background:var(--white);}
-
-/* shared */
-.sec-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gilt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
-.sec-ey::before{content:'◆';font-size:6px;}
-.sec-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:16px;}
-.sec-block{margin-bottom:40px;}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
-.sec-link{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-lt);cursor:pointer;}
-
-/* ══ POWER STRUCTURE ══ */
-.power-structure{background:var(--white);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:16px;}
-.ps-header{background:var(--nge);padding:14px 18px;}
-.psh-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:3px;}
-.psh-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:white;}
-.psh-note{font-family:'Nunito',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:3px;}
-.ps-body{padding:16px 18px;}
-.ps-tier{margin-bottom:16px;}
-.ps-tier-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.ps-tier-label::before{content:'';display:inline-block;width:20px;height:1px;background:var(--rule);}
-.ps-tier-label::after{content:'';flex:1;height:1px;background:var(--rule);}
-.ps-tier-items{display:flex;gap:8px;flex-wrap:wrap;}
-.ps-person{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;min-width:160px;}
-.pp-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:2px;}
-.pp-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);}
-.pp-status{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-top:5px;display:inline-block;}
-.st-active{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
-.st-dead{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
-.st-unknown{background:var(--bg2);color:var(--ink-mut);border:1px solid var(--rule);}
-.st-new{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
-.ps-council{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;flex:1;}
-.pc-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px;}
-.pc-note{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);line-height:1.55;}
-.ps-restructure-note{background:var(--amber-p);border:1px solid var(--amber-r);border-radius:8px;padding:11px 14px;margin-top:12px;}
-.prn-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);margin-bottom:4px;}
-.prn-text{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);line-height:1.55;}
-
-/* ══ TIMELINE ══ */
-.timeline{position:relative;padding-left:24px;}
-.timeline::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gilt-rul),var(--rule),transparent);}
-.tl-decade{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:10px;margin-top:20px;position:relative;}
-.tl-decade::before{content:'';position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:7px;height:1px;background:var(--gilt-rul);}
-.tl-item{position:relative;margin-bottom:10px;}
-.tl-dot{position:absolute;left:-21px;top:8px;width:9px;height:9px;border-radius:50%;border:2px solid;flex-shrink:0;}
-.dot-found{background:var(--nge-p);border-color:var(--nge-lt);}
-.dot-attack{background:var(--red-p);border-color:var(--red);}
-.dot-war{background:rgba(139,32,32,0.15);border-color:var(--red);}
-.dot-political{background:var(--blue-vp);border-color:var(--blue-lt);}
-.dot-milestone{background:var(--gilt-pl);border-color:var(--gilt);}
-.dot-degraded{background:var(--amber-p);border-color:var(--amber);}
-.tl-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:11px 13px;transition:box-shadow 0.12s;cursor:pointer;}
-.tl-card:hover{box-shadow:0 3px 12px rgba(27,58,107,0.07);}
-.tl-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;}
-.tl-year{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--blue);flex-shrink:0;min-width:36px;}
-.tl-type{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:1px;}
-.tt-found{background:var(--nge-p);color:var(--nge-lt);border:1px solid var(--nge-r);}
-.tt-attack{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
-.tt-war{background:rgba(139,32,32,0.08);color:var(--red);border:1px solid rgba(139,32,32,0.2);}
-.tt-political{background:var(--blue-vp);color:var(--blue-lt);border:1px solid var(--blue-pl);}
-.tt-milestone{background:var(--gilt-pl);color:var(--gilt);border:1px solid var(--gilt-rul);}
-.tt-degraded{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
-.tl-title{font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;color:var(--ink);flex:1;line-height:1.3;}
-.tl-body{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
-.tl-body .term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;}
-.tl-deaths{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--red);margin-top:4px;}
-
-/* ══ IRAN CONNECTION ══ */
-.relationship-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:10px;}
-.rc-header{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--rule-lt);}
-.rc-flag{font-size:22px;}
-.rc-entity{flex:1;}
-.rc-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--blue);}
-.rc-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
-.rc-strength{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;}
-.rc-confirmed{background:var(--green-p);color:var(--green);border:1px solid var(--green-r);}
-.rc-assessed{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
-.rc-alleged{background:var(--bg2);color:var(--ink-soft);border:1px solid var(--rule);}
-.rc-body{padding:12px 16px;}
-.rc-rel-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--nge-lt);margin-bottom:6px;}
-.rc-desc{font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
-.rc-desc .term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;color:var(--ink);}
-.rc-facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.rc-fact{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;padding:3px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--rule);color:var(--ink-soft);}
-.rc-claimed{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:8px;}
-
-/* ══ DESIGNATIONS ══ */
-.designation-table{width:100%;border-collapse:collapse;}
-.dt-head th{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);padding:0 10px 8px 0;text-align:left;border-bottom:1px solid var(--rule);font-weight:400;}
-.designation-table td{padding:10px 10px 10px 0;border-bottom:1px solid var(--rule-lt);vertical-align:middle;}
-.designation-table tr:last-child td{border-bottom:none;}
-.dd-country{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--ink);white-space:nowrap;}
-.dd-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap;}
-.dt-fto{background:var(--red-p);color:var(--red);border:1px solid var(--red-r);}
-.dt-sanc{background:var(--amber-p);color:var(--amber);border:1px solid var(--amber-r);}
-.dt-prosc{background:var(--nge-p);color:var(--nge-lt);border:1px solid var(--nge-r);}
-.dd-scope{font-family:'Nunito',sans-serif;font-size:11.5px;color:var(--ink-soft);}
-.dd-year{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);white-space:nowrap;}
-
-/* ══ DOCUMENTS ══ */
-.doc-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--rule-lt);}
-.doc-row:last-child{border-bottom:none;}
-.doc-icon{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-.doc-body{flex:1;}
-.doc-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:2px;}
-.doc-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);}
-.doc-arrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-mut);cursor:pointer;}
-
-/* ══ SIDEBAR ══ */
-.sb-block{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--rule);}
-.sb-block:last-child{border-bottom:none;}
-.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
-.sb-ey::before{content:'◆';font-size:5.5px;}
-.sb-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
-.sb-note{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.6;margin-bottom:10px;}
-
-/* connected events */
-.event-row{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--rule-lt);}
-.event-row:last-child{border-bottom:none;}
-.er-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
-.er-body{flex:1;}
-.er-title{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--blue);line-height:1.3;}
-.er-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);margin-top:1px;}
-
-/* connected issues */
-.issue-pill{display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--rule);cursor:pointer;transition:all 0.12s;margin-bottom:6px;}
-.issue-pill:hover{background:var(--gilt-pl);border-color:var(--gilt-rul);}
-.ip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.ip-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink);}
-
-/* def modal */
-.def-modal{display:none;position:fixed;inset:0;background:rgba(10,18,32,0.75);z-index:600;align-items:center;justify-content:center;}
-.def-modal.open{display:flex;}
-.def-panel{background:var(--white);border-radius:14px;padding:28px;max-width:440px;width:90%;position:relative;}
-.def-close{position:absolute;top:14px;right:18px;font-size:20px;color:var(--ink-mut);cursor:pointer;}
-.def-ey{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px;}
-.def-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:10px;}
-.def-body{font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.7;margin-bottom:12px;}
-.def-ex{background:var(--bg);border-radius:8px;padding:11px 13px;border-left:3px solid var(--gilt);}
-.def-ex-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
-.def-ex-text{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.55;}
-.term{border-bottom:1px dashed var(--gilt-rul);cursor:pointer;transition:color 0.1s;}
-.term:hover{color:var(--gilt);}
-
-/* ══ FLAG & MEDIA ══ */
-.hero-flag{position:absolute;right:48px;top:40px;opacity:0.18;pointer-events:none;}
-.flag-block{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
-.flag-img{width:120px;height:auto;border-radius:4px;border:1px solid rgba(255,255,255,0.1);}
-.flag-caption{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);line-height:1.6;}
-.flag-caption strong{color:rgba(255,255,255,0.5);display:block;margin-bottom:2px;}
-.photo-grid-nge{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
-.pg-item{border-radius:8px;overflow:hidden;background:var(--bg2);border:1px solid var(--rule);position:relative;aspect-ratio:16/9;cursor:pointer;transition:box-shadow 0.12s;}
-.pg-item:hover{box-shadow:0 4px 14px rgba(27,58,107,0.1);}
-.pg-item img{width:100%;height:100%;object-fit:cover;display:block;}
-.pg-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(14,26,46,0.88));padding:16px 10px 7px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.07em;color:rgba(255,255,255,0.75);}
-.pg-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:var(--bg2);}
-.pg-pl-icon{font-size:22px;opacity:0.3;}
-.pg-pl-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);text-align:center;padding:0 8px;line-height:1.4;}
-/* NGE person profile */
-.nge-profile-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:flex;gap:14px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.12s;}
-.nge-profile-card:hover{box-shadow:0 4px 14px rgba(27,58,107,0.08);}
-.npc-avatar{width:52px;height:52px;border-radius:50%;background:var(--nge-p);border:2px solid var(--nge-r);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--nge-lt);flex-shrink:0;position:relative;}
-.npc-org-badge{position:absolute;bottom:-3px;right:-3px;background:var(--nge);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:8px;}
-.npc-body{flex:1;}
-.npc-name-row{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
-.npc-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--ink);}
-.npc-org-chip{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--nge-p);color:var(--nge-lt);border:1px solid var(--nge-r);}
-.npc-role{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:5px;}
-.npc-desc{font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.55;}
-.npc-statement{background:var(--bg);border-left:2px solid var(--nge-r);padding:8px 10px;margin-top:8px;border-radius:0 6px 6px 0;}
-.nps-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--nge-lt);margin-bottom:3px;}
-.nps-text{font-family:'Libre Baskerville',serif;font-size:12px;font-style:italic;color:var(--ink-soft);line-height:1.55;}
-.npc-fora-note{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:8px;padding:5px 8px;background:var(--blue-vp);border-radius:4px;display:inline-block;}
-
-.btn-primary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--gilt);color:white;transition:all 0.12s;}
-.btn-secondary{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;background:transparent;color:rgba(255,255,255,0.7);transition:all 0.12s;}
-.btn-red{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;border:1px solid rgba(255,100,100,0.3);cursor:pointer;background:rgba(255,100,100,0.08);color:rgba(255,150,150,0.9);transition:all 0.12s;}
+/* SIDEBAR */
+.sb-block{margin-bottom:22px;}
+.sb-block+.sb-block{padding-top:18px;border-top:1px solid var(--rule);}
+.sb-ey{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.sb-title{font-family:'Libre Baskerville',serif;font-size:13.5px;font-weight:700;color:var(--hzb);margin-bottom:10px;}
+.data-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule-lt);}
+.data-row:last-child{border-bottom:none;}
+.dr-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mut);}
+.dr-val{font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;color:var(--ink);text-align:right;max-width:58%;}
+.dr-val.red{color:var(--red);}
+.quick-link{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule-lt);font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.07em;color:var(--hzb);}
+.quick-link:last-child{border-bottom:none;}
+.desig-mini{border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.dm-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--rule-lt);}
+.dm-item:last-child{border-bottom:none;}
+.dm-flag{font-size:12px;}
+.dm-name{font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;color:var(--ink);}
+.dm-note{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);margin-left:auto;text-align:right;}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">F<span>O</span>RA</div>
+  <div class="nav-logo">FORA</div>
   <div class="nav-links">
-    <span class="nav-link">Feed</span>
-    <span class="nav-link active">Entities</span>
-    <span class="nav-link">Issues</span>
-    <span class="nav-link">Events</span>
+    <span class="nav-link">Governance</span>
+    <span class="nav-link active">World</span>
+    <span class="nav-link">Knowledge</span>
+    <span class="nav-link">Discourse</span>
   </div>
-  <div class="nav-right"><div class="nav-avatar">NG</div></div>
+  <div class="nav-right"></div>
 </nav>
 
+<!-- TICKER -->
 <div class="ticker-bar">
-  <div class="ticker-badge active"><div class="wa-pulse" style="background:rgba(255,255,255,0.4);animation:none;"></div><span class="ticker-badge-text">HEZBOLLAH · ACTIVE</span></div>
-  <div class="ticker-scroll-wrap"><div class="ticker-track"><div class="ticker-item"><span class="ticker-key">Op. Epic Fury</span><span class="ticker-val tv-red">Active · Day 15 · Re-engaged</span></div><div class="ticker-item"><span class="ticker-key">Status</span><span class="ticker-val tv-amber">Severely degraded · active</span></div><div class="ticker-item"><span class="ticker-key">HQ</span><span class="ticker-val tv-red">Destroyed · 2024</span></div><div class="ticker-item"><span class="ticker-key">Secretary-General</span><span class="ticker-val tv-white">Naim Qassem · since Oct 2024</span></div><div class="ticker-item"><span class="ticker-key">Nasrallah</span><span class="ticker-val tv-red">Killed Sep 27 2024</span></div><div class="ticker-item"><span class="ticker-key">Lebanon ceasefire</span><span class="ticker-val tv-amber">Nov 2024 · holding fragile</span></div><div class="ticker-item"><span class="ticker-key">Iran funding</span><span class="ticker-val tv-amber">Supply chain disrupted</span></div><div class="ticker-item"><span class="ticker-key">Fighters est.</span><span class="ticker-val tv-white">~40K pre-war</span></div><div class="ticker-item"><span class="ticker-key">Op. Epic Fury</span><span class="ticker-val tv-red">Active · Day 15 · Re-engaged</span></div><div class="ticker-item"><span class="ticker-key">Status</span><span class="ticker-val tv-amber">Severely degraded · active</span></div><div class="ticker-item"><span class="ticker-key">HQ</span><span class="ticker-val tv-red">Destroyed · 2024</span></div><div class="ticker-item"><span class="ticker-key">Secretary-General</span><span class="ticker-val tv-white">Naim Qassem · since Oct 2024</span></div><div class="ticker-item"><span class="ticker-key">Nasrallah</span><span class="ticker-val tv-red">Killed Sep 27 2024</span></div><div class="ticker-item"><span class="ticker-key">Lebanon ceasefire</span><span class="ticker-val tv-amber">Nov 2024 · holding fragile</span></div><div class="ticker-item"><span class="ticker-key">Iran funding</span><span class="ticker-val tv-amber">Supply chain disrupted</span></div><div class="ticker-item"><span class="ticker-key">Fighters est.</span><span class="ticker-val tv-white">~40K pre-war</span></div></div></div>
+  <div class="ticker-badge"><span class="ticker-badge-text">Hezbollah · Degraded</span></div>
+  <div class="ticker-scroll-wrap">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="t-key">Sec.-Gen.</span><span class="t-val tv-a">Naim Qassem · since Oct 29, 2024</span></div>
+      <div class="ticker-item"><span class="t-key">Nasrallah</span><span class="t-val tv-r">Assassinated Sep 27, 2024 · Dahieh, Beirut</span></div>
+      <div class="ticker-item"><span class="t-key">Safieddine</span><span class="t-val tv-r">Assassinated Oct 3, 2024 · 2 days in office</span></div>
+      <div class="ticker-item"><span class="t-key">Status</span><span class="t-val tv-a">Severely degraded · Reorganizing under Qassem</span></div>
+      <div class="ticker-item"><span class="t-key">Lebanon War</span><span class="t-val tv-w">Ended Nov 2024 · Post-war restructuring ongoing</span></div>
+      <div class="ticker-item"><span class="t-key">Lebanon Justice</span><span class="t-val tv-r">Lebanese Minister of Justice considering prosecution of Qassem · Mar 2026</span></div>
+      <!-- dup -->
+      <div class="ticker-item"><span class="t-key">Sec.-Gen.</span><span class="t-val tv-a">Naim Qassem · since Oct 29, 2024</span></div>
+      <div class="ticker-item"><span class="t-key">Nasrallah</span><span class="t-val tv-r">Assassinated Sep 27, 2024 · Dahieh, Beirut</span></div>
+    </div>
+  </div>
 </div>
+
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-ring"></div>
-  <div class="hero-bc">
-    <a href="#">The World</a><span class="hero-bc-sep">/</span>
-    <a href="#">Non-Governmental Entities</a><span class="hero-bc-sep">/</span>
-    <a href="#">Militant · Paramilitary</a><span class="hero-bc-sep">/</span>
-    <span class="hero-bc-here">Hezbollah</span>
+  <div class="breadcrumb">
+    <span>FORA</span><span class="bc-sep">/</span>
+    <span>World</span><span class="bc-sep">/</span>
+    <span>Organizations</span><span class="bc-sep">/</span>
+    <span class="bc-here">Hezbollah</span>
   </div>
-
   <div class="hero-inner">
-    <div class="hero-left">
-      <div class="entity-eyebrow">
-        <span class="entity-class">Militant · Paramilitary · Political Party</span>
-        <span class="entity-status-chip status-degraded">⬤ Degraded · Rebuilding</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:2px;">
-        <img src="/mnt/user-data/uploads/Flag_of_Hezbollah_svg.png" style="width:52px;height:34px;object-fit:contain;border:0.5px solid rgba(255,255,255,0.15);border-radius:2px;flex-shrink:0;" alt="Hezbollah flag">
+    <div class="entity-identity">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+        <div class="entity-icon-wrap">🇱🇧</div>
         <div>
-          <div class="entity-endonym">حزب الله — Ḥizbu 'llāh</div>
           <div class="entity-name">Hezbollah</div>
+          <div class="entity-name-local">حزب الله — Ḥizb Allāh · Party of God</div>
+          <div class="entity-sub">Lebanese Shia Islamist Party &amp; Paramilitary · Founded 1982 · Beirut, Lebanon</div>
         </div>
       </div>
-      <div class="entity-aliases">Also: Hizballah · Hizbullah · Party of God · Islamic Resistance · Al-Muqawamah al-Islamiyyah</div>
-
-      <div class="entity-summary">
-        A Lebanese <span class="term" onclick="showDef('shia')">Shia</span> Muslim political party and militant organization, founded in 1982 during the Israeli invasion of Lebanon. Backed and funded primarily by <span class="term" onclick="showDef('iran')">Iran</span> through the <span class="term" onclick="showDef('irgc')">IRGC Quds Force</span>. Operates as a "state within a state" in Lebanon — running schools, hospitals, social services, and a military force simultaneously. Designated a <span class="term" onclick="showDef('fto')">Foreign Terrorist Organization</span> by the US since 1997 and by 27+ countries. Since the 2024 war with Israel, the organization has lost most of its leadership, approximately 70% of its weapons arsenal, and its longtime secretary-general <span class="term" onclick="showDef('nasrallah')">Hassan Nasrallah</span>. It is currently in a restructuring phase under new secretary-general <span class="term" onclick="showDef('qassem')">Naim Qassem</span>.
+      <div class="entity-tags">
+        <span class="etag etag-fto">FTO · US · UK · Gulf States + others</span>
+        <span class="etag etag-type">Political Party · Paramilitary · Social Welfare</span>
+        <span class="etag etag-degrad">⚠ Severely Degraded</span>
+        <span class="etag etag-grey">Iran-Created 1982</span>
+        <span class="etag etag-grey">Parallel State · S. Lebanon</span>
       </div>
-
-      <div class="hero-meta">
-        <div class="hm"><div class="hm-label">Founded</div><div class="hm-val">1982 · Lebanon</div></div>
-        <div class="hm"><div class="hm-label">Headquarters</div><div class="hm-val">Beirut · Dahiyeh (southern suburbs)</div></div>
-        <div class="hm"><div class="hm-label">Current leader</div><div class="hm-val">Naim Qassem · Since Oct 2024</div></div>
-        <div class="hm"><div class="hm-label">Active status</div><div class="hm-val">Degraded · Rebuilding</div></div>
-        <div class="hm"><div class="hm-label">Primary sponsor</div><div class="hm-val">Iran · IRGC Quds Force</div></div>
-        <div class="hm"><div class="hm-label">Lebanese parliament</div><div class="hm-val">2 ministries (Feb 2025 govt)</div></div>
-      </div>
-
-      <div class="power-basis-row">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-right:2px;">Power basis:</span>
-        <span class="pb-chip">Military</span>
-        <span class="pb-chip">Social services</span>
-        <span class="pb-chip">Religious</span>
-        <span class="pb-chip">Territorial</span>
-        <span class="pb-chip">Financial (Iran + narco)</span>
-        <span class="pb-chip">Political (Lebanese parliament)</span>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-num">1982</div><div class="hs-label">Founded<br>by Iran / IRGC</div></div>
+        <div class="hs"><div class="hs-num" style="color:#ff9090;">3</div><div class="hs-label">Sec.-Generals<br>Killed 2024</div></div>
+        <div class="hs"><div class="hs-num">4M</div><div class="hs-label">People Reached<br>Lebanon + diaspora</div></div>
+        <div class="hs"><div class="hs-num">27</div><div class="hs-label">Countries<br>Designate FTO</div></div>
+        <div class="hs"><div class="hs-num">1992</div><div class="hs-label">First Seats<br>in Parliament</div></div>
       </div>
     </div>
-
-    <div class="hero-right" style="min-width:240px;max-width:280px;display:flex;flex-direction:column;gap:10px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:2px;">Parent &amp; allied relationships</div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;">
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(139,26,26,0.3);border:0.5px solid #8b1a1a;color:#ffaaaa;white-space:nowrap;">Iran · Created &amp; funds</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(139,26,26,0.3);border:0.5px solid #8b1a1a;color:#ffaaaa;white-space:nowrap;">IRGC Quds Force · Commands</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(55,138,221,0.12);border:0.5px solid rgba(55,138,221,0.3);color:rgba(181,212,244,0.8);white-space:nowrap;">Syria (Assad) · Allied</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(196,127,0,0.2);border:0.5px solid #c47f00;color:#FAC775;white-space:nowrap;">Hamas · Coordinated</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(196,127,0,0.2);border:0.5px solid #c47f00;color:#FAC775;white-space:nowrap;">Houthis · Coordinated</span>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-top:4px;">FTO Designations</div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;">
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">US · 1997</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">EU · 2013</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">UK · 2019</span>
-        <span style="font-size:8px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;background:rgba(80,19,19,0.3);border:0.5px solid #791F1F;color:rgba(255,150,150,0.7);white-space:nowrap;">Arab League · 2016</span>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
-        <button class="btn-primary">+ Follow Hezbollah</button>
-      </div>
+    <div class="hero-actions">
+      <button class="btn-p">Follow Hezbollah</button>
+      <button class="btn-s">Add to Dashboard</button>
     </div>
   </div>
 </div>
 
 <!-- TABS -->
-<div class="entity-tabs">
+<div class="page-tabs">
   <div class="tabs-inner">
-    <div class="etab active" onclick="switchTab('overview',this)">Overview</div>
-    <div class="etab" onclick="switchTab('structure',this)">Power Structure</div>
-    <div class="etab" onclick="switchTab('timeline',this)">Timeline</div>
-    <div class="etab" onclick="switchTab('relationships',this)">Relationships</div>
-    <div class="etab" onclick="switchTab('designations',this)">Designations</div>
-    <div class="etab" onclick="switchTab('docs',this)">Documents</div>
-    <div class="etab" onclick="switchTab('current',this)">Current Status</div>
+    <div class="tab active">Overview</div>
+    <div class="tab">Leadership</div>
+    <div class="tab">Designations</div>
+    <div class="tab">Parallel State</div>
+    <div class="tab">Doctrine &amp; History</div>
+    <div class="tab">Discourse</div>
+    <div class="tab">The Record</div>
   </div>
 </div>
 
 <!-- BODY -->
 <div class="page-body">
-<div class="page-main">
+  <div class="page-main">
 
-  <!-- ══ OVERVIEW ══ -->
-  <div id="tab-overview">
-
-    <!-- Plain language explainer -->
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Plain language</div>
-          <div class="sec-title">What is Hezbollah?</div>
-        </div>
-      </div>
-      <div style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink);line-height:1.8;max-width:700px;">
-        Hezbollah is a Lebanese organization that is three things simultaneously — and understanding all three is necessary to understand it at all.<br><br>
-        <strong>1. A political party.</strong> Hezbollah has participated in Lebanese government since 1992. As of February 2025, it holds two cabinet posts. Its parliamentary bloc, Loyalty to the Resistance, has held between 12 and 15 seats in Lebanon's parliament. It is a legal political party that negotiates, campaigns, and governs.<br><br>
-        <strong>2. A social welfare provider.</strong> Hezbollah runs hospitals, schools, construction companies, and social services throughout Lebanon — particularly in the Shia-majority south and Beirut's southern suburbs. For hundreds of thousands of Lebanese Shia, Hezbollah is the primary provider of services the state does not deliver. This is the source of its popular legitimacy and the reason it cannot simply be "destroyed" without destroying the communities it serves.<br><br>
-        <strong>3. A military force.</strong> Hezbollah maintains an army — the largest non-state military force in the world outside of active war zones. Before the 2024 war with Israel, it had an estimated 120,000–200,000 rockets and missiles, 40,000–50,000 fighters, and capabilities exceeding those of most national armies in the Middle East. That arsenal was approximately 70% degraded in the 2024 war.<br><br>
-        The three roles are inseparable. Iran funds all three. The social services build loyalty. The political arm provides legal legitimacy. The military arm provides leverage. This is by design — and it is why Western countries' attempts to designate only the "military wing" while maintaining dialogue with the "political wing" has been described by Hezbollah itself as a distinction they do not recognize.
+    <!-- PLAIN SUMMARY -->
+    <div class="sec" style="border-top:none;">
+      <div class="plain-summary">
+        <strong>Hezbollah in plain language:</strong> Hezbollah is a Lebanese Shia organization that is simultaneously a political party with seats in parliament, a paramilitary force larger than the Lebanese Army, and a provider of schools and hospitals in Lebanon's south. Created by Iran's IRGC in 1982 following Israel's invasion of Lebanon. 27 countries designate it a terrorist organization. It fought Israel in 2006 and again in 2024. Its longtime leader Hassan Nasrallah was killed by Israel on September 27, 2024. The organization has been severely degraded but is actively reorganizing under new Secretary-General Naim Qassem.
       </div>
     </div>
 
-    <!-- Key facts -->
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Key context</div>
-          <div class="sec-title">What they call themselves — and what others call them</div>
-        </div>
-      </div>
-      <div style="font-family:'Nunito',sans-serif;font-size:13.5px;color:var(--ink-soft);line-height:1.8;background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;">
-        <strong style="color:var(--ink);">What they call themselves:</strong> حزب الله — Ḥizbu 'llāh — "Party of God." Also: Al-Muqawamah al-Islamiyyah (The Islamic Resistance). They use "resistance" because they frame their existence as defensive — resistance to Israeli occupation of Lebanese territory and to Western imperialism.<br><br>
-        <strong style="color:var(--ink);">What others call them:</strong> Hezbollah (English), Hizballah (US government official spelling), Hizbullah (UK), Hezbolá (Spanish). The spelling varies. The entity is the same.<br><br>
-        <strong style="color:var(--ink);">Why this matters:</strong> The name you use reflects your frame. Citizens using FORA will encounter both. The platform presents both without preferring either. Understanding that "Hezbollah" and "The Islamic Resistance" refer to the same organization — but that the choice of name reflects the speaker's political position — is civic literacy.
-      </div>
-    </div>
+    <!-- LEADERSHIP STATUS -->
+    <div class="sec">
+      <div class="sec-ey">Leadership · As of June 2026</div>
+      <h2 class="sec-headline">Three Leaders in Seven Days — Then Qassem</h2>
+      <p class="sec-lead">In the span of a week in late September and early October 2024, Israel killed Hassan Nasrallah (32 years as Secretary-General) and then Hashem Safieddine (Nasrallah's successor, dead 2 days after taking office). Naim Qassem, deputy secretary-general since 1991, was elected by the Shura Council on October 29, 2024. He faces the dual challenge of rebuilding a shattered command structure while managing an internal power struggle between pragmatic and hardline factions.</p>
 
-  </div>
-
-  <!-- ══ POWER STRUCTURE ══ -->
-  <div id="tab-structure" style="display:none;">
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Organization</div>
-          <div class="sec-title">Power Structure · March 2026</div>
-        </div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);">Post-war restructuring in progress</span>
+      <div class="status-panel">
+        <span class="sp-icon">⚠️</span>
+        <span class="sp-text">As of March 2026, Lebanon's Minister of Justice is considering legal action against Naim Qassem. Wafiq Safa — head of Hezbollah's Coordination and Liaison Unit since 1987 and one of the most senior figures in the organization — resigned in February 2026. Hezbollah is in active post-war restructuring, shifting from centralized command to decentralized cells to reduce vulnerability to targeted strikes.</span>
       </div>
 
-      <div class="power-structure">
-        <div class="ps-header">
-          <div class="psh-label">Hezbollah hierarchy</div>
-          <div class="psh-title">Command structure · Current as of March 2026</div>
-          <div class="psh-note">Significantly degraded from pre-2024 war structure. Iran actively managing restructuring to stabilize under Qassem.</div>
+      <div class="leader-grid">
+        <div class="leader-card">
+          <div class="lc-avatar" style="background:#4a3800;">NQ</div>
+          <div class="lc-name">Naim Qassem</div>
+          <div class="lc-role">Secretary-General · since Oct 29, 2024</div>
+          <span class="lc-badge lb-current">Incumbent</span>
+          <div class="lc-note">Born Feb 1953. Deputy Secretary-General for 33 years (1991–2024). Elected by Shura Council to succeed Nasrallah. Backed by Iran in consolidating power. Faces prosecution threat from Lebanese government (Mar 2026).</div>
         </div>
-        <div class="ps-body">
-
-          <!-- SUPREME AUTHORITY -->
-          <div class="ps-tier">
-            <div class="ps-tier-label">Supreme Authority — External</div>
-            <div class="ps-tier-items">
-
-              <!-- Khamenei successor — no photo, TBD -->
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="width:52px;height:52px;border-radius:50%;background:var(--bg2);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">❓</div>
-                <div>
-                  <div class="pp-name">Khamenei successor <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--ink-mut);">(TBD)</span></div>
-                  <div class="pp-role">Supreme Leader · Iran</div>
-                  <div class="pp-role" style="margin-top:2px;">Velayat-e Faqih — ultimate religious authority over Hezbollah. Hezbollah answers to the Supreme Leader as a religious obligation, not merely a political one.</div>
-                  <span class="pp-status st-unknown">Post-Khamenei · Successor unclear</span>
-                </div>
-              </div>
-
-              <!-- IRGC Quds Force — org, no person photo -->
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="width:52px;height:52px;border-radius:50%;background:rgba(139,32,32,0.1);border:2px solid rgba(139,32,32,0.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚔️</div>
-                <div>
-                  <div class="pp-name">IRGC Quds Force</div>
-                  <div class="pp-role">Command link · Funding · Weapons supply</div>
-                  <div class="pp-role" style="margin-top:2px;">Connective tissue between Tehran and Beirut — personal links weakened since Soleimani's assassination (Jan 2020). Iran is actively managing Hezbollah's post-war restructuring.</div>
-                  <span class="pp-status st-active">Active · Managing restructuring</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- SECRETARY-GENERAL -->
-          <div class="ps-tier">
-            <div class="ps-tier-label">Secretary-General</div>
-            <div class="ps-tier-items">
-              <div class="ps-person" style="flex:1;display:flex;gap:12px;align-items:flex-start;">
-                <!-- Qassem photo — using confirmed Wikipedia infobox image -->
-                <div style="flex-shrink:0;position:relative;">
-                  
-                  
-                  <div style="position:absolute;bottom:-2px;right:-2px;background:var(--nge);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:10px;">☪</div>
-                </div>
-                <div style="flex:1;">
-                  <div class="pp-name" style="font-size:15px;">Naim Qassem</div>
-                  <div class="pp-role">Secretary-General · Since October 29, 2024 · Born 1953 · Kfar Kila, Lebanon</div>
-                  <div class="pp-role" style="margin-top:4px;font-size:12px;line-height:1.55;">Chemistry teacher turned cleric. Deputy SG for 33 years under Nasrallah. Described by analysts as "a default choice" — one of the last senior clerics standing after Israel's 2024 campaign. Actively centralizing control over all party institutions. Iran-backed consolidation ongoing. Maintains active social media presence (Facebook, YouTube). On March 7, 2026, Lebanon's Justice Minister considered legal action against him for accusing the government of carrying out Israeli orders.</div>
-                  <span class="pp-status st-active">Active · Consolidating</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- KEY CURRENT LEADERSHIP -->
-          <div class="ps-tier">
-            <div class="ps-tier-label">Key leadership — current</div>
-            <div class="ps-tier-items">
-
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="width:48px;height:48px;border-radius:50%;background:var(--bg2);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink-soft);flex-shrink:0;">MF</div>
-                <div>
-                  <div class="pp-name">Mohammad Fneish</div>
-                  <div class="pp-role">Head, Executive Council (reported) · Feb 2026</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">Former minister and MP. Civil/administrative focus. Managing 2026 parliamentary elections. Hezbollah member since early 1980s, arrested by IDF in 1984.</div>
-                  <span class="pp-status st-new">New appointment</span>
-                </div>
-              </div>
-
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="width:48px;height:48px;border-radius:50%;background:var(--bg2);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink-soft);flex-shrink:0;">MR</div>
-                <div>
-                  <div class="pp-name">Mohammad Raad</div>
-                  <div class="pp-role">Head, Loyalty to Resistance parliamentary bloc</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">Senior political figure. Part of the pragmatic bloc aligned with Qassem. Key interface between Hezbollah and Lebanese parliament.</div>
-                  <span class="pp-status st-active">Active</span>
-                </div>
-              </div>
-
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="width:48px;height:48px;border-radius:50%;background:var(--bg2);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink-soft);flex-shrink:0;">HA</div>
-                <div>
-                  <div class="pp-name">Hussein Abdallah</div>
-                  <div class="pp-role">Security coordination (post-Safa) · Feb 2026</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">One of three figures who absorbed Wafiq Safa's responsibilities after his resignation. Handles security coordination specifically.</div>
-                  <span class="pp-status st-new">New appointment · Feb 2026</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- ELIMINATED LEADERSHIP -->
-          <div class="ps-tier">
-            <div class="ps-tier-label">Eliminated leadership — 2024</div>
-            <div class="ps-tier-items">
-
-              <!-- Nasrallah with photo -->
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="flex-shrink:0;position:relative;">
-                  
-                  
-                  <div style="position:absolute;bottom:-2px;right:-2px;background:var(--red);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:9px;">🪦</div>
-                </div>
-                <div>
-                  <div class="pp-name">Hassan Nasrallah</div>
-                  <div class="pp-role">Secretary-General 1992–2024 · 32 years · Born 1960</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">Founded Hezbollah as a young cleric. Built it into the most powerful non-state military force in the Middle East. His funeral drew ~1M people in Beirut, February 2025.</div>
-                  <span class="pp-status st-dead">Killed · Sep 27, 2024 · Israeli airstrike · Beirut</span>
-                </div>
-              </div>
-
-              <!-- Safieddine — try Wikimedia -->
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="flex-shrink:0;position:relative;">
-                  
-                  
-                  <div style="position:absolute;bottom:-2px;right:-2px;background:var(--red);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:9px;">🪦</div>
-                </div>
-                <div>
-                  <div class="pp-name">Hashem Safieddine</div>
-                  <div class="pp-role">Executive Council · Nasrallah's cousin · Presumed successor</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">Considered Nasrallah's most likely successor before being killed 6 days after Nasrallah.</div>
-                  <span class="pp-status st-dead">Killed · Oct 3, 2024 · Israeli airstrike · Beirut</span>
-                </div>
-              </div>
-
-              <!-- Fuad Shukr -->
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="flex-shrink:0;position:relative;">
-                  
-                  
-                  <div style="position:absolute;bottom:-2px;right:-2px;background:var(--red);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:9px;">🪦</div>
-                </div>
-                <div>
-                  <div class="pp-name">Fuad Shukr</div>
-                  <div class="pp-role">Senior military commander · Jihad Council</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">One of Hezbollah's most senior military figures. Also known as Hajj Mohsin. US offered $5M reward for information on him. Killed in Beirut airstrike.</div>
-                  <span class="pp-status st-dead">Killed · Jul 30, 2024 · Israeli airstrike · Beirut</span>
-                </div>
-              </div>
-
-              <!-- Ibrahim Aqil -->
-              <div class="ps-person" style="display:flex;gap:10px;align-items:flex-start;">
-                <div style="flex-shrink:0;position:relative;">
-                  
-                  
-                  <div style="position:absolute;bottom:-2px;right:-2px;background:var(--red);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--white);font-size:9px;">🪦</div>
-                </div>
-                <div>
-                  <div class="pp-name">Ibrahim Aqil</div>
-                  <div class="pp-role">Commander, Radwan Force · Elite special operations</div>
-                  <div class="pp-role" style="margin-top:2px;font-size:12px;">Head of Hezbollah's elite Radwan Force — the unit trained to invade northern Israel. FBI most wanted list. Killed in September 2024 pager/airstrike campaign.</div>
-                  <span class="pp-status st-dead">Killed · Sep 20, 2024 · Israeli airstrike · Beirut</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="ps-restructure-note">
-            <div class="prn-label">⚠ Restructuring note · February 2026</div>
-            <div class="prn-text">Wafiq Safa — head of Coordination and Liaison since 1987, considered one of Hezbollah's most influential figures — resigned in February 2026 after disputes with Qassem. His responsibilities were split three ways (security, coordination, political contacts) — a deliberate decentralization to reduce personal vulnerability to Israeli targeting. Two internal factions have emerged: a hardline core calling for escalation, and a pragmatic bloc aligned with Qassem advocating a different approach. Iran is actively managing the restructuring from Tehran.</div>
-          </div>
-
+        <div class="leader-card">
+          <div class="lc-avatar" style="background:#555;">HN</div>
+          <div class="lc-name">Hassan Nasrallah 🕯</div>
+          <div class="lc-role">Secretary-General · 1992–2024</div>
+          <span class="lc-badge lb-dead">Assassinated Sep 27, 2024</span>
+          <div class="lc-note">Led Hezbollah for 32 years. Killed in Israeli strike on Hezbollah HQ in Dahieh, Beirut. Widely regarded as one of the most consequential figures in the modern Middle East.</div>
         </div>
-
-        <!-- FORA PROFILE NOTE -->
-        <div style="margin:16px 18px;background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:8px;padding:12px 14px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-lt);margin-bottom:4px;">On FORA profiles</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12.5px;color:var(--ink);line-height:1.6;">If any Hezbollah command figure creates a FORA account, they receive an NGE Organizational Figure profile — same architecture as elected officials, different badge. Their contributions appear in the civic record labeled with their organizational role. They are subject to the same tone intercept and challenge mechanisms as every other user. FORA does not decide who gets to contribute to the shared description.</div>
+        <div class="leader-card">
+          <div class="lc-avatar" style="background:#555;">HS</div>
+          <div class="lc-name">Hashem Safieddine 🕯</div>
+          <div class="lc-role">Secretary-General · Oct 1–3, 2024</div>
+          <span class="lc-badge lb-dead">Assassinated Oct 3, 2024</span>
+          <div class="lc-note">Nasrallah's cousin and head of Executive Council since 2001. Assumed office October 1; killed by Israeli airstrike on Dahieh October 3 — 2 days in office.</div>
         </div>
-
+        <div class="leader-card">
+          <div class="lc-avatar" style="background:#6b4a9b;">MR</div>
+          <div class="lc-name">Mohammad Raad</div>
+          <div class="lc-role">Deputy Secretary-General · since Oct 2024</div>
+          <span class="lc-badge lb-current">Political Council</span>
+          <div class="lc-note">Head of Hezbollah's Loyalty to the Resistance bloc in Lebanese parliament. Named Deputy Secretary-General following Qassem's election.</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ══ TIMELINE ══ -->
-  <div id="tab-timeline" style="display:none;">
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">History</div>
-          <div class="sec-title">Major Events Timeline</div>
-        </div>
-      </div>
-      <div class="timeline">
+    <!-- PARALLEL STATE -->
+    <div class="sec">
+      <div class="sec-ey">Structure · Parallel State</div>
+      <h2 class="sec-headline">A State Within a State</h2>
+      <p class="sec-lead">Hezbollah is one of the most studied examples of a "parallel state" — an organization that exercises governmental functions (taxation, security, social services, courts) alongside, and often superior to, the formal government. In southern Lebanon and the Dahieh suburb of Beirut, Hezbollah has functioned as the primary governing authority for decades. The 2024 war damaged but did not eliminate this structure.</p>
 
-        <div class="tl-decade">1980s — Founding</div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-found"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">1982</span>
-              <span class="tl-type tt-found">Founded</span>
-              <div class="tl-title">Hezbollah formed — response to Israeli invasion of Lebanon</div>
-            </div>
-            <div class="tl-body">Israel invades Lebanon to expel the PLO. <span class="term" onclick="showDef('irgc')">IRGC</span> dispatches approximately 1,500 Revolutionary Guards to Lebanon's Bekaa Valley. They train and organize Shia militants into what becomes Hezbollah. The founding charter declares Hezbollah's primary goal: "wiping Israel off the map." The organization draws from the theology of Iran's <span class="term" onclick="showDef('velayat')">Velayat-e Faqih</span> — the Guardianship of the Islamic Jurist — meaning it answers to Iran's Supreme Leader as a religious obligation.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-attack"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">1983</span>
-              <span class="tl-type tt-attack">Attack</span>
-              <div class="tl-title">US Embassy and Marine barracks bombings — Beirut</div>
-            </div>
-            <div class="tl-body">April: US Embassy bombed — 63 killed. October: Suicide truck bombs hit US Marine barracks (241 killed) and French paratrooper barracks (58 killed) simultaneously. The largest single-day death toll for the US military since Vietnam. The US and France withdraw from Lebanon. Hezbollah's first major strategic success: demonstrating that suicide bombing could expel superpowers.</div>
-            <div class="tl-deaths">299 killed · US/France withdraw from Lebanon</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-attack"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">1985</span>
-              <span class="tl-type tt-attack">Attack</span>
-              <div class="tl-title">TWA Flight 847 hijacking</div>
-            </div>
-            <div class="tl-body">Hezbollah operatives hijack TWA Flight 847. A US Navy diver, Robert Stethem, is murdered and thrown from the plane. 39 American hostages held for 17 days. The hijacking establishes Hezbollah as a global terrorist actor in Western consciousness. Iran's fingerprints are throughout the operation.</div>
-          </div>
-        </div>
-
-        <div class="tl-decade">1990s — Expansion & Political Entry</div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-political"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">1992</span>
-              <span class="tl-type tt-political">Political</span>
-              <div class="tl-title">Enters Lebanese parliament · Nasrallah becomes Secretary-General</div>
-            </div>
-            <div class="tl-body">Hezbollah participates in Lebanese parliamentary elections for the first time, winning 8 seats. This begins the "state within a state" strategy — using political legitimacy to protect military operations. Abbas al-Musawi, Nasrallah's predecessor, is assassinated by Israel in February. Nasrallah, 32, takes over and begins a 32-year tenure that transforms the organization.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-attack"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">1994</span>
-              <span class="tl-type tt-attack">Attack · Latin America</span>
-              <div class="tl-title">AMIA bombing — Buenos Aires · 85 killed</div>
-            </div>
-            <div class="tl-body">Suicide bombing of the AMIA Jewish community center in Buenos Aires — the deadliest terrorist attack in Argentine history and the first major Hezbollah operation outside Lebanon/Middle East. <span class="term" onclick="showDef('amia')">85 killed, 300+ wounded</span>. Argentine courts eventually indicted Iranian officials and one Hezbollah operative. As of 2026, no one has been convicted. This attack establishes Hezbollah's Latin American network. Iran's fingerprints confirmed by Argentine and US investigations.</div>
-            <div class="tl-deaths">85 killed · 300+ wounded · No convictions 32 years later</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-milestone"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">1997</span>
-              <span class="tl-type tt-milestone">Designation</span>
-              <div class="tl-title">US designates Hezbollah a Foreign Terrorist Organization</div>
-            </div>
-            <div class="tl-body">Clinton administration officially designates Hezbollah under the Antiterrorism and Effective Death Penalty Act of 1996. This makes material support a federal crime. 25 years of US designations will follow — including dozens of individuals, front companies, and financial networks.</div>
-          </div>
-        </div>
-
-        <div class="tl-decade">2000s — Strategic Victories & Global Spread</div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-milestone"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">2000</span>
-              <span class="tl-type tt-milestone">Milestone</span>
-              <div class="tl-title">Israel withdraws from southern Lebanon</div>
-            </div>
-            <div class="tl-body">After 22 years of occupation, Israel withdraws from southern Lebanon. Hezbollah claims this as a victory — the first time an Arab force had defeated Israel through sustained military resistance. This moment becomes foundational to Hezbollah's legitimacy narrative in Lebanon and across the Arab world. Nasrallah's prestige reaches its peak.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-war"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">2006</span>
-              <span class="tl-type tt-war">War</span>
-              <div class="tl-title">34-day war with Israel · Hezbollah claims "divine victory"</div>
-            </div>
-            <div class="tl-body">Hezbollah kidnaps two Israeli soldiers, triggering a 34-day war. Israel bombs Lebanon extensively but fails to destroy Hezbollah. Despite massive destruction, Nasrallah declares "divine victory" — the fact that Hezbollah survived and fired rockets into northern Israel throughout is sufficient for the narrative. UN Resolution 1701 ends the war but Hezbollah returns to southern Lebanon and rearmed faster than expected. The war establishes Hezbollah's deterrence value against Israel.</div>
-            <div class="tl-deaths">~1,200 Lebanese killed · ~165 Israelis killed</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-attack"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">2012</span>
-              <span class="tl-type tt-attack">Attack · Europe</span>
-              <div class="tl-title">Burgas bombing — Bulgaria · 5 Israeli tourists killed</div>
-            </div>
-            <div class="tl-body">Hezbollah bombs a tourist bus at Burgas Airport, killing 5 Israeli tourists and a Bulgarian driver. The bombing triggers the EU to designate Hezbollah's military wing as a terrorist organization — Europe's first significant step, though still only a partial designation. The operation is attributed to Hezbollah's External Security Organization, the same unit responsible for the 1994 AMIA bombing.</div>
-            <div class="tl-deaths">5 Israelis + 1 Bulgarian killed</div>
-          </div>
-        </div>
-
-        <div class="tl-decade">2013–2023 — Syria, Expansion, October 7</div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-war"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">2013</span>
-              <span class="tl-type tt-war">Syrian Civil War</span>
-              <div class="tl-title">Hezbollah deploys fighters to Syria in support of Assad</div>
-            </div>
-            <div class="tl-body">Nasrallah publicly acknowledges Hezbollah is fighting in Syria alongside Assad. Thousands of fighters deploy over subsequent years, gaining significant combat experience in urban warfare. Hezbollah loses an estimated 1,700 fighters in Syria. The Syria deployment transforms the organization's military doctrine and provides battle-hardened commanders. Israeli analysts describe the Syria experience as giving Hezbollah capabilities "that cannot be bought."</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-war"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">2023</span>
-              <span class="tl-type tt-war">War · Northern Front</span>
-              <div class="tl-title">Opens northern front after October 7 Hamas attack</div>
-            </div>
-            <div class="tl-body">The day after Hamas's October 7 attack on Israel, Hezbollah begins firing rockets and drones into northern Israel "in solidarity." This triggers daily cross-border fire that displaces tens of thousands on both sides of the Lebanon-Israel border. Hezbollah escalates throughout 2023–2024, firing an estimated 8,000+ projectiles into northern Israel before the full war begins. Its stated goal: tie down Israeli forces on the northern front while Gaza fights in the south.</div>
-          </div>
-        </div>
-
-        <div class="tl-decade">2024–2026 — Decimation & Rebuilding</div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-attack"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">Sep 2024</span>
-              <span class="tl-type tt-attack">Assassination</span>
-              <div class="tl-title">Israel assassinates Nasrallah, Safieddine, and most of Hezbollah's leadership</div>
-            </div>
-            <div class="tl-body">September 17: Israel detonates pagers used by Hezbollah operatives across Lebanon — thousands wounded, hundreds killed. September 23: Massive Israeli airstrikes across Lebanon. September 27: Nasrallah killed in airstrike on Beirut's southern suburbs after 32 years as leader. October 2024: Hashem Safieddine (presumed successor) also killed. Fuad Shukr, Ibrahim Aqil, Ali Karaki, and most of the first- and second-tier military leadership are eliminated in rapid succession. The connective tissue between Hezbollah and Iran has been severed at the personal level.</div>
-            <div class="tl-deaths">Most of Hezbollah's top leadership eliminated · 32-year leadership era ends</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-degraded"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">Nov 2024</span>
-              <span class="tl-type tt-degraded">Ceasefire</span>
-              <div class="tl-title">US-brokered ceasefire · Hezbollah severely degraded</div>
-            </div>
-            <div class="tl-body">Israel and Hezbollah agree to a ceasefire brokered by the US and France. IDF assessment: ~70% of Hezbollah's weapons arsenal neutralized, ~80% of Radwan Force weapons destroyed, most tunnel network in southern Lebanon destroyed. 90% of Hezbollah infrastructure in south Lebanon dismantled by early 2025. Lebanese Army begins deploying in the south for the first time in decades. Naim Qassem elected Secretary-General on October 29.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-political"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">Aug 2025</span>
-              <span class="tl-type tt-political">Disarmament</span>
-              <div class="tl-title">Lebanese government votes to disarm Hezbollah — Homeland Shield Plan</div>
-            </div>
-            <div class="tl-body">Lebanese government votes to approve Hezbollah disarmament. Lebanese Army presents the Homeland Shield Plan. Hezbollah and Amal ministers walk out in protest. Thousands rally against approval. The plan is based on a US framework. As of March 2026, implementation is slow and contested — the Lebanese Army has entered some former Hezbollah facilities in the south but the organization retains weapons and is actively rebuilding.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot dot-war"></div>
-          <div class="tl-card">
-            <div class="tl-top">
-              <span class="tl-year">Mar 2026</span>
-              <span class="tl-type tt-attack">Current</span>
-              <div class="tl-title">Hezbollah fires missiles at Israel in retaliation for Khamenei killing</div>
-            </div>
-            <div class="tl-body">March 1, 2026: For the first time since the joint US-Israeli strikes on Iran, Hezbollah launches missiles and drones targeting northern and central Israel in retaliation for the killing of Supreme Leader Khamenei. This breaks the ceasefire. Israeli airstrikes follow on southern Beirut, Bekaa Valley, and Tyre. Lebanese PM Nawaf Salam condemns the attacks as "irresponsible acts outside Lebanese state authority." The March 12 Temple Israel attack in Michigan occurs 11 days after these strikes.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ RELATIONSHIPS ══ -->
-  <div id="tab-relationships" style="display:none;">
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Connections</div>
-          <div class="sec-title">Key Relationships</div>
-        </div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);">Strength: confirmed · assessed · alleged</span>
+      <div class="crisis-panel">
+        <span class="cp-icon">🔴</span>
+        <span class="cp-text">The 2024 Israel-Lebanon War (Sept–Nov 2024) resulted in significant damage to Hezbollah's military command, weapons caches, and tunnel infrastructure in southern Lebanon. Post-war reports indicate the organization is reorganizing toward decentralized cell structures. The parallel state social services network sustained less damage than military assets and remains partially operational.</span>
       </div>
 
-      <!-- Iran -->
-      <div class="relationship-card">
-        <div class="rc-header">
-          <div class="rc-flag">🇮🇷</div>
-          <div class="rc-entity">
-            <div class="rc-name">Iran · Islamic Republic</div>
-            <div class="rc-type">Sponsor · Creator · Command authority</div>
-          </div>
-          <span class="rc-strength rc-confirmed">Confirmed</span>
-        </div>
-        <div class="rc-body">
-          <div class="rc-rel-type">sponsored_by · commands · funds · arms</div>
-          <div class="rc-desc">
-            Iran created Hezbollah in 1982. The relationship is not merely financial — it is theological. Under <span class="term" onclick="showDef('velayat')">Velayat-e Faqih</span>, Hezbollah answers to Iran's Supreme Leader as a religious obligation. Iran provides an estimated $700M–$1B annually in pre-2023 funding (significantly reduced after Israeli-US strikes). The IRGC Quds Force is the primary conduit — providing weapons, training, intelligence, and strategic direction. Hezbollah's precision-guided missile program was built with Iranian technical assistance.<br><br>
-            The relationship has been complicated by: the death of Soleimani (2020, who was personally managing Hezbollah's regional operations), the death of Khamenei (2026), and Hezbollah's military degradation. <span class="term" onclick="showDef('qassem')">Naim Qassem</span> is described as being "backed by Iran" in his consolidation effort — Iran is managing the restructuring from Tehran.
-          </div>
-          <div class="rc-facts">
-            <span class="rc-fact">$700M+ annual funding (pre-2023)</span>
-            <span class="rc-fact">IRGC Quds Force primary link</span>
-            <span class="rc-fact">Theological obedience — Velayat-e Faqih</span>
-            <span class="rc-fact">Precision missile program — Iranian built</span>
-            <span class="rc-fact">Funding reduced post-2023 sanctions</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Venezuela -->
-      <div class="relationship-card">
-        <div class="rc-header">
-          <div class="rc-flag">🇻🇪</div>
-          <div class="rc-entity">
-            <div class="rc-name">Venezuela · Maduro regime</div>
-            <div class="rc-type">Safe haven · Financial hub · Narco nexus</div>
-          </div>
-          <span class="rc-strength rc-confirmed">Confirmed (US/Argentine)</span>
-        </div>
-        <div class="rc-body">
-          <div class="rc-rel-type">operates_within · funds_through · safe_haven</div>
-          <div class="rc-desc">
-            Venezuela under Chavez and then Maduro has been Hezbollah's primary Western Hemisphere base since the early 2000s. The relationship is ideological (shared anti-Americanism), financial (narcotrafficking, gold smuggling, money laundering), and operational (training facilities, passport provision, logistical infrastructure).<br><br>
-            Key documented elements: Tareck El Aissami, former Venezuelan VP — indicted by US for narco-terrorism — served as the primary regime-Hezbollah link; <span class="term" onclick="showDef('amia')">Venezuelan passports</span> issued to 10,000+ individuals from Lebanon, Syria, and Iran (2010–2019), many allegedly approved under El Aissami; Hezbollah established a paramilitary training center on Margarita Island (claimed); Iranian gold mining operations in Venezuela's Orinoco Mining Arc provide indirect Hezbollah revenue; <span class="term" onclick="showDef('tba')">Tri-Border Area</span> (Argentina/Brazil/Paraguay) operations use Venezuela as logistics hub.<br><br>
-            <strong style="color:var(--ink);">Current status (2026):</strong> The US operation to arrest Maduro in early 2026 has disrupted Hezbollah's Venezuela operations. Approximately 400 Hezbollah commanders reportedly deployed to Venezuela from early 2025 as the Middle East position weakened. The closure of Venezuela as a financial hub is assessed as a significant additional blow to Hezbollah's already-strained finances.
-          </div>
-          <div class="rc-facts">
-            <span class="rc-fact">Tri-Border Area drug network</span>
-            <span class="rc-fact">Gold smuggling → Iran</span>
-            <span class="rc-fact">USDT/crypto laundering (BCI Technologies)</span>
-            <span class="rc-fact">10K+ passports issued to Hezbollah-linked nationals</span>
-            <span class="rc-fact">~400 commanders deployed to Venezuela early 2025</span>
-            <span class="rc-fact">US Maduro operation disrupts network · Jan 2026</span>
-          </div>
-          <div class="rc-claimed">Strength: confirmed by US DOJ indictments · Argentine intelligence · RAND analysis</div>
-        </div>
-      </div>
-
-      <!-- Hamas -->
-      <div class="relationship-card">
-        <div class="rc-header">
-          <div class="rc-flag">🇵🇸</div>
-          <div class="rc-entity">
-            <div class="rc-name">Hamas · Palestinian militant organization</div>
-            <div class="rc-type">Ally · Coordinated resistance · Axis of Resistance</div>
-          </div>
-          <span class="rc-strength rc-confirmed">Confirmed</span>
-        </div>
-        <div class="rc-body">
-          <div class="rc-rel-type">allied_with · coordinated_with · arms_supplier</div>
-          <div class="rc-desc">
-            Both are members of Iran's "Axis of Resistance." Hezbollah has provided weapons, training, and financing to Hamas. The October 7, 2023 Hamas attack on Israel directly triggered Hezbollah's northern front opening. However, the two organizations have different ideological roots — Hezbollah is Shia, Hamas is Sunni (Muslim Brotherhood tradition) — and their relationship is strategic rather than theological. Hezbollah took significant damage opening a front "in solidarity" with Hamas.
-          </div>
-          <div class="rc-facts">
-            <span class="rc-fact">Both: Iran's Axis of Resistance</span>
-            <span class="rc-fact">Hezbollah trained Hamas operatives</span>
-            <span class="rc-fact">Different ideologies: Shia vs. Sunni</span>
-            <span class="rc-fact">Northern front opened Oct 8, 2023 in solidarity</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Lebanon -->
-      <div class="relationship-card">
-        <div class="rc-header">
-          <div class="rc-flag">🇱🇧</div>
-          <div class="rc-entity">
-            <div class="rc-name">Lebanon · Lebanese state</div>
-            <div class="rc-type">Host state · Political participant · Contested relationship</div>
-          </div>
-          <span class="rc-strength rc-assessed">Complex · Contested</span>
-        </div>
-        <div class="rc-body">
-          <div class="rc-rel-type">operates_within · governs_within · contested_by</div>
-          <div class="rc-desc">
-            Hezbollah is simultaneously inside and outside the Lebanese state. It holds cabinet posts. It participates in parliament. It also maintains a military force that the Lebanese state cannot control — which is the central contradiction. PM Nawaf Salam (Feb 2025 government) is the most openly anti-Hezbollah Lebanese PM in decades. He condemned the March 2026 rocket launches as "outside the authority of the Lebanese state." The Homeland Shield Plan (Sep 2025) is the state's attempt to disarm Hezbollah — with very limited progress so far.
-          </div>
-          <div class="rc-facts">
-            <span class="rc-fact">2 cabinet ministries (2025 government)</span>
-            <span class="rc-fact">12–15 parliamentary seats</span>
-            <span class="rc-fact">Homeland Shield Plan — disarmament pressure</span>
-            <span class="rc-fact">PM Salam condemns March 2026 strikes</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ══ DESIGNATIONS ══ -->
-  <div id="tab-designations" style="display:none;">
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Legal status</div>
-          <div class="sec-title">Terrorist Designations</div>
-        </div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);">27+ countries · varying scope</span>
-      </div>
-
-      <div style="background:var(--blue-vp);border:1px solid var(--blue-pl);border-radius:8px;padding:12px 16px;margin-bottom:16px;">
-        <div style="font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.6;">The distinction between <strong>"full organization"</strong> and <strong>"military wing only"</strong> designations is significant. Hezbollah itself says there is no such distinction — the organization is unified. Many European countries maintained the partial distinction for years to preserve diplomatic contacts with the "political wing." The UK and Germany moved to full designation in 2019 and 2020 respectively. The EU still maintains a partial designation (military wing only) as of 2026.</div>
-      </div>
-
-      <table class="designation-table">
-        <thead class="dt-head">
-          <tr>
-            <th>Country / Body</th>
-            <th>Designation type</th>
-            <th>Scope</th>
-            <th>Since</th>
-          </tr>
-        </thead>
+      <table class="ps-table">
+        <thead><tr>
+          <th>Function</th><th>Status</th><th>Description</th>
+        </tr></thead>
         <tbody>
-          <tr><td class="dd-country">🇺🇸 United States</td><td><span class="dd-type dt-fto">FTO · SDGT</span></td><td class="dd-scope">Full organization</td><td class="dd-year">1997</td></tr>
-          <tr><td class="dd-country">🇨🇦 Canada</td><td><span class="dd-type dt-fto">Terrorist entity</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2002</td></tr>
-          <tr><td class="dd-country">🇮🇱 Israel</td><td><span class="dd-type dt-fto">Terrorist organization</span></td><td class="dd-scope">Full organization</td><td class="dd-year">1997</td></tr>
-          <tr><td class="dd-country">🇬🇧 United Kingdom</td><td><span class="dd-type dt-prosc">Proscribed</span></td><td class="dd-scope">Full organization (military wing only until 2019)</td><td class="dd-year">2008/2019</td></tr>
-          <tr><td class="dd-country">🇩🇪 Germany</td><td><span class="dd-type dt-prosc">Banned</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2020</td></tr>
-          <tr><td class="dd-country">🇯🇵 Japan</td><td><span class="dd-type dt-sanc">Designated</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2013</td></tr>
-          <tr><td class="dd-country">🇳🇱 Netherlands</td><td><span class="dd-type dt-prosc">Proscribed</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2004</td></tr>
-          <tr><td class="dd-country">🇦🇷 Argentina</td><td><span class="dd-type dt-fto">Terrorist</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2019</td></tr>
-          <tr><td class="dd-country">🇪🇺 European Union</td><td><span class="dd-type dt-sanc">Sanctions</span></td><td class="dd-scope">Military wing only ⚠</td><td class="dd-year">2013</td></tr>
-          <tr><td class="dd-country">Arab League</td><td><span class="dd-type dt-fto">Terrorist</span></td><td class="dd-scope">Full organization (excl. Iraq, Lebanon, Algeria, Syria)</td><td class="dd-year">2016</td></tr>
-          <tr><td class="dd-country">Gulf Cooperation Council</td><td><span class="dd-type dt-fto">Terrorist</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2016</td></tr>
-          <tr><td class="dd-country">🇫🇷 France</td><td><span class="dd-type dt-sanc">Al-Manar banned</span></td><td class="dd-scope">Media arm · Not full organization</td><td class="dd-year">2004</td></tr>
-          <tr><td class="dd-country">🇨🇴 Colombia</td><td><span class="dd-type dt-fto">Terrorist</span></td><td class="dd-scope">Full organization</td><td class="dd-year">2020</td></tr>
-          <tr><td class="dd-country">🇧🇷 Brazil</td><td style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-soft);">No designation</td><td class="dd-scope">Not designated — despite Tri-Border Area operations</td><td class="dd-year">—</td></tr>
+          <tr>
+            <td><div class="pt-cat">Military (Jihad Council)</div></td>
+            <td><span class="pt-status st-degrad">Severely Degraded</span></td>
+            <td><div class="pt-desc">Multiple senior commanders killed; tunnels in south Lebanon destroyed; command structure decentralizing. Estimated to have lost significant weapons stockpile in 2024.</div></td>
+          </tr>
+          <tr>
+            <td><div class="pt-cat">Political Bureau</div></td>
+            <td><span class="pt-status st-degrad">Reorganizing</span></td>
+            <td><div class="pt-desc">Shura Council intact. Parliamentary bloc (Loyalty to Resistance) maintains seats in Lebanese parliament. Internal faction struggle between pragmatists and hardliners.</div></td>
+          </tr>
+          <tr>
+            <td><div class="pt-cat">Social Services (Executive Council)</div></td>
+            <td><span class="pt-status st-intact">Partially Operational</span></td>
+            <td><div class="pt-desc">Al-Shahid (martyrs' social foundation), Jihad al-Bina (construction), Imam Khomeini Relief Committee operations continue. Less targeted than military infrastructure.</div></td>
+          </tr>
+          <tr>
+            <td><div class="pt-cat">Intelligence / Coordination</div></td>
+            <td><span class="pt-status st-severed">Leadership Vacated</span></td>
+            <td><div class="pt-desc">Wafiq Safa, head of Coordination and Liaison Unit since 1987, resigned Feb 2026. This unit managed Hezbollah's relationship with Lebanon's state institutions and security forces.</div></td>
+          </tr>
+          <tr>
+            <td><div class="pt-cat">Iran Relationship (IRGC)</div></td>
+            <td><span class="pt-status st-degrad">Degraded</span></td>
+            <td><div class="pt-desc">IRGC Quds Force HQ destroyed in 2026 Iran War. Primary sponsor link remains but operational coordination capacity is reduced from pre-2024 levels.</div></td>
+          </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- ══ DOCUMENTS ══ -->
-  <div id="tab-docs" style="display:none;">
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Primary sources</div>
-          <div class="sec-title">Key Documents</div>
-        </div>
-      </div>
+  </div><!-- /page-main -->
 
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--nge-p);border:1px solid var(--nge-r);">📜</div>
-        <div class="doc-body">
-          <div class="doc-name">Hezbollah Open Letter (1985)</div>
-          <div class="doc-meta">Founding manifesto · First public articulation of ideology · Declares war on Israel, US, and Western imperialism · Calls for Islamic state in Lebanon · FORA: Tier 1 Primary Source</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--nge-p);border:1px solid var(--nge-r);">📜</div>
-        <div class="doc-body">
-          <div class="doc-name">Hezbollah Manifesto (2009)</div>
-          <div class="doc-meta">Updated political platform · Softened tone from 1985 · No longer explicitly calls for Islamic state · Retains Israel destruction goal · Published in Arabic, English, French</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--red-p);border:1px solid var(--red-r);">⚖️</div>
-        <div class="doc-body">
-          <div class="doc-name">US FTO Designation · 1997</div>
-          <div class="doc-meta">Federal Register · 8 U.S.C. § 1189 · Full legal text of designation · Practical effect: material support a federal crime</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--amber-p);border:1px solid var(--amber-r);">🔬</div>
-        <div class="doc-body">
-          <div class="doc-name">RAND: Hezbollah's Networks in Latin America (2025)</div>
-          <div class="doc-meta">RAND Corporation · Most current unclassified analysis of Latin American operations · Venezuela nexus · Crypto laundering · Narco-financing</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--amber-p);border:1px solid var(--amber-r);">🔬</div>
-        <div class="doc-body">
-          <div class="doc-name">ITIC: Hezbollah Military Status Assessment (Feb 2026)</div>
-          <div class="doc-meta">Meir Amit Intelligence and Terrorism Information Center · Current military capabilities · Arsenal estimates · Rebuilding pace</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--blue-vp);border:1px solid var(--blue-pl);">🏛</div>
-        <div class="doc-body">
-          <div class="doc-name">Senate Hearing: "Global Gangsters" — Oct 2025</div>
-          <div class="doc-meta">US Senate International Narcotics Control Caucus · Hezbollah Latin American drug operations · First congressional hearing on topic in a decade · Full transcript</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon" style="background:var(--green-p);border:1px solid var(--green-r);">🇱🇧</div>
-        <div class="doc-body">
-          <div class="doc-name">Lebanon Homeland Shield Plan — Sep 2025</div>
-          <div class="doc-meta">Lebanese Armed Forces · Disarmament roadmap · UN Resolution 1701 implementation · Presented to cabinet Sep 5, 2025</div>
-        </div>
-        <span class="doc-arrow">→</span>
-      </div>
+  <!-- SIDEBAR -->
+  <div class="page-sidebar">
+
+    <div class="sb-block">
+      <div class="sb-ey">Entity Profile</div>
+      <div class="sb-title">Hezbollah at a Glance</div>
+      <div class="data-row"><span class="dr-label">Full Name</span><span class="dr-val">Party of God (Hizb Allah)</span></div>
+      <div class="data-row"><span class="dr-label">Founded</span><span class="dr-val">1982 · South Lebanon</span></div>
+      <div class="data-row"><span class="dr-label">Created By</span><span class="dr-val">IRGC (Iran)</span></div>
+      <div class="data-row"><span class="dr-label">Secretary-General</span><span class="dr-val">Naim Qassem (since Oct 2024)</span></div>
+      <div class="data-row"><span class="dr-label">Ideology</span><span class="dr-val">Shia Islamism · Khomeinism · Anti-Zionism</span></div>
+      <div class="data-row"><span class="dr-label">Headquarters</span><span class="dr-val">Dahieh, Beirut</span></div>
+      <div class="data-row"><span class="dr-label">Parliament Seats</span><span class="dr-val">Loyalty to Resistance bloc</span></div>
+      <div class="data-row"><span class="dr-label">Status</span><span class="dr-val red">Severely Degraded</span></div>
     </div>
-  </div>
 
-  <!-- ══ CURRENT STATUS ══ -->
-  <div id="tab-current" style="display:none;">
-    <div class="sec-block">
-      <div class="sec-head">
-        <div>
-          <div class="sec-ey">Current · March 2026</div>
-          <div class="sec-title">Where Hezbollah Stands Today</div>
-        </div>
+    <div class="sb-block">
+      <div class="sb-ey">FTO Designations</div>
+      <div class="sb-title">International Status</div>
+      <div class="desig-mini">
+        <div class="dm-item"><span class="dm-flag">🇺🇸</span><span class="dm-name">United States</span><span class="dm-note">Full org · 1997</span></div>
+        <div class="dm-item"><span class="dm-flag">🇬🇧</span><span class="dm-name">United Kingdom</span><span class="dm-note">Full org · 2019</span></div>
+        <div class="dm-item"><span class="dm-flag">🇪🇺</span><span class="dm-name">European Union</span><span class="dm-note">Military wing only</span></div>
+        <div class="dm-item"><span class="dm-flag">🇸🇦</span><span class="dm-name">Saudi Arabia</span><span class="dm-note">Full org</span></div>
+        <div class="dm-item"><span class="dm-flag">🇦🇪</span><span class="dm-name">UAE</span><span class="dm-note">Full org</span></div>
+        <div class="dm-item"><span class="dm-flag">🇦🇺</span><span class="dm-name">Australia</span><span class="dm-note">Full org · 2003</span></div>
+        <div class="dm-item"><span class="dm-flag">🇮🇱</span><span class="dm-name">Israel</span><span class="dm-note">Full org</span></div>
+        <div class="dm-item"><span class="dm-flag">🇦🇱</span><span class="dm-name">Arab League</span><span class="dm-note">Designated 2016</span></div>
       </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
-
-        <div style="background:var(--red-p);border:1px solid var(--red-r);border-radius:10px;padding:14px 16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">Losses since Oct 2023</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.7;">
-            — Most of top political and military leadership killed<br>
-            — ~70% of weapons arsenal neutralized<br>
-            — ~80% of Radwan Force weapons destroyed<br>
-            — ~90% of south Lebanon infrastructure dismantled<br>
-            — Nasrallah's 32-year era ended<br>
-            — Venezuela operations disrupted (US/Maduro)<br>
-            — Iran funding reduced post-Khamenei death<br>
-            — Lebanese Army deploying in south for first time
-          </div>
-        </div>
-
-        <div style="background:var(--amber-p);border:1px solid var(--amber-r);border-radius:10px;padding:14px 16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;">Rebuilding capabilities</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);line-height:1.7;">
-            — ~25,000 rockets remaining (Alma Institute, 2026)<br>
-            — ~1,000 suicide UAVs<br>
-            — ~40,000 fighters (pre-war; current depleted unknown)<br>
-            — Domestic weapon manufacturing in Lebanon (Beirut, Bekaa)<br>
-            — Rearming via Beirut seaport and Syrian smuggling routes<br>
-            — Iran actively managing restructuring<br>
-            — Rebuilding pace exceeds IDF thwarting operations (assessed)<br>
-            — Fired missiles March 1, 2026 — broke ceasefire
-          </div>
-        </div>
-
-      </div>
-
-      <div style="background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;">Assessment · Meir Amit ITIC · Feb 2026</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:13.5px;color:var(--ink);line-height:1.75;font-style:italic;">"Hezbollah retains the ability to engage in direct confrontation with Israel. It would only enter such a conflict if the Supreme Leader — or his successor — were to issue such a decision. During the 12-day US-Israel war against Iran in June 2025, despite IRGC and Quds Force desire for Hezbollah to participate, the organization refrained — due to the absence of a Supreme Leader order. Hezbollah's rehabilitation pace currently exceeds IDF thwarting activity."</div>
-      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);line-height:1.5;">Note: EU designates military wing only; political wing not designated. Contested in some EU courts.</div>
     </div>
-  </div>
 
-</div><!-- /main -->
-
-<!-- SIDEBAR -->
-<div class="page-sidebar">
-
-  <!-- Connected civic events -->
-  <div class="sb-block">
-    <div class="sb-ey">Connected events</div>
-    <div class="sb-title">Recent FORA events</div>
-    <div class="event-row">
-      <div class="er-dot" style="background:var(--red);"></div>
-      <div class="er-body">
-        <div class="er-title">Temple Israel Synagogue Attack · Michigan</div>
-        <div class="er-meta">Mar 12, 2026 · Ghazali had Hezbollah contacts · Not a member</div>
-      </div>
+    <div class="sb-block">
+      <div class="sb-ey">Cross-Links</div>
+      <div class="sb-title">Related Pages</div>
+      <div class="quick-link">→ fora.center/iran</div>
+      <div class="quick-link">→ fora.center/lebanon</div>
+      <div class="quick-link">→ fora.center/org/hamas</div>
+      <div class="quick-link">→ fora.center/org/houthis</div>
+      <div class="quick-link">→ fora.center/org/quds-force</div>
+      <div class="quick-link">→ fora.center/gaza</div>
     </div>
-    <div class="event-row">
-      <div class="er-dot" style="background:var(--red);"></div>
-      <div class="er-body">
-        <div class="er-title">Hezbollah missile/drone strikes on Israel</div>
-        <div class="er-meta">Mar 1, 2026 · Retaliation for Khamenei killing · Broke ceasefire</div>
-      </div>
-    </div>
-    <div class="event-row">
-      <div class="er-dot" style="background:var(--amber);"></div>
-      <div class="er-body">
-        <div class="er-title">US operation — Maduro arrest attempt</div>
-        <div class="er-meta">Jan 2026 · Disrupts Venezuela Hezbollah network</div>
-      </div>
-    </div>
-    <div class="event-row">
-      <div class="er-dot" style="background:var(--amber);"></div>
-      <div class="er-body">
-        <div class="er-title">Wafiq Safa resignation · Hezbollah restructuring</div>
-        <div class="er-meta">Feb 2026 · Leadership consolidation under Qassem</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Connected issues -->
-  <div class="sb-block">
-    <div class="sb-ey">Civic Issues</div>
-    <div class="sb-title">What this connects to</div>
-    <div class="issue-pill"><div class="ip-dot" style="background:var(--gilt);"></div><div class="ip-text">Iran proxy networks — US domestic threat</div></div>
-    <div class="issue-pill"><div class="ip-dot" style="background:var(--gilt);"></div><div class="ip-text">Antisemitism in the United States</div></div>
-    <div class="issue-pill"><div class="ip-dot" style="background:var(--gilt);"></div><div class="ip-text">Hezbollah in Latin America</div></div>
-    <div class="issue-pill"><div class="ip-dot" style="background:var(--gilt);"></div><div class="ip-text">Lebanon sovereignty and disarmament</div></div>
-    <div class="issue-pill"><div class="ip-dot" style="background:var(--gilt);"></div><div class="ip-text">The Iran-Israel conflict</div></div>
-    <div class="issue-pill"><div class="ip-dot" style="background:var(--gilt);"></div><div class="ip-text">Congressional AUMF authority</div></div>
-  </div>
-
-  <!-- Key terms -->
-  <div class="sb-block">
-    <div class="sb-ey">Learn as you read</div>
-    <div class="sb-title">Tap any underlined term</div>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <div style="background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:9px 11px;cursor:pointer;transition:all 0.12s;" onclick="showDef('velayat')">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:2px;">Tap to define</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--blue);">What is Velayat-e Faqih?</div>
-      </div>
-      <div style="background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:9px 11px;cursor:pointer;transition:all 0.12s;" onclick="showDef('irgc')">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:2px;">Tap to define</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--blue);">What is the IRGC?</div>
-      </div>
-      <div style="background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:9px 11px;cursor:pointer;transition:all 0.12s;" onclick="showDef('tba')">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:2px;">Tap to define</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;color:var(--blue);">What is the Tri-Border Area?</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Data quality notice -->
-  <div class="sb-block">
-    <div class="sb-ey">Data quality</div>
-    <div class="sb-title">What is confirmed vs. assessed</div>
-    <div class="sb-note">Much of what is known about Hezbollah's internal structure, finances, and operations comes from: US government indictments and intelligence assessments, Israeli military/intelligence analysis, independent think tanks (RAND, ITIC, INSS), and investigative journalism. Some claims — particularly about Venezuela — are confirmed by court documents. Others are assessed by intelligence agencies. FORA labels each claim accordingly. Citizens can flag assessments they believe are overstated or underclaimed.</div>
-  </div>
-
-</div><!-- /sidebar -->
-</div><!-- /body -->
-
-<!-- DEFINITION MODAL -->
-<div class="def-modal" id="def-modal" onclick="closeDef(event)">
-  <div class="def-panel" style="position:relative;">
-    <span class="def-close" onclick="closeDef()">✕</span>
-    <div class="def-ey" id="def-ey">Definition</div>
-    <div class="def-title" id="def-title">—</div>
-    <div class="def-body" id="def-body">—</div>
-    <div class="def-ex">
-      <div class="def-ex-label">Context</div>
-      <div class="def-ex-text" id="def-ex">—</div>
-    </div>
   </div>
 </div>
 
-<script>
-const defs = {
-  shia:{ey:'Religion · Islam',title:'Shia Islam',body:'One of the two major branches of Islam, comprising approximately 10–15% of the world\'s 1.8 billion Muslims. Shia Islam emerged from a dispute after the Prophet Muhammad\'s death in 632 CE over who should lead the Muslim community. Shia Muslims believe leadership should have remained with the Prophet\'s family — his cousin and son-in-law Ali and his descendants.',ex:'Hezbollah is a Shia organization. Its primary sponsor Iran is approximately 90–95% Shia. Lebanon\'s Shia community (approximately 30–40% of Lebanon\'s population) is Hezbollah\'s primary constituency. Hamas, by contrast, is Sunni — a different Islamic tradition. Their alliance is strategic, not theological.'},
-  iran:{ey:'Jurisdiction · State',title:'Iran · Islamic Republic',body:'A theocratic republic in the Middle East, established after the 1979 Islamic Revolution. Iran is governed by a dual structure: an elected president and parliament, and a Supreme Leader (currently being determined after Khamenei\'s death) who holds ultimate authority over all state institutions, including the military, judiciary, and foreign policy.',ex:'Iran created Hezbollah in 1982, funds it, arms it, and commands it through the IRGC Quds Force. The relationship is theological (Hezbollah\'s Velayat-e Faqih doctrine means it answers to Iran\'s Supreme Leader as a religious obligation) as well as strategic.'},
-  irgc:{ey:'Organization · Military',title:'IRGC — Islamic Revolutionary Guard Corps',body:'The primary military force of the Islamic Republic of Iran, distinct from the regular Iranian Army. Created after the 1979 revolution to protect the Islamic system. The IRGC Quds Force is its external operations branch — responsible for supporting, arming, and training proxy forces including Hezbollah, Hamas, Houthis, and Iraqi Shia militias. Designated a Foreign Terrorist Organization by the US in 2019.',ex:'The IRGC Quds Force is the direct link between Iran\'s Supreme Leader and Hezbollah. Quds Force Commander Qasem Soleimani personally managed Hezbollah\'s regional strategy until his assassination by the US in January 2020. His death severed important personal connective tissue between Tehran and Beirut.'},
-  fto:{ey:'Legal term · US Federal',title:'Foreign Terrorist Organization (FTO)',body:'A designation made by the US Secretary of State under 8 U.S.C. § 1189. An FTO designation makes it a federal crime for US citizens or organizations to knowingly provide "material support or resources" to the group — including money, property, services, personnel, transportation, or training. It also enables deportation of aliens who are members.',ex:'Hezbollah has been an FTO since 1997. The Ghazali investigation centers on whether his contacts with suspected Hezbollah members constituted "material support." Simply knowing Hezbollah members is not sufficient — the prosecution must prove knowing, active support.'},
-  nasrallah:{ey:'Person · Deceased',title:'Hassan Nasrallah',body:'Secretary-General of Hezbollah from 1992 until his assassination on September 27, 2024. Served for 32 years. Widely described as the most powerful non-state actor in the Middle East for much of his tenure. Led Hezbollah through: the 2000 Israeli withdrawal from Lebanon, the 2006 war, the Syria intervention, and the post-October 7 northern front. His death is assessed as the most significant single blow to Hezbollah\'s capabilities since its founding.',ex:'Nasrallah was killed in an Israeli airstrike on Hezbollah\'s headquarters in Beirut\'s southern suburbs. He reportedly died from toxic fumes rather than direct blast injuries. His funeral in February 2025 drew an estimated 450,000–1,400,000 attendees — demonstrating continued popular support despite the organization\'s military defeat.'},
-  qassem:{ey:'Person · Current leader',title:'Naim Qassem',body:'Current Secretary-General of Hezbollah, elected October 29, 2024 following Nasrallah\'s assassination. Had served as deputy secretary-general for over 30 years under Nasrallah. Described by analysts as "a default choice," "weak," and "lacking charisma." Currently working to centralize control of the organization and stabilize after the leadership crisis, with active backing from Iran.',ex:'"There are no longer figures within Hezbollah that could be compared with Nasrallah, or even with Safieddine. Therefore, appointing a new secretary general for Hezbollah would take a while." — Lebanese analyst al-Amin, October 2024. Qassem was ultimately the appointment — confirming the assessment that it would be a default rather than a charismatic successor.'},
-  velayat:{ey:'Theology · Political theory · Iran',title:'Velayat-e Faqih',body:'Literally "Guardianship of the Islamic Jurist." A political-theological doctrine developed by Ayatollah Khomeini that holds that in the absence of the Hidden Imam, a qualified Islamic jurist should govern society. In Iran, this means the Supreme Leader holds ultimate authority above the elected government. For Hezbollah, it means the organization answers to Iran\'s Supreme Leader as a religious obligation — not merely a political or strategic relationship.',ex:'Velayat-e Faqih is what makes the Iran-Hezbollah relationship different from most state-proxy relationships. Most proxy forces follow their sponsor for strategic reasons. Hezbollah follows Iran\'s Supreme Leader because it believes this is religiously required. This means the relationship survives changes in Iranian government — it is tied to the institution of the Supreme Leader, not to any individual.'},
-  amia:{ey:'Event · Terrorism · 1994',title:'AMIA Bombing · Buenos Aires',body:'The bombing of the AMIA (Asociación Mutual Israelita Argentina) Jewish community center in Buenos Aires on July 18, 1994. 85 killed, more than 300 wounded. The deadliest terrorist attack in Argentine history. The first major Hezbollah operation outside Lebanon and the Middle East. Attributed to Hezbollah with Iranian government involvement. As of 2026 — 32 years later — no one has been convicted.',ex:'The AMIA bombing established Hezbollah\'s Latin American presence and its capability to conduct operations globally. Argentine courts have indicted Iranian officials including former President Rafsanjani (deceased) and former Foreign Minister Velayati. The case remains open. Argentina\'s Milei government has vowed to renew the investigation.'},
-  tba:{ey:'Geographic · Security',title:'Tri-Border Area (TBA)',body:'The area where Argentina, Brazil, and Paraguay meet — centered on the cities of Puerto Iguazú (Argentina), Foz do Iguaçu (Brazil), and Ciudad del Este (Paraguay). Home to a large Lebanese diaspora community and historically a hub for informal economic activity, smuggling, counterfeiting, and terrorist financing.',ex:'Hezbollah has maintained financial and logistical networks in the TBA since the 1980s. US Senate testimony estimates the area generates tens of millions in annual revenue for Hezbollah through counterfeiting, narcotics, and trade-based money laundering. Brazil\'s 2024 Operation Trapiche targeted Hezbollah recruitment and financing networks there. Argentinian security minister Bullrich confirmed Hezbollah activity in Chile, Bolivia, and the TBA in June 2025.'}
-};
-
-function showDef(key){
-  const d=defs[key]; if(!d) return;
-  document.getElementById('def-ey').textContent=d.ey;
-  document.getElementById('def-title').textContent=d.title;
-  document.getElementById('def-body').textContent=d.body;
-  document.getElementById('def-ex').textContent=d.ex;
-  document.getElementById('def-modal').classList.add('open');
-}
-function closeDef(e){
-  if(!e||e.target===document.getElementById('def-modal')) document.getElementById('def-modal').classList.remove('open');
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape') document.getElementById('def-modal').classList.remove('open');});
-
-function switchTab(tab,el){
-  const tabs=['overview','structure','timeline','relationships','designations','docs','current'];
-  tabs.forEach(t=>{
-    const el2=document.getElementById('tab-'+t);
-    if(el2) el2.style.display=t===tab?'block':'none';
-  });
-  document.querySelectorAll('.etab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-}
-</script>
 </body>
 </html>
