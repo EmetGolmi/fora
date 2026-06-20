@@ -9,6 +9,18 @@ Rails.application.routes.draw do
   # ── Root redirect — civic MVP lives at /mvp ───────────────────────────────
   root to: redirect("/mvp/dashboard")
 
+  # ── Legacy redirects — preserve previously-shared civic URLs ──────────────
+  # Pure 301s at root level; no controllers touched.
+  # Wildcard globs keep param-carrying URLs (e.g. /bills/123) working.
+  # None of these prefixes conflict with RCOs (/usa/…), market (/market/…),
+  # world (/iran, /cuba, /org/…), or IJDB (/usa/ijdb, /usa/:city/ijdb).
+  get "/dashboard",        to: redirect("/mvp/dashboard"),              as: nil
+  get "/votemay19",        to: redirect("/mvp/votemay19"),              as: nil
+  get "/bills/:id",        to: redirect("/mvp/bills/%{id}"),            as: nil
+  get "/eo/:id",           to: redirect("/mvp/eo/%{id}"),               as: nil
+  get "/officials/*path",  to: redirect("/mvp/officials/%{path}"),      as: nil
+  get "/candidates/*path", to: redirect("/mvp/candidates/%{path}"),     as: nil
+
   # ── Civic MVP ─────────────────────────────────────────────────────────────
   # All civic features live under /mvp so the namespace stays clean when
   # commerce (/market) and world (/iran, /cuba, etc.) scale alongside them.
