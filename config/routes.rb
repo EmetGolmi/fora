@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # ── Sessions (sign in / sign out) ─────────────────────────────────────────
+  get    "/session/new", to: "sessions#new",     as: :new_session
+  post   "/session",     to: "sessions#create",  as: :session
+  delete "/session",     to: "sessions#destroy", as: :destroy_session
+
   # ── Onboarding / sign-up ──────────────────────────────────────────────────
   get   "/join",          to: "onboarding#show",           as: :join
   post  "/join/account",  to: "onboarding#account"         # Step 1: create User+Profile, fire ResolveAddressJob
