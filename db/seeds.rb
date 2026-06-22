@@ -1079,3 +1079,4 @@ puts "OnThisDayEntry: #{created} created, #{updated} updated"
 
 load Rails.root.join("db/seeds/ijdb_philadelphia.rb")
 load Rails.root.join("db/seeds/ijdb_national.rb")
+load Rails.root.join("db/seeds/formation_pa_home_inspector.rb")

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA — A digital twin of society</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#edf1fb;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f0f3f8;--white:#fff;--rule:rgba(27,58,107,.1);
+  --green:#155c2d;--green-lt:#1f7a3e;--green-pl:#e5f0e8;
+  --temple:#b8860b;--govt:#1b3a6b;--market:#155c2d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:100;background:rgba(27,58,107,.97);backdrop-filter:blur(8px);border-bottom:2px solid var(--gilt);display:flex;align-items:center;padding:13px 26px;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:21px;font-weight:700;color:#fff;letter-spacing:.12em;text-decoration:none;}
+.nav-logo span{color:var(--gilt-lt);}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-left:14px;padding-left:14px;border-left:1px solid rgba(255,255,255,.2);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer;text-decoration:none;}
+.nav-link:hover{color:#fff;}
+.btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:9px 18px;border-radius:100px;cursor:pointer;border:1px solid transparent;text-decoration:none;display:inline-block;}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.3);color:#fff;}
+.btn-gilt{background:var(--gilt);color:#fff;}
+.btn-gilt:hover{background:var(--gilt-lt);}
+@media(max-width:680px){.nav-tag,.nav-link{display:none;}}
+
+/* hero */
+.hero{background:linear-gradient(170deg,var(--blue) 0%,#142c52 100%);color:#fff;padding:64px 26px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero-glyphs{position:absolute;inset:0;opacity:.05;font-size:120px;display:flex;align-items:center;justify-content:space-around;pointer-events:none;}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gilt-lt);margin-bottom:20px;}
+.hero-h1{font-family:'Libre Baskerville',serif;font-size:46px;font-weight:700;line-height:1.1;max-width:760px;margin:0 auto;}
+.hero-h1 em{color:var(--gilt-lt);font-style:normal;}
+.hero-sub{font-size:18px;color:rgba(255,255,255,.8);max-width:580px;margin:22px auto 0;line-height:1.55;}
+.hero-cta{margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-lg{padding:14px 28px;font-size:10px;}
+.hero-note{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-top:20px;text-transform:uppercase;}
+@media(max-width:680px){.hero-h1{font-size:32px;}.hero-sub{font-size:16px;}}
+
+/* two doors */
+.doors{max-width:1000px;margin:-34px auto 0;padding:0 26px;position:relative;z-index:10;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:760px){.doors{grid-template-columns:1fr;}}
+.door{background:#fff;border:1px solid var(--rule);border-radius:16px;padding:28px 26px;box-shadow:0 18px 44px rgba(20,44,82,.12);}
+.door-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.door.citizen .door-tag{color:var(--govt);}
+.door.pro .door-tag{color:var(--market);}
+.door-h{font-family:'Libre Baskerville',serif;font-size:23px;font-weight:700;line-height:1.2;margin-bottom:10px;}
+.door-d{font-size:14.5px;color:var(--ink-soft);margin-bottom:18px;}
+.door-list{list-style:none;margin-bottom:22px;}
+.door-list li{font-size:13.5px;color:var(--ink);padding:7px 0 7px 26px;position:relative;}
+.door-list li::before{position:absolute;left:0;top:7px;font-size:13px;}
+.door.citizen .door-list li::before{content:'△';color:var(--govt);}
+.door.pro .door-list li::before{content:'▢';color:var(--market);}
+.door-btn{width:100%;text-align:center;padding:13px;font-size:10px;}
+.door.citizen .door-btn{background:var(--govt);color:#fff;}
+.door.pro .door-btn{background:var(--market);color:#fff;}
+
+/* meet-in-middle band */
+.middle{max-width:780px;margin:50px auto;padding:0 26px;text-align:center;}
+.middle-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:14px;}
+.middle-h{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;line-height:1.25;margin-bottom:16px;}
+.middle-p{font-size:16px;color:var(--ink-soft);line-height:1.6;}
+.middle-p b{color:var(--ink);}
+
+/* three pillars */
+.pillars-sec{background:#fff;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:54px 26px;}
+.pillars-inner{max-width:1000px;margin:0 auto;}
+.pillars-head{text-align:center;margin-bottom:38px;}
+.pillars-head .eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:12px;}
+.pillars-head h2{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;}
+.pillars-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+@media(max-width:760px){.pillars-grid{grid-template-columns:1fr;}}
+.pillar{border:1px solid var(--rule);border-radius:14px;overflow:hidden;}
+.pillar-top{padding:22px;color:#fff;}
+.pillar.t .pillar-top{background:var(--temple);}.pillar.f .pillar-top{background:var(--govt);}.pillar.m .pillar-top{background:var(--market);}
+.pillar-glyph{font-size:30px;margin-bottom:10px;}
+.pillar-name{font-family:'Libre Baskerville',serif;font-size:21px;font-weight:700;}
+.pillar-domain{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:5px;}
+.pillar-body{padding:18px 20px;font-size:13.5px;color:var(--ink-soft);}
+
+/* differentiator strip */
+.diff{max-width:900px;margin:54px auto;padding:0 26px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;text-align:center;}
+@media(max-width:680px){.diff{grid-template-columns:1fr;gap:30px;}}
+.diff-item .n{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;color:var(--gilt);}
+.diff-item .t{font-size:13.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5;}
+.diff-item .t b{color:var(--ink);display:block;font-size:15px;margin-bottom:3px;}
+
+/* mission */
+.mission{background:linear-gradient(170deg,#142c52,var(--blue));color:#fff;padding:56px 26px;text-align:center;}
+.mission-inner{max-width:680px;margin:0 auto;}
+.mission-h{font-family:'Libre Baskerville',serif;font-style:italic;font-size:25px;line-height:1.45;}
+.mission-h em{color:var(--gilt-lt);font-style:normal;}
+.mission-sub{font-size:14px;color:rgba(255,255,255,.7);margin-top:20px;line-height:1.6;}
+.mission-pledge{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px;}
+.pledge{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:100px;padding:7px 14px;color:rgba(255,255,255,.85);}
+
+/* final cta */
+.final{text-align:center;padding:56px 26px;}
+.final h2{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;margin-bottom:10px;}
+.final p{font-size:15px;color:var(--ink-soft);margin-bottom:26px;}
+
+/* footer */
+.footer{background:#0e1a2e;color:rgba(255,255,255,.55);padding:30px 26px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;line-height:2;}
+.footer b{color:rgba(255,255,255,.85);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="<%= root_path %>" class="nav-logo">F<span>O</span>RA</a>
+  <span class="nav-tag">fora.center</span>
+  <div class="nav-right">
+    <a href="#pillars" class="nav-link">How it works</a>
+    <a href="<%= join_path %>#professional" class="nav-link">For professionals</a>
+    <a href="/session/new" class="btn btn-ghost">Sign in</a>
+    <a href="<%= join_path %>" class="btn btn-gilt">Join FORA</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glyphs"><span>◯</span><span>△</span><span>▢</span></div>
+  <div class="hero-eyebrow">A digital twin of society</div>
+  <h1 class="hero-h1">The place where a community and its <em>government</em> finally share a table.</h1>
+  <p class="hero-sub">Your officials, your bills, your neighborhood, and the professionals who keep it running — in one place built for a functioning civic life, not for outrage.</p>
+  <div class="hero-cta">
+    <a href="<%= join_path %>" class="btn btn-gilt btn-lg">Join FORA — it's free</a>
+    <a href="#pillars" class="btn btn-ghost btn-lg">See how it works</a>
+  </div>
+  <div class="hero-note">Governance is free for every citizen — forever.</div>
+</section>
+
+<!-- TWO DOORS -->
+<section class="doors">
+  <div class="door citizen">
+    <div class="door-tag">△ For neighbors</div>
+    <div class="door-h">Know your government. Use your voice.</div>
+    <div class="door-d">Everyone who governs you, everything they're deciding, and a real way to be heard — verified as the resident you are.</div>
+    <ul class="door-list">
+      <li>Every official, from City Council to the Senate</li>
+      <li>The bills they're moving, tracked and explained</li>
+      <li>Concur on neighborhood issues — your verified seat at the table</li>
+      <li>Discuss legislation where ideas come before faces</li>
+    </ul>
+    <a href="<%= join_path %>" class="btn door-btn">Explore your civic life →</a>
+  </div>
+  <div class="door pro" id="professional">
+    <div class="door-tag">▢ For professionals</div>
+    <div class="door-h">Run your trade. Keep your clients.</div>
+    <div class="door-d">The tools that used to cost you a stack of subscriptions — and the customers are already here, living their civic lives.</div>
+    <ul class="door-list">
+      <li>Your engagements, contracts, tasks, and files in one workspace</li>
+      <li>Set your own prices; FORA only suggests</li>
+      <li>A new-client page and QR for your card — clients come to you</li>
+      <li>Reputation built from your record, not paid reviews</li>
+    </ul>
+    <a href="<%= join_path %>" class="btn door-btn">Set up your practice →</a>
+  </div>
+</section>
+
+<!-- MEET IN MIDDLE -->
+<section class="middle">
+  <div class="middle-eyebrow">Why both doors lead to the same room</div>
+  <div class="middle-h">Most platforms make you choose. FORA is where the two of you meet.</div>
+  <div class="middle-p">The citizen comes for their government. The professional comes for their tools. They arrive through different doors — and find each other inside, in a place where a verified neighbor and a trusted tradesman are <b>the same circle, in the same town</b>. That's the room nobody else has built.</div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars-sec" id="pillars">
+  <div class="pillars-inner">
+    <div class="pillars-head">
+      <div class="eyebrow">Three domains of a life</div>
+      <h2>Temple · Forum · Market</h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar t">
+        <div class="pillar-top"><div class="pillar-glyph">◯</div><div class="pillar-name">Temple</div><div class="pillar-domain">Identity · Knowledge · Faith</div></div>
+        <div class="pillar-body">Your guide, your reflections, and the experienced among us — elders, clergy, professionals — sharing what they know with those still learning.</div>
+      </div>
+      <div class="pillar f">
+        <div class="pillar-top"><div class="pillar-glyph">△</div><div class="pillar-name">Forum</div><div class="pillar-domain">Government</div></div>
+        <div class="pillar-body">Officials, legislation, votes, and neighborhood issues — with a constituency meter that shows who actually lives in the district.</div>
+      </div>
+      <div class="pillar m">
+        <div class="pillar-top"><div class="pillar-glyph">▢</div><div class="pillar-name">Market</div><div class="pillar-domain">Commerce</div></div>
+        <div class="pillar-body">Where professionals run their practice and neighbors find people they can trust — Procore for civic services, not a lead-gen mill.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATORS -->
+<section class="diff">
+  <div class="diff-item"><div class="n">◯</div><div class="t"><b>No faces first</b>You meet ideas before appearances. No celebrity tiers, no pay-to-rank.</div></div>
+  <div class="diff-item"><div class="n">✓</div><div class="t"><b>Verified, not viral</b>Your voice counts because you're a real resident — not because you're loud.</div></div>
+  <div class="diff-item"><div class="n">△</div><div class="t"><b>The constituency meter</b>An official can finally see what share of the noise is their actual neighbors.</div></div>
+</section>
+
+<!-- MISSION -->
+<section class="mission">
+  <div class="mission-inner">
+    <div class="mission-h">"The governed and the government reach for the same tools — and have no functional relationship. <em>FORA is the infrastructure to fix that.</em>"</div>
+    <div class="mission-sub">Governance is, and always will be, free for every citizen, government, and civic organization. The commerce that funds it never touches the reputation that holds it together.</div>
+    <div class="mission-pledge">
+      <span class="pledge">Governance free forever</span>
+      <span class="pledge">Equal access · no tiers</span>
+      <span class="pledge">No ads on reputation</span>
+      <span class="pledge">All thresholds public</span>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <h2>Find your place in it.</h2>
+  <p>Start with your address. We'll show you the town you already live in.</p>
+  <a href="<%= join_path %>" class="btn btn-gilt btn-lg">Join FORA — free</a>
+</section>
+
+<footer class="footer">
+  <div><b>FORA</b> · fora.center · A digital twin of society</div>
+  <div>Temple ◯ · Forum △ · Market ▢ · Philadelphia &amp; beyond</div>
+  <div style="margin-top:8px;color:rgba(255,255,255,.35)">With the blessing of the Almighty.</div>
+</footer>
+
+</body>
+</html>

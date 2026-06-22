@@ -1,4 +1,10 @@
 class PagesController < ApplicationController
+  # GET / — logged-in users bounce to dashboard; everyone else sees the landing page.
+  def landing
+    return redirect_to dashboard_path if current_user
+    render layout: false
+  end
+
   def about
   end
 

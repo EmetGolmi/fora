@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_19_194307) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -57,6 +57,42 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_194307) do
     t.index ["status_date"], name: "index_civic_bills_on_status_date"
   end
 
+  create_table "civic_profiles", force: :cascade do |t|
+    t.boolean "accepting_clients", default: false, null: false
+    t.string "address_city"
+    t.string "address_line1"
+    t.string "address_state"
+    t.text "bio"
+    t.text "care_tags", default: [], array: true
+    t.datetime "created_at", null: false
+    t.string "display_name"
+    t.string "faith_branch"
+    t.string "faith_tradition"
+    t.text "grow_chips", default: [], array: true
+    t.boolean "has_entity"
+    t.string "naics_code"
+    t.boolean "onboarding_complete", default: false, null: false
+    t.integer "onboarding_step", default: 0, null: false
+    t.string "place_label"
+    t.string "provider_headline"
+    t.boolean "provider_mode", default: false, null: false
+    t.boolean "residency_verified", default: false, null: false
+    t.string "residency_verify_method"
+    t.string "resolve_job_id"
+    t.boolean "service_active", default: false, null: false
+    t.jsonb "service_area"
+    t.text "service_summary"
+    t.boolean "service_veteran", default: false, null: false
+    t.boolean "show_photo", default: false, null: false
+    t.integer "temple_scale_balance"
+    t.integer "temple_scale_purpose"
+    t.integer "temple_scale_reason"
+    t.integer "temple_scale_tradition"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_civic_profiles_on_user_id"
+  end
+
   create_table "civic_representatives", force: :cascade do |t|
     t.jsonb "contact", default: {}
     t.datetime "created_at", null: false
@@ -71,6 +107,105 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_194307) do
     t.datetime "updated_at", null: false
     t.index ["external_ids"], name: "index_civic_representatives_on_external_ids", using: :gin
     t.index ["ocd_division_id"], name: "index_civic_representatives_on_ocd_division_id"
+  end
+
+  create_table "compliance_obligations", force: :cascade do |t|
+    t.integer "cadence", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.bigint "credential_id"
+    t.string "label", null: false
+    t.date "next_due_at", null: false
+    t.integer "obligation_type", default: 0, null: false
+    t.bigint "profile_id", null: false
+    t.integer "reminder_lead_days", default: 30, null: false
+    t.bigint "source_step_id"
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["credential_id"], name: "index_compliance_obligations_on_credential_id"
+    t.index ["profile_id"], name: "index_compliance_obligations_on_profile_id"
+    t.index ["source_step_id"], name: "index_compliance_obligations_on_source_step_id"
+  end
+
+  create_table "definitions", force: :cascade do |t|
+    t.integer "context", null: false
+    t.datetime "created_at", null: false
+    t.text "plain_meaning", null: false
+    t.string "source_url"
+    t.string "term", null: false
+    t.datetime "updated_at", null: false
+    t.index ["term", "context"], name: "index_definitions_on_term_and_context", unique: true
+  end
+
+  create_table "document_templates", force: :cascade do |t|
+    t.integer "authored_by", default: 0, null: false
+    t.text "body_template", null: false
+    t.datetime "created_at", null: false
+    t.integer "doc_kind", null: false
+    t.bigint "jurisdiction_id"
+    t.text "legal_disclaimer", null: false
+    t.string "name", null: false
+    t.jsonb "placeholders", default: [], null: false
+    t.datetime "updated_at", null: false
+    t.integer "version", default: 1, null: false
+    t.index ["jurisdiction_id"], name: "index_document_templates_on_jurisdiction_id"
+  end
+
+  create_table "engagement_participants", force: :cascade do |t|
+    t.bigint "civic_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "engagement_id", null: false
+    t.string "role", null: false
+    t.datetime "updated_at", null: false
+    t.index ["civic_profile_id"], name: "index_engagement_participants_on_civic_profile_id"
+    t.index ["engagement_id", "civic_profile_id", "role"], name: "idx_eng_participants_unique", unique: true
+    t.index ["engagement_id"], name: "index_engagement_participants_on_engagement_id"
+  end
+
+  create_table "engagements", force: :cascade do |t|
+    t.string "case_number"
+    t.datetime "created_at", null: false
+    t.text "notes"
+    t.string "profession"
+    t.integer "status", default: 0, null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["case_number"], name: "index_engagements_on_case_number", unique: true, where: "(case_number IS NOT NULL)"
+    t.index ["status"], name: "index_engagements_on_status"
+  end
+
+  create_table "formation_steps", force: :cascade do |t|
+    t.jsonb "action_links", default: [], null: false
+    t.text "body", null: false
+    t.boolean "community_refined", default: false, null: false
+    t.string "cost_range"
+    t.datetime "created_at", null: false
+    t.integer "display_order", default: 0, null: false
+    t.string "naics_code"
+    t.string "phase", null: false
+    t.integer "requirement", default: 0, null: false
+    t.string "save_as"
+    t.bigint "supersedes_id"
+    t.string "title", null: false
+    t.bigint "track_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["supersedes_id"], name: "index_formation_steps_on_supersedes_id"
+    t.index ["track_id"], name: "index_formation_steps_on_track_id"
+  end
+
+  create_table "formation_tracks", force: :cascade do |t|
+    t.integer "authored_by", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.integer "entity_type", default: 1, null: false
+    t.boolean "is_published", default: false, null: false
+    t.bigint "jurisdiction_id"
+    t.integer "max_cost_cents"
+    t.integer "min_cost_cents"
+    t.string "name", null: false
+    t.string "profession"
+    t.text "summary"
+    t.datetime "updated_at", null: false
+    t.integer "version", default: 1, null: false
+    t.index ["jurisdiction_id"], name: "index_formation_tracks_on_jurisdiction_id"
   end
 
   create_table "ijdb_comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -160,6 +295,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_194307) do
     t.string "photo_url"
     t.datetime "updated_at", null: false
     t.index ["neighborhood_issue_id"], name: "index_issue_responses_on_neighborhood_issue_id"
+  end
+
+  create_table "library_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.bigint "engagement_id"
+    t.string "file_url"
+    t.integer "item_type", null: false
+    t.bigint "owner_profile_id", null: false
+    t.integer "source", null: false
+    t.string "source_url"
+    t.string "tags", default: [], array: true
+    t.string "thumbnail_url"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.integer "visibility", null: false
+    t.index ["engagement_id"], name: "index_library_items_on_engagement_id"
+    t.index ["owner_profile_id"], name: "index_library_items_on_owner_profile_id"
+    t.index ["tags"], name: "index_library_items_on_tags", using: :gin
   end
 
   create_table "neighborhood_issues", force: :cascade do |t|
@@ -298,6 +452,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_194307) do
     t.index ["ward", "division", "election_slug"], name: "idx_preballot_geography"
   end
 
+  create_table "provider_capabilities", force: :cascade do |t|
+    t.bigint "civic_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.string "naics_code"
+    t.string "profession", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["civic_profile_id", "profession"], name: "index_provider_capabilities_on_civic_profile_id_and_profession", unique: true
+    t.index ["civic_profile_id"], name: "index_provider_capabilities_on_civic_profile_id"
+  end
+
   create_table "resolved_addresses", force: :cascade do |t|
     t.string "address", null: false
     t.datetime "created_at", null: false
@@ -317,10 +482,51 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_194307) do
     t.index ["address_key"], name: "index_resolved_rcos_on_address_key", unique: true
   end
 
+  create_table "user_formation_progress", force: :cascade do |t|
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.bigint "document_id"
+    t.text "notes"
+    t.integer "status", default: 0, null: false
+    t.bigint "step_id", null: false
+    t.bigint "track_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["document_id"], name: "index_user_formation_progress_on_document_id"
+    t.index ["step_id"], name: "index_user_formation_progress_on_step_id"
+    t.index ["track_id"], name: "index_user_formation_progress_on_track_id"
+    t.index ["user_id", "step_id"], name: "index_user_formation_progress_on_user_id_and_step_id", unique: true
+    t.index ["user_id"], name: "index_user_formation_progress_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "handle", null: false
+    t.string "password_digest", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "verified", default: false, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["handle"], name: "index_users_on_handle", unique: true
+  end
+
   add_foreign_key "bill_comments", "civic_bills"
+  add_foreign_key "civic_profiles", "users"
+  add_foreign_key "compliance_obligations", "civic_profiles", column: "profile_id", on_delete: :cascade
+  add_foreign_key "compliance_obligations", "formation_steps", column: "source_step_id", on_delete: :nullify
+  add_foreign_key "engagement_participants", "civic_profiles"
+  add_foreign_key "engagement_participants", "engagements"
+  add_foreign_key "formation_steps", "formation_tracks", column: "track_id", on_delete: :cascade
   add_foreign_key "ijdb_comments", "ijdb_entries"
   add_foreign_key "ijdb_foia_requests", "ijdb_entries"
   add_foreign_key "issue_concurrences", "neighborhood_issues"
   add_foreign_key "issue_responses", "neighborhood_issues"
+  add_foreign_key "library_items", "civic_profiles", column: "owner_profile_id", on_delete: :cascade
+  add_foreign_key "library_items", "engagements", on_delete: :nullify
   add_foreign_key "official_finance_summaries", "civic_representatives"
+  add_foreign_key "provider_capabilities", "civic_profiles"
+  add_foreign_key "user_formation_progress", "formation_steps", column: "step_id"
+  add_foreign_key "user_formation_progress", "formation_tracks", column: "track_id"
+  add_foreign_key "user_formation_progress", "library_items", column: "document_id", on_delete: :nullify
+  add_foreign_key "user_formation_progress", "users"
 end

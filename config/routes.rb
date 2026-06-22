@@ -1,13 +1,22 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # ── Onboarding / sign-up ──────────────────────────────────────────────────
+  get   "/join",          to: "onboarding#show",           as: :join
+  post  "/join/account",  to: "onboarding#account"         # Step 1: create User+Profile, fire ResolveAddressJob
+  patch "/join/temple",   to: "onboarding#temple"          # Step 2: save 4 scales + grow_areas + faith
+  patch "/join/forum",    to: "onboarding#forum"           # Step 3: save service_status + verify method
+  patch "/join/market",   to: "onboarding#market"          # Step 4: save care_tags + day's-work + provider flag
+  post  "/join/complete", to: "onboarding#complete"        # Step 5: finalize, bridge session[:dashboard_job_id]
+  get   "/join/resolve",  to: "onboarding#resolve_status"  # poll ResolveAddressJob → populates Forum civic card
+
   # ── Informational pages (root-level, outside MVP scope) ───────────────────
   get  "about",            to: "pages#about",            as: :about
   get  "mc",               to: "pages#mc",               as: :mc
   get  "israel/sanctuary", to: "pages#israel_sanctuary", as: :israel_sanctuary
 
-  # ── Root redirect — civic MVP lives at /mvp ───────────────────────────────
-  root to: redirect("/mvp/dashboard")
+  # ── Root — landing page for logged-out users; controller redirects logged-in ──
+  root to: "pages#landing", as: :root
 
   # ── Legacy redirects — preserve previously-shared civic URLs ──────────────
   # Pure 301s at root level; no controllers touched.
