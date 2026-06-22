@@ -916,9 +916,12 @@ async function finalize() {
 }
 
 // ── Resume from server-side onboarding_step ───────────────────────────────────
+// Always call go(start) — even for 0 — so the welcome panel gets .active on
+// fresh load.  Without this, every .step stays display:none and only the
+// topbar renders.
 (function() {
   var start = parseInt(document.getElementById('wizard').getAttribute('data-start') || '0', 10);
-  if (start > 0) go(start);
+  go(start);
 })();
 </script>
 </body>
