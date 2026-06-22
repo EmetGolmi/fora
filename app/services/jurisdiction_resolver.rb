@@ -23,15 +23,7 @@ class JurisdictionResolver
                 PHILLY_PA03_ZIPS.include?(zip)
 
     unless is_philly
-      return {
-        normalized_address: matched[:full],
-        city:               matched[:city],
-        state:              matched[:state],
-        zip:                zip,
-        not_covered:        true,
-        message:            "FORA currently covers Philadelphia, PA. More cities coming soon.",
-        officials:          []
-      }
+      return national_resolve(matched, coords, zip)
     end
 
     # Philadelphia — hardcoded federal + state officials + best-effort dynamic
@@ -68,6 +60,74 @@ class JurisdictionResolver
   end
 
   private
+
+  # ── National path ─────────────────────────────────────────────────────────
+  # For any US address outside Philadelphia: return federal executives,
+  # US Senators (Congress.gov), and state legislators + US House member
+  # (OpenStates people.geo — national API, works for every state).
+  # Local/city officials are not available outside covered cities.
+  def national_resolve(matched, coords, zip)
+    state = matched[:state].to_s
+
+    federal = federal_executives + begin
+      fetch_senators(state)
+    rescue StandardError => e
+      Rails.logger.warn("[JurisdictionResolver] Congress.gov failed for #{state}: #{e.message}")
+      []
+    end
+
+    # OpenStates people.geo returns state legislators AND the US House member
+    # for the given coordinates.  fetch_openstates_people keeps all results
+    # (unlike fetch_state_officials which strips /cd: entries for Philly).
+    local = begin
+      fetch_openstates_people(coords[:lat], coords[:lng])
+    rescue StandardError => e
+      Rails.logger.warn("[JurisdictionResolver] OpenStates failed for #{coords.inspect}: #{e.message}")
+      []
+    end
+
+    officials = (federal + local).uniq { |o| o[:name].to_s.downcase.strip }
+
+    {
+      normalized_address: matched[:full],
+      city:               matched[:city],
+      state:              state,
+      zip:                zip,
+      lat:                coords[:lat],
+      lng:                coords[:lng],
+      officials:          officials
+    }
+  end
+
+  # Fetches the two US Senators for any state via Congress.gov.
+  def fetch_senators(state_code)
+    api_key = ENV["CONGRESS_API_KEY"]
+    return [] unless api_key
+
+    response = self.class.get("#{CONGRESS_URI}/#{state_code.to_s.upcase}", query: {
+      currentMember: true,
+      api_key:       api_key,
+      limit:         50
+    })
+    return [] unless response.success?
+
+    members  = response.parsed_response.dig("members") || []
+    senators = members.select { |m| m.dig("terms", "item")&.last&.dig("chamber") == "Senate" }
+    senators.map { |m| normalize_congress_member(m, state_code) }
+  end
+
+  # Raw OpenStates people.geo fetch — returns all results normalized, including
+  # US House members (/cd: division_id).  Callers decide what to keep.
+  def fetch_openstates_people(lat, lng)
+    response = self.class.get(OPENSTATES_URI, query: {
+      lat:    lat,
+      lng:    lng,
+      apikey: ENV["OPENSTATES_API_KEY"]
+    })
+    return [] unless response.success?
+
+    (response.parsed_response["results"] || []).map { |person| normalize_official(person) }
+  end
 
   def geocode(address)
     response = self.class.get(GEOCODING_URI, query: {
@@ -158,10 +218,11 @@ class JurisdictionResolver
       []
     end
 
-    (senators + representatives).map { |m| normalize_congress_member(m) }
+    (senators + representatives).map { |m| normalize_congress_member(m, state_code) }
   end
 
-  def normalize_congress_member(member)
+  def normalize_congress_member(member, state_code = "PA")
+    state_lc    = state_code.to_s.downcase
     chamber     = member.dig("terms", "item")&.last&.dig("chamber")
     district    = member["district"]
     name        = format_congress_name(member["name"])
@@ -172,14 +233,14 @@ class JurisdictionResolver
         name:         name,
         office:       "U.S. Senator",
         party:        member["partyName"],
-        jurisdiction: { name: "us_senate", district: nil, division_id: "ocd-division/country:us/state:pa", bioguide_id: bioguide_id }
+        jurisdiction: { name: "us_senate", district: nil, division_id: "ocd-division/country:us/state:#{state_lc}", bioguide_id: bioguide_id }
       }
     else
       {
         name:         name,
         office:       "U.S. Representative, Congressional District #{district}",
         party:        member["partyName"],
-        jurisdiction: { name: "us_house", district: district.to_s, division_id: "ocd-division/country:us/state:pa/cd:#{district}", bioguide_id: bioguide_id }
+        jurisdiction: { name: "us_house", district: district.to_s, division_id: "ocd-division/country:us/state:#{state_lc}/cd:#{district}", bioguide_id: bioguide_id }
       }
     end
   end
