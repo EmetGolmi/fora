@@ -54,6 +54,9 @@ Rails.application.routes.draw do
     get  "dashboard/status/:job_id", to: "dashboard#status"
     get  "dashboard/result/:job_id", to: "dashboard#result"
     get  "dashboard/bills",          to: "dashboard#bills"
+    post "dashboard/spark",          to: "dashboard#spark"
+    post "dashboard/build",          to: "dashboard#build_connection"
+    post "dashboard/project_add",    to: "dashboard#project_add"
 
     # Bills & Executive Orders
     get  "bills/:id",               to: "bills#show",          as: :bill

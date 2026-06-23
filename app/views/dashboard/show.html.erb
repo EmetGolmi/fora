@@ -1,177 +1,903 @@
-<% content_for(:title) { "#{@address} — FORA Philadelphia" } %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="<%= form_authenticity_token %>">
+<title>FORA · Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#eef2fb;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --scarlet:#8b1a1a;--scarlet-p:#faeaea;--amber:#c47f00;--amber-p:#fff3dc;
+  --green:#155c2d;--green-lt:#1f7a3e;--green-p:#e5f0e8;--purple:#2d1a4a;
+  --bg:#f2f4f8;--white:#fff;--ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --rule:#e3e8f0;--rule-soft:#eef1f6;
+  --temple:#b8860b;--forum:#1b3a6b;--market:#155c2d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Nunito',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+.serif{font-family:'Libre Baskerville',serif;}
+a{text-decoration:none;color:inherit;}
 
-<% content_for :head do %>
-  <%= stylesheet_link_tag "dashboard_home" %>
-<% end %>
+.shell{max-width:1290px;margin:0 auto;display:grid;grid-template-columns:245px minmax(0,1fr) 335px;min-height:100vh;}
+.col-left{border-right:1px solid var(--rule);position:sticky;top:0;height:100vh;padding:12px 9px;display:flex;flex-direction:column;overflow-y:auto;}
+.col-center{border-right:1px solid var(--rule);background:var(--white);min-width:0;}
+.col-right{padding:12px 16px;}
 
-<%= render "dashboard/sections/page_shortcuts" %>
+/* MOBILE chrome */
+.mtop{display:none;}
+.mbar{display:none;}
 
-<div class="dh-main">
+/* LEFT RAIL */
+.brand{display:flex;align-items:center;gap:9px;padding:6px 11px 12px;}
+.brand-mark{width:33px;height:33px;border-radius:8px;background:linear-gradient(150deg,var(--blue),var(--blue-md));display:flex;align-items:center;justify-content:center;color:var(--gilt-lt);font-family:'Libre Baskerville',serif;font-weight:700;font-size:18px;box-shadow:inset 0 0 0 1px rgba(212,168,50,.35);}
+.brand-word{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--blue);}
+.nav-home{display:flex;align-items:center;gap:13px;padding:10px 13px;border-radius:999px;font-weight:800;font-size:16px;color:var(--blue);background:var(--blue-vp);cursor:pointer;}
+.nav-home .ni{width:22px;text-align:center;color:var(--gilt);}
 
-  <%= render "dashboard/sections/address_block" %>
+.pillar-h{display:flex;align-items:center;gap:8px;padding:13px 13px 4px;}
+.pg{font-size:14px;width:17px;text-align:center;}
+.pg-t{color:var(--temple);}.pg-f{color:var(--forum);}.pg-m{color:var(--market);}
+.pn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-mut);}
+.tools{padding-left:7px;border-left:2px solid var(--rule);margin-left:20px;}
+.tools.t{border-color:var(--gilt-pl);}.tools.f{border-color:var(--blue-pl);}.tools.m{border-color:var(--green-p);}
+.tool{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-soft);}
+.tool:hover{background:var(--rule-soft);}
+.tool .ti{width:16px;text-align:center;color:var(--ink-soft);font-size:13px;flex:none;}
+.tool .bdg{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--scarlet);color:#fff;border-radius:999px;padding:1px 6px;}
 
-  <%= render "dashboard/sections/on_this_day" %>
+.voice{margin:14px 7px 6px;padding:12px;border:none;border-radius:999px;width:calc(100% - 14px);background:var(--gilt);color:#fff;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 2px 0 rgba(120,86,8,.45);}
+.voice:hover{background:var(--gilt-lt);}
+.id-block{margin-top:auto;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:999px;cursor:pointer;}
+.id-block:hover{background:var(--blue-pl);}
+.id-av{width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none;font-size:15px;}
+.id-n{font-weight:800;font-size:13.5px;line-height:1.15;}
+.id-h{color:var(--ink-mut);font-size:12px;}
 
-  <%= render "dashboard/sections/quick_reference" %>
+/* CENTER */
+.fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+.ftitle{padding:13px 18px 9px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--blue);}
+.tabs{display:flex;}
+.tab{flex:1;text-align:center;padding:13px 0;font-weight:700;font-size:14.5px;color:var(--ink-soft);cursor:pointer;position:relative;}
+.tab:hover{background:var(--rule-soft);}
+.tab.active{color:var(--ink);}
+.tab.active::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:64px;height:4px;border-radius:4px;background:var(--gilt);}
+.pf{display:flex;gap:7px;padding:9px 16px;border-bottom:1px solid var(--rule);overflow-x:auto;}
+.pchip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-soft);cursor:pointer;white-space:nowrap;background:#fff;}
+.pchip.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.pchip[data-p="t"].on{background:var(--temple);border-color:var(--temple);}
+.pchip[data-p="f"].on{background:var(--forum);border-color:var(--forum);}
+.pchip[data-p="m"].on{background:var(--market);border-color:var(--market);}
 
-  <%= render "dashboard/sections/officials" %>
+.legend{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:10px 16px;background:var(--blue-vp);border-bottom:1px solid var(--rule);font-size:11.5px;color:var(--ink-soft);}
+.legend b{color:var(--ink);}
+.lg{display:flex;align-items:center;gap:5px;}
+.lg .ic{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
+.ic-s{background:var(--gilt);}.ic-b{background:var(--blue-md);}.ic-i{background:var(--green);}
+.lg-arr{color:var(--ink-mut);}
 
-  <%= render "dashboard/sections/rco" %>
+.tabview{display:none;}.tabview.active{display:block;}
 
-  <%= render "dashboard/sections/legislation" %>
+/* EMPTY STATE */
+.empty{padding:40px 24px;text-align:center;color:var(--ink-soft);}
+.empty-icon{font-size:32px;margin-bottom:12px;}
+.empty-h{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:8px;}
+.empty-p{font-size:14px;line-height:1.6;}
 
-  <%= render "dashboard/sections/pathways" %>
+/* FEED POSTS */
+.post{padding:13px 16px;border-bottom:1px solid var(--rule);display:flex;gap:11px;border-left:3px solid transparent;}
+.post:hover{background:#fbfcfe;}
+.post.t{border-left-color:var(--temple);}.post.f{border-left-color:var(--forum);}.post.m{border-left-color:var(--market);}
+.av{width:44px;height:44px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;border:2px solid transparent;}
+.av-gov{background:var(--blue);border-color:var(--gilt);}.av-org{background:var(--purple);}.av-doc{background:var(--scarlet);}.av-user{background:var(--green);}
+.pb{flex:1;min-width:0;}
+.pm{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:13.5px;}
+.pn2{font-weight:800;}
+.vchk{color:var(--gilt);font-weight:900;}
+.pr,.ph{color:var(--ink-mut);font-size:12.5px;}
+.pbadge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:999px;}
+.bb-t{background:var(--gilt-pl);color:#6b5300;}.bb-f{background:var(--blue-pl);color:var(--blue);}.bb-m{background:var(--green-p);color:var(--market);}
+.fctx{font-size:11.5px;color:var(--ink-mut);margin:2px 0 6px;display:flex;align-items:center;gap:6px;}
+.fctx .star{color:var(--gilt);}
+.ptext{margin:3px 0;font-size:14.5px;line-height:1.5;}
 
-  <%= render "dashboard/sections/care_for_your_home" %>
+.icard{border:1px solid var(--rule);border-radius:12px;padding:11px 13px;margin-top:8px;background:#fff;}
+.ic-top{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:5px;}
+.ic-k{padding:2px 6px;border-radius:5px;}
+.k-bill{background:var(--blue-pl);color:var(--blue);}.k-eo{background:var(--scarlet-p);color:var(--scarlet);}.k-issue{background:var(--amber-p);color:var(--amber);}
+.ic-t{font-family:'Libre Baskerville',serif;font-weight:700;font-size:14.5px;line-height:1.3;}
+.ic-stage{margin-top:7px;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-soft);}
+.sbar{display:flex;gap:3px;flex:1;}
+.sseg{height:5px;flex:1;border-radius:3px;background:var(--rule);}
+.sseg.done{background:var(--blue);}.sseg.now{background:var(--gilt);}
 
-  <%= render "dashboard/sections/transportation" %>
+/* THE ARC */
+.arc{display:flex;align-items:center;gap:7px;margin-top:11px;flex-wrap:wrap;}
+.rung{display:flex;align-items:center;gap:6px;border:1.5px solid var(--rule);background:#fff;border-radius:999px;padding:6px 13px;font-weight:700;font-size:12.5px;color:var(--ink-soft);cursor:pointer;transition:all .12s;}
+.rung .ri{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;background:var(--ink-mut);}
+.rung:hover{border-color:var(--gilt);}
+.rung.spark.on{background:var(--gilt-pl);border-color:var(--gilt);color:#6b5300;}
+.rung.spark.on .ri{background:var(--gilt);}
+.rung.build.on{background:var(--blue-vp);border-color:var(--blue-md);color:var(--blue);}
+.rung.build.on .ri{background:var(--blue-md);}
+.rung.integ.on{background:var(--green-p);border-color:var(--green);color:var(--market);}
+.rung.integ.on .ri{background:var(--green);}
+.rung.locked{opacity:.45;cursor:default;}
+.rung.locked:hover{border-color:var(--rule);}
+.arc-sec{margin-left:auto;display:flex;align-items:center;gap:13px;color:var(--ink-mut);font-size:12.5px;}
+.arc-sec span{cursor:pointer;}
+.arc-sec span:hover{color:var(--blue-lt);}
+.concur-ct{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gilt);font-weight:700;}
 
+/* TRAY */
+.tray{display:none;margin-top:9px;padding:11px 12px;border-radius:11px;font-size:12.5px;}
+.tray.show{display:block;}
+.tray.build{background:var(--blue-vp);border:1px solid var(--blue-pl);}
+.tray.integ{background:var(--green-p);border:1px solid #bfe0cb;}
+.tray-h{font-weight:800;margin-bottom:7px;font-size:12px;}
+.tray.build .tray-h{color:var(--blue);}
+.tray.integ .tray-h{color:var(--market);}
+.tray-opts{display:flex;flex-wrap:wrap;gap:6px;}
+.topt{background:#fff;border:1px solid var(--rule);border-radius:999px;padding:6px 11px;font-weight:700;font-size:12px;cursor:pointer;}
+.topt:hover{border-color:var(--gilt);}
+.topt.stub{opacity:.5;cursor:default;}
+.topt.stub:hover{border-color:var(--rule);}
 
+/* NOTE FORM (Build tray) */
+.note-form{margin-top:9px;display:flex;gap:7px;}
+.note-form textarea{flex:1;border:1.5px solid var(--blue-pl);border-radius:8px;padding:7px 10px;font-family:'Nunito',sans-serif;font-size:13px;resize:none;outline:none;}
+.note-form textarea:focus{border-color:var(--blue-md);}
+.note-form button{background:var(--blue-md);color:#fff;border:none;border-radius:999px;padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* PROJECT FORM (Integrate tray) */
+.project-sel{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.proj-chip{background:#fff;border:1px solid var(--rule);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;}
+.proj-chip:hover{border-color:var(--green);}
+.proj-new-form{display:flex;gap:7px;margin-top:7px;width:100%;}
+.proj-new-form input{flex:1;border:1.5px solid #bfe0cb;border-radius:8px;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:13px;outline:none;}
+.proj-new-form input:focus{border-color:var(--green);}
+.proj-new-form button{background:var(--green);color:#fff;border:none;border-radius:999px;padding:6px 13px;font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;font-weight:700;cursor:pointer;}
+
+/* RIGHT RAIL */
+.rcard{background:var(--white);border:1px solid var(--rule);border-radius:15px;margin-bottom:15px;overflow:hidden;}
+.rh{padding:12px 15px 3px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:15.5px;color:var(--blue);}
+.rs{padding:0 15px 9px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mut);}
+.dk{padding:10px 15px;border-top:1px solid var(--rule-soft);cursor:pointer;}
+.dk:hover{background:var(--rule-soft);}
+.dk-top{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.dk-k{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:4px;}
+.dk-w{margin-left:auto;font-size:10.5px;color:var(--ink-mut);}
+.dk-t{font-weight:700;font-size:13px;line-height:1.3;}
+.dk-s{margin-top:5px;display:flex;gap:3px;}
+.dk-sg{height:4px;flex:1;border-radius:2px;background:var(--rule);}
+.dk-sg.done{background:var(--blue);}.dk-sg.now{background:var(--gilt);}
+.rfoot{padding:10px 15px;text-align:center;border-top:1px solid var(--rule-soft);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);cursor:pointer;}
+.rfoot:hover{background:var(--blue-vp);}
+.rep{display:flex;align-items:center;gap:9px;padding:8px 15px;border-top:1px solid var(--rule-soft);cursor:pointer;}
+.rep:hover{background:var(--rule-soft);}
+.rep-av{width:34px;height:34px;border-radius:50%;background:var(--blue);border:2px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:none;}
+.rep-n{font-weight:700;font-size:13px;}.rep-r{font-size:11px;color:var(--ink-mut);}
+.rep-f{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--blue);color:var(--blue);border-radius:999px;padding:4px 8px;white-space:nowrap;cursor:pointer;}
+.rep-f.on{background:var(--blue);color:#fff;}
+.cm{padding:12px 15px;}
+.cm-n{font-family:'Libre Baskerville',serif;font-size:29px;font-weight:700;color:var(--gilt);}
+.cm-l{font-size:11.5px;color:var(--ink-soft);line-height:1.4;margin-top:4px;}
+.cm-l b{color:var(--ink);}
+.cm-empty{padding:12px 15px;font-size:13px;color:var(--ink-mut);}
+
+/* RESPONSIVE */
+@media(max-width:1040px){
+  .shell{grid-template-columns:230px minmax(0,1fr);}
+  .col-right{display:none;}
+}
+@media(max-width:720px){
+  .shell{grid-template-columns:1fr;max-width:600px;}
+  .col-left{display:none;}
+  .mtop{display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--rule);padding:10px 15px;}
+  .mtop .mm{width:30px;height:30px;border-radius:7px;background:linear-gradient(150deg,var(--blue),var(--blue-md));color:var(--gilt-lt);font-family:'Libre Baskerville',serif;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .mtop .mw{font-family:'Libre Baskerville',serif;font-weight:700;font-size:18px;color:var(--blue);}
+  .mtop .mav{margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
+  body{padding-bottom:64px;}
+  .mbar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--rule);box-shadow:0 -2px 14px rgba(20,44,82,.07);}
+  .mtab{flex:1;text-align:center;padding:11px 0 9px;font-size:21px;cursor:pointer;color:var(--ink-soft);}
+  .mtab.home.on{color:var(--blue);}
+  .mtab[data-g="t"]{color:var(--temple);}.mtab[data-g="f"]{color:var(--forum);}.mtab[data-g="m"]{color:var(--market);}
+  .mtab.fab{position:relative;}
+  .mtab.fab span{display:inline-flex;width:38px;height:38px;border-radius:50%;background:var(--gilt);color:#fff;align-items:center;justify-content:center;font-size:24px;font-weight:400;box-shadow:0 2px 8px rgba(120,86,8,.4);margin-top:-3px;}
+  .arc-sec{margin-left:0;width:100%;justify-content:flex-start;margin-top:4px;}
+}
+</style>
+</head>
+<%
+  # ── View helpers ─────────────────────────────────────────────────────────────
+
+  # Bill stage → integer position (1–5) for the stage progress bar.
+  STAGE_POS = {
+    "introduced"             => 1,
+    "committee"              => 2,
+    "passed_chamber"         => 3,
+    "resolving_differences"  => 4,
+    "to_president"           => 4,
+    "became_law"             => 5
+  }.freeze
+
+  def stage_segs(bill)
+    pos = STAGE_POS[bill.bill_stage] || 1
+    (1..5).map do |i|
+      if i < pos  then "done"
+      elsif i == pos then "now"
+      else ""
+      end
+    end
+  end
+
+  def stage_label(bill)
+    bill.status.presence || bill.bill_stage.to_s.humanize
+  end
+
+  # Two-letter initials from a name string.
+  def initials(name)
+    parts = name.to_s.split
+    [parts.first&.first, parts.last&.first].compact.join.upcase
+  end
+
+  def time_ago_short(time)
+    return "" unless time
+    diff = Time.current - time
+    if diff < 3600        then "#{(diff / 60).round}m ago"
+    elsif diff < 86400    then "#{(diff / 3600).round}h ago"
+    elsif diff < 604800   then "#{(diff / 86400).round}d ago"
+    else time.strftime("%b %d")
+    end
+  end
+
+  def jur_label(bill)
+    j = bill.jurisdiction.to_s
+    case j
+    when /federal/i    then "Federal"
+    when /pennsylvania/i, /^pa$/i then "PA"
+    when /philadelphia/i then "City"
+    else j.split.last(2).join(" ")
+    end
+  end
+
+  def sponsors_line(bill)
+    sp = Array(bill.sponsors).first
+    sp ? "sponsored by #{sp['name'] || sp[:name]}" : ""
+  end
+%>
+<body>
+
+<!-- MOBILE top bar -->
+<div class="mtop">
+  <a href="<%= root_path %>" class="mm">F</a>
+  <span class="mw">FORA</span>
+  <div class="mav"><%= initials(current_user.handle) %></div>
+</div>
+
+<div class="shell">
+
+  <%# ── LEFT RAIL ─────────────────────────────────────────────────────────── %>
+  <nav class="col-left">
+    <div class="brand">
+      <a href="<%= root_path %>" class="brand-mark">F</a>
+      <span class="brand-word">FORA</span>
+    </div>
+
+    <a href="<%= dashboard_path %>" class="nav-home">
+      <span class="ni">⌂</span> Home
+    </a>
+
+    <div class="pillar-h"><span class="pg pg-t">◯</span><span class="pn">Temple</span></div>
+    <div class="tools t">
+      <a href="#" class="tool"><span class="ti">◴</span> Sit</a>
+      <a href="#" class="tool"><span class="ti">▤</span> Study</a>
+      <a href="#" class="tool"><span class="ti">⇄</span> Share</a>
+    </div>
+
+    <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
+    <div class="tools f">
+      <a href="<%= dashboard_path %>" class="tool"><span class="ti">◎</span> Observe</a>
+      <a href="#" class="tool"><span class="ti">⬡</span> Connect</a>
+      <a href="#" class="tool"><span class="ti">✓</span> Act</a>
+    </div>
+
+    <div class="pillar-h"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
+    <div class="tools m">
+      <a href="#" class="tool"><span class="ti">◳</span> Demand</a>
+      <% if @profile.provider_mode? %>
+        <a href="#" class="tool"><span class="ti">⚒</span> Supply</a>
+        <a href="#" class="tool"><span class="ti">▣</span> Contract</a>
+      <% else %>
+        <a href="#" class="tool"><span class="ti">⚒</span> Supply</a>
+        <a href="#" class="tool"><span class="ti">▣</span> Contract</a>
+      <% end %>
+    </div>
+
+    <button class="voice">Add your Voice</button>
+
+    <div class="id-block">
+      <div class="id-av"><%= initials(current_user.handle) %></div>
+      <div>
+        <div class="id-n">@<%= current_user.handle %></div>
+        <div class="id-h"><%= @profile.place_label.presence || @profile.address_city %></div>
+      </div>
+    </div>
+  </nav>
+
+  <%# ── CENTER ──────────────────────────────────────────────────────────────── %>
+  <main class="col-center">
+    <div class="fhead">
+      <div class="ftitle">Home</div>
+      <div class="tabs">
+        <div class="tab active" data-tab="following">Following</div>
+        <div class="tab" data-tab="juris">Your Jurisdictions</div>
+      </div>
+      <div class="pf">
+        <span class="pchip on" data-p="all">All</span>
+        <span class="pchip" data-p="t">◯ Temple</span>
+        <span class="pchip" data-p="f">△ Forum</span>
+        <span class="pchip" data-p="m">▢ Market</span>
+      </div>
+      <div class="legend">
+        <span class="lg"><span class="ic ic-s">★</span> <b>Spark</b> save it</span><span class="lg-arr">→</span>
+        <span class="lg"><span class="ic ic-b">⊕</span> <b>Build</b> connect &amp; develop</span><span class="lg-arr">→</span>
+        <span class="lg"><span class="ic ic-i">↗</span> <b>Integrate</b> weave it into something</span>
+      </div>
+    </div>
+
+    <%# ── FOLLOWING TAB ────────────────────────────────────────────────────── %>
+    <div class="tabview active" id="tv-following">
+      <% if @feed.empty? %>
+        <div class="empty">
+          <div class="empty-icon">★</div>
+          <div class="empty-h">Your feed is empty</div>
+          <div class="empty-p">Switch to <strong>Your Jurisdictions</strong> to find bills, issues, and officials to spark — they'll appear here.</div>
+        </div>
+      <% else %>
+        <% @feed.each do |h| %>
+          <%
+            item    = h[:item]
+            follow  = h[:follow]
+            type    = h[:type]
+            key     = "#{type}:#{item.id}"
+            built   = @connection_map.key?(key)
+            integrated = type == "NeighborhoodIssue" && @concurred_issues.include?(item.id)
+            time_str = time_ago_short(h[:last_at])
+          %>
+          <div class="post f">
+            <%# Avatar %>
+            <% if type == "CivicBill" %>
+              <div class="av av-doc">§</div>
+            <% elsif type == "NeighborhoodIssue" %>
+              <div class="av av-org"><%= item.rco_slug.upcase.first(2) %></div>
+            <% elsif type == "CivicRepresentative" %>
+              <div class="av av-gov"><%= initials(item.name) %></div>
+            <% end %>
+
+            <div class="pb">
+              <%# Meta line %>
+              <div class="pm">
+                <% if type == "CivicBill" %>
+                  <span class="pn2"><%= item.identifier.presence || "Bill" %></span>
+                  <span class="pr">· <%= stage_label(item) %></span>
+                <% elsif type == "NeighborhoodIssue" %>
+                  <span class="pn2"><%= item.rco_slug.upcase %></span>
+                  <span class="pr">· Neighborhood Issue</span>
+                <% elsif type == "CivicRepresentative" %>
+                  <span class="pn2"><%= item.name %></span>
+                  <span class="vchk">✓</span>
+                  <span class="pr">· <%= item.office %></span>
+                <% end %>
+                <span class="pbadge bb-f">△ Forum</span>
+              </div>
+
+              <%# Context line %>
+              <div class="fctx">
+                <span class="star">★</span>
+                <% if type == "CivicBill" %>
+                  You're tracking this bill
+                <% elsif type == "NeighborhoodIssue" %>
+                  <% if @concurred_issues.include?(item.id) %>
+                    Issue you concurred with
+                    <% if item.threshold_reached? %>
+                      · hit <%= item.alert_threshold %> → alerted to RCO
+                    <% end %>
+                  <% else %>
+                    Issue you're tracking
+                  <% end %>
+                <% elsif type == "CivicRepresentative" %>
+                  You follow this official
+                <% end %>
+                <% if time_str.present? %> · <%= time_str %><% end %>
+              </div>
+
+              <%# Item card for bills and issues %>
+              <% if type == "CivicBill" %>
+                <div class="icard">
+                  <div class="ic-top">
+                    <span class="ic-k k-bill">Bill · <%= jur_label(item) %></span>
+                    <%= sponsors_line(item) %>
+                  </div>
+                  <div class="ic-t"><%= item.title.truncate(120) %></div>
+                  <% segs = stage_segs(item) %>
+                  <div class="ic-stage">
+                    <div class="sbar">
+                      <% segs.each do |s| %><span class="sseg <%= s %>"></span><% end %>
+                    </div>
+                    <span><%= stage_label(item) %></span>
+                  </div>
+                </div>
+              <% elsif type == "NeighborhoodIssue" %>
+                <div class="icard">
+                  <div class="ic-top">
+                    <span class="ic-k k-issue">Issue</span>
+                    <%= item.location_description.presence || item.rco_slug.upcase %>
+                  </div>
+                  <div class="ic-t"><%= item.body.truncate(100) %></div>
+                </div>
+              <% end %>
+
+              <%# ARC buttons %>
+              <div class="arc">
+                <button class="rung spark on"
+                        data-type="<%= type %>"
+                        data-id="<%= item.id %>"
+                        onclick="toggleSpark(this)">
+                  <span class="ri">★</span> Sparked
+                </button>
+                <button class="rung build <%= 'on' if built %>"
+                        data-type="<%= type %>"
+                        data-id="<%= item.id %>"
+                        onclick="openTray(this,'build')">
+                  <span class="ri">⊕</span> <%= built ? "Built" : "Build" %>
+                </button>
+                <button class="rung integ <%= 'on' if integrated %>"
+                        data-type="<%= type %>"
+                        data-id="<%= item.id %>"
+                        onclick="openTray(this,'integ')">
+                  <span class="ri">↗</span> <%= integrated ? "Integrated" : "Integrate" %>
+                </button>
+                <div class="arc-sec">
+                  <% if type == "CivicBill" %>
+                    <span class="concur-ct"><%= item.follows.count %> sparks</span>
+                  <% elsif type == "NeighborhoodIssue" %>
+                    <span class="concur-ct"><%= item.concurrence_count %> concur</span>
+                  <% end %>
+                  <span>💬 Discuss</span>
+                </div>
+              </div>
+              <div class="tray build" data-source-type="<%= type %>" data-source-id="<%= item.id %>"></div>
+              <div class="tray integ" data-source-type="<%= type %>" data-source-id="<%= item.id %>"></div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div><%# /tv-following %>
+
+    <%# ── YOUR JURISDICTIONS TAB ───────────────────────────────────────────── %>
+    <div class="tabview" id="tv-juris">
+      <% if @jurisdiction_bills.none? && @jurisdiction_issues.none? %>
+        <div class="empty">
+          <div class="empty-icon">△</div>
+          <div class="empty-h">No local activity yet</div>
+          <div class="empty-p">As bills and issues for <%= @profile.place_label.presence || "your area" %> are added, they'll appear here.</div>
+        </div>
+      <% else %>
+        <% @jurisdiction_bills.each do |bill| %>
+          <div class="post f">
+            <div class="av av-doc">§</div>
+            <div class="pb">
+              <div class="pm">
+                <span class="pn2"><%= bill.identifier.presence || "Bill" %></span>
+                <span class="pr">· <%= stage_label(bill) %></span>
+                <span class="pbadge bb-f">△ Forum</span>
+              </div>
+              <div class="fctx">Your jurisdiction · not yet on your docket</div>
+              <div class="icard">
+                <div class="ic-top">
+                  <span class="ic-k k-bill">Bill · <%= jur_label(bill) %></span>
+                  <%= sponsors_line(bill) %>
+                </div>
+                <div class="ic-t"><%= bill.title.truncate(120) %></div>
+                <% segs = stage_segs(bill) %>
+                <div class="ic-stage">
+                  <div class="sbar">
+                    <% segs.each do |s| %><span class="sseg <%= s %>"></span><% end %>
+                  </div>
+                  <span><%= stage_label(bill) %></span>
+                </div>
+              </div>
+              <div class="arc">
+                <button class="rung spark"
+                        data-type="CivicBill"
+                        data-id="<%= bill.id %>"
+                        onclick="toggleSpark(this)">
+                  <span class="ri">★</span> Spark to track
+                </button>
+                <button class="rung build locked"><span class="ri">⊕</span> Build</button>
+                <button class="rung integ locked"><span class="ri">↗</span> Integrate</button>
+                <div class="arc-sec">
+                  <span class="concur-ct"><%= bill.follows.count %> sparks</span>
+                  <span>💬 Discuss</span>
+                </div>
+              </div>
+              <div class="tray build" data-source-type="CivicBill" data-source-id="<%= bill.id %>"></div>
+              <div class="tray integ" data-source-type="CivicBill" data-source-id="<%= bill.id %>"></div>
+            </div>
+          </div>
+        <% end %>
+
+        <% @jurisdiction_issues.each do |issue| %>
+          <div class="post f">
+            <div class="av av-org"><%= issue.rco_slug.upcase.first(2) %></div>
+            <div class="pb">
+              <div class="pm">
+                <span class="pn2"><%= issue.rco_slug.upcase %></span>
+                <span class="pr">· RCO</span>
+                <span class="pbadge bb-f">△ Forum</span>
+              </div>
+              <div class="fctx">Your neighborhood · not yet on your docket</div>
+              <div class="icard">
+                <div class="ic-top">
+                  <span class="ic-k k-issue">Issue</span>
+                  <%= issue.location_description.presence || issue.rco_slug.upcase %>
+                </div>
+                <div class="ic-t"><%= issue.body.truncate(100) %></div>
+              </div>
+              <div class="arc">
+                <button class="rung spark"
+                        data-type="NeighborhoodIssue"
+                        data-id="<%= issue.id %>"
+                        onclick="toggleSpark(this)">
+                  <span class="ri">★</span> Spark to track
+                </button>
+                <button class="rung build locked"><span class="ri">⊕</span> Build</button>
+                <button class="rung integ locked"><span class="ri">↗</span> Integrate</button>
+                <div class="arc-sec">
+                  <span class="concur-ct"><%= issue.concurrence_count %> concur</span>
+                </div>
+              </div>
+              <div class="tray build" data-source-type="NeighborhoodIssue" data-source-id="<%= issue.id %>"></div>
+              <div class="tray integ" data-source-type="NeighborhoodIssue" data-source-id="<%= issue.id %>"></div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div><%# /tv-juris %>
+  </main>
+
+  <%# ── RIGHT RAIL ──────────────────────────────────────────────────────────── %>
+  <aside class="col-right">
+
+    <%# YOUR DOCKET %>
+    <div class="rcard">
+      <div class="rh">Your Docket</div>
+      <div class="rs">What you're tracking · <%= @feed.size %> item<%= @feed.size == 1 ? "" : "s" %></div>
+      <% if @docket_items.empty? %>
+        <div style="padding:12px 15px;font-size:13px;color:var(--ink-mut);">Nothing on your docket yet — Spark something to start.</div>
+      <% else %>
+        <% @docket_items.each do |h| %>
+          <% item = h[:item]; type = h[:type] %>
+          <div class="dk">
+            <div class="dk-top">
+              <% if type == "CivicBill" %>
+                <span class="dk-k k-bill">Bill</span>
+                <%= item.identifier.presence || "" %>
+              <% elsif type == "NeighborhoodIssue" %>
+                <span class="dk-k k-issue">Issue</span>
+                <%= item.location_description.presence || item.rco_slug %>
+              <% elsif type == "CivicRepresentative" %>
+                <span class="dk-k" style="background:var(--blue-pl);color:var(--blue);">Rep</span>
+                <%= item.office.to_s.split.first(3).join(" ") %>
+              <% end %>
+              <span class="dk-w"><%= time_ago_short(h[:last_at]) %></span>
+            </div>
+            <div class="dk-t">
+              <% if type == "CivicBill" %>
+                <%= item.title.truncate(70) %>
+              <% elsif type == "NeighborhoodIssue" %>
+                <%= item.body.truncate(70) %>
+              <% elsif type == "CivicRepresentative" %>
+                <%= item.name %>
+              <% end %>
+            </div>
+            <% if type == "CivicBill" %>
+              <% segs = stage_segs(item) %>
+              <div class="dk-s">
+                <% segs.each do |s| %><span class="dk-sg <%= s %>"></span><% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="rfoot">See your full docket →</div>
+    </div>
+
+    <%# YOUR REPRESENTATIVES %>
+    <div class="rcard">
+      <div class="rh">Your seat at the table</div>
+      <div class="rs">Your Representatives</div>
+      <% if @officials.empty? %>
+        <div style="padding:12px 15px;font-size:13px;color:var(--ink-mut);">Officials will appear here after your address resolves.</div>
+      <% else %>
+        <% @officials.first(5).each do |o| %>
+          <%
+            bio     = o.dig(:jurisdiction, :bioguide_id).to_s
+            rep_rec = @rep_by_bioguide[bio]
+            followed = rep_rec && @rep_follows.include?(rep_rec.id)
+          %>
+          <div class="rep"
+               <% if rep_rec %>data-rep-id="<%= rep_rec.id %>"<% end %>>
+            <div class="rep-av"><%= initials(o[:name]) %></div>
+            <div>
+              <div class="rep-n"><%= o[:name] %></div>
+              <div class="rep-r"><%= o[:office] %></div>
+            </div>
+            <% if rep_rec %>
+              <span class="rep-f <%= 'on' if followed %>"
+                    onclick="toggleRepFollow(this, <%= rep_rec.id %>)">
+                <%= followed ? "✓ Following" : "+ Follow" %>
+              </span>
+            <% else %>
+              <span class="rep-f" style="opacity:.4;cursor:default">+ Follow</span>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="rfoot">See all your officials →</div>
+    </div>
+
+    <%# CONSTITUENCY METER %>
+    <div class="rcard">
+      <div class="rh">The constituency meter</div>
+      <% if @meter_bill && @meter_pct %>
+        <div class="cm">
+          <div class="cm-n"><%= @meter_pct %>%</div>
+          <div class="cm-l">
+            of people sparking <b><%= @meter_bill.identifier.presence || @meter_bill.title.truncate(40) %></b>
+            are <b>verified residents</b><% if @jurisdiction[:city].present? %> of <%= @jurisdiction[:city] %><% end %>.
+            The thing X can't show.
+          </div>
+        </div>
+      <% else %>
+        <div class="cm-empty">Spark a bill to see the verified-resident share of everyone following it.</div>
+      <% end %>
+    </div>
+
+  </aside>
+</div><%# /.shell %>
+
+<!-- MOBILE bottom bar — pillars kept together -->
+<div class="mbar">
+  <div class="mtab home on">⌂</div>
+  <div class="mtab fab"><span>+</span></div>
+  <div class="mtab" data-g="t">◯</div>
+  <div class="mtab" data-g="f">△</div>
+  <div class="mtab" data-g="m">▢</div>
 </div>
 
 <script>
-// ── Quick Reference collapse/expand ──────────────────────────────────────────
-function toggleQRef() {
-  var body = document.getElementById('qref-body');
-  var btn  = document.querySelector('.qref-collapse-btn');
-  if (!body) return;
-  var collapsed = body.style.display === 'none';
-  body.style.display = collapsed ? '' : 'none';
-  if (btn) btn.textContent = collapsed ? '\u25BC' : '\u25B2';
+var SPARK_URL       = '<%= dashboard_spark_path %>';
+var BUILD_URL       = '<%= dashboard_build_path %>';
+var PROJECT_URL     = '<%= dashboard_project_add_path %>';
+var PROJECTS        = <%= raw @project_list.map { |p| { id: p.id, title: p.title } }.to_json %>;
+
+function csrf() {
+  return document.querySelector('meta[name="csrf-token"]').content;
 }
 
-// ── Map picker dropdown ──────────────────────────────────────────────────────
-function toggleMap(el, ev) {
-  ev.stopPropagation();
-  document.querySelectorAll('.address-wrap.open').forEach(function(o) {
-    if (o !== el) o.classList.remove('open');
-  });
-  el.classList.toggle('open');
+function post(url, body) {
+  return fetch(url, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf() },
+    body:    JSON.stringify(body)
+  }).then(function(r){ return r.json(); });
 }
-document.addEventListener('click', function() {
-  document.querySelectorAll('.address-wrap.open').forEach(function(o) {
-    o.classList.remove('open');
-  });
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(function(t) {
+  t.onclick = function() {
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    document.querySelectorAll('.tabview').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById('tv-' + t.dataset.tab).classList.add('active');
+  };
 });
 
-// ── Section shortcut active state (IntersectionObserver) ────────────────────
-(function() {
-  var sections  = document.querySelectorAll('.section-anchor[id]');
-  var shortcuts = document.querySelectorAll('.ps-link');
-  if (!sections.length || !shortcuts.length || !('IntersectionObserver' in window)) return;
-
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (!entry.isIntersecting) return;
-      var id    = entry.target.id;
-      shortcuts.forEach(function(s) { s.classList.remove('active'); });
-      var match = document.querySelector('.ps-link[href="#' + id + '"]');
-      if (match) match.classList.add('active');
+// ── Pillar filter ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.pchip').forEach(function(c) {
+  c.onclick = function() {
+    document.querySelectorAll('.pchip').forEach(function(x){ x.classList.remove('on'); });
+    c.classList.add('on');
+    var p = c.dataset.p;
+    document.querySelectorAll('.tabview.active .post').forEach(function(post) {
+      post.style.display = (p === 'all' || post.classList.contains(p)) ? 'flex' : 'none';
     });
-  }, { rootMargin: '-100px 0px -60% 0px' });
-
-  sections.forEach(function(s) { observer.observe(s); });
-})();
-
-// ── Legislation Docket / Record toggle ─────────────────────────────────────
-(function() {
-  var docketActive = true;
-  var state = {
-    docket: { offset: <%= (@docket_bills || []).size %>, hasMore: <%= @docket_has_more %>, fetching: false, total: <%= @docket_total || 0 %> },
-    record: { offset: <%= (@record_bills || []).size %>, hasMore: <%= @record_has_more %>, fetching: false, total: <%= @record_total || 0 %> }
   };
+});
 
-  function esc(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function flagClass(jur) {
-    if (jur === 'federal')      return 'fed';
-    if (jur === 'pennsylvania') return 'state';
-    if (jur === 'philadelphia') return 'local';
-    return 'local';
-  }
-  function flagLabel(jur) {
-    if (jur === 'federal')      return 'Federal';
-    if (jur === 'pennsylvania') return 'State';
-    if (jur === 'philadelphia') return 'Local';
-    return jur || 'Local';
-  }
-
-  function buildRow(b, view) {
-    var fc = flagClass(b.jurisdiction);
-    var fl = flagLabel(b.jurisdiction);
-    var dateHtml = '';
-    if (b.status_date) {
-      dateHtml = view === 'docket'
-        ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--gilt);margin-top:3px;">Upcoming action \xB7 ' + esc(b.status_date) + '</div>'
-        : '<div style="font-family:\'JetBrains Mono\',monospace;font-size:7.5px;letter-spacing:0.06em;color:var(--ink-mut);margin-top:3px;">' + esc(b.status_date) + '</div>';
-    }
-    var numHtml = b.identifier ? '<span class="leg-bill-number">' + esc(b.identifier) + '</span>' : '';
-    return '<a href="/mvp/bills/' + b.id + '" style="text-decoration:none;color:inherit;display:block;">' +
-      '<div class="leg-row">' +
-        '<div class="leg-relevance"><div class="leg-rel-score tier-low" style="color:var(--ink-mut);font-size:16px;">\u2014</div><div class="leg-rel-label">Rank</div></div>' +
-        '<div>' +
-          '<div class="leg-meta-row"><span class="bill-level-flag ' + fc + '">' + fl + '</span>' + numHtml + '</div>' +
-          '<div class="leg-title">' + esc((b.title || '').substring(0, 220)) + ((b.title || '').length > 220 ? '\u2026' : '') + '</div>' +
-          dateHtml +
-        '</div>' +
-        '<div class="leg-action"><span class="leg-action-btn">Read bill \u2192</span></div>' +
-      '</div>' +
-    '</a>';
-  }
-
-  function loadMore(view) {
-    var s = state[view];
-    if (s.fetching || !s.hasMore) return;
-    s.fetching = true;
-    var sentinel = document.getElementById(view + '-sentinel');
-    sentinel.innerHTML = '<div style="text-align:center;padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gilt);">&#9670; Loading...</div>';
-
-    fetch('/dashboard/bills?view=' + view + '&offset=' + s.offset)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        var feed = document.getElementById(view + '-feed');
-        data.bills.forEach(function(b) { feed.insertAdjacentHTML('beforeend', buildRow(b, view)); });
-        s.offset  += data.bills.length;
-        s.hasMore  = data.has_more;
-        s.fetching = false;
-        sentinel.innerHTML = s.hasMore
-          ? ''
-          : '<div style="text-align:center;padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mut);">&#9733; All bills loaded</div>';
-      })
-      .catch(function() { s.fetching = false; sentinel.innerHTML = ''; });
-  }
-
-  if ('IntersectionObserver' in window) {
-    var scrollObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (!e.isIntersecting) return;
-        loadMore(e.target.id.replace('-sentinel', ''));
+// ── Spark toggle ──────────────────────────────────────────────────────────────
+function toggleSpark(btn) {
+  var type = btn.dataset.type;
+  var id   = btn.dataset.id;
+  post(SPARK_URL, { type: type, id: id }).then(function(data) {
+    if (data.sparked) {
+      btn.classList.add('on');
+      btn.innerHTML = '<span class="ri">★</span> Sparked';
+      // Unlock build and integrate in the same card
+      var pb = btn.closest('.pb');
+      pb.querySelectorAll('.rung.locked').forEach(function(r){
+        r.classList.remove('locked');
       });
-    }, { rootMargin: '300px' });
-    ['docket', 'record'].forEach(function(v) {
-      var el = document.getElementById(v + '-sentinel');
-      if (el) scrollObserver.observe(el);
-    });
-  }
-
-  window.foraLegToggle = function() {
-    docketActive = !docketActive;
-    var view = docketActive ? 'docket' : 'record';
-    document.getElementById('leg-docket-panel').style.display = docketActive ? 'block' : 'none';
-    document.getElementById('leg-record-panel').style.display = docketActive ? 'none'  : 'block';
-    document.getElementById('leg-title').textContent          = docketActive ? 'The Docket' : 'The Record';
-    document.getElementById('leg-toggle-link').textContent    = docketActive ? 'Check The Record \u2192' : 'See what\u2019s on The Docket \u2192';
-    document.getElementById('leg-count').textContent          = docketActive
-      ? state.docket.total + ' upcoming actions'
-      : state.record.total + ' recent bills';
-
-    var sentinel = document.getElementById(view + '-sentinel');
-    if (sentinel) {
-      var rect = sentinel.getBoundingClientRect();
-      if (rect.top < window.innerHeight + 300) loadMore(view);
+    } else {
+      btn.classList.remove('on');
+      btn.innerHTML = '<span class="ri">★</span> Spark to track';
     }
+    // Update any concur count displayed
+    if (data.count !== undefined) {
+      var sec = btn.closest('.pb').querySelector('.concur-ct');
+      if (sec) sec.textContent = data.count + ' sparks';
+    }
+  }).catch(function(){ /* silent — button state stays */ });
+}
+
+// ── Rep Follow toggle (right rail) ────────────────────────────────────────────
+function toggleRepFollow(btn, repId) {
+  post(SPARK_URL, { type: 'CivicRepresentative', id: repId }).then(function(data) {
+    if (data.sparked) {
+      btn.classList.add('on');
+      btn.textContent = '✓ Following';
+    } else {
+      btn.classList.remove('on');
+      btn.textContent = '+ Follow';
+    }
+  }).catch(function(){});
+}
+
+// ── Build / Integrate trays ───────────────────────────────────────────────────
+function openTray(btn, type) {
+  if (btn.classList.contains('locked')) return;
+
+  var pb       = btn.closest('.pb');
+  var tray     = pb.querySelector('.tray.' + type);
+  var isOpen   = tray.classList.contains('show');
+
+  // Close all trays in this card first
+  pb.querySelectorAll('.tray').forEach(function(x){ x.classList.remove('show'); });
+
+  if (!isOpen) {
+    if (type === 'build') {
+      renderBuildTray(btn, tray);
+    } else {
+      renderIntegTray(btn, tray);
+    }
+    tray.classList.add('show');
+    btn.classList.add('on');
+    btn.innerHTML = type === 'build'
+      ? '<span class="ri">⊕</span> Built'
+      : '<span class="ri">↗</span> Integrated';
+  }
+}
+
+function renderBuildTray(btn, tray) {
+  var sourceType = tray.dataset.sourceType;
+  var sourceId   = tray.dataset.sourceId;
+  tray.innerHTML =
+    '<div class="tray-h">Build on this — grow your understanding:</div>' +
+    '<div class="tray-opts">' +
+      '<span class="topt" onclick="showNoteForm(this, \'' + sourceType + '\', \'' + sourceId + '\')">+ Add your take</span>' +
+      '<span class="topt stub" title="Coming soon">✦ Ask your guide</span>' +
+    '</div>' +
+    '<div class="note-area"></div>';
+}
+
+function showNoteForm(topt, sourceType, sourceId) {
+  var area = topt.closest('.tray').querySelector('.note-area');
+  if (area.querySelector('textarea')) return; // already open
+  area.innerHTML =
+    '<div class="note-form">' +
+      '<textarea rows="2" placeholder="Your take on this…"></textarea>' +
+      '<button onclick="submitNote(this, \'' + sourceType + '\', \'' + sourceId + '\')">Save</button>' +
+    '</div>';
+}
+
+function submitNote(btn, sourceType, sourceId) {
+  var ta   = btn.previousElementSibling;
+  var note = ta.value.trim();
+  if (!note) { ta.focus(); return; }
+  btn.disabled = true;
+  btn.textContent = '…';
+  post(BUILD_URL, { source_type: sourceType, source_id: sourceId, note: note })
+    .then(function(data) {
+      if (data.ok) {
+        btn.closest('.note-form').innerHTML = '<span style="color:var(--blue-md);font-size:12px;">✓ Note saved</span>';
+      } else {
+        btn.disabled = false; btn.textContent = 'Save';
+      }
+    }).catch(function(){ btn.disabled = false; btn.textContent = 'Save'; });
+}
+
+function renderIntegTray(btn, tray) {
+  var sourceType = tray.dataset.sourceType;
+  var sourceId   = tray.dataset.sourceId;
+  var projOpts   = PROJECTS.map(function(p) {
+    return '<span class="proj-chip" onclick="addToProject(' + p.id + ', \'' + sourceType + '\', \'' + sourceId + '\')">' + p.title + '</span>';
+  }).join('');
+
+  tray.innerHTML =
+    '<div class="tray-h">Integrate — weave it into something on FORA:</div>' +
+    '<div class="tray-opts">' +
+      '<span class="topt" onclick="showProjectForm(this, \'' + sourceType + '\', \'' + sourceId + '\')">↗ Add to a project</span>' +
+      (sourceType === 'NeighborhoodIssue'
+        ? '<span class="topt stub" title="Concur coming soon">✓ Cast your voice (Concur)</span>'
+        : '') +
+      '<span class="topt stub" title="Coming soon">⇄ Share to Discourse</span>' +
+    '</div>' +
+    '<div class="project-area"></div>';
+}
+
+function showProjectForm(topt, sourceType, sourceId) {
+  var area = topt.closest('.tray').querySelector('.project-area');
+  if (area.querySelector('.project-sel')) return;
+
+  var projHtml = PROJECTS.length
+    ? '<div class="project-sel">' +
+        PROJECTS.map(function(p){
+          return '<span class="proj-chip" onclick="addToProject(' + p.id + ',\'' + sourceType + '\',\'' + sourceId + '\')">' + p.title + '</span>';
+        }).join('') +
+      '</div>'
+    : '';
+
+  area.innerHTML = projHtml +
+    '<div class="proj-new-form">' +
+      '<input type="text" placeholder="New project name…">' +
+      '<button onclick="createAndAdd(this, \'' + sourceType + '\', \'' + sourceId + '\')">Create</button>' +
+    '</div>';
+}
+
+function addToProject(projectId, sourceType, sourceId) {
+  post(PROJECT_URL, { project_id: projectId, type: sourceType, id: sourceId })
+    .then(function(data){
+      if (data.ok) showFlash('Added to "' + data.project_title + '"');
+    }).catch(function(){});
+}
+
+function createAndAdd(btn, sourceType, sourceId) {
+  var input = btn.previousElementSibling;
+  var title = input.value.trim();
+  if (!title) { input.focus(); return; }
+  btn.disabled = true;
+  post(PROJECT_URL, { title: title, type: sourceType, id: sourceId })
+    .then(function(data){
+      if (data.ok) {
+        PROJECTS.push({ id: data.project_id, title: data.project_title });
+        showFlash('Project "' + data.project_title + '" created');
+        btn.closest('.proj-new-form').innerHTML =
+          '<span style="color:var(--green);font-size:12px;">✓ ' + data.project_title + '</span>';
+      } else {
+        btn.disabled = false;
+      }
+    }).catch(function(){ btn.disabled = false; });
+}
+
+function showFlash(msg) {
+  var el = document.createElement('div');
+  el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 18px;border-radius:999px;font-family:"JetBrains Mono",monospace;font-size:11px;z-index:999;opacity:1;transition:opacity .4s';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(function(){ el.style.opacity = '0'; setTimeout(function(){ el.remove(); }, 400); }, 2200);
+}
+
+// ── Mobile bottom bar ─────────────────────────────────────────────────────────
+document.querySelectorAll('.mtab').forEach(function(m) {
+  m.onclick = function() {
+    document.querySelectorAll('.mtab').forEach(function(x){ x.classList.remove('on'); });
+    m.classList.add('on');
   };
-})();
+});
 </script>
+</body>
+</html>

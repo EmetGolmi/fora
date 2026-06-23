@@ -1,6 +1,8 @@
 class NeighborhoodIssue < ApplicationRecord
-  has_many :issue_responses, dependent: :destroy
+  has_many :issue_responses,    dependent: :destroy
   has_many :issue_concurrences, dependent: :destroy
+  has_many :follows,            as: :followable, dependent: :destroy
+  has_many :connections,        as: :source,     dependent: :destroy
 
   validates :body, presence: true
   validates :rco_slug, presence: true

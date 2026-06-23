@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_22_000004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -126,6 +126,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
     t.index ["source_step_id"], name: "index_compliance_obligations_on_source_step_id"
   end
 
+  create_table "connections", force: :cascade do |t|
+    t.bigint "civic_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.text "note"
+    t.bigint "source_id", null: false
+    t.string "source_type", null: false
+    t.bigint "target_id"
+    t.string "target_type"
+    t.datetime "updated_at", null: false
+    t.index ["civic_profile_id", "source_type", "source_id"], name: "idx_connections_on_profile_and_source"
+    t.index ["civic_profile_id"], name: "index_connections_on_civic_profile_id"
+    t.index ["source_type", "source_id"], name: "idx_connections_on_source"
+    t.index ["target_type", "target_id"], name: "idx_connections_on_target", where: "(target_id IS NOT NULL)"
+  end
+
   create_table "definitions", force: :cascade do |t|
     t.integer "context", null: false
     t.datetime "created_at", null: false
@@ -171,6 +186,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
     t.datetime "updated_at", null: false
     t.index ["case_number"], name: "index_engagements_on_case_number", unique: true, where: "(case_number IS NOT NULL)"
     t.index ["status"], name: "index_engagements_on_status"
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.bigint "civic_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "followable_id", null: false
+    t.string "followable_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["civic_profile_id", "followable_type", "followable_id"], name: "idx_follows_unique", unique: true
+    t.index ["civic_profile_id"], name: "index_follows_on_civic_profile_id"
+    t.index ["followable_type", "followable_id"], name: "idx_follows_on_followable"
   end
 
   create_table "formation_steps", force: :cascade do |t|
@@ -272,10 +298,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
   end
 
   create_table "issue_concurrences", force: :cascade do |t|
+    t.bigint "civic_profile_id"
     t.datetime "created_at", null: false
     t.bigint "neighborhood_issue_id", null: false
     t.string "session_token", null: false
     t.datetime "updated_at", null: false
+    t.index ["civic_profile_id"], name: "idx_issue_concurrences_on_profile"
+    t.index ["neighborhood_issue_id", "civic_profile_id"], name: "idx_issue_conc_on_issue_and_profile", unique: true, where: "(civic_profile_id IS NOT NULL)"
     t.index ["neighborhood_issue_id", "session_token"], name: "index_issue_concurrences_on_issue_and_token", unique: true
     t.index ["neighborhood_issue_id"], name: "index_issue_concurrences_on_neighborhood_issue_id"
   end
@@ -452,6 +481,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
     t.index ["ward", "division", "election_slug"], name: "idx_preballot_geography"
   end
 
+  create_table "project_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "itemable_id", null: false
+    t.string "itemable_type", null: false
+    t.bigint "project_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["itemable_type", "itemable_id"], name: "idx_project_items_on_itemable"
+    t.index ["project_id", "itemable_type", "itemable_id"], name: "idx_project_items_unique", unique: true
+    t.index ["project_id"], name: "index_project_items_on_project_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.bigint "civic_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["civic_profile_id"], name: "index_projects_on_civic_profile_id"
+  end
+
   create_table "provider_capabilities", force: :cascade do |t|
     t.bigint "civic_profile_id", null: false
     t.datetime "created_at", null: false
@@ -514,16 +562,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_000006) do
   add_foreign_key "civic_profiles", "users"
   add_foreign_key "compliance_obligations", "civic_profiles", column: "profile_id", on_delete: :cascade
   add_foreign_key "compliance_obligations", "formation_steps", column: "source_step_id", on_delete: :nullify
+  add_foreign_key "connections", "civic_profiles", on_delete: :cascade
   add_foreign_key "engagement_participants", "civic_profiles"
   add_foreign_key "engagement_participants", "engagements"
+  add_foreign_key "follows", "civic_profiles", on_delete: :cascade
   add_foreign_key "formation_steps", "formation_tracks", column: "track_id", on_delete: :cascade
   add_foreign_key "ijdb_comments", "ijdb_entries"
   add_foreign_key "ijdb_foia_requests", "ijdb_entries"
+  add_foreign_key "issue_concurrences", "civic_profiles", on_delete: :nullify
   add_foreign_key "issue_concurrences", "neighborhood_issues"
   add_foreign_key "issue_responses", "neighborhood_issues"
   add_foreign_key "library_items", "civic_profiles", column: "owner_profile_id", on_delete: :cascade
   add_foreign_key "library_items", "engagements", on_delete: :nullify
   add_foreign_key "official_finance_summaries", "civic_representatives"
+  add_foreign_key "project_items", "projects", on_delete: :cascade
+  add_foreign_key "projects", "civic_profiles", on_delete: :cascade
   add_foreign_key "provider_capabilities", "civic_profiles"
   add_foreign_key "user_formation_progress", "formation_steps", column: "step_id"
   add_foreign_key "user_formation_progress", "formation_tracks", column: "track_id"
