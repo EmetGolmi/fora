@@ -522,6 +522,11 @@ a{text-decoration:none;color:inherit;}
           </div>
         <% end %>
 
+        <%# — Infinite scroll sentinel for jurisdiction bills -%>
+        <div id="juris-bills-sentinel"
+             data-offset="<%= @jurisdiction_bills.size %>"
+             style="height:1px;"></div>
+
         <%# — Neighborhood issues for your RCO -%>
         <% @jurisdiction_issues.each do |issue| %>
           <% issue_sparked = @followed_issue_ids.include?(issue.id) %>
@@ -902,6 +907,176 @@ function toggleExpand(cue) {
     window.scrollTo({ top: top, behavior: 'smooth' });
   }
 }
+
+// ── Jurisdiction bills infinite scroll ───────────────────────────────────────
+(function() {
+  var sentinel = document.getElementById('juris-bills-sentinel');
+  if (!sentinel) return;
+
+  var loading  = false;
+  var hasMore  = true;
+  var csrfToken = (document.querySelector('meta[name="csrf-token"]') || {}).content || '';
+
+  var STAGE_SEGS = {
+    introduced: ['done','now','','',''],
+    committee:  ['done','done','now','',''],
+    passed_chamber: ['done','done','done','now',''],
+    resolving_differences: ['done','done','done','done','now'],
+    to_president: ['done','done','done','done','now'],
+    became_law:   ['done','done','done','done','done'],
+    vetoed:       ['done','done','done','done','done'],
+    failed:       ['done','now','','',''],
+    withdrawn:    ['done','now','','','']
+  };
+  var STAGE_LABEL = {
+    introduced:  'Introduced', committee: 'In Committee',
+    passed_chamber: 'Passed Chamber', resolving_differences: 'Resolving Differences',
+    to_president: 'To President', became_law: 'Became Law',
+    vetoed: 'Vetoed', failed: 'Failed', withdrawn: 'Withdrawn'
+  };
+  var JUR_COLOR = { federal: '#B22234', pennsylvania: '#003087', philadelphia: '#004C54' };
+  var JUR_LABEL = { federal: 'Federal', pennsylvania: 'State', philadelphia: 'Local' };
+
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderSegs(stage) {
+    var segs = STAGE_SEGS[stage] || ['done','now','','',''];
+    return segs.map(function(cls) { return '<span class="sseg ' + cls + '"></span>'; }).join('');
+  }
+
+  function renderBillCard(b) {
+    var color = JUR_COLOR[b.jurisdiction] || '#B22234';
+    var jlbl  = JUR_LABEL[b.jurisdiction] || 'Federal';
+    var slbl  = STAGE_LABEL[b.bill_stage]  || b.status || '';
+    var date  = b.status_date ? ' · ' + esc(b.status_date) : '';
+    var sparkOn = b.sparked ? ' on' : '';
+    var sparkTxt = b.sparked ? 'Tracking' : 'Track';
+
+    // — Expand panel content —
+    var expHtml = '';
+
+    // Summary block
+    if (b.plain_summary) {
+      expHtml += '<div class="bexp-block">'
+               + '<div class="bexp-block-h">In plain language</div>'
+               + '<div class="bexp-summary">' + esc(b.plain_summary) + '</div>'
+               + '</div>';
+    }
+
+    // Effects block
+    var effects = b.effects || [];
+    if (effects.length) {
+      expHtml += '<div class="bexp-block"><div class="bexp-block-h">How it may affect you</div>'
+               + '<ul class="bexp-affect">'
+               + effects.map(function(e){ return '<li>' + esc(e) + '</li>'; }).join('')
+               + '</ul></div>';
+    }
+
+    // Sit with it (guide)
+    if (b.guide_seeded && b.sit_for && b.sit_against) {
+      expHtml += '<div class="exp-guide" id="guide-' + b.id + '">'
+        + '<div class="exp-guide-head">'
+        + '<div class="exp-guide-eyebrow"><span style="font-size:13px;">◯</span> Think it through with your guide</div>'
+        + '<div class="exp-guide-h">Sit with it. Study it. Then take your stand.</div>'
+        + '<div class="exp-guide-sub"><b>FORA never tells you what to think.</b> It makes sure you\'ve understood — both sides, then the facts — before you decide.</div>'
+        + '</div>'
+        + '<div class="eg-tabs">'
+        + '<div class="eg-tab on" onclick="egTab(this,\'sit\',\'guide-' + b.id + '\')"><div class="eg-tab-n">Sit</div><div class="eg-tab-d">both sides</div></div>'
+        + '<div class="eg-tab" onclick="egTab(this,\'study\',\'guide-' + b.id + '\')"><div class="eg-tab-n">Study</div><div class="eg-tab-d">the facts</div></div>'
+        + '<div class="eg-tab" onclick="egTab(this,\'share\',\'guide-' + b.id + '\')"><div class="eg-tab-n">Share</div><div class="eg-tab-d">your stand</div></div>'
+        + '</div>'
+        // Sit pane
+        + '<div class="eg-pane on" id="guide-' + b.id + '-sit">'
+        + '<div class="eg-sides">'
+        + '<div class="eg-side for"><div class="eg-side-h">The case for</div><p>' + esc(b.sit_for) + '</p></div>'
+        + '<div class="eg-side against"><div class="eg-side-h">The case against</div><p>' + esc(b.sit_against) + '</p></div>'
+        + '</div>'
+        + '<div class="eg-minority"><b>⚖ Democracy with minority consent.</b> Even if most of your neighbors land one way, the other view holds something true. FORA asks you to understand it — not to agree with it.</div>'
+        + '<div class="eg-ack"><div class="eg-ack-h">Before you take a stand:</div>'
+        + '<textarea placeholder="In your own words — what\'s the strongest point on the side you disagree with?" oninput="egAckInput(this,\'guide-' + b.id + '\')"></textarea>'
+        + '<div class="eg-ack-note">Private. This isn\'t a test — it\'s the difference between a reaction and a position.</div>'
+        + '</div></div>'
+        // Study pane
+        + '<div class="eg-pane" id="guide-' + b.id + '-study">'
+        + (b.study_facts && b.study_facts.length
+            ? '<ul class="eg-facts">' + b.study_facts.map(function(f){
+                return '<li><span>' + esc(f.text) + '</span><span class="eg-fact-src">' + esc(f.source_label) + '</span></li>';
+              }).join('') + '</ul>'
+            : '')
+        + (b.full_text_url ? '<a href="' + esc(b.full_text_url) + '" target="_blank" rel="noopener" class="eg-study-doc">📄 Read the official bill text →</a>' : '')
+        + '</div>'
+        // Share pane
+        + '<div class="eg-pane" id="guide-' + b.id + '-share">'
+        + '<div class="eg-gate" id="guide-' + b.id + '-gate">Reflect on the strongest opposing argument — Share lightens once you have.</div>'
+        + '<div class="eg-share-acts dimmed" id="guide-' + b.id + '-acts">'
+        + '<a href="/mvp/bills/' + b.id + '#civic-voice" class="eg-sact"><div class="eg-sact-ico" style="background:#f8f0dc;">✓</div><div><div class="eg-sact-t">Share your voice</div><div class="eg-sact-d">Your take on the bill, visible to your community.</div></div></a>'
+        + '<a href="/mvp/bills/' + b.id + '#civic-voice" class="eg-sact"><div class="eg-sact-ico" style="background:#e5f0e8;">💬</div><div><div class="eg-sact-t">See neighbor takes</div><div class="eg-sact-d">What others in your jurisdiction are saying.</div></div></a>'
+        + '</div></div>'
+        + '</div>';
+    }
+
+    // Full bill page link
+    expHtml += '<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">'
+             + '<a href="/mvp/bills/' + b.id + '" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);text-decoration:none;">'
+             + '→ Full bill page</a></div>';
+
+    return '<div class="post f">'
+      + '<div class="av av-doc">§</div>'
+      + '<div class="pb">'
+      + '<div class="pm">'
+      + '<span class="pn2">' + esc(b.identifier || 'Bill') + '</span>'
+      + '<span class="pr">· ' + esc(slbl) + date + '</span>'
+      + '<span class="pbadge bb-f">△ Forum</span>'
+      + '</div>'
+      + '<div class="fctx">' + (b.sparked ? 'On your docket' : 'Your jurisdiction · not yet on your docket') + '</div>'
+      + '<div class="icard">'
+      + '<div class="ic-top"><span class="ic-k k-bill">Bill · ' + jlbl + '</span></div>'
+      + '<div class="ic-t">' + esc((b.title || '').substring(0, 120)) + '</div>'
+      + '<div class="ic-stage"><div class="sbar">' + renderSegs(b.bill_stage) + '</div><span>' + esc(slbl) + '</span></div>'
+      + '</div>'
+      + '<div class="expand-cue" onclick="toggleExpand(this)">▾ Open · read it, weigh it, take your stand</div>'
+      + '<div class="exp">' + expHtml + '</div>'
+      + '<div class="arc">'
+      + '<button class="rung spark' + sparkOn + '" data-type="CivicBill" data-id="' + b.id + '" onclick="toggleSpark(this)">'
+      + '<span class="ri">★</span> ' + sparkTxt
+      + '</button>'
+      + '<button class="rung build locked"><span class="ri">⊕</span> Build</button>'
+      + '<button class="rung integ locked"><span class="ri">↗</span> Integrate</button>'
+      + '<div class="arc-sec"><span class="concur-ct">' + b.follow_count + ' tracking</span> <span>💬 Discuss</span></div>'
+      + '</div>'
+      + '</div></div>';
+  }
+
+  function loadMore() {
+    if (loading || !hasMore) return;
+    loading = true;
+    var offset = parseInt(sentinel.dataset.offset || '0', 10);
+    fetch('/mvp/dashboard/jurisdiction_bills?offset=' + offset, {
+      headers: { 'X-CSRF-Token': csrfToken }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      hasMore = data.has_more;
+      sentinel.dataset.offset = data.offset;
+      var frag = document.createElement('div');
+      frag.innerHTML = data.bills.map(renderBillCard).join('');
+      while (frag.firstChild) {
+        sentinel.parentNode.insertBefore(frag.firstChild, sentinel);
+      }
+      loading = false;
+      if (!hasMore) observer.unobserve(sentinel);
+    })
+    .catch(function() { loading = false; });
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) loadMore();
+  }, { rootMargin: '200px' });
+
+  observer.observe(sentinel);
+}());
 
 // ── Mobile bottom bar ─────────────────────────────────────────────────────────
 document.querySelectorAll('.mtab').forEach(function(m) {

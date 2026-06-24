@@ -128,6 +128,28 @@ class DashboardController < ApplicationController
     redirect_to root_path
   end
 
+  # ── GET /mvp/dashboard/jurisdiction_bills ────────────────────────────────────
+  # Paginated JSON for infinite-scroll on the Your Jurisdictions tab.
+  def jurisdiction_bills
+    load_jurisdiction
+    offset   = [params[:offset].to_i, 0].max
+    per_page = 15
+
+    scope = jurisdiction_bills_scope
+    bills     = scope.offset(offset).limit(per_page)
+    has_more  = scope.offset(offset + per_page).exists?
+
+    followed = @profile.follows
+                       .where(followable_type: "CivicBill", followable_id: bills.map(&:id))
+                       .pluck(:followable_id).to_set
+
+    render json: {
+      bills:    bills.map { |b| bill_json_full(b, followed.include?(b.id)) },
+      has_more: has_more,
+      offset:   offset + per_page
+    }
+  end
+
   # ── GET /mvp/dashboard/bills ─────────────────────────────────────────────────
   def bills
     view        = params[:view] == "record" ? "record" : "docket"
@@ -250,28 +272,10 @@ class DashboardController < ApplicationController
     end
   end
 
-  # Bills for Your Jurisdictions tab: federal + state + city active bills.
-  # Shows ALL active bills for the user's jurisdiction regardless of follow state;
-  # the view renders current follow state per card using @followed_bill_ids.
+  # Bills for Your Jurisdictions tab — first page (server-rendered).
+  # Subsequent pages are loaded via GET /mvp/dashboard/jurisdiction_bills (JSON).
   def jurisdiction_bills
-    state = @jurisdiction[:state].to_s.presence || @profile.address_state.to_s
-    return CivicBill.none if state.blank?
-
-    city = @jurisdiction[:city].to_s.downcase
-
-    # Map 2-letter state abbreviation to the full string stored in bills.jurisdiction
-    state_name = case state.upcase
-                 when "PA" then "pennsylvania"
-                 else state.downcase
-                 end
-
-    jurs = ["federal", state_name]
-    jurs << "philadelphia" if city == "philadelphia"
-
-    CivicBill.active
-             .where(jurisdiction: jurs)
-             .order(Arel.sql("status_date DESC NULLS LAST"))
-             .limit(30)
+    jurisdiction_bills_scope.limit(15)
   end
 
   # Issues for Your Jurisdictions tab: local RCO issues.
@@ -317,5 +321,40 @@ class DashboardController < ApplicationController
     { id: b.id, identifier: b.identifier, title: b.title,
       status: b.status, status_date: b.status_date&.strftime("%b %d, %Y"),
       jurisdiction: b.jurisdiction }
+  end
+
+  def bill_json_full(b, sparked = false)
+    bill_json(b).merge(
+      bill_stage:   b.bill_stage,
+      plain_summary: b.plain_summary,
+      effects:       Array(b.effects),
+      guide_seeded:  b.guide_seeded,
+      sit_for:       b.sit_for,
+      sit_against:   b.sit_against,
+      study_facts:   Array(b.study_facts),
+      full_text_url: b.full_text_url,
+      sponsors:      Array(b.sponsors).first(1).map { |s| s["name"] || s[:name] }.compact,
+      sparked:       sparked,
+      follow_count:  b.follows.count
+    )
+  end
+
+  # Extracted scope so both #show (server-side) and #jurisdiction_bills (JSON) use the same query.
+  def jurisdiction_bills_scope
+    state = @jurisdiction[:state].to_s.presence || @profile.address_state.to_s
+    return CivicBill.none if state.blank?
+
+    city       = @jurisdiction[:city].to_s.downcase
+    state_name = case state.upcase
+                 when "PA" then "pennsylvania"
+                 else state.downcase
+                 end
+
+    jurs = ["federal", state_name]
+    jurs << "philadelphia" if city == "philadelphia"
+
+    CivicBill.active
+             .where(jurisdiction: jurs)
+             .order(Arel.sql("status_date DESC NULLS LAST"))
   end
 end

@@ -187,7 +187,7 @@ namespace :bills do
 
     resp = call_anthropic(body)
     text = resp.dig("content", 0, "text").to_s.strip
-    parts = text.split(" || ", 2).map(&:strip)
+    parts = text.split(/\s*\|\|\s*/, 2).map(&:strip)
     summary = clean_text(parts[0])
     effects = clean_text(parts[1])
     [summary, effects]
