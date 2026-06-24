@@ -270,8 +270,8 @@ class DashboardController < ApplicationController
 
     CivicBill.active
              .where(jurisdiction: jurs)
-             .order(status_date: :desc)
-             .limit(15)
+             .order(Arel.sql("status_date DESC NULLS LAST"))
+             .limit(30)
   end
 
   # Issues for Your Jurisdictions tab: local RCO issues.
