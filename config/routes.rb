@@ -59,6 +59,9 @@ Rails.application.routes.draw do
     post "dashboard/build",          to: "dashboard#build_connection"
     post "dashboard/project_add",    to: "dashboard#project_add"
 
+    # Settings
+    get  "settings", to: "settings#show", as: :settings
+
     # Bills & Executive Orders
     get  "bills/:id",               to: "bills#show",          as: :bill
     get  "bills/:id/summary",       to: "bills#summary",       as: :bill_summary

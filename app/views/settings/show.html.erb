@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="<%= form_authenticity_token %>">
+<title>FORA · Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#eef2fb;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;--gilt-rul:rgba(184,134,11,.28);
+  --scarlet:#8b1a1a;--scarlet-p:#faeaea;--green:#155c2d;--green-lt:#1f7a3e;--green-p:#e5f0e8;
+  --purple:#2d1a4a;--bg:#f2f4f8;--white:#fff;--ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --rule:#e3e8f0;--rule-soft:#eef1f6;--temple:#b8860b;--forum:#1b3a6b;--market:#155c2d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Nunito',sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+
+/* ── TWO-COLUMN SHELL ── */
+.shell{max-width:1290px;margin:0 auto;display:grid;grid-template-columns:245px 1fr;min-height:100vh;}
+
+/* LEFT RAIL */
+.col-left{border-right:1px solid var(--rule);position:sticky;top:0;height:100vh;padding:12px 9px;display:flex;flex-direction:column;overflow-y:auto;}
+.brand{display:flex;align-items:center;gap:9px;padding:6px 11px 12px;}
+.brand-mark{width:33px;height:33px;border-radius:8px;background:linear-gradient(150deg,var(--blue),var(--blue-md));display:flex;align-items:center;justify-content:center;color:var(--gilt-lt);font-family:'Libre Baskerville',serif;font-weight:700;font-size:18px;box-shadow:inset 0 0 0 1px rgba(212,168,50,.35);}
+.brand-word{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--blue);}
+
+.nav-home{display:flex;align-items:center;gap:13px;padding:10px 13px;border-radius:999px;font-weight:800;font-size:16px;color:var(--blue);cursor:pointer;}
+.nav-home:hover{background:var(--blue-vp);}
+.nav-home .ni{width:22px;text-align:center;color:var(--gilt);}
+
+.pillar-h{display:flex;align-items:center;gap:8px;padding:13px 13px 4px;}
+.pg{font-size:14px;width:17px;text-align:center;}
+.pg-t{color:var(--temple);}.pg-f{color:var(--forum);}.pg-m{color:var(--market);}
+.pn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-mut);}
+.tools{padding-left:7px;border-left:2px solid var(--rule);margin-left:20px;}
+.tools.t{border-color:var(--gilt-pl);}.tools.f{border-color:var(--blue-pl);}.tools.m{border-color:var(--green-p);}
+.tool{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-soft);}
+.tool:hover{background:var(--rule-soft);}
+.tool.active{background:var(--blue-vp);color:var(--blue);font-weight:800;}
+.tool .ti{width:16px;text-align:center;color:var(--ink-soft);font-size:13px;flex:none;}
+.tool.active .ti{color:var(--gilt);}
+
+.voice{margin:14px 7px 6px;padding:12px;border:none;border-radius:999px;width:calc(100% - 14px);background:var(--gilt);color:#fff;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 2px 0 rgba(120,86,8,.45);}
+.voice:hover{background:var(--gilt-lt);}
+
+.id-block{margin-top:auto;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:999px;cursor:pointer;}
+.id-block:hover{background:var(--blue-pl);}
+.id-av{width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none;font-size:15px;}
+.id-n{font-weight:800;font-size:13.5px;line-height:1.15;}
+.id-h{color:var(--ink-mut);font-size:12px;}
+
+/* MAIN CONTENT */
+.col-main{padding:28px 32px 70px;min-width:0;}
+@media(max-width:1040px){.col-main{padding:20px 18px 70px;}}
+
+.header{margin-bottom:28px;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:8px;}
+.page-title{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:var(--blue);}
+.subtitle{font-size:14px;color:var(--ink-soft);margin-top:5px;}
+
+/* MASTER SETTINGS */
+.master-section{background:var(--white);border:1px solid var(--rule);border-radius:15px;padding:24px;margin-bottom:32px;}
+.ms-h{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:16px;}
+.ms-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule-soft);}
+.ms-row:last-child{border-bottom:none;}
+.ms-label{font-weight:600;font-size:14px;}
+.ms-value{font-size:13.5px;color:var(--ink-soft);}
+.ms-action{display:flex;gap:8px;flex-shrink:0;margin-left:12px;}
+.btn-text{background:none;border:1.5px solid var(--rule);color:var(--blue);border-radius:999px;padding:6px 13px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.btn-text:hover{border-color:var(--blue);background:var(--blue-vp);}
+.btn-danger{border-color:var(--scarlet);color:var(--scarlet);}
+.btn-danger:hover{background:var(--scarlet-p);}
+
+/* THREE-PILLAR GRID */
+.pillar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+@media(max-width:1100px){.pillar-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:700px){.pillar-grid{grid-template-columns:1fr;}}
+
+.pillar-col{background:var(--white);border:1px solid var(--rule);border-radius:15px;overflow:hidden;}
+.pillar-head{padding:18px;border-bottom:2px solid;display:flex;align-items:center;gap:10px;}
+.pc-t .pillar-head{border-bottom-color:var(--temple);background:linear-gradient(120deg,#fdfaf1,#fff);}
+.pc-f .pillar-head{border-bottom-color:var(--forum);background:linear-gradient(120deg,#f0f4fa,#fff);}
+.pc-m .pillar-head{border-bottom-color:var(--market);background:linear-gradient(120deg,#f0f8f4,#fff);}
+.pillar-glyph{font-size:22px;width:28px;}
+.pg-tl{color:var(--temple);}.pg-fl{color:var(--forum);}.pg-ml{color:var(--market);}
+.pillar-name{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;}
+.pillar-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+
+.settings-section{padding:18px;border-bottom:1px solid var(--rule-soft);}
+.settings-section:last-child{border-bottom:none;}
+.ss-h{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:11px;}
+.setting-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;}
+.setting-row:last-child{margin-bottom:0;}
+.setting-label{font-weight:600;font-size:13.5px;flex-shrink:0;}
+.setting-val{font-size:12.5px;color:var(--ink-soft);text-align:right;}
+
+/* toggles */
+.toggle{width:44px;height:24px;border-radius:999px;background:var(--rule);position:relative;cursor:pointer;border:none;flex-shrink:0;transition:background .2s;}
+.toggle.on{background:var(--gilt);}
+.toggle-dot{position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle.on .toggle-dot{left:22px;}
+
+/* selects + inputs */
+.sel{border:1.5px solid var(--rule);border-radius:8px;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:12.5px;outline:none;background:var(--white);cursor:pointer;color:var(--ink-soft);}
+.sel:hover{border-color:var(--blue-md);}
+.inp{border:1.5px solid var(--rule);border-radius:8px;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:12.5px;outline:none;background:var(--white);color:var(--ink);}
+.inp:focus{border-color:var(--gilt);box-shadow:0 0 0 3px var(--gilt-pl);}
+
+/* badges */
+.verified-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-p);border:1px solid var(--market);border-radius:6px;padding:4px 9px;font-size:11px;color:var(--market);font-weight:700;white-space:nowrap;}
+.verified-badge::before{content:'✓';font-weight:900;}
+.not-verified{display:inline-flex;align-items:center;gap:5px;background:var(--rule-soft);border:1px solid var(--rule);border-radius:6px;padding:4px 9px;font-size:11px;color:var(--ink-mut);white-space:nowrap;}
+
+/* handle row */
+.handle-row{display:flex;align-items:center;gap:4px;}
+.handle-prefix{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-mut);font-weight:600;}
+
+/* responsive */
+@media(max-width:720px){
+  .shell{grid-template-columns:1fr;}
+  .col-left{display:none;}
+  .ms-row{flex-direction:column;align-items:flex-start;gap:8px;}
+  .ms-action{width:100%;}
+  .btn-text{flex:1;text-align:center;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <%# ── LEFT NAV ── %>
+  <nav class="col-left">
+    <div class="brand">
+      <a href="<%= root_path %>" class="brand-mark">F</a>
+      <span class="brand-word">FORA</span>
+    </div>
+
+    <a href="<%= dashboard_path %>" class="nav-home">
+      <span class="ni">⌂</span> Home
+    </a>
+    <a href="<%= settings_path %>" class="tool active" style="margin-top:2px;">
+      <span class="ti">⚙</span> Settings
+    </a>
+
+    <div class="pillar-h"><span class="pg pg-t">◯</span><span class="pn">Temple</span></div>
+    <div class="tools t">
+      <a href="#" class="tool"><span class="ti">◴</span> Sit</a>
+      <a href="#" class="tool"><span class="ti">▤</span> Study</a>
+      <a href="#" class="tool"><span class="ti">⇄</span> Share</a>
+    </div>
+
+    <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
+    <div class="tools f">
+      <a href="<%= dashboard_path %>" class="tool"><span class="ti">◎</span> Observe</a>
+      <a href="#" class="tool"><span class="ti">⬡</span> Connect</a>
+      <a href="#" class="tool"><span class="ti">✓</span> Act</a>
+    </div>
+
+    <div class="pillar-h"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
+    <div class="tools m">
+      <a href="#" class="tool"><span class="ti">◳</span> Demand</a>
+      <a href="#" class="tool"><span class="ti">⚒</span> Supply</a>
+      <a href="#" class="tool"><span class="ti">▣</span> Contract</a>
+    </div>
+
+    <button class="voice">Add your Voice</button>
+
+    <div class="id-block">
+      <div class="id-av">
+        <%= current_user.handle.to_s.first(2).upcase %>
+      </div>
+      <div>
+        <div class="id-n">@<%= current_user.handle %></div>
+        <div class="id-h"><%= @profile.place_label.presence || @profile.address_city %></div>
+      </div>
+    </div>
+  </nav>
+
+  <%# ── MAIN ── %>
+  <main class="col-main">
+
+    <div class="header">
+      <div class="eyebrow">Account &amp; Realm Settings</div>
+      <div class="page-title">Settings</div>
+      <div class="subtitle">Your identity and preferences across Temple, Forum, and Market.</div>
+    </div>
+
+    <%# ── ACCOUNT ── %>
+    <div class="master-section">
+      <div class="ms-h">Account</div>
+
+      <div class="ms-row">
+        <div>
+          <div class="ms-label">Email</div>
+          <div class="ms-value"><%= current_user.email %></div>
+        </div>
+        <div class="ms-action"><button class="btn-text">Change</button></div>
+      </div>
+
+      <div class="ms-row">
+        <div>
+          <div class="ms-label">Password</div>
+          <div class="ms-value">••••••••</div>
+        </div>
+        <div class="ms-action"><button class="btn-text">Change</button></div>
+      </div>
+
+      <div class="ms-row">
+        <div>
+          <div class="ms-label">Address (for jurisdiction)</div>
+          <div class="ms-value">
+            <%= [@profile.address_line1, @profile.address_city, @profile.address_state].compact_blank.join(", ").presence || "Not set" %>
+          </div>
+        </div>
+        <div class="ms-action"><button class="btn-text">Edit</button></div>
+      </div>
+
+      <div class="ms-row">
+        <div>
+          <div class="ms-label">Sessions</div>
+          <div class="ms-value">1 active session</div>
+        </div>
+        <div class="ms-action"><button class="btn-text">Manage</button></div>
+      </div>
+
+      <div class="ms-row">
+        <div>
+          <div class="ms-label">Sign out</div>
+          <div class="ms-value">End your session</div>
+        </div>
+        <div class="ms-action">
+          <%= button_to "Sign out", destroy_session_path, method: :delete, class: "btn-text" %>
+        </div>
+      </div>
+
+      <div class="ms-row">
+        <div>
+          <div class="ms-label">Delete account</div>
+          <div class="ms-value">Permanently remove all your data</div>
+        </div>
+        <div class="ms-action"><button class="btn-text btn-danger">Delete</button></div>
+      </div>
+    </div>
+
+    <%# ── THREE-PILLAR GRID ── %>
+    <div class="pillar-grid">
+
+      <%# ◯ TEMPLE %>
+      <div class="pillar-col pc-t">
+        <div class="pillar-head">
+          <div class="pillar-glyph pg-tl">◯</div>
+          <div>
+            <div class="pillar-name">Temple</div>
+            <div class="pillar-sub">Your inner world</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Profile</div>
+          <div class="setting-row">
+            <span class="setting-label">Handle</span>
+            <div class="handle-row">
+              <span class="handle-prefix">@</span>
+              <input type="text" class="inp" value="<%= current_user.handle %>" style="width:130px;">
+            </div>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Bio</span>
+            <button class="btn-text">Edit</button>
+          </div>
+          <% if @profile.faith_tradition.present? %>
+          <div class="setting-row">
+            <span class="setting-label">Tradition / Faith</span>
+            <span class="setting-val"><%= @profile.faith_tradition %></span>
+          </div>
+          <% end %>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Privacy</div>
+          <div class="setting-row">
+            <span class="setting-label">Reflections (private)</span>
+            <span class="setting-val">Only you can see</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Personality scales</span>
+            <span class="setting-val">Hidden from public</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Bio visibility</span>
+            <select class="sel"><option>Everyone</option><option>Neighbors only</option><option>Private</option></select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Verification</div>
+          <div class="setting-row">
+            <span class="setting-label">Status</span>
+            <span class="not-verified">Not verified</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Verify now</span>
+            <button class="btn-text">Start</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Notifications</div>
+          <div class="setting-row">
+            <span class="setting-label">New discourse replies</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Digest (weekly)</span>
+            <button class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+        </div>
+      </div>
+
+      <%# △ FORUM %>
+      <div class="pillar-col pc-f">
+        <div class="pillar-head">
+          <div class="pillar-glyph pg-fl">△</div>
+          <div>
+            <div class="pillar-name">Forum</div>
+            <div class="pillar-sub">Your civic voice</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Profile</div>
+          <div class="setting-row">
+            <span class="setting-label">Handle</span>
+            <div class="handle-row">
+              <span class="handle-prefix">@</span>
+              <input type="text" class="inp" value="<%= current_user.handle %>" style="width:130px;">
+            </div>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Display name</span>
+            <span class="setting-val">Pseudonymous</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Officials see your takes</span>
+            <span class="setting-val">Yes (constituency meter)</span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Privacy</div>
+          <div class="setting-row">
+            <span class="setting-label">Show neighborhood</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Your concurrences public</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Who can follow you</span>
+            <select class="sel"><option>Anyone</option><option>Neighbors only</option></select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Verification</div>
+          <div class="setting-row">
+            <span class="setting-label">Residency</span>
+            <% if @profile.residency_verified? %>
+              <span class="verified-badge">Verified resident</span>
+            <% else %>
+              <span class="not-verified">Not verified</span>
+            <% end %>
+          </div>
+          <% if @profile.place_label.present? || @profile.address_city.present? %>
+          <div class="setting-row">
+            <span class="setting-label">Jurisdiction</span>
+            <span class="setting-val"><%= @profile.place_label.presence || @profile.address_city %></span>
+          </div>
+          <% end %>
+          <div class="setting-row">
+            <span class="setting-label">Your vote weight</span>
+            <span class="setting-val">
+              <%= @profile.residency_verified? ? "100% (verified resident)" : "Unverified" %>
+            </span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Notifications</div>
+          <div class="setting-row">
+            <span class="setting-label">Bill updates (tracked)</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Comments on your takes</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">RCO alerts</span>
+            <button class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+        </div>
+      </div>
+
+      <%# ▢ MARKET %>
+      <div class="pillar-col pc-m">
+        <div class="pillar-head">
+          <div class="pillar-glyph pg-ml">▢</div>
+          <div>
+            <div class="pillar-name">Market</div>
+            <div class="pillar-sub">Your work &amp; exchange</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Profile</div>
+          <div class="setting-row">
+            <span class="setting-label">Professional name</span>
+            <span class="setting-val"><%= current_user.handle %></span>
+          </div>
+          <% if @profile.service_summary.present? %>
+          <div class="setting-row">
+            <span class="setting-label">Bio / Services</span>
+            <button class="btn-text">Edit</button>
+          </div>
+          <% else %>
+          <div class="setting-row">
+            <span class="setting-label">Bio / Services</span>
+            <button class="btn-text">Add</button>
+          </div>
+          <% end %>
+          <% if @profile.naics_code.present? %>
+          <div class="setting-row">
+            <span class="setting-label">NAICS code</span>
+            <span class="setting-val"><%= @profile.naics_code %></span>
+          </div>
+          <% end %>
+          <div class="setting-row">
+            <span class="setting-label">Availability</span>
+            <select class="sel">
+              <option <%= 'selected' if @profile.provider_mode? %>>Accepting new jobs</option>
+              <option <%= 'selected' unless @profile.provider_mode? %>>Not taking work</option>
+              <option>By referral only</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Privacy</div>
+          <div class="setting-row">
+            <span class="setting-label">Show pricing</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Who can contact you</span>
+            <select class="sel"><option>Verified neighbors</option><option>Anyone</option><option>Nobody</option></select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Verification</div>
+          <div class="setting-row">
+            <span class="setting-label">License</span>
+            <span class="not-verified">Not verified</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Insurance</span>
+            <span class="not-verified">Not verified</span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Upload docs</span>
+            <button class="btn-text">Upload</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Notifications</div>
+          <div class="setting-row">
+            <span class="setting-label">New inquiries</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Contract updates</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Reviews &amp; feedback</span>
+            <button class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></button>
+          </div>
+        </div>
+      </div>
+
+    </div><%# /.pillar-grid %>
+  </main>
+
+</div><%# /.shell %>
+</body>
+</html>
