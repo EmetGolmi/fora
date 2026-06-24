@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_24_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_24_224854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -87,8 +87,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_24_000001) do
     t.string "display_name"
     t.string "faith_branch"
     t.string "faith_tradition"
+    t.string "forum_pseudonym"
     t.text "grow_chips", default: [], array: true
     t.boolean "has_entity"
+    t.string "market_display_name"
+    t.string "market_entity_name"
     t.string "naics_code"
     t.boolean "onboarding_complete", default: false, null: false
     t.integer "onboarding_step", default: 0, null: false
@@ -103,6 +106,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_24_000001) do
     t.text "service_summary"
     t.boolean "service_veteran", default: false, null: false
     t.boolean "show_photo", default: false, null: false
+    t.string "temple_handle"
     t.integer "temple_scale_balance"
     t.integer "temple_scale_purpose"
     t.integer "temple_scale_reason"

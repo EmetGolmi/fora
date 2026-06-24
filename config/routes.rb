@@ -60,7 +60,8 @@ Rails.application.routes.draw do
     post "dashboard/project_add",    to: "dashboard#project_add"
 
     # Settings
-    get  "settings", to: "settings#show", as: :settings
+    get   "settings", to: "settings#show",   as: :settings
+    patch "settings", to: "settings#update"
 
     # Bills & Executive Orders
     get  "bills/:id",               to: "bills#show",          as: :bill
