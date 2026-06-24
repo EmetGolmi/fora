@@ -5,11 +5,10 @@ class DashboardController < ApplicationController
 
   # ── GET /mvp/dashboard ───────────────────────────────────────────────────────
   def show
-    # Address / officials — resolved during onboarding Step 1.
-    # Fall back to legacy session[:dashboard_job_id] for any pre-login
-    # address lookups that might still exist in the wild.
-    job_id = @profile.resolve_job_id.presence || session[:dashboard_job_id]
-    load_jurisdiction(job_id)
+    # Address / officials — profile-first: resolve_job_id is persisted at
+    # account creation and is the canonical source.  Session key is a
+    # legacy-only fallback for any pre-login anonymous flows.
+    load_jurisdiction
 
     # ── CENTER: Following tab ─────────────────────────────────────────────────
     follows = @profile.follows.includes(:followable).order(created_at: :desc)
@@ -18,6 +17,13 @@ class DashboardController < ApplicationController
     # ── CENTER: Your Jurisdictions tab ────────────────────────────────────────
     @jurisdiction_bills  = jurisdiction_bills
     @jurisdiction_issues = jurisdiction_issues
+
+    # Precompute follow-state sets for jurisdiction tab cards (avoids N+1).
+    # Derived from @feed (already loaded) — no extra queries.
+    @followed_bill_ids  = @feed.select { |h| h[:type] == "CivicBill" }
+                               .map    { |h| h[:item].id }.to_set
+    @followed_issue_ids = @feed.select { |h| h[:type] == "NeighborhoodIssue" }
+                               .map    { |h| h[:item].id }.to_set
 
     # ── CENTER: arc state maps (Build / Integrate tray content) ──────────────
     @connection_map = @profile.connections
@@ -49,10 +55,18 @@ class DashboardController < ApplicationController
       CivicRepresentative
         .where("external_ids->>'bioguide_id' = ANY(ARRAY[?]::text[])", bio_ids)
         .index_by { |r| r.external_ids["bioguide_id"] } : {}
+
+    # Jurisdiction tab: officials that have CivicRepresentative AR records
+    # (needed for followability), preserved in API resolution order.
+    @jurisdiction_reps = @officials.filter_map do |o|
+      @rep_by_bioguide[o.dig(:jurisdiction, :bioguide_id).to_s]
+    end
   end
 
   # ── POST /mvp/dashboard/spark ────────────────────────────────────────────────
   # Toggle a Follow (Spark / un-Spark).  Returns JSON so JS can flip button state.
+  # This is the Follow create/destroy action — a single POST endpoint that
+  # creates a Follow if none exists, or destroys it if one does.
   def spark
     followable = find_followable(params[:type], params[:id])
     return render json: { error: "Not found" }, status: :not_found unless followable
@@ -171,16 +185,43 @@ class DashboardController < ApplicationController
     redirect_to join_path unless @profile&.onboarding_complete?
   end
 
-  def load_jurisdiction(job_id)
+  # Profile-first jurisdiction loader.  Three-level fallback:
+  #   1. profile.resolve_job_id → cache → ResolvedAddress by job_id
+  #   2. profile address → ResolvedAddress by address  (handles upsert collision)
+  #   3. session[:dashboard_job_id] → legacy pre-login flows
+  # Never re-resolves; only reads already-stored results.
+  def load_jurisdiction
     @jurisdiction = {}
     @officials    = []
-    return unless job_id.present?
 
-    cached = Rails.cache.read("resolve:#{job_id}") ||
-             ResolvedAddress.find_by(job_id: job_id)&.result_json
+    cached = nil
+
+    # 1 — profile job_id
+    job_id = @profile.resolve_job_id.presence
+    if job_id.present?
+      cached = Rails.cache.read("resolve:#{job_id}") ||
+               ResolvedAddress.find_by(job_id: job_id)&.result_json
+    end
+
+    # 2 — address fallback (handles job_id staleness from upsert collision)
+    if cached.blank? && @profile.address_line1.present?
+      full = [@profile.address_line1, @profile.address_city, @profile.address_state]
+               .reject(&:blank?).join(", ")
+      cached = ResolvedAddress.find_by(address: full)&.result_json
+    end
+
+    # 3 — session fallback (legacy anonymous pre-login flows)
+    if cached.blank? && session[:dashboard_job_id].present?
+      sj     = session[:dashboard_job_id]
+      cached = Rails.cache.read("resolve:#{sj}") ||
+               ResolvedAddress.find_by(job_id: sj)&.result_json
+    end
+
     return unless cached.present?
 
-    data          = JSON.parse(cached, symbolize_names: true)
+    data = JSON.parse(cached, symbolize_names: true)
+    return if data[:error].present?   # job failed; don't surface error payload
+
     @jurisdiction = data[:jurisdiction] || {}
     @officials    = Array(@jurisdiction[:officials])
   end
@@ -209,21 +250,32 @@ class DashboardController < ApplicationController
     end
   end
 
-  # Bills for Your Jurisdictions tab: active bills in the user's state,
-  # excluding anything they already follow.
+  # Bills for Your Jurisdictions tab: federal + state + city active bills.
+  # Shows ALL active bills for the user's jurisdiction regardless of follow state;
+  # the view renders current follow state per card using @followed_bill_ids.
   def jurisdiction_bills
     state = @jurisdiction[:state].to_s.presence || @profile.address_state.to_s
     return CivicBill.none if state.blank?
 
-    already = @profile.follows.where(followable_type: "CivicBill").select(:followable_id)
+    city = @jurisdiction[:city].to_s.downcase
+
+    # Map 2-letter state abbreviation to the full string stored in bills.jurisdiction
+    state_name = case state.upcase
+                 when "PA" then "pennsylvania"
+                 else state.downcase
+                 end
+
+    jurs = ["federal", state_name]
+    jurs << "philadelphia" if city == "philadelphia"
+
     CivicBill.active
-             .where("jurisdiction ILIKE ?", "%#{state.downcase}%")
-             .where.not(id: already)
+             .where(jurisdiction: jurs)
              .order(status_date: :desc)
-             .limit(10)
+             .limit(15)
   end
 
-  # Issues for Your Jurisdictions tab: local RCO issues not yet followed.
+  # Issues for Your Jurisdictions tab: local RCO issues.
+  # Shows ALL issues for the user's RCOs regardless of follow state.
   def jurisdiction_issues
     lat = @jurisdiction[:lat]
     lng = @jurisdiction[:lng]
@@ -237,9 +289,7 @@ class DashboardController < ApplicationController
     end
     return NeighborhoodIssue.none if rco_slugs.empty?
 
-    already = @profile.follows.where(followable_type: "NeighborhoodIssue").select(:followable_id)
     NeighborhoodIssue.where(rco_slug: rco_slugs)
-                     .where.not(id: already)
                      .order(updated_at: :desc)
                      .limit(10)
   end

@@ -421,14 +421,49 @@ a{text-decoration:none;color:inherit;}
 
     <%# ── YOUR JURISDICTIONS TAB ───────────────────────────────────────────── %>
     <div class="tabview" id="tv-juris">
-      <% if @jurisdiction_bills.none? && @jurisdiction_issues.none? %>
+      <% if @jurisdiction_reps.empty? && @jurisdiction_bills.none? && @jurisdiction_issues.none? %>
         <div class="empty">
           <div class="empty-icon">△</div>
           <div class="empty-h">No local activity yet</div>
           <div class="empty-p">As bills and issues for <%= @profile.place_label.presence || "your area" %> are added, they'll appear here.</div>
         </div>
       <% else %>
+
+        <%# — Your representatives (only those with CivicRepresentative AR records) -%>
+        <% @jurisdiction_reps.each do |rep| %>
+          <% rep_sparked = @rep_follows.include?(rep.id) %>
+          <div class="post f">
+            <div class="av av-gov"><%= initials(rep.name) %></div>
+            <div class="pb">
+              <div class="pm">
+                <span class="pn2"><%= rep.name %></span>
+                <span class="vchk">✓</span>
+                <span class="pr">· <%= rep.office %></span>
+                <span class="pbadge bb-f">△ Forum</span>
+              </div>
+              <div class="fctx"><%= rep_sparked ? "You follow this official" : "Your representative" %></div>
+              <div class="arc">
+                <button class="rung spark <%= 'on' if rep_sparked %>"
+                        data-type="CivicRepresentative"
+                        data-id="<%= rep.id %>"
+                        onclick="toggleSpark(this)">
+                  <span class="ri">★</span> <%= rep_sparked ? "Sparked" : "Spark to track" %>
+                </button>
+                <button class="rung build <%= 'locked' unless rep_sparked %>"><span class="ri">⊕</span> Build</button>
+                <button class="rung integ <%= 'locked' unless rep_sparked %>"><span class="ri">↗</span> Integrate</button>
+                <div class="arc-sec">
+                  <span class="concur-ct"><%= rep.follows.count %> following</span>
+                </div>
+              </div>
+              <div class="tray build" data-source-type="CivicRepresentative" data-source-id="<%= rep.id %>"></div>
+              <div class="tray integ" data-source-type="CivicRepresentative" data-source-id="<%= rep.id %>"></div>
+            </div>
+          </div>
+        <% end %>
+
+        <%# — Active bills for your jurisdiction (federal + state + city) -%>
         <% @jurisdiction_bills.each do |bill| %>
+          <% bill_sparked = @followed_bill_ids.include?(bill.id) %>
           <div class="post f">
             <div class="av av-doc">§</div>
             <div class="pb">
@@ -437,7 +472,7 @@ a{text-decoration:none;color:inherit;}
                 <span class="pr">· <%= stage_label(bill) %></span>
                 <span class="pbadge bb-f">△ Forum</span>
               </div>
-              <div class="fctx">Your jurisdiction · not yet on your docket</div>
+              <div class="fctx"><%= bill_sparked ? "On your docket" : "Your jurisdiction · not yet on your docket" %></div>
               <div class="icard">
                 <div class="ic-top">
                   <span class="ic-k k-bill">Bill · <%= jur_label(bill) %></span>
@@ -453,14 +488,14 @@ a{text-decoration:none;color:inherit;}
                 </div>
               </div>
               <div class="arc">
-                <button class="rung spark"
+                <button class="rung spark <%= 'on' if bill_sparked %>"
                         data-type="CivicBill"
                         data-id="<%= bill.id %>"
                         onclick="toggleSpark(this)">
-                  <span class="ri">★</span> Spark to track
+                  <span class="ri">★</span> <%= bill_sparked ? "Sparked" : "Spark to track" %>
                 </button>
-                <button class="rung build locked"><span class="ri">⊕</span> Build</button>
-                <button class="rung integ locked"><span class="ri">↗</span> Integrate</button>
+                <button class="rung build <%= 'locked' unless bill_sparked %>"><span class="ri">⊕</span> Build</button>
+                <button class="rung integ <%= 'locked' unless bill_sparked %>"><span class="ri">↗</span> Integrate</button>
                 <div class="arc-sec">
                   <span class="concur-ct"><%= bill.follows.count %> sparks</span>
                   <span>💬 Discuss</span>
@@ -472,7 +507,9 @@ a{text-decoration:none;color:inherit;}
           </div>
         <% end %>
 
+        <%# — Neighborhood issues for your RCO -%>
         <% @jurisdiction_issues.each do |issue| %>
+          <% issue_sparked = @followed_issue_ids.include?(issue.id) %>
           <div class="post f">
             <div class="av av-org"><%= issue.rco_slug.upcase.first(2) %></div>
             <div class="pb">
@@ -481,7 +518,7 @@ a{text-decoration:none;color:inherit;}
                 <span class="pr">· RCO</span>
                 <span class="pbadge bb-f">△ Forum</span>
               </div>
-              <div class="fctx">Your neighborhood · not yet on your docket</div>
+              <div class="fctx"><%= issue_sparked ? "On your docket" : "Your neighborhood · not yet on your docket" %></div>
               <div class="icard">
                 <div class="ic-top">
                   <span class="ic-k k-issue">Issue</span>
@@ -490,14 +527,14 @@ a{text-decoration:none;color:inherit;}
                 <div class="ic-t"><%= issue.body.truncate(100) %></div>
               </div>
               <div class="arc">
-                <button class="rung spark"
+                <button class="rung spark <%= 'on' if issue_sparked %>"
                         data-type="NeighborhoodIssue"
                         data-id="<%= issue.id %>"
                         onclick="toggleSpark(this)">
-                  <span class="ri">★</span> Spark to track
+                  <span class="ri">★</span> <%= issue_sparked ? "Sparked" : "Spark to track" %>
                 </button>
-                <button class="rung build locked"><span class="ri">⊕</span> Build</button>
-                <button class="rung integ locked"><span class="ri">↗</span> Integrate</button>
+                <button class="rung build <%= 'locked' unless issue_sparked %>"><span class="ri">⊕</span> Build</button>
+                <button class="rung integ <%= 'locked' unless issue_sparked %>"><span class="ri">↗</span> Integrate</button>
                 <div class="arc-sec">
                   <span class="concur-ct"><%= issue.concurrence_count %> concur</span>
                 </div>
@@ -507,6 +544,7 @@ a{text-decoration:none;color:inherit;}
             </div>
           </div>
         <% end %>
+
       <% end %>
     </div><%# /tv-juris %>
   </main>
