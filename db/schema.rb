@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_22_000004) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -36,16 +36,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_22_000004) do
   create_table "civic_bills", force: :cascade do |t|
     t.string "bill_stage", default: "introduced"
     t.datetime "created_at", null: false
+    t.jsonb "effects", default: []
     t.string "external_id", null: false
     t.string "full_text_url"
+    t.boolean "guide_seeded", default: false, null: false
     t.string "identifier"
     t.string "jurisdiction", null: false
+    t.text "plain_summary"
     t.jsonb "raw_data"
     t.string "session_identifier"
+    t.text "sit_against"
+    t.text "sit_for"
     t.string "source", null: false
     t.jsonb "sponsors", default: []
     t.string "status"
     t.date "status_date"
+    t.jsonb "study_facts", default: []
     t.jsonb "subjects", default: []
     t.text "summary"
     t.string "title", null: false

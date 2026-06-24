@@ -189,53 +189,11 @@
 <!-- ── BODY ──────────────────────────────────────────────────────────────── -->
 <div style="max-width:860px; margin:0 auto; padding:44px 48px 72px;">
 
-  <!-- What This Bill Does -->
-  <div style="margin-bottom:44px;">
-    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Plain Language</div>
-    <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 16px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">What This Bill Does</h2>
-
-    <% if @summary.present? %>
-      <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ AI Analysis</div>
-      <p style="font-family:'Nunito',sans-serif; font-size:15px; color:#3a4a5e; line-height:1.75;"><%= @summary %></p>
-    <% else %>
-      <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:20px 22px; display:flex; align-items:flex-start; gap:14px;">
-        <div style="width:8px; height:8px; border-radius:50%; background:#b8860b; flex-shrink:0; margin-top:5px;"></div>
-        <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; line-height:1.6; margin:0; font-style:italic;">AI analysis coming soon — check back shortly.</p>
-      </div>
-    <% end %>
-  </div>
-
-  <% if @bill.full_text_url.present? %>
-    <div style="margin-bottom:44px;">
-      <a href="<%= @bill.full_text_url %>" target="_blank" rel="noopener"
-         style="display:inline-flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:0.12em; text-transform:uppercase; color:#254f92; text-decoration:none; padding:8px 18px; background:white; border:1.5px solid #dde5f5; border-radius:6px;">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Read the full bill text
-      </a>
-    </div>
-  <% end %>
-
-  <!-- What May Happen -->
-  <div style="margin-bottom:52px;">
-    <div style="font-family:'JetBrains Mono',monospace; font-size:7.5px; letter-spacing:0.2em; text-transform:uppercase; color:#b8860b; margin-bottom:6px;">◆ Anticipated Effects</div>
-    <h2 style="font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#1b3a6b; margin:0 0 16px; padding-bottom:12px; border-bottom:1px solid rgba(27,58,107,0.09);">What May Happen</h2>
-    <% if @effects.present? %>
-      <% if @effects_curated %>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ Editorial</div>
-        <% @effects.split("\n\n").each do |para| %>
-          <p style="font-family:'Nunito',sans-serif; font-size:15px; color:#3a4a5e; line-height:1.75; margin-bottom:1.1em;"><%= para %></p>
-        <% end %>
-      <% else %>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:#b8860b; margin-bottom:10px;">◆ AI Analysis</div>
-        <p style="font-family:'Nunito',sans-serif; font-size:15px; color:#3a4a5e; line-height:1.75;"><%= @effects %></p>
-      <% end %>
-    <% else %>
-      <div style="background:white; border:1px solid rgba(27,58,107,0.09); border-radius:10px; padding:20px 22px; display:flex; align-items:flex-start; gap:14px;">
-        <div style="width:8px; height:8px; border-radius:50%; background:#b8860b; flex-shrink:0; margin-top:5px;"></div>
-        <p style="font-family:'Nunito',sans-serif; font-size:14px; color:#8a9ab8; line-height:1.6; margin:0; font-style:italic;">Based on similar legislation, anticipated effects will appear here. FORA never predicts outcomes — only what evidence suggests may be possible.</p>
-      </div>
-    <% end %>
-  </div>
+  <%= render "shared/bill_expanded",
+             bill:       @bill,
+             context:    :page,
+             ai_summary: @summary,
+             ai_effects: @effects %>
 
   <!-- Gilt divider -->
   <div style="display:flex; align-items:center; gap:16px; margin-bottom:48px;">
@@ -245,7 +203,7 @@
   </div>
 
   <%# ── CIVIC VOICE ──────────────────────────────────── %>
-  <div style="background:#1b3a6b;border-radius:12px;padding:2rem 2rem 2.5rem;margin-top:0;">
+  <div id="civic-voice" style="background:#1b3a6b;border-radius:12px;padding:2rem 2rem 2.5rem;margin-top:0;">
   <div class="civic-voice-wrap">
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;
                 letter-spacing:0.14em;text-transform:uppercase;

@@ -1,0 +1,295 @@
+<%#
+  Shared partial: bill expand panel
+  Used by: dashboard card (context: :card) and bills#show (context: :page)
+
+  Locals:
+    bill       — CivicBill (required)
+    context    — :card (default) | :page
+    ai_summary — String from bills#show AI cache (optional, card ignores)
+    ai_effects — String from bills#show AI cache (optional, card ignores)
+
+  Data model (all optional / gracefully absent):
+    bill.plain_summary   — human-seeded plain language; overrides ai_summary
+    bill.effects         — jsonb Array<String>; bullet list; overrides ai_effects
+    bill.sit_for         — text, "the case for"
+    bill.sit_against     — text, "the case against"
+    bill.study_facts     — jsonb Array<{text, source_label, source_url?}>
+    bill.guide_seeded    — boolean guard; false → graceful placeholder
+    bill.full_text_url   — existing column; used for doc links
+%>
+<% ctx      = local_assigns.fetch(:context,    :card) %>
+<% ai_sum   = local_assigns.fetch(:ai_summary, nil)   %>
+<% ai_eff   = local_assigns.fetch(:ai_effects, nil)   %>
+<% sum_text = bill.plain_summary.presence || ai_sum   %>
+<% eff_rows = Array(bill.effects).presence            %>
+<% gid      = "guide-#{bill.id}"                      %>
+
+<%# ── CSS (once per page) ──────────────────────────────────────────────── %>
+<% unless @_bill_guide_css_loaded %>
+  <% @_bill_guide_css_loaded = true %>
+  <style>
+  /* expand panel — title + metarow */
+  .exp-full-t{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;line-height:1.4;margin:12px 0 9px;color:var(--ink,#0e1a2e);}
+  .bexp-metarow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .bexp-chip{font-size:11.5px;color:var(--ink-soft,#5a6e8a);background:var(--rule-soft,#eef1f6);border-radius:999px;padding:5px 11px;display:flex;align-items:center;gap:5px;text-decoration:none;}
+  a.bexp-chip{color:var(--ink-soft,#5a6e8a);}
+  .bexp-chip.doc{background:#faeaea;color:#8b1a1a;font-weight:700;}
+
+  /* content blocks */
+  .bexp-block{border-top:1px solid var(--rule,#e3e8f0);padding-top:13px;margin-top:14px;}
+  .bexp-block-h{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-mut,#8a9ab8);margin-bottom:8px;}
+  .bexp-summary{font-size:14.5px;line-height:1.65;color:var(--ink,#0e1a2e);}
+  .bexp-affect{list-style:none;}
+  .bexp-affect li{font-size:13.5px;line-height:1.5;padding:7px 0 7px 24px;position:relative;color:var(--ink,#0e1a2e);}
+  .bexp-affect li::before{content:"→";position:absolute;left:0;top:7px;color:var(--gilt,#b8860b);font-weight:700;}
+  .bexp-src-note{font-size:10.5px;color:var(--ink-mut,#8a9ab8);font-style:italic;margin-top:6px;}
+  .bexp-placeholder{font-size:13px;color:var(--ink-mut,#8a9ab8);font-style:italic;padding:4px 0;}
+
+  /* guide container */
+  .exp-guide{margin-top:16px;border:1px solid rgba(184,134,11,.28);border-radius:13px;overflow:hidden;background:#fff;}
+  .exp-guide-head{background:linear-gradient(120deg,#fdfaf1,#fff);padding:13px 15px;border-bottom:1px solid rgba(184,134,11,.28);}
+  .exp-guide-eyebrow{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--temple,#b8860b);margin-bottom:5px;}
+  .exp-guide-h{font-family:'Libre Baskerville',serif;font-weight:700;font-size:15px;color:var(--blue,#1b3a6b);}
+  .exp-guide-sub{font-size:11.5px;color:var(--ink-soft,#5a6e8a);margin-top:3px;line-height:1.5;}
+  .exp-guide-sub b{color:var(--ink,#0e1a2e);}
+  .exp-guide-unseeded{padding:16px;font-size:13px;color:var(--ink-mut,#8a9ab8);font-style:italic;}
+
+  /* guide tabs */
+  .eg-tabs{display:flex;border-bottom:1px solid var(--rule,#e3e8f0);}
+  .eg-tab{flex:1;text-align:center;padding:11px 4px 9px;cursor:pointer;border-bottom:3px solid transparent;}
+  .eg-tab-n{font-family:'Libre Baskerville',serif;font-weight:700;font-size:14px;color:var(--ink-soft,#5a6e8a);}
+  .eg-tab-d{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-mut,#8a9ab8);margin-top:2px;}
+  .eg-tab.on{border-bottom-color:var(--temple,#b8860b);}
+  .eg-tab.on .eg-tab-n{color:var(--temple,#b8860b);}
+  .eg-pane{display:none;padding:15px;}
+  .eg-pane.on{display:block;}
+
+  /* sit */
+  .eg-sides{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(max-width:520px){.eg-sides{grid-template-columns:1fr;}}
+  .eg-side{border:1px solid var(--rule,#e3e8f0);border-radius:10px;padding:11px 12px;}
+  .eg-side-h{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;font-weight:600;}
+  .eg-side.for  .eg-side-h{color:#1f7a3e;}
+  .eg-side.against .eg-side-h{color:#8b1a1a;}
+  .eg-side p{font-size:12.5px;line-height:1.55;color:var(--ink,#0e1a2e);}
+  .eg-minority{margin-top:12px;background:var(--blue-vp,#eef2fb);border:1px solid var(--blue-pl,#dde5f5);border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.55;color:var(--blue-md,#254f92);}
+  .eg-minority b{color:var(--blue,#1b3a6b);}
+  .eg-ack{margin-top:12px;background:#f8f0dc;border:1px solid rgba(184,134,11,.28);border-radius:10px;padding:12px 13px;}
+  .eg-ack-h{font-weight:800;font-size:12.5px;color:#6b5300;margin-bottom:6px;}
+  .eg-ack textarea{width:100%;border:1.5px solid rgba(184,134,11,.28);border-radius:8px;padding:9px 11px;font-family:'Nunito',sans-serif;font-size:13px;resize:vertical;min-height:54px;outline:none;background:#fff;}
+  .eg-ack-note{font-size:10.5px;color:var(--ink-mut,#8a9ab8);margin-top:6px;font-style:italic;}
+
+  /* study */
+  .eg-facts{list-style:none;}
+  .eg-facts li{font-size:13px;line-height:1.5;padding:8px 0;border-bottom:1px solid var(--rule-soft,#eef1f6);display:flex;gap:9px;align-items:flex-start;}
+  .eg-facts li:last-child{border-bottom:none;}
+  .eg-fact-src{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:var(--blue,#1b3a6b);background:var(--blue-pl,#dde5f5);border-radius:5px;padding:2px 6px;white-space:nowrap;flex:none;text-decoration:none;}
+  .eg-study-doc{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8b1a1a;border:1px solid #faeaea;background:#faeaea;border-radius:999px;padding:8px 13px;text-decoration:none;}
+
+  /* share */
+  .eg-gate{font-size:11px;color:var(--ink-mut,#8a9ab8);font-style:italic;margin-bottom:12px;}
+  .eg-share-acts{display:flex;flex-direction:column;gap:9px;}
+  .eg-share-acts.dimmed .eg-sact{opacity:.42;transition:opacity .2s;}
+  .eg-sact{display:flex;align-items:center;gap:11px;border:1.5px solid var(--rule,#e3e8f0);border-radius:11px;padding:11px 13px;cursor:pointer;text-decoration:none;color:inherit;}
+  .eg-sact:hover{border-color:var(--gilt,#b8860b);}
+  .eg-sact-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;}
+  .eg-sact-t{font-weight:700;font-size:13.5px;color:var(--ink,#0e1a2e);}
+  .eg-sact-d{font-size:11.5px;color:var(--ink-soft,#5a6e8a);}
+  </style>
+<% end %>
+
+<%# ── Card context: full title + metarow ─────────────────────────────── %>
+<% if ctx == :card %>
+  <div class="exp-full-t"><%= bill.title %></div>
+  <div class="bexp-metarow">
+    <% sp = Array(bill.sponsors).first %>
+    <% if sp.present? %>
+      <span class="bexp-chip">📋 <%= sp["name"] || sp[:name] %></span>
+    <% end %>
+    <span class="bexp-chip">🏛 <%= bill.status.to_s.truncate(60) %></span>
+    <% if bill.full_text_url.present? %>
+      <a href="<%= bill.full_text_url %>" target="_blank" rel="noopener" class="bexp-chip doc">📄 Official text →</a>
+    <% end %>
+  </div>
+<% end %>
+
+<%# ── Summary ──────────────────────────────────────────────────────────── %>
+<div class="bexp-block">
+  <div class="bexp-block-h">In plain language</div>
+  <% if sum_text.present? %>
+    <div class="bexp-summary"><%= sum_text %></div>
+    <% if bill.plain_summary.blank? %>
+      <div class="bexp-src-note">AI-generated analysis.</div>
+    <% end %>
+  <% else %>
+    <div class="bexp-placeholder">Plain language summary coming soon.</div>
+  <% end %>
+</div>
+
+<%# ── Effects ─────────────────────────────────────────────────────────── %>
+<% if eff_rows.present? || ai_eff.present? %>
+  <div class="bexp-block">
+    <div class="bexp-block-h">How it may affect you</div>
+    <% if eff_rows.present? %>
+      <ul class="bexp-affect">
+        <% eff_rows.each do |eff| %>
+          <li><%= eff %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="bexp-summary"><%= ai_eff %></div>
+      <div class="bexp-src-note">AI-generated analysis.</div>
+    <% end %>
+  </div>
+<% end %>
+
+<%# ── Guide ────────────────────────────────────────────────────────────── %>
+<div class="exp-guide" id="<%= gid %>">
+  <div class="exp-guide-head">
+    <div class="exp-guide-eyebrow">
+      <span style="font-size:13px;">◯</span> Think it through with your guide
+    </div>
+    <div class="exp-guide-h">Sit with it. Study it. Then take your stand.</div>
+    <div class="exp-guide-sub">
+      <b>FORA never tells you what to think.</b>
+      It makes sure you've understood — both sides, then the facts — before you decide.
+    </div>
+  </div>
+
+  <% if bill.guide_seeded? %>
+
+    <div class="eg-tabs">
+      <div class="eg-tab on" onclick="egTab(this,'sit','<%= gid %>')">
+        <div class="eg-tab-n">Sit</div>
+        <div class="eg-tab-d">both sides</div>
+      </div>
+      <div class="eg-tab" onclick="egTab(this,'study','<%= gid %>')">
+        <div class="eg-tab-n">Study</div>
+        <div class="eg-tab-d">the facts</div>
+      </div>
+      <div class="eg-tab" onclick="egTab(this,'share','<%= gid %>')">
+        <div class="eg-tab-n">Share</div>
+        <div class="eg-tab-d">your stand</div>
+      </div>
+    </div>
+
+    <%# SIT ────────────────────────────────── %>
+    <div class="eg-pane on" id="<%= gid %>-sit">
+      <div class="eg-sides">
+        <div class="eg-side for">
+          <div class="eg-side-h">The case for</div>
+          <p><%= bill.sit_for %></p>
+        </div>
+        <div class="eg-side against">
+          <div class="eg-side-h">The case against</div>
+          <p><%= bill.sit_against %></p>
+        </div>
+      </div>
+      <div class="eg-minority">
+        <b>⚖ Democracy with minority consent.</b>
+        Even if most of your neighbors land one way, the other view holds something true.
+        FORA asks you to understand it — not to agree with it. A position you can't argue
+        against isn't one you've actually examined.
+      </div>
+      <div class="eg-ack">
+        <div class="eg-ack-h">Before you take a stand:</div>
+        <textarea placeholder="In your own words — what's the strongest point on the side you disagree with?"
+                  oninput="egAckInput(this,'<%= gid %>')"></textarea>
+        <div class="eg-ack-note">
+          Private. This isn't a test — it's the difference between a reaction and a position.
+        </div>
+      </div>
+    </div>
+
+    <%# STUDY ──────────────────────────────── %>
+    <div class="eg-pane" id="<%= gid %>-study">
+      <% facts = Array(bill.study_facts) %>
+      <% if facts.present? %>
+        <ul class="eg-facts">
+          <% facts.each do |fact| %>
+            <li>
+              <span><%= fact["text"] %></span>
+              <% if fact["source_label"].present? %>
+                <% if fact["source_url"].present? %>
+                  <a href="<%= fact["source_url"] %>" target="_blank" rel="noopener"
+                     class="eg-fact-src"><%= fact["source_label"] %></a>
+                <% else %>
+                  <span class="eg-fact-src"><%= fact["source_label"] %></span>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+      <% if bill.full_text_url.present? %>
+        <a href="<%= bill.full_text_url %>" target="_blank" rel="noopener"
+           class="eg-study-doc">📄 Read the official bill text →</a>
+      <% end %>
+    </div>
+
+    <%# SHARE ──────────────────────────────── %>
+    <div class="eg-pane" id="<%= gid %>-share">
+      <div class="eg-gate" id="<%= gid %>-gate">
+        Reflect on the strongest opposing argument — Share lightens once you have.
+      </div>
+      <div class="eg-share-acts dimmed" id="<%= gid %>-acts">
+        <% if ctx == :card %>
+          <a href="<%= bill_path(bill) %>" class="eg-sact">
+            <div class="eg-sact-ico" style="background:#eef2fb;">📋</div>
+            <div>
+              <div class="eg-sact-t">Read the full bill page</div>
+              <div class="eg-sact-d">Full text, vote history, and the community voice section.</div>
+            </div>
+          </a>
+        <% end %>
+        <a href="<%= bill_path(bill) %>#civic-voice" class="eg-sact">
+          <div class="eg-sact-ico" style="background:#f8f0dc;">✓</div>
+          <div>
+            <div class="eg-sact-t">Share your voice</div>
+            <div class="eg-sact-d">Your take on the bill, visible to your community.</div>
+          </div>
+        </a>
+        <a href="<%= bill_path(bill) %>#civic-voice" class="eg-sact">
+          <div class="eg-sact-ico" style="background:#e5f0e8;">💬</div>
+          <div>
+            <div class="eg-sact-t">See neighbor takes</div>
+            <div class="eg-sact-d">What others in your jurisdiction are saying.</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  <% else %>
+    <div class="exp-guide-unseeded">
+      Deeper guide coming — the Sit / Study / Share guide for this bill is being prepared.
+    </div>
+  <% end %>
+</div><%# /.exp-guide %>
+
+<%# ── JS (once per page) ────────────────────────────────────────────────── %>
+<% unless @_bill_guide_js_loaded %>
+  <% @_bill_guide_js_loaded = true %>
+  <script>
+  function egTab(tab, key, gid) {
+    var guide = document.getElementById(gid);
+    if (!guide) return;
+    guide.querySelectorAll('.eg-tab').forEach(function(t){ t.classList.remove('on'); });
+    tab.classList.add('on');
+    guide.querySelectorAll('.eg-pane').forEach(function(p){ p.classList.remove('on'); });
+    var pane = document.getElementById(gid + '-' + key);
+    if (pane) pane.classList.add('on');
+  }
+
+  function egAckInput(ta, gid) {
+    var filled  = ta.value.trim().length > 0;
+    var acts    = document.getElementById(gid + '-acts');
+    var gateEl  = document.getElementById(gid + '-gate');
+    if (acts) acts.classList.toggle('dimmed', !filled);
+    if (gateEl) {
+      gateEl.textContent = filled
+        ? '\uD83D\uDD13 Reflection noted. Your voice now carries more weight.'
+        : 'Reflect on the strongest opposing argument \u2014 Share lightens once you have.';
+    }
+  }
+  </script>
+<% end %>

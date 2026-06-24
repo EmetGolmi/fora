@@ -187,6 +187,13 @@ a{text-decoration:none;color:inherit;}
 .cm-l b{color:var(--ink);}
 .cm-empty{padding:12px 15px;font-size:13px;color:var(--ink-mut);}
 
+/* EXPAND SHELL */
+.expand-cue{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:9px;padding:6px;border-top:1px dashed var(--rule);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);cursor:pointer;user-select:none;}
+.expand-cue:hover{color:var(--blue-md);}
+.exp{display:none;}
+.exp.open{display:block;animation:expfade .25s ease;}
+@keyframes expfade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
 /* RESPONSIVE */
 @media(max-width:1040px){
   .shell{grid-template-columns:230px minmax(0,1fr);}
@@ -372,6 +379,10 @@ a{text-decoration:none;color:inherit;}
                     <span><%= stage_label(item) %></span>
                   </div>
                 </div>
+                <div class="expand-cue" onclick="toggleExpand(this)">▾ Open · read it, weigh it, take your stand</div>
+                <div class="exp">
+                  <%= render "shared/bill_expanded", bill: item, context: :card %>
+                </div>
               <% elsif type == "NeighborhoodIssue" %>
                 <div class="icard">
                   <div class="ic-top">
@@ -486,6 +497,10 @@ a{text-decoration:none;color:inherit;}
                   </div>
                   <span><%= stage_label(bill) %></span>
                 </div>
+              </div>
+              <div class="expand-cue" onclick="toggleExpand(this)">▾ Open · read it, weigh it, take your stand</div>
+              <div class="exp">
+                <%= render "shared/bill_expanded", bill: bill, context: :card %>
               </div>
               <div class="arc">
                 <button class="rung spark <%= 'on' if bill_sparked %>"
@@ -869,6 +884,23 @@ function showFlash(msg) {
   el.textContent = msg;
   document.body.appendChild(el);
   setTimeout(function(){ el.style.opacity = '0'; setTimeout(function(){ el.remove(); }, 400); }, 2200);
+}
+
+// ── Expand bill card in place ─────────────────────────────────────────────────
+function toggleExpand(cue) {
+  var pb    = cue.closest('.pb');
+  var exp   = pb.querySelector('.exp');
+  var icard = pb.querySelector('.icard');
+  if (!exp) return;
+  var isOpen = exp.classList.toggle('open');
+  if (icard) icard.style.display = isOpen ? 'none' : '';
+  cue.innerHTML = isOpen
+    ? '&#9652; Collapse'
+    : '&#9662; Open &middot; read it, weigh it, take your stand';
+  if (isOpen) {
+    var top = pb.closest('.post').getBoundingClientRect().top + window.scrollY - 20;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
 }
 
 // ── Mobile bottom bar ─────────────────────────────────────────────────────────
