@@ -11,6 +11,7 @@ class CivicProfile < ApplicationRecord
   has_many :connections,  dependent: :destroy
   has_many :projects,     dependent: :destroy
   has_many :issue_concurrences, dependent: :nullify
+  has_many :bill_reflections,   dependent: :destroy  # private journal — see BillReflection privacy invariant
 
   # Convenience: the set of things this profile is following
   has_many :followed_bills,    -> { where(follows: { followable_type: "CivicBill" }) },

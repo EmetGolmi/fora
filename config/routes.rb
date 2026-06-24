@@ -62,8 +62,10 @@ Rails.application.routes.draw do
     # Bills & Executive Orders
     get  "bills/:id",               to: "bills#show",          as: :bill
     get  "bills/:id/summary",       to: "bills#summary",       as: :bill_summary
-    get  "bills/:bill_id/comments", to: "bill_comments#index", as: :bill_comments
-    post "bills/:bill_id/comments", to: "bill_comments#create"
+    get  "bills/:bill_id/comments",    to: "bill_comments#index",       as: :bill_comments
+    post "bills/:bill_id/comments",    to: "bill_comments#create"
+    post "bills/:bill_id/reflection",  to: "bill_reflections#upsert",   as: :bill_reflection
+    post "bills/:bill_id/tone_check",  to: "bill_reflections#tone_check"
     get  "eo/:id",                  to: "executive_orders#show", as: :executive_order
 
     # ── Officials — friendly slug routes ──────────────────────────────────

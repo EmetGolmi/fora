@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_24_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -31,6 +31,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_000001) do
     t.index ["civic_bill_id"], name: "index_bill_comments_on_civic_bill_id"
     t.index ["session_token"], name: "index_bill_comments_on_session_token"
     t.index ["stance"], name: "index_bill_comments_on_stance"
+  end
+
+  create_table "bill_reflections", force: :cascade do |t|
+    t.bigint "civic_bill_id", null: false
+    t.bigint "civic_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "feeling_tags", default: [], null: false
+    t.text "reaction_note"
+    t.text "steelman_note"
+    t.datetime "updated_at", null: false
+    t.index ["civic_bill_id"], name: "index_bill_reflections_on_civic_bill_id"
+    t.index ["civic_profile_id", "civic_bill_id"], name: "idx_bill_reflections_profile_bill", unique: true
+    t.index ["civic_profile_id"], name: "index_bill_reflections_on_civic_profile_id"
   end
 
   create_table "civic_bills", force: :cascade do |t|
@@ -565,6 +578,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_000001) do
   end
 
   add_foreign_key "bill_comments", "civic_bills"
+  add_foreign_key "bill_reflections", "civic_bills"
+  add_foreign_key "bill_reflections", "civic_profiles"
   add_foreign_key "civic_profiles", "users"
   add_foreign_key "compliance_obligations", "civic_profiles", column: "profile_id", on_delete: :cascade
   add_foreign_key "compliance_obligations", "formation_steps", column: "source_step_id", on_delete: :nullify

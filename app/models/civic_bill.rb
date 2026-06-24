@@ -1,5 +1,6 @@
 class CivicBill < ApplicationRecord
-  has_many :bill_comments, foreign_key: :civic_bill_id, dependent: :destroy
+  has_many :bill_comments,    foreign_key: :civic_bill_id, dependent: :destroy
+  has_many :bill_reflections, dependent: :destroy  # private — see BillReflection privacy invariant
   has_many :follows,      as: :followable, dependent: :destroy
   has_many :connections,  as: :source,     dependent: :destroy
 
