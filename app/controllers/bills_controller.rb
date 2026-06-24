@@ -1,4 +1,28 @@
 class BillsController < ApplicationController
+  # ── GET /mvp/bills/:id/summary — lazy JSON for dashboard cards ───────────────
+  def summary
+    @bill = CivicBill.find_by(id: params[:id])
+    return render json: { error: "not found" }, status: :not_found unless @bill
+
+    if @bill.plain_summary.present?
+      return render json: { summary: @bill.plain_summary, effects: Array(@bill.effects) }
+    end
+
+    cached = Rails.cache.read("bill_summary:#{@bill.id}")
+    if cached.present?
+      data = JSON.parse(cached, symbolize_names: true)
+      @summary = data[:summary]
+      @effects = data[:effects]
+      @bill.update_column(:plain_summary, @summary) if @summary.present?
+    else
+      fetch_ai_summary
+    end
+
+    render json: { summary: @summary, effects: @effects.is_a?(Array) ? @effects : [] }
+  rescue StandardError
+    render json: { summary: nil, effects: [] }
+  end
+
   def show
     @bill = CivicBill.find_by(id: params[:id])
     if @bill.nil?

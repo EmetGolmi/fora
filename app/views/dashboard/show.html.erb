@@ -905,6 +905,36 @@ function toggleExpand(cue) {
   if (isOpen) {
     var top = pb.closest('.post').getBoundingClientRect().top + window.scrollY - 20;
     window.scrollTo({ top: top, behavior: 'smooth' });
+    // Lazy-load summary if missing
+    var lazy = exp.querySelector('.bexp-summary-lazy');
+    if (lazy && !lazy.dataset.loaded) {
+      lazy.dataset.loaded = '1';
+      var billId = lazy.dataset.billId;
+      fetch('/mvp/bills/' + billId + '/summary')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.summary) {
+            lazy.innerHTML = data.summary;
+            lazy.style.fontStyle = 'normal';
+            lazy.style.color = 'var(--ink)';
+            lazy.style.fontSize = '14.5px';
+            lazy.style.lineHeight = '1.65';
+            // Inject effects if present and no effects block exists
+            if (data.effects && data.effects.length && !exp.querySelector('.bexp-affect')) {
+              var effDiv = document.createElement('div');
+              effDiv.className = 'bexp-block';
+              effDiv.innerHTML = '<div class="bexp-block-h">How it may affect you</div>'
+                + '<ul class="bexp-affect">'
+                + data.effects.map(function(e){ return '<li>' + e + '</li>'; }).join('')
+                + '</ul>';
+              lazy.closest('.bexp-block').insertAdjacentElement('afterend', effDiv);
+            }
+          } else {
+            lazy.textContent = 'Summary not yet available.';
+          }
+        })
+        .catch(function() { lazy.textContent = 'Could not load summary.'; });
+    }
   }
 }
 
