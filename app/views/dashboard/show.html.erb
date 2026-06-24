@@ -284,7 +284,7 @@ a{text-decoration:none;color:inherit;}
         <span class="pchip" data-p="m">▢ Market</span>
       </div>
       <div class="legend">
-        <span class="lg"><span class="ic ic-s">★</span> <b>Spark</b> save it</span><span class="lg-arr">→</span>
+        <span class="lg"><span class="ic ic-s">★</span> <b>Track</b> save it</span><span class="lg-arr">→</span>
         <span class="lg"><span class="ic ic-b">⊕</span> <b>Build</b> connect &amp; develop</span><span class="lg-arr">→</span>
         <span class="lg"><span class="ic ic-i">↗</span> <b>Integrate</b> weave it into something</span>
       </div>
@@ -296,7 +296,7 @@ a{text-decoration:none;color:inherit;}
         <div class="empty">
           <div class="empty-icon">★</div>
           <div class="empty-h">Your feed is empty</div>
-          <div class="empty-p">Switch to <strong>Your Jurisdictions</strong> to find bills, issues, and officials to spark — they'll appear here.</div>
+          <div class="empty-p">Switch to <strong>Your Jurisdictions</strong> to find bills, issues, and officials to track — they'll appear here.</div>
         </div>
       <% else %>
         <% @feed.each do |h| %>
@@ -388,7 +388,7 @@ a{text-decoration:none;color:inherit;}
                         data-type="<%= type %>"
                         data-id="<%= item.id %>"
                         onclick="toggleSpark(this)">
-                  <span class="ri">★</span> Sparked
+                  <span class="ri">★</span> Tracking
                 </button>
                 <button class="rung build <%= 'on' if built %>"
                         data-type="<%= type %>"
@@ -404,7 +404,7 @@ a{text-decoration:none;color:inherit;}
                 </button>
                 <div class="arc-sec">
                   <% if type == "CivicBill" %>
-                    <span class="concur-ct"><%= item.follows.count %> sparks</span>
+                    <span class="concur-ct"><%= item.follows.count %> tracking</span>
                   <% elsif type == "NeighborhoodIssue" %>
                     <span class="concur-ct"><%= item.concurrence_count %> concur</span>
                   <% end %>
@@ -447,7 +447,7 @@ a{text-decoration:none;color:inherit;}
                         data-type="CivicRepresentative"
                         data-id="<%= rep.id %>"
                         onclick="toggleSpark(this)">
-                  <span class="ri">★</span> <%= rep_sparked ? "Sparked" : "Spark to track" %>
+                  <span class="ri">★</span> <%= rep_sparked ? "Tracking" : "Track" %>
                 </button>
                 <button class="rung build <%= 'locked' unless rep_sparked %>"><span class="ri">⊕</span> Build</button>
                 <button class="rung integ <%= 'locked' unless rep_sparked %>"><span class="ri">↗</span> Integrate</button>
@@ -492,12 +492,12 @@ a{text-decoration:none;color:inherit;}
                         data-type="CivicBill"
                         data-id="<%= bill.id %>"
                         onclick="toggleSpark(this)">
-                  <span class="ri">★</span> <%= bill_sparked ? "Sparked" : "Spark to track" %>
+                  <span class="ri">★</span> <%= bill_sparked ? "Tracking" : "Track" %>
                 </button>
                 <button class="rung build <%= 'locked' unless bill_sparked %>"><span class="ri">⊕</span> Build</button>
                 <button class="rung integ <%= 'locked' unless bill_sparked %>"><span class="ri">↗</span> Integrate</button>
                 <div class="arc-sec">
-                  <span class="concur-ct"><%= bill.follows.count %> sparks</span>
+                  <span class="concur-ct"><%= bill.follows.count %> tracking</span>
                   <span>💬 Discuss</span>
                 </div>
               </div>
@@ -531,7 +531,7 @@ a{text-decoration:none;color:inherit;}
                         data-type="NeighborhoodIssue"
                         data-id="<%= issue.id %>"
                         onclick="toggleSpark(this)">
-                  <span class="ri">★</span> <%= issue_sparked ? "Sparked" : "Spark to track" %>
+                  <span class="ri">★</span> <%= issue_sparked ? "Tracking" : "Track" %>
                 </button>
                 <button class="rung build <%= 'locked' unless issue_sparked %>"><span class="ri">⊕</span> Build</button>
                 <button class="rung integ <%= 'locked' unless issue_sparked %>"><span class="ri">↗</span> Integrate</button>
@@ -557,7 +557,7 @@ a{text-decoration:none;color:inherit;}
       <div class="rh">Your Docket</div>
       <div class="rs">What you're tracking · <%= @feed.size %> item<%= @feed.size == 1 ? "" : "s" %></div>
       <% if @docket_items.empty? %>
-        <div style="padding:12px 15px;font-size:13px;color:var(--ink-mut);">Nothing on your docket yet — Spark something to start.</div>
+        <div style="padding:12px 15px;font-size:13px;color:var(--ink-mut);">Nothing on your docket yet — Track something to start.</div>
       <% else %>
         <% @docket_items.each do |h| %>
           <% item = h[:item]; type = h[:type] %>
@@ -637,13 +637,13 @@ a{text-decoration:none;color:inherit;}
         <div class="cm">
           <div class="cm-n"><%= @meter_pct %>%</div>
           <div class="cm-l">
-            of people sparking <b><%= @meter_bill.identifier.presence || @meter_bill.title.truncate(40) %></b>
+            of people tracking <b><%= @meter_bill.identifier.presence || @meter_bill.title.truncate(40) %></b>
             are <b>verified residents</b><% if @jurisdiction[:city].present? %> of <%= @jurisdiction[:city] %><% end %>.
             The thing X can't show.
           </div>
         </div>
       <% else %>
-        <div class="cm-empty">Spark a bill to see the verified-resident share of everyone following it.</div>
+        <div class="cm-empty">Track a bill to see the verified-resident share of everyone following it.</div>
       <% end %>
     </div>
 
@@ -706,7 +706,7 @@ function toggleSpark(btn) {
   post(SPARK_URL, { type: type, id: id }).then(function(data) {
     if (data.sparked) {
       btn.classList.add('on');
-      btn.innerHTML = '<span class="ri">★</span> Sparked';
+      btn.innerHTML = '<span class="ri">★</span> Tracking';
       // Unlock build and integrate in the same card
       var pb = btn.closest('.pb');
       pb.querySelectorAll('.rung.locked').forEach(function(r){
@@ -714,12 +714,12 @@ function toggleSpark(btn) {
       });
     } else {
       btn.classList.remove('on');
-      btn.innerHTML = '<span class="ri">★</span> Spark to track';
+      btn.innerHTML = '<span class="ri">★</span> Track';
     }
     // Update any concur count displayed
     if (data.count !== undefined) {
       var sec = btn.closest('.pb').querySelector('.concur-ct');
-      if (sec) sec.textContent = data.count + ' sparks';
+      if (sec) sec.textContent = data.count + ' tracking';
     }
   }).catch(function(){ /* silent — button state stays */ });
 }
