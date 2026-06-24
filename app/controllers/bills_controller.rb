@@ -11,6 +11,10 @@ class BillsController < ApplicationController
       data     = JSON.parse(cached, symbolize_names: true)
       @summary = data[:summary]
       @effects = data[:effects]
+      # Persist to DB if not yet saved (so dashboard can read plain_summary directly)
+      if @bill.plain_summary.blank? && @summary.present?
+        @bill.update_column(:plain_summary, @summary)
+      end
     else
       fetch_ai_summary
     end
@@ -79,6 +83,8 @@ class BillsController < ApplicationController
           { summary: @summary, effects: @effects }.to_json,
           expires_in: 24.hours
         )
+        # Persist plain_summary to DB so the dashboard can read it without cache
+        @bill.update_column(:plain_summary, @summary) if @summary.present? && @bill.plain_summary.blank?
       end
     end
   rescue StandardError
