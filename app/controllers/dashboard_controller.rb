@@ -128,6 +128,20 @@ class DashboardController < ApplicationController
     redirect_to root_path
   end
 
+  # ── GET /mvp/dashboard/reresolve ────────────────────────────────────────────
+  # Re-fires address resolution for the current profile. Synchronous so the
+  # result is available immediately on the redirect back to the dashboard.
+  def reresolve
+    address = [@profile.address_line1, @profile.address_city, @profile.address_state]
+                .compact_blank.join(", ")
+    if address.present?
+      job_id = @profile.resolve_job_id.presence || SecureRandom.hex(8)
+      ResolveAddressJob.perform_now(address, job_id)
+      @profile.update_column(:resolve_job_id, job_id) unless @profile.resolve_job_id == job_id
+    end
+    redirect_to dashboard_path
+  end
+
   # ── GET /mvp/dashboard/jurisdiction_bills ────────────────────────────────────
   # Paginated JSON for infinite-scroll on the Your Jurisdictions tab.
   def jurisdiction_bills
@@ -237,6 +251,22 @@ class DashboardController < ApplicationController
       sj     = session[:dashboard_job_id]
       cached = Rails.cache.read("resolve:#{sj}") ||
                ResolvedAddress.find_by(job_id: sj)&.result_json
+    end
+
+    # 4 — synchronous self-heal: if nothing was found but the profile has an
+    # address, resolve right now and persist so subsequent loads are instant.
+    if cached.blank? && @profile.address_line1.present?
+      begin
+        full    = [@profile.address_line1, @profile.address_city, @profile.address_state]
+                    .compact_blank.join(", ")
+        job_id  = @profile.resolve_job_id.presence || SecureRandom.hex(8)
+        ResolveAddressJob.perform_now(full, job_id)
+        @profile.update_column(:resolve_job_id, job_id) unless @profile.resolve_job_id == job_id
+        cached  = ResolvedAddress.find_by(job_id: job_id)&.result_json ||
+                  Rails.cache.read("resolve:#{job_id}")
+      rescue => e
+        Rails.logger.warn("DashboardController#load_jurisdiction self-heal failed: #{e.message}")
+      end
     end
 
     return unless cached.present?

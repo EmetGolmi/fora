@@ -629,7 +629,13 @@ a{text-decoration:none;color:inherit;}
       <div class="rh">Your seat at the table</div>
       <div class="rs">Your Representatives</div>
       <% if @officials.empty? %>
-        <div style="padding:12px 15px;font-size:13px;color:var(--ink-mut);">Officials will appear here after your address resolves.</div>
+        <div style="padding:12px 15px;">
+          <div style="font-size:13px;color:var(--ink-mut);margin-bottom:8px;">Your representatives couldn't be loaded.</div>
+          <a href="<%= dashboard_reresolve_path %>"
+             style="display:inline-block;font-size:12px;font-weight:700;color:var(--blue);border:1.5px solid var(--blue-pl);border-radius:999px;padding:5px 13px;background:var(--blue-vp);">
+            Resolve now →
+          </a>
+        </div>
       <% else %>
         <% @officials.first(5).each do |o| %>
           <%

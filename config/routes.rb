@@ -49,7 +49,8 @@ Rails.application.routes.draw do
 
     # Dashboard
     get  "dashboard",                to: "dashboard#show",   as: :dashboard
-    get  "dashboard/clear",          to: "dashboard#clear",  as: :dashboard_clear
+    get  "dashboard/clear",           to: "dashboard#clear",     as: :dashboard_clear
+    get  "dashboard/reresolve",       to: "dashboard#reresolve", as: :dashboard_reresolve
     post "dashboard/resolve",        to: "dashboard#resolve"
     get  "dashboard/status/:job_id", to: "dashboard#status"
     get  "dashboard/result/:job_id", to: "dashboard#result"
