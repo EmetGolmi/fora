@@ -45,6 +45,8 @@ a{text-decoration:none;color:inherit;}
 .tools.t{border-color:var(--gilt-pl);}.tools.f{border-color:var(--blue-pl);}.tools.m{border-color:var(--green-p);}
 .tool{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-soft);}
 .tool:hover{background:var(--rule-soft);}
+.tool.active{background:var(--blue-vp);color:var(--blue);font-weight:800;}
+.tool.active .ti{color:var(--gilt);}
 .tool .ti{width:16px;text-align:center;color:var(--ink-soft);font-size:13px;flex:none;}
 .tool .bdg{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--scarlet);color:#fff;border-radius:999px;padding:1px 6px;}
 
@@ -251,7 +253,8 @@ a{text-decoration:none;color:inherit;}
 
     <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
     <div class="tools f">
-      <a href="<%= dashboard_path %>" class="tool"><span class="ti">◎</span> Observe</a>
+      <a href="#" class="tool active" data-panel="observe"
+         onclick="switchPanel('observe',this);return false;"><span class="ti">◎</span> Observe</a>
       <a href="#" class="tool"><span class="ti">⬡</span> Connect</a>
       <a href="#" class="tool"><span class="ti">✓</span> Act</a>
     </div>
@@ -281,6 +284,7 @@ a{text-decoration:none;color:inherit;}
 
   <%# ── CENTER ──────────────────────────────────────────────────────────────── %>
   <main class="col-center">
+  <div id="panel-observe">
     <div class="fhead">
       <div class="ftitle">Home</div>
       <div class="tabs">
@@ -570,6 +574,7 @@ a{text-decoration:none;color:inherit;}
 
       <% end %>
     </div><%# /tv-juris %>
+  </div><%# /panel-observe %>
   </main>
 
   <%# ── RIGHT RAIL ──────────────────────────────────────────────────────────── %>
@@ -1110,6 +1115,21 @@ function toggleExpand(cue) {
 
   observer.observe(sentinel);
 }());
+
+// ── Left nav panel switching ──────────────────────────────────────────────────
+function switchPanel(key, el) {
+  // Update active state on all tool nav items
+  document.querySelectorAll('.col-left .tool').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  if (el) el.classList.add('active');
+
+  // Show/hide panels (observe is the only panel for now)
+  var panels = document.querySelectorAll('.col-center [id^="panel-"]');
+  panels.forEach(function(p) {
+    p.style.display = (p.id === 'panel-' + key) ? '' : 'none';
+  });
+}
 
 // ── Mobile bottom bar ─────────────────────────────────────────────────────────
 document.querySelectorAll('.mtab').forEach(function(m) {
