@@ -183,6 +183,20 @@ a{text-decoration:none;color:inherit;}
 .rep-n{font-weight:700;font-size:13px;}.rep-r{font-size:11px;color:var(--ink-mut);}
 .rep-f{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--blue);color:var(--blue);border-radius:999px;padding:4px 8px;white-space:nowrap;cursor:pointer;}
 .rep-f.on{background:var(--blue);color:#fff;}
+.rh-btn{padding:12px 15px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14.5px;color:var(--white);background:var(--blue-md);border:none;cursor:pointer;width:100%;text-align:left;}
+.rh-btn:hover{background:var(--blue);}
+.opt-c-section{padding:12px 15px;border-top:1px solid var(--rule-soft);}
+.opt-c-section.federal{background:var(--blue-vp);}
+.opt-c-section.state{background:var(--green-p);}
+.opt-c-section.city{background:var(--amber-p);}
+.opt-c-section-h{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid rgba(0,0,0,.1);}
+.opt-c-rep{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05);}
+.opt-c-rep:last-child{border-bottom:none;}
+.opt-c-av{width:30px;height:30px;border-radius:50%;background:var(--blue);border:2px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;flex:none;}
+.opt-c-name{font-weight:700;font-size:12px;}
+.opt-c-title{font-size:9.5px;color:var(--ink-mut);}
+.opt-c-btn{padding:3px 8px;border:1px solid var(--blue);border-radius:4px;font-size:7px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;cursor:pointer;background:#fff;color:var(--blue);flex:none;}
+.opt-c-btn.on{background:var(--blue);color:#fff;}
 .cm{padding:12px 15px;}
 .cm-n{font-family:'Libre Baskerville',serif;font-size:29px;font-weight:700;color:var(--gilt);}
 .cm-l{font-size:11.5px;color:var(--ink-soft);line-height:1.4;margin-top:4px;}
@@ -621,8 +635,7 @@ a{text-decoration:none;color:inherit;}
 
     <%# YOUR REPRESENTATIVES %>
     <div class="rcard">
-      <div class="rh">Your seat at the table</div>
-      <div class="rs">Your Representatives</div>
+      <button class="rh-btn">Your Representatives</button>
       <% if @officials.empty? %>
         <div style="padding:12px 15px;">
           <div style="font-size:13px;color:var(--ink-mut);margin-bottom:8px;">Your representatives couldn't be loaded.</div>
@@ -632,31 +645,38 @@ a{text-decoration:none;color:inherit;}
           </a>
         </div>
       <% else %>
-        <% @officials.first(5).each do |o| %>
-          <%
-            bio     = o.dig(:jurisdiction, :bioguide_id).to_s
-            rep_rec = @rep_by_bioguide[bio]
-            followed = rep_rec && @rep_follows.include?(rep_rec.id)
-          %>
-          <div class="rep"
-               <% if rep_rec %>data-rep-id="<%= rep_rec.id %>"<% end %>>
-            <div class="rep-av"><%= initials(o[:name]) %></div>
-            <div>
-              <div class="rep-n"><%= o[:name] %></div>
-              <div class="rep-r"><%= o[:office] %></div>
-            </div>
-            <% if rep_rec %>
-              <span class="rep-f <%= 'on' if followed %>"
-                    onclick="toggleRepFollow(this, <%= rep_rec.id %>)">
-                <%= followed ? "✓ Following" : "+ Follow" %>
-              </span>
-            <% else %>
-              <span class="rep-f" style="opacity:.4;cursor:default">+ Follow</span>
+        <%
+          federal_reps = @officials.select { |o| o[:office].to_s.match?(/U\.S\.|House \(/i) }
+          state_reps   = @officials.select { |o| o[:office].to_s.match?(/\bState\b/i) }
+          city_reps    = @officials.reject { |o| o[:office].to_s.match?(/U\.S\.|House \(|\bState\b/i) }
+        %>
+        <% [['federal', 'Federal', federal_reps], ['state', 'State', state_reps], ['city', 'City', city_reps]].each do |tier, label, reps| %>
+          <% next if reps.empty? %>
+          <div class="opt-c-section <%= tier %>">
+            <div class="opt-c-section-h"><%= label %> (<%= reps.size %>)</div>
+            <% reps.each do |o| %>
+              <%
+                bio      = o.dig(:jurisdiction, :bioguide_id).to_s
+                rep_rec  = @rep_by_bioguide[bio]
+                followed = rep_rec && @rep_follows.include?(rep_rec.id)
+              %>
+              <div class="opt-c-rep"<%= rep_rec ? " data-rep-id=\"#{rep_rec.id}\"" : "" %>>
+                <div class="opt-c-av"><%= initials(o[:name]) %></div>
+                <div style="flex:1;">
+                  <div class="opt-c-name"><%= o[:name] %><%= " ✓" if followed %></div>
+                  <div class="opt-c-title"><%= o[:office] %></div>
+                </div>
+                <% if rep_rec %>
+                  <button class="opt-c-btn <%= 'on' if followed %>"
+                          onclick="toggleRepFollow(this, <%= rep_rec.id %>)">F</button>
+                <% else %>
+                  <button class="opt-c-btn" style="opacity:.3;cursor:default">F</button>
+                <% end %>
+              </div>
             <% end %>
           </div>
         <% end %>
       <% end %>
-      <div class="rfoot">See all your officials →</div>
     </div>
 
     <%# CONSTITUENCY METER %>
@@ -758,10 +778,8 @@ function toggleRepFollow(btn, repId) {
   post(SPARK_URL, { type: 'CivicRepresentative', id: repId }).then(function(data) {
     if (data.sparked) {
       btn.classList.add('on');
-      btn.textContent = '✓ Following';
     } else {
       btn.classList.remove('on');
-      btn.textContent = '+ Follow';
     }
   }).catch(function(){});
 }
