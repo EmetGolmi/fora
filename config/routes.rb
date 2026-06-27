@@ -167,8 +167,9 @@ Rails.application.routes.draw do
   end
 
   # ── Commerce ──────────────────────────────────────────────────────────────
-  get "market/newllc",       to: "market/new_llc#index", as: :new_llc
-  get "market/newllc/guide", to: "market/new_llc#guide", as: :new_llc_guide
+  get "market/square",       to: "market#square",         as: :market_square
+  get "market/newllc",       to: "market/new_llc#index",  as: :new_llc
+  get "market/newllc/guide", to: "market/new_llc#guide",  as: :new_llc_guide
 
   # ── World / Jurisdiction & NGE Pages ──────────────────────────────────────
   get "/iran",          to: "world#iran"

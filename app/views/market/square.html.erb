@@ -1,0 +1,904 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.nav {
+  background: #1b3a6b;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+.nav-logo {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #b8860b;
+  letter-spacing: .05em;
+  margin-right: 28px;
+  flex-shrink: 0;
+}
+.nav-logo span { color: #fff; }
+.nav-tabs { display: flex; gap: 0; height: 100%; flex: 1; }
+.nav-tab {
+  display: flex; align-items: center; gap: 5px;
+  padding: 0 14px;
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5);
+  letter-spacing: .05em; text-transform: uppercase; cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.nav-tab.active { color: #b8860b; border-bottom-color: #b8860b; }
+.nav-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #b8860b; color: #fff;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-left: auto;
+}
+
+.mkt-head {
+  background: #1b3a6b;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid rgba(184,134,11,0.3);
+}
+.mkt-eyebrow {
+  font-family: monospace;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: #b8860b; margin-bottom: 5px;
+}
+.mkt-title {
+  font-family: Georgia, serif;
+  font-size: 20px; color: #fff; font-weight: 700; margin-bottom: 10px;
+}
+
+.search-bar {
+  display: flex; gap: 0; max-width: 680px;
+}
+.search-what {
+  flex: 1; height: 38px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-right: none;
+  border-radius: 7px 0 0 7px;
+  background: rgba(255,255,255,.1);
+  color: #fff; padding: 0 14px; font-size: 13px;
+}
+.search-what::placeholder { color: rgba(255,255,255,.4); }
+.search-where {
+  width: 180px; height: 38px;
+  border: 1px solid rgba(184,134,11,.5);
+  border-right: none;
+  background: rgba(184,134,11,.12);
+  color: rgba(255,255,255,.85); padding: 0 10px; font-size: 12px;
+}
+.search-where::placeholder { color: rgba(255,255,255,.5); }
+.search-go {
+  height: 38px; padding: 0 14px;
+  background: #b8860b; border: none;
+  color: #fff; cursor: pointer; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+}
+.search-project {
+  height: 38px; padding: 0 13px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  border-left: none;
+  border-radius: 0 7px 7px 0;
+  color: rgba(255,255,255,.75); cursor: pointer;
+  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+
+.body-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px 20px 40px;
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 18px;
+}
+
+/* LEFT RAIL */
+.left-rail {}
+
+.rail-section {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e5e5);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.rail-section-title {
+  font-family: monospace;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-muted, #999);
+  padding: 12px 14px 8px;
+}
+
+.cat-group {}
+.cat-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--text-primary, #111);
+  border-top: 0.5px solid var(--border, #e5e5e5);
+}
+.cat-header:first-of-type { border-top: none; }
+.cat-header i.arrow {
+  font-size: 12px;
+  color: var(--text-muted, #999);
+  transition: transform .2s;
+}
+.cat-header.open i.arrow { transform: rotate(180deg); }
+.cat-header .cat-icon { font-size: 14px; margin-right: 6px; color: var(--text-secondary, #666); }
+.cat-header.active-cat { color: #1b3a6b; }
+.cat-header.active-cat .cat-icon { color: #1b3a6b; }
+
+.cat-subs {
+  display: none;
+  background: var(--surface-1, #f8f8f7);
+  border-top: 0.5px solid var(--border, #e5e5e5);
+}
+.cat-subs.open { display: block; }
+.sub-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px 6px 28px;
+  font-size: 12px; color: var(--text-secondary, #666);
+  cursor: pointer; border-bottom: 0.5px solid var(--border, #eee);
+}
+.sub-item:last-child { border-bottom: none; }
+.sub-item.active { color: #1b3a6b; font-weight: 600; background: #edf2fb; }
+.sub-item:hover { background: var(--surface-0, #f2f2f0); }
+
+.sort-block {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e5e5);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.sort-block-title {
+  font-family: monospace;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-muted, #999); margin-bottom: 8px;
+}
+.sort-btns { display: flex; flex-wrap: wrap; gap: 5px; }
+.sort-btn {
+  font-size: 11px; padding: 4px 9px;
+  border-radius: 5px;
+  border: 0.5px solid var(--border-strong, #ccc);
+  background: var(--surface-1, #f8f8f7);
+  color: var(--text-secondary, #555);
+  cursor: pointer;
+}
+.sort-btn.active { background: #1b3a6b; color: #fff; border-color: #1b3a6b; }
+
+.filter-block {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e5e5);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.filter-block-title {
+  font-family: monospace;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-muted, #999); margin-bottom: 8px;
+}
+.filter-label {
+  display: flex; align-items: center; gap: 7px;
+  padding: 4px 0; font-size: 12px;
+  color: var(--text-secondary, #555); cursor: pointer;
+}
+.filter-label input { accent-color: #1b3a6b; }
+
+/* MAIN CONTENT */
+.main-col {}
+
+.results-header {
+  display: flex; align-items: baseline;
+  margin-bottom: 14px; gap: 8px;
+}
+.results-title {
+  font-family: Georgia, serif;
+  font-size: 16px; color: var(--text-primary, #111);
+}
+.results-count {
+  font-family: monospace;
+  font-size: 10px; color: var(--text-muted, #999); letter-spacing: .04em;
+}
+
+/* SPONSORED PSA */
+.sponsored-post {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e5e5);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.sponsored-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px 0;
+}
+.sponsored-who {
+  display: flex; align-items: center; gap: 10px;
+}
+.sponsored-logo {
+  width: 38px; height: 38px; border-radius: 6px;
+  background: #ff6800; color: #fff;
+  font-size: 8px; font-weight: 700;
+  font-family: monospace;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; line-height: 1.2; letter-spacing: .03em;
+}
+.sponsored-name { font-size: 13px; font-weight: 700; color: var(--text-primary, #111); }
+.sponsored-label {
+  font-family: monospace; font-size: 8px; letter-spacing: .08em;
+  color: var(--text-muted, #999);
+  border: 0.5px solid var(--border, #e5e5e5);
+  padding: 2px 6px; border-radius: 4px;
+}
+.psa-body {
+  padding: 10px 16px 14px;
+  font-size: 12.5px;
+  color: var(--text-secondary, #555);
+  line-height: 1.6;
+  border-left: 3px solid #ff6800;
+  margin: 10px 16px 0;
+  border-radius: 0;
+}
+.psa-body strong { color: var(--text-primary, #111); }
+.psa-cta {
+  display: flex; align-items: center; gap: 6px;
+  margin: 10px 16px 14px;
+  font-size: 12px; color: #1b3a6b; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+}
+.psa-edict {
+  font-family: monospace;
+  font-size: 8.5px; letter-spacing: .04em;
+  color: var(--text-muted, #aaa);
+  padding: 8px 16px;
+  border-top: 0.5px solid var(--border, #eee);
+  background: var(--surface-1, #f8f8f7);
+}
+
+/* LISTING */
+.listing {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e5e5);
+  border-radius: 12px;
+  padding: 15px 17px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color .12s;
+}
+.listing:hover { border-color: #1b3a6b; }
+
+.listing-top { display: flex; gap: 12px; align-items: flex-start; }
+.listing-avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; position: relative;
+}
+.av-biz { background: #e8f0fb; color: #1b3a6b; border: 2px solid #1b3a6b; }
+.av-neighbor { background: #e8f3eb; color: #2a6e3f; border: 2px solid #4caf72; }
+.av-community { background: #fef3e2; color: #b8860b; border: 2px solid #b8860b; }
+.vet-bar {
+  position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+  background: #3b5323; color: #fff;
+  font-size: 6px; font-weight: 700; letter-spacing: .04em;
+  padding: 1px 5px; border-radius: 3px; white-space: nowrap; font-family: monospace;
+}
+
+.listing-main { flex: 1; min-width: 0; }
+.listing-name-row {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 3px;
+}
+.listing-name { font-size: 14.5px; font-weight: 700; color: #1b3a6b; }
+
+.bdg {
+  font-family: monospace; font-size: 8px; letter-spacing: .06em;
+  padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase;
+}
+.bdg-biz { background: #e8f0fb; color: #1b3a6b; }
+.bdg-neighbor { background: #e8f3eb; color: #2a6e3f; }
+.bdg-community { background: #fef3e2; color: #9a6f00; }
+.bdg-cleared { background: #eef7f0; color: #1d6e3b; border: 0.5px solid #7dcfa0; }
+
+.listing-meta {
+  font-size: 11.5px; color: var(--text-secondary, #666);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 5px;
+}
+.rating { display: flex; align-items: center; gap: 3px; font-weight: 600; color: var(--text-primary, #111); font-size: 12px; }
+.star-color { color: #f5a623; }
+
+.social-proof {
+  font-size: 11.5px; color: #2a6e3f; font-weight: 600;
+  display: flex; align-items: center; gap: 4px; margin-bottom: 6px;
+}
+
+.listing-desc {
+  font-size: 12.5px; color: var(--text-secondary, #555);
+  line-height: 1.5; margin-bottom: 7px;
+}
+
+.tag-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
+.tag {
+  font-size: 11px; background: var(--surface-1, #f8f8f7);
+  border: 0.5px solid var(--border, #e5e5e5);
+  color: var(--text-secondary, #666);
+  padding: 2px 8px; border-radius: 20px;
+}
+
+.listing-actions {
+  display: flex; gap: 7px; align-items: center; flex-wrap: wrap;
+}
+.act-btn {
+  font-size: 11.5px; padding: 5px 13px;
+  border-radius: 6px;
+  border: 0.5px solid var(--border-strong, #ccc);
+  background: var(--surface-1, #f8f8f7);
+  color: var(--text-primary, #111);
+  cursor: pointer; display: flex; align-items: center; gap: 5px;
+}
+.act-btn.primary { background: #1b3a6b; color: #fff; border-color: #1b3a6b; }
+.act-btn i { font-size: 14px; }
+
+.reviews-toggle {
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 8px;
+  font-size: 11.5px; color: var(--text-muted, #999);
+  cursor: pointer; padding: 0;
+  background: none; border: none;
+  font-family: inherit;
+}
+.reviews-toggle i { font-size: 13px; transition: transform .2s; }
+.reviews-toggle.open i { transform: rotate(180deg); }
+
+.top-comment {
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: var(--surface-1, #f8f8f7);
+  border-radius: 7px;
+  font-size: 11.5px;
+  color: var(--text-secondary, #666);
+  border: 0.5px solid var(--border, #eee);
+}
+.top-comment-who {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--text-primary, #111); margin-bottom: 2px;
+  display: flex; align-items: center; gap: 4px;
+}
+.top-comment-who .chk { color: #2a6e3f; font-size: 10px; }
+
+.reviews-expand {
+  display: none; margin-top: 10px;
+  border-top: 0.5px solid var(--border, #eee); padding-top: 10px;
+}
+.reviews-expand.open { display: block; }
+.comment-row { display: flex; gap: 9px; margin-bottom: 10px; }
+.comment-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface-1, #f0f0ee);
+  border: 0.5px solid var(--border, #e5e5e5);
+  color: var(--text-secondary, #666); font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.comment-who {
+  font-size: 11px; font-weight: 600; color: var(--text-primary, #111);
+  display: flex; align-items: center; gap: 4px; margin-bottom: 2px;
+}
+.comment-who .chk { color: #2a6e3f; font-size: 10px; }
+.comment-text { font-size: 11.5px; color: var(--text-secondary, #555); line-height: 1.45; }
+</style>
+
+<h2 class="sr-only">FORA Market Square — Auto & Transport, Oil Change, Bella Vista PA 19147</h2>
+
+<nav class="nav">
+  <div class="nav-logo">F<span>ORA</span></div>
+  <div class="nav-tabs">
+    <div class="nav-tab"><i class="ti ti-home" aria-hidden="true"></i> Home</div>
+    <div class="nav-tab"><i class="ti ti-circle" aria-hidden="true"></i> Temple</div>
+    <div class="nav-tab"><i class="ti ti-triangle" aria-hidden="true"></i> Forum</div>
+    <div class="nav-tab active"><i class="ti ti-square" aria-hidden="true"></i> Market</div>
+  </div>
+  <div class="nav-avatar">N</div>
+</nav>
+
+<div class="mkt-head">
+  <div class="mkt-eyebrow">▢ Market Square · Philadelphia, PA</div>
+  <div class="mkt-title">The Square</div>
+  <div class="search-bar">
+    <input class="search-what" type="text" placeholder="What do you need?" />
+    <input class="search-where" type="text" value="Philadelphia, PA 19147" />
+    <button class="search-go"><i class="ti ti-search" aria-hidden="true"></i></button>
+    <button class="search-project"><i class="ti ti-plus" aria-hidden="true"></i> Start a project</button>
+  </div>
+</div>
+
+<div class="body-wrap">
+
+  <!-- LEFT RAIL -->
+  <div class="left-rail">
+
+    <div class="sort-block">
+      <div class="sort-block-title">Sort by</div>
+      <div class="sort-btns">
+        <button class="sort-btn active">Best match</button>
+        <button class="sort-btn">Rating</button>
+        <button class="sort-btn">Distance</button>
+        <button class="sort-btn">Price</button>
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-block-title">Filter</div>
+      <label class="filter-label"><input type="checkbox" checked /> Verified neighbors</label>
+      <label class="filter-label"><input type="checkbox" /> Businesses only</label>
+      <label class="filter-label"><input type="checkbox" checked /> Instant booking</label>
+      <label class="filter-label"><input type="checkbox" /> Mobile / comes to you</label>
+      <label class="filter-label"><input type="checkbox" /> Teaches while working</label>
+      <label class="filter-label"><input type="checkbox" checked /> Acquaintance reviews</label>
+    </div>
+
+    <div class="rail-section">
+      <div class="rail-section-title">Browse categories</div>
+
+      <div class="cat-group">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span><i class="ti ti-tools cat-icon" aria-hidden="true"></i>Home &amp; Shelter</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs">
+          <div class="sub-item">Handyman</div>
+          <div class="sub-item">Plumbing</div>
+          <div class="sub-item">Electrical</div>
+          <div class="sub-item">Painting</div>
+          <div class="sub-item">Carpentry</div>
+          <div class="sub-item">Landscaping</div>
+          <div class="sub-item">Roofing</div>
+          <div class="sub-item">Flooring</div>
+          <div class="sub-item">Moving</div>
+          <div class="sub-item">Smart home</div>
+          <div class="sub-item">Pool &amp; spa</div>
+          <div class="sub-item">Pest control</div>
+          <div class="sub-item">Interior design</div>
+          <div class="sub-item">Architecture</div>
+          <div class="sub-item">Real estate</div>
+          <div class="sub-item">Insurance</div>
+          <div class="sub-item">→ Permitting guide</div>
+        </div>
+      </div>
+
+      <div class="cat-group">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span><i class="ti ti-bowl-chopsticks cat-icon" aria-hidden="true"></i>Eat &amp; Drink</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs">
+          <div class="sub-item">Restaurants</div>
+          <div class="sub-item">Bars &amp; nightlife</div>
+          <div class="sub-item">Home chefs</div>
+          <div class="sub-item">Meal prep</div>
+          <div class="sub-item">Bakers</div>
+          <div class="sub-item">Farmers markets</div>
+          <div class="sub-item">Culinary experiences</div>
+          <div class="sub-item">Food therapy</div>
+          <div class="sub-item">Dining clubs</div>
+          <div class="sub-item">Food scrap recycling</div>
+        </div>
+      </div>
+
+      <div class="cat-group">
+        <div class="cat-header active-cat open" onclick="toggleCat(this)">
+          <span><i class="ti ti-car cat-icon" aria-hidden="true"></i>Auto &amp; Transport</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs open">
+          <div class="sub-item active">Oil change</div>
+          <div class="sub-item">Mechanic &amp; repair</div>
+          <div class="sub-item">Detailing &amp; wash</div>
+          <div class="sub-item">Tires</div>
+          <div class="sub-item">State inspection</div>
+          <div class="sub-item">Rideshare &amp; commute</div>
+          <div class="sub-item">Parking &amp; valet</div>
+          <div class="sub-item">Rentals</div>
+          <div class="sub-item">Towing</div>
+          <div class="sub-item">Car dealers</div>
+          <div class="sub-item">Junkyards</div>
+          <div class="sub-item">Adopt a vehicle</div>
+          <div class="sub-item">Insurance</div>
+          <div class="sub-item">Classes</div>
+        </div>
+      </div>
+
+      <div class="cat-group">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span><i class="ti ti-heart-rate-monitor cat-icon" aria-hidden="true"></i>Health &amp; Body</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs">
+          <div class="sub-item">Doctors</div>
+          <div class="sub-item">Dentists</div>
+          <div class="sub-item">Chiropractic</div>
+          <div class="sub-item">Physical therapy</div>
+          <div class="sub-item">Massage</div>
+          <div class="sub-item">Salon &amp; hair</div>
+          <div class="sub-item">Barber</div>
+          <div class="sub-item">Nail</div>
+          <div class="sub-item">Spa</div>
+          <div class="sub-item">Community health</div>
+        </div>
+      </div>
+
+      <div class="cat-group">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span><i class="ti ti-shirt cat-icon" aria-hidden="true"></i>Style &amp; Wardrobe</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs">
+          <div class="sub-item">Tailoring</div>
+          <div class="sub-item">Laundry &amp; dry cleaning</div>
+          <div class="sub-item">Dressmakers</div>
+          <div class="sub-item">Clothing swaps</div>
+          <div class="sub-item">Personal stylists</div>
+          <div class="sub-item">Knitting &amp; sewing clubs</div>
+          <div class="sub-item">Size-share clubs</div>
+        </div>
+      </div>
+
+      <div class="cat-group">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span><i class="ti ti-baby-carriage cat-icon" aria-hidden="true"></i>Kids &amp; Pets</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs">
+          <div class="sub-item">Childcare &amp; nannies</div>
+          <div class="sub-item">Babysitting</div>
+          <div class="sub-item">After-school care</div>
+          <div class="sub-item">Summer camps</div>
+          <div class="sub-item">Tutoring</div>
+          <div class="sub-item">Coaches &amp; classes</div>
+          <div class="sub-item">Pediatricians</div>
+          <div class="sub-item">Dog walking</div>
+          <div class="sub-item">Veterinarians</div>
+          <div class="sub-item">Pet training</div>
+        </div>
+      </div>
+
+      <div class="cat-group">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span><i class="ti ti-compass cat-icon" aria-hidden="true"></i>Learn &amp; Experience</span>
+          <i class="ti ti-chevron-down arrow" aria-hidden="true"></i>
+        </div>
+        <div class="cat-subs">
+          <div class="sub-item">Photography lessons</div>
+          <div class="sub-item">Guided tours</div>
+          <div class="sub-item">Cooking classes</div>
+          <div class="sub-item">Art classes</div>
+          <div class="sub-item">Martial arts</div>
+          <div class="sub-item">Cultural experiences</div>
+          <div class="sub-item">Fitness &amp; yoga</div>
+          <div class="sub-item">Music lessons</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-col">
+
+    <div class="results-header">
+      <div class="results-title">Auto &amp; Transport › Oil change</div>
+      <div class="results-count">&nbsp;· 8 results · Bella Vista, 19147</div>
+    </div>
+
+    <!-- SPONSORED PSA -->
+    <div class="sponsored-post">
+      <div class="sponsored-header">
+        <div class="sponsored-who">
+          <div class="sponsored-logo">JIFFY<br>LUBE</div>
+          <div>
+            <div class="sponsored-name">Jiffy Lube</div>
+            <div style="font-size:11px;color:var(--text-muted,#999)">Community service announcement</div>
+          </div>
+        </div>
+        <div class="sponsored-label">Sponsored</div>
+      </div>
+      <div class="psa-body">
+        <strong>How often should you change your oil?</strong> For most vehicles with conventional oil, every <strong>3 months or 3,000 miles</strong>. If you use synthetic, you can go <strong>6–12 months or 5,000–10,000 miles</strong> — check your owner's manual. Older vehicles and those doing hard work (towing, stop-and-go city driving) trend toward the shorter interval.<br><br>
+        <strong>Changing your own oil?</strong> Bring your used oil to any Jiffy Lube location — we'll dispose of it safely at no charge, no questions asked. Used motor oil poured down a drain or into the ground contaminates groundwater. One quart can make 250,000 gallons of water undrinkable.
+      </div>
+      <a class="psa-cta" href="#">
+        <i class="ti ti-calendar-plus" aria-hidden="true"></i> Add oil change reminder to your FORA calendar
+      </a>
+      <div class="psa-edict">FORA ad policy: sponsors earn placement by contributing to the community — not by selling. This is a public service announcement.</div>
+    </div>
+
+    <!-- CHOW'S -->
+    <div class="listing" onclick="openListing('chow')">
+      <div class="listing-top">
+        <div class="listing-avatar av-biz">CG</div>
+        <div class="listing-main">
+          <div class="listing-name-row">
+            <span class="listing-name">Chow's Garage</span>
+            <span class="bdg bdg-biz">Business</span>
+          </div>
+          <div class="listing-meta">
+            <span class="rating"><i class="ti ti-star-filled star-color" aria-hidden="true"></i> 4.5 <span style="color:var(--text-muted,#999);font-weight:400">(110 reviews)</span></span>
+            <span>2.1 mi · East Passyunk</span>
+            <span>$60–100 oil change</span>
+          </div>
+          <div class="listing-desc">Full-service shop. LOF (lube, oil, filter) $120 · complimentary 14-point inspection with every service. Schedule online to manage your time — no surprises.</div>
+          <div class="tag-row">
+            <span class="tag">State inspections</span>
+            <span class="tag">Import specialists</span>
+            <span class="tag">Instant booking</span>
+          </div>
+          <div class="listing-actions" onclick="event.stopPropagation()">
+            <button class="act-btn primary"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule</button>
+            <button class="act-btn"><i class="ti ti-message" aria-hidden="true"></i> Message</button>
+          </div>
+          <div class="top-comment">
+            <div class="top-comment-who">@phl.teacher.southphilly <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+            In and out in under an hour — they flagged worn wiper blades I hadn't noticed. Honest shop.
+          </div>
+          <button class="reviews-toggle" id="toggle-chow" onclick="event.stopPropagation();toggleReviews('chow')">
+            Reviews <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="reviews-expand" id="reviews-chow">
+            <div class="comment-row">
+              <div class="comment-av">MR</div>
+              <div>
+                <div class="comment-who">@phl.realtor.passyunk <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+                <div class="comment-text">Family shop — been going 6 years. They'll tell you straight what needs work now vs. what can wait.</div>
+              </div>
+            </div>
+            <div class="comment-row">
+              <div class="comment-av">DS</div>
+              <div>
+                <div class="comment-who">@phl.carpenter.bella <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+                <div class="comment-text">$65 for conventional, fast, no upsell pressure. Rare.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIFF -->
+    <div class="listing" onclick="openListing('cliff')">
+      <div class="listing-top">
+        <div class="listing-avatar av-neighbor" style="position:relative">
+          C
+          <div class="vet-bar">Army · Ret.</div>
+        </div>
+        <div class="listing-main">
+          <div class="listing-name-row">
+            <span class="listing-name">Your neighbor Cliff</span>
+            <span class="bdg bdg-neighbor">Neighbor</span>
+            <span class="bdg bdg-cleared"><i class="ti ti-shield-check" aria-hidden="true"></i> BG cleared</span>
+          </div>
+          <div class="listing-meta">
+            <span class="rating"><i class="ti ti-star-filled star-color" aria-hidden="true"></i> 4.8 <span style="color:var(--text-muted,#999);font-weight:400">(36 reviews)</span></span>
+            <span>Mobile · 19147</span>
+            <span>$50 + cost of oil &amp; filter</span>
+          </div>
+          <div class="social-proof"><i class="ti ti-users" aria-hidden="true"></i> 2 of your acquaintances have left positive reviews for Cliff</div>
+          <div class="listing-desc">Retired Army vet, amateur race car driver. Mobile — I come to you. I'll teach you how to do it yourself and where to properly dispose of your used oil. Check out my car collection.</div>
+          <div class="tag-row">
+            <span class="tag">Mobile</span>
+            <span class="tag">Teaches while working</span>
+            <span class="tag">DIY education</span>
+            <span class="tag">Instant booking</span>
+          </div>
+          <div class="listing-actions" onclick="event.stopPropagation()">
+            <button class="act-btn primary"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule</button>
+            <button class="act-btn"><i class="ti ti-message" aria-hidden="true"></i> Message</button>
+          </div>
+          <div class="top-comment">
+            <div class="top-comment-who">@phl.nurse.bellavista <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+            Came to my driveway Saturday morning. Talked me through every step. Felt like having a dad in the neighborhood.
+          </div>
+          <button class="reviews-toggle" id="toggle-cliff" onclick="event.stopPropagation();toggleReviews('cliff')">
+            Reviews <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="reviews-expand" id="reviews-cliff">
+            <div class="comment-row">
+              <div class="comment-av">DL</div>
+              <div>
+                <div class="comment-who">@phl.carpenter.kensington <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+                <div class="comment-text">Dude is fast, honest, and $50 is a steal. He turned down a tip and said "buy your wife dinner instead." Solid man.</div>
+              </div>
+            </div>
+            <div class="comment-row">
+              <div class="comment-av">TR</div>
+              <div>
+                <div class="comment-who">@phl.teacher.southphilly <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+                <div class="comment-text">Had Cliff teach my 17-year-old how to do an oil change. Best $50 I ever spent.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JIFFY LUBE organic -->
+    <div class="listing" onclick="openListing('jiffy')">
+      <div class="listing-top">
+        <div class="listing-avatar av-biz" style="background:#fff3ec;color:#ff6800;border-color:#ff6800;font-size:9px;font-family:monospace;font-weight:900">JL</div>
+        <div class="listing-main">
+          <div class="listing-name-row">
+            <span class="listing-name">Jiffy Lube</span>
+            <span class="bdg bdg-biz">Business</span>
+          </div>
+          <div class="listing-meta">
+            <span class="rating"><i class="ti ti-star-filled star-color" aria-hidden="true"></i> 3.9 <span style="color:var(--text-muted,#999);font-weight:400">(184 reviews)</span></span>
+            <span>0.8 mi · Columbus Blvd</span>
+            <span>$89–119</span>
+          </div>
+          <div class="social-proof"><i class="ti ti-users" aria-hidden="true"></i> 10 of your acquaintances have left positive reviews for Jiffy Lube</div>
+          <div class="listing-desc">No appointment needed. Signature Service oil change, typically 30 min. Full-service multi-point check included.</div>
+          <div class="tag-row">
+            <span class="tag">Walk-in welcome</span>
+            <span class="tag">Multi-point check</span>
+          </div>
+          <div class="listing-actions" onclick="event.stopPropagation()">
+            <button class="act-btn primary"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule</button>
+            <button class="act-btn"><i class="ti ti-message" aria-hidden="true"></i> Message</button>
+          </div>
+          <div class="top-comment">
+            <div class="top-comment-who">@phl.driver.southphilly <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+            Quick and consistent. I go when I can't get to Chow's. No complaints.
+          </div>
+          <button class="reviews-toggle" id="toggle-jiffy" onclick="event.stopPropagation();toggleReviews('jiffy')">
+            Reviews <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="reviews-expand" id="reviews-jiffy"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STACEY'S -->
+    <div class="listing" onclick="openListing('stacey')">
+      <div class="listing-top">
+        <div class="listing-avatar av-biz" style="background:#fce8f3;color:#c2185b;border-color:#c2185b;font-size:11px">SG</div>
+        <div class="listing-main">
+          <div class="listing-name-row">
+            <span class="listing-name">Stacey's All-Girl Mechanic &amp; Drift Club</span>
+            <span class="bdg bdg-biz">Business</span>
+          </div>
+          <div class="listing-meta">
+            <span class="rating"><i class="ti ti-star-filled star-color" aria-hidden="true"></i> 4.7 <span style="color:var(--text-muted,#999);font-weight:400">(63 reviews)</span></span>
+            <span>1.4 mi · Moyamensing</span>
+            <span>$80 oil change</span>
+          </div>
+          <div class="listing-desc">$80 oil change — nail studio on-site, get your nails done while you wait. Woman-owned, community-rooted, drift-certified.</div>
+          <div class="tag-row">
+            <span class="tag">Woman-owned</span>
+            <span class="tag">Nail studio on-site</span>
+            <span class="tag">Drift instruction</span>
+            <span class="tag">Instant booking</span>
+          </div>
+          <div class="listing-actions" onclick="event.stopPropagation()">
+            <button class="act-btn primary"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule</button>
+            <button class="act-btn"><i class="ti ti-message" aria-hidden="true"></i> Message</button>
+          </div>
+          <div class="top-comment">
+            <div class="top-comment-who">@phl.designer.passyunk <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+            Got my gel done while they changed my oil. This place is everything.
+          </div>
+          <button class="reviews-toggle" id="toggle-stacey" onclick="event.stopPropagation();toggleReviews('stacey')">
+            Reviews <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="reviews-expand" id="reviews-stacey"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TECH SCHOOL -->
+    <div class="listing" onclick="openListing('tech')">
+      <div class="listing-top">
+        <div class="listing-avatar av-community">TS</div>
+        <div class="listing-main">
+          <div class="listing-name-row">
+            <span class="listing-name">PHL Vocational Tech — Auto Program</span>
+            <span class="bdg bdg-community">Community</span>
+          </div>
+          <div class="listing-meta">
+            <span class="rating"><i class="ti ti-star-filled star-color" aria-hidden="true"></i> 4.3 <span style="color:var(--text-muted,#999);font-weight:400">(22 reviews)</span></span>
+            <span>2.8 mi · S. Philly</span>
+            <span>Free + cost of oil</span>
+          </div>
+          <div class="listing-desc">Students perform the oil change under certified instructor supervision. Tues &amp; Thurs only, 6:30am–5pm. A way to support career-track students while saving money.</div>
+          <div class="tag-row">
+            <span class="tag">Free labor</span>
+            <span class="tag">Supervised students</span>
+            <span class="tag">Limited hours</span>
+          </div>
+          <div class="listing-actions" onclick="event.stopPropagation()">
+            <button class="act-btn primary"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule</button>
+            <button class="act-btn"><i class="ti ti-message" aria-hidden="true"></i> Message</button>
+          </div>
+          <div class="top-comment">
+            <div class="top-comment-who">@phl.dad.bellavista <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+            Brought my son to watch. The instructor talked us through everything. We're going back.
+          </div>
+          <button class="reviews-toggle" id="toggle-tech" onclick="event.stopPropagation();toggleReviews('tech')">
+            Reviews <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="reviews-expand" id="reviews-tech"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEP BOYS -->
+    <div class="listing" onclick="openListing('pep')">
+      <div class="listing-top">
+        <div class="listing-avatar av-biz" style="background:#eaf0ff;color:#1a3c9e;border-color:#1a3c9e;font-size:10px">PB</div>
+        <div class="listing-main">
+          <div class="listing-name-row">
+            <span class="listing-name">Pep Boys</span>
+            <span class="bdg bdg-biz">Business</span>
+          </div>
+          <div class="listing-meta">
+            <span class="rating"><i class="ti ti-star-filled star-color" aria-hidden="true"></i> 3.7 <span style="color:var(--text-muted,#999);font-weight:400">(227 reviews)</span></span>
+            <span>1.1 mi · Oregon Ave</span>
+            <span>$59–109</span>
+          </div>
+          <div class="listing-desc">Walk-in and appointment available. Full parts counter on-site — they'll sell you the filter if you want to watch and do it yourself next time.</div>
+          <div class="tag-row">
+            <span class="tag">Walk-in welcome</span>
+            <span class="tag">Parts on-site</span>
+          </div>
+          <div class="listing-actions" onclick="event.stopPropagation()">
+            <button class="act-btn primary"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule</button>
+            <button class="act-btn"><i class="ti ti-message" aria-hidden="true"></i> Message</button>
+          </div>
+          <div class="top-comment">
+            <div class="top-comment-who">@phl.nurse.southphilly <span class="chk"><i class="ti ti-check" aria-hidden="true"></i></span></div>
+            Reliable. Nothing fancy. Gets the job done.
+          </div>
+          <button class="reviews-toggle" id="toggle-pep" onclick="event.stopPropagation();toggleReviews('pep')">
+            Reviews <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="reviews-expand" id="reviews-pep"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleCat(header) {
+  var subs = header.nextElementSibling;
+  var isOpen = subs.classList.contains('open');
+  if (isOpen) {
+    subs.classList.remove('open');
+    header.classList.remove('open');
+  } else {
+    subs.classList.add('open');
+    header.classList.add('open');
+  }
+}
+
+function toggleReviews(id) {
+  var expand = document.getElementById('reviews-' + id);
+  var toggle = document.getElementById('toggle-' + id);
+  if (expand) {
+    var isOpen = expand.classList.contains('open');
+    expand.classList.toggle('open');
+    if (toggle) toggle.classList.toggle('open');
+  }
+}
+
+function openListing(id) {
+}
+
+var initCats = document.querySelectorAll('.cat-header.open');
+initCats.forEach(function(h) { });
+</script>
