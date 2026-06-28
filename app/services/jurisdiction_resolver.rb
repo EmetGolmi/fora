@@ -1,7 +1,7 @@
 class JurisdictionResolver
   include HTTParty
 
-  GEOCODING_URI  = "https://maps.googleapis.com/maps/api/geocode/json"
+  NOMINATIM_URI  = "https://nominatim.openstreetmap.org/search"
   OPENSTATES_URI = "https://v3.openstates.org/people.geo"
   CONGRESS_URI   = "https://api.congress.gov/v3/member"
   PHL_CARTO_URI  = "https://phl.carto.com/api/v2/sql"
@@ -130,30 +130,34 @@ class JurisdictionResolver
   end
 
   def geocode(address)
-    response = self.class.get(GEOCODING_URI, query: {
-      address: address,
-      key:     ENV["GOOGLE_GEOCODING_API_KEY"]
+    response = self.class.get(NOMINATIM_URI, query: {
+      q:              address,
+      format:         "json",
+      addressdetails: 1,
+      limit:          1,
+      countrycodes:   "us"
+    }, headers: {
+      "User-Agent" => "FORA Civic App (contact@fora.app)"
     })
 
     return nil unless response.success?
-    return nil unless response.parsed_response["status"] == "OK"
 
-    result = response.parsed_response.dig("results", 0)
+    result = response.parsed_response&.first
     return nil unless result
 
-    components = result["address_components"] || []
-    city  = component_long(components, "locality") ||
-            component_long(components, "sublocality_level_1") ||
-            component_long(components, "neighborhood")
-    state = component_short(components, "administrative_area_level_1")
-    zip   = component_long(components, "postal_code")
-    lat   = result.dig("geometry", "location", "lat")
-    lng   = result.dig("geometry", "location", "lng")
+    addr  = result["address"] || {}
+    lat   = result["lat"].to_f
+    lng   = result["lon"].to_f
+    city  = addr["city"] || addr["town"] || addr["village"] || addr["municipality"]
+    zip   = addr["postcode"]
+    # ISO3166-2-lvl4 is always present (e.g. "US-PA") — last segment is the state code
+    state = (addr["ISO3166-2-lvl4"] || "").split("-").last.presence ||
+            addr["state_code"]
 
     {
       coordinates:     { lat: lat, lng: lng },
       matched_address: {
-        full:  result["formatted_address"],
+        full:  result["display_name"],
         city:  city,
         state: state,
         zip:   zip
