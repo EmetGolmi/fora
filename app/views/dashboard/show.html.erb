@@ -650,9 +650,9 @@ a{text-decoration:none;color:inherit;}
         </div>
       <% else %>
         <%
-          federal_reps = @officials.select { |o| o[:office].to_s.match?(/U\.S\.|House \(/i) }
-          state_reps   = @officials.select { |o| o[:office].to_s.match?(/\bState\b/i) }
-          city_reps    = @officials.reject { |o| o[:office].to_s.match?(/U\.S\.|House \(|\bState\b/i) }
+          federal_reps = @officials.select { |o| o[:office].to_s.match?(/U\.S\.|House \(|President|Vice President/i) }
+          state_reps   = @officials.select { |o| o[:office].to_s.match?(/\bState\b|Governor|Lieutenant Governor/i) && !o[:office].to_s.match?(/President/i) }
+          city_reps    = @officials.reject { |o| o[:office].to_s.match?(/U\.S\.|House \(|President|Vice President|\bState\b|Governor|Lieutenant Governor/i) }
         %>
         <% [['federal', 'Federal', federal_reps], ['state', 'State', state_reps], ['city', 'City', city_reps]].each do |tier, label, reps| %>
           <% next if reps.empty? %>
