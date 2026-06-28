@@ -189,7 +189,11 @@ a{text-decoration:none;color:inherit;}
 .opt-c-section.federal{background:var(--blue-vp);}
 .opt-c-section.state{background:var(--green-p);}
 .opt-c-section.city{background:var(--amber-p);}
-.opt-c-section-h{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid rgba(0,0,0,.1);}
+.opt-c-section-h{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);font-weight:700;padding-bottom:8px;border-bottom:2px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.opt-c-section-h .tog-arrow{font-size:10px;transition:transform .2s;}
+.opt-c-section-h.collapsed .tog-arrow{transform:rotate(-90deg);}
+.opt-c-body{margin-top:10px;}
+.opt-c-body.collapsed{display:none;}
 .opt-c-rep{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05);}
 .opt-c-rep:last-child{border-bottom:none;}
 .opt-c-av{width:30px;height:30px;border-radius:50%;background:var(--blue);border:2px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;flex:none;}
@@ -653,7 +657,11 @@ a{text-decoration:none;color:inherit;}
         <% [['federal', 'Federal', federal_reps], ['state', 'State', state_reps], ['city', 'City', city_reps]].each do |tier, label, reps| %>
           <% next if reps.empty? %>
           <div class="opt-c-section <%= tier %>">
-            <div class="opt-c-section-h"><%= label %> (<%= reps.size %>)</div>
+            <div class="opt-c-section-h" onclick="toggleRepSection(this)">
+              <span><%= label %> (<%= reps.size %>)</span>
+              <span class="tog-arrow">▾</span>
+            </div>
+            <div class="opt-c-body">
             <% reps.each do |o| %>
               <%
                 bio      = o.dig(:jurisdiction, :bioguide_id).to_s
@@ -674,6 +682,7 @@ a{text-decoration:none;color:inherit;}
                 <% end %>
               </div>
             <% end %>
+            </div><%# /.opt-c-body %>
           </div>
         <% end %>
       <% end %>
@@ -771,6 +780,12 @@ function toggleSpark(btn) {
       if (sec) sec.textContent = data.count + ' tracking';
     }
   }).catch(function(){ /* silent — button state stays */ });
+}
+
+// ── Rep section collapse ──────────────────────────────────────────────────────
+function toggleRepSection(hdr) {
+  hdr.classList.toggle('collapsed');
+  hdr.nextElementSibling.classList.toggle('collapsed');
 }
 
 // ── Rep Follow toggle (right rail) ────────────────────────────────────────────
