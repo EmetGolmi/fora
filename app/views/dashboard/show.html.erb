@@ -65,7 +65,8 @@ a{text-decoration:none;color:inherit;}
 .dash-search-input{flex:1;padding:9px 13px;border:1px solid var(--rule);border-radius:8px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink);outline:none;background:#fff;}
 .dash-search-input::placeholder{color:var(--ink-soft);}
 .dash-search-input:focus{border-color:var(--blue);}
-.dash-search-loc{width:180px;flex-shrink:0;padding:9px 13px;border:1px solid var(--rule);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);background:#fafafa;outline:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
+.dash-search-loc{width:180px;flex-shrink:0;padding:9px 13px;border:1px solid var(--rule);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);background:#fafafa;outline:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;cursor:text;}
+.dash-search-loc:focus{border-color:var(--blue);color:var(--ink);background:#fff;}
 .dash-search-go{width:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:17px;}
 .dash-search-go:hover{background:#122d55;}
 .dash-search-new{flex-shrink:0;padding:9px 14px;border:1px solid var(--rule);border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--blue);background:#fff;cursor:pointer;white-space:nowrap;}
@@ -332,7 +333,7 @@ a{text-decoration:none;color:inherit;}
       <div class="ftitle">Home</div>
       <div class="dash-search">
         <input class="dash-search-input" type="text" placeholder="What do you need?">
-        <div class="dash-search-loc"><%= [@profile.address_city.presence, @profile.address_state.presence].compact.join(", ").presence || "Your location" %></div>
+        <input class="dash-search-loc" type="text" value="<%= [@profile.address_city.presence, @profile.address_state.presence].compact.join(", ").presence || "" %>" placeholder="Your location">
         <button class="dash-search-go">🔍</button>
         <button class="dash-search-new">+ Start a project</button>
       </div>
