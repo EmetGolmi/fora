@@ -136,8 +136,14 @@ class DashboardController < ApplicationController
                 .compact_blank.join(", ")
     if address.present?
       job_id = @profile.resolve_job_id.presence || SecureRandom.hex(8)
-      ResolveAddressJob.perform_now(address, job_id)
-      @profile.update_column(:resolve_job_id, job_id) unless @profile.resolve_job_id == job_id
+      begin
+        ResolveAddressJob.perform_now(address, job_id)
+        @profile.update_column(:resolve_job_id, job_id) unless @profile.resolve_job_id == job_id
+      rescue => e
+        Rails.logger.error("reresolve failed for profile #{@profile.id}: #{e.message}")
+      end
+    else
+      Rails.logger.warn("reresolve: profile #{@profile.id} has no address stored")
     end
     redirect_to dashboard_path
   end

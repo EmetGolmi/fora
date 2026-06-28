@@ -65,7 +65,7 @@ class OnboardingController < ApplicationController
       full_address = [ addr_line, addr_city, addr_state ].reject(&:blank?).join(", ")
       job_id = SecureRandom.uuid
       Rails.cache.write("address:#{job_id}", full_address, expires_in: 30.minutes)
-      ResolveAddressJob.perform_later(full_address, job_id)
+      ResolveAddressJob.perform_now(full_address, job_id)
 
       @user.create_civic_profile!(
         address_line1:   addr_line,
