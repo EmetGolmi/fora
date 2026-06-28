@@ -178,6 +178,27 @@ a{text-decoration:none;color:inherit;}
 .rfoot{padding:10px 15px;text-align:center;border-top:1px solid var(--rule-soft);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);cursor:pointer;}
 .rfoot:hover{background:var(--blue-vp);}
 .rep{display:flex;align-items:center;gap:9px;padding:8px 15px;border-top:1px solid var(--rule-soft);cursor:pointer;}
+/* ── Official expand panel ── */
+.rep-expand-toggle{margin-top:6px;font-size:11px;color:var(--ink-mut);background:none;border:none;padding:0;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;}
+.rep-expand-toggle .arr{font-size:10px;display:inline-block;transition:transform .18s;}
+.rep-expand-toggle.open .arr{transform:rotate(180deg);}
+.rep-panel{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule-soft);}
+.rep-panel.open{display:block;}
+.rep-panel-hd{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mut);margin:0 0 6px;}
+.rep-panel-photo{width:52px;height:62px;border-radius:6px;object-fit:cover;object-position:top;float:right;margin:0 0 8px 10px;border:1px solid var(--rule);}
+.rep-panel-contact{font-size:12px;color:var(--ink-soft);line-height:1.7;margin-bottom:10px;}
+.rep-panel-contact a{color:var(--blue);text-decoration:none;}
+.rep-panel-contact a:hover{text-decoration:underline;}
+.rep-stats{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
+.rep-stat{background:var(--rule-soft);border-radius:8px;padding:7px 10px;flex:1;min-width:72px;}
+.rep-stat-n{font-size:15px;font-weight:800;color:var(--ink);}
+.rep-stat-l{font-size:9.5px;color:var(--ink-mut);margin-top:1px;line-height:1.3;}
+.rep-bills{}
+.rep-bill{font-size:11.5px;color:var(--ink-soft);padding:4px 0;border-bottom:0.5px solid var(--rule-soft);display:flex;gap:6px;}
+.rep-bill:last-child{border-bottom:none;}
+.rep-bill-id{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);white-space:nowrap;padding-top:2px;}
+.rep-profile-link{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:11.5px;font-weight:700;color:var(--blue);border:1px solid var(--blue-pl);border-radius:999px;padding:5px 14px;background:var(--blue-vp);text-decoration:none;clear:both;}
+.rep-profile-link:hover{background:var(--blue-pl);}
 .rep:hover{background:var(--rule-soft);}
 .rep-av{width:34px;height:34px;border-radius:50%;background:var(--blue);border:2px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:none;}
 .rep-n{font-weight:700;font-size:13px;}.rep-r{font-size:11px;color:var(--ink-mut);}
@@ -463,6 +484,7 @@ a{text-decoration:none;color:inherit;}
         <%# — Your representatives (only those with CivicRepresentative AR records) -%>
         <% @jurisdiction_reps.each do |rep| %>
           <% rep_sparked = @rep_follows.include?(rep.id) %>
+          <% odata = official_card_data(rep) %>
           <div class="post f">
             <div class="av av-gov"><%= initials(rep.name) %></div>
             <div class="pb">
@@ -488,6 +510,64 @@ a{text-decoration:none;color:inherit;}
               </div>
               <div class="tray build" data-source-type="CivicRepresentative" data-source-id="<%= rep.id %>"></div>
               <div class="tray integ" data-source-type="CivicRepresentative" data-source-id="<%= rep.id %>"></div>
+
+              <% if odata %>
+                <button class="rep-expand-toggle" onclick="toggleRepPanel(this)">
+                  <span class="arr">▾</span> See full profile
+                </button>
+                <div class="rep-panel">
+                  <% if odata[:photo] %>
+                    <img class="rep-panel-photo" src="<%= odata[:photo] %>" alt="<%= rep.name %>">
+                  <% end %>
+
+                  <div class="rep-panel-hd">Contact</div>
+                  <div class="rep-panel-contact">
+                    <% if odata[:website] %>📎 <a href="<%= odata[:website] %>" target="_blank" rel="noopener"><%= odata[:website].sub(%r{https?://}, '') %></a><br><% end %>
+                    <% if odata[:phone] %>📞 <%= odata[:phone] %><br><% end %>
+                    <% if odata[:address] %>📍 <%= odata[:address] %><% end %>
+                  </div>
+
+                  <% if odata[:party_vote] || odata[:sponsored] %>
+                    <div class="rep-panel-hd" style="clear:both;">Activity</div>
+                    <div class="rep-stats">
+                      <% if odata[:party_vote] %>
+                        <div class="rep-stat">
+                          <div class="rep-stat-n"><%= odata[:party_vote].to_i %>%</div>
+                          <div class="rep-stat-l">votes with party</div>
+                        </div>
+                        <div class="rep-stat">
+                          <div class="rep-stat-n"><%= odata[:missed].to_i %>%</div>
+                          <div class="rep-stat-l">missed votes</div>
+                        </div>
+                      <% end %>
+                      <% if odata[:sponsored] %>
+                        <div class="rep-stat">
+                          <div class="rep-stat-n"><%= odata[:sponsored] %></div>
+                          <div class="rep-stat-l">bills sponsored</div>
+                        </div>
+                        <div class="rep-stat">
+                          <div class="rep-stat-n"><%= odata[:enacted] %></div>
+                          <div class="rep-stat-l">enacted</div>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+
+                  <% if odata[:bills].any? %>
+                    <div class="rep-panel-hd">Recent bills</div>
+                    <div class="rep-bills">
+                      <% odata[:bills].each do |bill| %>
+                        <div class="rep-bill">
+                          <span class="rep-bill-id"><%= bill[:id] %></span>
+                          <span><%= bill[:title] %></span>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+
+                  <a href="<%= odata[:profile_path] %>" class="rep-profile-link">Full profile →</a>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>
@@ -780,6 +860,13 @@ function toggleSpark(btn) {
       if (sec) sec.textContent = data.count + ' tracking';
     }
   }).catch(function(){ /* silent — button state stays */ });
+}
+
+// ── Official card expand (Jurisdictions tab) ──────────────────────────────────
+function toggleRepPanel(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+  btn.querySelector('.arr').style.transform = btn.classList.contains('open') ? 'rotate(180deg)' : '';
 }
 
 // ── Rep section collapse ──────────────────────────────────────────────────────
