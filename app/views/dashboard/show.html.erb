@@ -86,7 +86,16 @@ a{text-decoration:none;color:inherit;}
 .psa-cta{display:flex;align-items:center;gap:6px;margin:10px 16px 14px;font-size:12px;color:#1b3a6b;font-weight:600;cursor:pointer;text-decoration:none;}
 .psa-edict{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.04em;color:#aaa;padding:8px 16px;border-top:0.5px solid #eee;background:#f8f8f7;}
 /* listing card — matches /market/square */
-.listing{background:#fff;border:0.5px solid #e5e5e5;border-radius:12px;padding:15px 17px;margin-bottom:10px;cursor:pointer;transition:border-color .12s;}
+.listing{background:#fff;border:0.5px solid #e5e5e5;border-radius:12px;padding:15px 17px;margin-bottom:10px;cursor:pointer;transition:border-color .12s;position:relative;}
+.lshare-btn{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:6px;border:0.5px solid #e5e5e5;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:#999;transition:background .12s,color .12s;}
+.lshare-btn:hover{background:#f0f0f0;color:#1b3a6b;}
+.lshare-menu{display:none;position:absolute;top:42px;right:10px;z-index:20;background:#fff;border:0.5px solid #e5e5e5;border-radius:9px;box-shadow:0 4px 18px rgba(0,0,0,.12);min-width:160px;overflow:hidden;}
+.lshare-menu.open{display:block;}
+.lshare-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12.5px;color:#111;cursor:pointer;text-decoration:none;border-bottom:0.5px solid #f0f0f0;}
+.lshare-item:last-child{border-bottom:none;}
+.lshare-item:hover{background:#f5f5f5;}
+.listing-url{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:11.5px;color:#1b3a6b;text-decoration:none;font-weight:600;}
+.listing-url:hover{text-decoration:underline;}
 .listing:hover{border-color:#1b3a6b;}
 .listing-top{display:flex;gap:12px;align-items:flex-start;}
 .listing-avatar{width:46px;height:46px;border-radius:50%;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
@@ -1701,6 +1710,7 @@ var MKT_DOMS = [
        ]},
       {name:"Jiffy Lube",av:"JL",avClass:"av-biz",avStyle:"background:#fff3ec;color:#ff6800;border-color:#ff6800;font-size:9px;font-family:monospace;font-weight:900",
        bdgClass:"lbdg-biz",bdgLabel:"Business",
+       url:"https://www.jiffylube.com",
        rating:"3.9",reviewCount:"184",location:"0.8 mi · Columbus Blvd",price:"$89–119",
        socialProof:"10 of your acquaintances have left positive reviews for Jiffy Lube",
        desc:"No appointment needed. Signature Service oil change, typically 30 min. Full-service multi-point check included.",
@@ -1719,17 +1729,20 @@ var MKT_DOMS = [
        topComment:{who:"@phl.dad.bellavista",text:"Brought my son to watch. The instructor talked us through everything. We're going back."}},
       {name:"Pep Boys",av:"PB",avClass:"av-biz",avStyle:"background:#eaf0ff;color:#1a3c9e;border-color:#1a3c9e;font-size:10px",
        bdgClass:"lbdg-biz",bdgLabel:"Business",
+       url:"https://www.pepboys.com",
        rating:"3.7",reviewCount:"227",location:"1.1 mi · Oregon Ave",price:"$59–109",
        desc:"Walk-in and appointment available. Full parts counter on-site — they'll sell you the filter if you want to watch and do it yourself next time.",
        tags:["Walk-in welcome","Parts on-site"]},
       {name:"Girls Auto Clinic",av:"GA",avClass:"av-biz",avStyle:"background:#fce8f3;color:#c2185b;border-color:#c2185b",
        bdgClass:"lbdg-biz",bdgLabel:"Business",
+       url:"https://www.girlsautoclinic.com/",
        rating:"5.0",reviewCount:"650+ Google reviews",location:"Upper Darby, PA · 6.1 mi",price:"Varies by service",
        desc:"Women-focused auto repair shop. Oil changes, safety inspections, brakes, A/C, and diagnostics — plus Clutch Beauty Bar on-site for manicures while you wait. Founded by Patrice Banks.",
        tags:["Women-owned","Clutch Beauty Bar","VID Membership","Mon–Fri 8am–6pm"],
        related:{label:"SHEcanic Foundation — Car Care Workshop",url:"https://www.shecanicfoundation.org/car-care-workshop"}},
       {name:"SHEcanic Foundation — Car Care Workshop",av:"SC",avClass:"av-community",
        bdgClass:"lbdg-community",bdgLabel:"Community",
+       url:"https://www.shecanicfoundation.org/car-care-workshop",
        location:"Philadelphia area · 2nd Saturday monthly",price:"Free · Workshop Plus: paid",
        desc:"Hands-on automotive education for women. Learn engine basics, maintenance schedules, and how to communicate with mechanics. Free 120-min community sessions monthly (Apr–Dec); 4-hr immersive sessions quarterly.",
        tags:["Free to attend","Monthly · 2nd Saturday","Women-focused","Hands-on","No experience needed"],
@@ -1895,18 +1908,48 @@ function mktCardHtml(c, idx) {
     }
     var revToggle = topC ? '<button class="lreviews-toggle" onclick="event.stopPropagation();this.classList.toggle(\'open\');document.getElementById(\''+revId+'\').classList.toggle(\'open\')">Reviews <span class="lrev-chev">▾</span></button><div class="lrev-expand" id="'+revId+'">'+moreRevHtml+'</div>' : '';
     var ratingStr = c.rating ? '<span class="lrating"><span class="star-ic">★</span> '+c.rating+' <span style="color:#999;font-weight:400">('+c.reviewCount+')</span></span>' : '';
-    var relatedHtml = c.related ? '<div class="listing-related">↗ Related: <a href="'+c.related.url+'" target="_blank" rel="noopener">'+c.related.label+'</a></div>' : '';
-    return '<div class="listing"><div class="listing-top"><div class="listing-avatar '+c.avClass+'"'+avStyle+'>'+c.av+vetBar+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+c.bdgClass+'">'+c.bdgLabel+'</span>'+cleared+'</div><div class="listing-meta">'+ratingStr+'<span>'+c.location+'</span><span>'+c.price+'</span></div>'+sp+'<div class="listing-desc">'+c.desc+'</div>'+tagRow+'<div class="listing-actions" onclick="event.stopPropagation()"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div>'+topC+revToggle+relatedHtml+'</div></div></div>';
+    var relatedHtml = c.related ? '<div class="listing-related">↗ Related: <a href="'+c.related.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+c.related.label+'</a></div>' : '';
+    var urlHtml = c.url ? '<a class="listing-url" href="'+c.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">🌐 '+c.url.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'')+'</a>' : '';
+    var shareMenuId = 'sm-'+idx;
+    var shareBtn = '<button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu(\''+shareMenuId+'\',\''+c.name.replace(/'/g,"\\'")+'\')" title="Share">⤴</button>'
+      + '<div class="lshare-menu" id="'+shareMenuId+'">'
+      + cardShareItems(c.name, c.url||window.location.href)
+      + '</div>';
+    return '<div class="listing">'+shareBtn+'<div class="listing-top"><div class="listing-avatar '+c.avClass+'"'+avStyle+'>'+c.av+vetBar+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+c.bdgClass+'">'+c.bdgLabel+'</span>'+cleared+'</div><div class="listing-meta">'+ratingStr+'<span>'+c.location+'</span><span>'+c.price+'</span></div>'+sp+'<div class="listing-desc">'+c.desc+'</div>'+urlHtml+tagRow+'<div class="listing-actions" onclick="event.stopPropagation()"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div>'+topC+revToggle+relatedHtml+'</div></div></div>';
   }
   // Simple card — derive initials and av class from kind
   var initials = c.name.split(/\s+/).slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();
   var avCls = c.kind==='nbr'?'av-neighbor':c.kind==='prog'?'av-community':'av-biz';
   var bdgCls = c.kind==='nbr'?'lbdg-neighbor':c.kind==='prog'?'lbdg-prog':c.kind==='fora'?'lbdg-fora':'lbdg-biz';
   var bdgLbl = c.kind==='nbr'?'Neighbor':c.kind==='prog'?'Program':c.kind==='fora'?'FORA guide':'Business';
-  return '<div class="listing"><div class="listing-top"><div class="listing-avatar '+avCls+'">'+initials+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+bdgCls+'">'+bdgLbl+'</span></div><div class="listing-desc" style="margin-top:4px">'+c.type+'</div><div class="listing-meta" style="margin-top:4px">'+c.stars+'</div><div class="listing-actions" onclick="event.stopPropagation()" style="margin-top:8px"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div></div></div></div>';
+  var sSmid = 'sm-s-'+idx;
+  var sSimpleUrl = c.url || window.location.href;
+  var sSimpleBtn = '<button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu(\''+sSmid+'\',\''+c.name.replace(/'/g,"\\'")+'\')" title="Share">⤴</button><div class="lshare-menu" id="'+sSmid+'">'+cardShareItems(c.name, sSimpleUrl)+'</div>';
+  var sUrlHtml = c.url ? '<a class="listing-url" href="'+c.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">🌐 '+c.url.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'')+'</a>' : '';
+  return '<div class="listing">'+sSimpleBtn+'<div class="listing-top"><div class="listing-avatar '+avCls+'">'+initials+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+bdgCls+'">'+bdgLbl+'</span></div><div class="listing-desc" style="margin-top:4px">'+c.type+'</div><div class="listing-meta" style="margin-top:4px">'+c.stars+'</div>'+sUrlHtml+'<div class="listing-actions" onclick="event.stopPropagation()" style="margin-top:8px"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div></div></div></div>';
 }
 
 var MKT_JIFFY_AD = '<div class="sponsored-post"><div class="sponsored-header"><div class="sponsored-who"><div class="sponsored-logo">JIFFY<br>LUBE</div><div><div class="sponsored-name">Jiffy Lube</div><div style="font-size:11px;color:#999">Community service announcement</div></div></div><div class="sponsored-label">Sponsored</div></div><div class="psa-body"><strong>How often should you change your oil?</strong> For most vehicles with conventional oil, every <strong>3 months or 3,000 miles</strong>. If you use synthetic, you can go <strong>6–12 months or 5,000–10,000 miles</strong> — check your owner\'s manual. Older vehicles and those doing hard work (towing, stop-and-go city driving) trend toward the shorter interval.<br><br><strong>Changing your own oil?</strong> Bring your used oil to any Jiffy Lube location — we\'ll dispose of it safely at no charge, no questions asked. Used motor oil poured down a drain or into the ground contaminates groundwater. One quart can make 250,000 gallons of water undrinkable.</div><a class="psa-cta" href="#">&#128197; Add oil change reminder to your FORA calendar</a><div class="psa-edict">FORA ad policy: sponsors earn placement by contributing to the community. This is a public service announcement.</div></div>';
+
+function cardShareItems(name, url) {
+  var enc = encodeURIComponent, txt = enc(name), href = enc(url);
+  return '<a class="lshare-item" href="https://twitter.com/intent/tweet?text='+txt+'&url='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span>𝕏</span> Share on X</a>'
+       + '<a class="lshare-item" href="https://www.facebook.com/sharer/sharer.php?u='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="color:#1877f2">f</span> Share on Facebook</a>'
+       + '<a class="lshare-item" href="#" onclick="event.stopPropagation();event.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(\''+url.replace(/'/g,"\\'")+'\')" style="cursor:pointer"><span>🔗</span> Copy link</a>';
+}
+
+function toggleShareMenu(id, name) {
+  var menus = document.querySelectorAll('.lshare-menu');
+  menus.forEach(function(m){ if (m.id !== id) m.classList.remove('open'); });
+  var el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.lshare-btn') && !e.target.closest('.lshare-menu')) {
+    document.querySelectorAll('.lshare-menu.open').forEach(function(m){ m.classList.remove('open'); });
+  }
+});
 
 function renderMktCards(title, sub, cards) {
   var crumb = document.getElementById('mkt-crumb');
