@@ -50,6 +50,39 @@ a{text-decoration:none;color:inherit;}
 .tool .ti{width:16px;text-align:center;color:var(--ink-soft);font-size:13px;flex:none;}
 .tool .bdg{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--scarlet);color:#fff;border-radius:999px;padding:1px 6px;}
 
+/* Market left-nav accordion */
+.mkt-nav{margin-left:20px;border-left:2px solid var(--green-p);padding-left:7px;}
+.mkt-dom-h{display:flex;align-items:center;gap:7px;padding:7px 10px 7px 5px;color:var(--ink-soft);font-size:13px;font-weight:600;cursor:pointer;user-select:none;border-radius:8px;}
+.mkt-dom-h:hover{background:var(--rule-soft);color:var(--ink);}
+.mkt-dom-h.on{color:var(--market);}
+.mkt-dom-icon{font-size:13px;flex-shrink:0;width:16px;text-align:center;}
+.mkt-dom-label{flex:1;}
+.mkt-chev{font-size:10px;color:var(--ink-mut);transition:transform .15s;flex-shrink:0;}
+.mkt-dom-h.open .mkt-chev{transform:rotate(180deg);}
+.mkt-sub-list{display:none;padding-bottom:2px;}
+.mkt-sub-list.open{display:block;}
+.mkt-sub{padding:4px 8px 4px 28px;font-size:12px;color:var(--ink-soft);cursor:pointer;border-left:2px solid transparent;border-radius:0 6px 6px 0;}
+.mkt-sub:hover{color:var(--ink);background:var(--rule-soft);}
+.mkt-sub.on{color:var(--market);font-weight:700;border-left-color:var(--market);}
+
+/* Market center panel */
+.mkt-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:13px 18px 10px;}
+.mkt-fhead-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--market);}
+.mkt-fhead-crumb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:3px;display:none;}
+.mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px;}
+.mkt-card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:13px 15px;cursor:pointer;transition:border-color .12s;}
+.mkt-card:hover{border-color:#b0bdd0;}
+.mkt-card-name{font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:2px;}
+.mkt-card-type{font-size:12px;color:var(--ink-soft);margin-bottom:9px;}
+.mkt-card-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.mkt-badge{font-size:9.5px;padding:2px 7px;border-radius:10px;border:1px solid;font-family:'JetBrains Mono',monospace;letter-spacing:.03em;}
+.mkt-badge.biz{background:#e8f0fb;color:var(--blue);border-color:#c0d3f0;}
+.mkt-badge.prog{background:var(--green-p);color:var(--market);border-color:#9ecfb0;}
+.mkt-badge.nbr{background:var(--gilt-pl);color:#6b5300;border-color:#d4a520;}
+.mkt-badge.fora{background:#f5f5f7;color:var(--ink-soft);border-color:var(--rule);}
+.mkt-stars{font-size:11px;color:var(--ink-soft);}
+.mkt-empty-state{color:var(--ink-soft);font-size:13px;padding:56px 24px;text-align:center;line-height:1.7;}
+
 .voice{margin:14px 7px 6px;padding:12px;border:none;border-radius:999px;width:calc(100% - 14px);background:var(--gilt);color:#fff;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 2px 0 rgba(120,86,8,.45);}
 .voice:hover{background:var(--gilt-lt);}
 .id-block{margin-top:auto;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:999px;cursor:pointer;}
@@ -308,18 +341,8 @@ a{text-decoration:none;color:inherit;}
       <a href="#" class="tool"><span class="ti">✓</span> Act</a>
     </div>
 
-    <div class="pillar-h"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
-    <div class="tools m">
-      <a href="<%= market_square_path %>" class="tool"><span class="ti">▢</span> Square</a>
-      <a href="#" class="tool"><span class="ti">◳</span> Demand</a>
-      <% if @profile.provider_mode? %>
-        <a href="#" class="tool"><span class="ti">⚒</span> Supply</a>
-        <a href="#" class="tool"><span class="ti">▣</span> Contract</a>
-      <% else %>
-        <a href="#" class="tool"><span class="ti">⚒</span> Supply</a>
-        <a href="#" class="tool"><span class="ti">▣</span> Contract</a>
-      <% end %>
-    </div>
+    <div class="pillar-h" style="cursor:pointer" onclick="switchPanel('market',null);return false;"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
+    <div class="mkt-nav" id="mkt-nav"></div>
 
     <button class="voice">Add your Voice</button>
 
@@ -684,6 +707,15 @@ a{text-decoration:none;color:inherit;}
       <% end %>
     </div><%# /tv-juris %>
   </div><%# /panel-observe %>
+
+  <%# ── MARKET PANEL ─────────────────────────────────────────────────────── %>
+  <div id="panel-market" style="display:none">
+    <div class="mkt-fhead">
+      <div class="mkt-fhead-title">▢ Market</div>
+      <div class="mkt-fhead-crumb" id="mkt-crumb"></div>
+    </div>
+    <div id="mkt-main"><p class="mkt-empty-state">Select a category from the left to explore your neighborhood marketplace.</p></div>
+  </div>
   </main>
 
   <%# ── RIGHT RAIL ──────────────────────────────────────────────────────────── %>
@@ -1275,6 +1307,253 @@ document.querySelectorAll('.mtab').forEach(function(m) {
     m.classList.add('on');
   };
 });
+
+// ── Market accordion & cards ───────────────────────────────────────────────
+var MKT_DOMS = [
+  {icon:"ti-home",label:"Your home",subs:[
+    {label:"Handyman & repair",cards:[
+      {name:"Mike's Handyman",type:"General repair · neighbor",kind:"nbr",stars:"4.6 · 31 reviews"},
+      {name:"Fix-It Philly",type:"Home repair co.",kind:"biz",stars:"4.5 · 58 reviews"},
+      {name:"PHL Whole Home Repair",type:"City grant program",kind:"prog",stars:"Income-eligible"},
+      {name:"Before you hire — contractor guide",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Roofing",cards:[
+      {name:"Apex Roofing Co.",type:"Licensed contractor",kind:"biz",stars:"4.8 · 94 reviews"},
+      {name:"Dave's Roofing & Gutters",type:"Neighbor contractor",kind:"nbr",stars:"4.6 · 31 reviews"},
+      {name:"PHL Whole Home Repair",type:"City grant — up to $24k",kind:"prog",stars:"Income-eligible"},
+      {name:"Roofing permits — what's required",type:"FORA guide · L&I code",kind:"fora",stars:"Forum brief"}
+    ]},
+    {label:"Plumbing",cards:[
+      {name:"South Philly Plumbing",type:"Licensed plumber",kind:"biz",stars:"4.7 · 66 reviews"},
+      {name:"Joe the Plumber",type:"Neighbor · cash",kind:"nbr",stars:"4.4 · 19 reviews"},
+      {name:"PIDC Water Grant",type:"Water efficiency program",kind:"prog",stars:"Free assessment"}
+    ]},
+    {label:"Electrical",cards:[
+      {name:"Passyunk Electric",type:"Licensed electrician",kind:"biz",stars:"4.9 · 44 reviews"},
+      {name:"PECO Energy Efficiency",type:"Rebate program",kind:"prog",stars:"Up to $500 back"}
+    ]},
+    {label:"Real estate",cards:[
+      {name:"Redfin Philadelphia",type:"Brokerage",kind:"biz",stars:"4.6 · 200+ reviews"},
+      {name:"Philadelphia Housing Authority",type:"Affordable housing programs",kind:"prog",stars:"Income-eligible"},
+      {name:"Know your homebuyer rights",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Architecture & design",cards:[
+      {name:"Studio Karim",type:"Residential architect",kind:"biz",stars:"5.0 · 12 reviews"},
+      {name:"María López Design",type:"Interior designer · neighbor",kind:"nbr",stars:"4.9 · 8 reviews"}
+    ]},
+    {label:"Pest control",cards:[
+      {name:"BugOut Philly",type:"Licensed exterminator",kind:"biz",stars:"4.7 · 81 reviews"},
+      {name:"Tenant pest rights — Philadelphia",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Moving",cards:[
+      {name:"Two Guys Moving",type:"Local movers",kind:"nbr",stars:"4.5 · 43 reviews"},
+      {name:"College Hunks",type:"Moving company",kind:"biz",stars:"4.6 · 130 reviews"}
+    ]}
+  ]},
+  {icon:"ti-salad",label:"Food & drink",subs:[
+    {label:"Restaurants",cards:[
+      {name:"Corner Table",type:"Restaurant · South Philly",kind:"biz",stars:"4.7 · 210 reviews"},
+      {name:"Fond",type:"BYOB · Passyunk",kind:"biz",stars:"4.9 · 310 reviews"}
+    ]},
+    {label:"Local producers",cards:[
+      {name:"Headhouse Farmers Market",type:"Weekly market · Saturdays",kind:"prog",stars:"8am–2pm"},
+      {name:"Nadia's Home Kitchen",type:"Meal prep · neighbor",kind:"nbr",stars:"4.9 · 18 orders"},
+      {name:"South Philly Bakehouse",type:"Neighborhood baker",kind:"nbr",stars:"5.0 · 34 reviews"}
+    ]},
+    {label:"Food access programs",cards:[
+      {name:"Philly Food Policy Council",type:"Food access resources",kind:"prog",stars:"Free"},
+      {name:"SNAP — how to apply",type:"FORA guide · eligibility",kind:"fora",stars:"Temple brief"},
+      {name:"Share Food Program",type:"Food pantry network",kind:"prog",stars:"Free distribution"}
+    ]},
+    {label:"Food scrap & sustainability",cards:[
+      {name:"Philly Compost",type:"City composting program",kind:"prog",stars:"Free pickup"},
+      {name:"Food scrap drop-off locations",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]}
+  ]},
+  {icon:"ti-heart-rate-monitor",label:"Health & body",subs:[
+    {label:"Medical & dental",cards:[
+      {name:"Rittenhouse Family Medicine",type:"Primary care",kind:"biz",stars:"4.6 · 88 reviews"},
+      {name:"Community Health Centers",type:"Sliding-scale clinic",kind:"prog",stars:"No-cost visits"},
+      {name:"Philadelphia FIGHT",type:"Community health center",kind:"prog",stars:"Free & low-cost"}
+    ]},
+    {label:"Mental health",cards:[
+      {name:"Open Path Therapy",type:"Affordable counseling",kind:"prog",stars:"$30–$80/session"},
+      {name:"DBHIDS Crisis Line",type:"24/7 behavioral health crisis",kind:"prog",stars:"Free · 24/7"},
+      {name:"Understanding therapy options",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Fitness & bodywork",cards:[
+      {name:"Bella Vista Yoga",type:"Fitness studio",kind:"biz",stars:"4.8 · 54 reviews"},
+      {name:"Fairmount Park Recreation",type:"Free public fitness",kind:"prog",stars:"Free"},
+      {name:"Massage by Elise",type:"Licensed MT · neighbor",kind:"nbr",stars:"4.9 · 28 reviews"}
+    ]},
+    {label:"Personal care",cards:[
+      {name:"The Barbershop on Passyunk",type:"Barber",kind:"biz",stars:"4.8 · 142 reviews"},
+      {name:"Salon Nour",type:"Full-service salon",kind:"biz",stars:"4.7 · 97 reviews"}
+    ]}
+  ]},
+  {icon:"ti-car",label:"Getting around",subs:[
+    {label:"Auto repair",cards:[
+      {name:"South St. Auto Repair",type:"Full-service mechanic",kind:"biz",stars:"4.7 · 120 reviews"},
+      {name:"Tony's Garage",type:"Neighbor mechanic",kind:"nbr",stars:"4.5 · 28 reviews"},
+      {name:"PA inspection — what's required",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Transit & rideshare",cards:[
+      {name:"SEPTA Key Assist",type:"Reduced fare program",kind:"prog",stars:"Income-eligible"},
+      {name:"SEPTA trip planning",type:"FORA guide · routes & passes",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Moving & logistics",cards:[
+      {name:"Two Guys Moving",type:"Local movers",kind:"nbr",stars:"4.5 · 43 reviews"},
+      {name:"College Hunks",type:"Moving company",kind:"biz",stars:"4.6 · 130 reviews"}
+    ]},
+    {label:"Vehicle services",cards:[
+      {name:"Philly Car Share",type:"Vehicle access program",kind:"prog",stars:"Hourly rates"},
+      {name:"Adopt a vehicle — PHL",type:"City surplus vehicle program",kind:"prog",stars:"Auction-based"}
+    ]}
+  ]},
+  {icon:"ti-users",label:"Family & care",subs:[
+    {label:"Childcare",cards:[
+      {name:"Bright Beginnings Daycare",type:"Licensed center",kind:"biz",stars:"4.9 · 61 reviews"},
+      {name:"CCIS Philadelphia",type:"Childcare subsidy program",kind:"prog",stars:"Income-eligible"},
+      {name:"Sara (neighbor babysitter)",type:"Weeknights and weekends",kind:"nbr",stars:"5.0 · 12 reviews"},
+      {name:"Childcare options in Philly",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Elder care",cards:[
+      {name:"COSA Elder Services",type:"In-home elder support",kind:"prog",stars:"Free assessment"},
+      {name:"Philadelphia Corporation for Aging",type:"Benefits, meals, transport",kind:"prog",stars:"215-765-9040"},
+      {name:"Grace (in-home caregiver)",type:"10 yrs experience",kind:"nbr",stars:"5.0 · 7 reviews"},
+      {name:"Elder care rights in Philadelphia",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Youth & after-school",cards:[
+      {name:"Big Brothers Big Sisters",type:"Youth mentorship",kind:"prog",stars:"Free enrollment"},
+      {name:"YouthBuild Philadelphia",type:"Trade + GED program",kind:"prog",stars:"Free"},
+      {name:"Rising Tide Guitar School",type:"Youth music lessons",kind:"biz",stars:"4.7 · 38 reviews"}
+    ]},
+    {label:"Pets",cards:[
+      {name:"Sara's Pet Care",type:"Dog walking · neighbor",kind:"nbr",stars:"5.0 · 27 reviews"},
+      {name:"Passyunk Animal Hospital",type:"Veterinarian",kind:"biz",stars:"4.8 · 113 reviews"},
+      {name:"PAWS Philadelphia",type:"Low-cost vet + adoption",kind:"prog",stars:"Sliding scale"}
+    ]}
+  ]},
+  {icon:"ti-palette",label:"Style & expression",subs:[
+    {label:"Clothing & tailoring",cards:[
+      {name:"Anastasia's Alterations",type:"Tailor · South Philly",kind:"biz",stars:"4.9 · 77 reviews"},
+      {name:"Philly Clothing Swap",type:"Community exchange",kind:"prog",stars:"Monthly event"},
+      {name:"Fleece & Yarn Co-op",type:"Sewing circle · neighbor",kind:"nbr",stars:"4.7 · 12 members"}
+    ]},
+    {label:"Faith & community",cards:[
+      {name:"Congregation Rodeph Shalom",type:"Synagogue · North Philly",kind:"prog",stars:"Open services"},
+      {name:"St. Paul's Episcopal",type:"Church · Bella Vista",kind:"prog",stars:"Open services"},
+      {name:"Masjid Al-Jamia",type:"Mosque · West Philly",kind:"prog",stars:"Open services"},
+      {name:"Faith communities in your area",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Arts & culture",cards:[
+      {name:"PhillyCAM",type:"Community media arts",kind:"prog",stars:"Subsidized rates"},
+      {name:"Fleisher Art Memorial",type:"Free art classes",kind:"prog",stars:"Free"},
+      {name:"Guided tours — South Philly",type:"Neighborhood history",kind:"nbr",stars:"4.8 · 22 reviews"}
+    ]}
+  ]},
+  {icon:"ti-books",label:"Learn & grow",subs:[
+    {label:"Tutoring & coaching",cards:[
+      {name:"Maria Chen — Math Tutor",type:"K–12 · all levels",kind:"nbr",stars:"5.0 · 22 reviews"},
+      {name:"Philadelphia Reads",type:"Free literacy tutoring",kind:"prog",stars:"Free"},
+      {name:"Coaching by James",type:"Career coaching · neighbor",kind:"nbr",stars:"4.8 · 14 reviews"}
+    ]},
+    {label:"Classes & skills",cards:[
+      {name:"Rising Tide Guitar School",type:"Music lessons · all ages",kind:"biz",stars:"4.7 · 38 reviews"},
+      {name:"Bella Vista Yoga",type:"Fitness & mindfulness",kind:"biz",stars:"4.8 · 54 reviews"},
+      {name:"Cooking classes — Nadia's",type:"Home chef · neighbor",kind:"nbr",stars:"4.9 · 8 sessions"}
+    ]},
+    {label:"Trades & apprenticeships",cards:[
+      {name:"YouthBuild Philadelphia",type:"Trade certification · free",kind:"prog",stars:"Free enrollment"},
+      {name:"UA Local 690 — Plumbers",type:"Union apprenticeship",kind:"prog",stars:"Apply online"},
+      {name:"Trade licensing in PA",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]}
+  ]},
+  {icon:"ti-briefcase",label:"Work & livelihood",subs:[
+    {label:"Legal aid",cards:[
+      {name:"Community Legal Services",type:"Free civil legal aid",kind:"prog",stars:"Walk-in hours"},
+      {name:"SeniorLAW Center",type:"Free legal help for 60+",kind:"prog",stars:"Free"},
+      {name:"Know your tenant rights",type:"FORA guide",kind:"fora",stars:"Temple brief"},
+      {name:"James Okafor — Paralegal",type:"Document prep",kind:"nbr",stars:"4.8 · 9 reviews"}
+    ]},
+    {label:"Jobs & workforce",cards:[
+      {name:"Philly Works",type:"Workforce development",kind:"prog",stars:"Free placement"},
+      {name:"CareerLink Philadelphia",type:"State workforce center",kind:"prog",stars:"Free services"},
+      {name:"Unemployment benefits — how to apply",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+    ]},
+    {label:"Business formation",cards:[
+      {name:"Philly SCORE",type:"Free small biz mentoring",kind:"prog",stars:"Free coaching"},
+      {name:"Starting a business in Philadelphia",type:"FORA guide · L&I, taxes",kind:"fora",stars:"Temple brief"},
+      {name:"James Okafor — CPA",type:"Small business accounting",kind:"nbr",stars:"4.8 · 19 reviews"}
+    ]},
+    {label:"Professional services",cards:[
+      {name:"Redfin — Buyer's agent",type:"Real estate",kind:"biz",stars:"4.6 · 200+ reviews"},
+      {name:"Philadelphia Bar Association",type:"Lawyer referral service",kind:"prog",stars:"First call free"}
+    ]}
+  ]}
+];
+
+(function buildMktNav() {
+  var nav = document.getElementById('mkt-nav');
+  MKT_DOMS.forEach(function(d) {
+    var row = document.createElement('div');
+
+    var hd = document.createElement('div');
+    hd.className = 'mkt-dom-h';
+    hd.innerHTML = '<i class="ti ' + d.icon + ' mkt-dom-icon"></i><span class="mkt-dom-label">' + d.label + '</span><i class="ti ti-chevron-down mkt-chev"></i>';
+
+    var sl = document.createElement('div');
+    sl.className = 'mkt-sub-list';
+
+    d.subs.forEach(function(s) {
+      var si = document.createElement('div');
+      si.className = 'mkt-sub';
+      si.textContent = s.label;
+      si.onclick = function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.mkt-sub').forEach(function(x){x.classList.remove('on');});
+        si.classList.add('on');
+        switchPanel('market', null);
+        renderMktCards(d.label, s.label, s.cards);
+      };
+      sl.appendChild(si);
+    });
+
+    hd.onclick = function() {
+      var isOpen = sl.classList.contains('open');
+      document.querySelectorAll('.mkt-sub-list').forEach(function(x){x.classList.remove('open');});
+      document.querySelectorAll('.mkt-dom-h').forEach(function(x){x.classList.remove('on','open');});
+      if (!isOpen) {
+        sl.classList.add('open');
+        hd.classList.add('on','open');
+        switchPanel('market', null);
+        renderMktDomain(d);
+      }
+    };
+
+    row.appendChild(hd);
+    row.appendChild(sl);
+    nav.appendChild(row);
+  });
+})();
+
+function renderMktDomain(d) {
+  var all = [];
+  d.subs.forEach(function(s){ s.cards.forEach(function(c){ all.push(c); }); });
+  var unique = all.filter(function(c,i,a){ return a.findIndex(function(x){return x.name===c.name;})===i; }).slice(0,8);
+  renderMktCards(d.label, 'All subcategories', unique);
+}
+
+function renderMktCards(title, sub, cards) {
+  var crumb = document.getElementById('mkt-crumb');
+  crumb.textContent = title + (sub !== 'All subcategories' ? ' › ' + sub : '');
+  crumb.style.display = '';
+  var html = cards.map(function(c) {
+    var bl = c.kind==='biz'?'Business':c.kind==='prog'?'Program':c.kind==='nbr'?'Neighbor':'FORA guide';
+    return '<div class="mkt-card"><div class="mkt-card-name">' + c.name + '</div><div class="mkt-card-type">' + c.type + '</div><div class="mkt-card-meta"><span class="mkt-badge ' + c.kind + '">' + bl + '</span><span class="mkt-stars">' + c.stars + '</span></div></div>';
+  }).join('');
+  document.getElementById('mkt-main').innerHTML = '<div class="mkt-grid">' + html + '</div>';
+}
 </script>
 </body>
 </html>
