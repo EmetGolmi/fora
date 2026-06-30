@@ -380,6 +380,7 @@ a{text-decoration:none;color:inherit;}
       <a href="#" class="tool"><span class="ti">◴</span> Sit</a>
       <a href="#" class="tool"><span class="ti">▤</span> Study</a>
       <a href="#" class="tool"><span class="ti">⇄</span> Share</a>
+      <a href="#" class="tool" onclick="switchPanel('religion',this);return false;"><span class="ti">✦</span> Religion &amp; Spirituality</a>
     </div>
 
     <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
@@ -910,6 +911,14 @@ a{text-decoration:none;color:inherit;}
       <% end %>
     <% end %>
   </div><%# /panel-legislation %>
+
+  <%# ── RELIGION & SPIRITUALITY PANEL (Temple) ─────────────────────────────── %>
+  <div id="panel-religion" style="display:none">
+    <div class="fhead" style="border-bottom:2px solid var(--gilt);">
+      <div class="ftitle" style="color:var(--temple);">◯ Religion &amp; Spirituality</div>
+    </div>
+    <div id="rel-main" class="mkt-grid"></div>
+  </div><%# /panel-religion %>
 
   <%# ── PATHS & PROGRAMS PANEL ─────────────────────────────────────────────── %>
   <div id="panel-pathsprograms" style="display:none">
@@ -1522,6 +1531,20 @@ function switchPanel(key, el) {
   });
 
   if (key === 'pathsprograms') renderPathsPrograms();
+  if (key === 'religion') renderReligion();
+}
+
+var RELIGION_CARDS = [
+  {name:"Congregation Rodeph Shalom",type:"Synagogue · North Philly",kind:"prog",stars:"Open services"},
+  {name:"St. Paul's Episcopal",type:"Church · Bella Vista",kind:"prog",stars:"Open services"},
+  {name:"Masjid Al-Jamia",type:"Mosque · West Philly",kind:"prog",stars:"Open services"},
+  {name:"Faith communities in your area",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+];
+
+function renderReligion() {
+  var el = document.getElementById('rel-main');
+  if (el.children.length > 0) return;
+  el.innerHTML = RELIGION_CARDS.map(function(c, i) { return mktCardHtml(c, 'rel' + i); }).join('');
 }
 
 function renderPathsPrograms() {
@@ -1740,12 +1763,6 @@ var MKT_DOMS = [
       {name:"Anastasia's Alterations",type:"Tailor · South Philly",kind:"biz",stars:"4.9 · 77 reviews"},
       {name:"Philly Clothing Swap",type:"Community exchange",kind:"prog",stars:"Monthly event"},
       {name:"Fleece & Yarn Co-op",type:"Sewing circle · neighbor",kind:"nbr",stars:"4.7 · 12 members"}
-    ]},
-    {label:"Faith & community",cards:[
-      {name:"Congregation Rodeph Shalom",type:"Synagogue · North Philly",kind:"prog",stars:"Open services"},
-      {name:"St. Paul's Episcopal",type:"Church · Bella Vista",kind:"prog",stars:"Open services"},
-      {name:"Masjid Al-Jamia",type:"Mosque · West Philly",kind:"prog",stars:"Open services"},
-      {name:"Faith communities in your area",type:"FORA guide",kind:"fora",stars:"Temple brief"}
     ]},
     {label:"Arts & culture",cards:[
       {name:"PhillyCAM",type:"Community media arts",kind:"prog",stars:"Subsidized rates"},
