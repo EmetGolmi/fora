@@ -301,8 +301,14 @@ a{text-decoration:none;color:inherit;}
 .opt-c-section-h.collapsed .tog-arrow{transform:rotate(-90deg);}
 .opt-c-body{margin-top:10px;}
 .opt-c-body.collapsed{display:none;}
-.opt-c-rep{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05);}
+.opt-c-rep{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer;}
 .opt-c-rep:last-child{border-bottom:none;}
+.opt-c-rep:hover .opt-c-name{color:var(--blue);}
+/* Official profile panel */
+.official-panel-bar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:9px 16px;display:flex;align-items:center;gap:10px;}
+.official-panel-back{font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;background:none;border:none;padding:4px 8px;border-radius:6px;}
+.official-panel-back:hover{background:var(--rule-soft);}
+.official-iframe{width:100%;border:none;display:block;}
 .opt-c-av{width:30px;height:30px;border-radius:50%;background:var(--blue);border:2px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;flex:none;}
 .opt-c-name{font-weight:700;font-size:12px;}
 .opt-c-title{font-size:9.5px;color:var(--ink-mut);}
@@ -759,6 +765,16 @@ a{text-decoration:none;color:inherit;}
     </div>
     <div id="mkt-main"><p class="mkt-empty-state">Select a category from the left to explore your neighborhood marketplace.</p></div>
   </div>
+
+  <%# ── OFFICIAL PROFILE PANEL ──────────────────────────────────────────── %>
+  <div id="panel-official" style="display:none">
+    <div class="official-panel-bar">
+      <button class="official-panel-back" onclick="switchPanel('observe',null)">← Your Representatives</button>
+      <span id="official-panel-name" style="font-size:13px;color:var(--ink-soft);"></span>
+    </div>
+    <iframe id="official-iframe" class="official-iframe" src="" title="Official profile"
+            onload="this.style.height=(this.contentWindow.document.body.scrollHeight+40)+'px'"></iframe>
+  </div>
   </main>
 
   <%# ── RIGHT RAIL ──────────────────────────────────────────────────────────── %>
@@ -839,7 +855,10 @@ a{text-decoration:none;color:inherit;}
                 rep_rec  = @rep_by_bioguide[bio]
                 followed = rep_rec && @rep_follows.include?(rep_rec.id)
               %>
-              <div class="opt-c-rep"<%= rep_rec ? " data-rep-id=\"#{rep_rec.id}\"" : "" %>>
+              <% prof_path = official_profile_path(o) %>
+              <div class="opt-c-rep"
+                   <%= rep_rec ? "data-rep-id=\"#{rep_rec.id}\"" : "" %>
+                   <%= prof_path ? "onclick=\"openOfficialProfile('#{prof_path}', '#{j o[:name]}')\"" : "" %>>
                 <div class="opt-c-av"><%= initials(o[:name]) %></div>
                 <div style="flex:1;">
                   <div class="opt-c-name"><%= o[:name] %><%= " ✓" if followed %></div>
@@ -847,9 +866,9 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <% if rep_rec %>
                   <button class="opt-c-btn <%= 'on' if followed %>"
-                          onclick="toggleRepFollow(this, <%= rep_rec.id %>)">F</button>
+                          onclick="event.stopPropagation();toggleRepFollow(this, <%= rep_rec.id %>)">F</button>
                 <% else %>
-                  <button class="opt-c-btn" style="opacity:.3;cursor:default">F</button>
+                  <button class="opt-c-btn" style="opacity:.3;cursor:default" onclick="event.stopPropagation()">F</button>
                 <% end %>
               </div>
             <% end %>
@@ -1350,6 +1369,21 @@ document.querySelectorAll('.mtab').forEach(function(m) {
     m.classList.add('on');
   };
 });
+
+// ── Official profile panel ────────────────────────────────────────────────
+function openOfficialProfile(path, name) {
+  var iframe = document.getElementById('official-iframe');
+  iframe.style.height = 'calc(100vh - 100px)';
+  iframe.src = path;
+  document.getElementById('official-panel-name').textContent = name;
+  switchPanel('official', null);
+  iframe.onload = function() {
+    try {
+      var h = iframe.contentWindow.document.body.scrollHeight;
+      if (h > 200) iframe.style.height = (h + 40) + 'px';
+    } catch(e) {}
+  };
+}
 
 // ── Market accordion & cards ───────────────────────────────────────────────
 var MKT_DOMS = [

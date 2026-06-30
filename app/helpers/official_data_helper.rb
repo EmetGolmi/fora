@@ -132,8 +132,40 @@ module OfficialDataHelper
     }
   }.freeze
 
+  # Map jurisdiction.name → profile path for executives and city officials
+  JURISDICTION_PROFILE_PATHS = {
+    "president"            => "/mvp/officials/usa/president",
+    "vice_president"       => "/mvp/officials/usa/vp",
+    "governor"             => "/mvp/officials/usa/pa/governor",
+    "lt_governor"          => "/mvp/officials/usa/pa/lt-governor",
+    "mayor"                => "/mvp/officials/usa/pa/philly/mayor",
+    "council_president"    => "/mvp/officials/usa/pa/philly/council-president",
+    "majority_leader"      => "/mvp/officials/usa/pa/philly/majority-leader",
+    "majority_whip"        => "/mvp/officials/usa/pa/philly/majority-whip",
+    "minority_leader"      => "/mvp/officials/usa/pa/philly/minority-leader",
+    "minority_whip"        => "/mvp/officials/usa/pa/philly/minority-whip",
+    "deputy_majority_whip" => "/mvp/officials/usa/pa/philly/deputy-majority-whip",
+    "managing_director"    => "/mvp/officials/usa/pa/philly/managing-director",
+    "finance_director"     => "/mvp/officials/usa/pa/philly/finance-director",
+  }.freeze
+
   def official_card_data(rep)
     bio = rep.external_ids&.fetch("bioguide_id", nil).to_s
     OFFICIAL_CARD_DATA[bio]
+  end
+
+  # Returns the dashboard-relative profile path for an official hash from @officials.
+  # Falls back through: bioguide CARD_DATA → jurisdiction name map → city_council district.
+  def official_profile_path(o)
+    bio      = o.dig(:jurisdiction, :bioguide_id).to_s
+    jur_name = o.dig(:jurisdiction, :name).to_s
+    district = o.dig(:jurisdiction, :district).to_s
+
+    return OFFICIAL_CARD_DATA[bio][:profile_path] if OFFICIAL_CARD_DATA[bio]&.key?(:profile_path)
+    return JURISDICTION_PROFILE_PATHS[jur_name]   if JURISDICTION_PROFILE_PATHS[jur_name]
+
+    if jur_name == "city_council" && district.present?
+      "/mvp/officials/usa/pa/philly/district-#{district}"
+    end
   end
 end
