@@ -303,15 +303,33 @@ a{text-decoration:none;color:inherit;}
             <textarea class="inp" rows="3" style="resize:vertical;"
                       placeholder="A few words about yourself…"><%= @profile.bio %></textarea>
           </div>
-          <% if @profile.faith_tradition.present? %>
-          <div class="setting-row">
-            <span class="setting-label">Tradition / Faith</span>
-            <span class="setting-val"><%= @profile.faith_tradition %></span>
-          </div>
-          <% end %>
           <div class="save-row">
             <button class="btn-save" onclick="saveSection('temple', {temple_handle: document.getElementById('temple-handle').value}, this)">Save</button>
             <span class="save-msg" id="temple-msg"></span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="ss-h">Tradition &amp; Faith</div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+            <span class="setting-label">Faith</span>
+            <input type="text" class="inp" id="faith-tradition" value="<%= @profile.faith_tradition.to_s %>" placeholder="e.g. Judaism, Christianity, Islam">
+          </div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+            <span class="setting-label">Ethnicity</span>
+            <input type="text" class="inp" id="faith-ethnicity" value="<%= @profile.faith_ethnicity.to_s %>" placeholder="e.g. Jewish, Armenian, Arab">
+          </div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+            <span class="setting-label">Culture</span>
+            <input type="text" class="inp" id="faith-culture" value="<%= @profile.faith_culture.to_s %>" placeholder="e.g. Ashkenazi, Sephardic, Mizrahi">
+          </div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+            <span class="setting-label">Denomination</span>
+            <input type="text" class="inp" id="faith-denomination" value="<%= @profile.faith_branch.to_s %>" placeholder="e.g. Conservative, Orthodox, Reform">
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveSection('faith', {faith_tradition: document.getElementById('faith-tradition').value, faith_ethnicity: document.getElementById('faith-ethnicity').value, faith_culture: document.getElementById('faith-culture').value, faith_branch: document.getElementById('faith-denomination').value}, this)">Save</button>
+            <span class="save-msg" id="faith-msg"></span>
           </div>
         </div>
 

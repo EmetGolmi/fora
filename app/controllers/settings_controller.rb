@@ -44,7 +44,10 @@ class SettingsController < ApplicationController
       :market_entity_name,
       :service_summary,
       :bio,
-      :faith_tradition
+      :faith_tradition,
+      :faith_ethnicity,
+      :faith_culture,
+      :faith_branch
     )
   end
 end
