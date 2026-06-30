@@ -186,7 +186,7 @@ a{text-decoration:none;color:inherit;}
 .empty-p{font-size:14px;line-height:1.6;}
 
 /* FEED POSTS */
-.post{padding:13px 16px;border-bottom:1px solid var(--rule);display:flex;gap:11px;border-left:3px solid transparent;}
+.post{padding:13px 16px;border-bottom:1px solid var(--rule);display:flex;gap:11px;border-left:3px solid transparent;position:relative;}
 .post:hover{background:#fbfcfe;}
 .post.t{border-left-color:var(--temple);}.post.f{border-left-color:var(--forum);}.post.m{border-left-color:var(--market);}
 .av{width:44px;height:44px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;border:2px solid transparent;}
@@ -783,14 +783,17 @@ a{text-decoration:none;color:inherit;}
       <% @jurisdiction_reps.each do |rep| %>
         <% rep_sparked = @rep_follows.include?(rep.id) %>
         <% odata = official_card_data(rep) %>
+        <% rep_share_id = "osm-#{rep.id}" %>
+        <% rep_share_url = odata&.dig(:profile_path) ? (request.base_url + odata[:profile_path]) : request.original_url %>
         <div class="post f">
+          <button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu('<%= rep_share_id %>','<%= j rep.name %>','<%= rep_share_url %>')" title="Share">⤴</button>
+          <div class="lshare-menu" id="<%= rep_share_id %>"></div>
           <div class="av av-gov"><%= initials(rep.name) %></div>
           <div class="pb">
             <div class="pm">
               <span class="pn2"><%= rep.name %></span>
               <span class="vchk">✓</span>
               <span class="pr">· <%= rep.office %></span>
-              <span class="pbadge bb-f">△ Forum</span>
             </div>
             <div class="fctx"><%= rep_sparked ? "You follow this official" : "Your representative" %></div>
             <div class="arc">
@@ -855,14 +858,17 @@ a{text-decoration:none;color:inherit;}
       <% @officials.each do |o| %>
         <% next if @rep_by_bioguide[o.dig(:jurisdiction, :bioguide_id).to_s] %>
         <% prof_path = official_profile_path(o) %>
+        <% o_share_id = "osm-#{o[:name].to_s.gsub(/\W+/, '-').downcase}" %>
+        <% o_share_url = prof_path ? (request.base_url + prof_path) : request.original_url %>
         <div class="post f" style="<%= prof_path ? 'cursor:pointer' : '' %>"
              <%= prof_path ? "onclick=\"openOfficialProfile('#{prof_path}', '#{j o[:name]}')\"" : "" %>>
+          <button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu('<%= o_share_id %>','<%= j o[:name] %>','<%= o_share_url %>')" title="Share">⤴</button>
+          <div class="lshare-menu" id="<%= o_share_id %>"></div>
           <div class="av av-gov"><%= initials(o[:name]) %></div>
           <div class="pb">
             <div class="pm">
               <span class="pn2"><%= o[:name] %></span>
               <span class="pr">· <%= o[:office] %></span>
-              <span class="pbadge bb-f">△ Forum</span>
             </div>
             <div class="fctx">Your representative<%= prof_path ? " · tap to view profile" : "" %></div>
           </div>
@@ -1932,17 +1938,25 @@ function mktCardHtml(c, idx) {
 var MKT_JIFFY_AD = '<div class="sponsored-post"><div class="sponsored-header"><div class="sponsored-who"><div class="sponsored-logo">JIFFY<br>LUBE</div><div><div class="sponsored-name">Jiffy Lube</div><div style="font-size:11px;color:#999">Community service announcement</div></div></div><div class="sponsored-label">Sponsored</div></div><div class="psa-body"><strong>How often should you change your oil?</strong> For most vehicles with conventional oil, every <strong>3 months or 3,000 miles</strong>. If you use synthetic, you can go <strong>6–12 months or 5,000–10,000 miles</strong> — check your owner\'s manual. Older vehicles and those doing hard work (towing, stop-and-go city driving) trend toward the shorter interval.<br><br><strong>Changing your own oil?</strong> Bring your used oil to any Jiffy Lube location — we\'ll dispose of it safely at no charge, no questions asked. Used motor oil poured down a drain or into the ground contaminates groundwater. One quart can make 250,000 gallons of water undrinkable.</div><a class="psa-cta" href="#">&#128197; Add oil change reminder to your FORA calendar</a><div class="psa-edict">FORA ad policy: sponsors earn placement by contributing to the community. This is a public service announcement.</div></div>';
 
 function cardShareItems(name, url) {
-  var enc = encodeURIComponent, txt = enc(name), href = enc(url);
-  return '<a class="lshare-item" href="https://twitter.com/intent/tweet?text='+txt+'&url='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span>𝕏</span> Share on X</a>'
-       + '<a class="lshare-item" href="https://www.facebook.com/sharer/sharer.php?u='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="color:#1877f2">f</span> Share on Facebook</a>'
-       + '<a class="lshare-item" href="#" onclick="event.stopPropagation();event.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(\''+url.replace(/'/g,"\\'")+'\')" style="cursor:pointer"><span>🔗</span> Copy link</a>';
+  var enc = encodeURIComponent, txt = enc(name), href = enc(url), safeUrl = url.replace(/'/g,"\\'");
+  var copyFn = 'event.stopPropagation();event.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(\''+safeUrl+'\').then(function(){var el=this;el.textContent=el.textContent.replace(/Copy /,"Copied! ");setTimeout(function(){el.textContent=el.textContent.replace(/Copied! /,"Copy ");},2000);}.bind(this))';
+  return '<a class="lshare-item" href="https://twitter.com/intent/tweet?text='+txt+'&url='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="font-weight:900">𝕏</span> Share on X</a>'
+       + '<a class="lshare-item" href="https://www.facebook.com/sharer/sharer.php?u='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="color:#1877f2;font-weight:700">f</span> Share on Facebook</a>'
+       + '<a class="lshare-item" href="https://wa.me/?text='+enc(name+' '+url)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="color:#25d366">●</span> Share on WhatsApp</a>'
+       + '<a class="lshare-item" href="https://www.linkedin.com/sharing/share-offsite/?url='+href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="color:#0a66c2;font-weight:700">in</span> Share on LinkedIn</a>'
+       + '<a class="lshare-item" href="https://reddit.com/submit?url='+href+'&title='+txt+'" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span style="color:#ff4500;font-weight:700">r/</span> Share on Reddit</a>'
+       + '<a class="lshare-item" href="#" onclick="'+copyFn+'"><span>📸</span> Copy for Instagram</a>'
+       + '<a class="lshare-item" href="#" onclick="'+copyFn+'"><span>♪</span> Copy for TikTok</a>';
 }
 
-function toggleShareMenu(id, name) {
+function toggleShareMenu(id, name, url) {
   var menus = document.querySelectorAll('.lshare-menu');
   menus.forEach(function(m){ if (m.id !== id) m.classList.remove('open'); });
   var el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
+  if (el) {
+    if (url && !el.innerHTML.trim()) { el.innerHTML = cardShareItems(name, url); }
+    el.classList.toggle('open');
+  }
 }
 
 document.addEventListener('click', function(e) {
