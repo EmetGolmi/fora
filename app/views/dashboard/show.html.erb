@@ -125,6 +125,8 @@ a{text-decoration:none;color:inherit;}
 .lcomment-av{width:28px;height:28px;border-radius:50%;background:#f0f0ee;border:0.5px solid #e5e5e5;color:#666;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .lcomment-who{font-size:11px;font-weight:600;color:#111;display:flex;align-items:center;gap:4px;margin-bottom:2px;}
 .lcomment-text{font-size:11.5px;color:#555;line-height:1.45;}
+.listing-related{font-size:11px;color:#1b3a6b;margin-top:8px;padding-top:6px;border-top:0.5px solid #eee;}
+.listing-related a{color:#1b3a6b;font-weight:600;text-decoration:underline;text-decoration-color:rgba(27,58,107,.3);}
 
 .voice{margin:14px 7px 6px;padding:12px;border:none;border-radius:999px;width:calc(100% - 14px);background:var(--gilt);color:#fff;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 2px 0 rgba(120,86,8,.45);}
 .voice:hover{background:var(--gilt-lt);}
@@ -1719,7 +1721,19 @@ var MKT_DOMS = [
        bdgClass:"lbdg-biz",bdgLabel:"Business",
        rating:"3.7",reviewCount:"227",location:"1.1 mi · Oregon Ave",price:"$59–109",
        desc:"Walk-in and appointment available. Full parts counter on-site — they'll sell you the filter if you want to watch and do it yourself next time.",
-       tags:["Walk-in welcome","Parts on-site"]}
+       tags:["Walk-in welcome","Parts on-site"]},
+      {name:"Girls Auto Clinic",av:"GA",avClass:"av-biz",avStyle:"background:#fce8f3;color:#c2185b;border-color:#c2185b",
+       bdgClass:"lbdg-biz",bdgLabel:"Business",
+       rating:"5.0",reviewCount:"650+ Google reviews",location:"Upper Darby, PA · 6.1 mi",price:"Varies by service",
+       desc:"Women-focused auto repair shop. Oil changes, safety inspections, brakes, A/C, and diagnostics — plus Clutch Beauty Bar on-site for manicures while you wait. Founded by Patrice Banks.",
+       tags:["Women-owned","Clutch Beauty Bar","VID Membership","Mon–Fri 8am–6pm"],
+       related:{label:"SHEcanic Foundation — Car Care Workshop",url:"https://www.shecanicfoundation.org/car-care-workshop"}},
+      {name:"SHEcanic Foundation — Car Care Workshop",av:"SC",avClass:"av-community",
+       bdgClass:"lbdg-community",bdgLabel:"Community",
+       location:"Philadelphia area · 2nd Saturday monthly",price:"Free · Workshop Plus: paid",
+       desc:"Hands-on automotive education for women. Learn engine basics, maintenance schedules, and how to communicate with mechanics. Free 120-min community sessions monthly (Apr–Dec); 4-hr immersive sessions quarterly.",
+       tags:["Free to attend","Monthly · 2nd Saturday","Women-focused","Hands-on","No experience needed"],
+       related:{label:"Girls Auto Clinic",url:"https://www.girlsautoclinic.com/"}}
     ]},
     {label:"Transit & rideshare",cards:[
       {name:"SEPTA Key Assist",type:"Reduced fare program",kind:"prog",stars:"Income-eligible"},
@@ -1880,7 +1894,9 @@ function mktCardHtml(c, idx) {
       }).join('');
     }
     var revToggle = topC ? '<button class="lreviews-toggle" onclick="event.stopPropagation();this.classList.toggle(\'open\');document.getElementById(\''+revId+'\').classList.toggle(\'open\')">Reviews <span class="lrev-chev">▾</span></button><div class="lrev-expand" id="'+revId+'">'+moreRevHtml+'</div>' : '';
-    return '<div class="listing"><div class="listing-top"><div class="listing-avatar '+c.avClass+'"'+avStyle+'>'+c.av+vetBar+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+c.bdgClass+'">'+c.bdgLabel+'</span>'+cleared+'</div><div class="listing-meta"><span class="lrating"><span class="star-ic">★</span> '+c.rating+' <span style="color:#999;font-weight:400">('+c.reviewCount+' reviews)</span></span><span>'+c.location+'</span><span>'+c.price+'</span></div>'+sp+'<div class="listing-desc">'+c.desc+'</div>'+tagRow+'<div class="listing-actions" onclick="event.stopPropagation()"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div>'+topC+revToggle+'</div></div></div>';
+    var ratingStr = c.rating ? '<span class="lrating"><span class="star-ic">★</span> '+c.rating+' <span style="color:#999;font-weight:400">('+c.reviewCount+')</span></span>' : '';
+    var relatedHtml = c.related ? '<div class="listing-related">↗ Related: <a href="'+c.related.url+'" target="_blank" rel="noopener">'+c.related.label+'</a></div>' : '';
+    return '<div class="listing"><div class="listing-top"><div class="listing-avatar '+c.avClass+'"'+avStyle+'>'+c.av+vetBar+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+c.bdgClass+'">'+c.bdgLabel+'</span>'+cleared+'</div><div class="listing-meta">'+ratingStr+'<span>'+c.location+'</span><span>'+c.price+'</span></div>'+sp+'<div class="listing-desc">'+c.desc+'</div>'+tagRow+'<div class="listing-actions" onclick="event.stopPropagation()"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div>'+topC+revToggle+relatedHtml+'</div></div></div>';
   }
   // Simple card — derive initials and av class from kind
   var initials = c.name.split(/\s+/).slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();
