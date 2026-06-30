@@ -71,6 +71,20 @@ a{text-decoration:none;color:inherit;}
 .mkt-fhead-crumb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:3px;display:none;}
 .mkt-grid{display:flex;flex-direction:column;padding:12px 18px;}
 .mkt-empty-state{color:var(--ink-soft);font-size:13px;padding:56px 24px;text-align:center;line-height:1.7;}
+/* category header above listings */
+.mkt-cat-header{padding:10px 18px 6px;font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--ink);}
+.mkt-cat-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:1px;}
+/* sponsored PSA card */
+.sponsored-post{background:#fff;border:0.5px solid #e5e5e5;border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.sponsored-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 0;}
+.sponsored-who{display:flex;align-items:center;gap:10px;}
+.sponsored-logo{width:38px;height:38px;border-radius:6px;background:#ff6800;color:#fff;font-size:8px;font-weight:700;font-family:monospace;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;letter-spacing:.03em;}
+.sponsored-name{font-size:13px;font-weight:700;color:#111;}
+.sponsored-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;color:#999;border:0.5px solid #e5e5e5;padding:2px 6px;border-radius:4px;}
+.psa-body{padding:10px 16px 14px;font-size:12.5px;color:#555;line-height:1.6;border-left:3px solid #ff6800;margin:10px 16px 0;border-radius:0;}
+.psa-body strong{color:#111;}
+.psa-cta{display:flex;align-items:center;gap:6px;margin:10px 16px 14px;font-size:12px;color:#1b3a6b;font-weight:600;cursor:pointer;text-decoration:none;}
+.psa-edict{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.04em;color:#aaa;padding:8px 16px;border-top:0.5px solid #eee;background:#f8f8f7;}
 /* listing card — matches /market/square */
 .listing{background:#fff;border:0.5px solid #e5e5e5;border-radius:12px;padding:15px 17px;margin-bottom:10px;cursor:pointer;transition:border-color .12s;}
 .listing:hover{border-color:#1b3a6b;}
@@ -1640,12 +1654,16 @@ function mktCardHtml(c, idx) {
   return '<div class="listing"><div class="listing-top"><div class="listing-avatar '+avCls+'">'+initials+'</div><div class="listing-main"><div class="listing-name-row"><span class="listing-name">'+c.name+'</span><span class="lbdg '+bdgCls+'">'+bdgLbl+'</span></div><div class="listing-desc" style="margin-top:4px">'+c.type+'</div><div class="listing-meta" style="margin-top:4px">'+c.stars+'</div><div class="listing-actions" onclick="event.stopPropagation()" style="margin-top:8px"><button class="lact-btn primary">Schedule</button><button class="lact-btn">Message</button></div></div></div></div>';
 }
 
+var MKT_JIFFY_AD = '<div class="sponsored-post"><div class="sponsored-header"><div class="sponsored-who"><div class="sponsored-logo">JIFFY<br>LUBE</div><div><div class="sponsored-name">Jiffy Lube</div><div style="font-size:11px;color:#999">Community service announcement</div></div></div><div class="sponsored-label">Sponsored</div></div><div class="psa-body"><strong>How often should you change your oil?</strong> For most vehicles with conventional oil, every <strong>3 months or 3,000 miles</strong>. If you use synthetic, you can go <strong>6–12 months or 5,000–10,000 miles</strong> — check your owner\'s manual. Older vehicles and those doing hard work (towing, stop-and-go city driving) trend toward the shorter interval.<br><br><strong>Changing your own oil?</strong> Bring your used oil to any Jiffy Lube location — we\'ll dispose of it safely at no charge, no questions asked. Used motor oil poured down a drain or into the ground contaminates groundwater. One quart can make 250,000 gallons of water undrinkable.</div><a class="psa-cta" href="#">&#128197; Add oil change reminder to your FORA calendar</a><div class="psa-edict">FORA ad policy: sponsors earn placement by contributing to the community — not by selling. This is a public service announcement.</div></div>';
+
 function renderMktCards(title, sub, cards) {
   var crumb = document.getElementById('mkt-crumb');
   crumb.textContent = title + (sub !== 'All subcategories' ? ' › ' + sub : '');
   crumb.style.display = '';
+  var heading = '<div class="mkt-cat-header"><div>' + (sub !== 'All subcategories' ? sub : title) + '</div><div class="mkt-cat-sub">' + (sub !== 'All subcategories' ? title : '') + '</div></div>';
+  var ad = (sub === 'Auto repair') ? MKT_JIFFY_AD : '';
   var html = cards.map(function(c, i){ return mktCardHtml(c, i); }).join('');
-  document.getElementById('mkt-main').innerHTML = '<div class="mkt-grid">'+html+'</div>';
+  document.getElementById('mkt-main').innerHTML = heading + '<div class="mkt-grid">' + ad + html + '</div>';
 }
 </script>
 </body>
