@@ -5,6 +5,15 @@ class SettingsController < ApplicationController
     @profile = current_user.civic_profile
   end
 
+  # POST /mvp/settings/verify_password
+  def verify_password
+    if current_user.authenticate(params[:password].to_s)
+      render json: { ok: true }
+    else
+      render json: { ok: false }, status: :unauthorized
+    end
+  end
+
   # PATCH /mvp/settings
   # Accepts a `section` param so each pillar can save independently.
   def update

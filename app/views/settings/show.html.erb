@@ -68,6 +68,16 @@ a{text-decoration:none;color:inherit;}
 .btn-text:hover{border-color:var(--blue);background:var(--blue-vp);}
 .btn-danger{border-color:var(--scarlet);color:var(--scarlet);}
 .btn-danger:hover{background:var(--scarlet-p);}
+/* PASSWORD REVEAL */
+.pw-reveal-wrap{display:none;padding:12px 0 4px;flex-direction:column;gap:10px;}
+.pw-reveal-wrap.open{display:flex;}
+.pw-field-wrap{display:flex;align-items:center;gap:0;border:1.5px solid var(--rule);border-radius:10px;overflow:hidden;background:#fff;}
+.pw-field-wrap input{flex:1;border:none;outline:none;padding:9px 12px;font-size:14px;font-family:'Nunito',sans-serif;background:transparent;}
+.pw-eye-btn{background:none;border:none;padding:0 11px;cursor:pointer;font-size:16px;color:#999;line-height:1;}
+.pw-eye-btn:hover{color:var(--blue);}
+.pw-status{font-size:12.5px;font-weight:700;min-height:18px;}
+.pw-status.ok{color:var(--market);}
+.pw-status.err{color:var(--scarlet);}
 
 /* PILLAR GRID */
 .pillar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
@@ -203,12 +213,27 @@ a{text-decoration:none;color:inherit;}
         <div class="ms-action"><button class="btn-text">Change</button></div>
       </div>
 
-      <div class="ms-row">
-        <div>
-          <div class="ms-label">Password</div>
-          <div class="ms-value">••••••••</div>
+      <div>
+        <div class="ms-row">
+          <div>
+            <div class="ms-label">Password</div>
+            <div class="ms-value" id="pw-dots">••••••••</div>
+          </div>
+          <div class="ms-action">
+            <button class="btn-text" id="pw-view-btn" onclick="togglePwReveal()">👁 View</button>
+            <button class="btn-text">Change</button>
+          </div>
         </div>
-        <div class="ms-action"><button class="btn-text">Change</button></div>
+        <div class="pw-reveal-wrap" id="pw-reveal-wrap">
+          <div class="pw-field-wrap">
+            <input type="password" id="pw-input" placeholder="Enter your password" autocomplete="current-password">
+            <button class="pw-eye-btn" id="pw-eye" onclick="togglePwEye()" title="Show / hide">👁</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button class="btn-text" onclick="verifyPw()" style="padding:7px 18px">Verify</button>
+            <span class="pw-status" id="pw-status"></span>
+          </div>
+        </div>
       </div>
 
       <div class="ms-row">
@@ -549,6 +574,52 @@ function saveSection(section, fields, btn) {
     btn.disabled = false;
     btn.textContent = orig;
     if (msgEl) { msgEl.textContent = 'Network error.'; msgEl.className = 'save-msg err'; }
+  });
+}
+
+// ── Password reveal ──────────────────────────────────────────────────────────
+function togglePwReveal() {
+  var wrap = document.getElementById('pw-reveal-wrap');
+  var btn  = document.getElementById('pw-view-btn');
+  var open = wrap.classList.toggle('open');
+  btn.textContent = open ? '✕ Hide' : '👁 View';
+  if (open) {
+    document.getElementById('pw-input').focus();
+    document.getElementById('pw-status').textContent = '';
+    document.getElementById('pw-status').className = 'pw-status';
+  }
+}
+
+function togglePwEye() {
+  var inp  = document.getElementById('pw-input');
+  var eye  = document.getElementById('pw-eye');
+  var show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  eye.textContent = show ? '🙈' : '👁';
+}
+
+function verifyPw() {
+  var inp    = document.getElementById('pw-input');
+  var status = document.getElementById('pw-status');
+  var pw     = inp.value;
+  if (!pw) { status.textContent = 'Enter your password first.'; status.className = 'pw-status err'; return; }
+  status.textContent = 'Checking…'; status.className = 'pw-status';
+  fetch('<%= settings_verify_password_path %>', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || '' },
+    body: JSON.stringify({ password: pw })
+  }).then(function(r) {
+    if (r.ok) {
+      status.textContent = '✓ Password confirmed';
+      status.className = 'pw-status ok';
+    } else {
+      status.textContent = '✗ Incorrect password';
+      status.className = 'pw-status err';
+      inp.value = '';
+      inp.focus();
+    }
+  }).catch(function() {
+    status.textContent = 'Network error'; status.className = 'pw-status err';
   });
 }
 </script>
