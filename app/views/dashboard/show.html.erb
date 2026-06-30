@@ -69,7 +69,7 @@ a{text-decoration:none;color:inherit;}
 .mkt-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:13px 18px 10px;}
 .mkt-fhead-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--market);}
 .mkt-fhead-crumb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:3px;display:none;}
-.mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px;}
+.mkt-grid{display:flex;flex-direction:column;gap:10px;padding:16px 18px;}
 .mkt-card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:13px 15px;cursor:pointer;transition:border-color .12s;}
 .mkt-card:hover{border-color:#b0bdd0;}
 .mkt-card-name{font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:2px;}
@@ -94,7 +94,7 @@ a{text-decoration:none;color:inherit;}
 /* CENTER */
 .fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
 .ftitle{padding:13px 18px 9px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--blue);}
-.dash-search{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid var(--rule);}
+.dash-search{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:6;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);}
 .dash-search-input{flex:1;padding:9px 13px;border:1px solid var(--rule);border-radius:8px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--ink);outline:none;background:#fff;}
 .dash-search-input::placeholder{color:var(--ink-soft);}
 .dash-search-input:focus{border-color:var(--blue);}
@@ -351,15 +351,15 @@ a{text-decoration:none;color:inherit;}
 
   <%# ── CENTER ──────────────────────────────────────────────────────────────── %>
   <main class="col-center">
+  <div class="dash-search">
+    <input class="dash-search-input" type="text" placeholder="What do you need?">
+    <input class="dash-search-loc" type="text" value="<%= [@profile.address_city.presence, @profile.address_state.presence].compact.join(", ").presence || "" %>" placeholder="Your location">
+    <button class="dash-search-go">🔍</button>
+    <button class="dash-search-new">+ Start a project</button>
+  </div>
   <div id="panel-observe">
     <div class="fhead">
       <div class="ftitle">Home</div>
-      <div class="dash-search">
-        <input class="dash-search-input" type="text" placeholder="What do you need?">
-        <input class="dash-search-loc" type="text" value="<%= [@profile.address_city.presence, @profile.address_state.presence].compact.join(", ").presence || "" %>" placeholder="Your location">
-        <button class="dash-search-go">🔍</button>
-        <button class="dash-search-new">+ Start a project</button>
-      </div>
       <div class="tabs">
         <div class="tab active" data-tab="following">Following</div>
         <div class="tab" data-tab="juris">Your Jurisdictions</div>
@@ -1393,9 +1393,12 @@ var MKT_DOMS = [
   ]},
   {icon:"ti-car",label:"Getting around",subs:[
     {label:"Auto repair",cards:[
-      {name:"South St. Auto Repair",type:"Full-service mechanic",kind:"biz",stars:"4.7 · 120 reviews"},
-      {name:"Tony's Garage",type:"Neighbor mechanic",kind:"nbr",stars:"4.5 · 28 reviews"},
-      {name:"PA inspection — what's required",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Chow's Garage",type:"Full-service shop · LOF $120 · complimentary 14-point inspection",kind:"biz",stars:"4.5 · 110 reviews · 2.1 mi · $60–100"},
+      {name:"Cliff Neighbor",type:"Retired Army vet, amateur race car driver. Mobile — I come to you.",kind:"nbr",stars:"4.8 · 36 reviews · Mobile · $50 + oil & filter"},
+      {name:"Jiffy Lube",type:"Walk-in welcome · Signature Service oil change, typically 30 min",kind:"biz",stars:"3.9 · 184 reviews · 0.8 mi · $89–119"},
+      {name:"Stacey's All-Girl Mechanic & Drift Club",type:"Woman-owned · Nail studio on-site · Drift instruction",kind:"biz",stars:"4.7 · 63 reviews · 1.4 mi · $80"},
+      {name:"PHL Vocational Tech — Auto Program",type:"Students perform oil change under certified instructor supervision",kind:"prog",stars:"4.3 · 22 reviews · 2.8 mi · Free + oil cost"},
+      {name:"Pep Boys",type:"Walk-in welcome · Full parts counter on-site",kind:"biz",stars:"3.7 · 227 reviews · 1.1 mi · $59–109"}
     ]},
     {label:"Transit & rideshare",cards:[
       {name:"SEPTA Key Assist",type:"Reduced fare program",kind:"prog",stars:"Income-eligible"},
