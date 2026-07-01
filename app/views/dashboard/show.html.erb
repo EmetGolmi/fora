@@ -359,6 +359,34 @@ a{text-decoration:none;color:inherit;}
   .mtab.fab span{display:inline-flex;width:38px;height:38px;border-radius:50%;background:var(--gilt);color:#fff;align-items:center;justify-content:center;font-size:24px;font-weight:400;box-shadow:0 2px 8px rgba(120,86,8,.4);margin-top:-3px;}
   .arc-sec{margin-left:0;width:100%;justify-content:flex-start;margin-top:4px;}
 }
+/* ── Three-layer market panel ──────────────────────────────────────────── */
+.layer-banner{border-bottom:1px solid var(--rule);cursor:pointer;user-select:none}
+.layer-banner-head{display:flex;align-items:center;gap:9px;padding:9px 18px}
+.layer-glyph{font-size:13px;flex-shrink:0;width:18px;text-align:center}
+.layer-label{font-size:11px;font-weight:500;flex:1;color:var(--ink-soft)}
+.layer-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);background:var(--bg);border:0.5px solid var(--rule);border-radius:20px;padding:2px 7px}
+.layer-chev{font-size:11px;color:var(--ink-mut);transition:transform .15s}
+.layer-banner.open .layer-chev{transform:rotate(180deg)}
+.layer-body{display:none;padding:0 18px 10px;border-top:0.5px solid var(--rule)}
+.layer-body.open{display:block}
+.temple-banner .layer-banner-head{background:#fdf8ef}
+.temple-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:0.5px solid var(--rule)}
+.temple-item:last-child{border-bottom:none}
+.temple-dot{width:6px;height:6px;border-radius:50%;background:var(--gilt);flex-shrink:0;margin-top:5px}
+.temple-item-title{font-size:12px;font-weight:500;color:var(--ink);margin:0 0 1px}
+.temple-item-sub{font-size:11px;color:var(--ink-soft);margin:0}
+.temple-item-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.05em;color:var(--gilt);background:#fdf8ef;border:0.5px solid #f8e8b0;border-radius:4px;padding:1px 5px;margin-left:auto;flex-shrink:0;align-self:flex-start;margin-top:1px}
+.forum-banner .layer-banner-head{background:#eef2fb}
+.forum-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:0.5px solid var(--rule)}
+.forum-item:last-child{border-bottom:none}
+.forum-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:5px}
+.forum-item-title{font-size:12px;font-weight:500;color:var(--ink);margin:0 0 1px}
+.forum-item-sub{font-size:11px;color:var(--ink-soft);margin:0;line-height:1.4}
+.forum-item-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.05em;color:var(--blue);background:#eef2fb;border:0.5px solid #c8d8f5;border-radius:4px;padding:1px 5px;margin-left:auto;flex-shrink:0;align-self:flex-start;margin-top:1px}
+.mkt-sec-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);font-family:'JetBrains Mono',monospace;padding:12px 18px 6px;border-top:1px solid var(--rule);display:flex;align-items:center;gap:8px}
+.mkt-filter-chips{display:flex;gap:5px;padding:0 18px 10px;flex-wrap:wrap}
+.mkt-fchip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid var(--rule);color:var(--ink-soft);cursor:pointer;background:#fff}
+.mkt-fchip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1965,14 +1993,80 @@ document.addEventListener('click', function(e) {
   }
 });
 
+var MKT_LAYERS = {
+  'Auto repair': {
+    temple: {
+      label: 'Temple \u2014 community resources & what to know',
+      items: [
+        {title:'Philly Car Clinic \u2014 free community repair days', sub:'Monthly event at Kensington Yards. Volunteer mechanics help with oil changes, brake checks, and diagnosis. Open to all residents. Next date: July 12.', tag:'Community'},
+        {title:'What to know before you take your car in', sub:'How to read a repair estimate, what questions to ask, how to verify a shop\u2019s PA license, and when to get a second opinion.', tag:'Guide'},
+        {title:'PA Lemon Law & consumer rights for vehicle repairs', sub:'Your rights under the Pennsylvania Motor Vehicle Sales Finance Act. What a shop must disclose in writing before beginning repairs.', tag:'Rights'}
+      ]
+    },
+    forum: {
+      label: 'Forum \u2014 legislation, programs & incentives',
+      items: [
+        {title:'PA EV Rebate Program \u2014 up to $2,000 back on electric vehicle purchase', sub:'Pennsylvania DCED program. Income-eligible residents can receive a rebate on purchase or lease of a new EV. Applications open quarterly.', tag:'Program'},
+        {title:'H.B. 1423 \u2014 Diesel fuel additive requirements update (PA, 2026)', sub:'Passed committee June 2026. Amends diesel emissions standards for vehicles registered in PA. Would require DEF fluid use in vehicles over 8,500 lbs GVWR as of Jan 2027.', tag:'Bill \u00b7 State'},
+        {title:'Philadelphia Clean Air Council \u2014 vehicle idle reduction program', sub:'City ordinance limits commercial vehicle idling to 5 minutes. Enforcement active in school zones and residential areas. Free anti-idling stickers for fleet operators.', tag:'City ordinance'}
+      ]
+    },
+    filterChips: ['All','Business','Independent','Oil change','Tires','Inspection','Bodywork']
+  }
+};
+
+function toggleMktLayer(id) {
+  var banner = document.getElementById('mkt-' + id + '-banner');
+  var body   = document.getElementById('mkt-' + id + '-body');
+  if (!banner || !body) return;
+  var open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  banner.classList.toggle('open', !open);
+}
+function mktFchip(el) {
+  el.closest('.mkt-filter-chips').querySelectorAll('.mkt-fchip').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+}
+
 function renderMktCards(title, sub, cards) {
   var crumb = document.getElementById('mkt-crumb');
-  crumb.textContent = title + (sub !== 'All subcategories' ? ' › ' + sub : '');
+  crumb.textContent = title + (sub !== 'All subcategories' ? ' \u203a ' + sub : '');
   crumb.style.display = '';
   var heading = '<div class="mkt-cat-header"><div>' + (sub !== 'All subcategories' ? sub : title) + '</div><div class="mkt-cat-sub">' + (sub !== 'All subcategories' ? title : '') + '</div></div>';
   var ad = (sub === 'Auto repair') ? MKT_JIFFY_AD : '';
   var html = cards.map(function(c, i){ return mktCardHtml(c, i); }).join('');
-  document.getElementById('mkt-main').innerHTML = heading + '<div class="mkt-grid">' + ad + html + '</div>';
+
+  var layers = MKT_LAYERS[sub];
+  var layerHtml = '';
+  if (layers) {
+    var templeItems = layers.temple.items.map(function(it) {
+      return '<div class="temple-item"><div class="temple-dot"></div><div style="flex:1;min-width:0"><p class="temple-item-title">' + it.title + '</p><p class="temple-item-sub">' + it.sub + '</p></div><span class="temple-item-tag">' + it.tag + '</span></div>';
+    }).join('');
+    layerHtml += '<div class="layer-banner temple-banner" id="mkt-temple-banner" onclick="toggleMktLayer(\'temple\')">'
+      + '<div class="layer-banner-head"><span class="layer-glyph" style="color:var(--gilt)">&#9711;</span>'
+      + '<span class="layer-label" style="color:#7a5c00">' + layers.temple.label + '</span>'
+      + '<span class="layer-count">' + layers.temple.items.length + ' items</span>'
+      + '<span class="layer-chev">&#9662;</span></div>'
+      + '<div class="layer-body" id="mkt-temple-body">' + templeItems + '</div></div>';
+
+    var forumItems = layers.forum.items.map(function(it) {
+      return '<div class="forum-item"><div class="forum-dot"></div><div style="flex:1;min-width:0"><p class="forum-item-title">' + it.title + '</p><p class="forum-item-sub">' + it.sub + '</p></div><span class="forum-item-tag">' + it.tag + '</span></div>';
+    }).join('');
+    layerHtml += '<div class="layer-banner forum-banner" id="mkt-forum-banner" onclick="toggleMktLayer(\'forum\')">'
+      + '<div class="layer-banner-head"><span class="layer-glyph" style="color:var(--blue)">&#9651;</span>'
+      + '<span class="layer-label" style="color:#1b3a6b">' + layers.forum.label + '</span>'
+      + '<span class="layer-count">' + layers.forum.items.length + ' items</span>'
+      + '<span class="layer-chev">&#9662;</span></div>'
+      + '<div class="layer-body" id="mkt-forum-body">' + forumItems + '</div></div>';
+
+    var chips = layers.filterChips.map(function(c, i) {
+      return '<span class="mkt-fchip' + (i === 0 ? ' on' : '') + '" onclick="mktFchip(this)">' + c + '</span>';
+    }).join('');
+    layerHtml += '<div class="mkt-sec-label"><span>&#9634; Market \u2014 providers near you</span></div>'
+      + '<div class="mkt-filter-chips">' + chips + '</div>';
+  }
+
+  document.getElementById('mkt-main').innerHTML = heading + layerHtml + '<div class="mkt-grid">' + ad + html + '</div>';
 }
 </script>
 </body>
