@@ -387,6 +387,35 @@ a{text-decoration:none;color:inherit;}
 .mkt-filter-chips{display:flex;gap:5px;padding:0 18px 10px;flex-wrap:wrap}
 .mkt-fchip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid var(--rule);color:var(--ink-soft);cursor:pointer;background:#fff}
 .mkt-fchip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* ── Global search results panel ──────────────────────────────────────────── */
+.scope-row{display:flex;gap:6px;padding:9px 14px;border-bottom:1px solid var(--rule);overflow-x:auto;}
+.schip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;padding:5px 11px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-soft);cursor:pointer;white-space:nowrap;background:#fff;}
+.schip.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.schip[data-p="t"].on{background:var(--gilt);border-color:var(--gilt);}
+.schip[data-p="f"].on{background:var(--blue);border-color:var(--blue);}
+.schip[data-p="m"].on{background:var(--green);border-color:var(--green);}
+.result-card{border-bottom:1px solid var(--rule);padding:12px 16px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;border-left:3px solid transparent;}
+.result-card:hover{background:var(--rule-soft);}
+.result-card.r-t{border-left-color:var(--gilt);}
+.result-card.r-f{border-left-color:var(--blue);}
+.result-card.r-m{border-left-color:var(--green);}
+.r-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:#fff;}
+.ri-t{background:var(--gilt);}.ri-f{background:var(--blue);}.ri-m{background:var(--green);}
+.r-body{flex:1;min-width:0;}
+.r-top{display:flex;align-items:center;gap:6px;margin-bottom:2px;flex-wrap:wrap;}
+.r-name{font-size:13px;font-weight:700;color:var(--ink);}
+.r-badge{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:4px;font-weight:700;}
+.rb-t{background:var(--gilt-pl,#fdf8ef);color:#6b5300;}.rb-f{background:var(--blue-pl,#eef2fb);color:var(--blue);}.rb-m{background:var(--green-p,#eaf4ee);color:var(--green);}
+.r-sub{font-size:11.5px;color:var(--ink-soft);line-height:1.45;}
+.r-meta{font-size:10.5px;color:var(--ink-mut);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+.results-label{padding:8px 16px 4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mut);}
+.srch-idle{padding:48px 24px;text-align:center;}
+.srch-idle-glyph{font-size:22px;color:var(--ink-mut);margin-bottom:12px;}
+.srch-idle-h{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.srch-idle-p{font-size:13px;color:var(--ink-soft);line-height:1.6;}
+.srch-sug-chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.srch-sug{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;padding:5px 11px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-soft);cursor:pointer;background:#fff;}
+.srch-sug:hover{background:var(--rule-soft);}
 </style>
 </head>
 <body>
@@ -440,10 +469,23 @@ a{text-decoration:none;color:inherit;}
   <%# ── CENTER ──────────────────────────────────────────────────────────────── %>
   <main class="col-center">
   <div class="dash-search">
-    <input class="dash-search-input" type="text" placeholder="What do you need?">
-    <input class="dash-search-loc" type="text" value="<%= [@profile.address_city.presence, @profile.address_state.presence].compact.join(", ").presence || "" %>" placeholder="Your location">
-    <button class="dash-search-go">🔍</button>
-    <button class="dash-search-new">+ Start a project</button>
+    <input class="dash-search-input" id="srch" type="text"
+           placeholder="Search FORA — legislation, officials, businesses, discussions…"
+           oninput="onSrchInput(this.value)"
+           onkeydown="if(event.key==='Enter')doSearch(this.value)">
+    <input class="dash-search-loc" type="text"
+           value="<%= [@profile.address_city.presence, @profile.address_state.presence].compact.join(', ').presence || '' %>"
+           placeholder="Your location" readonly>
+    <button class="dash-search-go" onclick="doSearch(document.getElementById('srch').value)">
+      <i class="ti ti-search"></i>
+    </button>
+    <button class="dash-search-new" onclick="switchPanel('market',null)">&#9634; Market</button>
+  </div>
+  <div class="scope-row" id="scope-row" style="display:none">
+    <span class="schip on" data-p="all" onclick="setSrchScope(this,'all')">All results</span>
+    <span class="schip" data-p="t" onclick="setSrchScope(this,'t')">&#9675; Temple</span>
+    <span class="schip" data-p="f" onclick="setSrchScope(this,'f')">&#9651; Forum</span>
+    <span class="schip" data-p="m" onclick="setSrchScope(this,'m')">&#9634; Market</span>
   </div>
   <div id="panel-observe">
     <div class="fhead">
@@ -990,6 +1032,24 @@ a{text-decoration:none;color:inherit;}
     </div>
     <iframe id="official-iframe" class="official-iframe" src="" title="Official profile"
             onload="this.style.height=(this.contentWindow.document.body.scrollHeight+40)+'px'"></iframe>
+  </div>
+
+  <%# ── GLOBAL SEARCH PANEL ───────────────────────────────────────────────── %>
+  <div id="panel-search" style="display:none">
+    <div id="srch-results">
+      <div class="srch-idle">
+        <div class="srch-idle-glyph">&#9675; &#9651; &#9634;</div>
+        <div class="srch-idle-h">Search all of FORA</div>
+        <p class="srch-idle-p">Find legislation, officials, businesses, community programs,<br>and more — from anywhere in FORA.</p>
+        <div class="srch-sug-chips">
+          <span class="srch-sug" onclick="doSearch('auto repair')">auto repair</span>
+          <span class="srch-sug" onclick="doSearch('tenant rights')">tenant rights</span>
+          <span class="srch-sug" onclick="doSearch('childcare')">childcare</span>
+          <span class="srch-sug" onclick="doSearch('emissions')">emissions</span>
+          <span class="srch-sug" onclick="doSearch('plumber')">plumber</span>
+        </div>
+      </div>
+    </div>
   </div>
   </main>
 
@@ -2675,6 +2735,85 @@ function renderMktCards(title, sub, cards) {
   }
 
   document.getElementById('mkt-main').innerHTML = heading + layerHtml + '<div class="mkt-grid">' + ad + html + '</div>';
+}
+
+// ── Global search ──────────────────────────────────────────────────────────
+var srchResults = [], srchScope = 'all', srchPrevPanel = 'observe';
+var srchDebounce;
+
+function onSrchInput(v) {
+  clearTimeout(srchDebounce);
+  if (!v.trim()) { resetSrch(); return; }
+  srchDebounce = setTimeout(function(){ doSearch(v); }, 350);
+}
+
+function doSearch(q) {
+  q = q.trim();
+  if (!q) { resetSrch(); return; }
+  var vis = document.querySelector('.col-center [id^="panel-"]:not([style*="display:none"])');
+  if (vis && vis.id !== 'panel-search') srchPrevPanel = vis.id.replace('panel-','');
+  switchPanel('search', null);
+  document.getElementById('scope-row').style.display = 'flex';
+  document.getElementById('srch-results').innerHTML = '<div style="padding:32px;text-align:center;color:var(--ink-mut);font-size:13px;">Searching\u2026</div>';
+
+  var csrf = document.querySelector('meta[name="csrf-token"]');
+  fetch('/search?q=' + encodeURIComponent(q), {
+    headers: { 'X-CSRF-Token': csrf ? csrf.content : '' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    srchResults = [];
+    (data.temple||[]).forEach(function(r){ r.p='t'; srchResults.push(r); });
+    (data.forum||[]).forEach(function(r){ r.p='f'; srchResults.push(r); });
+    (data.market||[]).forEach(function(r){ r.p='m'; srchResults.push(r); });
+    srchScope = 'all';
+    document.querySelectorAll('.schip').forEach(function(c){ c.classList.toggle('on', c.dataset.p==='all'); });
+    renderSrchResults(q);
+  })
+  .catch(function(){
+    document.getElementById('srch-results').innerHTML = '<div style="padding:32px;text-align:center;color:var(--ink-mut);">Search unavailable.</div>';
+  });
+}
+
+function setSrchScope(el, scope) {
+  srchScope = scope;
+  document.querySelectorAll('.schip').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  renderSrchResults(document.getElementById('srch').value);
+}
+
+function renderSrchResults(q) {
+  var res = srchScope === 'all' ? srchResults : srchResults.filter(function(r){ return r.p === srchScope; });
+  var area = document.getElementById('srch-results');
+  if (!res.length) {
+    area.innerHTML = '<div class="srch-idle"><div class="srch-idle-h" style="margin-top:40px">No results for &ldquo;'+q+'&rdquo;</div><p class="srch-idle-p">Try a different term or broaden your scope.</p></div>';
+    return;
+  }
+  var groups = {t:[],f:[],m:[]};
+  res.forEach(function(r){ if(groups[r.p]) groups[r.p].push(r); });
+  var html = '<div style="padding:10px 16px 4px;font-size:11.5px;color:var(--ink-mut)">' + res.length + ' result' + (res.length===1?'':'s') + ' for <strong style="color:var(--ink)">&ldquo;' + q + '&rdquo;</strong></div>';
+  [['t','\u25cb','Temple'],['f','\u25b3','Forum'],['m','\u25a2','Market']].forEach(function(pg){
+    var p=pg[0],glyph=pg[1],label=pg[2];
+    if(!groups[p].length) return;
+    html += '<div class="results-label">' + glyph + ' ' + label + ' \u2014 ' + groups[p].length + ' result' + (groups[p].length===1?'':'s') + '</div>';
+    html += groups[p].map(function(r){
+      var bc=p==='t'?'rb-t':p==='f'?'rb-f':'rb-m';
+      var ic=p==='t'?'ri-t':p==='f'?'ri-f':'ri-m';
+      var badge=r.type==='bill'?'Bill':r.type==='official'?'Official':r.type==='guide'?'Guide':r.type==='community'?'Community':r.type==='rights'?'Rights':'Provider';
+      return '<div class="result-card r-'+p+'">'
+        +'<div class="r-icon '+ic+'"><i class="ti '+(r.icon||'ti-circle')+'" aria-hidden="true"></i></div>'
+        +'<div class="r-body"><div class="r-top"><span class="r-name">'+r.title+'</span><span class="r-badge '+bc+'">'+badge+'</span></div>'
+        +'<div class="r-sub">'+(r.subtitle||'')+'</div>'
+        +'<div class="r-meta">'+(r.meta||'')+'</div></div></div>';
+    }).join('');
+  });
+  area.innerHTML = html;
+}
+
+function resetSrch() {
+  document.getElementById('scope-row').style.display = 'none';
+  document.getElementById('srch-results').innerHTML = '';
+  switchPanel(srchPrevPanel, null);
 }
 </script>
 </body>

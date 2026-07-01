@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_100004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -370,6 +370,69 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000001) do
     t.index ["tags"], name: "index_library_items_on_tags", using: :gin
   end
 
+  create_table "market_domains", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "icon", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_market_domains_on_slug", unique: true
+  end
+
+  create_table "market_providers", force: :cascade do |t|
+    t.string "address"
+    t.string "city"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "handle"
+    t.boolean "is_active", default: true
+    t.boolean "is_mobile", default: false
+    t.decimal "latitude", precision: 10, scale: 6
+    t.string "license_number"
+    t.boolean "license_verified", default: false
+    t.decimal "longitude", precision: 10, scale: 6
+    t.bigint "market_subcategory_id", null: false
+    t.string "name", null: false
+    t.string "neighborhood"
+    t.string "phone"
+    t.integer "provider_type", default: 0, null: false
+    t.decimal "rating_cache", precision: 3, scale: 1
+    t.integer "review_count", default: 0
+    t.jsonb "service_territory"
+    t.string "state"
+    t.datetime "updated_at", null: false
+    t.string "website"
+    t.string "zip"
+    t.index ["market_subcategory_id"], name: "index_market_providers_on_market_subcategory_id"
+  end
+
+  create_table "market_subcategories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "market_domain_id", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["market_domain_id", "slug"], name: "index_market_subcategories_on_market_domain_id_and_slug", unique: true
+    t.index ["market_domain_id"], name: "index_market_subcategories_on_market_domain_id"
+  end
+
+  create_table "market_temple_items", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.boolean "is_active", default: true
+    t.integer "item_type", default: 0, null: false
+    t.bigint "market_domain_id"
+    t.bigint "market_subcategory_id"
+    t.integer "position", default: 0
+    t.string "source_url"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["market_domain_id"], name: "index_market_temple_items_on_market_domain_id"
+    t.index ["market_subcategory_id"], name: "index_market_temple_items_on_market_subcategory_id"
+  end
+
   create_table "neighborhood_issues", force: :cascade do |t|
     t.integer "alert_threshold", default: 10
     t.boolean "anonymous", default: false
@@ -601,6 +664,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000001) do
   add_foreign_key "issue_responses", "neighborhood_issues"
   add_foreign_key "library_items", "civic_profiles", column: "owner_profile_id", on_delete: :cascade
   add_foreign_key "library_items", "engagements", on_delete: :nullify
+  add_foreign_key "market_providers", "market_subcategories"
+  add_foreign_key "market_subcategories", "market_domains"
+  add_foreign_key "market_temple_items", "market_domains"
+  add_foreign_key "market_temple_items", "market_subcategories"
   add_foreign_key "official_finance_summaries", "civic_representatives"
   add_foreign_key "project_items", "projects", on_delete: :cascade
   add_foreign_key "projects", "civic_profiles", on_delete: :cascade
