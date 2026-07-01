@@ -1993,27 +1993,635 @@ document.addEventListener('click', function(e) {
   }
 });
 
-var MKT_LAYERS = {
-  'Auto repair': {
-    temple: {
-      label: 'Temple \u2014 community resources & what to know',
-      items: [
-        {title:'Philly Car Clinic \u2014 free community repair days', sub:'Monthly event at Kensington Yards. Volunteer mechanics help with oil changes, brake checks, and diagnosis. Open to all residents. Next date: July 12.', tag:'Community'},
-        {title:'What to know before you take your car in', sub:'How to read a repair estimate, what questions to ask, how to verify a shop\u2019s PA license, and when to get a second opinion.', tag:'Guide'},
-        {title:'PA Lemon Law & consumer rights for vehicle repairs', sub:'Your rights under the Pennsylvania Motor Vehicle Sales Finance Act. What a shop must disclose in writing before beginning repairs.', tag:'Rights'}
-      ]
+  var MKT_LAYERS = {
+    'Auto repair': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philly Car Clinic \u2014 free community repair days', sub:'Monthly event at Kensington Yards. Volunteer mechanics help with oil changes, brake checks, and diagnosis. Open to all residents. Next date: July 12.', tag:'Community'},
+          {title:'What to know before you take your car in', sub:'How to read a repair estimate, what questions to ask, how to verify a shop\u2019s PA license, and when to get a second opinion.', tag:'Guide'},
+          {title:'PA Lemon Law & consumer rights for vehicle repairs', sub:'Your rights under the Pennsylvania Motor Vehicle Sales Finance Act. What a shop must disclose in writing before beginning repairs.', tag:'Rights'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA EV Rebate Program \u2014 up to $2,000 back on electric vehicle purchase', sub:'Pennsylvania DCED program. Income-eligible residents can receive a rebate on purchase or lease of a new EV. Applications open quarterly.', tag:'Program'},
+          {title:'H.B. 1423 \u2014 Diesel fuel additive requirements update (PA, 2026)', sub:'Passed committee June 2026. Amends diesel emissions standards for vehicles registered in PA. Would require DEF fluid use in vehicles over 8,500 lbs GVWR as of Jan 2027.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Clean Air Council \u2014 vehicle idle reduction program', sub:'City ordinance limits commercial vehicle idling to 5 minutes. Enforcement active in school zones and residential areas. Free anti-idling stickers for fleet operators.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','Business','Independent','Oil change','Tires','Inspection','Bodywork']
     },
-    forum: {
-      label: 'Forum \u2014 legislation, programs & incentives',
-      items: [
-        {title:'PA EV Rebate Program \u2014 up to $2,000 back on electric vehicle purchase', sub:'Pennsylvania DCED program. Income-eligible residents can receive a rebate on purchase or lease of a new EV. Applications open quarterly.', tag:'Program'},
-        {title:'H.B. 1423 \u2014 Diesel fuel additive requirements update (PA, 2026)', sub:'Passed committee June 2026. Amends diesel emissions standards for vehicles registered in PA. Would require DEF fluid use in vehicles over 8,500 lbs GVWR as of Jan 2027.', tag:'Bill \u00b7 State'},
-        {title:'Philadelphia Clean Air Council \u2014 vehicle idle reduction program', sub:'City ordinance limits commercial vehicle idling to 5 minutes. Enforcement active in school zones and residential areas. Free anti-idling stickers for fleet operators.', tag:'City ordinance'}
-      ]
+    'Handyman & repair': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Rebuilding Together Philadelphia \u2014 free home repairs for low-income homeowners', sub:'Nonprofit sends licensed volunteers to repair roofs, fix electrical hazards, and address accessibility needs. Priority given to seniors and people with disabilities. Applications open each January.', tag:'Resource'},
+          {title:'What to know before hiring a handyman in PA', sub:'Pennsylvania does not require a general handyman license for repairs under $5,000, but contractors doing plumbing, electrical, or HVAC work must hold trade-specific licenses. Always ask for proof of insurance.', tag:'Guide'},
+          {title:'Philadelphia Housing Development Corporation \u2014 Basic Systems Repair Program', sub:'City-funded grants up to $24,500 for income-eligible homeowners to fix heating, plumbing, and electrical systems. Apply through the Philadelphia DHCD office on JFK Blvd.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Basic Systems Repair Program \u2014 grants up to $24,500', sub:'PHDC program funded through CDBG dollars. Covers HVAC, plumbing, and electrical system failures in owner-occupied homes. Income limit 80% AMI. Applications accepted year-round subject to funding availability.', tag:'Program'},
+          {title:'S.B. 742 \u2014 Home Improvement Consumer Protection Act amendments (PA, 2025)', sub:'Strengthens requirements for written contracts on jobs over $500. Requires contractors to disclose HIC registration number on all ads and bids. Passed Senate October 2025.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Code \u00a7 9-1601 \u2014 Home Improvement Contractor licensing', sub:'City ordinance requires any contractor doing home improvement work in Philadelphia to register with L&I. Unregistered contractors are subject to fines up to $2,000 per violation.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','Plumbing','Electrical','Carpentry','Painting','Appliances']
     },
-    filterChips: ['All','Business','Independent','Oil change','Tires','Inspection','Bodywork']
-  }
-};
+    'Roofing': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'How to spot storm damage before a contractor does', sub:'After heavy rain or hail, check gutters for granule buildup, look for lifted flashing around chimneys, and photograph any visible cracks. Document everything before calling a roofer.', tag:'Guide'},
+          {title:'PA Attorney General \u2014 storm chaser contractor warnings', sub:'After major storms, predatory roofers work door-to-door in Philly neighborhoods. The AG\u2019s office maintains a roofing contractor complaint database and issues seasonal consumer alerts.', tag:'Rights'},
+          {title:'Rebuilding Together Philadelphia \u2014 emergency roof repair program', sub:'For income-qualified homeowners facing active leaks. Emergency intake line available. Partners with volunteer roofers and roofing material suppliers across the city.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia DHCD \u2014 Roof Repair & Weatherization Assistance', sub:'Federally funded weatherization program that includes roof assessment and minor repair. Combines with WAP (Weatherization Assistance Program) funding administered by DCED. Income limit 200% federal poverty level.', tag:'Program'},
+          {title:'H.B. 2201 \u2014 Roofing Contractor Registration Act (PA, 2026)', sub:'Introduced February 2026. Would create statewide roofing contractor registration, require $100,000 liability insurance, and establish a consumer protection fund for failed roofing projects.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Green Roof Tax Credit \u2014 stormwater billing reduction', sub:'PWD offers a Stormwater Management Incentives Program with grants and bill credits for green roof installation. Residential properties can receive up to 100% reduction in impervious surface charge.', tag:'Program'}
+        ]
+      },
+      filterChips: ['All','Flat roof','Shingle','Metal','Emergency','Gutters']
+    },
+    'Plumbing': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'How to shut off water in a Philadelphia rowhome', sub:'Most rowhomes have the main shutoff inside the basement near the front wall. Know where it is before a pipe bursts. The street-level curb stop requires a T-bar tool \u2014 Philadelphia Water will shut it from outside in emergencies.', tag:'How-to'},
+          {title:'Philadelphia Water Department \u2014 Lead Service Line Replacement Program', sub:'PWD is replacing lead service lines at no cost to homeowners. Check your line material at water.phila.gov/lsl. Replacement typically takes one day; temporary water service is provided.', tag:'Resource'},
+          {title:'PA plumber licensing \u2014 what to verify before hiring', sub:'All journeyman and master plumbers in PA must be licensed through the State Plumbing Board under the Pennsylvania Construction Code Act. Ask for license number before any work begins. Verify at license.pa.gov.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Water \u2014 Tiered Assistance Program (TAP)', sub:'Income-based discount on water and sewer bills. Eligible households pay 2\u20134% of monthly income rather than metered rate. Apply online or at 1101 Market St. Enrollment open year-round.', tag:'Program'},
+          {title:'H.B. 1887 \u2014 Lead Plumbing Disclosure Act (PA, 2025)', sub:'Requires sellers and landlords to disclose known lead service lines or lead solder in plumbing before sale or lease. Signed into law November 2025. Phased enforcement begins January 2026.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Plumbing Code \u2014 backflow preventer requirements (2024 update)', sub:'L&I updated backflow preventer requirements for residential irrigation and commercial food service connections effective March 2024. Annual testing now required for all RPZ assemblies.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','Emergency','Drain','Water heater','Lead pipe','Sewer']
+    },
+    'Electrical': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Signs your Philadelphia rowhome needs a panel upgrade', sub:'Flickering lights, frequently tripping breakers, or a fuse box instead of a circuit breaker panel are red flags. Most rowhomes built before 1970 were wired for 60-amp service \u2014 modern households need 150\u2013200 amp.', tag:'Guide'},
+          {title:'PECO electrical safety resources \u2014 free home energy assessments', sub:'PECO offers free in-home energy assessments for eligible customers. Technicians check wiring safety, identify hazards, and recommend efficiency upgrades. Schedule at peco.com or call 1-800-494-4000.', tag:'Resource'},
+          {title:'PA electrical contractor licensing \u2014 what the law requires', sub:'Pennsylvania does not have a statewide electrician license, but Philadelphia L&I requires all electrical contractors to be licensed locally. Always verify the L&I license at phillyinfo.org before work begins.', tag:'Rights'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PECO LOOP Program \u2014 Low-Income Usage Reduction Program', sub:'Provides free energy efficiency upgrades including LED lighting, smart thermostats, and weatherization to income-eligible households. Reduces bills by an average of $250/year. Apply at peco.com/loop.', tag:'Program'},
+          {title:'Federal Investment Tax Credit \u2014 30% back on home battery & solar installations', sub:'IRA Section 25D credit covers solar panels and battery storage installed on your primary residence. Applies to both purchase and installation costs. Claimed on federal Form 5695.', tag:'Federal'},
+          {title:'Philadelphia Electrical Code \u2014 knob-and-tube wiring prohibition in renovations', sub:'Philadelphia Building Code prohibits energizing or extending existing knob-and-tube wiring when a property undergoes renovation requiring permits. L&I inspectors flag it during permit review.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','Panel upgrade','Outlets','Lighting','EV charger','Inspection']
+    },
+    'Real estate': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia homebuyer resources \u2014 where to start', sub:'The Philadelphia Home Buy Now program connects first-time buyers with HUD-approved counseling agencies. Free sessions cover credit readiness, mortgage options, and neighborhood market conditions. philahome.org.', tag:'Resource'},
+          {title:'Understanding the Philadelphia property tax system', sub:'Philly uses the Actual Value Initiative (AVI) to assess properties. Your assessed value should equal market value. If it doesn\u2019t, you have the right to appeal at the BRT. Appeals must be filed by the first Monday of October.', tag:'Guide'},
+          {title:'Tenant rights when a landlord sells your building', sub:'Under Philadelphia law, tenants have the right to remain through their lease term when a property sells. Landlords must give 30 days\u2019 notice to vacate unless cause is shown. Know your rights at phila.gov/tenants.', tag:'Rights'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia First Time Homebuyer Forgivable Loan \u2014 up to $10,000', sub:'City program through PHDC provides a 0% interest forgivable loan for down payment and closing costs. Forgiven after 15 years of owner-occupancy. Income limit 80% AMI. Apply through participating lenders.', tag:'Program'},
+          {title:'Philadelphia Bill No. 230458 \u2014 Longtime Owner Occupant Program (LOOP) expansion', sub:'2023 ordinance expanded LOOP eligibility to homeowners with incomes up to 150% AMI. Caps real estate tax increases for qualifying long-term owner-occupants who meet residency and income criteria.', tag:'City ordinance'},
+          {title:'H.B. 2126 \u2014 Transfer on Death Deed Act (PA, 2024)', sub:'Signed into law 2024. Allows Pennsylvania homeowners to designate a beneficiary who automatically receives title upon death, avoiding probate. Can help families in gentrifying neighborhoods retain property.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Buy','Rent','Sell','Invest','Commercial']
+    },
+    'Architecture & design': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Architecture Center \u2014 public programs and walking tours', sub:'The Center at 1218 Arch St offers free and low-cost public programs, neighborhood walking tours, and school partnerships exploring Philly\u2019s built environment. Open to all residents.', tag:'Community'},
+          {title:'When do you need an architect vs. a designer in Philadelphia?', sub:'Philadelphia L&I requires architect-stamped drawings for structural changes, additions over 500 sq ft, and change-of-use permits. Interior renovations without structural work can often use a designer or design-build contractor.', tag:'Guide'},
+          {title:'Philadelphia Historic Preservation resources \u2014 working with the HDC', sub:'If your property is in a historic district or individually listed, the Historical Commission must approve exterior changes. Pre-application consultations are free and can prevent costly redesigns.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Historic Preservation Tax Credit \u2014 25% state credit', sub:'PA Historic Preservation Tax Credit (HPTC) provides 25% of qualified rehabilitation costs for certified historic structures. Federal Historic Tax Credit stacks at 20%. Administered by PHMC.', tag:'Program'},
+          {title:'Philadelphia Zoning Code \u2014 2023 accessory dwelling unit amendments', sub:'Bill No. 220665 amended the Zoning Code to permit ADUs by-right in R-1 through R-10 districts on lots over 1,600 sq ft. Design standards set maximum height and required setbacks for accessory structures.', tag:'City ordinance'},
+          {title:'H.B. 1677 \u2014 Architect Licensure Modernization Act (PA, 2025)', sub:'Updates continuing education requirements for PA-licensed architects and aligns reciprocity with 47 states participating in the NCARB licensing system. Effective January 2026.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Residential','Commercial','Historic','Interior','Landscape']
+    },
+    'Pest control': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Rat Patrol \u2014 free inspections and block-level coordination', sub:'The city\u2019s rat abatement program offers free property inspections, bait station installation, and community cleanup coordination. Request service at phila.gov/rat-patrol or call 311.', tag:'Resource'},
+          {title:'What Philadelphia renters can do when landlords ignore pest problems', sub:'Under Philadelphia Housing Code Section 9-3901, landlords are responsible for pest-free conditions. Tenants can report to L&I, who will inspect and issue violations. Document everything in writing first.', tag:'Rights'},
+          {title:'Integrated Pest Management for rowhomes \u2014 what actually works', sub:'Sealing gaps around pipes and utility entries, removing standing water, and keeping trash lids sealed reduces rodent entry more effectively than repeated chemical treatments. A licensed IPM professional can assess entry points.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Vector Control \u2014 free bed bug encasements for low-income households', sub:'City Department of Public Health Vector Control unit distributes mattress and box spring encasements and provides bed bug education to income-qualified residents. Call 215-685-9000 to schedule.', tag:'Program'},
+          {title:'Philadelphia Bill No. 210112 \u2014 Pest Management Disclosure for rental units', sub:'Ordinance requires landlords to disclose any known pest infestation history at initial lease signing. Failure to disclose is grounds for lease termination without penalty under Philadelphia tenant law.', tag:'City ordinance'},
+          {title:'PA Pesticide Control Act \u2014 licensing and consumer rights', sub:'All commercial pest control operators in PA must be licensed by PDA under the Pesticide Control Act of 1973. Consumers have the right to request the pesticide label and Safety Data Sheet before any application.', tag:'Rights'}
+        ]
+      },
+      filterChips: ['All','Rodents','Bed bugs','Cockroaches','Termites','Ants']
+    },
+    'Moving': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia moving day tips \u2014 permits, parking, and rowhome logistics', sub:'The City requires a moving truck parking permit from the Streets Department for any large vehicle parked in a no-parking zone during a move. Apply online at least 5 days in advance at phila.gov/permits.', tag:'How-to'},
+          {title:'How to vet a moving company in Pennsylvania', sub:'PA movers must register with PUC and hold a PUC certificate. Verify at puc.pa.gov. Out-of-state movers need FMCSA registration. Never pay more than 10% over a binding estimate without an amended agreement.', tag:'Guide'},
+          {title:'Free and low-cost moving resources in Philadelphia', sub:'Philabundance and local Buy Nothing groups often coordinate furniture and household goods sharing for people relocating. Habitat for Humanity ReStore accepts and sometimes delivers donated furniture citywide.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA PUC \u2014 Household Goods Carrier registration requirements', sub:'Pennsylvania movers must hold a PUC Certificate of Public Convenience. PUC publishes a consumer guide on mover rights including maximum liability and required inventory forms. File complaints at puc.pa.gov.', tag:'Program'},
+          {title:'Philadelphia Moving Truck Permit \u2014 Streets Department', sub:'City ordinance requires permits for moving trucks in restricted zones. Permits cost $20/day per block. Double-parking without a permit is subject to a $76 fine plus tow. Online application at phila.gov/streets.', tag:'City ordinance'},
+          {title:'S.B. 419 \u2014 Moving Company Consumer Protection Act (PA, 2025)', sub:'Introduced March 2025. Would cap deposits at 10% of written estimate, require itemized invoices, and establish a dispute resolution process through the Office of Attorney General. In committee as of June 2026.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Local','Long-distance','Storage','Labor only','Packing']
+    },
+    'Restaurants': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia restaurant inspection scores \u2014 how to read them', sub:'The Philadelphia Department of Public Health posts inspection results at phila.gov/foodprotection. Scores are not a simple letter grade; look at the violation categories (critical vs. non-critical) for a full picture.', tag:'Guide'},
+          {title:'Philly restaurant weeks and community dining events', sub:'Philadelphia Restaurant Week runs twice yearly (January and September) with fixed-price menus at hundreds of restaurants. The Black Restaurant Week (typically March) spotlights Black-owned dining across the region.', tag:'Community'},
+          {title:'How to report a restaurant food safety concern in Philadelphia', sub:'Call the Environmental Health Services hotline at 215-685-7495 or submit online. Complaints are investigated within 24\u201348 hours for active illness concerns. Your identity is kept confidential.', tag:'How-to'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Outdoor Dining Program \u2014 sidewalk caf\u00e9 permits', sub:'L&I issues Sidewalk Caf\u00e9 Permits for outdoor seating in the public right-of-way. Annual fee based on square footage. Permanent parklet permits available through Streets Department. Applications at phila.gov/li.', tag:'City program'},
+          {title:'Philadelphia Bill No. 220557 \u2014 third-party delivery fee cap', sub:'Ordinance caps food delivery platform commissions at 15% during declared emergencies and established a permanent 20% cap on all third-party platform fees for Philadelphia restaurants. Effective 2023.', tag:'City ordinance'},
+          {title:'PA Restaurant Revitalization \u2014 DCED Small Business Assistance', sub:'State DCED administers ongoing small business grant and loan programs including the PA Small Business Advantage Grant covering equipment and facility upgrades for food service businesses. Applications at dced.pa.gov.', tag:'Program'}
+        ]
+      },
+      filterChips: ['All','Takeout','Dine-in','BYOB','Catering','Pop-up']
+    },
+    'Local producers': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia farmers market directory \u2014 seasonal and year-round', sub:'The Philly Foodworks and PCCY maintain a citywide farmers market map. Year-round markets include Reading Terminal Market and Clark Park (Germantown). Seasonal markets operate in nearly every neighborhood from May\u2013November.', tag:'Resource'},
+          {title:'How to find certified local producers in the Philadelphia region', sub:'The PA Preferred program certifies products grown or produced in Pennsylvania. Look for the PA Preferred logo at markets. The Southeastern PA Food System maps producers within 150 miles of Philly.', tag:'Guide'},
+          {title:'Community Supported Agriculture (CSA) shares \u2014 how they work and where to find them', sub:'CSA shares let you buy a season\u2019s produce in advance directly from a farm. Several Philadelphia-area farms offer SNAP-EBT-eligible CSA shares through the Philly CSA Coalition. Pickup sites in most neighborhoods.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'SNAP at farmers markets \u2014 Double Up Food Bucks program', sub:'The Fair Food Network\u2019s Double Up Food Bucks doubles SNAP dollars spent at participating Philadelphia farmers markets, up to $20/day. Over 30 Philly-area markets participate. Details at doubleupfoodbucks.org.', tag:'Program'},
+          {title:'PA Farm Bill \u2014 Beginning Farmer Tax Credit (Act 14 of 2024)', sub:'PA Act 14 provides income tax credits to established farmers who sell or lease land or equipment to beginning farmers. Helps new producers get access to farmland in the Philadelphia agricultural belt.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Zoning Code \u2014 urban agriculture by-right provisions', sub:'Bill No. 120735 (as amended) permits community gardens and urban farms as by-right uses in all residential and most commercial zones. Sales of produce grown on-site are permitted without additional licensing.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','Produce','Dairy & eggs','Meat','Baked goods','Honey & preserves']
+    },
+    'Food access programs': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia food pantry finder \u2014 no paperwork required', sub:'Philabundance\u2019s pantry finder at philabundance.org/find-food shows locations, hours, and eligibility requirements. Many pantries are client-choice and require no proof of income. Call 215-339-0900 for same-day needs.', tag:'Resource'},
+          {title:'How to apply for SNAP benefits in Pennsylvania', sub:'Apply online at compass.state.pa.us, by phone at 1-800-692-7462, or in person at your local CAO. Most households are approved within 30 days; expedited 7-day processing available for households with under $150 in income.', tag:'How-to'},
+          {title:'Free summer meals for children in Philadelphia', sub:'Every summer, the City runs free meal sites at recreation centers, libraries, and schools for children under 18. No registration or ID required. Find sites at phila.gov/summerfood or text FOOD to 304-304.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'WIC \u2014 Women, Infants & Children \u2014 PA program details', sub:'PA WIC provides supplemental foods, nutrition education, and referrals for pregnant and postpartum women and children under 5. Philly has 12 WIC sites. Income limit 185% federal poverty level. Apply at pawic.com.', tag:'Program'},
+          {title:'Philadelphia City Council Resolution 230723 \u2014 food insecurity emergency declaration', sub:'2023 resolution directed the Office of Homeless Services and DBHIDS to coordinate emergency food distribution through neighborhood anchor institutions. Established the Neighborhood Food Access Fund.', tag:'City program'},
+          {title:'H.B. 977 \u2014 SNAP Restaurant Meals Program authorization (PA, 2025)', sub:'Would authorize Pennsylvania to apply for USDA waiver allowing elderly, disabled, and homeless SNAP recipients to use benefits at participating restaurants. Passed House Human Services Committee April 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Pantries','SNAP','WIC','Meals','Produce']
+    },
+    'Food scrap & sustainability': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia composting drop-off sites \u2014 where and what\u2019s accepted', sub:'The Philly Compost Initiative operates drop-off sites at several farmers markets and community gardens. Accepts fruit and vegetable scraps, coffee grounds, and eggshells. Meat and dairy not accepted. Find sites at phila.gov/compost.', tag:'Resource'},
+          {title:'How to start a block-level composting program in your neighborhood', sub:'The Sanitation Convenience Centers accept green waste year-round. Block associations can apply to the Streets Department for a communal composting bin through the Community Composting Program. Minimal paperwork required.', tag:'How-to'},
+          {title:'Philadelphia food waste by the numbers \u2014 what your neighbors throw away', sub:'The City estimates Philadelphia residents send over 250,000 tons of food waste to landfill annually. Reducing food waste is the single highest-impact climate action available to most households, per EPA estimates.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Zero Waste Plan 2035 \u2014 food scrap diversion targets', sub:'The City\u2019s official sustainability plan commits to 90% diversion of organics from landfill by 2035. Includes mandatory food scrap separation for commercial food establishments generating over 1 ton/week by 2027.', tag:'City program'},
+          {title:'Philadelphia Bill No. 230145 \u2014 food waste reporting for large generators', sub:'Requires grocery stores, food distributors, and large restaurants to report annual food waste diversion tonnage to the Streets Department. First reports due January 2025. Enforcement begins 2026.', tag:'City ordinance'},
+          {title:'USDA ReConnect \u2014 food system resilience grants available to PA nonprofits', sub:'USDA ReConnect and Community Food Projects Competitive Grant Program fund food waste reduction infrastructure including cold storage, gleaning programs, and community kitchen composting. Applications at grants.gov.', tag:'Federal'}
+        ]
+      },
+      filterChips: ['All','Composting','Gleaning','Zero waste','Drop-off','Community']
+    },
+    'Medical & dental': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Health Centers \u2014 sliding-scale primary care for all residents', sub:'The City operates 9 neighborhood health centers providing primary care, dental, and behavioral health services on a sliding-scale fee based on income. No insurance required. Find your nearest center at phila.gov/healthcenters.', tag:'Resource'},
+          {title:'How to find a dentist who accepts Medicaid in Philadelphia', sub:'Pennsylvania\u2019s Medicaid dental benefit (Medical Assistance) covers preventive, restorative, and emergency care for adults and children. Search participating providers at findahealthcenter.hrsa.gov or call 1-800-348-4040.', tag:'Guide'},
+          {title:'What to do if you receive a surprise medical bill in PA', sub:'Under PA Act 96 of 2020 and the federal No Surprises Act (2022), you are protected from surprise billing for emergency services and out-of-network providers at in-network facilities. File a complaint at insurance.pa.gov.', tag:'Rights'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Pennsylvania Medicaid (Medical Assistance) \u2014 how to enroll', sub:'PA Medical Assistance covers low-income adults, children, pregnant women, and people with disabilities. Apply at compass.state.pa.us or through a CAO. CHIP covers uninsured children in families up to 317% FPL.', tag:'Program'},
+          {title:'Philadelphia Healthy Philadelphia Initiative \u2014 school-based health centers', sub:'City program funds health centers in 30+ Philadelphia public schools providing primary care, dental, and mental health services to students regardless of insurance status. Operated by CHOP, Temple, and Jefferson.', tag:'City program'},
+          {title:'H.B. 1950 \u2014 PA Health Care Cost Transparency Act (2025)', sub:'Requires hospitals and large physician groups to post standard charges and provide good-faith cost estimates before elective procedures. Passed House Health Committee March 2025. Modeled on federal price transparency rule.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Primary care','Dental','Vision','Urgent care','Specialists']
+    },
+    'Mental health': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia crisis resources \u2014 what to call and when', sub:'Call 988 (Suicide & Crisis Lifeline) for mental health crises. Philadelphia Crisis Line: 215-685-6440 (24/7). Behavioral Health Crisis Mobile Team dispatches to your location as an alternative to police response. Text HELLO to 741741.', tag:'Resource'},
+          {title:'How to find a therapist who takes your insurance in Philadelphia', sub:'Psychology Today\u2019s therapist finder and Open Path Collective list Philadelphia therapists by insurance and sliding-scale fee. Community Behavioral Health (CBH) is the Medicaid behavioral health manager for Philadelphia \u2014 call 888-545-2600.', tag:'Guide'},
+          {title:'Community mental health programs in Philadelphia neighborhoods', sub:'DBHIDS funds over 60 neighborhood behavioral health providers. Peer support specialists, recovery coaches, and community mental health workers are available through programs like DBHIDS\u2019s Peer Into Recovery initiative.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA Act 106 of 1989 \u2014 mental health parity in insurance', sub:'Requires PA-regulated insurers to cover mental health and substance use disorder treatment on equal terms with medical benefits. File complaints for parity violations with the PA Insurance Department at 1-877-881-6388.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia DBHIDS \u2014 Community Behavioral Health sliding-scale access', sub:'Philadelphia residents enrolled in Medicaid receive behavioral health services through CBH at no cost. Services include therapy, psychiatry, crisis intervention, and peer support. Referral not required for most services.', tag:'Program'},
+          {title:'H.B. 2302 \u2014 Mental Health First Aid training grant program (PA, 2026)', sub:'Would fund Mental Health First Aid certification for school staff, first responders, and community organizations statewide. $5M appropriation proposed. Modeled on successful Pittsburgh pilot program.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Therapy','Psychiatry','Crisis','Peer support','Substance use']
+    },
+    'Fitness & bodywork': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Parks & Recreation \u2014 free and low-cost fitness programs', sub:'PPR operates fitness centers at recreation centers across all neighborhoods. Annual membership is $40 for adults. Free fitness classes, swim lessons, and sports leagues run year-round. Find your rec center at phila.gov/rec.', tag:'Resource'},
+          {title:'Community yoga and movement events in Philadelphia', sub:'Philly Free Yoga and neighborhood rec centers host free outdoor yoga in Clark Park, Rittenhouse Square, and Mander Recreation Center from May through September. No registration required.', tag:'Community'},
+          {title:'What to look for when choosing a massage therapist in PA', sub:'Pennsylvania requires massage therapists to be licensed through the State Board of Massage Therapy. Always verify license at license.pa.gov. Licensed therapists must complete 600 hours of approved training.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Recreation Financial Assistance Program \u2014 reduced-fee memberships', sub:'Income-eligible residents can receive reduced or waived fees for PPR programs including fitness centers, swim classes, and camp programs. Apply at any recreation center with proof of income.', tag:'City program'},
+          {title:'PA Massage Therapy Practice Act \u2014 2024 continuing education updates', sub:'Act 39 of 2024 updated CEU requirements for PA licensed massage therapists to include 3 hours of ethics training per two-year cycle. New applications now require background clearances.', tag:'Bill \u00b7 State'},
+          {title:'Healthy People 2030 \u2014 federal physical activity grants available to PA organizations', sub:'CDC funds community-level physical activity promotion through the REACH program and Community Preventive Services programs. Philadelphia-area nonprofits and health systems are eligible to apply.', tag:'Federal'}
+        ]
+      },
+      filterChips: ['All','Gym','Yoga','Martial arts','Massage','Swimming']
+    },
+    'Personal care': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia cosmetology licensing \u2014 what practitioners must have', sub:'All cosmetologists, barbers, estheticians, and nail technicians in PA must be licensed through the State Board of Cosmetology. Verify any salon or individual provider at license.pa.gov before services.', tag:'Guide'},
+          {title:'Community barbershop and beauty events in Philadelphia', sub:'Several Philadelphia barbershops and salons host free or reduced-cost community cut days, often tied to back-to-school season. The Barbershop Books program at local shops also provides literacy resources for children.', tag:'Community'},
+          {title:'Your rights when a salon service goes wrong in Pennsylvania', sub:'Complaints against licensed cosmetologists can be filed with the PA Bureau of Professional and Occupational Affairs. The Board can suspend or revoke licenses for sanitation violations or consumer harm.', tag:'Rights'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA Cosmetology Law \u2014 Sanitation Code updates (2024)', sub:'PA Board of Cosmetology issued updated sanitation guidelines effective January 2024. Requires single-use items for each client, documented disinfection logs, and annual sanitation training for all licensed operators.', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Workforce Development \u2014 free cosmetology training programs', sub:'Philadelphia Works funds subsidized cosmetology and barbering training programs at several city institutions including community colleges and licensed private schools. Income-eligible residents can receive full tuition support.', tag:'City program'},
+          {title:'H.B. 1588 \u2014 Natural Hair Discrimination prohibition (PA CROWN Act, 2025)', sub:'PA CROWN Act prohibits discrimination based on natural hair texture and protective hairstyles (locs, braids, twists, Bantu knots) in employment, education, and housing. Signed into law February 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Hair','Nails','Skin','Barbershop','Spa']
+    },
+    'Transit & rideshare': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'SEPTA Key card \u2014 how to get one and load it in Philadelphia', sub:'SEPTA Key cards replace tokens and paper transfers. Purchase at any SEPTA station, Wawa, or ACME. The Convenience card works without registration; the Registered card protects your balance. Load at septakey.org or at kiosks.', tag:'How-to'},
+          {title:'Low-income transit programs in Philadelphia', sub:'SEPTA\u2019s Reduced Fare Program offers 50% discounts for seniors over 65, people with disabilities, and Medicare card holders. The Key Assist program provides subsidized Key cards to income-eligible riders. Apply at transit.phila.gov.', tag:'Resource'},
+          {title:'Philly transit safety and rider rights', sub:'SEPTA riders have the right to safe, accessible transportation. Report unsafe conditions to SEPTA Transit Police at 215-580-8111. Riders with disabilities can use SEPTA\u2019s accessibility complaint process at septa.org/ada.', tag:'Rights'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'SEPTA Key Assist \u2014 subsidized transit for low-income Philadelphians', sub:'City-funded program in partnership with SEPTA provides subsidized monthly TransPasses to income-eligible Philadelphia residents. Administered through Community Legal Services and participating social service agencies.', tag:'Program'},
+          {title:'Philadelphia Bill No. 220856 \u2014 Congestion pricing study authorization', sub:'City Council resolution directed the Office of Transportation to study congestion-based pricing for Center City and commissioned a report on equity impacts for low-income commuters and transit-dependent households.', tag:'City ordinance'},
+          {title:'H.B. 2088 \u2014 SEPTA Capital Funding Reform Act (PA, 2025)', sub:'Proposes dedicated state funding stream for SEPTA capital projects through a 0.5% increase in the state\u2019s sales tax on fuel. Would provide $400M annually for track, signal, and station upgrades. Passed House Transportation Committee May 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Bus','Subway','Regional Rail','Rideshare','Bike share']
+    },
+    'Moving & logistics': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia moving logistics \u2014 navigating narrow streets and parking', sub:'Many Philly streets are too narrow for large moving trucks. Scope the route in advance and note any low bridges or one-way streets. The Streets Department\u2019s online map shows street width restrictions and loading zone locations.', tag:'Guide'},
+          {title:'Freight and delivery resources for small Philadelphia businesses', sub:'The Philadelphia Commerce Department\u2019s Delivery Innovation Task Force has published guidance on last-mile delivery for small businesses including approved loading zone use and cargo bike delivery options in Center City.', tag:'Resource'},
+          {title:'Philly community mutual aid \u2014 neighbor-to-neighbor moving help', sub:'Several Philly mutual aid networks (West Philly Mutual Aid, Germantown Mutual Aid) coordinate volunteer moving help for neighbors in need, particularly seniors, people with disabilities, and those facing eviction.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Streets Department \u2014 Loading Zone and Delivery Management Program', sub:'Commercial delivery operators can apply for designated loading zone permits in high-density commercial corridors. Program launched as part of the City\u2019s Curbside Management Plan. Fee schedule at phila.gov/streets.', tag:'City program'},
+          {title:'PA PUC \u2014 freight broker and household goods mover regulations', sub:'PA requires all for-hire motor carriers operating within the state to hold a PUC Certificate of Public Convenience. Brokers arranging moves must register separately. Consumer complaint process at puc.pa.gov.', tag:'Program'},
+          {title:'S.B. 612 \u2014 Last-Mile Delivery Vehicle Emissions Standards (PA, 2025)', sub:'Would require delivery vehicles under 10,000 lbs GVWR registered in PA to meet zero-emission standards by 2030. Includes voucher program for small delivery businesses to transition to EVs. Introduced September 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Residential','Commercial','Freight','Courier','Storage']
+    },
+    'Vehicle services': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia street sweeping schedule \u2014 and how to avoid tickets', sub:'The Streets Department posts sweeping schedules at phila.gov/streets. Alternate-side parking rules are enforced by PPA. Sign up for text alerts through the PPA app to avoid $51 cleaning violation tickets.', tag:'How-to'},
+          {title:'PA vehicle inspection requirements \u2014 what you need to know', sub:'Pennsylvania requires annual safety inspections and biennial emissions inspections for most vehicles. Stickers expire at the end of the month shown. Driving with an expired sticker is a $25 fine plus court costs.', tag:'Guide'},
+          {title:'Free car seat inspections in Philadelphia', sub:'Philadelphia Fire Department stations and several hospitals offer free car seat inspection events. Certified Child Passenger Safety Technicians verify installation and fit. Find events at safercar.gov/cpsApp.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA Vehicle Code \u2014 inspection station licensing and consumer rights', sub:'PennDOT licenses all PA vehicle inspection stations. If a station fails your vehicle, you have the right to a reinspection at a different station. File complaints about inspection fraud at 1-800-932-4600.', tag:'Rights'},
+          {title:'Philadelphia Parking Authority \u2014 residential permit parking program', sub:'RPP allows residents in designated zones to park without time limits. Annual permit costs $35. Applications processed online at philapark.org. Zone maps updated annually based on community petitions.', tag:'City program'},
+          {title:'H.B. 1654 \u2014 EV Charging Access in Multi-Unit Dwellings (PA, 2025)', sub:'Would require landlords of apartment buildings with 50+ units to permit tenants to install EV charging equipment at their own expense. Prohibits lease provisions blocking EV charger installation. Passed House Commerce Committee June 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Inspection','Registration','Car wash','Towing','Parking']
+    },
+    'Childcare': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia childcare subsidy \u2014 who qualifies and how to apply', sub:'The Child Care Works subsidy program pays childcare costs for income-eligible Philadelphia families. Income limit is 180% FPL. Apply through OCDEL at compass.state.pa.us. Waitlists exist; apply early.', tag:'Resource'},
+          {title:'How to evaluate a licensed childcare provider in Philadelphia', sub:'All licensed childcare centers and family daycare homes in PA are rated through Keystone STARS (1\u20134 stars). Inspection records and complaint history are public at findchildcare.pa.gov. Always verify the provider\u2019s license.', tag:'Guide'},
+          {title:'Philadelphia community childcare co-ops and cooperative care networks', sub:'Several Philadelphia neighborhoods have informal childcare co-ops where parents trade care hours. The Philadelphia Parent Child Center network connects families with community-based childcare resources and parenting support.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Child Care Works \u2014 PA subsidy program for income-eligible families', sub:'State-funded subsidy covers full or partial childcare costs at licensed providers. Philadelphia administers through the Office of Children and Families. Families pay a sliding-scale copay based on income. Apply at compass.state.pa.us.', tag:'Program'},
+          {title:'Philadelphia Universal Pre-K \u2014 PHLpreK expansion', sub:'PHLpreK provides free, high-quality pre-K to Philadelphia 3- and 4-year-olds whose families earn up to 300% FPL. Funded through the Philadelphia Beverage Tax. Over 3,000 seats across 200+ provider sites. Apply at phila.gov/phlprek.', tag:'City program'},
+          {title:'H.B. 2450 \u2014 Child Care Provider Tax Credit Act (PA, 2026)', sub:'Would provide PA employers a 30% tax credit for contributions to employee childcare costs or on-site childcare facilities. Also creates a refundable credit for home daycare providers who achieve Keystone STARS 3 or 4 rating.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Infant','Toddler','Pre-K','After school','Subsidy']
+    },
+    'Elder care': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Corporation for Aging \u2014 services for residents 60 and older', sub:'PCA is the Area Agency on Aging for Philadelphia. Services include in-home care, Meals on Wheels, caregiver support, benefits counseling, and protective services. Call the helpline at 215-765-9040 (M\u2013F 8am\u20136pm).', tag:'Resource'},
+          {title:'How to spot elder financial abuse in Philadelphia', sub:'Financial abuse is the most common form of elder abuse in PA. Signs include unusual bank transactions, unpaid bills, or sudden changes to legal documents. Report to PCA\u2019s Protective Services at 215-765-9040 or APS at 1-800-490-8505.', tag:'Guide'},
+          {title:'Philadelphia senior centers \u2014 free programs and lunch five days a week', sub:'The City and PCA fund 32 senior centers across Philadelphia offering congregate meals, fitness, social programming, and benefits enrollment help. No income requirement for most programs. Find your nearest center at pcacares.org.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA PENNCARE \u2014 home and community-based waiver programs for older adults', sub:'The PA Department of Human Services administers OBRA and COMMCARE waivers providing in-home services (personal care, adult day, home modifications) to Medicaid-eligible seniors as an alternative to nursing home placement.', tag:'Program'},
+          {title:'Philadelphia Property Tax Freeze for seniors \u2014 Senior Citizen Tax Freeze', sub:'Philadelphia homeowners 65+ with incomes under $33,500 can freeze their property tax at current assessment. Freezes do not accumulate; the current bill stays flat indefinitely while enrolled. Apply at phila.gov/otr.', tag:'City program'},
+          {title:'S.B. 838 \u2014 Personal Care Home Reform Act (PA, 2025)', sub:'Would increase staffing ratios, require 24-hour supervision in licensed personal care homes, and establish a state ombudsman for personal care home residents. Passed Senate Aging & Youth Committee October 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','In-home care','Adult day','Meals','Transportation','Housing']
+    },
+    'Youth & after-school': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Out-of-School Time \u2014 finding after-school programs near you', sub:'The City\u2019s OST program funds after-school and summer enrichment at over 200 sites across Philadelphia. Programs are free or low-cost for income-eligible families. Search at phila.gov/ost or call 215-685-1830.', tag:'Resource'},
+          {title:'Summer camp and recreation options for Philadelphia youth', sub:'Philadelphia Parks & Recreation runs summer camps at 25+ recreation centers across the city. Fee assistance is available. The Fairmount Park Conservancy\u2019s camp scholarship fund helps cover costs for families in need.', tag:'Community'},
+          {title:'What to look for in a quality after-school program', sub:'Quality indicators include certified staff, low child-to-staff ratios, structured homework time, and enrichment activities. Ask about staff turnover, safety protocols, and family communication practices before enrolling.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia 21st Century Community Learning Centers grants', sub:'Federally funded after-school and summer program grants administered through PDE. Philadelphia schools and nonprofits apply for 3-year grants to run evidence-based OST programs. Priority for high-poverty schools.', tag:'Federal'},
+          {title:'Philadelphia Youth Commission \u2014 Youth Grants Program', sub:'City grants up to $5,000 for youth-led projects and organizations serving Philadelphia young people ages 14\u201324. Applications open annually in winter. Details at phila.gov/youth.', tag:'City program'},
+          {title:'H.B. 1399 \u2014 Youth Workforce Investment Act (PA, 2025)', sub:'Expands Pennsylvania\u2019s youth workforce development funding by $25M annually through WIOA Title I reauthorization. Prioritizes youth ages 16\u201324 who are out of school or system-involved. Passed House Labor Committee March 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Academic','Arts','Sports','STEM','Summer']
+    },
+    'Pets': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'ACCT Philly \u2014 adoption, low-cost vet care, and surrender resources', sub:'ACCT Philly (Animal Care & Control Team) is the City\u2019s open-admission shelter. Offers adoptions, low-cost spay/neuter, community cat programs, and pet food pantry. Located at 111 W. Hunting Park Ave. acctphilly.org.', tag:'Resource'},
+          {title:'Low-cost veterinary care in Philadelphia \u2014 where to find it', sub:'The Pennsylvania SPCA and ACCT offer low-cost vaccine clinics and wellness services. Red Paw Emergency Relief Team provides emergency vet care for pets of people facing housing instability. Many vet schools offer discounted care.', tag:'Resource'},
+          {title:'Philadelphia dog laws \u2014 leash rules, registration, and prohibited breeds', sub:'All dogs in Philadelphia must be licensed annually through ACCT. Leash law requires dogs on leash in all public areas except designated off-leash zones. Philadelphia does not have a breed-specific ban. Register at acctphilly.org.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Dog License \u2014 annual registration requirement', sub:'Philadelphia dog owners must license their dog annually through ACCT Philly. Fee is $10 for spayed/neutered dogs, $35 unaltered. Revenue supports animal control operations. Unlicensed dogs subject to $300 fine.', tag:'City program'},
+          {title:'PA Dog Law \u2014 Bureau of Dog Law Enforcement regulations', sub:'The PA Department of Agriculture enforces the Dog Law (3 Pa.C.S. \u00a7 459) governing kennel licensing, dangerous dog hearings, and cruelty investigations. File complaints about dangerous or mistreated dogs at 1-800-698-6423.', tag:'Bill \u00b7 State'},
+          {title:'H.B. 1821 \u2014 Pet Protection in Domestic Violence Cases (PA, 2025)', sub:'Allows PA courts to include pets in Protection From Abuse orders, granting temporary custody to abuse survivors. Passed House Judiciary Committee January 2025. Builds on 2022 Act 68 which first introduced pet provisions.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Dogs','Cats','Veterinary','Grooming','Training']
+    },
+    'Clothing & tailoring': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia thrift and consignment shops by neighborhood', sub:'Philly has a strong secondhand clothing culture. Top spots include Community Thrift (South Philly), Retrospect (Manayunk), and Philly AIDS Thrift (Bella Vista). Proceeds from several shops support local nonprofits.', tag:'Community'},
+          {title:'Finding a tailor for alterations and custom work in Philadelphia', sub:'Look for tailors certified through the Tailors Guild or with verifiable portfolio work. Ask about turnaround time, whether they do hand-stitching vs. machine only, and whether they have experience with your garment\u2019s fabric.', tag:'Guide'},
+          {title:'Dress for Success Philadelphia \u2014 professional clothing for job seekers', sub:'Dress for Success provides free professional clothing and career development support to women entering the workforce. Appointments required. Located at 1420 Walnut St. Referrals accepted from partner agencies or self-referral.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Fashion Incubator \u2014 design business support', sub:'Operated through the Philadelphia Museum of Art, the Fashion Incubator provides subsidized studio space, mentorship, and business development resources to emerging Philadelphia-based fashion designers. Applications open annually.', tag:'Program'},
+          {title:'PA Textile Recycling Program \u2014 collection sites and accepted materials', sub:'PA DEP funds textile recycling through municipal solid waste grants. Philadelphia Streets Department operates drop-off locations for used clothing and textiles at sanitation convenience centers. Diverts over 4,000 tons annually.', tag:'Program'},
+          {title:'Philadelphia Wage Tax exemption \u2014 what self-employed tailors need to know', sub:'Philadelphia residents working as self-employed tailors or seamstresses must file a Philadelphia Net Profits Tax return. Non-resident tailors working in the city owe the Earnings Tax on Philly-sourced income. Details at phila.gov/revenue.', tag:'Guide'}
+        ]
+      },
+      filterChips: ['All','Alterations','Custom','Thrift','Formal wear','Sustainable']
+    },
+    'Arts & culture': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia free museum days and cultural access programs', sub:'The Philadelphia Museum of Art, Franklin Institute, Please Touch Museum, and Academy of Natural Sciences all offer free or reduced admission days. The EBT Museum Access program provides $3 admission for SNAP recipients at participating institutions.', tag:'Resource'},
+          {title:'Philadelphia Mural Arts Program \u2014 tours, community projects, and artist opportunities', sub:'Mural Arts Philadelphia offers free neighborhood mural tours, youth art programs, and open calls for professional artists. The Guild program provides mural production jobs for Philadelphians in recovery or re-entry. muralarts.org.', tag:'Community'},
+          {title:'Finding studio space and residencies for Philadelphia artists', sub:'The City\u2019s Office of Arts, Culture and the Creative Economy maintains a studio space database. Crane Arts, Vox Populi, and the Icebox Project Space offer residencies and subsidized studios for working artists.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Cultural Fund \u2014 city grants for arts organizations', sub:'The Philadelphia Cultural Fund distributes $2.5M+ annually to Philadelphia-based arts and culture organizations through competitive grant rounds. Eligible organizations must be 501(c)(3) and have at least two years of programming history.', tag:'Program'},
+          {title:'PA Council on the Arts \u2014 individual artist and organization grants', sub:'PCA offers grants to PA artists and organizations including the Artistic Excellence Program and Arts Organization grants. Philadelphia applicants eligible for all statewide categories. Applications at arts.pa.gov.', tag:'Program'},
+          {title:'Philadelphia Bill No. 230589 \u2014 Artist Live/Work Space Preservation ordinance', sub:'Requires developers converting buildings with existing artist studio or live/work leases to provide 180 days\u2019 notice and right of first refusal to affected tenants. Also requires L&I to track displacement of arts spaces citywide.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','Visual art','Music','Theater','Film','Dance']
+    },
+    'Tutoring & coaching': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Free tutoring resources at Philadelphia Free Library branches', sub:'The Free Library of Philadelphia offers free homework help, one-on-one tutoring referrals, and digital literacy support at all branch locations. The Culinary Literacy Center (Parkway Central) offers adult basic education with cooking.', tag:'Resource'},
+          {title:'How to evaluate a tutor for your child in Philadelphia', sub:'Look for tutors with subject-specific credentials, references, and a clear assessment process. Ask about their approach to identifying learning gaps vs. simply re-teaching content. Many offer a free first session.', tag:'Guide'},
+          {title:'Philadelphia peer tutoring and mentorship networks', sub:'City Year Philadelphia, Big Brothers Big Sisters of Greater Philadelphia, and the YMCA Achievers program all match students with volunteer tutors and mentors. Waitlists exist; apply early in the school year.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia ESOP \u2014 Extended School Offerings Program', sub:'SDP-funded program provides free tutoring and enrichment for struggling Philadelphia public school students. Extended School Year (summer school) services available for students with IEPs and those below grade level.', tag:'City program'},
+          {title:'PA Education Improvement Tax Credit \u2014 EITC scholarship funding', sub:'PA EITC allows businesses to earn 75\u201390% tax credits for donations to approved scholarship organizations. Scholarship organizations distribute funds to income-eligible students for tutoring and private school tuition. Apply at dced.pa.gov.', tag:'Program'},
+          {title:'H.B. 1122 \u2014 Reading Intervention and Literacy Act (PA, 2024)', sub:'Mandates structured literacy instruction in K\u20133 Philadelphia public schools and requires diagnostic reading screenings for all students. Includes funding for reading specialist positions and tutoring through LETRS-trained interventionists.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','K-12','Test prep','Adult literacy','ESL','College prep']
+    },
+    'Classes & skills': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia Free Library \u2014 free classes, workshops, and certifications', sub:'The Free Library offers free computer classes, GED preparation, ESL instruction, digital literacy workshops, and job readiness programs at branches citywide. No library card required for most programs.', tag:'Resource'},
+          {title:'Community colleges and continuing education options in Philadelphia', sub:'Community College of Philadelphia offers non-credit workforce training, professional development, and personal enrichment courses. Many courses qualify for WIOA funding for income-eligible adults. Register at ccp.edu.', tag:'Guide'},
+          {title:'Skill-share and community learning networks in Philadelphia', sub:'PhillySkillShare and Neighborly connect Philadelphians who want to exchange skills informally. Free and donation-based workshops are posted regularly on Eventbrite, Meetup, and through neighborhood association listservs.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'WIOA Adult Education \u2014 free training for Philadelphia workers', sub:'Workforce Innovation and Opportunity Act funding covers tuition-free job training, skills certifications, and OJT for income-eligible Philadelphia adults at approved providers. Apply through Philadelphia Works at philaworks.com.', tag:'Program'},
+          {title:'PA Apprenticeship and Training Office \u2014 registered apprenticeship programs', sub:'PA L&I registers apprenticeship programs in over 50 trades and occupations. Apprentices earn while they learn. Employers receive $2,000\u20133,000 state incentive for each registered apprentice hired. List at dli.pa.gov.', tag:'Program'},
+          {title:'Philadelphia Digital Equity Fund \u2014 technology training grants', sub:'City-funded program provides laptops, internet access, and digital skills training to income-eligible Philadelphians. Administered through the Mayor\u2019s Office of Innovation and Technology in partnership with digital literacy nonprofits.', tag:'City program'}
+        ]
+      },
+      filterChips: ['All','Digital skills','Language','Creative','Certification','Workforce']
+    },
+    'Trades & apprenticeships': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'How to enter the building trades in Philadelphia', sub:'Philadelphia\u2019s joint apprenticeship training committees (JATCs) are the primary path into the unionized trades. Programs in electrical, plumbing, ironwork, and carpentry are highly competitive. Most require a high school diploma and math assessment.', tag:'Guide'},
+          {title:'Pre-apprenticeship programs for Philadelphia residents', sub:'Build Commonwealth and Utility Workers of the World pre-apprenticeship programs prepare Philadelphia residents \u2014 especially women and people of color \u2014 for entry into union apprenticeships. Programs are free and include stipends.', tag:'Resource'},
+          {title:'Philadelphia Building Trades Council \u2014 union apprenticeship directory', sub:'The Philadelphia Building and Construction Trades Council coordinates joint apprenticeships for 18 affiliated unions. Applications typically open annually. Visit the council at 1500 N. American St for current openings.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA Apprenticeship Tax Credit \u2014 up to $3,000 per apprentice hired', sub:'PA employers who hire registered apprentices receive a $2,000 credit in year one and $1,000 in year two, per apprentice. Credit applied against PA Corporate Net Income Tax. Apply through PA L&I Office of Apprenticeships.', tag:'Program'},
+          {title:'Philadelphia Executive Order 06-11 \u2014 local hiring on city contracts', sub:'Requires prime contractors on city-funded construction projects over $500,000 to make good-faith efforts to hire Philadelphia residents and MBE/WBE firms. L&I monitors compliance and can withhold payment for violations.', tag:'City ordinance'},
+          {title:'H.B. 1780 \u2014 Skilled Workforce Scholarship Act (PA, 2025)', sub:'Creates a $5,000 annual scholarship for PA residents enrolled in approved trade apprenticeship programs. Priority for students from households below 300% FPL. Funded through PA Higher Education Assistance Agency. Passed Senate October 2025.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Electrical','Plumbing','Carpentry','HVAC','Ironwork']
+    },
+    'Legal aid': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Free legal help in Philadelphia \u2014 who to call first', sub:'Community Legal Services (CLS) provides free civil legal aid to low-income Philadelphians in housing, benefits, consumer, and family law. Call 215-981-3700. Philadelphia Volunteers for the Indigent Program (VIP) connects clients with pro bono attorneys.', tag:'Resource'},
+          {title:'Know your rights as a Philadelphia renter', sub:'Philadelphia tenants have among the strongest protections in Pennsylvania: right to a livable unit (implied warranty of habitability), right to the Tenant\u2019s Bill of Rights notice at lease signing, and protection from retaliatory eviction. Know your rights at clsphila.org.', tag:'Rights'},
+          {title:'Philadelphia Bar Association Lawyer Referral Service', sub:'The PBA Lawyer Referral Service connects Philadelphia residents with attorneys for a $35 consultation fee. Referrals available in most practice areas. Sliding-scale and pro bono attorneys identified during intake. Call 215-238-6333.', tag:'Resource'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Bill No. 190027 \u2014 Right to Counsel in eviction proceedings', sub:'Philadelphia ordinance guarantees free legal representation to low-income tenants (below 200% FPL) facing eviction in Municipal Court. Implemented in phases 2019\u20132023. Administered through the Philadelphia Eviction Prevention Project.', tag:'City ordinance'},
+          {title:'PA Legal Aid Network \u2014 statewide free civil legal services', sub:'PLAN coordinates 14 regional legal aid programs covering all 67 PA counties. Income limit generally 125% FPL. Services cover housing, public benefits, consumer protection, family law, and immigration. Find your office at palegalaid.net.', tag:'Program'},
+          {title:'H.B. 2315 \u2014 Debt Collection Transparency Act (PA, 2026)', sub:'Would require debt collectors to provide itemized account history before filing suit, cap attorney fees in collection actions, and require plain-language notices of rights. Introduced March 2026. In House Consumer Affairs Committee.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Housing','Family','Consumer','Immigration','Criminal record']
+    },
+    'Jobs & workforce': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Philadelphia PA CareerLink \u2014 free job search and training resources', sub:'PA CareerLink Philadelphia operates four locations offering job search assistance, r\u00e9sum\u00e9 help, skills assessments, and referrals to funded training programs. Locations in West Philly, North Philly, NE Philly, and Center City. No appointment needed.', tag:'Resource'},
+          {title:'How to navigate the Philadelphia job market \u2014 key employers by sector', sub:'Philadelphia\u2019s largest employers include Jefferson Health, CHOP, Penn, Temple University, and the City itself. Major growth sectors are healthcare, logistics, and life sciences. Industry sector partnerships at PhilaWorks connect workers with employers.', tag:'Guide'},
+          {title:'Philadelphia workforce reentry resources for returning citizens', sub:'Reentry services including job readiness, credential repair, and employer connections are available through Renewal, Reintegration Inc., and the Mayor\u2019s Reentry Council. Philadelphia Clean Slate Law (Act 56 of 2018) automates expungement for many offenses.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Works \u2014 WIOA-funded workforce training and placement', sub:'Philadelphia\u2019s local workforce development board administers WIOA funds for adult, dislocated worker, and youth programs. Training vouchers (ITAs) up to $10,000 available for approved programs. Apply at PA CareerLink locations.', tag:'Program'},
+          {title:'Philadelphia Fair Workweek Ordinance \u2014 Bill No. 170867', sub:'Requires retail, food service, and hospitality employers with 250+ employees to post schedules 14 days in advance, pay predictability pay for last-minute changes, and offer existing employees additional hours before new hires.', tag:'City ordinance'},
+          {title:'H.B. 1465 \u2014 Minimum Wage Increase Act (PA, 2025)', sub:'Would increase Pennsylvania minimum wage from $7.25 to $15/hour by 2027 in annual increments. Would also index future increases to CPI. Passed House Labor & Industry Committee May 2025. Senate vote pending as of June 2026.', tag:'Bill \u00b7 State'}
+        ]
+      },
+      filterChips: ['All','Job search','Training','Reentry','Gig work','Union']
+    },
+    'Business formation': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'How to register a business in Philadelphia \u2014 step by step', sub:'Philadelphia businesses must: (1) register with PA DOS at dos.pa.gov, (2) obtain a Philadelphia Business Privilege License from Revenue, (3) register for City taxes, and (4) obtain any required L&I permits. phila.gov/business has a guided checklist.', tag:'How-to'},
+          {title:'Philadelphia small business support organizations', sub:'PIDC, SCORE Philadelphia, the African American Chamber of Commerce of PA/NJ/DE, and the Chamber of Commerce for Greater Philadelphia all offer free advising, networking, and resources for new and growing businesses.', tag:'Resource'},
+          {title:'Choosing between LLC, sole proprietorship, and corporation in PA', sub:'Most small Philadelphia businesses start as LLCs or sole proprietors. LLCs offer liability protection with pass-through taxation. PA charges a $125 filing fee for LLCs. Consult a CPA or attorney before choosing your entity type.', tag:'Guide'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'Philadelphia Department of Commerce \u2014 Business Formation Navigator', sub:'Free service connecting new business owners with licensing guidance, sector-specific compliance requirements, and referrals to MWBE certification. Book a free appointment at phila.gov/commerce or call 215-683-2100.', tag:'Program'},
+          {title:'MWBE certification in Philadelphia and PA \u2014 how it works', sub:'City MWBE certification opens access to set-aside contracts and technical assistance programs. PA MWBE certification through BDISBO provides access to state contracting opportunities. Both certifications are separate applications.', tag:'Program'},
+          {title:'Philadelphia Bill No. 230301 \u2014 Small Business Anti-Displacement Fund', sub:'Establishes a revolving loan fund for small businesses in gentrifying neighborhoods facing lease displacement. Loans of $10,000\u2013$100,000 at below-market rates. Administered through PIDC. Priority for businesses operating 5+ years.', tag:'City ordinance'}
+        ]
+      },
+      filterChips: ['All','LLC','Sole prop','Nonprofit','MWBE','Licensing']
+    },
+    'Professional services': {
+      temple: {
+        label: 'Temple \u2014 community resources & what to know',
+        items: [
+          {title:'Free professional consultations in Philadelphia \u2014 where to find them', sub:'SCORE Philadelphia offers free mentoring from retired executives in accounting, marketing, legal, and HR. The SBA Philadelphia District Office connects small businesses with free consulting through the Small Business Development Center at Temple.', tag:'Resource'},
+          {title:'Verifying professional licenses in Pennsylvania', sub:'All PA licensed professionals \u2014 accountants, engineers, architects, real estate agents, and more \u2014 can be verified at license.pa.gov. Always verify before engaging any professional service provider, especially for financial or legal matters.', tag:'Guide'},
+          {title:'Philadelphia professional networking and industry associations', sub:'The Philadelphia Bar Association, Greater Philadelphia Chamber, PA Institute of CPAs, and AIA Philadelphia all host regular networking events open to members and often to guests. Many offer sliding-scale or young professional memberships.', tag:'Community'}
+        ]
+      },
+      forum: {
+        label: 'Forum \u2014 legislation, programs & incentives',
+        items: [
+          {title:'PA CPA Law \u2014 licensure and consumer protection', sub:'The PA CPA Law (63 P.S. \u00a7 9.1 et seq.) requires all CPAs practicing in PA to hold a current license from the State Board of Accountancy. Unlicensed practice is a misdemeanor. File complaints at BPOA (license.pa.gov).', tag:'Bill \u00b7 State'},
+          {title:'Philadelphia Net Profits Tax \u2014 what self-employed professionals pay', sub:'Philadelphia self-employed professionals pay the Net Profits Tax at 3.44% (residents) or 3.44% (non-residents on Philly-sourced income) as of 2025. Quarterly estimated payments required if annual liability exceeds $2,000. Details at phila.gov/revenue.', tag:'Guide'},
+          {title:'SBA 7(a) and 504 Loans \u2014 for Philadelphia professional service businesses', sub:'SBA loans available through participating lenders including PIDC and local credit unions. 7(a) loans up to $5M for working capital and equipment; 504 loans for commercial real estate. Low down payments and below-market rates.', tag:'Federal'}
+        ]
+      },
+      filterChips: ['All','Accounting','Legal','Marketing','HR','Consulting']
+    }
+  };
 
 function toggleMktLayer(id) {
   var banner = document.getElementById('mkt-' + id + '-banner');
