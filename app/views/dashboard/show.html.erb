@@ -9,9 +9,9 @@
 <style>
 :root{
   --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#eef2fb;
-  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;--gilt-vp:#fdf8ef;
   --scarlet:#8b1a1a;--scarlet-p:#faeaea;--amber:#c47f00;--amber-p:#fff3dc;
-  --green:#155c2d;--green-lt:#1f7a3e;--green-p:#e5f0e8;--purple:#2d1a4a;
+  --green:#155c2d;--green-lt:#1f7a3e;--green-p:#e5f0e8;--green-vp:#f0f7f2;--purple:#2d1a4a;
   --bg:#f2f4f8;--white:#fff;--ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
   --rule:#e3e8f0;--rule-soft:#eef1f6;
   --temple:#b8860b;--forum:#1b3a6b;--market:#155c2d;
@@ -274,6 +274,11 @@ a{text-decoration:none;color:inherit;}
 .dk-sg.done{background:var(--blue);}.dk-sg.now{background:var(--gilt);}
 .rfoot{padding:10px 15px;text-align:center;border-top:1px solid var(--rule-soft);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);cursor:pointer;}
 .rfoot:hover{background:var(--blue-vp);}
+.rrow{display:flex;align-items:center;gap:9px;padding:7px 14px;border-top:1px solid var(--rule-soft);font-size:13px;cursor:pointer;}
+.rrow:hover{background:var(--rule-soft);}
+.rrow-av{width:28px;height:28px;border-radius:50%;background:var(--blue);border:1.5px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.rrow-name{font-weight:700;font-size:12.5px;}
+.rrow-role{font-size:10.5px;color:var(--ink-mut);}
 .rep{display:flex;align-items:center;gap:9px;padding:8px 15px;border-top:1px solid var(--rule-soft);cursor:pointer;}
 /* ── Official expand panel ── */
 .rep-expand-toggle{margin-top:6px;font-size:11px;color:var(--ink-mut);background:none;border:none;padding:0;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;}
@@ -436,26 +441,26 @@ a{text-decoration:none;color:inherit;}
       <span class="brand-word">FORA</span>
     </div>
 
-    <a href="<%= dashboard_path %>" class="nav-home">
-      <span class="ni">⌂</span> Home
+    <a href="#" class="nav-home" onclick="switchPanel('search',null);return false;">
+      <i class="ti ti-home ni"></i> Home
     </a>
     <a href="<%= settings_path %>" class="tool" style="margin-top:2px;">
-      <span class="ti">⚙</span> Settings
+      <i class="ti ti-settings"></i> Settings
     </a>
 
     <div class="pillar-h"><span class="pg pg-t">◯</span><span class="pn">Temple</span></div>
     <div class="tools t">
-      <a href="#" class="tool"><span class="ti">◴</span> Sit</a>
-      <a href="#" class="tool"><span class="ti">▤</span> Study</a>
-      <a href="#" class="tool"><span class="ti">⇄</span> Share</a>
-      <a href="#" class="tool" onclick="switchPanel('religion',this);return false;"><span class="ti">✦</span> Religion &amp; Spirituality</a>
+      <a href="#" class="tool"><i class="ti ti-flame"></i> Sit</a>
+      <a href="#" class="tool"><i class="ti ti-books"></i> Study</a>
+      <a href="#" class="tool"><i class="ti ti-share"></i> Share</a>
+      <a href="#" class="tool" onclick="switchPanel('religion',this);return false;"><i class="ti ti-building-church"></i> Religion &amp; Spirituality</a>
     </div>
 
     <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
     <div class="tools f">
-      <a href="#" class="tool" onclick="switchPanel('officials',this);return false;"><span class="ti">△</span> Officials</a>
-      <a href="#" class="tool" onclick="switchPanel('legislation',this);return false;"><span class="ti">§</span> Legislation</a>
-      <a href="#" class="tool" onclick="switchPanel('pathsprograms',this);return false;"><span class="ti">◈</span> Paths &amp; Programs</a>
+      <a href="#" class="tool" onclick="switchPanel('legislation',this);return false;"><i class="ti ti-building-bank"></i> Legislation</a>
+      <a href="#" class="tool" onclick="switchPanel('officials',this);return false;"><i class="ti ti-users"></i> Officials</a>
+      <a href="#" class="tool" onclick="switchPanel('pathsprograms',this);return false;"><i class="ti ti-message"></i> Discourse</a>
     </div>
 
     <div class="pillar-h" style="cursor:pointer" onclick="switchPanel('market',null);return false;"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
@@ -487,7 +492,7 @@ a{text-decoration:none;color:inherit;}
     <span class="schip" data-p="f" onclick="setSrchScope(this,'f')">&#9651; Forum</span>
     <span class="schip" data-p="m" onclick="setSrchScope(this,'m')">&#9634; Market</span>
   </div>
-  <div id="panel-observe">
+  <div id="panel-observe" style="display:none">
     <div class="fhead">
       <div class="ftitle">Home</div>
       <div class="tabs">
@@ -1035,18 +1040,19 @@ a{text-decoration:none;color:inherit;}
   </div>
 
   <%# ── GLOBAL SEARCH PANEL ───────────────────────────────────────────────── %>
-  <div id="panel-search" style="display:none">
+  <div id="panel-search">
     <div id="srch-results">
       <div class="srch-idle">
         <div class="srch-idle-glyph">&#9675; &#9651; &#9634;</div>
         <div class="srch-idle-h">Search all of FORA</div>
         <p class="srch-idle-p">Find legislation, officials, businesses, community programs,<br>and more — from anywhere in FORA.</p>
         <div class="srch-sug-chips">
+          <span class="srch-sug" onclick="doSearch('roofer')">roofer</span>
+          <span class="srch-sug" onclick="doSearch('emissions')">emissions</span>
+          <span class="srch-sug" onclick="doSearch('Fetterman')">Fetterman</span>
           <span class="srch-sug" onclick="doSearch('auto repair')">auto repair</span>
           <span class="srch-sug" onclick="doSearch('tenant rights')">tenant rights</span>
-          <span class="srch-sug" onclick="doSearch('childcare')">childcare</span>
-          <span class="srch-sug" onclick="doSearch('emissions')">emissions</span>
-          <span class="srch-sug" onclick="doSearch('plumber')">plumber</span>
+          <span class="srch-sug" onclick="doSearch('car clinic')">car clinic</span>
         </div>
       </div>
     </div>
@@ -1100,57 +1106,48 @@ a{text-decoration:none;color:inherit;}
       <div class="rfoot">See your full docket →</div>
     </div>
 
-    <%# YOUR REPRESENTATIVES %>
+    <%# YOUR OFFICIALS %>
     <div class="rcard">
-      <button class="rh-btn">Your Representatives</button>
+      <div class="rh">Your officials</div>
+      <div class="rs"><%= [@profile.place_label.presence, @profile.address_city.presence].compact.first.to_s %></div>
       <% if @officials.empty? %>
-        <div style="padding:12px 15px;">
-          <div style="font-size:13px;color:var(--ink-mut);margin-bottom:8px;">Your representatives couldn't be loaded.</div>
-          <a href="<%= dashboard_reresolve_path %>"
-             style="display:inline-block;font-size:12px;font-weight:700;color:var(--blue);border:1.5px solid var(--blue-pl);border-radius:999px;padding:5px 13px;background:var(--blue-vp);">
-            Resolve now →
-          </a>
+        <div style="padding:10px 14px;font-size:13px;color:var(--ink-mut);">
+          Officials couldn't be loaded.
+          <a href="<%= dashboard_reresolve_path %>" style="display:block;margin-top:6px;font-size:12px;font-weight:700;color:var(--blue);">Resolve now →</a>
         </div>
       <% else %>
-        <%
-          federal_reps = @officials.select { |o| o[:office].to_s.match?(/U\.S\.|House \(|President|Vice President/i) }
-          state_reps   = @officials.select { |o| o[:office].to_s.match?(/\bState\b|Governor|Lieutenant Governor/i) && !o[:office].to_s.match?(/President/i) }
-          city_reps    = @officials.reject { |o| o[:office].to_s.match?(/U\.S\.|House \(|President|Vice President|\bState\b|Governor|Lieutenant Governor/i) }
-        %>
-        <% [['federal', 'Federal', federal_reps], ['state', 'State', state_reps], ['city', 'City', city_reps]].each do |tier, label, reps| %>
-          <% next if reps.empty? %>
-          <div class="opt-c-section <%= tier %>">
-            <div class="opt-c-section-h" onclick="toggleRepSection(this)">
-              <span><%= label %> (<%= reps.size %>)</span>
-              <span class="tog-arrow">▾</span>
+        <% @officials.first(5).each do |o| %>
+          <% prof_path = official_profile_path(o) %>
+          <div class="rrow" <%= prof_path ? "onclick=\"openOfficialProfile('#{prof_path}', '#{j o[:name]}')\"" : "" %>>
+            <div class="rrow-av"><%= initials(o[:name]) %></div>
+            <div style="flex:1;min-width:0;">
+              <div class="rrow-name"><%= o[:name] %></div>
+              <div class="rrow-role"><%= o[:office] %></div>
             </div>
-            <div class="opt-c-body">
-            <% reps.each do |o| %>
-              <%
-                bio      = o.dig(:jurisdiction, :bioguide_id).to_s
-                rep_rec  = @rep_by_bioguide[bio]
-                followed = rep_rec && @rep_follows.include?(rep_rec.id)
-              %>
-              <% prof_path = official_profile_path(o) %>
-              <div class="opt-c-rep"
-                   <%= rep_rec ? "data-rep-id=\"#{rep_rec.id}\"" : "" %>
-                   <%= prof_path ? "onclick=\"openOfficialProfile('#{prof_path}', '#{j o[:name]}')\"" : "" %>>
-                <div class="opt-c-av"><%= initials(o[:name]) %></div>
-                <div style="flex:1;">
-                  <div class="opt-c-name"><%= o[:name] %><%= " ✓" if followed %></div>
-                  <div class="opt-c-title"><%= o[:office] %></div>
-                </div>
-                <% if rep_rec %>
-                  <button class="opt-c-btn <%= 'on' if followed %>"
-                          onclick="event.stopPropagation();toggleRepFollow(this, <%= rep_rec.id %>)">F</button>
-                <% else %>
-                  <button class="opt-c-btn" style="opacity:.3;cursor:default" onclick="event.stopPropagation()">F</button>
-                <% end %>
-              </div>
-            <% end %>
-            </div><%# /.opt-c-body %>
           </div>
         <% end %>
+      <% end %>
+    </div>
+
+    <%# ACTIVE LEGISLATION %>
+    <div class="rcard">
+      <div class="rh">Active legislation</div>
+      <div class="rs">Near you · this week</div>
+      <% if @jurisdiction_bills.any? %>
+        <% @jurisdiction_bills.first(3).each do |b| %>
+          <div class="rrow" style="align-items:flex-start;padding:9px 14px;">
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:12.5px;font-weight:700;margin-bottom:2px;line-height:1.35">
+                <%= [b.identifier.presence, b.title.truncate(52)].compact.join(" — ") %>
+              </div>
+              <div style="font-size:10.5px;color:var(--ink-mut);font-family:'JetBrains Mono',monospace">
+                <%= b.jurisdiction.capitalize %> · <%= b.status %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div style="padding:10px 14px;font-size:13px;color:var(--ink-mut);">No active legislation near you.</div>
       <% end %>
     </div>
 
