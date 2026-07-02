@@ -326,6 +326,7 @@ a{text-decoration:none;color:inherit;}
 .official-panel-back{font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;background:none;border:none;padding:4px 8px;border-radius:6px;}
 .official-panel-back:hover{background:var(--rule-soft);}
 .official-iframe{width:100%;border:none;display:block;}
+.settings-iframe{width:100%;border:none;display:block;min-height:calc(100vh - 50px);}
 .opt-c-av{width:30px;height:30px;border-radius:50%;background:var(--blue);border:2px solid var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;flex:none;}
 .opt-c-name{font-weight:700;font-size:12px;}
 .opt-c-title{font-size:9.5px;color:var(--ink-mut);}
@@ -445,7 +446,7 @@ a{text-decoration:none;color:inherit;}
     <a href="#" class="nav-home" onclick="switchPanel('search',null);return false;">
       <i class="ti ti-home ni"></i> Home
     </a>
-    <a href="<%= settings_path %>" class="tool" style="margin-top:2px;">
+    <a href="#" class="tool" style="margin-top:2px;" onclick="openSettingsPanel();return false;">
       <i class="ti ti-settings"></i> Settings
     </a>
 
@@ -1057,6 +1058,15 @@ a{text-decoration:none;color:inherit;}
         </div>
       </div>
     </div>
+  </div>
+
+  <%# ── SETTINGS PANEL ────────────────────────────────────────────────────── %>
+  <div id="panel-settings" style="display:none">
+    <div class="official-panel-bar">
+      <button class="official-panel-back" onclick="switchPanel('search',null)">← Home</button>
+      <span style="font-size:13px;color:var(--ink-soft);">Settings</span>
+    </div>
+    <iframe id="settings-iframe" class="settings-iframe" src="" title="Settings"></iframe>
   </div>
   </main>
 
@@ -2812,6 +2822,22 @@ function resetSrch() {
   document.getElementById('scope-row').style.display = 'none';
   document.getElementById('srch-results').innerHTML = '';
   switchPanel(srchPrevPanel, null);
+}
+
+// ── Settings panel ─────────────────────────────────────────────────────────
+function openSettingsPanel() {
+  var iframe = document.getElementById('settings-iframe');
+  if (!iframe.getAttribute('data-loaded')) {
+    iframe.src = '<%= settings_path %>?embed=1';
+    iframe.setAttribute('data-loaded', '1');
+    iframe.onload = function() {
+      try {
+        var h = iframe.contentWindow.document.body.scrollHeight;
+        if (h > 200) iframe.style.height = (h + 40) + 'px';
+      } catch(e) {}
+    };
+  }
+  switchPanel('settings', null);
 }
 </script>
 </body>
