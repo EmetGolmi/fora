@@ -61,6 +61,18 @@ class DashboardController < ApplicationController
     @jurisdiction_reps = @officials.filter_map do |o|
       @rep_by_bioguide[o.dig(:jurisdiction, :bioguide_id).to_s]
     end
+
+    # Person records for officials without CivicRepresentative (council members, execs).
+    # Indexed two ways for robust O(1) lookup despite name-normalization differences:
+    #   "office_type/district_number"  — for district council (unique, no name matching)
+    #   "last_name_downcase"           — for at-large/executives as fallback
+    local_office_types = %w[city_council city_council_at_large mayor managing_director
+                             finance_director governor lt_governor council_president]
+    @official_persons = {}
+    Person.where(office_type: local_office_types).each do |p|
+      key = p.district_number.present? ? "#{p.office_type}/#{p.district_number}" : p.last_name.to_s.split.last.to_s.downcase
+      @official_persons[key] = p
+    end
   end
 
   # ── POST /mvp/dashboard/spark ────────────────────────────────────────────────

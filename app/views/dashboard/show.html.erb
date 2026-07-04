@@ -931,23 +931,71 @@ a{text-decoration:none;color:inherit;}
         </div>
       <% end %>
 
-      <%# officials without CivicRepresentative records (President, VP, Governor, etc.) %>
+      <%# officials without CivicRepresentative records (council members, executives, etc.) %>
       <% @officials.each do |o| %>
         <% next if @rep_by_bioguide[o.dig(:jurisdiction, :bioguide_id).to_s] %>
-        <% prof_path = official_profile_path(o) %>
+        <% prof_path  = official_profile_path(o) %>
+        <% _jur = o.dig(:jurisdiction, :name).to_s; _dist = o.dig(:jurisdiction, :district).to_s %>
+        <% o_person = _dist.present? ? @official_persons["#{_jur}/#{_dist}"] : @official_persons[o[:name].to_s.split.last.to_s.downcase] %>
         <% o_share_id = "osm-#{o[:name].to_s.gsub(/\W+/, '-').downcase}" %>
         <% o_share_url = prof_path ? (request.base_url + prof_path) : request.original_url %>
-        <div class="post f" style="<%= prof_path ? 'cursor:pointer' : '' %>"
-             <%= prof_path ? "onclick=\"openOfficialProfile('#{prof_path}', '#{j o[:name]}')\"" : "" %>>
+        <% o_bills = o_person&.extra_data&.dig("sponsored_bills")&.first(2) || [] %>
+        <div class="post f">
           <button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu('<%= o_share_id %>','<%= j o[:name] %>','<%= o_share_url %>')" title="Share">⤴</button>
           <div class="lshare-menu" id="<%= o_share_id %>"></div>
           <div class="av av-gov"><%= initials(o[:name]) %></div>
           <div class="pb">
             <div class="pm">
               <span class="pn2"><%= o[:name] %></span>
+              <span class="vchk">✓</span>
               <span class="pr">· <%= o[:office] %></span>
             </div>
-            <div class="fctx">Your representative<%= prof_path ? " · tap to view profile" : "" %></div>
+            <div class="fctx">Your representative</div>
+            <% if o_person || prof_path %>
+              <button class="rep-expand-toggle" onclick="toggleRepPanel(this)">
+                <span class="arr">▾</span> See full profile
+              </button>
+              <div class="rep-panel">
+                <% if o_person&.photo_url.present? %>
+                  <img class="rep-panel-photo" src="<%= o_person.photo_url %>" alt="<%= o[:name] %>">
+                <% end %>
+                <% if o_person&.office_phone.present? || o_person&.office_address.present? || o_person&.website_url.present? %>
+                  <div class="rep-panel-hd">Contact</div>
+                  <div class="rep-panel-contact">
+                    <% if o_person.website_url.present? %>📎 <a href="<%= o_person.website_url %>" target="_blank" rel="noopener"><%= o_person.website_url.sub(%r{https?://}, '') %></a><br><% end %>
+                    <% if o_person.office_phone.present? %>📞 <%= o_person.office_phone %><br><% end %>
+                    <% if o_person.office_address.present? %>📍 <%= o_person.office_address %><% end %>
+                  </div>
+                <% end %>
+                <% if o_person && (o_person.bills_introduced_count.present? || o_person.attendance_rate_pct.present?) %>
+                  <div class="rep-panel-hd" style="clear:both;">Activity</div>
+                  <div class="rep-stats">
+                    <% if o_person.attendance_rate_pct.present? %>
+                      <div class="rep-stat"><div class="rep-stat-n"><%= o_person.attendance_rate_pct.to_i %>%</div><div class="rep-stat-l">attendance</div></div>
+                      <div class="rep-stat"><div class="rep-stat-n"><%= o_person.party_line_vote_pct.to_i %>%</div><div class="rep-stat-l">party-line votes</div></div>
+                    <% end %>
+                    <% if o_person.bills_introduced_count.present? %>
+                      <div class="rep-stat"><div class="rep-stat-n"><%= o_person.bills_introduced_count %></div><div class="rep-stat-l">bills introduced</div></div>
+                      <div class="rep-stat"><div class="rep-stat-n"><%= o_person.bills_passed_count || '—' %></div><div class="rep-stat-l">bills passed</div></div>
+                    <% end %>
+                  </div>
+                <% end %>
+                <% if o_bills.any? %>
+                  <div class="rep-panel-hd">Recent bills</div>
+                  <div class="rep-bills">
+                    <% o_bills.each do |bill| %>
+                      <div class="rep-bill">
+                        <span class="rep-bill-id"><%= bill["bill_number"] %></span>
+                        <span><%= bill["title"].to_s.truncate(70) %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+                <% if prof_path %>
+                  <a href="<%= prof_path %>" class="rep-profile-link" onclick="event.stopPropagation();openOfficialProfile('<%= prof_path %>','<%= j o[:name] %>');return false;">Full profile →</a>
+                <% end %>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>
