@@ -940,25 +940,44 @@ a{text-decoration:none;color:inherit;}
         <% o_share_id = "osm-#{o[:name].to_s.gsub(/\W+/, '-').downcase}" %>
         <% o_share_url = prof_path ? (request.base_url + prof_path) : request.original_url %>
         <% o_bills = o_person&.extra_data&.dig("sponsored_bills")&.first(2) || [] %>
+        <% o_sparked = o_person && @person_follows.include?(o_person.id) %>
         <div class="post f">
           <button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu('<%= o_share_id %>','<%= j o[:name] %>','<%= o_share_url %>')" title="Share">⤴</button>
           <div class="lshare-menu" id="<%= o_share_id %>"></div>
-          <div class="av av-gov"><%= initials(o[:name]) %></div>
+          <% if o_person&.photo_url.present? %>
+            <div class="av av-gov" style="padding:0;overflow:hidden;">
+              <img src="<%= o_person.photo_url %>" alt="<%= o[:name] %>" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          <% else %>
+            <div class="av av-gov"><%= initials(o[:name]) %></div>
+          <% end %>
           <div class="pb">
             <div class="pm">
               <span class="pn2"><%= o[:name] %></span>
               <span class="vchk">✓</span>
               <span class="pr">· <%= o[:office] %></span>
             </div>
-            <div class="fctx">Your representative</div>
+            <div class="fctx"><%= o_sparked ? "You follow this official" : "Your representative" %></div>
+            <% if o_person %>
+              <div class="arc">
+                <button class="rung spark <%= 'on' if o_sparked %>"
+                        data-type="Person"
+                        data-id="<%= o_person.id %>"
+                        onclick="toggleSpark(this)">
+                  <span class="ri">★</span> <%= o_sparked ? "Tracking" : "Track" %>
+                </button>
+                <button class="rung build <%= 'locked' unless o_sparked %>"><span class="ri">⊕</span> Build</button>
+                <button class="rung integ <%= 'locked' unless o_sparked %>"><span class="ri">↗</span> Integrate</button>
+                <div class="arc-sec">
+                  <span class="concur-ct"><%= o_person.follows.count %> following</span>
+                </div>
+              </div>
+            <% end %>
             <% if o_person || prof_path %>
               <button class="rep-expand-toggle" onclick="toggleRepPanel(this)">
                 <span class="arr">▾</span> See full profile
               </button>
               <div class="rep-panel">
-                <% if o_person&.photo_url.present? %>
-                  <img class="rep-panel-photo" src="<%= o_person.photo_url %>" alt="<%= o[:name] %>">
-                <% end %>
                 <% if o_person&.office_phone.present? || o_person&.office_address.present? || o_person&.website_url.present? %>
                   <div class="rep-panel-hd">Contact</div>
                   <div class="rep-panel-contact">

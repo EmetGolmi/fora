@@ -41,6 +41,11 @@ class DashboardController < ApplicationController
                            .pluck(:followable_id)
                            .to_set
 
+    @person_follows = @profile.follows
+                              .where(followable_type: "Person")
+                              .pluck(:followable_id)
+                              .to_set
+
     # ── RIGHT: Constituency meter ─────────────────────────────────────────────
     top_bill    = @feed.find { |h| h[:type] == "CivicBill" }&.dig(:item)
     @meter_bill = top_bill
@@ -358,7 +363,7 @@ class DashboardController < ApplicationController
     ((verified.to_f / total) * 100).round
   end
 
-  FOLLOWABLE_TYPES = %w[CivicBill NeighborhoodIssue CivicRepresentative].freeze
+  FOLLOWABLE_TYPES = %w[CivicBill NeighborhoodIssue CivicRepresentative Person].freeze
 
   def find_followable(type, id)
     return nil unless FOLLOWABLE_TYPES.include?(type.to_s)
