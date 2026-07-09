@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_08_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_08_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -624,7 +624,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_08_000001) do
     t.datetime "created_at", null: false
     t.string "established"
     t.string "faith_tradition"
+    t.decimal "latitude", precision: 9, scale: 6
     t.string "location"
+    t.decimal "longitude", precision: 9, scale: 6
     t.text "notes"
     t.string "site_name", null: false
     t.string "source_citation"
@@ -633,6 +635,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_08_000001) do
     t.datetime "updated_at", null: false
     t.integer "year_of_incident"
     t.index ["country"], name: "index_sacred_fire_entries_on_country"
+    t.index ["latitude", "longitude"], name: "index_sacred_fire_entries_on_latitude_and_longitude"
     t.index ["site_name", "year_of_incident"], name: "index_sacred_fire_entries_on_site_name_and_year_of_incident"
     t.index ["tab"], name: "index_sacred_fire_entries_on_tab"
     t.index ["year_of_incident"], name: "index_sacred_fire_entries_on_year_of_incident"

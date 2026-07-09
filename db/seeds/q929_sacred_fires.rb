@@ -2,7 +2,7 @@
 # 183 entries — auto-generated from q929_sacred_fires_registry_v17.xlsx
 
 puts 'Seeding Q929 Sacred Fire Entries...'
-
+created = 0; updated = 0
 entries = [
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -16,6 +16,8 @@ entries = [
     status:           "Destroyed",
     notes:            "UNESCO World Heritage; 600-yr symbol of Ryukyuan kingdom. Rebuilt 2022 through public fundraising.",
     source_citation:  "Japan Times, Oct 31 2019",
+    latitude:         0.26212235e2,
+    longitude:        0.127679145e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -29,6 +31,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Housed the 'Eternal Flame' (Kiezu-no-hi) burning continuously ~1,200 years; one of the source flames for Hiroshima Peace Memorial Park.",
     source_citation:  "Tokyo Weekender, May 21 2026",
+    latitude:         0.34271448e2,
+    longitude:        0.132308872e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -42,6 +46,8 @@ entries = [
     status:           "Destroyed",
     notes:            "300-year-old shrine dedicated to the deity of fire prevention. Burned May 6, 2026.",
     source_citation:  "Tokyo Weekender / Fire Risk Heritage, 2026",
+    latitude:         0.37928441e2,
+    longitude:        0.139042058e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -55,6 +61,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Part of 2026 wave of 9 shrines and temples lost Jan–May in Japan.",
     source_citation:  "Fire Risk Heritage, June 2026",
+    latitude:         0.34627924e2,
+    longitude:        0.136108658e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -68,6 +76,8 @@ entries = [
     status:           "Destroyed",
     notes:            "573-year-old national treasure; main wooden hall completely destroyed May 16, 2026.",
     source_citation:  "Tokyo Weekender, May 21 2026",
+    latitude:         0.36736215e2,
+    longitude:        0.137018731e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -81,6 +91,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Two buildings destroyed February 2026; part of Japan's 2026 temple fire wave.",
     source_citation:  "Tokyo Weekender, May 21 2026",
+    latitude:         0.33660297e2,
+    longitude:        0.132900825e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -94,6 +106,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Five people killed in blaze; February 2026.",
     source_citation:  "Tokyo Weekender, May 21 2026",
+    latitude:         0.339536e2,
+    longitude:        0.1309321e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -107,6 +121,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Part of 2026 wave; cause under investigation.",
     source_citation:  "Fire Risk Heritage, June 2026",
+    latitude:         0.36706751e2,
+    longitude:        0.137214056e3,
   },
   {
     tab:              "Shinto & Buddhist (Japan)",
@@ -120,6 +136,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Head priest's wife killed in the blaze; February 2026.",
     source_citation:  "Tokyo Weekender, May 21 2026",
+    latitude:         0.33844984e2,
+    longitude:        0.132740477e3,
   },
   {
     tab:              "Buddhist",
@@ -133,6 +151,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Three-alarm fire Jan 6, 2026; second major fire at same temple (also burned 2024). Roof collapsed. No injuries.",
     source_citation:  "AsAmNews, Jan 6 2026",
+    latitude:         0.37336166e2,
+    longitude:        -0.121890591e3,
   },
   {
     tab:              "Buddhist",
@@ -146,6 +166,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Memorial Hall fire June 2025; 9 National Treasures successfully relocated before damage. Main Jogyesa temple unaffected.",
     source_citation:  "BuddhistDoor Global, Jun 12 2025",
+    latitude:         0.37581868e2,
+    longitude:        0.126969247e3,
   },
   {
     tab:              "Buddhist",
@@ -159,6 +181,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "January 21, 1985: Nine bombs planted by Islamist militants detonated across the upper terraces of Borobudur — the largest Buddhist monument in the world. Nine stupas on the Arupadhatu (upper spiritual level) badly damaged. No casualties. Husein Ali Al Habsyie (blind Muslim cleric) sentenced to life imprisonment for masterminding the attack. Connected to Tanjung Priok massacre and anti-Suharto Islamist movement.",
     source_citation:  "AP / Jakarta Post / US State Dept, 1985",
+    latitude:         -0.7513614e1,
+    longitude:        0.110214513e3,
   },
   {
     tab:              "Buddhist",
@@ -172,6 +196,8 @@ entries = [
     status:           "Damaged",
     notes:            "2016–2017: Myanmar military 'clearance operations' following ARSA attacks on security posts in Rakhine State. Numerous Buddhist and Hindu religious sites belonging to ethnic Rakhine and Hindu minorities also damaged or destroyed. Rohingya ARSA also attacked Hindu villages (99 killed per Amnesty International, Aug 25 2017 — same day as ARSA's main offensive). UN describes as textbook ethnic cleansing.",
     source_citation:  "HRW / Amnesty International / CFR, 2017",
+    latitude:         0.2e2,
+    longitude:        0.93e2,
   },
   {
     tab:              "Hindu",
@@ -185,6 +211,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Perpetrators poured petrol through lifted tin roof at 2–3 AM. Part of wave of attacks on Hindu minorities following Awami League collapse.",
     source_citation:  "India TV News / PTI, Dec 7 2024",
+    latitude:         0.238103e2,
+    longitude:        0.904125e2,
   },
   {
     tab:              "Hindu",
@@ -198,6 +226,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Fire completely burned temple interior and deities; part of Bangladesh minority attacks wave.",
     source_citation:  "ISKCON official reporting 2024",
+    latitude:         0.23820293e2,
+    longitude:        0.90371041e2,
   },
   {
     tab:              "Hindu",
@@ -211,6 +241,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Fire destroyed roof and large portions of structure.",
     source_citation:  "Kerala media 2024",
+    latitude:         0.10352874e2,
+    longitude:        0.7651204e2,
   },
   {
     tab:              "Hindu",
@@ -224,6 +256,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "70 firefighters from four stations battled blaze for three hours. No injuries. July 4, 2026.",
     source_citation:  "Inside Croydon, Jul 4 2026",
+    latitude:         0.51371305e2,
+    longitude:        -0.101957e0,
   },
   {
     tab:              "Hindu",
@@ -237,6 +271,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Idol and temple structure targeted in arson attack.",
     source_citation:  "Indian media 2025",
+    latitude:         0.286139e2,
+    longitude:        0.77209e2,
   },
   {
     tab:              "Hindu",
@@ -250,6 +286,8 @@ entries = [
     status:           "Destroyed",
     notes:            "May 31, 2025 at 3 AM: extremists stormed temple, vandalised Kali murti, torched premises, then erected a boundary wall — indicating attempt to seize the land. Police downplayed communal angle.",
     source_citation:  "Organiser / Hindu Post, Jun 2 2025",
+    latitude:         0.22405474e2,
+    longitude:        0.91746373e2,
   },
   {
     tab:              "Hindu",
@@ -263,6 +301,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "February 2025: Kali idol smashed. Part of USCIRF-documented wave — 92 incidents in Q1 2025 alone, including 25 temple attacks.",
     source_citation:  "USCIRF July 2025 Factsheet / Bangladesh Daily Star, Feb 2025",
+    latitude:         0.24888931e2,
+    longitude:        0.90384519e2,
   },
   {
     tab:              "Hindu",
@@ -276,6 +316,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Mob attacked temple and local shops; 10 Hindus injured attempting to intervene when they found the temple under attack.",
     source_citation:  "USCIRF July 2025 Factsheet / Hindu Post, Feb 2025",
+    latitude:         0.2250956e2,
+    longitude:        0.9000725e2,
   },
   {
     tab:              "Hindu",
@@ -289,6 +331,8 @@ entries = [
     status:           "Damaged",
     notes:            "April 14, 2025: Inner sanctum of campus temple vandalized. Part of escalating pattern of campus religious sites being targeted.",
     source_citation:  "USCIRF July 2025 Factsheet / Bangladesh media, Apr 2025",
+    latitude:         0.22791844e2,
+    longitude:        0.9110081e2,
   },
   {
     tab:              "Hindu",
@@ -302,6 +346,8 @@ entries = [
     status:           "Destroyed",
     notes:            "May 2025: Temple torched. One of multiple fire incidents in the Sitakunda area in 2025.",
     source_citation:  "USCIRF July 2025 Factsheet / Organiser, May 2025",
+    latitude:         0.22619982e2,
+    longitude:        0.91656984e2,
   },
   {
     tab:              "Hindu",
@@ -315,6 +361,8 @@ entries = [
     status:           "Destroyed",
     notes:            "September 2025: Temple set on fire during surge in incidents — same month saw attacks in Kushtia, Netrokona, Gazipur, Jamalpur, Satkhira, Jhenaidah, Nilphamari, Manikganj.",
     source_citation:  "USCIRF July 2025 Factsheet / BHBCOP press statement, Sep 2025",
+    latitude:         0.25339843e2,
+    longitude:        0.8953926e2,
   },
   {
     tab:              "Hindu",
@@ -328,6 +376,8 @@ entries = [
     status:           "Demolished",
     notes:            "July 15, 2023: 150+ year old temple demolished by municipal authorities with police present, declared 'dangerous structure.' Occurred night before rocket attack on a second temple in Kashmore.",
     source_citation:  "Outlook India / Dawn, Jul 15–16 2023",
+    latitude:         0.24875529e2,
+    longitude:        0.67031312e2,
   },
   {
     tab:              "Hindu",
@@ -341,6 +391,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "July 16, 2023: Dacoits attacked a local Hindu temple and adjacent homes using rocket launchers. HRCP raised alarm: 30 Hindu community members reportedly held hostage by criminal gangs threatening temples. Occurred one day after Karachi demolition.",
     source_citation:  "Outlook India / HRCP, Jul 16 2023",
+    latitude:         0.28432292e2,
+    longitude:        0.69581476e2,
   },
   {
     tab:              "Hindu",
@@ -354,6 +406,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Mob of young men vandalised and burned the temple following a court acquittal; idols smashed. Part of pattern of mob destruction in Punjab. Pakistan Supreme Court had earlier ordered protection of Hindu sites.",
     source_citation:  "Organiser / Pakistani media, 2023",
+    latitude:         0.28425372e2,
+    longitude:        0.6991117e2,
   },
   {
     tab:              "Hindu",
@@ -367,6 +421,8 @@ entries = [
     status:           "Destroyed",
     notes:            "August 16, 2023: Thousands of rioters burned 21+ churches and attacked minority homes after Quran desecration claim. Two Christian men arrested. Far-right TLP party linked to riots. Pakistan's worst anti-minority pogrom in years.",
     source_citation:  "BBC / AP / Christianity Today / US State Dept Religious Freedom Report 2023, Aug 16 2023",
+    latitude:         0.31333018e2,
+    longitude:        0.73418339e2,
   },
   {
     tab:              "Hindu",
@@ -380,6 +436,8 @@ entries = [
     status:           "Destroyed",
     notes:            "April 22, 2025: Five armed terrorists killed 26 civilians, mainly Hindu tourists on pilgrimage. TRF initially claimed, then denied. Worst attack on Indian civilians since 2008 Mumbai attacks. Not a temple fire — included for pattern of targeting Hindu pilgrims at sacred sites.",
     source_citation:  "Reuters / AP / US State Dept / USCIRF, Apr 22 2025",
+    latitude:         0.34032205e2,
+    longitude:        0.75322648e2,
   },
   {
     tab:              "Hindu",
@@ -393,6 +451,8 @@ entries = [
     status:           "Damaged",
     notes:            "September 15, 2024: Temple entrance sign spray-painted with 'Go back, Hindus,' 'Hindustan Murdabad,' and 'Fuck Modi.' Part of wave of 8+ Hindu temple attacks across California within 7 months (Dec 2023–Aug 2025). Hindu American Foundation and Indian-American members of Congress urged DOJ investigation. FBI recorded 37 anti-Hindu hate crimes in 2021–2022.",
     source_citation:  "Hindu American Foundation / RNS / Religion News Service, Sep 2024",
+    latitude:         0.38567196e2,
+    longitude:        -0.121298697e3,
   },
   {
     tab:              "Hindu",
@@ -406,6 +466,8 @@ entries = [
     status:           "Damaged",
     notes:            "August 11, 2025: Temple vandalized with Khalistani slogans ('Khalistan Zindabad'). Part of sustained campaign targeting Hindu temples across US tied to Sikh separatist movement. Attack 4 days before India's Independence Day. HAF: 'Attack on America.'",
     source_citation:  "Hindu American Foundation / RNS, Aug 2025",
+    latitude:         0.39613699e2,
+    longitude:        -0.86109543e2,
   },
   {
     tab:              "Hindu",
@@ -419,6 +481,8 @@ entries = [
     status:           "Damaged",
     notes:            "2022: Six to eight men on motorcycles stormed the Shri Mari Maata Mandir; smashed idols of deities. Police reached scene; FIR lodged. Pattern: Hindu temples in Pakistan regularly attacked with near-zero prosecutions. HRCP and Hindu community expressed outrage. 95% of Pakistan's 428 Hindu temples have been converted or seized since 1990 per All Pakistan Hindu Rights Movement.",
     source_citation:  "Dawn / The Business Standard / HRCP, 2022",
+    latitude:         0.24833382e2,
+    longitude:        0.67096075e2,
   },
   {
     tab:              "Hindu",
@@ -432,6 +496,8 @@ entries = [
     status:           "Destroyed",
     notes:            "August 2021: Muslim mob stormed and vandalized Siddhi Vinayak temple; smashed and burned idols. Local police negligence condemned by Hindu parliamentarian Dr. Ramesh Vankwani. Pakistan Supreme Court had previously ordered protection of Hindu sites. Police filed FIR but mob members rarely prosecuted.",
     source_citation:  "Dawn / Opindia / HRCP, Aug 2021",
+    latitude:         0.28422541e2,
+    longitude:        0.70303424e2,
   },
   {
     tab:              "Hindu",
@@ -445,6 +511,8 @@ entries = [
     status:           "Destroyed",
     notes:            "May–December 2023: Ethnic conflict between Hindu Meitei and Christian Kuki-Zo communities. 200+ people killed, 60,000+ displaced. 300+ churches burned or destroyed in Kuki-Zo hill areas by Meitei mobs; Hindu temples also attacked in retaliation. US State Dept Religious Freedom Report flagged India's response as inadequate. India's Supreme Court condemned state government inaction.",
     source_citation:  "US State Dept 2023 Religious Freedom Report / HRW / NYT, 2023",
+    latitude:         0.24817e2,
+    longitude:        0.939368e2,
   },
   {
     tab:              "Hindu",
@@ -458,6 +526,8 @@ entries = [
     status:           "Damaged",
     notes:            "September 2022: Mobs attacked Hindu and Jain temples, homes, and businesses in Leicester following a cricket match between India and Pakistan. Hindu families and temples targeted. Police made multiple arrests. UK government condemned attacks. Described as worst communal violence in England in decades.",
     source_citation:  "BBC / Times of India / UK Home Office, Sep 2022",
+    latitude:         0.52573226e2,
+    longitude:        -0.1123318e1,
   },
   {
     tab:              "Jewish",
@@ -471,6 +541,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Oldest and largest synagogue in Mississippi. Suspect (19) posted antisemitic meme hours before; confessed; arrested with burn injuries. Torahs destroyed including one Holocaust survivor.",
     source_citation:  "CNN / NBC / ProPublica, Jan 2026",
+    latitude:         0.32299869e2,
+    longitude:        -0.90183041e2,
   },
   {
     tab:              "Jewish",
@@ -484,6 +556,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Accelerant spread through interior. ASIO determined Iranian government involvement Aug 2025. Iranian ambassador expelled.",
     source_citation:  "Times of Israel / AFP / ASIO / AP, Dec 2024–Aug 2025",
+    latitude:         -0.37875892e2,
+    longitude:        0.144995206e3,
   },
   {
     tab:              "Jewish",
@@ -497,6 +571,8 @@ entries = [
     status:           "Damaged",
     notes:            "Incendiary device found at scene. First attack: Nov 2023. PM Trudeau: 'vile antisemitic attack.'",
     source_citation:  "Washington Times / Canadian Press, Dec 18 2024",
+    latitude:         0.4548423e2,
+    longitude:        -0.73806455e2,
   },
   {
     tab:              "Jewish",
@@ -510,6 +586,8 @@ entries = [
     status:           "Near-miss",
     notes:            "January 11, 2025; attempted fire did not successfully ignite.",
     source_citation:  "Times of Israel / AFP, Jan 2025",
+    latitude:         -0.33896113e2,
+    longitude:        0.151180189e3,
   },
   {
     tab:              "Jewish",
@@ -523,6 +601,8 @@ entries = [
     status:           "Near-miss",
     notes:            "Flammable liquid poured on entrance and ignited July 4, 2025. Part of sustained campaign against Melbourne Jewish institutions.",
     source_citation:  "Times of Israel / AFP, Jul 2025",
+    latitude:         -0.37814245e2,
+    longitude:        0.144963173e3,
   },
   {
     tab:              "Jewish",
@@ -536,6 +616,8 @@ entries = [
     status:           "Damaged",
     notes:            "Ruins of a 6th-century synagogue containing the King David Mosaic (508 CE), depicting David playing a harp — one of the oldest known Jewish mosaics. Mosaic itself removed to Israel Museum in 1967 after 1967 war. The surrounding Old City has been systematically destroyed in the 2023–present war.",
     source_citation:  "Britannica / Jewish Action (Gush Katif Museum article) / NPR, 2023–2024",
+    latitude:         0.31506025e2,
+    longitude:        0.34461757e2,
   },
   {
     tab:              "Jewish",
@@ -549,6 +631,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Destroyed December 8, 2023. Pre-dated Islam; established by Samaritans, an ancient Jewish religious group. The Zeitoun area (Old City) was historically Gaza's Jewish Quarter until Crusader rule in the 12th century.",
     source_citation:  "NPR / Art Newspaper / US Institute for Palestine Studies, Dec 2023",
+    latitude:         0.31506025e2,
+    longitude:        0.34461757e2,
   },
   {
     tab:              "Jewish",
@@ -562,6 +646,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Largest Gush Katif settlement; 520 families, 2,600 people. Had multiple synagogues serving as regional religious center. Residents barricaded in main synagogue during IDF evacuation Aug 15–18, 2005; forcibly removed. Mobs burned synagogue buildings September 12, 2005 — day IDF withdrew. Structures used as Hamas military base; now obliterated by 2023–25 war.",
     source_citation:  "AP (Sep 12 2005) / Haaretz (Sep 13 2005) / NPR (Sep 2025) / Gush Katif Heritage Center",
+    latitude:         0.31351948e2,
+    longitude:        0.3427587e2,
   },
   {
     tab:              "Jewish",
@@ -575,6 +661,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Oldest re-established Gaza settlement (1970). Had a yeshiva. Famous last-stand: settlers barricaded on synagogue roof during evacuation Aug 18, 2005; IDF soldiers carried them off in scenes broadcast worldwide. Burned by mobs Sep 12, 2005.",
     source_citation:  "AP / AFP / NPR / Haaretz, Aug–Sep 2005",
+    latitude:         0.31403261e2,
+    longitude:        0.34355728e2,
   },
   {
     tab:              "Jewish",
@@ -588,6 +676,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Isolated enclave in northern Gaza. Synagogue burned by mobs Sep 12, 2005. Subsequently bulldozed by Palestinian Authority to make way for housing development. Site now within war-destroyed northern Gaza.",
     source_citation:  "Christian Century (Oct 2005) / Haaretz (Sep 13 2005) / AP",
+    latitude:         0.31478991e2,
+    longitude:        0.34414698e2,
   },
   {
     tab:              "Jewish",
@@ -601,6 +691,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Agricultural community. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center / Jewish Virtual Library, 2005",
+    latitude:         0.31374111e2,
+    longitude:        0.34300746e2,
   },
   {
     tab:              "Jewish",
@@ -614,6 +706,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Absorption center for French Jewish immigrants. French-language synagogue services. Burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31344345e2,
+    longitude:        0.34277754e2,
   },
   {
     tab:              "Jewish",
@@ -627,6 +721,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Founded as Nahal settlement. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.3133729e2,
+    longitude:        0.34258456e2,
   },
   {
     tab:              "Jewish",
@@ -640,6 +736,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Named after Cabinet Minister Michael Hazani. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31380506e2,
+    longitude:        0.34321943e2,
   },
   {
     tab:              "Jewish",
@@ -653,6 +751,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Southernmost settlement in Gaza. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31308466e2,
+    longitude:        0.3428657e2,
   },
   {
     tab:              "Jewish",
@@ -666,6 +766,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Small community. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31329647e2,
+    longitude:        0.342558e2,
   },
   {
     tab:              "Jewish",
@@ -679,6 +781,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Yeshiva settlement; synagogue central to community life. Burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31321465e2,
+    longitude:        0.34251591e2,
   },
   {
     tab:              "Jewish",
@@ -692,6 +796,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Agricultural community. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31328884e2,
+    longitude:        0.34242808e2,
   },
   {
     tab:              "Jewish",
@@ -705,6 +811,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Community in industrial zone area. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31375543e2,
+    longitude:        0.34311482e2,
   },
   {
     tab:              "Jewish",
@@ -718,6 +826,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Coastal community. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.3125e2,
+    longitude:        0.34355e2,
   },
   {
     tab:              "Jewish",
@@ -731,6 +841,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Coastal settlement near Egypt border. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31218e2,
+    longitude:        0.3429e2,
   },
   {
     tab:              "Jewish",
@@ -744,6 +856,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Newest and smallest Gush Katif settlement; established 2001. Active synagogue burned Sep 12, 2005. Ruins later used as Hamas rocket launch site per Israeli military reports.",
     source_citation:  "Gush Katif Heritage Center / Ynetnews, 2005–2007",
+    latitude:         0.31255e2,
+    longitude:        0.3436e2,
   },
   {
     tab:              "Jewish",
@@ -757,6 +871,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Mechina (pre-military academy) with 200 students. Synagogue served students and families. Burned Sep 12, 2005.",
     source_citation:  "Jewish Virtual Library / Gush Katif Heritage Center, 2005",
+    latitude:         0.3128e2,
+    longitude:        0.3438e2,
   },
   {
     tab:              "Jewish",
@@ -770,6 +886,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Small agricultural community. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.3128e2,
+    longitude:        0.3438e2,
   },
   {
     tab:              "Jewish",
@@ -783,6 +901,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Northern bloc settlement. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31583048e2,
+    longitude:        0.34502466e2,
   },
   {
     tab:              "Jewish",
@@ -796,6 +916,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Largest northern settlement; ~300 families. Had active synagogue. Burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31562235e2,
+    longitude:        0.34531582e2,
   },
   {
     tab:              "Jewish",
@@ -809,6 +931,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Secular coastal community. Synagogue building burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.31571386e2,
+    longitude:        0.34489943e2,
   },
   {
     tab:              "Jewish",
@@ -822,6 +946,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Agricultural settlement. Synagogue burned Sep 12, 2005.",
     source_citation:  "Gush Katif Heritage Center, 2005",
+    latitude:         0.3128e2,
+    longitude:        0.3438e2,
   },
   {
     tab:              "Jewish",
@@ -835,6 +961,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Jewish Virtual Library documents ~30 synagogues across 21 settlements. The settlements of Neve Dekalim, Kfar Darom and Netzarim each had multiple synagogues / yeshivot / batei midrash beyond the main community synagogue. Yeshivat Torat Hachim (200 students), Hesder Yeshiva (150 students), 6 Kollelim, and a women's Midrasha in Neve Dekalim alone. All destroyed. Every last Jewish house of worship in Gaza is gone.",
     source_citation:  "Jewish Virtual Library / ASIL (American Society of International Law) / Jewish Action",
+    latitude:         0.3128e2,
+    longitude:        0.3438e2,
   },
   {
     tab:              "Jewish",
@@ -848,6 +976,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "April 11, 2002: Al-Qaeda operative drove gas truck packed with explosives through security barriers. 21 killed — 14 German tourists, 5 Tunisians, 2 French. First successful Al-Qaeda attack after Afghanistan defeat. Organized by Khalid Sheikh Mohammed. Synagogue restored. Part of Al-Qaeda's declared global jihad against Jews and the West.",
     source_citation:  "Times of Israel / Washington Institute / AP, Apr 11 2002",
+    latitude:         0.33773598e2,
+    longitude:        0.10886189e2,
   },
   {
     tab:              "Jewish",
@@ -861,6 +991,8 @@ entries = [
     status:           "Destroyed",
     notes:            "March 30, 2002: Doused with gasoline and burned to the ground. Part of coordinated week-long wave of antisemitic attacks across France during Passover coinciding with Second Intifada escalation. French Jewish community called it terrorism.",
     source_citation:  "JTA / Times of Israel / AP, Mar 30 2002",
+    latitude:         0.43296399e2,
+    longitude:        0.5377789e1,
   },
   {
     tab:              "Jewish",
@@ -874,6 +1006,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "March 30, 2002: 12–15 masked attackers rammed two cars through courtyard gates; one car driven into prayer hall before being set on fire. Severe structural damage. Same Passover wave as Marseille attack.",
     source_citation:  "JTA / Times of Israel / AP, Mar 30 2002",
+    latitude:         0.45757814e2,
+    longitude:        0.4832011e1,
   },
   {
     tab:              "Jewish",
@@ -887,6 +1021,8 @@ entries = [
     status:           "Damaged",
     notes:            "March–April 2002: Fire set burning doors and façade before being extinguished. Part of same French antisemitic attack wave during Second Intifada.",
     source_citation:  "JTA / Times of Israel, Apr 2002",
+    latitude:         0.48584614e2,
+    longitude:        0.7750713e1,
   },
   {
     tab:              "Jewish",
@@ -900,6 +1036,8 @@ entries = [
     status:           "Damaged",
     notes:            "April 2002: Firebombed in same Passover wave of pro-Palestinian antisemitic attacks across France. French government condemned attacks.",
     source_citation:  "JTA, Apr 2002",
+    latitude:         0.48812589e2,
+    longitude:        0.2357003e1,
   },
   {
     tab:              "Jewish",
@@ -913,6 +1051,8 @@ entries = [
     status:           "Damaged",
     notes:            "2002: Firebombed in same wave of antisemitic attacks across Europe coinciding with Second Intifada escalation.",
     source_citation:  "JTA / Times of Israel, 2002",
+    latitude:         0.50846737e2,
+    longitude:        0.4352493e1,
   },
   {
     tab:              "Jewish",
@@ -926,6 +1066,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "November 15, 2003: Truck bomb detonated outside during Saturday morning services; 400 present including children's bar mitzvah. 28 killed total in first wave; external walls not breached due to prior fortification but severe structural damage. Al-Qaeda Turkish cell convicted. Site of 1986 attack that killed 22 worshippers. Rebuilt and operating.",
     source_citation:  "Times of Israel / Washington Institute / AP, Nov 15 2003",
+    latitude:         0.41028423e2,
+    longitude:        0.28973681e2,
   },
   {
     tab:              "Jewish",
@@ -939,6 +1081,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "November 15, 2003: Second truck bomb, detonated 4 minutes after Neve Shalom. Combined 28 killed, 300+ injured in both synagogue attacks. Al-Qaeda Turkish cell directed by operatives linked to Osama bin Laden. 74 charged; multiple convicted of murder and terrorism.",
     source_citation:  "Times of Israel / Washington Institute / AP, Nov 15 2003",
+    latitude:         0.41063789e2,
+    longitude:        0.28983164e2,
   },
   {
     tab:              "Jewish",
@@ -952,6 +1096,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "October 2, 2025 — Yom Kippur: Jihad Al-Shamie drove a car into worshippers then stabbed congregants. 2 killed (Adrian Daulby and Melvin Cravitz); 3 hospitalized. Attacker shot dead by police. Accomplice Mohammad Asim Bashir charged with terrorism offences. Counter Terrorism Policing North West: largest anti-Jewish terror investigation in region's history. Occurred same week as Peacehaven mosque arson.",
     source_citation:  "Counter Terrorism Policing North West / Times of Israel / BBC, Oct 2 2025",
+    latitude:         0.53522607e2,
+    longitude:        -0.2224489e1,
   },
   {
     tab:              "Jewish",
@@ -965,6 +1111,8 @@ entries = [
     status:           "Damaged",
     notes:            "July 29, 2014: Three Palestinians filled 6 bottles with petrol and threw them at the synagogue. One arrested on site while filming. Court controversially sentenced them only for arson — not as antisemitic hate crime — ruling they wanted to 'raise awareness of Gaza.' B'nai B'rith International condemned both attack and verdict as whitewashing antisemitism.",
     source_citation:  "B'nai B'rith International / Times of Israel, Jul 2014",
+    latitude:         0.51264018e2,
+    longitude:        0.7178037e1,
   },
   {
     tab:              "Jewish",
@@ -978,6 +1126,8 @@ entries = [
     status:           "Damaged",
     notes:            "December 9, 2017: Gang of ~10 masked individuals threw 6+ firebombs at the building while ~40 Jewish youth were inside. No injuries; vehicles and yard damaged; building not entered. Three convicted: one 22-year-old asylum seeker from Gaza (main suspect, deported), two stateless Palestinians and one Syrian. Attack occurred day after Malmö antisemitic march calling for killing Jews.",
     source_citation:  "ADL / Times of Israel / AP, Dec 9 2017",
+    latitude:         0.57707233e2,
+    longitude:        0.11967017e2,
   },
   {
     tab:              "Jewish",
@@ -991,6 +1141,8 @@ entries = [
     status:           "Damaged",
     notes:            "October 9, 2019 — Yom Kippur: Neo-Nazi Stephan Balliet attempted mass shooting; tried to breach door with firearms and improvised explosives. 51 inside celebrating Yom Kippur. Door held — massacre averted. Balliet shot two innocent bystanders dead. Livestreamed attack, inspired by Christchurch manifesto. Sentenced to life imprisonment. Germany's government criticized for failing to provide requested police protection.",
     source_citation:  "CTC West Point / World Jewish Congress / Washington Post / AP, Oct 9 2019",
+    latitude:         0.51482435e2,
+    longitude:        0.11971299e2,
   },
   {
     tab:              "Jewish",
@@ -1004,6 +1156,8 @@ entries = [
     status:           "Destroyed",
     notes:            "May 17, 2024: Algerian national threw firebomb through synagogue window then threatened police with a knife. Killed by police. Fire caused significant damage to synagogue. France's second major synagogue firebombing since 2002.",
     source_citation:  "ADL / Times of Israel / AFP, May 17 2024",
+    latitude:         0.49440459e2,
+    longitude:        0.1093966e1,
   },
   {
     tab:              "Jewish",
@@ -1017,6 +1171,8 @@ entries = [
     status:           "Damaged",
     notes:            "April 19, 2026: Bottle of accelerant thrown through window; medical room damaged. Part of sustained London antisemitic arson campaign. Responsibility claimed by Harakat Ashab al-Yamin al-Islamia (HAYI) — assessed as Iran IRGC front group. PM Starmer visited; warned Iran of 'consequences.' 27 arrests across wave. Community Security Trust: 3,700 antisemitic incidents in UK in 2025 — second-highest ever.",
     source_citation:  "CBS News / Jerusalem Post / BBC / Counter Terrorism Policing, Apr 19 2026",
+    latitude:         0.51584663e2,
+    longitude:        -0.313425e0,
   },
   {
     tab:              "Jewish",
@@ -1030,6 +1186,8 @@ entries = [
     status:           "Damaged",
     notes:            "May 5, 2026: Two men set fire to the former synagogue in predawn attack. Building closed as synagogue in 2020, being purchased by a mosque at time of attack; had been tagged with 'Free Palestine' and 'Kill the Zionists' graffiti. Counter Terrorism Police led investigation. Two men charged. HAYI noted attack on Telegram without claiming responsibility.",
     source_citation:  "Jerusalem Post / CBS News / AFP / Metropolitan Police, May 5 2026",
+    latitude:         0.51517486e2,
+    longitude:        -0.65969e-1,
   },
   {
     tab:              "Jewish",
@@ -1043,6 +1201,8 @@ entries = [
     status:           "Near-miss",
     notes:            "April 2026: Arson attempt — bottles of accelerant placed outside; brick thrown. Fire did not take hold. Part of same HAYI-linked London campaign. Two arrested: a 47-year-old woman and 46-year-old man.",
     source_citation:  "BBC / Jerusalem Post / Metropolitan Police, Apr 2026",
+    latitude:         0.51597325e2,
+    longitude:        -0.180559e0,
   },
   {
     tab:              "Jewish",
@@ -1056,6 +1216,8 @@ entries = [
     status:           "Damaged",
     notes:            "September 17, 2006: Three men fired shots into the synagogue's windows. No casualties. Perpetrators convicted of vandalism and illegal weapons possession. Attack followed September 2005 Danish cartoon controversy and Islamist unrest across Europe.",
     source_citation:  "JTA / Times of Israel, Sep 2006",
+    latitude:         0.5991333e2,
+    longitude:        0.1073897e2,
   },
   {
     tab:              "Jewish",
@@ -1069,6 +1231,8 @@ entries = [
     status:           "Near-miss",
     notes:            "2009: Arsonists attempted to burn down a synagogue in northwest London. Fire did not take hold; building saved. Part of documented wave of antisemitic incidents in UK following 2008–2009 Gaza War.",
     source_citation:  "JTA, 2009",
+    latitude:         0.2237006e2,
+    longitude:        0.11411999e3,
   },
   {
     tab:              "Jewish",
@@ -1082,6 +1246,8 @@ entries = [
     status:           "Damaged",
     notes:            "May 1, 2024: Molotov cocktails thrown at the entrance. Building sustained some damage; no injuries. Warsaw's only pre-war synagogue to survive the Nazi destruction of the Jewish Quarter. Attack condemned by Polish Prime Minister Tusk and President Duda.",
     source_citation:  "ADL / Times of Israel / AP, May 1 2024",
+    latitude:         0.52233374e2,
+    longitude:        0.21071149e2,
   },
   {
     tab:              "Jewish",
@@ -1095,6 +1261,8 @@ entries = [
     status:           "Damaged",
     notes:            "April 5, 2024: Unknown perpetrator threw Molotov cocktail against synagogue door. Fire discovered quickly; minor damage only. Police investigating.",
     source_citation:  "ADL / Times of Israel, Apr 5 2024",
+    latitude:         0.53138975e2,
+    longitude:        0.8214602e1,
   },
   {
     tab:              "Jewish",
@@ -1108,6 +1276,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "August 24, 2024: 33-year-old Algerian national draped in Palestinian flag set two cars on fire in synagogue courtyard (one containing gas canister causing explosion), then set fire to two entrance doors while 5 people including rabbi were inside. Police officer injured by blast. National Anti-Terrorism Prosecutor took over. Suspect arrested in Nîmes after shootout. French President Macron called it a 'terrorist attack.' CRIF: 'an attempt to kill Jews.' France recorded 887 antisemitic acts in H1 2024 — nearly triple prior year.",
     source_citation:  "Times of Israel / AFP / ABC News / France24, Aug 24 2024",
+    latitude:         0.43560267e2,
+    longitude:        0.4086022e1,
   },
   {
     tab:              "Jewish",
@@ -1121,6 +1291,8 @@ entries = [
     status:           "Destroyed",
     notes:            "June 23, 2024: Simultaneous coordinated attacks on two synagogues, two Orthodox churches, and a police post in Dagestan. 15 police officers and 4 civilians killed; attacker cells neutralized by security forces. Derbent's synagogue dates to the 6th century CE — one of the oldest in the world. ISIS-linked Vilayat Kavkaz (Caucasus Province) carried out attacks.",
     source_citation:  "ADL / AP / Reuters / Times of Israel, Jun 23 2024",
+    latitude:         0.420528e2,
+    longitude:        0.482888e2,
   },
   {
     tab:              "Jewish",
@@ -1134,6 +1306,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "May 9, 2023: Tunisian national security guard opened fire at the annual pilgrimage, killing 5 (3 Jews, 2 police). Tunisia's president condemned attack. Same site as the 2002 Al-Qaeda truck bombing. Suspect killed by police.",
     source_citation:  "ADL / Times of Israel / AP, May 9 2023",
+    latitude:         0.33773598e2,
+    longitude:        0.10886189e2,
   },
   {
     tab:              "Jewish",
@@ -1147,6 +1321,8 @@ entries = [
     status:           "Damaged",
     notes:            "March 13, 2026: Four teens (aged 17–19) caused arson and explosion at synagogue entrance. All arrested shortly after. Dutch Justice Minister David van Weel told parliament Iran's involvement was being 'explicitly investigated.' Dutch prosecutors charged all four with terrorist intent. Claimed by HAYI (Iran IRGC front group) on same Telegram channels as London attacks. Part of same post-October 7 Iran-directed antisemitic campaign across Western Europe.",
     source_citation:  "Times of Israel / Washington Post / Haaretz / AP, Mar 13 2026",
+    latitude:         0.51924442e2,
+    longitude:        0.447775e1,
   },
   {
     tab:              "Christian",
@@ -1160,6 +1336,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "UNESCO World Heritage. Spire and lead roof collapsed. €700M+ restoration. Reopened Dec 2024.",
     source_citation:  "Reuters / Le Monde, Apr 16 2019",
+    latitude:         0.48856202e2,
+    longitude:        0.2355619e1,
   },
   {
     tab:              "Christian",
@@ -1173,6 +1351,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Building constructed 1900 (126 yrs); congregation founded 1857 (169 yrs). Roof collapsed in 3-alarm fire July 7, 2026. One firefighter hospitalized.",
     source_citation:  "WPXI / CBS Pittsburgh / Patch, Jul 7 2026",
+    latitude:         0.40430903e2,
+    longitude:        -0.80010331e2,
   },
   {
     tab:              "Christian",
@@ -1186,6 +1366,8 @@ entries = [
     status:           "Destroyed",
     notes:            "One of the oldest congregations in Queens.",
     source_citation:  "Reported 2026",
+    latitude:         0.40772015e2,
+    longitude:        -0.73930267e2,
   },
   {
     tab:              "Christian",
@@ -1199,6 +1381,8 @@ entries = [
     status:           "Destroyed",
     notes:            "119-year-old parish.",
     source_citation:  "Reported 2025",
+    latitude:         0.40713508e2,
+    longitude:        -0.73828313e2,
   },
   {
     tab:              "Christian",
@@ -1212,6 +1396,8 @@ entries = [
     status:           "Destroyed",
     notes:            "134-year-old structure.",
     source_citation:  "Reported 2023",
+    latitude:         0.31344986e2,
+    longitude:        -0.109554485e3,
   },
   {
     tab:              "Christian",
@@ -1225,6 +1411,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Two historic Douglas churches lost same year.",
     source_citation:  "Reported 2023",
+    latitude:         0.31344986e2,
+    longitude:        -0.109554485e3,
   },
   {
     tab:              "Christian",
@@ -1238,6 +1426,8 @@ entries = [
     status:           "Destroyed",
     notes:            "111-year-old Quebec heritage church.",
     source_citation:  "Reported 2024",
+    latitude:         0.46343233e2,
+    longitude:        -0.72542849e2,
   },
   {
     tab:              "Christian",
@@ -1251,6 +1441,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Known for Byzantine-style mosaics; 161 years old.",
     source_citation:  "Reported 2024",
+    latitude:         0.43653482e2,
+    longitude:        -0.79383935e2,
   },
   {
     tab:              "Christian",
@@ -1264,6 +1456,8 @@ entries = [
     status:           "Destroyed",
     notes:            "118-year-old parish serving Prairie Ukrainian community.",
     source_citation:  "Reported 2025",
+    latitude:         0.49895537e2,
+    longitude:        -0.97138458e2,
   },
   {
     tab:              "Christian",
@@ -1277,6 +1471,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Ancient church in active South Lebanon war zone.",
     source_citation:  "Reported 2024",
+    latitude:         0.33280189e2,
+    longitude:        0.35370288e2,
   },
   {
     tab:              "Christian",
@@ -1290,6 +1486,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "170-year-old heritage church; arson confirmed.",
     source_citation:  "Fire Risk Heritage / French media 2024",
+    latitude:         0.50751577e2,
+    longitude:        0.2253418e1,
   },
   {
     tab:              "Christian",
@@ -1303,6 +1501,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "One of the oldest churches in the world. 500 sheltering when struck Oct 19, 2023. 18 killed.",
     source_citation:  "Reuters / NPR / Art Newspaper / Greek Orthodox Patriarchate statement, Oct 19 2023",
+    latitude:         0.315017e2,
+    longitude:        0.344668e2,
   },
   {
     tab:              "Christian",
@@ -1316,6 +1516,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Only Catholic church in Gaza. Mother and daughter killed by sniper Dec 16, 2023. Struck again by Israeli tank fire Jul 17, 2025.",
     source_citation:  "Vatican News / Washington Post / NPR, 2023–2025",
+    latitude:         0.315017e2,
+    longitude:        0.344668e2,
   },
   {
     tab:              "Christian",
@@ -1329,6 +1531,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Chapel in Namur Province.",
     source_citation:  "Belgian media 2025",
+    latitude:         0.50476567e2,
+    longitude:        0.4884757e1,
   },
   {
     tab:              "Christian",
@@ -1342,6 +1546,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Structure severely compromised; future uncertain.",
     source_citation:  "German media 2025",
+    latitude:         0.53897255e2,
+    longitude:        0.9139542e1,
   },
   {
     tab:              "Christian",
@@ -1355,6 +1561,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Attack on Palestinian Christian village; fire set near ancient archaeological ruins.",
     source_citation:  "Reported 2025",
+    latitude:         0.319477e2,
+    longitude:        0.353093e2,
   },
   {
     tab:              "Christian",
@@ -1368,6 +1576,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Reported 2024.",
     source_citation:  "German media 2024",
+    latitude:         0.49489291e2,
+    longitude:        0.846731e1,
   },
   {
     tab:              "Christian",
@@ -1381,6 +1591,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Reported 2024.",
     source_citation:  "German media 2024",
+    latitude:         0.49318093e2,
+    longitude:        0.9421723e1,
   },
   {
     tab:              "Christian",
@@ -1394,6 +1606,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Historic Amsterdam landmark.",
     source_citation:  "Dutch media 2026",
+    latitude:         0.5237308e2,
+    longitude:        0.4892453e1,
   },
   {
     tab:              "Christian",
@@ -1407,6 +1621,8 @@ entries = [
     status:           "Near-miss",
     notes:            "FACT CHECK: Viral arson claim is false. City of Bordeaux confirmed no structural damage. July 4, 2026.",
     source_citation:  "City of Bordeaux / Lead Stories, Jul 7 2026",
+    latitude:         0.44841225e2,
+    longitude:        -0.580036e0,
   },
   {
     tab:              "Christian",
@@ -1420,6 +1636,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Jan 2, 2025: Boko Haram attacked Njila; church burned, community displaced. Second attack on Njila Jan 14. Residents demanded conversion to Islam or death. Part of coordinated Jan 2025 Chibok campaign.",
     source_citation:  "Daily Trust / TruthNigeria / ICC, Jan 2025",
+    latitude:         0.1085e2,
+    longitude:        0.1285e2,
   },
   {
     tab:              "Christian",
@@ -1433,6 +1651,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Jan 12, 2025 ~2 AM: Church burned; two brothers (Enoch Pogu Pudza and Josiah Pogu Pudza) killed — both EYN church members. One woman shot and wounded. 30+ houses destroyed.",
     source_citation:  "Vanguard / Christian Daily / Daily Trust, Jan 12 2025",
+    latitude:         0.1085e2,
+    longitude:        0.1285e2,
   },
   {
     tab:              "Christian",
@@ -1446,6 +1666,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Jan 14, 2025: Church of Brethren (EYN) burned along with 10 houses. Second attack Jan 20 at 3 AM burned 15+ more structures. 1,500+ residents fled to Chibok town. Farmer Ibrahim Yana: 'They burned down our church and homes.'",
     source_citation:  "Vanguard / TruthNigeria / ICC, Jan 14–20 2025",
+    latitude:         0.108023e2,
+    longitude:        0.127795e2,
   },
   {
     tab:              "Christian",
@@ -1459,6 +1681,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Jan 20, 2025: Attacked in same Boko Haram campaign sweep. Entire village population fled. Borno State Commissioner confirmed 5 churches destroyed across campaign, 5 killed, 2 wounded, 74 homes burned, 4,000+ displaced.",
     source_citation:  "TruthNigeria / Borno State Govt statement, Jan 2025",
+    latitude:         0.1085e2,
+    longitude:        0.1285e2,
   },
   {
     tab:              "Christian",
@@ -1472,6 +1696,8 @@ entries = [
     status:           "Destroyed",
     notes:            "February 25, 2024: 15 parishioners killed during Sunday prayers; 2 injured. Catholic Diocese of Dori confirmed. Deadliest church attack in Burkina Faso in years. ISGS controls large swathes of northern territory.",
     source_citation:  "Vatican News / HRW / AP, Feb 25 2024",
+    latitude:         0.14396647e2,
+    longitude:        0.2439e-1,
   },
   {
     tab:              "Christian",
@@ -1485,6 +1711,8 @@ entries = [
     status:           "Destroyed",
     notes:            "August 25, 2024: Militants forced assistant pastor Yacouba and another man into the church at gunpoint; both executed inside. 28 men killed total. Congregation leader Alimata: 'I knew they had killed my husband.'",
     source_citation:  "Voice of the Martyrs / Open Doors, Aug 25 2024",
+    latitude:         0.12486849e2,
+    longitude:        -0.379624e1,
   },
   {
     tab:              "Christian",
@@ -1498,6 +1726,8 @@ entries = [
     status:           "Destroyed",
     notes:            "May 20, 2025: Islamist terrorists entered during prayer meeting; killed church elder Amadou Thiombiano and 18-year-old Jeremi Thiombiano. Women and children allowed to flee. Pastor's home ransacked.",
     source_citation:  "Voice of the Martyrs, May 20 2025",
+    latitude:         0.1206e2,
+    longitude:        0.35e0,
   },
   {
     tab:              "Christian",
@@ -1511,6 +1741,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "July 27, 2025: 43–50 killed including 19 women, 15 men, 9 children; several aged 12–14 abducted. Night vigil attacked with blunt instruments, machetes, gunfire. ADF claimed on Telegram. Pope Leo XIV condemned attack. MONUSCO described as 'large-scale massacre.' Worst church attack in DRC in years.",
     source_citation:  "HRW (Aug 6 2025) / Reuters / Vatican News / AP, Jul 27 2025",
+    latitude:         0.1366699e1,
+    longitude:        0.29763132e2,
   },
   {
     tab:              "Christian",
@@ -1524,6 +1756,8 @@ entries = [
     status:           "Destroyed",
     notes:            "February 12–14, 2025: ADF militants abducted 70+ Christian civilians from Mayba village, brought them to a Protestant church, and executed them with machetes. Bodies discovered Feb 14. ACN and Fides confirmed deaths; MONUSCO stated 'unverified' but acknowledged 70+ bodies found inside church. EU Parliament broached formal question.",
     source_citation:  "Vatican News / ACN International / EU Parliament (Mar 2025), Feb 2025",
+    latitude:         0.2e0,
+    longitude:        0.292e2,
   },
   {
     tab:              "Christian",
@@ -1537,6 +1771,8 @@ entries = [
     status:           "Destroyed",
     notes:            "January 15, 2025: Bomb hidden inside church detonated during Sunday service; 17 killed, 63 wounded. ISIS-Central Africa (IS-CA) via ADF claimed responsibility.",
     source_citation:  "Organiser / ICC, Jan 15 2025",
+    latitude:         0.47911e-1,
+    longitude:        0.29686764e2,
   },
   {
     tab:              "Christian",
@@ -1550,6 +1786,8 @@ entries = [
     status:           "Destroyed",
     notes:            "February 12, 2024: Church and mission offices of Our Lady of Africa burned following ISMP attack on Pemba port city. Parish priest escaped with the Blessed Sacrament and sacramental books.",
     source_citation:  "Vatican News / ACI Africa, Feb 2024",
+    latitude:         -0.13389616e2,
+    longitude:        0.40243839e2,
   },
   {
     tab:              "Christian",
@@ -1563,6 +1801,8 @@ entries = [
     status:           "Destroyed",
     notes:            "September 30, 2024: ISMP burned one church and 100+ Christian homes in coordinated attack. Part of Sept 23–30 wave in which ISMP burned multiple churches across Cabo Delgado and Nampula, killed 30+ Christians, beheaded captives.",
     source_citation:  "MEMRI / Newsweek / Heritage Foundation, Sep 30 2024",
+    latitude:         -0.151e2,
+    longitude:        0.393e2,
   },
   {
     tab:              "Christian",
@@ -1576,6 +1816,8 @@ entries = [
     status:           "Destroyed",
     notes:            "September 26, 2024: ISMP shot and killed a Christian, then burned two churches. Part of the same September 2024 wave across Cabo Delgado in which ISMP destroyed 23+ churches in a six-month period in 2024.",
     source_citation:  "MEMRI / Heritage Foundation, Sep 26 2024",
+    latitude:         -0.1345e2,
+    longitude:        0.397e2,
   },
   {
     tab:              "Christian",
@@ -1589,6 +1831,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Oct 2025–Feb 2026: Wave of attacks in Arsi Zone killed 20+ Orthodox Christians in one market attack (Feb 26, 2026) including a priest shot during church prayers. Open Doors: 25 churches burned, demolished, or looted by armed groups in Amhara and Oromia under 2022 truce breakdown. Identity of perpetrators disputed (OLA vs. government forces).",
     source_citation:  "Open Doors (2026 World Watch List) / Christianity Today / Catholic Herald, 2025–2026",
+    latitude:         0.74e1,
+    longitude:        0.395e2,
   },
   {
     tab:              "Christian",
@@ -1602,6 +1846,8 @@ entries = [
     status:           "Destroyed",
     notes:            "January 5, 2024: ISWAP killed pastor Rev. Luka Levong on church premises, then killed 13 church members in their homes; church building set on fire and vehicles destroyed.",
     source_citation:  "Organiser, Jan 5 2024",
+    latitude:         0.1289e2,
+    longitude:        0.1193e2,
   },
   {
     tab:              "Christian",
@@ -1615,6 +1861,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023 Christmas Eve massacres. Pastor Rev. Solomon Gushe killed here along with 9 family members. Church burned. Part of coordinated attack on 17–21 villages in Bokkos and Barkin Ladi LGAs. 195+ total killed across the wave; 221 houses burned in Bokkos alone, 29,000+ displaced.",
     source_citation:  "CSW Nigeria / Morning Star News / ICC, Dec 25 2023",
+    latitude:         0.93e1,
+    longitude:        0.885e1,
   },
   {
     tab:              "Christian",
@@ -1628,6 +1876,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023. One of 8 churches confirmed destroyed by CSW Nigeria in the Christmas Eve attacks. Attackers arrived by motorcycle, armed with sophisticated weapons; attacked simultaneously across villages.",
     source_citation:  "CSW Nigeria, Dec 29 2023",
+    latitude:         0.93e1,
+    longitude:        0.885e1,
   },
   {
     tab:              "Christian",
@@ -1641,6 +1891,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023. Church burned; mass burial of village victims held Christmas Day. CSI received video of mass grave. Named victims documented: Sati Solomon Langweng, David Jallang, Gauis Adamu, Mafulul Langweng, Nafor James Markut and others.",
     source_citation:  "CSW Nigeria / CSI / Morning Star News, Dec 25 2023",
+    latitude:         0.9399021e1,
+    longitude:        0.8898819e1,
   },
   {
     tab:              "Christian",
@@ -1654,6 +1906,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023. One of 8 churches confirmed destroyed by CSW Nigeria. Ndun among the villages listed in coordinated Christmas Eve attack. Pastor killed in another nearby church the same night.",
     source_citation:  "CSW Nigeria, Dec 29 2023",
+    latitude:         0.93e1,
+    longitude:        0.885e1,
   },
   {
     tab:              "Christian",
@@ -1667,6 +1921,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023. Church burned. Tahore identified in multiple sources as a targeted community in the simultaneous attacks that began around 10 PM Christmas Eve.",
     source_citation:  "CSW Nigeria / Premium Times, Dec 2023",
+    latitude:         0.93e1,
+    longitude:        0.885e1,
   },
   {
     tab:              "Christian",
@@ -1680,6 +1936,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023. One of 8 churches confirmed destroyed by CSW Nigeria in the Bokkos LGA Christmas Eve attacks.",
     source_citation:  "CSW Nigeria, Dec 29 2023",
+    latitude:         0.93e1,
+    longitude:        0.885e1,
   },
   {
     tab:              "Christian",
@@ -1693,6 +1951,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 23–25, 2023. One of 8 churches confirmed destroyed. Attack described as planned 60+ days in advance by terrorist organizers; multiple early-warning security alerts ignored.",
     source_citation:  "CSW Nigeria / TruthNigeria, Dec 2023",
+    latitude:         0.93e1,
+    longitude:        0.885e1,
   },
   {
     tab:              "Christian",
@@ -1706,6 +1966,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Dec 24, 2023 at 10:45 PM: Barkin Ladi villages Hurum, Darwat (NTV), and Gana Ropp attacked. 17+ killed in Barkin Ladi alone per police. Hurum church burned. Attacks described by governor as 'pure terrorism.' Security forces received 30+ distress calls simultaneously and could not respond in time.",
     source_citation:  "CSW Nigeria / ICC / Plateau Police, Dec 25 2023",
+    latitude:         0.952e1,
+    longitude:        0.896e1,
   },
   {
     tab:              "Christian",
@@ -1719,6 +1981,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "June 22, 2025: Suicide bomber entered during Divine Liturgy (350 worshippers); opened fire, threw grenade, detonated vest. 30 killed, 54 injured including children. First Damascus suicide bombing since fall of Assad. Largest attack on Syria's Christians since 1860. ISIS and Saraya Ansar al-Sunnah both claimed responsibility.",
     source_citation:  "BBC / CNN / AP / House of Commons Library, Jun 22 2025",
+    latitude:         0.3351e2,
+    longitude:        0.3629e2,
   },
   {
     tab:              "Christian",
@@ -1732,6 +1996,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "July 24, 2022: Church built as symbolic response to Istanbul Hagia Sophia's re-conversion to mosque; drone fired from Idlib on inauguration ceremony. 2 killed, 12 wounded. SOHR confirmed.",
     source_citation:  "Agenzia Fides / National Catholic Register / SOHR, Jul 24 2022",
+    latitude:         0.3538e2,
+    longitude:        0.3637e2,
   },
   {
     tab:              "Christian",
@@ -1745,6 +2011,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "December 11, 2024 — 3 days after Assad's fall: HTS-linked fighters broke crosses, stole icons and Virgin Mary image. Community sealed the church with stones for safety. Dec 23: Christmas tree in town square burned by armed HTS foreign elements. A note threatening to burn another church left on a second site.",
     source_citation:  "SyriacPress / CSI-USA, Dec 2024",
+    latitude:         0.3538e2,
+    longitude:        0.3637e2,
   },
   {
     tab:              "Christian",
@@ -1758,6 +2026,8 @@ entries = [
     status:           "Destroyed",
     notes:            "July 15, 2025: Attacked and set ablaze during Islamist assault on Sweida. Pastor Fr. Butrus al-Jut: 'They didn't stop at the church. They ransacked and burned our homes, shattered our windows, stole our belongings, looted our businesses. They set fire to our lives.' 38 Christian homes also destroyed; 70 people took refuge in Shahba church hall.",
     source_citation:  "NCR / Commonweal / ACN, Jul 15 2025",
+    latitude:         0.3272e2,
+    longitude:        0.3655e2,
   },
   {
     tab:              "Christian",
@@ -1771,6 +2041,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "April 23, 2024 ~11 PM: Large extremist mob set fire to multiple Coptic homes, blocking residents from escaping burning buildings. Triggered by rumor that 3,000-family Christian village had obtained church construction permit. Bishop Makarios alerted authorities beforehand; security arrived late. State pledged compensation and arrests. Perpetrators posted celebratory videos online.",
     source_citation:  "CSI / CNA / CSW / ICC, Apr 23 2024",
+    latitude:         0.2809e2,
+    longitude:        0.3075e2,
   },
   {
     tab:              "Christian",
@@ -1784,6 +2056,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "April 26, 2024: Three days after Fawakhir attack, extremists attacked Copts in a second Minya village after an evangelical church obtained an official building permit. Security forces moved in and arrested perpetrators. Pattern: any church construction triggers mob violence even with legal permits.",
     source_citation:  "Christian Daily / CSW, Apr 26 2024",
+    latitude:         0.30112726e2,
+    longitude:        0.31170049e2,
   },
   {
     tab:              "Christian",
@@ -1797,6 +2071,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "December 2023: Villagers attacked and burned Coptic property during attempt to prevent construction of an officially licensed church. Security forces clashed with rioters. Part of pattern across Minya: Khaiyary (Sep 2023), Manzafat Zaafarana (Jan 2024) — attackers in every case successfully stopped church construction.",
     source_citation:  "US State Dept Religious Freedom Report 2023 / Coptic Solidarity",
+    latitude:         0.30201458e2,
+    longitude:        0.31468537e2,
   },
   {
     tab:              "Christian",
@@ -1810,6 +2086,8 @@ entries = [
     status:           "Destroyed",
     notes:            "August 16, 2023: Thousands armed with sticks and iron rods burned 21+ churches and attacked Christian homes after claim of Quran desecration. Two Christians arrested under blasphemy law. 100+ rioters arrested. Pakistan's largest anti-Christian pogrom since 1947. Government promised reconstruction. Pattern repeated from prior Jaranwala riots in 2022–23.",
     source_citation:  "BBC / AP / Christianity Today / US State Dept Religious Freedom Report 2023, Aug 16 2023",
+    latitude:         0.31333018e2,
+    longitude:        0.73418339e2,
   },
   {
     tab:              "Christian",
@@ -1823,6 +2101,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "2024: Church damaged during South Lebanon conflict. Reported as part of wave of Lebanese Christian heritage sites damaged during Israel–Hezbollah fighting. ACN documented multiple South Lebanon church losses.",
     source_citation:  "ACN / Church of Lebanon reporting, 2024",
+    latitude:         0.3312e2,
+    longitude:        0.3518e2,
   },
   {
     tab:              "Christian",
@@ -1836,6 +2116,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "January 25, 2023: Attacker with machete killed sexton Diego Valencia at Nuestra Señora de La Palma; seriously injured priest Antonio Rodríguez at San Isidro Church moments later. Shocked Spain's interfaith communities.",
     source_citation:  "Organiser / multiple Spanish media, Jan 25 2023",
+    latitude:         0.36131173e2,
+    longitude:        -0.5447399e1,
   },
   {
     tab:              "Christian",
@@ -1849,6 +2131,8 @@ entries = [
     status:           "Damaged",
     notes:            "2024: Reports of increasing intimidation, vandalism, and graffiti targeting Christian sites near Bethlehem by extremist settlers; UNESCO monitoring. Pattern of cross removals and threatening graffiti documented by multiple NGOs.",
     source_citation:  "Open Doors / ACN / local church reporting, 2024",
+    latitude:         0.317054e2,
+    longitude:        0.352024e2,
   },
   {
     tab:              "Christian",
@@ -1862,6 +2146,8 @@ entries = [
     status:           "Damaged",
     notes:            "2024: HTS/SNA-aligned forces seized and looted Syriac Orthodox church properties in northeast Syria; crosses removed, properties repurposed. Pattern of HTS-zone persecution included banning clergy from wearing clerical dress in public.",
     source_citation:  "UK Home Office Country Policy / Open Doors, 2024",
+    latitude:         0.37003926e2,
+    longitude:        0.41252255e2,
   },
   {
     tab:              "Christian",
@@ -1875,6 +2161,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Hamas embedded military command infrastructure throughout Gaza City's civilian and religious zones, forcing IDF operations into populated areas. October 19, 2023: An annex building in the compound was struck during IDF operations targeting Hamas command networks in the area; 18 killed among ~500 sheltering inside. The church structure itself was not destroyed. Israel stated it targeted a nearby Hamas command-and-control center. Third-oldest church in world; houses tomb of Saint Porphyrius, Bishop of Gaza 395–420 AD. Struck again July 2024 (missile did not detonate, no casualties). Greek Orthodox Patriarchate statement on record; IDF disputed targeting the church directly.",
     source_citation:  "Wikipedia / Reuters / Al Jazeera, Oct 19 2023",
+    latitude:         0.315068e2,
+    longitude:        0.344697e2,
   },
   {
     tab:              "Christian",
@@ -1888,6 +2176,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Hamas used the surrounding Rimal neighborhood as an active combat zone, deploying fighters and infrastructure adjacent to civilian shelters and the hospital complex. December 16, 2023: Two Christian women, Naheda Anton and her daughter Samar Anton, killed by IDF fire while walking within the church compound. 600+ civilians sheltering inside. July 17, 2025: Church struck by IDF tank fire during active combat operations against Hamas fighters in the immediate area; 3 killed, priest wounded. Only Catholic church in Gaza, founded c.1300s. Vatican News confirmed both incidents. Italy's PM condemned the July 2025 strike.",
     source_citation:  "Vatican News / NPR / Washington Post, Dec 2023 & Jul 2025",
+    latitude:         0.315186e2,
+    longitude:        0.344332e2,
   },
   {
     tab:              "Christian",
@@ -1901,6 +2191,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Hamas fighters operated throughout the Rimal district and used the hospital zone as a combat area. IDF documented Hamas tunnels and military infrastructure beneath and around the Al-Ahli complex. December 26, 2023: Church destroyed by IDF tank shell during active combat operations against Hamas forces in the district. Al-Ahli Arab Hospital — Gaza's oldest Christian institution, founded by Church of England 1882 — was struck by a massive explosion on October 17, 2023; US intelligence and multiple Western governments assessed it was caused by a misfired Palestinian Islamic Jihad rocket, not an Israeli strike — Hamas and PIJ disputed this. Church loss is a direct consequence of Hamas's deliberate militarization of the civilian and religious district.",
     source_citation:  "Holy Land Christian Ecumenical Foundation (HCEF) / Episcopal News Service, Dec 2023",
+    latitude:         0.315186e2,
+    longitude:        0.344332e2,
   },
   {
     tab:              "Christian",
@@ -1914,6 +2206,8 @@ entries = [
     status:           "Destroyed",
     notes:            "Hamas deliberately based military operations in Jabalia, one of Gaza's most densely populated areas, making IDF operations to dismantle Hamas's northern command structure unavoidable in the district. Founded 444 CE under Emperor Theodosius II; restored 2019–2022 in French-British collaboration. Reported destroyed by shelling in the Jabalia combat zone per Heritage for Peace (Nov 2023). Contained mosaic floors, 16 ancient Greek inscriptions, graves. Archaeologist Jan 2025: mosaics may still be partially intact beneath debris. Loss attributable to Hamas's use of northern Gaza as a military stronghold.",
     source_citation:  "Heritage for Peace NGO report / Art Newspaper / NPR, Nov 2023",
+    latitude:         0.31528214e2,
+    longitude:        0.34483167e2,
   },
   {
     tab:              "Christian",
@@ -1927,6 +2221,8 @@ entries = [
     status:           "Damaged",
     notes:            "Hamas positioned rocket infrastructure and military assets throughout central Gaza, including areas surrounding Tell Umm el-'Amr, forcing IDF operations across the region. First Christian monastery in Palestine; founded c.340 CE. Largest ancient monastery in Middle East. Restored 2020–2022. Partially damaged by indirect effects of combat in surrounding area; no direct strike confirmed. UNESCO granted emergency enhanced protection December 2023 — Hamas's militarization of Gaza denied UNESCO and heritage organizations the ability to protect it. Added to World Heritage in Danger list July 2024. Every heritage loss here is a consequence of Hamas embedding its military machine inside Gaza's civilian and cultural fabric.",
     source_citation:  "UNESCO (Dec 2023 emergency protection) / CNN (Jul 2024) / Art Newspaper, 2023–2024",
+    latitude:         0.314167e2,
+    longitude:        0.343667e2,
   },
   {
     tab:              "Christian",
@@ -1940,6 +2236,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Hamas and Palestinian Islamic Jihad routinely fired rockets from within Gaza City's civilian zones, including the hospital district. October 17, 2023: Al-Ahli Arab Hospital engulfed in a massive explosion. US intelligence (Director of National Intelligence), AP, BBC, and multiple Western governments concluded the blast was caused by a misfired Palestinian Islamic Jihad rocket — not an Israeli strike. Hamas blamed Israel to generate international pressure; that claim was rejected by the US, UK, France, and Germany. Gaza's only Christian hospital, founded by Church of England 1882, severely damaged as a direct result of Palestinian militant rocket misfires. Chapel facilities destroyed in the blast.",
     source_citation:  "Episcopal News Service / HRW, Oct 17 2023",
+    latitude:         0.31505031e2,
+    longitude:        0.34464138e2,
   },
   {
     tab:              "Christian",
@@ -1953,6 +2251,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Hamas deliberately positioned military assets, tunnel entrances, and command infrastructure throughout Gaza City's residential and institutional zones, making IDF operations unavoidable in the district. November 2023: Rosary Sisters' school damaged during IDF operations targeting Hamas military networks embedded in the surrounding area. July 2024: Holy Family Catholic school also damaged during continued IDF operations against Hamas. Every loss of Christian heritage in Gaza flows directly from Hamas's use of civilian and religious infrastructure as military cover.",
     source_citation:  "HCEF / Vatican News / Independent Catholic News, Nov 2023",
+    latitude:         0.31505031e2,
+    longitude:        0.34464138e2,
   },
   {
     tab:              "Christian",
@@ -1966,6 +2266,8 @@ entries = [
     status:           "Damaged",
     notes:            "July 2025: Arson attack set fire to fields adjacent to ruins of 5th-century Byzantine church; flames reached wall of Christian cemetery. Priest: 'It's the most holy place in the village. When we are in war or attack, we come here to pray to ask God to protect us.' US Ambassador Huckabee made rare visit and condemned attack. Israeli police investigating. Greek Orthodox Patriarch Theophilos III called it 'a direct and intentional threat.'",
     source_citation:  "CBS News / NPR / New Arab, Jul 2025",
+    latitude:         0.319477e2,
+    longitude:        0.353093e2,
   },
   {
     tab:              "Christian",
@@ -1979,6 +2281,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "Cross-reference: Entry already exists in Christian tab. Taybeh is a Palestinian Christian majority village. Settler attacks on the community intensified after Oct 7, 2023. Father Jack Abed filed ~12 police reports about settler attacks with no prosecutions.",
     source_citation:  "CBS News / NPR, Jul 2025",
+    latitude:         0.319477e2,
+    longitude:        0.353093e2,
   },
   {
     tab:              "Christian",
@@ -1992,6 +2296,8 @@ entries = [
     status:           "Damaged",
     notes:            "2024: Reports of Christian gravestones defaced and desecrated in multiple West Bank locations. Pattern documented by New Arab: rise in settler attacks on Christian religious property. US State Dept noted cases of cross removals and graffiti on church walls.",
     source_citation:  "New Arab / US State Dept, 2024",
+    latitude:         0.31713025e2,
+    longitude:        0.35185557e2,
   },
   {
     tab:              "Christian",
@@ -2005,6 +2311,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "June 5, 2022 — Pentecost Sunday: Gunmen disguised as congregants entered during Mass; detonated explosives at altar and opened fire. 50+ killed including many children; dozens wounded. First major attack on a church in southwest Nigeria. Federal government attributed to ISWAP; local witnesses identified attackers as Fulani. Four convicted and sentenced to death by Federal High Court Abuja (June 2026). Church reopened Easter 2023 after 43-week closure. Cardinal Dolan called it 'especially horrific.'",
     source_citation:  "Vatican News / Reuters / ACN International / AP, Jun 5 2022",
+    latitude:         0.7196201e1,
+    longitude:        0.5586802e1,
   },
   {
     tab:              "Christian",
@@ -2018,6 +2326,8 @@ entries = [
     status:           "Destroyed",
     notes:            "April 21, 2019 — Easter Sunday: Suicide bomber detonated backpack bomb during Easter Mass. Over 100 killed — deadliest of three church bombings. Pews and roof collapsed. National Tawheed Jamaat (NTJ) cell, inspired by ISIS, carried out attack. US State Dept confirmed ISIS-linked Sri Lankan citizens carried out all eight coordinated bombings killing 269 total (including 5 Americans). 500+ wounded across all sites.",
     source_citation:  "US State Dept Country Reports on Terrorism 2019 / AP / Reuters, Apr 21 2019",
+    latitude:         0.7209428e1,
+    longitude:        0.79833117e2,
   },
   {
     tab:              "Christian",
@@ -2031,6 +2341,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "April 21, 2019 — Easter Sunday: Suicide bombing during Easter Mass inside this iconic Catholic shrine in the capital. One of three coordinated church bombings. Historic shrine severely damaged; multiple killed. Part of same NTJ/ISIS-inspired cell.",
     source_citation:  "US State Dept / AP / Reuters, Apr 21 2019",
+    latitude:         0.6943283e1,
+    longitude:        0.79854971e2,
   },
   {
     tab:              "Christian",
@@ -2044,6 +2356,8 @@ entries = [
     status:           "Destroyed",
     notes:            "April 21, 2019 — Easter Sunday: Third church targeted in coordinated bombing. Zion Church destroyed; multiple killed. Only evangelical church targeted in the wave; demonstrated the ISIS cell targeted Christianity broadly, not only Catholicism.",
     source_citation:  "US State Dept / AP / CTC West Point, Apr 21 2019",
+    latitude:         0.7838102e1,
+    longitude:        0.81556753e2,
   },
   {
     tab:              "Christian",
@@ -2057,6 +2371,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "January 27, 2019: Indonesian husband-and-wife ISIS suicide bombers detonated two bombs during Sunday Mass — first inside the cathedral, second outside as security forces responded. 20 killed, 102+ wounded. ISIS claimed via Telegram; Abu Sayyaf ASG (pledged ISIS 2013) facilitated. Attack timed one week after Bangsamoro autonomy plebiscite. Indonesian bombers had tried to join ISIS in Syria but were deported. President Duterte issued 'all-out war' directive.",
     source_citation:  "The Diplomat / Vatican News / AP / VOA, Jan 27 2019",
+    latitude:         0.6053117e1,
+    longitude:        0.121000763e3,
   },
   {
     tab:              "Christian",
@@ -2070,6 +2386,8 @@ entries = [
     status:           "Damaged",
     notes:            "March 28, 2021 — Palm Sunday: Newlywed couple (married 6-7 months) from Jamaah Ansharut Daulah (JAD, ISIS-affiliated) rode motorbike to cathedral gate; intercepted by security guards; detonated pressure cooker bomb. Only two perpetrators killed; 20 worshippers wounded. Oldest church in Makassar. Same Indonesian JAD cell connected to 2019 Jolo bombing. Indonesian BNPT confirmed ISIS ideology.",
     source_citation:  "VOA / AP / Reuters, Mar 28 2021",
+    latitude:         -0.5134296e1,
+    longitude:        0.119412428e3,
   },
   {
     tab:              "Christian",
@@ -2083,6 +2401,8 @@ entries = [
     status:           "Destroyed",
     notes:            "December 24, 2000: Coordinated bombings of churches across 9 Indonesian cities on Christmas Eve. 18 killed, many injured. Jakarta alone: 5 Catholic and Protestant churches targeted including the Roman Catholic Cathedral. Al-Qaeda and Jemaah Islamiyah carried out attacks. Hambali implicated. Part of JI's campaign to ignite sectarian war across Southeast Asia.",
     source_citation:  "AP / Reuters / US State Dept, Dec 24 2000",
+    latitude:         -0.6175405e1,
+    longitude:        0.106827168e3,
   },
   {
     tab:              "Christian",
@@ -2096,6 +2416,8 @@ entries = [
     status:           "Destroyed",
     notes:            "January 1, 2011: Car bomb detonated outside church as worshippers left New Year's Eve service. 23 killed, 97 wounded. Al-Qaeda in Iraq claimed responsibility. Egypt's deadliest anti-Christian attack in modern history to that point. Triggered mass Coptic protests. Egyptian government blamed foreign elements.",
     source_citation:  "AP / NYT / BBC, Jan 1 2011",
+    latitude:         0.31199181e2,
+    longitude:        0.29895172e2,
   },
   {
     tab:              "Christian",
@@ -2109,6 +2431,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "April 9, 2017 — Palm Sunday: Two simultaneous ISIS suicide bombings. St. George's Tanta: bomb detonated inside during Palm Sunday Mass — 29 killed, 78 wounded. St. Mark's Cathedral Alexandria (HQ of Pope Tawadros II): bomber intercepted outside, detonated — 17 killed, 48 wounded. Total: 47 killed. ISIS claimed both attacks. US designated Egypt attack sites for emergency security. Pope Tawadros survived; had been meeting at St. Mark's during the bombing.",
     source_citation:  "AP / NYT / BBC, Apr 9 2017",
+    latitude:         0.307865e2,
+    longitude:        0.310004e2,
   },
   {
     tab:              "Christian",
@@ -2122,6 +2446,8 @@ entries = [
     status:           "Destroyed",
     notes:            "December 11, 2016: ISIS suicide bomber struck the St. Peter and Paul Coptic Church (Botroseya) adjacent to St. Mark's Cathedral during Sunday Mass. 29 killed, 47 wounded — majority women. Largest single attack on Copts in Cairo since 2011. ISIS claimed it targeted 'crusaders.' Attacker was 22-year-old Egyptian student. Egypt declared 3-day national mourning.",
     source_citation:  "NYT / AP / BBC, Dec 11 2016",
+    latitude:         0.30066667e2,
+    longitude:        0.31283333e2,
   },
   {
     tab:              "Christian",
@@ -2135,6 +2461,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "October 31, 2010: Al-Qaeda in Iraq gunmen seized the church during Sunday Mass with 120 hostages; Iraqi security forces stormed building; 58 Christians killed including 2 priests and 7 security personnel — worst massacre of Christians in Iraq's modern history. ISIS precursor explicitly targeted church as 'dirty den of idolatry.' Triggered mass exodus of Iraq's ancient Christian community.",
     source_citation:  "NYT / AP / HRW, Oct 31 2010",
+    latitude:         0.33308797e2,
+    longitude:        0.44421017e2,
   },
   {
     tab:              "Christian",
@@ -2148,6 +2476,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "July 26, 2016: Two ISIS-pledged attackers took 5 hostages during morning Mass; slit throat of 85-year-old Father Jacques Hamel at the altar; wounded another hostage. Both attackers shot dead by police outside. Condemned by Pope Francis. First ISIS attack on a French church during services. Attackers were on ISIS watchlist; one wore electronic surveillance tag.",
     source_citation:  "AP / NYT / BBC, Jul 26 2016",
+    latitude:         0.493831e2,
+    longitude:        0.109163e1,
   },
   {
     tab:              "Christian",
@@ -2161,6 +2491,8 @@ entries = [
     status:           "Destroyed",
     notes:            "April 2025 — Holy Week: Fulani extremist militants launched coordinated attacks during Holy Week and Easter in Plateau State. 157 killed across multiple villages; 8 Christians killed on Easter Monday in separate attack. ICC documented massacres in rural communities. Part of sustained campaign against Middle Belt Christians. 3,490 Nigerians killed for faith in 2025 per Open Doors (72% of global total).",
     source_citation:  "ACN International / ICC / Open Doors 2026 World Watch List, Apr 2025",
+    latitude:         0.92182e1,
+    longitude:        0.95179e1,
   },
   {
     tab:              "Sikh",
@@ -2174,6 +2506,8 @@ entries = [
     status:           "Demolished",
     notes:            "125-year-old historic gurdwara demolished without required NOC. India's MEA formally condemned as 'despicable act' and called for restoration.",
     source_citation:  "Deccan Herald / Akashvani News, Jul 2026",
+    latitude:         0.3174214e2,
+    longitude:        0.73831786e2,
   },
   {
     tab:              "Sikh",
@@ -2187,6 +2521,8 @@ entries = [
     status:           "Damaged",
     notes:            "November 3, 2024: Gurdwara attacked. Canadian Sikh organizations issued joint condemnation, calling it part of 'ongoing campaign by Indian authorities to incite violence and division.' Incident coincided with protests outside Hindu Sabha Mandir Brampton (Diwali weekend) during India–Canada diplomatic crisis over Nijjar assassination.",
     source_citation:  "World Sikh Organization of Canada / CBC, Nov 4 2024",
+    latitude:         0.43705171e2,
+    longitude:        -0.79638234e2,
   },
   {
     tab:              "Sikh",
@@ -2200,6 +2536,8 @@ entries = [
     status:           "Damaged",
     notes:            "April 19, 2025: Walls spray-painted with pro-Khalistan slogans in English and Punjabi. Vancouver Police released CCTV images of suspects and vehicle. The KDS is one of North America's oldest Sikh institutions; it had recently banned Khalistani extremists from its Baisakhi parade — retaliation suspected. KDS condemned attack as 'ongoing campaign by extremist forces that seek to instil fear and division within the Canadian Sikh community.'",
     source_citation:  "CBC News / Coalition of Hindus of North America, Apr 23 2025",
+    latitude:         0.49260872e2,
+    longitude:        -0.123113952e3,
   },
   {
     tab:              "Sikh",
@@ -2213,6 +2551,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "June 18, 2023: Hardeep Singh Nijjar, president of the gurdwara since 2019, shot and killed in the parking lot. Canadian government formally accused India's government of directing the assassination — triggering the worst India–Canada diplomatic crisis in history, expulsion of diplomats, and RCMP investigation into Indian transnational repression across Canadian Sikh communities. Gurdwara became centre of Khalistan movement in Canada; portraits of Air India bombing mastermind Talwinder Singh Parmar displayed inside.",
     source_citation:  "CBC / Globe and Mail / RCMP statement, Jun 18 2023",
+    latitude:         0.49191496e2,
+    longitude:        -0.122839368e3,
   },
   {
     tab:              "Sikh",
@@ -2226,6 +2566,8 @@ entries = [
     status:           "Damaged",
     notes:            "2023: Canada's oldest existing gurdwara (1911, designated national historic site 2002) targeted with graffiti amid wave of anti-India / pro-Khalistan incidents across BC gurdwaras. Part of sustained extremist campaign across Canadian Sikh institutions.",
     source_citation:  "Canadian media / CoHNA, 2023",
+    latitude:         0.49052116e2,
+    longitude:        -0.122329479e3,
   },
   {
     tab:              "Sikh",
@@ -2239,6 +2581,8 @@ entries = [
     status:           "Damaged",
     notes:            "July 2021: Edmonton's Singh Sabha Gurdwara faced months of targeted harassment including racist phone calls and delivery of meat to the gurdwara entrance as deliberate religious insult. Edmonton Police Service investigated. Part of pattern of anti-Sikh harassment against gurdwaras in Alberta.",
     source_citation:  "Anti-Sikh sentiment in Canada Wikipedia / CBC, 2021",
+    latitude:         0.53546206e2,
+    longitude:        -0.113491241e3,
   },
   {
     tab:              "Sikh",
@@ -2252,6 +2596,8 @@ entries = [
     status:           "Damaged",
     notes:            "December 23, 2016: Outer walls and doors spray-painted with swastika, racist messages, and profane graffiti. Attack shocked Calgary's Sikh community. Widely condemned by community leaders.",
     source_citation:  "Anti-Sikh sentiment in Canada Wikipedia / Calgary media, Dec 2016",
+    latitude:         0.51045606e2,
+    longitude:        -0.114057541e3,
   },
   {
     tab:              "Sikh",
@@ -2265,6 +2611,8 @@ entries = [
     status:           "",
     notes:            "",
     source_citation:  "",
+    latitude:         nil,
+    longitude:        nil,
   },
   {
     tab:              "Sunni → Shia",
@@ -2278,6 +2626,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "63 killed, 196 injured during Friday prayer March 4, 2022. One of the oldest mosques in Peshawar. Deadliest Pakistan attack since 2018 Mastung bombing. Attacker was an Afghan national.",
     source_citation:  "AP / BBC / US State Dept Religious Freedom Report 2022, Mar 4 2022",
+    latitude:         0.34012385e2,
+    longitude:        0.71578746e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2291,6 +2641,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "33 killed, 43 wounded. April 21, 2022. Part of ISKP campaign targeting Shia communities in Taliban-controlled Afghanistan.",
     source_citation:  "Reuters / AP, Apr 2022",
+    latitude:         0.36709037e2,
+    longitude:        0.67111409e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2304,6 +2656,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "9 killed, 13 wounded. April 28, 2022, days after the first Mazar attack.",
     source_citation:  "Reuters / AP, Apr 2022",
+    latitude:         0.36709037e2,
+    longitude:        0.67111409e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2317,6 +2671,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "15 Shia pilgrims killed including two children. October 26, 2022. One of the holiest Shia shrines in Iran; houses tomb of Ahmad ibn Musa, son of 7th Imam.",
     source_citation:  "BBC / Reuters / AP, Oct 26 2022",
+    latitude:         0.29606022e2,
+    longitude:        0.52537804e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2330,6 +2686,8 @@ entries = [
     status:           "Destroyed",
     notes:            "7+ killed, 17 wounded. October 13, 2023. Part of sustained ISKP campaign against Shia worship in Afghanistan.",
     source_citation:  "Reuters / AP, Oct 13 2023",
+    latitude:         0.36099968e2,
+    longitude:        0.68640438e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2343,6 +2701,8 @@ entries = [
     status:           "Severely damaged",
     notes:            "6 killed (including a policeman), 28–50 injured. July 15, 2024, eve of Ashura. First successful jihadist attack in Oman's modern history. Attackers killed by security forces. ISIS framed attack as part of Sunni campaign against 'apostate rawafidh.'",
     source_citation:  "Washington Institute for Near East Policy / Reuters / AP, Jul 15 2024",
+    latitude:         0.23612363e2,
+    longitude:        0.58593813e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2356,6 +2716,8 @@ entries = [
     status:           "Destroyed",
     notes:            "31–32 killed, 169–170 injured during Friday prayer February 6, 2026. Deadliest attack in Islamabad since 2008 Marriott bombing. Bomber stopped at entrance, opened fire, then detonated. ISIS explicitly declared Shia Pakistanis 'legitimate targets.' Four arrested including Afghan ISKP mastermind.",
     source_citation:  "NYT / Reuters / AP / CSIS, Feb 6 2026",
+    latitude:         0.33641384e2,
+    longitude:        0.73152635e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2369,6 +2731,8 @@ entries = [
     status:           "Damaged",
     notes:            "Attack on Shia mosque 2024; part of ongoing ISKP campaign against Shia communities in Afghanistan.",
     source_citation:  "Washington Institute, 2024",
+    latitude:         0.34035527e2,
+    longitude:        0.62038671e2,
   },
   {
     tab:              "Sunni → Shia",
@@ -2382,10 +2746,10 @@ entries = [
     status:           "",
     notes:            "",
     source_citation:  "",
+    latitude:         nil,
+    longitude:        nil,
   }
 ]
-
-created = 0; updated = 0
 entries.each do |attrs|
   record = SacredFireEntry.find_or_initialize_by(site_name: attrs[:site_name], year_of_incident: attrs[:year_of_incident])
   new_record = record.new_record?

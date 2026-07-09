@@ -6,6 +6,8 @@
 <title>FORA · Q929 · Sacred Places Fire & Destruction Registry</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -116,6 +118,17 @@ tr.expanded .chev{transform:rotate(90deg);}
 /* EMPTY STATE */
 .empty-state{padding:48px 20px;text-align:center;color:var(--ink-mut);font-size:13px;}
 
+/* MAP */
+.map-section{margin-bottom:24px;}
+.map-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.map-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);}
+.map-legend{display:flex;gap:14px;flex-wrap:wrap;}
+.ml-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink-soft);}
+.ml-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.6);box-shadow:0 1px 3px rgba(0,0,0,0.3);}
+.ml-destroyed{background:#c0392b;}.ml-damaged{background:#e67e22;}.ml-nearmiss{background:#27ae60;}
+#q929-map{width:100%;height:380px;border-radius:12px;border:1px solid var(--rule);overflow:hidden;}
+#map-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);}
+
 @media(max-width:700px){
   .nav{padding:0 16px;}
   .page-wrap{padding:20px 16px 60px;}
@@ -174,6 +187,18 @@ tr.expanded .chev{transform:rotate(90deg);}
       <div class="stat-num"><%= @stats[:nearmiss] %></div>
       <div class="stat-lbl">Near-miss</div>
     </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-header">
+      <span class="map-label">Map — <span id="map-count">loading…</span></span>
+      <div class="map-legend">
+        <div class="ml-item"><div class="ml-dot ml-destroyed"></div>Destroyed / demolished</div>
+        <div class="ml-item"><div class="ml-dot ml-damaged"></div>Damaged</div>
+        <div class="ml-item"><div class="ml-dot ml-nearmiss"></div>Near-miss</div>
+      </div>
+    </div>
+    <div id="q929-map"></div>
   </div>
 
   <div class="tab-strip" id="tab-strip">
@@ -277,6 +302,67 @@ tr.expanded .chev{transform:rotate(90deg);}
 </div><!-- /page-wrap -->
 
 <script>
+// ── Entry data from Rails ────────────────────────────────────────────────
+var ENTRIES = <%= raw @entries.map { |e|
+  {
+    id:     e.id,
+    name:   e.site_name,
+    loc:    [e.location, e.country].compact.join(', '),
+    tab:    e.tab,
+    year:   e.year_of_incident,
+    status: e.status,
+    lat:    e.latitude,
+    lng:    e.longitude,
+  }
+}.to_json %>;
+
+var COLOR = { 'Destroyed': '#c0392b', 'Demolished': '#c0392b',
+              'Severely damaged': '#e67e22', 'Damaged': '#e67e22',
+              'Near-miss': '#27ae60' };
+
+// ── Leaflet map ──────────────────────────────────────────────────────────
+var map = L.map('q929-map', { scrollWheelZoom: false }).setView([25, 20], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors', maxZoom: 18
+}).addTo(map);
+
+var allMarkers = [];   // {entry, marker, layer}
+var markerLayer = L.layerGroup().addTo(map);
+
+function makeIcon(status) {
+  var color = COLOR[status] || '#888';
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:12px;height:12px;border-radius:50%;background:' + color + ';border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);"></div>',
+    iconSize: [12,12], iconAnchor: [6,6]
+  });
+}
+
+ENTRIES.forEach(function(e) {
+  if (e.lat == null || e.lng == null) return;
+  var m = L.marker([e.lat, e.lng], { icon: makeIcon(e.status) });
+  m.bindPopup(
+    '<strong style="font-size:13px">' + e.name + '</strong>' +
+    '<br><span style="font-size:11px;color:#666">' + e.loc + '</span>' +
+    '<br><span style="font-size:11px;color:#666">' + (e.year || '') + ' · ' + (e.status || '') + '</span>'
+  );
+  allMarkers.push({ entry: e, marker: m });
+});
+
+function refreshMap(tab) {
+  markerLayer.clearLayers();
+  var shown = 0;
+  allMarkers.forEach(function(o) {
+    if (tab === 'all' || o.entry.tab === tab) {
+      o.marker.addTo(markerLayer);
+      shown++;
+    }
+  });
+  document.getElementById('map-count').textContent = shown + ' mapped';
+}
+refreshMap('all');
+
+// ── Tab filter ───────────────────────────────────────────────────────────
 var currentTab = 'all';
 
 function filterTab(el, tab) {
@@ -291,16 +377,15 @@ function filterTab(el, tab) {
     var show = tab === 'all' || rt === tab;
     r.style.display = show ? '' : 'none';
     if (show && r.classList.contains('data-row')) visible++;
-    // collapse any open expand rows when filtering
-    if (!show && r.classList.contains('expand-row')) {
-      r.style.display = 'none';
-    }
+    if (!show && r.classList.contains('expand-row')) r.style.display = 'none';
   });
 
   document.getElementById('vis-count').textContent = visible + ' entr' + (visible === 1 ? 'y' : 'ies') + ' shown';
   document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
+  refreshMap(tab);
 }
 
+// ── Row expand ───────────────────────────────────────────────────────────
 function toggleExpand(i) {
   var dataRow = document.querySelector('[onclick="toggleExpand('+i+')"]');
   var expRow  = document.getElementById('exp-' + i);
