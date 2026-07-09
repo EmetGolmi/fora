@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · Q929 · Sacred Places Fire & Destruction Registry</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1b3a6b;--blue-lt:#2a5298;--blue-pl:rgba(27,58,107,0.12);
+  --gilt:#b8860b;--gilt-dk:#8b6914;--gilt-pl:#fdf8ed;--gilt-rul:rgba(184,134,11,0.2);
+  --red:#8b1a1a;--red-lt:#c0392b;--red-p:rgba(139,26,26,0.07);--red-r:rgba(139,26,26,0.18);
+  --amber:#c47f00;--amber-p:rgba(196,127,0,0.08);--amber-r:rgba(196,127,0,0.2);
+  --green:#155c2d;--green-p:rgba(21,92,45,0.07);--green-r:rgba(21,92,45,0.2);
+  --ink:#0e1a2e;--ink-mid:#1e2d45;--ink-soft:#4a5568;--ink-mut:#7a8aaa;
+  --bg:#f2f4f8;--white:#ffffff;
+  --rule:rgba(27,58,107,0.1);--rule-lt:rgba(27,58,107,0.06);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+.nav{background:var(--blue);border-bottom:4px solid var(--gilt);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:white;letter-spacing:0.04em;}
+.nav-right{display:flex;gap:20px;align-items:center;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;}
+.nav-link:hover{color:white;}
+.nav-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);cursor:pointer;background:transparent;}
+
+/* ALERT BAR */
+.alert-bar{background:linear-gradient(135deg,#4a0808,#7a1212);border-bottom:2px solid #c0392b;padding:9px 40px;display:flex;align-items:center;gap:14px;}
+.ab-pulse{width:8px;height:8px;border-radius:50%;background:#ff4444;flex-shrink:0;animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,68,68,0.4);}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(255,68,68,0);}}
+.ab-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.ab-text{font-family:'Nunito',sans-serif;font-size:13px;color:rgba(255,255,255,0.9);}
+.ab-text strong{color:white;}
+
+/* PAGE WRAP */
+.page-wrap{max-width:1100px;margin:0 auto;padding:32px 40px 80px;}
+
+/* HEADER */
+.ph{margin-bottom:28px;}
+.ph-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red-lt);margin-bottom:8px;}
+.ph-title{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:8px;}
+.ph-desc{font-size:14px;color:var(--ink-soft);max-width:680px;line-height:1.65;}
+.ph-meta{margin-top:10px;display:flex;gap:16px;flex-wrap:wrap;}
+.ph-meta-item{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+.stat-box{background:var(--white);border-radius:10px;padding:16px 18px;border:1px solid var(--rule);position:relative;overflow:hidden;}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.stat-box.s-total::before{background:var(--blue);}
+.stat-box.s-dest::before{background:var(--red-lt);}
+.stat-box.s-dmg::before{background:#e67e22;}
+.stat-box.s-near::before{background:var(--green);}
+.stat-num{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;line-height:1;}
+.stat-box.s-total .stat-num{color:var(--blue);}
+.stat-box.s-dest .stat-num{color:var(--red-lt);}
+.stat-box.s-dmg .stat-num{color:#d35400;}
+.stat-box.s-near .stat-num{color:var(--green);}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mut);margin-top:6px;}
+
+/* TAB STRIP */
+.tab-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.tc{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.07em;text-transform:uppercase;padding:5px 12px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-mut);cursor:pointer;background:var(--white);transition:all .15s;white-space:nowrap;}
+.tc:hover{border-color:var(--red-r);color:var(--red);}
+.tc.active{background:var(--red);border-color:var(--red);color:white;}
+.tc .ct{opacity:0.65;margin-left:3px;}
+
+/* TABLE SECTION */
+.table-section{background:var(--white);border-radius:12px;border:1px solid var(--rule);overflow:hidden;}
+.ts-header{padding:14px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;}
+.ts-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mut);}
+.ts-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{padding:10px 14px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-mut);background:#f9fafb;border-bottom:1px solid var(--rule);font-weight:500;}
+tbody tr{border-bottom:1px solid var(--rule-lt);cursor:pointer;transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:#fafbfd;}
+tbody tr.expanded{background:#fdf8ed;}
+td{padding:11px 14px;vertical-align:top;}
+.td-site .site-name{font-weight:700;color:var(--ink);font-size:13px;line-height:1.3;}
+.td-site .site-tab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+.td-loc{color:var(--ink-soft);font-size:12.5px;line-height:1.4;}
+.td-loc .country{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);margin-top:2px;}
+.td-num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+.td-cause{font-size:12px;color:var(--ink-soft);line-height:1.4;max-width:260px;}
+
+/* STATUS PILLS */
+.sp{display:inline-block;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+.sp-destroyed{background:var(--red-p);color:#922b21;border:1px solid var(--red-r);}
+.sp-damaged{background:var(--amber-p);color:#7d5a1e;border:1px solid var(--amber-r);}
+.sp-nearmiss{background:var(--green-p);color:#1e6b45;border:1px solid var(--green-r);}
+
+/* EXPAND ROW */
+tr.expand-row td{padding:0;background:#fdf8ed;border-bottom:1px solid var(--gilt-rul);}
+.expand-inner{padding:14px 20px 16px 54px;display:flex;gap:32px;flex-wrap:wrap;}
+.exp-block{flex:1;min-width:220px;}
+.exp-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:4px;}
+.exp-text{font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+.exp-source{font-size:11px;color:var(--ink-mut);font-style:italic;margin-top:4px;}
+
+/* CHEVRON */
+.chev{font-size:11px;color:var(--ink-mut);transition:transform .2s;display:inline-block;margin-right:4px;}
+tr.expanded .chev{transform:rotate(90deg);}
+
+/* FOOTER NOTE */
+.footer-note{margin-top:24px;padding:16px 20px;background:var(--white);border-radius:10px;border:1px solid var(--rule);}
+.fn-text{font-size:12px;color:var(--ink-mut);line-height:1.7;}
+.fn-text strong{color:var(--ink-soft);}
+
+/* EMPTY STATE */
+.empty-state{padding:48px 20px;text-align:center;color:var(--ink-mut);font-size:13px;}
+
+@media(max-width:700px){
+  .nav{padding:0 16px;}
+  .page-wrap{padding:20px 16px 60px;}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+  .ph-title{font-size:22px;}
+  .alert-bar{padding:9px 16px;}
+  thead th:nth-child(3),thead th:nth-child(4){display:none;}
+  td:nth-child(3),td:nth-child(4){display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">FORA</a>
+  <div class="nav-right">
+    <a href="/mvp/dashboard" class="nav-link">Dashboard</a>
+    <a href="/mvp/dashboard" class="nav-btn">Sign in</a>
+  </div>
+</nav>
+
+<div class="alert-bar">
+  <div class="ab-pulse"></div>
+  <span class="ab-label">Living registry</span>
+  <span class="ab-text"><strong><%= @stats[:total] %> sites documented</strong> — updated <%= Date.today.strftime('%B %Y') %> · fora.center/q929</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="ph">
+    <div class="ph-eyebrow">Q929 — Sacred Places</div>
+    <h1 class="ph-title">Fire &amp; Destruction Registry</h1>
+    <p class="ph-desc">A living record of fires, bombings, demolitions, and targeted attacks on holy sites worldwide — spanning all faith traditions. Entries are sourced from verified news reporting, government records, and civil society documentation.</p>
+    <div class="ph-meta">
+      <span class="ph-meta-item"><%= @stats[:total] %> entries</span>
+      <span class="ph-meta-item">7 traditions</span>
+      <span class="ph-meta-item">Updated July 2026</span>
+      <span class="ph-meta-item">fora.center/q929</span>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box s-total">
+      <div class="stat-num"><%= @stats[:total] %></div>
+      <div class="stat-lbl">Sites recorded</div>
+    </div>
+    <div class="stat-box s-dest">
+      <div class="stat-num"><%= @stats[:destroyed] %></div>
+      <div class="stat-lbl">Destroyed or demolished</div>
+    </div>
+    <div class="stat-box s-dmg">
+      <div class="stat-num"><%= @stats[:damaged] %></div>
+      <div class="stat-lbl">Damaged</div>
+    </div>
+    <div class="stat-box s-near">
+      <div class="stat-num"><%= @stats[:nearmiss] %></div>
+      <div class="stat-lbl">Near-miss</div>
+    </div>
+  </div>
+
+  <div class="tab-strip" id="tab-strip">
+    <span class="tc active" data-tab="all" onclick="filterTab(this,'all')">All <span class="ct">(<%= @stats[:total] %>)</span></span>
+    <% tab_order = ['Christian','Jewish','Hindu','Shinto & Buddhist (Japan)','Sunni → Shia','Sikh','Buddhist'] %>
+    <% tab_order.each do |tab| %>
+      <% count = @tab_counts[tab] || 0 %>
+      <% next if count == 0 %>
+      <span class="tc" data-tab="<%= tab %>" onclick="filterTab(this,'<%= tab %>')"><%= tab %> <span class="ct">(<%= count %>)</span></span>
+    <% end %>
+  </div>
+
+  <div class="table-section">
+    <div class="ts-header">
+      <span class="ts-title">Registry</span>
+      <span class="ts-count" id="vis-count"><%= @stats[:total] %> entries shown</span>
+    </div>
+    <table id="q929-table">
+      <thead>
+        <tr>
+          <th style="width:5px"></th>
+          <th style="width:30%">Site</th>
+          <th style="width:18%">Location</th>
+          <th style="width:7%">Est.</th>
+          <th style="width:6%">Year</th>
+          <th style="width:22%">Cause</th>
+          <th style="width:12%">Status</th>
+        </tr>
+      </thead>
+      <tbody id="q929-body">
+        <% @entries.each_with_index do |e, i| %>
+          <% status_class = case e.status
+               when 'Destroyed','Demolished' then 'sp-destroyed'
+               when 'Severely damaged','Damaged' then 'sp-damaged'
+               when 'Near-miss' then 'sp-nearmiss'
+               else 'sp-damaged'
+             end %>
+          <tr class="data-row" data-tab="<%= e.tab %>" onclick="toggleExpand(<%= i %>)">
+            <td style="width:5px;padding-right:4px;"><span class="chev">›</span></td>
+            <td class="td-site">
+              <div class="site-name"><%= e.site_name %></div>
+              <div class="site-tab"><%= e.tab %></div>
+            </td>
+            <td class="td-loc">
+              <div><%= e.location %></div>
+              <div class="country"><%= e.country %></div>
+            </td>
+            <td class="td-num"><%= e.established.presence || '—' %></td>
+            <td class="td-num"><%= e.year_of_incident || '—' %></td>
+            <td class="td-cause"><%= e.cause.to_s.truncate(90) %></td>
+            <td><span class="sp <%= status_class %>"><%= e.status.presence || '—' %></span></td>
+          </tr>
+          <tr class="expand-row" id="exp-<%= i %>" style="display:none" data-tab="<%= e.tab %>">
+            <td colspan="7">
+              <div class="expand-inner">
+                <% if e.notes.present? %>
+                  <div class="exp-block">
+                    <div class="exp-label">Notes &amp; significance</div>
+                    <div class="exp-text"><%= e.notes %></div>
+                  </div>
+                <% end %>
+                <% if e.cause.present? && e.cause.length > 90 %>
+                  <div class="exp-block">
+                    <div class="exp-label">Cause</div>
+                    <div class="exp-text"><%= e.cause %></div>
+                  </div>
+                <% end %>
+                <% if e.source_citation.present? %>
+                  <div class="exp-block" style="flex:0 0 auto;min-width:180px;">
+                    <div class="exp-label">Source</div>
+                    <div class="exp-source"><%= e.source_citation %></div>
+                  </div>
+                <% end %>
+                <% if e.faith_tradition.present? || e.established.present? %>
+                  <div class="exp-block" style="flex:0 0 auto;min-width:160px;">
+                    <% if e.faith_tradition.present? %>
+                      <div class="exp-label">Tradition</div>
+                      <div class="exp-text" style="margin-bottom:10px;"><%= e.faith_tradition %></div>
+                    <% end %>
+                    <% if e.established.present? %>
+                      <div class="exp-label">Founded</div>
+                      <div class="exp-text"><%= e.established %></div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="empty-state" id="empty-state" style="display:none">No entries for this filter.</div>
+  </div>
+
+  <div class="footer-note">
+    <div class="fn-text">
+      <strong>About this registry:</strong> Q929 documents sacred sites lost to fire, bombing, demolition, and targeted destruction. Entries span all faith traditions and are updated as events are verified. Near-miss entries are included to document proximity incidents at heritage sites. <strong>Sources</strong> are cited per entry and include wire services (AP, AFP, Reuters), regional news, government reports, and civil society documentation (USCIRF, HRW, ADL, HAF, CSW, Open Doors). Registry maintained at <strong>fora.center/q929</strong>.
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+var currentTab = 'all';
+
+function filterTab(el, tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tc').forEach(function(c){ c.classList.remove('active'); });
+  el.classList.add('active');
+
+  var rows = document.querySelectorAll('#q929-body tr');
+  var visible = 0;
+  rows.forEach(function(r) {
+    var rt = r.dataset.tab;
+    var show = tab === 'all' || rt === tab;
+    r.style.display = show ? '' : 'none';
+    if (show && r.classList.contains('data-row')) visible++;
+    // collapse any open expand rows when filtering
+    if (!show && r.classList.contains('expand-row')) {
+      r.style.display = 'none';
+    }
+  });
+
+  document.getElementById('vis-count').textContent = visible + ' entr' + (visible === 1 ? 'y' : 'ies') + ' shown';
+  document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
+}
+
+function toggleExpand(i) {
+  var dataRow = document.querySelector('[onclick="toggleExpand('+i+')"]');
+  var expRow  = document.getElementById('exp-' + i);
+  if (!expRow) return;
+  var isOpen = expRow.style.display !== 'none';
+  expRow.style.display = isOpen ? 'none' : '';
+  dataRow.classList.toggle('expanded', !isOpen);
+}
+</script>
+</body>
+</html>

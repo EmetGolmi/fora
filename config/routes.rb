@@ -189,6 +189,7 @@ Rails.application.routes.draw do
   get "/org/hezbollah", to: "world#hezbollah"
   get "/cuba",          to: "world#cuba"
   get "/org/gaesa",     to: "world#gaesa"
+  get "/q929",          to: "world#q929"
 
   # ── IJDB — Islamic Jihad Database ─────────────────────────────────────────
   # National route BEFORE the city-scoped block (fixed path wins over :city param)
