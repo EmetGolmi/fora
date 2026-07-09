@@ -80,6 +80,10 @@ a{text-decoration:none;color:inherit;}
 
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead th{padding:10px 14px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-mut);background:#f9fafb;border-bottom:1px solid var(--rule);font-weight:500;}
+thead th.sortable{cursor:pointer;user-select:none;white-space:nowrap;}
+thead th.sortable:hover{color:var(--ink);background:#eef0f4;}
+thead th.sortable.sorted{color:var(--blue);}
+.sort-ind{font-size:9px;opacity:0.7;margin-left:3px;}
 tbody tr{border-bottom:1px solid var(--rule-lt);cursor:pointer;transition:background .1s;}
 tbody tr:last-child{border-bottom:none;}
 tbody tr:hover{background:#fafbfd;}
@@ -220,12 +224,12 @@ tr.expanded .chev{transform:rotate(90deg);}
       <thead>
         <tr>
           <th style="width:5px"></th>
-          <th style="width:30%">Site</th>
-          <th style="width:18%">Location</th>
-          <th style="width:7%">Est.</th>
-          <th style="width:6%">Year</th>
-          <th style="width:22%">Cause</th>
-          <th style="width:12%">Status</th>
+          <th style="width:30%" class="sortable" id="th-site"     onclick="sortTable('site')">Site <span class="sort-ind" id="si-site"></span></th>
+          <th style="width:18%" class="sortable" id="th-location" onclick="sortTable('location')">Location <span class="sort-ind" id="si-location"></span></th>
+          <th style="width:7%"  class="sortable" id="th-est"      onclick="sortTable('est')">Est. <span class="sort-ind" id="si-est"></span></th>
+          <th style="width:6%"  class="sortable" id="th-year"     onclick="sortTable('year')">Year <span class="sort-ind" id="si-year"></span></th>
+          <th style="width:22%" class="sortable" id="th-cause"    onclick="sortTable('cause')">Cause <span class="sort-ind" id="si-cause"></span></th>
+          <th style="width:12%" class="sortable" id="th-status"   onclick="sortTable('status')">Status <span class="sort-ind" id="si-status"></span></th>
         </tr>
       </thead>
       <tbody id="q929-body">
@@ -236,7 +240,14 @@ tr.expanded .chev{transform:rotate(90deg);}
                when 'Near-miss' then 'sp-nearmiss'
                else 'sp-damaged'
              end %>
-          <tr class="data-row" data-tab="<%= e.tab %>" onclick="toggleExpand(<%= i %>)">
+          <tr class="data-row" data-tab="<%= e.tab %>"
+              data-site="<%= e.site_name.downcase %>"
+              data-location="<%= e.location.to_s.downcase %>"
+              data-est="<%= e.established.to_s.scan(/\d{3,}/).first || '9999' %>"
+              data-year="<%= e.year_of_incident || 9999 %>"
+              data-cause="<%= e.cause.to_s.downcase %>"
+              data-status="<%= e.status.to_s.downcase %>"
+              onclick="toggleExpand(<%= i %>)">
             <td style="width:5px;padding-right:4px;"><span class="chev">›</span></td>
             <td class="td-site">
               <div class="site-name"><%= e.site_name %></div>
@@ -383,6 +394,56 @@ function filterTab(el, tab) {
   document.getElementById('vis-count').textContent = visible + ' entr' + (visible === 1 ? 'y' : 'ies') + ' shown';
   document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
   refreshMap(tab);
+}
+
+// ── Column sort ──────────────────────────────────────────────────────────
+var sortCol = null, sortDir = 1;
+
+function sortTable(col) {
+  sortDir = (sortCol === col) ? -sortDir : 1;
+  sortCol = col;
+
+  // Update header indicators
+  ['site','location','est','year','cause','status'].forEach(function(c) {
+    document.getElementById('si-' + c).textContent = '';
+    document.getElementById('th-' + c).classList.remove('sorted');
+  });
+  document.getElementById('si-' + col).textContent = sortDir === 1 ? ' ▲' : ' ▼';
+  document.getElementById('th-' + col).classList.add('sorted');
+
+  var tbody  = document.getElementById('q929-body');
+  var numeric = (col === 'year' || col === 'est');
+  var rows   = Array.from(tbody.querySelectorAll('tr.data-row'));
+
+  rows.sort(function(a, b) {
+    var av = a.dataset[col] || '', bv = b.dataset[col] || '';
+    if (numeric) {
+      av = parseFloat(av) || 0; bv = parseFloat(bv) || 0;
+      return sortDir * (av - bv);
+    }
+    return sortDir * av.localeCompare(bv);
+  });
+
+  // Re-append each data-row immediately followed by its expand-row
+  rows.forEach(function(dataRow) {
+    var idx    = dataRow.getAttribute('onclick').match(/\d+/)[0];
+    var expRow = document.getElementById('exp-' + idx);
+    expRow.style.display = 'none';
+    dataRow.classList.remove('expanded');
+    tbody.appendChild(dataRow);
+    tbody.appendChild(expRow);
+  });
+
+  // Re-apply current tab filter
+  var visRows = tbody.querySelectorAll('tr.data-row');
+  var visible = 0;
+  visRows.forEach(function(r) {
+    var show = currentTab === 'all' || r.dataset.tab === currentTab;
+    r.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('vis-count').textContent =
+    visible + ' entr' + (visible === 1 ? 'y' : 'ies') + ' shown';
 }
 
 // ── Row expand ───────────────────────────────────────────────────────────
