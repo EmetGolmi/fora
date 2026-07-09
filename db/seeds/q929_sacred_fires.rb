@@ -1,9 +1,10 @@
-# Q929 Sacred Places Fire & Destruction Registry
-# 183 entries — auto-generated from q929_sacred_fires_registry_v17.xlsx
+# db/seeds/q929_sacred_fires.rb
+# Generated from q929_sacred_fires_registry_v17.xlsx — 181 entries
+# Idempotent: find_or_create_by site_name; updates all fields on re-run.
 
-puts 'Seeding Q929 Sacred Fire Entries...'
-created = 0; updated = 0
-entries = [
+puts "── Q929 seed: Sacred Fire & Destruction Registry ──"
+
+data = [
   {
     tab:              "Shinto & Buddhist (Japan)",
     site_name:        "Shuri Castle — Seiden Main Hall",
@@ -2600,21 +2601,6 @@ entries = [
     longitude:        -0.114057541e3,
   },
   {
-    tab:              "Sikh",
-    site_name:        "NOTE: No major Sikh gurdwara fires producing confirmed total structural loss were found in international reporting for 2019–2026. The Farooqabad demolition is included as it represents deliberate destruction of a 125-year-old sacred site. Registry will be updated as verified incidents are documented.",
-    location:         "",
-    country:          "",
-    faith_tradition:  "",
-    established:      "",
-    year_of_incident: nil,
-    cause:            "",
-    status:           "",
-    notes:            "",
-    source_citation:  "",
-    latitude:         nil,
-    longitude:        nil,
-  },
-  {
     tab:              "Sunni → Shia",
     site_name:        "Masjid Asna-e-Ashri (Qissa Khwani Bazaar)",
     location:         "Peshawar, Khyber Pakhtunkhwa",
@@ -2733,28 +2719,23 @@ entries = [
     source_citation:  "Washington Institute, 2024",
     latitude:         0.34035527e2,
     longitude:        0.62038671e2,
-  },
-  {
-    tab:              "Sunni → Shia",
-    site_name:        "NOTE ON SCOPE: This tab records only confirmed intra-Islamic sectarian attacks where the perpetrator (ISIS/ISKP/affiliated Sunni extremists) specifically targeted Shia mosques or shrines as a sectarian act. General terrorist attacks on mosques of mixed or unknown sectarian motivation are excluded. ISIS has explicitly and repeatedly stated its theological position that Shia Muslims are 'rawafidh' (apostates) and legitimate targets. This campaign has been ongoing since 2014 across Iraq, Syria, Afghanistan, Pakistan, Iran, and the Gulf.",
-    location:         "",
-    country:          "",
-    faith_tradition:  "",
-    established:      "",
-    year_of_incident: nil,
-    cause:            "",
-    status:           "",
-    notes:            "",
-    source_citation:  "",
-    latitude:         nil,
-    longitude:        nil,
   }
 ]
-entries.each do |attrs|
-  record = SacredFireEntry.find_or_initialize_by(site_name: attrs[:site_name], year_of_incident: attrs[:year_of_incident])
-  new_record = record.new_record?
-  record.assign_attributes(attrs)
-  record.save!
-  new_record ? created += 1 : updated += 1
+
+created = 0
+updated = 0
+data.each do |attrs|
+  entry = SacredFireEntry.find_or_initialize_by(site_name: attrs[:site_name])
+  is_new = entry.new_record?
+  entry.assign_attributes(attrs)
+  entry.save!
+  is_new ? created += 1 : updated += 1
 end
-puts "Q929: 183 entries — #{created} created, #{updated} updated"
+
+# Remove entries no longer in the registry
+current_names = data.map{|r| r[:site_name]}
+removed = SacredFireEntry.where.not(site_name: current_names).destroy_all
+puts "  Removed: #{removed.length} stale entries" if removed.any?
+
+puts "  Created: #{created}, Updated: #{updated}, Total: #{SacredFireEntry.count}"
+puts "── Done ──"
