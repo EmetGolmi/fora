@@ -1,6 +1,5 @@
 # Q929 Sacred Places Fire & Destruction Registry
-# 183 entries across 7 traditions
-# Auto-generated from q929_sacred_fires_registry_v17.xlsx
+# 183 entries — auto-generated from q929_sacred_fires_registry_v17.xlsx
 
 puts 'Seeding Q929 Sacred Fire Entries...'
 
@@ -1424,7 +1423,7 @@ entries = [
   },
   {
     tab:              "Christian",
-    site_name:        "EYN Church (Church of the Brethren)",
+    site_name:        "EYN Church (Church of the Brethren) — Bamzir (Banziir) village",
     location:         "Bamzir (Banziir) village, Chibok LGA, Borno State",
     country:          "Nigeria",
     faith_tradition:  "Protestant (EYN / Church of the Brethren)",
@@ -1437,7 +1436,7 @@ entries = [
   },
   {
     tab:              "Christian",
-    site_name:        "EYN Church (Church of the Brethren)",
+    site_name:        "EYN Church (Church of the Brethren) — Shikarkir village",
     location:         "Shikarkir village, Chibok LGA, Borno State",
     country:          "Nigeria",
     faith_tradition:  "Protestant (EYN / Church of the Brethren)",
@@ -1879,7 +1878,7 @@ entries = [
   },
   {
     tab:              "Christian",
-    site_name:        "Holy Family Church",
+    site_name:        "Holy Family Church — Gaza City (near Al-Ahli Hospital)",
     location:         "Gaza City (near Al-Ahli Hospital)",
     country:          "Gaza Strip",
     faith_tradition:  "Catholic (Latin Patriarchate)",
@@ -2386,18 +2385,12 @@ entries = [
   }
 ]
 
-created = 0
-updated = 0
-
+created = 0; updated = 0
 entries.each do |attrs|
-  record = SacredFireEntry.find_or_initialize_by(
-    site_name:        attrs[:site_name],
-    year_of_incident: attrs[:year_of_incident]
-  )
+  record = SacredFireEntry.find_or_initialize_by(site_name: attrs[:site_name], year_of_incident: attrs[:year_of_incident])
   new_record = record.new_record?
   record.assign_attributes(attrs)
   record.save!
   new_record ? created += 1 : updated += 1
 end
-
-puts "Q929: 183 entries processed — #{created} created, #{updated} updated"
+puts "Q929: 183 entries — #{created} created, #{updated} updated"
