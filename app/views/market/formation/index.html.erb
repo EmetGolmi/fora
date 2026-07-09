@@ -1,0 +1,71 @@
+<%# app/views/market/formation/index.html.erb %>
+<% content_for :title, "Formation Guides · FORA" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "market/new_llc" %>
+  <style>
+    .ft-index-hero{background:#1B2A4A;border-bottom:3px solid #C8A84B;padding:2.5rem 2rem 2rem;}
+    .ft-index-eyebrow{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#C8A84B;margin-bottom:.75rem;}
+    .ft-index-h1{font-family:'Libre Baskerville',serif;font-size:1.75rem;font-weight:700;color:#fff;line-height:1.25;margin-bottom:.5rem;}
+    .ft-index-sub{font-size:.9375rem;color:rgba(255,255,255,.72);max-width:640px;line-height:1.6;}
+    .ft-track-card{background:#fff;border:1px solid #e8ecf2;border-radius:12px;padding:1.25rem 1.5rem;
+                   margin-bottom:1rem;display:flex;align-items:flex-start;gap:1.25rem;cursor:pointer;
+                   text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s;}
+    .ft-track-card:hover{border-color:#9eb5d8;box-shadow:0 2px 12px rgba(27,58,107,.07);}
+    .ft-track-icon{width:44px;height:44px;border-radius:10px;background:#eef2fb;display:flex;
+                   align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;}
+    .ft-track-body{flex:1;}
+    .ft-track-name{font-family:'Libre Baskerville',serif;font-size:1.0625rem;font-weight:700;color:#0e1a2e;margin-bottom:.25rem;}
+    .ft-track-summary{font-size:.875rem;color:#5a6e8a;line-height:1.55;}
+    .ft-track-chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.625rem;}
+    .ft-tc{font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+           padding:3px 9px;border-radius:999px;background:#f2f5fb;color:#5a6e8a;}
+    .ft-tc.profession{background:#fdf8ed;color:#7a5c00;}
+    .ft-tc.cost{background:#f0f7f2;color:#155c2d;}
+    .ft-track-arr{font-size:1.25rem;color:#9eb5d8;margin-left:.5rem;align-self:center;}
+    .ft-empty{padding:3rem 1rem;text-align:center;color:#8a9ab8;font-size:.9375rem;}
+  </style>
+<% end %>
+
+<div class="newllc-page">
+  <div class="ft-index-hero">
+    <p class="ft-index-eyebrow">Business Formation · FORA</p>
+    <h1 class="ft-index-h1">Formation Guides</h1>
+    <p class="ft-index-sub">Step-by-step guides to forming your LLC, getting licensed, and staying compliant — built for specific professions in Pennsylvania.</p>
+  </div>
+
+  <div class="newllc-body">
+    <% if @tracks.any? %>
+      <% @tracks.each do |track| %>
+        <a href="<%= market_formation_path(track) %>" class="ft-track-card">
+          <div class="ft-track-icon">▢</div>
+          <div class="ft-track-body">
+            <div class="ft-track-name"><%= track.name %></div>
+            <% if track.summary.present? %>
+              <div class="ft-track-summary"><%= truncate(track.summary, length: 160) %></div>
+            <% end %>
+            <div class="ft-track-chips">
+              <% if track.profession.present? %>
+                <span class="ft-tc profession"><%= track.profession %></span>
+              <% end %>
+              <% if track.min_cost_cents && track.max_cost_cents %>
+                <span class="ft-tc cost">$<%= number_with_delimiter(track.min_cost_cents / 100) %>–$<%= number_with_delimiter(track.max_cost_cents / 100) %></span>
+              <% end %>
+              <span class="ft-tc"><%= track.formation_steps.count %> steps</span>
+            </div>
+          </div>
+          <span class="ft-track-arr">→</span>
+        </a>
+      <% end %>
+    <% else %>
+      <div class="ft-empty">No formation guides published yet.</div>
+    <% end %>
+
+    <div class="newllc-footer">
+      <div class="newllc-footer-brand">FORA · fora.center</div>
+      <div class="newllc-footer-disc">
+        Formation guides are informational and reflect Pennsylvania requirements. Not legal advice.
+        Verify current requirements before filing.
+      </div>
+    </div>
+  </div>
+</div>

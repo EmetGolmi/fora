@@ -10,9 +10,7 @@ module Market
     end
 
     def guide
-      # Pass intake params to the view for meta/SEO and
-      # progressive enhancement if you ever go server-side.
-      # The real personalization happens client-side in JS.
+      # Pass intake params to the view for JS personalization.
       @name     = params[:name].to_s.strip.truncate(60)
       @work     = params[:work].to_s.strip.truncate(80)
       @location = params[:location].to_s.strip.truncate(80)
@@ -26,6 +24,9 @@ module Market
       else
         "Start Your Business · FORA"
       end
+
+      # Link to the data-driven checklist track
+      @formation_track = FormationTrack.find_by(name: "PA Home Inspector · Single-Member LLC")
     end
   end
 end

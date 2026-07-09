@@ -1,0 +1,323 @@
+<%# app/views/market/formation/show.html.erb %>
+<% content_for :title, "#{@track.name} · FORA" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "market/new_llc" %>
+  <style>
+    /* ── Formation checklist additions ──────────────────────────────────── */
+    .ft-hero{background:#1B2A4A;border-bottom:3px solid #C8A84B;padding:2.5rem 2rem 2rem;}
+    .ft-eyebrow{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#C8A84B;margin-bottom:.75rem;}
+    .ft-h1{font-family:'Libre Baskerville',serif;font-size:1.75rem;font-weight:700;color:#fff;line-height:1.25;margin-bottom:.75rem;}
+    .ft-summary{font-size:.9375rem;color:rgba(255,255,255,.78);line-height:1.65;max-width:680px;}
+    .ft-meta{display:flex;gap:1.5rem;margin-top:1.25rem;flex-wrap:wrap;}
+    .ft-meta-chip{font-size:.75rem;color:rgba(255,255,255,.55);letter-spacing:.07em;}
+    .ft-meta-chip strong{color:rgba(255,255,255,.85);}
+
+    /* progress bar */
+    .ft-progress{background:#fff;border-bottom:1px solid #e8ecf2;padding:.9rem 2rem;display:flex;align-items:center;gap:1rem;}
+    .ft-prog-label{font-size:.8125rem;color:#5a6e8a;white-space:nowrap;}
+    .ft-prog-bar-wrap{flex:1;height:6px;background:#e8ecf2;border-radius:999px;overflow:hidden;}
+    .ft-prog-bar{height:100%;background:#155c2d;border-radius:999px;transition:width .3s;}
+    .ft-prog-pct{font-size:.8125rem;font-weight:700;color:#155c2d;white-space:nowrap;}
+    .ft-login-nudge{font-size:.8rem;color:#8a9ab8;margin-left:.5rem;}
+    .ft-login-nudge a{color:#1b3a6b;text-decoration:underline;}
+
+    /* phase header */
+    .ft-phase-h{font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8a9ab8;
+                padding:.5rem 0 .5rem;margin:1.5rem 0 .5rem;border-top:1px solid #e8ecf2;}
+    .ft-phase-h:first-child{margin-top:.5rem;border-top:none;}
+
+    /* step card */
+    .ft-step{background:#fff;border:1px solid #e8ecf2;border-radius:10px;padding:1.1rem 1.25rem 1.1rem 1rem;
+             margin-bottom:.625rem;display:grid;grid-template-columns:36px 1fr;gap:.5rem 1rem;
+             transition:border-color .15s;}
+    .ft-step.done{background:#f5faf6;border-color:#b8dfc2;}
+    .ft-step:hover{border-color:#c5d3e8;}
+
+    /* checkbox */
+    .ft-cb-wrap{display:flex;align-items:flex-start;padding-top:.25rem;}
+    .ft-cb{width:20px;height:20px;border-radius:5px;border:2px solid #c5d3e8;cursor:pointer;
+           display:flex;align-items:center;justify-content:center;flex-shrink:0;
+           background:#fff;transition:all .15s;}
+    .ft-cb.checked{background:#155c2d;border-color:#155c2d;}
+    .ft-cb .ck{display:none;color:#fff;font-size:.75rem;font-weight:700;}
+    .ft-cb.checked .ck{display:block;}
+    .ft-cb-spin{display:none;width:10px;height:10px;border:2px solid rgba(255,255,255,.4);
+                border-top-color:#fff;border-radius:50%;animation:cb-spin .5s linear infinite;}
+    .ft-cb.loading .ck{display:none;}
+    .ft-cb.loading .ft-cb-spin{display:block;}
+    @keyframes cb-spin{to{transform:rotate(360deg);}}
+
+    /* step body */
+    .ft-step-main{}
+    .ft-step-top{display:flex;align-items:flex-start;gap:.625rem;flex-wrap:wrap;margin-bottom:.375rem;}
+    .ft-step-title{font-weight:700;color:#0e1a2e;font-size:.9375rem;line-height:1.35;flex:1 1 0;}
+    .ft-step.done .ft-step-title{color:#5a6e8a;}
+    .ft-req{display:inline-block;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;
+            font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap;margin-top:2px;}
+    .ft-req.required{background:#faeaea;color:#8b1a1a;}
+    .ft-req.recommended{background:#fdf8ed;color:#7a5c00;}
+    .ft-req.optional{background:#f0f7f2;color:#155c2d;}
+    .ft-cost{font-size:.75rem;color:#8a9ab8;font-family:'JetBrains Mono',monospace;white-space:nowrap;margin-top:3px;}
+
+    /* body + actions */
+    .ft-body-wrap{margin-top:.5rem;}
+    .ft-body{font-size:.875rem;color:#3a4e68;line-height:1.65;white-space:pre-line;}
+    .ft-step.done .ft-body{color:#8a9ab8;}
+    .ft-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;}
+    .ft-action-btn{display:inline-flex;align-items:center;gap:.375rem;font-size:.8rem;
+                   padding:5px 12px;border-radius:6px;border:1px solid #c5d3e8;color:#1b3a6b;
+                   background:#fff;text-decoration:none;cursor:pointer;transition:all .15s;}
+    .ft-action-btn:hover{background:#eef2fb;border-color:#9eb5d8;}
+    .ft-action-btn.no-url{cursor:default;color:#8a9ab8;border-color:#e8ecf2;}
+    .ft-save-chip{font-size:.8rem;padding:4px 10px;border-radius:6px;border:1px solid #b8dfc2;
+                  color:#155c2d;background:#f0f7f2;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+
+    /* glossary tooltips */
+    .ft-def{border-bottom:1px dashed #b8860b;cursor:help;color:inherit;position:relative;}
+    .ft-def-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:0;width:240px;
+                background:#0e1a2e;color:#fff;font-size:.78rem;line-height:1.55;padding:8px 10px;
+                border-radius:6px;z-index:20;pointer-events:none;white-space:normal;}
+    .ft-def:hover .ft-def-tip{display:block;}
+
+    /* login CTA */
+    .ft-login-cta{background:#fdf8ed;border:1px solid rgba(184,134,11,.25);border-radius:10px;
+                  padding:1rem 1.25rem;margin:1.5rem 0;font-size:.875rem;color:#5a6e8a;text-align:center;}
+    .ft-login-cta a{color:#1b3a6b;font-weight:700;text-decoration:underline;}
+
+    .ft-back{display:inline-flex;align-items:center;gap:.375rem;font-size:.8125rem;color:#5a6e8a;
+             text-decoration:none;margin:1.25rem 0 .5rem;}
+    .ft-back:hover{color:#1b3a6b;}
+  </style>
+<% end %>
+
+<%
+  req_label = -> (r) {
+    case r.to_s
+    when 'required'    then ['Required',    'required']
+    when 'recommended' then ['Recommended', 'recommended']
+    when 'optional'    then ['Optional',    'optional']
+    else                    [r.to_s.capitalize, 'required']
+    end
+  }
+
+  def_tooltip = -> (text, defs) {
+    return h(text) if defs.blank?
+    result = h(text)
+    defs.each do |term, defn|
+      next if defn.plain_meaning.blank?
+      tip  = h(defn.plain_meaning)
+      html = %(<span class="ft-def">#{h(term)}<span class="ft-def-tip">#{tip}</span></span>)
+      result = result.gsub(Regexp.new("\\b#{Regexp.escape(h(term))}\\b", Regexp::IGNORECASE), html)
+    end
+    result.html_safe
+  }
+
+  done_ids = @progress.select { |_, p| p.status_done? }.keys.to_set
+%>
+
+<div class="newllc-page">
+
+  <%# HERO %>
+  <div class="ft-hero">
+    <p class="ft-eyebrow">Business Formation · FORA</p>
+    <h1 class="ft-h1"><%= @track.name %></h1>
+    <% if @track.summary.present? %>
+      <p class="ft-summary"><%= @track.summary %></p>
+    <% end %>
+    <div class="ft-meta">
+      <span class="ft-meta-chip"><strong><%= @total_steps %></strong> steps</span>
+      <% if @track.min_cost_cents && @track.max_cost_cents %>
+        <span class="ft-meta-chip">Est. cost: <strong>$<%= number_with_delimiter(@track.min_cost_cents / 100) %>–$<%= number_with_delimiter(@track.max_cost_cents / 100) %></strong></span>
+      <% end %>
+      <span class="ft-meta-chip"><strong><%= @track.profession %></strong></span>
+    </div>
+  </div>
+
+  <%# PROGRESS BAR %>
+  <div class="ft-progress">
+    <%
+      pct = @total_steps > 0 ? (@done_count * 100.0 / @total_steps).round : 0
+    %>
+    <span class="ft-prog-label">Progress:</span>
+    <div class="ft-prog-bar-wrap">
+      <div class="ft-prog-bar" id="ft-prog-bar" style="width:<%= pct %>%"></div>
+    </div>
+    <span class="ft-prog-pct" id="ft-prog-pct"><%= @done_count %>/<%= @total_steps %></span>
+    <% unless current_user %>
+      <span class="ft-login-nudge">
+        <a href="/join">Sign in</a> to save progress
+      </span>
+    <% end %>
+  </div>
+
+  <div class="newllc-body">
+    <a href="<%= market_formation_index_path %>" class="ft-back">← All formation guides</a>
+
+    <% unless current_user %>
+      <div class="ft-login-cta">
+        <a href="/join">Sign in or create a free account</a> to track your progress and save documents against each step.
+      </div>
+    <% end %>
+
+    <%# PHASES %>
+    <% @steps_by_phase.each do |phase, steps| %>
+      <div class="ft-phase-h"><%= phase %></div>
+
+      <% steps.each do |step| %>
+        <% is_done = done_ids.include?(step.id.to_s) %>
+        <% req_text, req_class = req_label.call(step.requirement) %>
+        <div class="ft-step <%= 'done' if is_done %>" id="step-<%= step.id %>">
+          <%# Checkbox %>
+          <div class="ft-cb-wrap">
+            <div class="ft-cb <%= 'checked' if is_done %>"
+                 id="cb-<%= step.id %>"
+                 onclick="toggleStep('<%= step.id %>', '<%= j toggle_step_market_formation_path(@track, step_id: step.id) %>')"
+                 title="<%= is_done ? 'Mark not done' : 'Mark done' %>">
+              <span class="ck">✓</span>
+              <div class="ft-cb-spin"></div>
+            </div>
+          </div>
+
+          <%# Content %>
+          <div class="ft-step-main">
+            <div class="ft-step-top">
+              <span class="ft-step-title"><%= step.title %></span>
+              <span class="ft-req <%= req_class %>"><%= req_text %></span>
+              <% if step.cost_range.present? %>
+                <span class="ft-cost"><%= step.cost_range %></span>
+              <% end %>
+            </div>
+
+            <% if step.body.present? %>
+              <div class="ft-body-wrap">
+                <div class="ft-body"><%= step.body %></div>
+              </div>
+            <% end %>
+
+            <% if step.action_links.any? %>
+              <div class="ft-actions">
+                <% step.action_links.each do |link| %>
+                  <% url = link["url"] || link[:url] %>
+                  <% label = link["label"] || link[:label] %>
+                  <% if url.present? %>
+                    <a href="<%= url %>" target="_blank" rel="noopener" class="ft-action-btn">
+                      ↗ <%= label %>
+                    </a>
+                  <% else %>
+                    <span class="ft-action-btn no-url"><%= label %></span>
+                  <% end %>
+                <% end %>
+
+                <% if step.save_as.present? %>
+                  <button class="ft-save-chip" onclick="saveDoc('<%= step.id %>','<%= j step.save_as %>')">
+                    + Save document
+                  </button>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%# KEY LINKS ── mirror existing guide %>
+    <p class="newllc-phase-label" style="margin-top:2rem">Key links</p>
+    <div class="newllc-links-grid">
+      <a class="newllc-link-card" href="https://apps.dos.pa.gov/CorpSearch" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">Check name availability</div>
+        <div class="newllc-lc-url">apps.dos.pa.gov/CorpSearch</div>
+      </a>
+      <a class="newllc-link-card" href="https://www.corporations.pa.gov" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">File LLC / Annual Report</div>
+        <div class="newllc-lc-url">corporations.pa.gov</div>
+      </a>
+      <a class="newllc-link-card" href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">Get your EIN (free, instant)</div>
+        <div class="newllc-lc-url">IRS.gov — Apply for an EIN</div>
+      </a>
+      <a class="newllc-link-card" href="https://mypath.pa.gov" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">Register with myPATH</div>
+        <div class="newllc-lc-url">mypath.pa.gov</div>
+      </a>
+      <a class="newllc-link-card" href="https://www.nachi.org" target="_blank" rel="noopener">
+        <div class="newllc-lc-label">InterNACHI — home inspector association</div>
+        <div class="newllc-lc-url">nachi.org</div>
+      </a>
+      <a class="newllc-link-card" href="<%= new_llc_guide_path %>" class="newllc-link-card">
+        <div class="newllc-lc-label">Full narrative guide</div>
+        <div class="newllc-lc-url">fora.center/market/newllc/guide</div>
+      </a>
+    </div>
+
+    <div class="newllc-footer">
+      <div class="newllc-footer-brand">FORA · fora.center</div>
+      <div class="newllc-footer-disc">
+        Informational purposes only. Reflects Pennsylvania requirements as of July 2026.
+        Not legal or financial advice. Verify current fees and requirements with
+        <a href="https://www.dos.pa.gov" target="_blank" rel="noopener">dos.pa.gov</a>,
+        the IRS, and your financial institution before filing.
+      </div>
+    </div>
+
+  </div><%# /newllc-body %>
+</div><%# /newllc-page %>
+
+<script>
+var TRACK_ID  = '<%= @track.id %>';
+var STEP_CNT  = <%= @total_steps %>;
+var DONE_CNT  = <%= @done_count %>;
+var LOGGED_IN = <%= current_user ? 'true' : 'false' %>;
+
+function toggleStep(stepId, url) {
+  if (!LOGGED_IN) {
+    window.location.href = '/join';
+    return;
+  }
+
+  var cb  = document.getElementById('cb-' + stepId);
+  var row = document.getElementById('step-' + stepId);
+  if (!cb) return;
+
+  cb.classList.add('loading');
+
+  fetch(url, {
+    method:  'PATCH',
+    headers: {
+      'X-CSRF-Token':   document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type':   'application/json',
+      'Accept':         'application/json'
+    }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    cb.classList.remove('loading');
+    var wasDone = cb.classList.contains('checked');
+
+    if (data.done) {
+      cb.classList.add('checked');
+      row.classList.add('done');
+      if (!wasDone) DONE_CNT++;
+    } else {
+      cb.classList.remove('checked');
+      row.classList.remove('done');
+      if (wasDone) DONE_CNT--;
+    }
+
+    var pct = STEP_CNT > 0 ? Math.round(DONE_CNT * 100 / STEP_CNT) : 0;
+    document.getElementById('ft-prog-bar').style.width = pct + '%';
+    document.getElementById('ft-prog-pct').textContent = DONE_CNT + '/' + STEP_CNT;
+  })
+  .catch(function() {
+    cb.classList.remove('loading');
+  });
+}
+
+function saveDoc(stepId, saveAs) {
+  if (!LOGGED_IN) {
+    window.location.href = '/join';
+    return;
+  }
+  // Phase 1b: LibraryItem creation — stub for now
+  alert('Document saving coming soon.');
+}
+</script>

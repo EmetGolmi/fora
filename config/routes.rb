@@ -180,6 +180,11 @@ Rails.application.routes.draw do
     resources :domains, only: [:show], param: :slug do
       resources :subcategories, only: [:show], param: :slug
     end
+    resources :formation, only: [:index, :show] do
+      member do
+        patch :toggle_step
+      end
+    end
   end
 
   # ── World / Jurisdiction & NGE Pages ──────────────────────────────────────
