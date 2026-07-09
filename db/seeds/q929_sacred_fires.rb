@@ -9,6 +9,7 @@ data = [
   {
     tab:              "Shinto & Buddhist (Japan)",
     site_name:        "Shuri Castle — Seiden Main Hall",
+    wiki_title:       "Shuri Castle",
     location:         "Naha, Okinawa",
     country:          "Japan",
     faith_tradition:  "Shinto / Ryukyuan",
@@ -159,6 +160,7 @@ data = [
   {
     tab:              "Buddhist",
     site_name:        "Jogyesa Temple — Memorial Hall",
+    wiki_title:       "Jogyesa",
     location:         "Jongno District, Seoul",
     country:          "South Korea",
     faith_tradition:  "Buddhist (Jogye Order)",
@@ -174,6 +176,7 @@ data = [
   {
     tab:              "Buddhist",
     site_name:        "Borobudur Temple — bombing",
+    wiki_title:       "Borobudur",
     location:         "Magelang, Central Java",
     country:          "Indonesia",
     faith_tradition:  "Buddhist (UNESCO World Heritage, 8th c. CE)",
@@ -969,6 +972,7 @@ data = [
   {
     tab:              "Jewish",
     site_name:        "El Ghriba Synagogue",
+    wiki_title:       "El Ghriba synagogue",
     location:         "Djerba island",
     country:          "Tunisia",
     faith_tradition:  "Jewish (oldest synagogue in Africa)",
@@ -1059,6 +1063,7 @@ data = [
   {
     tab:              "Jewish",
     site_name:        "Neve Shalom Synagogue",
+    wiki_title:       "Neve Shalom Synagogue",
     location:         "Beyoğlu, Istanbul",
     country:          "Turkey",
     faith_tradition:  "Jewish (Sephardic)",
@@ -1104,6 +1109,7 @@ data = [
   {
     tab:              "Jewish",
     site_name:        "Wuppertal Synagogue",
+    wiki_title:       "Wuppertal Synagogue",
     location:         "Wuppertal, North Rhine-Westphalia",
     country:          "Germany",
     faith_tradition:  "Jewish",
@@ -1239,6 +1245,7 @@ data = [
   {
     tab:              "Jewish",
     site_name:        "Nozyk Synagogue",
+    wiki_title:       "Nozyk Synagogue",
     location:         "Warsaw, Masovian Voivodeship",
     country:          "Poland",
     faith_tradition:  "Jewish (only surviving pre-war Warsaw synagogue)",
@@ -1299,6 +1306,7 @@ data = [
   {
     tab:              "Jewish",
     site_name:        "El Ghriba Synagogue — shooting",
+    wiki_title:       "El Ghriba synagogue",
     location:         "Djerba island",
     country:          "Tunisia",
     faith_tradition:  "Jewish (oldest synagogue in Africa)",
@@ -1329,6 +1337,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Notre-Dame de Paris",
+    wiki_title:       "Notre-Dame de Paris",
     location:         "4th arrondissement, Paris",
     country:          "France",
     faith_tradition:  "Catholic",
@@ -1494,6 +1503,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Church of Saint Porphyrius",
+    wiki_title:       "Church of Saint Porphyrius",
     location:         "Gaza City",
     country:          "Palestinian Territory",
     faith_tradition:  "Greek Orthodox",
@@ -1599,6 +1609,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Vondelkerk",
+    wiki_title:       "Vondelkerk",
     location:         "Amsterdam, North Holland",
     country:          "Netherlands",
     faith_tradition:  "Protestant",
@@ -2319,6 +2330,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "St. Sebastian's Church — Negombo",
+    wiki_title:       "St. Sebastian's Church, Negombo",
     location:         "Negombo, Western Province",
     country:          "Sri Lanka",
     faith_tradition:  "Catholic",
@@ -2334,6 +2346,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "St. Anthony's Shrine — Kochchikade, Colombo",
+    wiki_title:       "St. Anthony's Shrine, Kochchikade",
     location:         "Kochchikade, Colombo",
     country:          "Sri Lanka",
     faith_tradition:  "Catholic",
@@ -2364,6 +2377,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Cathedral of Our Lady of Mount Carmel — Jolo",
+    wiki_title:       "2019 Jolo Cathedral bombings",
     location:         "Jolo, Sulu Province, Mindanao",
     country:          "Philippines",
     faith_tradition:  "Catholic",
@@ -2379,6 +2393,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Sacred Heart Cathedral (Gereja Hati Yesus) — Makassar",
+    wiki_title:       "Makassar Cathedral",
     location:         "Makassar, South Sulawesi",
     country:          "Indonesia",
     faith_tradition:  "Catholic",
@@ -2409,6 +2424,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Saints Church (Two Saints Church) — Alexandria",
+    wiki_title:       "2011 Alexandria church bombing",
     location:         "Alexandria",
     country:          "Egypt",
     faith_tradition:  "Coptic Orthodox",
@@ -2424,6 +2440,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "St. George's Church and St. Mark's Cathedral — Tanta and Alexandria (Palm Sunday bombings)",
+    wiki_title:       "2017 Palm Sunday church bombings",
     location:         "Tanta (Gharbiya) and Alexandria",
     country:          "Egypt",
     faith_tradition:  "Coptic Orthodox",
@@ -2454,6 +2471,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Our Lady of Salvation Church (Sayidat al-Najat) — Baghdad",
+    wiki_title:       "Our Lady of Salvation Church, Baghdad",
     location:         "Karrada district, Baghdad",
     country:          "Iraq",
     faith_tradition:  "Syriac Catholic",
@@ -2469,6 +2487,7 @@ data = [
   {
     tab:              "Christian",
     site_name:        "Saint-Étienne-du-Rouvray Church — priest beheaded",
+    wiki_title:       "2016 Normandy church attack",
     location:         "Saint-Étienne-du-Rouvray, Seine-Maritime, Normandy",
     country:          "France",
     faith_tradition:  "Catholic",
@@ -2559,6 +2578,7 @@ data = [
   {
     tab:              "Sikh",
     site_name:        "Gur Sikh Temple — Abbotsford (Gur Sikh Temple)",
+    wiki_title:       "Gur Sikh Temple, Abbotsford",
     location:         "Abbotsford, British Columbia",
     country:          "Canada",
     faith_tradition:  "Sikh",
@@ -2649,6 +2669,7 @@ data = [
   {
     tab:              "Sunni → Shia",
     site_name:        "Shah Cheragh Shrine",
+    wiki_title:       "Shah Cheragh",
     location:         "Shiraz, Fars Province",
     country:          "Iran",
     faith_tradition:  "Shia Muslim (Shrine)",

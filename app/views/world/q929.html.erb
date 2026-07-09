@@ -247,6 +247,7 @@ tr.expanded .chev{transform:rotate(90deg);}
               data-year="<%= e.year_of_incident || 9999 %>"
               data-cause="<%= e.cause.to_s.downcase %>"
               data-status="<%= e.status.to_s.downcase %>"
+              data-wiki-title="<%= e.wiki_title.to_s %>"
               onclick="toggleExpand(<%= i %>)">
             <td style="width:5px;padding-right:4px;"><span class="chev">›</span></td>
             <td class="td-site">
@@ -281,6 +282,14 @@ tr.expanded .chev{transform:rotate(90deg);}
                   <div class="exp-block" style="flex:0 0 auto;min-width:180px;">
                     <div class="exp-label">Source</div>
                     <div class="exp-source"><%= e.source_citation %></div>
+                  </div>
+                <% end %>
+                <% if e.wiki_title.present? %>
+                  <div class="exp-photo" id="photo-<%= i %>" style="display:none;flex:0 0 auto;width:220px;">
+                    <div class="exp-label">Before</div>
+                    <img id="photo-img-<%= i %>" src="" alt="<%= e.site_name %>"
+                         style="width:220px;height:147px;object-fit:cover;border-radius:6px;margin-top:4px;display:block;background:#e8eaf0;">
+                    <div class="exp-source" style="margin-top:5px;">Photo: Wikipedia / Wikimedia Commons</div>
                   </div>
                 <% end %>
                 <% if e.faith_tradition.present? || e.established.present? %>
@@ -446,6 +455,23 @@ function sortTable(col) {
     visible + ' entr' + (visible === 1 ? 'y' : 'ies') + ' shown';
 }
 
+// ── Wikipedia "Before" photo ─────────────────────────────────────────────
+function loadWikiPhoto(i, title) {
+  var div = document.getElementById('photo-' + i);
+  var img = document.getElementById('photo-img-' + i);
+  if (!div || !img || div.dataset.attempted) return;
+  div.dataset.attempted = '1';
+  fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.thumbnail && d.thumbnail.source) {
+        img.src = d.thumbnail.source;
+        div.style.display = '';
+      }
+    })
+    .catch(function() {});
+}
+
 // ── Row expand ───────────────────────────────────────────────────────────
 function toggleExpand(i) {
   var dataRow = document.querySelector('[onclick="toggleExpand('+i+')"]');
@@ -454,6 +480,10 @@ function toggleExpand(i) {
   var isOpen = expRow.style.display !== 'none';
   expRow.style.display = isOpen ? 'none' : '';
   dataRow.classList.toggle('expanded', !isOpen);
+  if (!isOpen) {
+    var wt = dataRow.dataset.wikiTitle;
+    if (wt) loadWikiPhoto(i, wt);
+  }
 }
 </script>
 </body>
