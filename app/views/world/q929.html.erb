@@ -248,6 +248,7 @@ tr.expanded .chev{transform:rotate(90deg);}
               data-cause="<%= e.cause.to_s.downcase %>"
               data-status="<%= e.status.to_s.downcase %>"
               data-wiki-title="<%= e.wiki_title.to_s %>"
+              data-wiki-incident="<%= e.wiki_title_incident.to_s %>"
               onclick="toggleExpand(<%= i %>)">
             <td style="width:5px;padding-right:4px;"><span class="chev">›</span></td>
             <td class="td-site">
@@ -288,6 +289,14 @@ tr.expanded .chev{transform:rotate(90deg);}
                   <div class="exp-photo" id="photo-<%= i %>" style="display:none;flex:0 0 auto;width:220px;">
                     <div class="exp-label">Before</div>
                     <img id="photo-img-<%= i %>" src="" alt="<%= e.site_name %>"
+                         style="width:220px;height:147px;object-fit:cover;border-radius:6px;margin-top:4px;display:block;background:#e8eaf0;">
+                    <div class="exp-source" style="margin-top:5px;">Photo: Wikipedia / Wikimedia Commons</div>
+                  </div>
+                <% end %>
+                <% if e.wiki_title_incident.present? %>
+                  <div class="exp-photo" id="photo-after-<%= i %>" style="display:none;flex:0 0 auto;width:220px;">
+                    <div class="exp-label" style="color:var(--red-lt);">Aftermath</div>
+                    <img id="photo-after-img-<%= i %>" src="" alt="<%= e.site_name %> — aftermath"
                          style="width:220px;height:147px;object-fit:cover;border-radius:6px;margin-top:4px;display:block;background:#e8eaf0;">
                     <div class="exp-source" style="margin-top:5px;">Photo: Wikipedia / Wikimedia Commons</div>
                   </div>
@@ -455,10 +464,10 @@ function sortTable(col) {
     visible + ' entr' + (visible === 1 ? 'y' : 'ies') + ' shown';
 }
 
-// ── Wikipedia "Before" photo ─────────────────────────────────────────────
-function loadWikiPhoto(i, title) {
-  var div = document.getElementById('photo-' + i);
-  var img = document.getElementById('photo-img-' + i);
+// ── Wikipedia photos ─────────────────────────────────────────────────────
+function fetchWikiThumb(title, divId, imgId) {
+  var div = document.getElementById(divId);
+  var img = document.getElementById(imgId);
   if (!div || !img || div.dataset.attempted) return;
   div.dataset.attempted = '1';
   fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title))
@@ -471,6 +480,8 @@ function loadWikiPhoto(i, title) {
     })
     .catch(function() {});
 }
+function loadWikiPhoto(i, title)      { fetchWikiThumb(title, 'photo-' + i,       'photo-img-' + i); }
+function loadWikiPhotoAfter(i, title) { fetchWikiThumb(title, 'photo-after-' + i, 'photo-after-img-' + i); }
 
 // ── Row expand ───────────────────────────────────────────────────────────
 function toggleExpand(i) {
@@ -483,6 +494,8 @@ function toggleExpand(i) {
   if (!isOpen) {
     var wt = dataRow.dataset.wikiTitle;
     if (wt) loadWikiPhoto(i, wt);
+    var wi = dataRow.dataset.wikiIncident;
+    if (wi) loadWikiPhotoAfter(i, wi);
   }
 }
 </script>
