@@ -1,8 +1,9 @@
 # db/seeds/q929_sacred_fires.rb
-# Generated from q929_sacred_fires_registry_v17.xlsx — 181 entries
+# Generated from q929_sacred_fires_registry_v17.xlsx -- 181 entries
 # Idempotent: find_or_create_by site_name; updates all fields on re-run.
 
-puts "── Q929 seed: Sacred Fire & Destruction Registry ──"
+$stdout.sync = true
+puts "Q929 seed: Sacred Fire & Destruction Registry"
 
 data = [
   {
@@ -2738,4 +2739,4 @@ removed = SacredFireEntry.where.not(site_name: current_names).destroy_all
 puts "  Removed: #{removed.length} stale entries" if removed.any?
 
 puts "  Created: #{created}, Updated: #{updated}, Total: #{SacredFireEntry.count}"
-puts "── Done ──"
+puts "Q929 seed done."
