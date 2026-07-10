@@ -42,6 +42,7 @@ TEMPLE_DOMAINS = [
       { slug: "insurance-navigation", name: "Insurance Navigation",   position: 3 },
       { slug: "substance-use-support",name: "Substance Use Support",  position: 4 },
       { slug: "disability-rights",    name: "Disability Rights",      position: 5 },
+      { slug: "religion-spirituality",name: "Religion & Spirituality",position: 6 },
     ]
   },
   {
