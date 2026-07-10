@@ -67,6 +67,10 @@ class DashboardController < ApplicationController
       @rep_by_bioguide[o.dig(:jurisdiction, :bioguide_id).to_s]
     end
 
+    # ── LEFT NAV: Temple & Forum accordion data ────────────────────────────
+    @temple_domains = TempleDomain.includes(:temple_subcategories).order(:position)
+    @forum_domains  = ForumDomain.includes(:forum_subcategories).order(:position)
+
     # Person records for officials without CivicRepresentative (council members, execs).
     # Indexed two ways for robust O(1) lookup despite name-normalization differences:
     #   "office_type/district_number"  — for district council (unique, no name matching)

@@ -3,6 +3,8 @@ class SettingsController < ApplicationController
 
   def show
     @profile = current_user.civic_profile
+    @temple_domains = TempleDomain.includes(:temple_subcategories).order(:position)
+    @forum_domains  = ForumDomain.includes(:forum_subcategories).order(:position)
   end
 
   # POST /mvp/settings/verify_password

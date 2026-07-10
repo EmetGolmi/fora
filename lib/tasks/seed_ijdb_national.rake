@@ -13,5 +13,12 @@ namespace :ijdb do
       puts "Q929 ERROR: #{e.class}: #{e.message}"
       puts e.backtrace.first(3).join("\n")
     end
+    # Temple/Forum nav domains
+    begin
+      load Rails.root.join('db/seeds/temple_forum_nav.rb')
+    rescue => e
+      puts "Temple/Forum nav ERROR: #{e.class}: #{e.message}"
+      puts e.backtrace.first(3).join("\n")
+    end
   end
 end

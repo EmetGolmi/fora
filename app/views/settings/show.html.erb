@@ -36,6 +36,32 @@ a{text-decoration:none;color:inherit;}
 .pn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-mut);}
 .tools{padding-left:7px;border-left:2px solid var(--rule);margin-left:20px;}
 .tools.t{border-color:var(--gilt-pl);}.tools.f{border-color:var(--blue-pl);}.tools.m{border-color:var(--green-p);}
+.tpl-nav{margin-left:20px;border-left:2px solid var(--gilt-pl);padding-left:7px;}
+.tpl-dom-h{display:flex;align-items:center;gap:7px;padding:7px 10px 7px 5px;color:var(--ink-soft);font-size:13px;font-weight:600;cursor:pointer;user-select:none;border-radius:8px;}
+.tpl-dom-h:hover{background:var(--rule-soft);color:var(--ink);}
+.tpl-dom-h.on{color:var(--temple);}
+.tpl-dom-icon{font-size:13px;flex-shrink:0;width:16px;text-align:center;}
+.tpl-dom-label{flex:1;}
+.tpl-chev{font-size:10px;color:var(--ink-mut);transition:transform .15s;flex-shrink:0;}
+.tpl-dom-h.open .tpl-chev{transform:rotate(180deg);}
+.tpl-sub-list{display:none;padding-bottom:2px;}
+.tpl-sub-list.open{display:block;}
+.tpl-sub{padding:4px 8px 4px 28px;font-size:12px;color:var(--ink-soft);cursor:pointer;border-left:2px solid transparent;border-radius:0 6px 6px 0;}
+.tpl-sub:hover{color:var(--ink);background:var(--rule-soft);}
+.tpl-sub.on{color:var(--temple);font-weight:700;border-left-color:var(--temple);}
+.frm-nav{margin-left:20px;border-left:2px solid var(--blue-pl);padding-left:7px;}
+.frm-dom-h{display:flex;align-items:center;gap:7px;padding:7px 10px 7px 5px;color:var(--ink-soft);font-size:13px;font-weight:600;cursor:pointer;user-select:none;border-radius:8px;}
+.frm-dom-h:hover{background:var(--rule-soft);color:var(--ink);}
+.frm-dom-h.on{color:var(--forum);}
+.frm-dom-icon{font-size:13px;flex-shrink:0;width:16px;text-align:center;}
+.frm-dom-label{flex:1;}
+.frm-chev{font-size:10px;color:var(--ink-mut);transition:transform .15s;flex-shrink:0;}
+.frm-dom-h.open .frm-chev{transform:rotate(180deg);}
+.frm-sub-list{display:none;padding-bottom:2px;}
+.frm-sub-list.open{display:block;}
+.frm-sub{padding:4px 8px 4px 28px;font-size:12px;color:var(--ink-soft);cursor:pointer;border-left:2px solid transparent;border-radius:0 6px 6px 0;}
+.frm-sub:hover{color:var(--ink);background:var(--rule-soft);}
+.frm-sub.on{color:var(--forum);font-weight:700;border-left-color:var(--forum);}
 .tool{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-soft);}
 .tool:hover{background:var(--rule-soft);}
 .tool.active{background:var(--blue-vp);color:var(--blue);font-weight:800;}
@@ -163,18 +189,36 @@ a{text-decoration:none;color:inherit;}
     </a>
 
     <div class="pillar-h"><span class="pg pg-t">◯</span><span class="pn">Temple</span></div>
-    <div class="tools t">
-      <a href="#" class="tool"><i class="ti ti-flame"></i> Sit</a>
-      <a href="#" class="tool"><i class="ti ti-books"></i> Study</a>
-      <a href="#" class="tool"><i class="ti ti-share"></i> Share</a>
-      <a href="#" class="tool"><i class="ti ti-building-church"></i> Religion &amp; Spirituality</a>
+    <div class="tpl-nav">
+      <%- @temple_domains.each do |dom| %>
+        <div class="tpl-dom-h" onclick="toggleNavDom(this,'tpl')">
+          <i class="ti <%= dom.icon %> tpl-dom-icon"></i>
+          <span class="tpl-dom-label"><%= dom.name %></span>
+          <i class="ti ti-chevron-down tpl-chev"></i>
+        </div>
+        <div class="tpl-sub-list">
+          <%- dom.temple_subcategories.each do |sub| %>
+            <div class="tpl-sub"><%= sub.name %></div>
+          <%- end %>
+        </div>
+      <%- end %>
     </div>
 
     <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
-    <div class="tools f">
-      <a href="<%= dashboard_path %>" class="tool"><i class="ti ti-building-bank"></i> Legislation</a>
+    <div class="frm-nav">
       <a href="<%= dashboard_path %>" class="tool"><i class="ti ti-users"></i> Officials</a>
-      <a href="#" class="tool"><i class="ti ti-message"></i> Discourse</a>
+      <%- @forum_domains.reject { |d| d.slug == 'officials' }.each do |dom| %>
+        <div class="frm-dom-h" onclick="toggleNavDom(this,'frm')">
+          <i class="ti <%= dom.icon %> frm-dom-icon"></i>
+          <span class="frm-dom-label"><%= dom.name %></span>
+          <i class="ti ti-chevron-down frm-chev"></i>
+        </div>
+        <div class="frm-sub-list">
+          <%- dom.forum_subcategories.each do |sub| %>
+            <div class="frm-sub"><%= sub.name %></div>
+          <%- end %>
+        </div>
+      <%- end %>
     </div>
 
     <div class="pillar-h"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
@@ -632,6 +676,18 @@ function verifyPw() {
   }).catch(function() {
     status.textContent = 'Network error'; status.className = 'pw-status err';
   });
+}
+
+function toggleNavDom(h, prefix) {
+  var sl = h.nextElementSibling;
+  var isOpen = sl.classList.contains('open');
+  var nav = h.parentElement;
+  nav.querySelectorAll('.' + prefix + '-dom-h').forEach(function(x){ x.classList.remove('on','open'); });
+  nav.querySelectorAll('.' + prefix + '-sub-list').forEach(function(x){ x.classList.remove('open'); });
+  if (!isOpen) {
+    sl.classList.add('open');
+    h.classList.add('on','open');
+  }
 }
 </script>
 </body>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_09_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_09_100004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -257,6 +257,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_09_000002) do
     t.datetime "updated_at", null: false
     t.integer "version", default: 1, null: false
     t.index ["jurisdiction_id"], name: "index_formation_tracks_on_jurisdiction_id"
+  end
+
+  create_table "forum_domains", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "icon", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_forum_domains_on_slug", unique: true
+  end
+
+  create_table "forum_subcategories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "forum_domain_id", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["forum_domain_id", "slug"], name: "index_forum_subcategories_on_forum_domain_id_and_slug", unique: true
+    t.index ["forum_domain_id"], name: "index_forum_subcategories_on_forum_domain_id"
   end
 
   create_table "ijdb_comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -643,6 +664,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_09_000002) do
     t.index ["year_of_incident"], name: "index_sacred_fire_entries_on_year_of_incident"
   end
 
+  create_table "temple_domains", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "icon", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_temple_domains_on_slug", unique: true
+  end
+
+  create_table "temple_subcategories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.bigint "temple_domain_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["temple_domain_id", "slug"], name: "index_temple_subcategories_on_temple_domain_id_and_slug", unique: true
+    t.index ["temple_domain_id"], name: "index_temple_subcategories_on_temple_domain_id"
+  end
+
   create_table "user_formation_progress", force: :cascade do |t|
     t.datetime "completed_at"
     t.datetime "created_at", null: false
@@ -682,6 +724,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_09_000002) do
   add_foreign_key "engagement_participants", "engagements"
   add_foreign_key "follows", "civic_profiles", on_delete: :cascade
   add_foreign_key "formation_steps", "formation_tracks", column: "track_id", on_delete: :cascade
+  add_foreign_key "forum_subcategories", "forum_domains"
   add_foreign_key "ijdb_comments", "ijdb_entries"
   add_foreign_key "ijdb_foia_requests", "ijdb_entries"
   add_foreign_key "issue_concurrences", "civic_profiles", on_delete: :nullify
@@ -697,6 +740,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_09_000002) do
   add_foreign_key "project_items", "projects", on_delete: :cascade
   add_foreign_key "projects", "civic_profiles", on_delete: :cascade
   add_foreign_key "provider_capabilities", "civic_profiles"
+  add_foreign_key "temple_subcategories", "temple_domains"
   add_foreign_key "user_formation_progress", "formation_steps", column: "step_id"
   add_foreign_key "user_formation_progress", "formation_tracks", column: "track_id"
   add_foreign_key "user_formation_progress", "library_items", column: "document_id", on_delete: :nullify
