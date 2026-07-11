@@ -1999,11 +1999,13 @@ function switchPanel(key, el) {
   var isMkt = (key === 'market' || key === 'market-listing');
   var mapRight = document.getElementById('mkt-map-right');
   var civic    = document.getElementById('right-civic');
-  if (mapRight) mapRight.style.display = isMkt ? '' : 'none';
-  if (civic)    civic.style.display    = isMkt ? 'none' : '';
+  if (mapRight) mapRight.style.display = isMkt ? 'block' : 'none';
+  if (civic)    civic.style.display    = isMkt ? 'none'  : 'block';
   if (isMkt) {
-    initMktMapD();
-    setTimeout(function(){ if (_mktMapD) _mktMapD.invalidateSize(); }, 150);
+    setTimeout(function(){
+      initMktMapD();
+      if (_mktMapD) _mktMapD.invalidateSize();
+    }, 0);
   }
 }
 
@@ -2424,8 +2426,16 @@ function mktViewToggle(mode) {
     if (lb) lb.classList.remove('on');
     if (mb) mb.classList.add('on');
     if (main) main.style.display = 'none';
-    if (wrap) { wrap.style.display = ''; initMktMapM(); setTimeout(function(){ if (_mktMapM) _mktMapM.invalidateSize(); }, 150); }
-    if (_mktBounds && _mktMapM) _mktMapM.fitBounds(_mktBounds, {padding:[20,20], maxZoom:15});
+    if (wrap) {
+      wrap.style.display = 'block';
+      setTimeout(function(){
+        initMktMapM();
+        if (_mktMapM) {
+          _mktMapM.invalidateSize();
+          if (_mktBounds) _mktMapM.fitBounds(_mktBounds, {padding:[20,20], maxZoom:15});
+        }
+      }, 0);
+    }
   } else {
     if (lb) lb.classList.add('on');
     if (mb) mb.classList.remove('on');
