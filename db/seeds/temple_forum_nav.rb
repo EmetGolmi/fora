@@ -37,12 +37,13 @@ TEMPLE_DOMAINS = [
   {
     slug: "tpl-health-body", name: "Health & Body", icon: "ti-heart-rate-monitor", position: 3,
     subcategories: [
-      { slug: "patient-rights",       name: "Patient Rights",         position: 1 },
-      { slug: "mental-health-resources", name: "Mental Health Resources", position: 2 },
-      { slug: "insurance-navigation", name: "Insurance Navigation",   position: 3 },
-      { slug: "substance-use-support",name: "Substance Use Support",  position: 4 },
-      { slug: "disability-rights",    name: "Disability Rights",      position: 5 },
-      { slug: "religion-spirituality",name: "Religion & Spirituality",position: 6 },
+      { slug: "tpl-hygiene",          name: "Hygiene",                position: 1 },
+      { slug: "patient-rights",       name: "Patient Rights",         position: 2 },
+      { slug: "mental-health-resources", name: "Mental Health Resources", position: 3 },
+      { slug: "insurance-navigation", name: "Insurance Navigation",   position: 4 },
+      { slug: "substance-use-support",name: "Substance Use Support",  position: 5 },
+      { slug: "disability-rights",    name: "Disability Rights",      position: 6 },
+      { slug: "religion-spirituality",name: "Religion & Spirituality",position: 7 },
     ]
   },
   {
