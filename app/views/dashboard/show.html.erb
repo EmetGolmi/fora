@@ -148,8 +148,16 @@ a{text-decoration:none;color:inherit;}
 .frm-grid{display:flex;flex-direction:column;padding:12px 18px;}
 .frm-bill{background:#fff;border:1px solid var(--rule);border-radius:12px;margin-bottom:10px;padding:14px 16px;transition:border-color .15s,box-shadow .15s;}
 .frm-bill:hover{border-color:var(--blue-pl);box-shadow:0 2px 8px rgba(27,58,107,.08);}
-.frm-bill-top{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
+.frm-bill-top{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap;}
 .frm-bill-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;background:var(--blue-pl);color:var(--forum);padding:2px 8px;border-radius:999px;font-weight:700;}
+.frm-tracker{display:flex;align-items:center;margin-left:auto;}
+.frm-ts{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;padding:3px 8px;border-top:0.5px solid var(--rule);border-bottom:0.5px solid var(--rule);border-right:0.5px solid var(--rule);color:var(--ink-soft);background:#fafafa;white-space:nowrap;line-height:1.4;}
+.frm-ts:first-child{border-left:0.5px solid var(--rule);border-radius:4px 0 0 4px;}
+.frm-ts:last-child{border-radius:0 4px 4px 0;}
+.frm-ts.done{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5;}
+.frm-ts.active{background:var(--forum);color:#fff;border-color:var(--forum);}
+.frm-ts.enacted{background:var(--gilt);color:#fff;border-color:var(--gilt);}
+.frm-ts.vetoed{background:#FAECE7;color:#993C1D;border-color:#D85A30;}
 .frm-bill-status{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-soft);}
 .frm-bill-status.signed,.frm-bill-status.passed{background:#e5f0e8;color:var(--green);border-color:var(--green-p);}
 .frm-bill-status.pending{background:var(--amber-p);color:var(--amber);border-color:#ffe08a;}
@@ -3880,8 +3888,37 @@ function escJs(s) {
   return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
 }
 
+function frmTrackerHtml(c) {
+  var jur = billJur(c);
+  var exec = jur === 'pennsylvania' ? 'Governor' : (jur === 'philadelphia' ? 'Mayor' : 'Executive');
+  var stages = ['Introduced', 'Committee', 'Floor Vote', exec, 'Enacted'];
+  var s = c.status || '';
+  var lbl = (c.statusLabel || '').toLowerCase();
+  var active, isEnacted = false, isVetoed = false;
+  if (s === 'signed' || lbl.indexOf('enacted') !== -1 || lbl.indexOf('in effect') !== -1 || lbl.indexOf('signed') !== -1) {
+    active = 4; isEnacted = true;
+  } else if (lbl.indexOf('vetoed') !== -1) {
+    active = 3; isVetoed = true;
+  } else if (s === 'passed') {
+    active = lbl.indexOf('passed congress') !== -1 ? 3 : 2;
+  } else {
+    if (lbl.indexOf('introduced') !== -1 || lbl.indexOf('budget proposal') !== -1 || lbl.indexOf('policy analysis') !== -1 || lbl.indexOf('admin proposal') !== -1) active = 0;
+    else active = 1;
+  }
+  var html = '<div class="frm-tracker">';
+  for (var i = 0; i < stages.length; i++) {
+    var cls = 'frm-ts';
+    if (isEnacted && i === 4) cls += ' enacted';
+    else if (isVetoed && i === active) cls += ' vetoed';
+    else if (i < active) cls += ' done';
+    else if (i === active) cls += ' active';
+    html += '<div class="' + cls + '">' + stages[i] + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
 function frmBillHtml(c) {
-  var sc = (c.status === 'signed' || c.status === 'passed') ? c.status : 'pending';
   var bid = 'fbi' + (++_frmSeq);
   _frmBillRegistry[bid] = c;
   var shareUrl  = encodeURIComponent(c.url || 'https://fora.community');
@@ -3889,7 +3926,7 @@ function frmBillHtml(c) {
   return '<div class="frm-bill" id="' + bid + '" onclick="openFrmBill(\'' + bid + '\')" style="cursor:pointer">' +
     '<div class="frm-bill-top">' +
       (c.num ? '<span class="frm-bill-num">' + c.num + '</span>' : '') +
-      '<span class="frm-bill-status ' + sc + '">' + c.statusLabel + '</span>' +
+      frmTrackerHtml(c) +
     '</div>' +
     '<div class="frm-bill-name">' + c.name + '</div>' +
     '<div class="frm-bill-type">' + c.type + '</div>' +
