@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_11_100001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_11_100002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -264,9 +264,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_11_100001) do
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.string "handle"
+    t.string "perspective_type", default: "general", null: false
+    t.string "social_url"
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.index ["bill_num"], name: "index_forum_comments_on_bill_num"
+    t.index ["perspective_type"], name: "index_forum_comments_on_perspective_type"
     t.index ["user_id"], name: "index_forum_comments_on_user_id"
   end
 
