@@ -137,6 +137,14 @@ a{text-decoration:none;color:inherit;}
 .frm-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--forum);padding:13px 18px 10px;}
 .frm-fhead-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--forum);}
 .frm-fhead-crumb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:3px;}
+.frm-jur-row{display:flex;gap:6px;padding:9px 16px 8px;border-bottom:1px solid var(--rule-soft);flex-wrap:wrap;background:#fff;}
+.frm-jchip{padding:3px 11px;border-radius:20px;border:1px solid var(--rule);background:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;cursor:pointer;color:var(--ink-soft);transition:all .15s;user-select:none;}
+.frm-jchip:hover{border-color:var(--ink-soft);}
+.frm-jchip.on{color:#fff;border-color:transparent;}
+.frm-jchip[data-jur="all"].on{background:var(--forum);}
+.frm-jchip[data-jur="federal"].on{background:#B22234;}
+.frm-jchip[data-jur="pennsylvania"].on{background:#003087;}
+.frm-jchip[data-jur="philadelphia"].on{background:#004C54;}
 .frm-grid{display:flex;flex-direction:column;padding:12px 18px;}
 .frm-bill{background:#fff;border:1px solid var(--rule);border-radius:12px;margin-bottom:10px;padding:14px 16px;transition:border-color .15s,box-shadow .15s;}
 .frm-bill:hover{border-color:var(--blue-pl);box-shadow:0 2px 8px rgba(27,58,107,.08);}
@@ -1336,6 +1344,12 @@ a{text-decoration:none;color:inherit;}
     <div class="frm-fhead">
       <div class="frm-fhead-title" id="frm-panel-title">△ Forum</div>
       <div class="frm-fhead-crumb" id="frm-panel-crumb"></div>
+    </div>
+    <div class="frm-jur-row">
+      <span class="frm-jchip on" data-jur="all" onclick="setFrmJur('all',this)">All</span>
+      <span class="frm-jchip" data-jur="federal" onclick="setFrmJur('federal',this)">Federal</span>
+      <span class="frm-jchip" data-jur="pennsylvania" onclick="setFrmJur('pennsylvania',this)">State</span>
+      <span class="frm-jchip" data-jur="philadelphia" onclick="setFrmJur('philadelphia',this)">Local</span>
     </div>
     <div id="frm-main" class="frm-grid"></div>
   </div><%# /panel-forum-domain %>
@@ -3600,15 +3614,19 @@ var FRM_DOMS = {
   "frm-your-home": { name:"Your Home", icon:"ti-home",
     subs: {
       "housing-legislation": { label:"Housing Legislation", cards:[
-        {name:"21st Century ROAD to Housing Act", num:"H.R.6644", type:"Federal · 119th Congress", status:"passed", statusLabel:"Passed Congress", desc:"Largest housing affordability bill in decades. Incentivizes states to streamline zoning laws, funds infrastructure for new housing development, and establishes pre-approved design pattern books to speed local approvals.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
-        {name:"Housing Affordability Act", num:"S.1527 / H.R.6132", type:"Federal · Senate & House", status:"pending", statusLabel:"In Committee", desc:"Increases FHA multifamily housing loan limits for mortgage insurance and ties limits to a more accurate inflation index.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/1527"},
+        {name:"21st Century ROAD to Housing Act", num:"H.R.6644", type:"Federal · 119th Congress", jurisdiction:"federal", status:"passed", statusLabel:"Passed Congress", desc:"Largest housing affordability bill in decades. Incentivizes states to streamline zoning laws, funds infrastructure for new housing development, and establishes pre-approved design pattern books to speed local approvals.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
+        {name:"Housing Affordability Act", num:"S.1527 / H.R.6132", type:"Federal · Senate & House", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Increases FHA multifamily housing loan limits for mortgage insurance and ties limits to a more accurate inflation index.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/1527"},
+        {name:"PA Whole-Home Repairs Program Reauthorization", num:"H.B.2085", type:"Pennsylvania · House", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Reauthorizes and expands Pennsylvania's Whole-Home Repairs grant program to $100M annually. Funds critical repairs for low- and moderate-income homeowners and small landlords to address structural, electrical, plumbing, and energy safety issues.", url:"https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm?syear=2025&sind=0&body=H&type=B&bn=2085"},
+        {name:"Philadelphia Fair Housing Preservation Ordinance", num:"Bill No. 250323", type:"Philadelphia · City Council", jurisdiction:"philadelphia", status:"pending", statusLabel:"In Committee", desc:"Would require relocation assistance for tenants displaced by owner-move-in evictions and establish a right of first refusal for tenants when landlords sell occupied buildings.", url:"https://phila.legistar.com/"},
       ]},
       "zoning-land-use": { label:"Zoning & Land Use", cards:[
         {name:"ROAD to Housing Act — Zoning Incentives", num:"H.R.6644 §§201-220", type:"Federal · Enacted", status:"passed", statusLabel:"Enacted", desc:"Creates federal funding incentives for communities that adopt zoning reforms — including ADU legalization, mixed-use zoning, and by-right development approvals near transit.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
         {name:"BUILD America 250 Act — Land Use Provisions", num:"H.R.8870", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Five-year surface transportation reauthorization that links federal highway funds to local land use and zoning decisions near transit corridors.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
       ]},
       "property-tax-bills": { label:"Property Tax Bills", cards:[
-        {name:"FY2026 THUD Appropriations Act", num:"H.R.4552", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"FY2026 transportation and housing spending. Includes CDBG funding that states can direct toward property tax relief programs for low-income homeowners.", url:"https://www.congress.gov/bill/119th-congress/house-bill/4552"},
+        {name:"FY2026 THUD Appropriations Act", num:"H.R.4552", type:"Federal · Enacted", jurisdiction:"federal", status:"signed", statusLabel:"Enacted Feb 2026", desc:"FY2026 transportation and housing spending. Includes CDBG funding that states can direct toward property tax relief programs for low-income homeowners.", url:"https://www.congress.gov/bill/119th-congress/house-bill/4552"},
+        {name:"PA Property Tax/Rent Rebate Program Expansion", num:"H.B.1776", type:"Pennsylvania · Enacted", jurisdiction:"pennsylvania", status:"signed", statusLabel:"Enacted 2024", desc:"Expanded Pennsylvania's Property Tax/Rent Rebate to cover more seniors and people with disabilities. Raised income limit to $45,000 and maximum rebate to $1,000.", url:"https://www.revenue.pa.gov/IncentivesCreditsPrograms/PropertyTaxRentRebateProgram/Pages/default.aspx"},
+        {name:"Philadelphia LOOP — Longtime Owner Occupants Program", num:"Bill No. 080872-A", type:"Philadelphia · Enacted", jurisdiction:"philadelphia", status:"signed", statusLabel:"In Effect", desc:"Caps property assessment increases at 10% per year for owner-occupants who have lived in their home for 10+ years and meet income limits. Applications accepted annually.", url:"https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-relief-for-your-property-taxes/longtime-owner-occupants-program-loop/"},
       ]},
       "code-enforcement": { label:"Code Enforcement", cards:[
         {name:"ROAD to Housing Act — Housing Standards", num:"H.R.6644 Title III", type:"Federal · Enacted", status:"passed", statusLabel:"Enacted", desc:"Establishes federal guidance on minimum habitability standards and code enforcement response timelines as a condition of certain federal housing grant funding.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
@@ -3622,8 +3640,10 @@ var FRM_DOMS = {
   "frm-food-drink": { name:"Food & Drink", icon:"ti-salad",
     subs: {
       "food-policy-legislation": { label:"Food Policy Legislation", cards:[
-        {name:"Farm, Food, and National Security Act of 2026", num:"H.R.7567", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"2026 Farm Bill. Establishes an Office of Urban Agriculture, expands SNAP access, invests in local food systems, and addresses food security across all 12 farm bill titles.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
-        {name:"Food Security and Farm Protection Act", num:"S.1326", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Senate alternative farm bill addressing food access, specialty crops, and nutrition program funding.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/1326"},
+        {name:"Farm, Food, and National Security Act of 2026", num:"H.R.7567", type:"Federal · House Passed", jurisdiction:"federal", status:"passed", statusLabel:"House Passed", desc:"2026 Farm Bill. Establishes an Office of Urban Agriculture, expands SNAP access, invests in local food systems, and addresses food security across all 12 farm bill titles.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
+        {name:"Food Security and Farm Protection Act", num:"S.1326", type:"Federal · Senate", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Senate alternative farm bill addressing food access, specialty crops, and nutrition program funding.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/1326"},
+        {name:"PA Hunger-Free Pennsylvania Act", num:"S.B.652", type:"Pennsylvania · Senate", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Creates Pennsylvania's first comprehensive food security strategy. Establishes a Food Security Advisory Council, expands SNAP outreach, and funds regional food bank infrastructure statewide.", url:"https://www.legis.state.pa.us/"},
+        {name:"Philadelphia Good Food Purchasing Program", num:"Executive Order 10-21", type:"Philadelphia · City Policy", jurisdiction:"philadelphia", status:"signed", statusLabel:"In Effect", desc:"Directs city institutional food purchasing toward local, healthy, fair, and environmentally sustainable suppliers. Supports urban agriculture and fair wages throughout Philadelphia's food system.", url:"https://www.phila.gov/"},
       ]},
       "restaurant-licensing": { label:"Restaurant Licensing", cards:[
         {name:"Farm, Food, and National Security Act — Food Safety Title", num:"H.R.7567 Title XI", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"Updates federal food safety inspection requirements and sets new standards for food service licensing, limiting states from imposing stricter permit burdens on small food businesses.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
@@ -3639,9 +3659,11 @@ var FRM_DOMS = {
   "frm-health-body": { name:"Health & Body", icon:"ti-heart-rate-monitor",
     subs: {
       "healthcare-legislation": { label:"Healthcare Legislation", cards:[
-        {name:"One Big Beautiful Bill Act", num:"H.R.1 / P.L.119-21", type:"Federal · Signed Law", status:"signed", statusLabel:"Signed 7/4/25", desc:"Cuts over $1 trillion from federal health programs. Ends ACA Marketplace enhanced subsidies, removes caps on tax credit repayment for low-income enrollees, and restructures Medicaid eligibility.", url:"https://www.ama-assn.org/health-care-advocacy/federal-advocacy/changes-medicaid-aca-and-other-key-provisions-one-big"},
-        {name:"Health Care Affordability Act of 2025", num:"S.46", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Makes permanent the ACA Marketplace enhanced subsidies from ARPA and the IRA, protecting premium tax credits for low- and middle-income enrollees.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/46"},
-        {name:"Medicare for All Act", num:"H.R.3069 / S.1506", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Establishes a national single-payer health insurance program administered by HHS. Covers all US residents for medical, dental, vision, and long-term care.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3069"},
+        {name:"One Big Beautiful Bill Act", num:"H.R.1 / P.L.119-21", type:"Federal · Signed Law", jurisdiction:"federal", status:"signed", statusLabel:"Signed 7/4/25", desc:"Cuts over $1 trillion from federal health programs. Ends ACA Marketplace enhanced subsidies, removes caps on tax credit repayment for low-income enrollees, and restructures Medicaid eligibility.", url:"https://www.ama-assn.org/health-care-advocacy/federal-advocacy/changes-medicaid-aca-and-other-key-provisions-one-big"},
+        {name:"Health Care Affordability Act of 2025", num:"S.46", type:"Federal · Senate", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Makes permanent the ACA Marketplace enhanced subsidies from ARPA and the IRA, protecting premium tax credits for low- and middle-income enrollees.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/46"},
+        {name:"Medicare for All Act", num:"H.R.3069 / S.1506", type:"Federal · House & Senate", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Establishes a national single-payer health insurance program administered by HHS. Covers all US residents for medical, dental, vision, and long-term care.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3069"},
+        {name:"PA Medicaid Continuity of Coverage Act", num:"S.B.824", type:"Pennsylvania · Senate", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Would require Pennsylvania to use maximum allowable continuous coverage periods and limit renewals to every 12 months, protecting PA Medicaid enrollees from federal rollback impacts.", url:"https://www.legis.state.pa.us/"},
+        {name:"Philadelphia Behavioral Health Funding Ordinance", num:"Bill No. 250441", type:"Philadelphia · City Council", jurisdiction:"philadelphia", status:"pending", statusLabel:"Introduced 2025", desc:"Directs the City of Philadelphia to set aside $40M annually from the general fund for behavioral health, substance use treatment, and crisis response programs.", url:"https://phila.legistar.com/"},
       ]},
       "medicaid-medicare-bills": { label:"Medicaid & Medicare Bills", cards:[
         {name:"One Big Beautiful Bill — Medicaid Cuts", num:"H.R.1 Title IV", type:"Federal · Signed Law", status:"signed", statusLabel:"Signed 7/4/25", desc:"Ends ACA Medicaid expansion fiscal incentive in 2026. Adds work requirements and new enrollment barriers. An estimated 10 million people projected to lose Medicaid coverage.", url:"https://medicareadvocacy.org/impact-of-the-big-bill-on-medicare/"},
@@ -3667,11 +3689,13 @@ var FRM_DOMS = {
         {name:"BASICS Act", num:"H.R.7437", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Bipartisan bridge and safety infrastructure act targeting high-priority bridge replacements in underserved communities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7437"},
       ]},
       "transit-funding": { label:"Transit Funding", cards:[
-        {name:"BUILD America 250 Act — Transit Provisions", num:"H.R.8870 Title III", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Authorizes only $77 billion for rail and transit — a steep cut from IIJA's $142 billion. Provides $0 in guaranteed Capital Investment Grants, raising concerns from transit advocates.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
-        {name:"Surface Transportation Reauthorization: Public Transportation", num:"CRS R48644", type:"Congressional Research Service", status:"pending", statusLabel:"Policy Analysis", desc:"CRS analysis of the transit funding gap in the BUILD America 250 reauthorization, covering FTA formula grants, New Starts, and Bus and Bus Facilities programs.", url:"https://www.congress.gov/crs-product/R48644"},
+        {name:"BUILD America 250 Act — Transit Provisions", num:"H.R.8870 Title III", type:"Federal · House Committee", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Authorizes only $77 billion for rail and transit — a steep cut from IIJA's $142 billion. Provides $0 in guaranteed Capital Investment Grants, raising concerns from transit advocates.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+        {name:"Surface Transportation Reauthorization: Public Transportation", num:"CRS R48644", type:"Congressional Research Service", jurisdiction:"federal", status:"pending", statusLabel:"Policy Analysis", desc:"CRS analysis of the transit funding gap in the BUILD America 250 reauthorization, covering FTA formula grants, New Starts, and Bus and Bus Facilities programs.", url:"https://www.congress.gov/crs-product/R48644"},
+        {name:"PA SEPTA Operating Assistance Act", num:"H.B.1100", type:"Pennsylvania · House", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Establishes a dedicated $240M annual state operating subsidy for SEPTA to prevent service cuts and fare increases. Addresses SEPTA's structural funding deficit after federal COVID relief expires.", url:"https://www.legis.state.pa.us/"},
       ]},
       "parking-vision-zero": { label:"Parking & Vision Zero Ordinances", cards:[
-        {name:"BUILD America 250 Act — Highway Safety Standards", num:"H.R.8870 Title II", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Sets new federal highway safety targets and minimum standards for pedestrian safety infrastructure as a condition of federal transportation funds.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+        {name:"BUILD America 250 Act — Highway Safety Standards", num:"H.R.8870 Title II", type:"Federal · House Committee", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Sets new federal highway safety targets and minimum standards for pedestrian safety infrastructure as a condition of federal transportation funds.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+        {name:"Philadelphia Vision Zero Action Plan Ordinance", num:"Bill No. 240839", type:"Philadelphia · City Council", jurisdiction:"philadelphia", status:"signed", statusLabel:"Enacted 2024", desc:"Requires the city to implement its Vision Zero Action Plan through street redesigns, enforcement, and education programs. Sets a goal of zero traffic deaths and serious injuries by 2030.", url:"https://www.phila.gov/programs/vision-zero/"},
       ]},
     }
   },
@@ -3690,16 +3714,20 @@ var FRM_DOMS = {
         {name:"One Big Beautiful Bill — Medicaid & Elder Care Impact", num:"H.R.1 Title IV", type:"Federal · Signed Law", status:"signed", statusLabel:"Signed 7/4/25", desc:"Medicaid is the primary funder of nursing home care. The OBBBA's Medicaid work requirements and enrollment barriers are projected to reduce coverage for elderly low-income residents.", url:"https://medicareadvocacy.org/impact-of-the-big-bill-on-medicare/"},
       ]},
       "childcare-subsidy": { label:"Childcare Subsidy Programs", cards:[
-        {name:"Child Care Availability and Affordability Act", num:"S.847", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Bipartisan bill expanding CCDBG subsidy eligibility and increasing child care provider reimbursement rates.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/847"},
-        {name:"Child Care Supply Tax Credit Act of 2025", num:"S.3534", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"New wage-based tax credit for child care educators, with higher rates for rural areas, to increase supply and retain the workforce.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/3534"},
+        {name:"Child Care Availability and Affordability Act", num:"S.847", type:"Federal · Senate", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Bipartisan bill expanding CCDBG subsidy eligibility and increasing child care provider reimbursement rates.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/847"},
+        {name:"Child Care Supply Tax Credit Act of 2025", num:"S.3534", type:"Federal · Senate", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"New wage-based tax credit for child care educators, with higher rates for rural areas, to increase supply and retain the workforce.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/3534"},
+        {name:"PA Child Care Works Expansion", num:"H.B.893", type:"Pennsylvania · House", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Expands Pennsylvania's Child Care Works subsidy eligibility to families earning up to 185% of federal poverty level. Increases provider reimbursement rates to reflect actual market costs.", url:"https://www.legis.state.pa.us/"},
+        {name:"Philadelphia PHLpreK Expansion Ordinance", num:"Bill No. 180093-A", type:"Philadelphia · City Council", jurisdiction:"philadelphia", status:"signed", statusLabel:"In Effect", desc:"Funded by the Philadelphia beverage tax, PHLpreK provides free, high-quality pre-kindergarten for 3- and 4-year-olds. Serves approximately 3,300 children annually across Philadelphia neighborhoods.", url:"https://www.phila.gov/programs/phlprek/"},
       ]},
     }
   },
   "frm-style-expression": { name:"Style & Expression", icon:"ti-palette",
     subs: {
       "arts-funding-legislation": { label:"Arts Funding Legislation", cards:[
-        {name:"FY2026 NEA & NEH Appropriations", num:"P.L.119-74", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"NEA and NEH each received $207 million for FY2026. Congress rejected the administration's proposal to eliminate both agencies. Funds arts grants, arts education, and humanities research.", url:"https://www.congress.gov/crs-product/R48958"},
-        {name:"ARTIST Act", num:"S.254 / H.R.5694", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Protects visual artists' rights in work-for-hire arrangements. Clarifies that certain creative works cannot be classified as 'work for hire' without explicit written agreement.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/254"},
+        {name:"FY2026 NEA & NEH Appropriations", num:"P.L.119-74", type:"Federal · Enacted", jurisdiction:"federal", status:"signed", statusLabel:"Enacted Feb 2026", desc:"NEA and NEH each received $207 million for FY2026. Congress rejected the administration's proposal to eliminate both agencies. Funds arts grants, arts education, and humanities research.", url:"https://www.congress.gov/crs-product/R48958"},
+        {name:"ARTIST Act", num:"S.254 / H.R.5694", type:"Federal · House & Senate", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Protects visual artists' rights in work-for-hire arrangements. Clarifies that certain creative works cannot be classified as 'work for hire' without explicit written agreement.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/254"},
+        {name:"PA Creative Economy Initiative", num:"H.B.756", type:"Pennsylvania · House", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Establishes the Pennsylvania Creative Economy Fund, providing $20M annually in grants and loans to arts organizations, creative businesses, and cultural tourism projects.", url:"https://www.legis.state.pa.us/"},
+        {name:"Philadelphia Percent for Art Ordinance Update", num:"Bill No. 240512", type:"Philadelphia · City Council", jurisdiction:"philadelphia", status:"pending", statusLabel:"In Committee", desc:"Would raise Philadelphia's Percent for Art requirement from 1% to 1.5% on public capital projects, directing funding to community-selected public art in underserved neighborhoods.", url:"https://phila.legistar.com/"},
       ]},
       "cultural-heritage-bills": { label:"Cultural Heritage Bills", cards:[
         {name:"FY2026 IMLS Appropriations", num:"P.L.119-75", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Institute of Museum and Library Services received $291.8 million. Funds museums, archives, oral history programs, and cultural heritage preservation across all 50 states.", url:"https://www.congress.gov/crs-product/R48958"},
@@ -3713,8 +3741,10 @@ var FRM_DOMS = {
   "frm-learn-grow": { name:"Learn & Grow", icon:"ti-books",
     subs: {
       "education-legislation": { label:"Education Legislation", cards:[
-        {name:"FY2026 Labor-HHS-Education Appropriations", num:"P.L.119-75 Title III", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Dept. of Education received $79.0B in discretionary funding (+$217M over FY2025). Rejected proposed elimination of Title I targeted grants, TRIO, GEAR UP, and other equity programs.", url:"https://www.acenet.edu/News-Room/Pages/House-Passes-FY26-LHHS-Minibus.aspx"},
-        {name:"Make Education Great Again Act", num:"H.R.2386", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Restructures federal education policy, consolidating programs and increasing state flexibility over curriculum and standards.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2386"},
+        {name:"FY2026 Labor-HHS-Education Appropriations", num:"P.L.119-75 Title III", type:"Federal · Enacted", jurisdiction:"federal", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Dept. of Education received $79.0B in discretionary funding (+$217M over FY2025). Rejected proposed elimination of Title I targeted grants, TRIO, GEAR UP, and other equity programs.", url:"https://www.acenet.edu/News-Room/Pages/House-Passes-FY26-LHHS-Minibus.aspx"},
+        {name:"Make Education Great Again Act", num:"H.R.2386", type:"Federal · House", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Restructures federal education policy, consolidating programs and increasing state flexibility over curriculum and standards.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2386"},
+        {name:"PA Fair Funding Formula — Phase 1", num:"S.B.1 (2025)", type:"Pennsylvania · Enacted", jurisdiction:"pennsylvania", status:"signed", statusLabel:"Enacted 2025", desc:"Funds the first phase of the PA Supreme Court's ordered school funding remedy. Directs $1.1B in new money to the 100 most underfunded school districts over seven years.", url:"https://www.pa.gov/agencies/education.html"},
+        {name:"Philadelphia School Funding Settlement Allocation", num:"Resolution 240867", type:"Philadelphia · City Council", jurisdiction:"philadelphia", status:"signed", statusLabel:"Enacted 2025", desc:"Allocates Philadelphia's share of the PA school funding remedy — approximately $200M in additional state funding over 7 years — to high-need schools throughout the district.", url:"https://www.philasd.org/"},
       ]},
       "school-funding-bills": { label:"School Funding Bills", cards:[
         {name:"FY2026 Title I & IDEA Increases", num:"P.L.119-75 §§3001-3040", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Congress approved a $20M increase to both Title I (low-income school funding) and IDEA (disability education). Funded HBCUs, HSIs, Tribal Colleges, and MSIs at increased levels.", url:"https://www.nasfaa.org/news-item/36924/Senate_Committee_Advances_FY_2026_Education_Budget_Bill_That_Flat-Funds_Pell_Grant_and_Student_Aid_Programs"},
@@ -3735,9 +3765,11 @@ var FRM_DOMS = {
         {name:"Protecting America's Workers Act", num:"H.R.3036", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Extends OSHA protections to government employees. Increases civil and criminal penalties for safety violations. Requires DOL to investigate all workplace fatalities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3036"},
       ]},
       "minimum-wage-bills": { label:"Minimum Wage Bills", cards:[
-        {name:"Living Wage For All Act", num:"H.R.8555", type:"Federal · House", status:"pending", statusLabel:"Introduced June 2026", desc:"Raises federal minimum wage to $25/hr. Large employers phase in by 2032; others by 2039. Eliminates tipped minimum wage ($2.13/hr). Ties future increases to two-thirds of national median wage.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8555"},
-        {name:"Raise the Wage Act of 2025", num:"H.R.2743", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Phased increase of the federal minimum wage. Eliminates the subminimum wage for tipped workers and workers with disabilities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2743"},
-        {name:"Original LAW Act", num:"H.R.122", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Increases federal minimum wage to $10.59 starting Jan 1 2026, then +$4/yr annually through Jan 1 2030.", url:"https://www.congress.gov/bill/119th-congress/house-bill/122"},
+        {name:"Living Wage For All Act", num:"H.R.8555", type:"Federal · House", jurisdiction:"federal", status:"pending", statusLabel:"Introduced June 2026", desc:"Raises federal minimum wage to $25/hr. Large employers phase in by 2032; others by 2039. Eliminates tipped minimum wage ($2.13/hr). Ties future increases to two-thirds of national median wage.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8555"},
+        {name:"Raise the Wage Act of 2025", num:"H.R.2743", type:"Federal · House", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Phased increase of the federal minimum wage. Eliminates the subminimum wage for tipped workers and workers with disabilities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2743"},
+        {name:"Original LAW Act", num:"H.R.122", type:"Federal · House", jurisdiction:"federal", status:"pending", statusLabel:"In Committee", desc:"Increases federal minimum wage to $10.59 starting Jan 1 2026, then +$4/yr annually through Jan 1 2030.", url:"https://www.congress.gov/bill/119th-congress/house-bill/122"},
+        {name:"Pennsylvania Minimum Wage Increase Act", num:"H.B.1500", type:"Pennsylvania · House", jurisdiction:"pennsylvania", status:"pending", statusLabel:"In Committee", desc:"Raises Pennsylvania's minimum wage from $7.25 to $15/hr by 2027, with automatic future increases tied to inflation. Pennsylvania has not raised its minimum wage since 2009.", url:"https://www.legis.state.pa.us/"},
+        {name:"Philadelphia Fair Workweek Employment Standards Ordinance", num:"Bill No. 170921-A", type:"Philadelphia · Enacted", jurisdiction:"philadelphia", status:"signed", statusLabel:"In Effect since 2020", desc:"Requires large retail, food service, and hotel employers to provide advance schedule notice. Mandates predictability pay for last-minute schedule changes.", url:"https://www.phila.gov/programs/fair-workweek/"},
       ]},
       "workplace-safety-ordinances": { label:"Workplace Safety Ordinances", cards:[
         {name:"Protecting America's Workers Act", num:"H.R.3036", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Extends OSHA coverage to federal, state, and local government employees. Increases maximum civil and criminal penalties for violations. Mandates DOL investigation of all workplace fatalities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3036"},
@@ -3752,6 +3784,25 @@ var FRM_DOMS = {
 
 // ── Forum panel click handlers ────────────────────────────────────────────────
 var _lastFrmContext = null;
+var _frmJurFilter = 'all';
+
+function billJur(c) {
+  if (c.jurisdiction) return c.jurisdiction;
+  var t = (c.type || '').toLowerCase();
+  if (t.indexOf('philadelphia') !== -1) return 'philadelphia';
+  if (t.indexOf('pennsylvania') !== -1 || t.indexOf(' pa ·') !== -1) return 'pennsylvania';
+  return 'federal';
+}
+
+function setFrmJur(jur, el) {
+  _frmJurFilter = jur;
+  document.querySelectorAll('.frm-jchip').forEach(function(x){ x.classList.remove('on'); });
+  if (el) el.classList.add('on');
+  if (_lastFrmContext) {
+    if (_lastFrmContext.type === 'domain') renderFrmDomain(_lastFrmContext.slug);
+    else renderFrmCards(_lastFrmContext.slug);
+  }
+}
 
 function frmDomClick(h, slug) {
   var sl = h.nextElementSibling;
@@ -3787,10 +3838,12 @@ function renderFrmDomain(domSlug) {
       if (!seen[c.name]) { seen[c.name] = true; allCards.push(c); }
     });
   });
+  if (_frmJurFilter !== 'all') allCards = allCards.filter(function(c){ return billJur(c) === _frmJurFilter; });
+  var jurLabel = {federal:'Federal',pennsylvania:'State',philadelphia:'Local'}[_frmJurFilter] || '';
   var el = document.getElementById('frm-main');
   el.innerHTML = allCards.length
     ? allCards.map(frmBillHtml).join('')
-    : '<div class="frm-empty-state">No legislation data for this domain yet.</div>';
+    : '<div class="frm-empty-state">No ' + (jurLabel ? jurLabel + ' ' : '') + 'legislation data for this domain yet.</div>';
 }
 
 function renderFrmCards(subSlug) {
@@ -3801,10 +3854,13 @@ function renderFrmCards(subSlug) {
   if (!subData) return;
   document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 ' + FRM_DOMS[domSlug].name;
   document.getElementById('frm-panel-crumb').textContent = subData.label;
+  var cards = subData.cards;
+  if (_frmJurFilter !== 'all') cards = cards.filter(function(c){ return billJur(c) === _frmJurFilter; });
+  var jurLabel = {federal:'Federal',pennsylvania:'State',philadelphia:'Local'}[_frmJurFilter] || '';
   var el = document.getElementById('frm-main');
-  el.innerHTML = subData.cards.length
-    ? subData.cards.map(frmBillHtml).join('')
-    : '<div class="frm-empty-state">No legislation data for this subcategory yet.</div>';
+  el.innerHTML = cards.length
+    ? cards.map(frmBillHtml).join('')
+    : '<div class="frm-empty-state">No ' + (jurLabel ? jurLabel + ' ' : '') + 'legislation data for this subcategory yet.</div>';
 }
 
 var _frmSeq = 0;
