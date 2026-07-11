@@ -116,6 +116,33 @@ a{text-decoration:none;color:inherit;}
 .frm-bill-link a:hover{text-decoration:underline;}
 .frm-empty-state{color:var(--ink-soft);font-size:13px;padding:56px 24px;text-align:center;line-height:1.7;}
 
+/* Forum bill card actions */
+.frm-bill-actions{display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.frm-action-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border:1px solid var(--rule);border-radius:999px;background:#fff;color:var(--ink-soft);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;transition:background .12s,color .12s,border-color .12s;}
+.frm-action-btn:hover{background:var(--blue-vp);color:var(--forum);border-color:var(--blue-pl);}
+.frm-action-btn .ti{font-size:13px;}
+.frm-share-wrap{position:relative;}
+.frm-share-menu{position:absolute;left:0;top:calc(100% + 5px);background:#fff;border:1px solid var(--rule);border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.11);z-index:30;min-width:175px;padding:4px 0;overflow:hidden;}
+.frm-share-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--ink);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-family:'Nunito',sans-serif;text-decoration:none;}
+.frm-share-item:hover{background:var(--rule-soft);}
+.frm-share-item .ti{font-size:14px;width:16px;color:var(--ink-soft);}
+
+/* Forum comment area */
+.frm-comment-area{margin-top:11px;padding-top:11px;border-top:1px solid var(--rule);}
+.frm-comment-list{margin-bottom:10px;}
+.frm-comment-item{padding:8px 0 7px;border-bottom:1px solid var(--rule-soft);}
+.frm-comment-item:last-child{border-bottom:none;}
+.frm-ci-meta{display:flex;align-items:center;gap:8px;margin-bottom:3px;}
+.frm-ci-handle{font-weight:700;font-size:12px;color:var(--forum);}
+.frm-ci-date{font-size:11px;color:var(--ink-mut);font-family:'JetBrains Mono',monospace;}
+.frm-ci-body{font-size:13px;color:var(--ink);line-height:1.5;}
+.frm-no-comments,.frm-comment-loading{font-size:12px;color:var(--ink-mut);padding:5px 0;font-style:italic;}
+.frm-comment-form{display:flex;gap:8px;align-items:flex-start;margin-top:2px;}
+.frm-comment-input{flex:1;border:1px solid var(--rule);border-radius:8px;padding:7px 10px;font-size:13px;font-family:'Nunito',sans-serif;resize:none;color:var(--ink);line-height:1.45;}
+.frm-comment-input:focus{outline:none;border-color:var(--forum);box-shadow:0 0 0 2px rgba(27,58,107,.08);}
+.frm-comment-submit{padding:7px 16px;background:var(--forum);color:#fff;border:none;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:background .12s;}
+.frm-comment-submit:hover{background:var(--blue-md);}
+
 /* Market center panel */
 .mkt-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:13px 18px 10px;}
 .mkt-fhead-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--market);}
@@ -3210,10 +3237,20 @@ function renderFrmCards(subSlug) {
     : '<div class="frm-empty-state">No legislation data for this subcategory yet.</div>';
 }
 
+var _frmSeq = 0;
+
+function escJs(s) {
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+
 function frmBillHtml(c) {
   var sc = (c.status === 'signed' || c.status === 'passed') ? c.status : 'pending';
   var link = c.url ? '<div class="frm-bill-link"><a href="' + c.url + '" target="_blank" rel="noopener">View on Congress.gov &#8599;</a></div>' : '';
-  return '<div class="frm-bill">' +
+  var bid = 'fbi' + (++_frmSeq);
+  var bnum = escJs(c.num || '');
+  var shareUrl = encodeURIComponent(c.url || 'https://fora.community');
+  var shareText = encodeURIComponent((c.name || '') + (c.num ? ' \u2014 ' + c.num : ''));
+  return '<div class="frm-bill" id="' + bid + '">' +
     '<div class="frm-bill-top">' +
       (c.num ? '<span class="frm-bill-num">' + c.num + '</span>' : '') +
       '<span class="frm-bill-status ' + sc + '">' + c.statusLabel + '</span>' +
@@ -3221,8 +3258,98 @@ function frmBillHtml(c) {
     '<div class="frm-bill-name">' + c.name + '</div>' +
     '<div class="frm-bill-type">' + c.type + '</div>' +
     '<div class="frm-bill-desc">' + c.desc + '</div>' +
-    link + '</div>';
+    link +
+    '<div class="frm-bill-actions">' +
+      '<button class="frm-action-btn" onclick="toggleFrmComments(\'' + bid + '\',\'' + bnum + '\')"><i class="ti ti-message-circle"></i> Comment</button>' +
+      '<div class="frm-share-wrap">' +
+        '<button class="frm-action-btn" onclick="toggleFrmShare(\'' + bid + '\',event)"><i class="ti ti-share"></i> Share</button>' +
+        '<div class="frm-share-menu" id="sm-' + bid + '" style="display:none">' +
+          '<a class="frm-share-item" href="https://twitter.com/intent/tweet?text=' + shareText + '&url=' + shareUrl + '" target="_blank" rel="noopener"><i class="ti ti-brand-x"></i> X / Twitter</a>' +
+          '<a class="frm-share-item" href="https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '" target="_blank" rel="noopener"><i class="ti ti-brand-facebook"></i> Facebook</a>' +
+          '<a class="frm-share-item" href="https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrl + '" target="_blank" rel="noopener"><i class="ti ti-brand-linkedin"></i> LinkedIn</a>' +
+          '<button class="frm-share-item" onclick="frmCopyLink(\'' + escJs(c.url || '') + '\',this,\'' + bid + '\')"><i class="ti ti-copy"></i> Copy Link</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="frm-comment-area" id="ca-' + bid + '" style="display:none">' +
+      '<div class="frm-comment-list" id="cl-' + bid + '"><div class="frm-comment-loading">Loading comments\u2026</div></div>' +
+      '<div class="frm-comment-form">' +
+        '<textarea class="frm-comment-input" id="ci-' + bid + '" placeholder="Share your perspective\u2026" rows="2"></textarea>' +
+        '<button class="frm-comment-submit" onclick="submitFrmComment(\'' + bid + '\',\'' + bnum + '\')">Post</button>' +
+      '</div>' +
+    '</div>' +
+    '</div>';
 }
+
+// ── Forum comment / share handlers ──────────────────────────────────────────
+function toggleFrmComments(bid, billNum) {
+  var area = document.getElementById('ca-' + bid);
+  if (!area) return;
+  var open = area.style.display !== 'none';
+  area.style.display = open ? 'none' : '';
+  if (!open) loadFrmComments(bid, billNum);
+}
+
+function loadFrmComments(bid, billNum) {
+  var list = document.getElementById('cl-' + bid);
+  fetch('/mvp/forum/comments?bill_num=' + encodeURIComponent(billNum), {
+    headers: {'X-Requested-With':'XMLHttpRequest'}
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (!data.length) {
+      list.innerHTML = '<div class="frm-no-comments">No comments yet \u2014 be the first.</div>';
+    } else {
+      list.innerHTML = data.map(function(c) {
+        return '<div class="frm-comment-item">' +
+          '<div class="frm-ci-meta"><span class="frm-ci-handle">@' + c.handle + '</span><span class="frm-ci-date">' + c.created_at + '</span></div>' +
+          '<div class="frm-ci-body">' + c.body.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+          '</div>';
+      }).join('');
+    }
+  }).catch(function() {
+    list.innerHTML = '<div class="frm-no-comments">Could not load comments.</div>';
+  });
+}
+
+function submitFrmComment(bid, billNum) {
+  var input = document.getElementById('ci-' + bid);
+  var body = input ? input.value.trim() : '';
+  if (!body) return;
+  var csrf = (document.querySelector('meta[name="csrf-token"]') || {}).content || '';
+  fetch('/mvp/forum/comments', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'X-Requested-With':'XMLHttpRequest'},
+    body: JSON.stringify({bill_num: billNum, body: body})
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) {
+      input.value = '';
+      loadFrmComments(bid, billNum);
+    }
+  });
+}
+
+function toggleFrmShare(bid, e) {
+  if (e) e.stopPropagation();
+  var menu = document.getElementById('sm-' + bid);
+  if (!menu) return;
+  var willOpen = menu.style.display === 'none';
+  document.querySelectorAll('.frm-share-menu').forEach(function(m){ m.style.display='none'; });
+  if (willOpen) menu.style.display = '';
+}
+
+function frmCopyLink(url, btn, bid) {
+  if (!url) return;
+  navigator.clipboard.writeText(url).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() {
+      btn.innerHTML = '<i class="ti ti-copy"></i> Copy Link';
+      document.getElementById('sm-' + bid).style.display = 'none';
+    }, 1500);
+  });
+}
+
+document.addEventListener('click', function() {
+  document.querySelectorAll('.frm-share-menu').forEach(function(m){ m.style.display='none'; });
+});
 </script>
 </body>
 </html>
