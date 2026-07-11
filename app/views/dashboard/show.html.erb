@@ -132,6 +132,10 @@ a{text-decoration:none;color:inherit;}
 .frm-sub{padding:4px 8px 4px 28px;font-size:12px;color:var(--ink-soft);cursor:pointer;border-left:2px solid transparent;border-radius:0 6px 6px 0;}
 .frm-sub:hover{color:var(--ink);background:var(--rule-soft);}
 .frm-sub.on{color:var(--forum);font-weight:700;border-left-color:var(--forum);}
+.frm-gov-subs{padding-bottom:2px;}
+.frm-gov-sub{padding-left:28px !important;}
+#frm-leg-domains>.frm-dom-h{padding-left:14px;}
+#frm-leg-domains .frm-sub-list .frm-sub{padding-left:44px;}
 
 /* Forum legislation panel */
 .frm-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--forum);padding:13px 18px 10px;}
@@ -705,19 +709,31 @@ a{text-decoration:none;color:inherit;}
 
     <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
     <div class="frm-nav">
-      <a href="#" class="tool" onclick="switchPanel('officials',this);return false;"><i class="ti ti-users"></i> Officials</a>
-      <%- @forum_domains.reject { |d| d.slug == 'officials' }.each do |dom| %>
-        <div class="frm-dom-h" onclick="frmDomClick(this,'<%= dom.slug %>')">
-          <i class="ti <%= dom.icon %> frm-dom-icon"></i>
-          <span class="frm-dom-label"><%= dom.name %></span>
-          <i class="ti ti-chevron-down frm-chev"></i>
-        </div>
-        <div class="frm-sub-list">
-          <%- dom.forum_subcategories.each do |sub| %>
-            <div class="frm-sub" onclick="frmSubClick('<%= sub.slug %>',this)"><%= sub.name %></div>
-          <%- end %>
-        </div>
-      <%- end %>
+      <a href="#" class="tool" onclick="openOfficials(this);return false;"><i class="ti ti-users"></i> Officials</a>
+      <div class="frm-gov-subs">
+        <div class="frm-sub frm-gov-sub" onclick="filterOfficials('federal',this)">Federal</div>
+        <div class="frm-sub frm-gov-sub" onclick="filterOfficials('state',this)">State</div>
+        <div class="frm-sub frm-gov-sub" onclick="filterOfficials('local',this)">Local</div>
+      </div>
+      <div class="frm-dom-h" id="frm-leg-h" onclick="frmLegislationClick(this)">
+        <i class="ti ti-file-description frm-dom-icon"></i>
+        <span class="frm-dom-label">Legislation</span>
+        <i class="ti ti-chevron-down frm-chev"></i>
+      </div>
+      <div class="frm-sub-list" id="frm-leg-domains">
+        <%- @forum_domains.reject { |d| d.slug == 'officials' }.each do |dom| %>
+          <div class="frm-dom-h" onclick="frmDomClick(this,'<%= dom.slug %>')">
+            <i class="ti <%= dom.icon %> frm-dom-icon"></i>
+            <span class="frm-dom-label"><%= dom.name %></span>
+            <i class="ti ti-chevron-down frm-chev"></i>
+          </div>
+          <div class="frm-sub-list">
+            <%- dom.forum_subcategories.each do |sub| %>
+              <div class="frm-sub" onclick="frmSubClick('<%= sub.slug %>',this)"><%= sub.name %></div>
+            <%- end %>
+          </div>
+        <%- end %>
+      </div>
     </div>
 
     <div class="pillar-h" style="cursor:pointer" onclick="switchPanel('market',null);return false;"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
@@ -1120,7 +1136,7 @@ a{text-decoration:none;color:inherit;}
         <% odata = official_card_data(rep) %>
         <% rep_share_id = "osm-#{rep.id}" %>
         <% rep_share_url = odata&.dig(:profile_path) ? (request.base_url + odata[:profile_path]) : request.original_url %>
-        <div class="post f">
+        <div class="post f" data-gov-level="federal">
           <button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu('<%= rep_share_id %>','<%= j rep.name %>','<%= rep_share_url %>')" title="Share">⤴</button>
           <div class="lshare-menu" id="<%= rep_share_id %>"></div>
           <div class="av av-gov"><%= initials(rep.name) %></div>
@@ -1199,7 +1215,8 @@ a{text-decoration:none;color:inherit;}
         <% o_share_url = prof_path ? (request.base_url + prof_path) : request.original_url %>
         <% o_bills = o_person&.extra_data&.dig("sponsored_bills")&.first(2) || [] %>
         <% o_sparked = o_person && @person_follows.include?(o_person.id) %>
-        <div class="post f">
+        <% _off = o[:office].to_s.downcase; _glevel = _off.include?('u.s.')||_off.include?('united states') ? 'federal' : _off.include?('state ')||_off.include?('governor')||_off.include?('pennsylvania') ? 'state' : 'local' %>
+        <div class="post f" data-gov-level="<%= _glevel %>">
           <button class="lshare-btn" onclick="event.stopPropagation();toggleShareMenu('<%= o_share_id %>','<%= j o[:name] %>','<%= o_share_url %>')" title="Share">⤴</button>
           <div class="lshare-menu" id="<%= o_share_id %>"></div>
           <% if o_person&.photo_url.present? %>
@@ -3794,6 +3811,52 @@ var FRM_DOMS = {
 var _lastFrmContext = null;
 var _frmJurFilter = 'all';
 
+function openOfficials(el) {
+  switchPanel('officials', el);
+  document.querySelectorAll('.frm-gov-sub').forEach(function(x){ x.classList.remove('on'); });
+  document.querySelectorAll('#panel-officials .post.f').forEach(function(c){ c.style.display = ''; });
+}
+
+function filterOfficials(level, el) {
+  document.querySelectorAll('.frm-gov-sub').forEach(function(x){ x.classList.remove('on'); });
+  if (el) el.classList.add('on');
+  document.querySelectorAll('#panel-officials .post.f').forEach(function(c){
+    c.style.display = (c.dataset.govLevel === level) ? '' : 'none';
+  });
+}
+
+function frmLegislationClick(h) {
+  var legDoms = document.getElementById('frm-leg-domains');
+  var isOpen = legDoms.classList.contains('open');
+  legDoms.classList.toggle('open');
+  h.classList.toggle('on');
+  h.classList.toggle('open');
+  if (!isOpen) {
+    _lastFrmContext = { type: 'all' };
+    switchPanel('forum-domain', null);
+    renderFrmAll();
+  }
+}
+
+function renderFrmAll() {
+  document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 All Legislation';
+  document.getElementById('frm-panel-crumb').textContent = 'All categories';
+  var seen = {}, allCards = [];
+  Object.keys(FRM_DOMS).forEach(function(dk) {
+    Object.keys(FRM_DOMS[dk].subs).forEach(function(sk) {
+      FRM_DOMS[dk].subs[sk].cards.forEach(function(c) {
+        if (!seen[c.name]) { seen[c.name] = true; allCards.push(c); }
+      });
+    });
+  });
+  if (_frmJurFilter !== 'all') allCards = allCards.filter(function(c){ return billJur(c) === _frmJurFilter; });
+  var jurLabel = {federal:'Federal',pennsylvania:'State',philadelphia:'Local'}[_frmJurFilter] || '';
+  var el = document.getElementById('frm-main');
+  el.innerHTML = allCards.length
+    ? allCards.map(frmBillHtml).join('')
+    : '<div class="frm-empty-state">No ' + (jurLabel ? jurLabel + ' ' : '') + 'legislation available.</div>';
+}
+
 function billJur(c) {
   if (c.jurisdiction) return c.jurisdiction;
   var t = (c.type || '').toLowerCase();
@@ -3807,7 +3870,8 @@ function setFrmJur(jur, el) {
   document.querySelectorAll('.frm-jchip').forEach(function(x){ x.classList.remove('on'); });
   if (el) el.classList.add('on');
   if (_lastFrmContext) {
-    if (_lastFrmContext.type === 'domain') renderFrmDomain(_lastFrmContext.slug);
+    if (_lastFrmContext.type === 'all') renderFrmAll();
+    else if (_lastFrmContext.type === 'domain') renderFrmDomain(_lastFrmContext.slug);
     else renderFrmCards(_lastFrmContext.slug);
   }
 }
@@ -3978,7 +4042,8 @@ function openFrmBill(bid) {
 function closeFrmBill() {
   switchPanel('forum-domain', null);
   if (_lastFrmContext) {
-    if (_lastFrmContext.type === 'domain') renderFrmDomain(_lastFrmContext.slug);
+    if (_lastFrmContext.type === 'all') renderFrmAll();
+    else if (_lastFrmContext.type === 'domain') renderFrmDomain(_lastFrmContext.slug);
     else renderFrmCards(_lastFrmContext.slug);
   }
 }
