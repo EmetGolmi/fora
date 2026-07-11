@@ -143,6 +143,17 @@ class DashboardController < ApplicationController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  # ── PATCH /mvp/dashboard/service_area ───────────────────────────────────────
+  # Save the current user's service radius (mobile providers: handymen, etc.)
+  def update_service_area
+    radius = params[:radius_mi].to_f
+    radius = [[radius, 0.5].max, 50.0].min
+    @profile.update!(service_radius_mi: radius)
+    render json: { ok: true, radius_mi: @profile.service_radius_mi }
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { ok: false, errors: e.message }, status: :unprocessable_entity
+  end
+
   # ── GET /mvp/dashboard/clear ─────────────────────────────────────────────────
   def clear
     session.delete(:dashboard_job_id)

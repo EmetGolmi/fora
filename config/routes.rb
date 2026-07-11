@@ -56,9 +56,10 @@ Rails.application.routes.draw do
     get  "dashboard/result/:job_id", to: "dashboard#result"
     get  "dashboard/bills",               to: "dashboard#bills"
     get  "dashboard/jurisdiction_bills",  to: "dashboard#jurisdiction_bills"
-    post "dashboard/spark",          to: "dashboard#spark"
-    post "dashboard/build",          to: "dashboard#build_connection"
-    post "dashboard/project_add",    to: "dashboard#project_add"
+    post  "dashboard/spark",          to: "dashboard#spark"
+    post  "dashboard/build",          to: "dashboard#build_connection"
+    post  "dashboard/project_add",    to: "dashboard#project_add"
+    patch "dashboard/service_area",   to: "dashboard#update_service_area", as: :dashboard_service_area
 
     # Settings
     get   "settings",                 to: "settings#show",            as: :settings

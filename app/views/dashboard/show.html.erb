@@ -43,6 +43,21 @@ a{text-decoration:none;color:inherit;}
   .mkt-view-toggle{display:flex;}
   #mkt-map-right{display:none!important;}
 }
+/* Service area panel */
+#svc-map{height:320px;border-radius:10px;overflow:hidden;margin-bottom:14px;border:1px solid var(--rule);}
+.svc-head{padding:18px 20px 12px;border-bottom:1px solid var(--rule-soft);}
+.svc-head-title{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--market);margin-bottom:4px;}
+.svc-head-sub{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.svc-body{padding:16px 20px;}
+.svc-radius-label{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.svc-radius-label span{color:var(--market);font-size:15px;}
+#svc-slider{width:100%;accent-color:var(--market);margin-bottom:14px;cursor:pointer;}
+.svc-actions{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.svc-save-btn{padding:8px 22px;background:var(--market);color:#fff;border:none;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:700;cursor:pointer;transition:background .15s;}
+.svc-save-btn:hover{background:var(--green-lt);}
+.svc-save-btn:disabled{opacity:.5;cursor:default;}
+.svc-saved{font-size:12px;color:var(--market);font-weight:700;}
+.svc-hint{font-size:11px;color:var(--ink-mut);line-height:1.6;}
 
 /* MOBILE chrome */
 .mtop{display:none;}
@@ -686,6 +701,9 @@ a{text-decoration:none;color:inherit;}
 
     <div class="pillar-h" style="cursor:pointer" onclick="switchPanel('market',null);return false;"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
     <div class="mkt-nav" id="mkt-nav"></div>
+    <% if @profile.provider_mode? %>
+      <a href="#" class="tool" style="margin-top:4px" onclick="openSvcPanel();return false;"><i class="ti ti-map-pin"></i> My Service Area</a>
+    <% end %>
 
     <button class="voice">Add your Voice</button>
 
@@ -1376,6 +1394,24 @@ a{text-decoration:none;color:inherit;}
     </div>
     <div class="mkt-detail-body" id="mkt-listing-body"></div>
   </div><%# /panel-market-listing %>
+
+  <%# ── SERVICE AREA PANEL ─────────────────────────────────────────────────── %>
+  <div id="panel-service-area" style="display:none">
+    <div class="svc-head">
+      <div class="svc-head-title">▢ My Service Area</div>
+      <div class="svc-head-sub">Define the radius you serve as a mobile provider — neighbors searching for help will see this zone on the marketplace map.</div>
+    </div>
+    <div class="svc-body">
+      <div id="svc-map"></div>
+      <div class="svc-radius-label">Radius: <span id="svc-radius-val">3.0</span> miles</div>
+      <input type="range" id="svc-slider" min="0.5" max="15" step="0.5" value="3.0" oninput="svcSliderMove(this.value)">
+      <div class="svc-actions">
+        <button class="svc-save-btn" onclick="saveSvcArea()">Save Service Area</button>
+        <span class="svc-saved" id="svc-saved" style="display:none">&#10003; Saved</span>
+      </div>
+      <p class="svc-hint">Drag the slider to adjust your coverage radius. Clients and neighbors searching the marketplace will see this zone alongside your listing.</p>
+    </div>
+  </div><%# /panel-service-area %>
 
   <%# ── OFFICIAL PROFILE PANEL ──────────────────────────────────────────── %>
   <div id="panel-official" style="display:none">
@@ -2072,7 +2108,7 @@ function openOfficialProfile(path, name) {
 var MKT_DOMS = [
   {icon:"ti-home",label:"Your home",subs:[
     {label:"Handyman & repair",cards:[
-      {name:"Mike's Handyman",type:"General repair · neighbor",kind:"nbr",stars:"4.6 · 31 reviews"},
+      {name:"Mike's Handyman",type:"General repair · neighbor",kind:"nbr",stars:"4.6 · 31 reviews",location:"South Philly",svcRadius:3},
       {name:"Fix-It Philly",type:"Home repair co.",kind:"biz",stars:"4.5 · 58 reviews"},
       {name:"PHL Whole Home Repair",type:"City grant program",kind:"prog",stars:"Income-eligible"},
       {name:"Before you hire — contractor guide",type:"FORA guide",kind:"fora",stars:"Temple brief"}
@@ -2106,7 +2142,7 @@ var MKT_DOMS = [
       {name:"Tenant pest rights — Philadelphia",type:"FORA guide",kind:"fora",stars:"Temple brief"}
     ]},
     {label:"Moving",cards:[
-      {name:"Two Guys Moving",type:"Local movers",kind:"nbr",stars:"4.5 · 43 reviews"},
+      {name:"Two Guys Moving",type:"Local movers",kind:"nbr",stars:"4.5 · 43 reviews",location:"South Philly",svcRadius:8},
       {name:"College Hunks",type:"Moving company",kind:"biz",stars:"4.6 · 130 reviews"}
     ]}
   ]},
@@ -2117,7 +2153,7 @@ var MKT_DOMS = [
     ]},
     {label:"Local producers",cards:[
       {name:"Headhouse Farmers Market",type:"Weekly market · Saturdays",kind:"prog",stars:"8am–2pm"},
-      {name:"Nadia's Home Kitchen",type:"Meal prep · neighbor",kind:"nbr",stars:"4.9 · 18 orders"},
+      {name:"Nadia's Home Kitchen",type:"Meal prep · neighbor",kind:"nbr",stars:"4.9 · 18 orders",location:"Bella Vista",svcRadius:2},
       {name:"South Philly Bakehouse",type:"Neighborhood baker",kind:"nbr",stars:"5.0 · 34 reviews"}
     ]},
     {label:"Food access programs",cards:[
@@ -2144,7 +2180,7 @@ var MKT_DOMS = [
     {label:"Fitness & bodywork",cards:[
       {name:"Bella Vista Yoga",type:"Fitness studio",kind:"biz",stars:"4.8 · 54 reviews"},
       {name:"Fairmount Park Recreation",type:"Free public fitness",kind:"prog",stars:"Free"},
-      {name:"Massage by Elise",type:"Licensed MT · neighbor",kind:"nbr",stars:"4.9 · 28 reviews"}
+      {name:"Massage by Elise",type:"Licensed MT · neighbor",kind:"nbr",stars:"4.9 · 28 reviews",location:"Graduate Hospital",svcRadius:3}
     ]},
     {label:"Personal care",cards:[
       {name:"The Barbershop on Passyunk",type:"Barber",kind:"biz",stars:"4.8 · 142 reviews"},
@@ -2167,7 +2203,7 @@ var MKT_DOMS = [
          {av:"MR",who:"@phl.realtor.passyunk",text:"Family shop — been going 6 years. They'll tell you straight what needs work now vs. what can wait."},
          {av:"DS",who:"@phl.carpenter.bella",text:"$65 for conventional, fast, no upsell pressure. Rare."}
        ]},
-      {name:"Your neighbor Cliff",av:"C",avClass:"av-neighbor",vetBar:"Army · Ret.",bdgClass:"lbdg-neighbor",bdgLabel:"Neighbor",cleared:true,
+      {name:"Your neighbor Cliff",av:"C",avClass:"av-neighbor",vetBar:"Army · Ret.",bdgClass:"lbdg-neighbor",bdgLabel:"Neighbor",cleared:true,svcRadius:5,
        rating:"4.8",reviewCount:"36",location:"Mobile · 19147",price:"$50 + cost of oil & filter",
        socialProof:"2 of your acquaintances have left positive reviews for Cliff",
        desc:"Retired Army vet, amateur race car driver. Mobile — I come to you. I'll teach you how to do it yourself and where to properly dispose of your used oil.",
@@ -2328,7 +2364,10 @@ var _mktMapM    = null;
 var _mktMarkersD = {};
 var _mktMarkersM = {};
 var _mktBounds  = null;
-var _mktCoords  = {}; // lid → [lat,lng] (stable per session)
+var _mktCoords   = {}; // lid → [lat,lng] (stable per session)
+var _mktCirclesD = {}; // lid → Leaflet service circle (desktop)
+var _mktCirclesM = {}; // lid → Leaflet service circle (mobile)
+var _userSvcRadiusMi = <%= @profile.service_radius_mi || 0 %>;
 
 function _mktTileLayer(map) {
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -2337,11 +2376,30 @@ function _mktTileLayer(map) {
   }).addTo(map);
 }
 
+function _svcCenter() {
+  var label = '<%= j @profile.place_label.to_s.downcase %>';
+  var city  = '<%= j @profile.address_city.to_s.downcase %>';
+  var keys  = Object.keys(PHILLY_HOODS);
+  for (var i = 0; i < keys.length; i++) {
+    if (label.indexOf(keys[i]) !== -1 || city.indexOf(keys[i]) !== -1) return PHILLY_HOODS[keys[i]];
+  }
+  return [39.9526, -75.1652];
+}
+
+function _addUserSvcCircle(map) {
+  if (!_userSvcRadiusMi || _userSvcRadiusMi <= 0) return;
+  L.circle(_svcCenter(), {
+    radius: _userSvcRadiusMi * 1609.34,
+    color: '#1b3a6b', fillColor: '#3a6abf', fillOpacity: 0.07, weight: 2, dashArray: '6,5'
+  }).bindTooltip('My service area', {direction: 'top'}).addTo(map);
+}
+
 function initMktMapD() {
   if (_mktMapD || !document.getElementById('mkt-map-d')) return;
   _mktMapD = L.map('mkt-map-d', {zoomControl:true, scrollWheelZoom:true})
               .setView([39.9526,-75.1652], 13);
   _mktTileLayer(_mktMapD);
+  _addUserSvcCircle(_mktMapD);
 }
 
 function initMktMapM() {
@@ -2349,6 +2407,7 @@ function initMktMapM() {
   _mktMapM = L.map('mkt-map-m', {zoomControl:true, scrollWheelZoom:false})
               .setView([39.9526,-75.1652], 13);
   _mktTileLayer(_mktMapM);
+  _addUserSvcCircle(_mktMapM);
 }
 
 function _coordsForLoc(lid, loc) {
@@ -2375,10 +2434,13 @@ function _mktPinIcon(kind) {
 
 function renderMktMapPins(lids) {
   if (!lids || !lids.length) return;
-  // Clear old markers
+  // Clear old markers and service circles
   Object.keys(_mktMarkersD).forEach(function(k){ if (_mktMapD) _mktMapD.removeLayer(_mktMarkersD[k]); });
   Object.keys(_mktMarkersM).forEach(function(k){ if (_mktMapM) _mktMapM.removeLayer(_mktMarkersM[k]); });
+  Object.keys(_mktCirclesD).forEach(function(k){ if (_mktMapD) _mktMapD.removeLayer(_mktCirclesD[k]); });
+  Object.keys(_mktCirclesM).forEach(function(k){ if (_mktMapM) _mktMapM.removeLayer(_mktCirclesM[k]); });
   _mktMarkersD = {}; _mktMarkersM = {};
+  _mktCirclesD = {}; _mktCirclesM = {};
 
   var bounds = [];
   lids.forEach(function(lid) {
@@ -2394,6 +2456,11 @@ function renderMktMapPins(lids) {
     var icon = _mktPinIcon(c.kind || '');
     if (_mktMapD) { _mktMarkersD[lid] = L.marker(coords,{icon:icon}).bindPopup(popup).addTo(_mktMapD); }
     if (_mktMapM) { _mktMarkersM[lid] = L.marker(coords,{icon:icon}).bindPopup(popup).addTo(_mktMapM); }
+    if (c.svcRadius) {
+      var cOpts = {radius:c.svcRadius*1609.34,color:'#155c2d',fillColor:'#1f7a3e',fillOpacity:0.10,weight:1.5,dashArray:'5,4'};
+      if (_mktMapD) _mktCirclesD[lid] = L.circle(coords, cOpts).addTo(_mktMapD);
+      if (_mktMapM) _mktCirclesM[lid] = L.circle(coords, cOpts).addTo(_mktMapM);
+    }
   });
 
   if (bounds.length) {
@@ -2404,10 +2471,18 @@ function renderMktMapPins(lids) {
 }
 
 function zoomMktPin(lid) {
-  var md = _mktMarkersD[lid];
-  if (md && _mktMapD) { _mktMapD.setView(md.getLatLng(), 16, {animate:true}); md.openPopup(); }
-  var mm = _mktMarkersM[lid];
-  if (mm && _mktMapM) { _mktMapM.setView(mm.getLatLng(), 16, {animate:true}); mm.openPopup(); }
+  var md = _mktMarkersD[lid], cd = _mktCirclesD[lid];
+  if (_mktMapD) {
+    if (cd) _mktMapD.fitBounds(cd.getBounds(), {padding:[30,30]});
+    else if (md) _mktMapD.setView(md.getLatLng(), 16, {animate:true});
+    if (md) md.openPopup();
+  }
+  var mm = _mktMarkersM[lid], cm = _mktCirclesM[lid];
+  if (_mktMapM) {
+    if (cm) _mktMapM.fitBounds(cm.getBounds(), {padding:[20,20]});
+    else if (mm) _mktMapM.setView(mm.getLatLng(), 16, {animate:true});
+    if (mm) mm.openPopup();
+  }
 }
 
 function resetMktMapExtent() {
@@ -2488,7 +2563,8 @@ function buildMktDetailHtml(c) {
   var ratingHtml = c.rating
     ? '<span class="mkt-hero-stars">&#9733; '+c.rating+'</span> <span style="color:#999">('+c.reviewCount+' reviews)</span>'
     : (c.stars ? c.stars : '');
-  var metaParts = [c.location, c.price].filter(Boolean);
+  var svcText = c.svcRadius ? 'Serves within '+c.svcRadius+' mi' : null;
+  var metaParts = [c.location, c.price, svcText].filter(Boolean);
   var urlHtml = c.url
     ? '<a href="'+c.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="listing-url" style="margin-top:6px">&#127760; '+c.url.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'')+'</a>'
     : '';
@@ -3911,6 +3987,62 @@ function submitFrmPerspective() {
     errDiv.textContent = 'Network error — please try again.';
     errDiv.style.display = '';
   });
+}
+
+// ── Service area panel ────────────────────────────────────────────────────────
+var _svcMap    = null;
+var _svcCircle = null;
+var _svcRadiusMi = <%= @profile.service_radius_mi || 3.0 %>;
+
+function openSvcPanel() {
+  switchPanel('service-area', null);
+  setTimeout(function(){ initSvcMap(); }, 0);
+}
+
+function initSvcMap() {
+  var el = document.getElementById('svc-map');
+  if (!el) return;
+  if (_svcMap) { _svcMap.invalidateSize(); return; }
+  var center = _svcCenter();
+  _svcMap = L.map('svc-map', {zoomControl:true, scrollWheelZoom:true}).setView(center, 12);
+  _mktTileLayer(_svcMap);
+  _svcCircle = L.circle(center, {
+    radius: _svcRadiusMi * 1609.34,
+    color: '#155c2d', fillColor: '#1f7a3e', fillOpacity: 0.18, weight: 2
+  }).addTo(_svcMap);
+  _svcMap.fitBounds(_svcCircle.getBounds(), {padding:[30,30]});
+  var sl = document.getElementById('svc-slider');
+  var rv = document.getElementById('svc-radius-val');
+  if (sl) sl.value = _svcRadiusMi;
+  if (rv) rv.textContent = _svcRadiusMi.toFixed(1);
+}
+
+function svcSliderMove(val) {
+  _svcRadiusMi = parseFloat(val);
+  var rv = document.getElementById('svc-radius-val');
+  if (rv) rv.textContent = _svcRadiusMi.toFixed(1);
+  if (_svcCircle) {
+    _svcCircle.setRadius(_svcRadiusMi * 1609.34);
+    if (_svcMap) _svcMap.fitBounds(_svcCircle.getBounds(), {padding:[30,30]});
+  }
+}
+
+function saveSvcArea() {
+  var btn   = document.querySelector('.svc-save-btn');
+  var saved = document.getElementById('svc-saved');
+  if (btn) btn.disabled = true;
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/mvp/dashboard/service_area', {
+    method:  'PATCH',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf},
+    body:    JSON.stringify({radius_mi: _svcRadiusMi})
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (btn) btn.disabled = false;
+    if (data.ok) {
+      _userSvcRadiusMi = _svcRadiusMi;
+      if (saved) { saved.style.display=''; setTimeout(function(){ saved.style.display='none'; }, 2500); }
+    }
+  }).catch(function(){ if (btn) btn.disabled = false; });
 }
 
 // ── Share handlers ────────────────────────────────────────────────────────────
