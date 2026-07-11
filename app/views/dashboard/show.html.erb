@@ -7,6 +7,7 @@
 <title>FORA · Home</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/tabler-icons.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
   --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#eef2fb;
@@ -26,6 +27,22 @@ a{text-decoration:none;color:inherit;}
 .col-left{border-right:1px solid var(--rule);position:sticky;top:0;height:100vh;padding:12px 9px;display:flex;flex-direction:column;overflow-y:auto;}
 .col-center{border-right:1px solid var(--rule);background:var(--white);min-width:0;}
 .col-right{padding:12px 16px;}
+/* Market map — desktop right column */
+#mkt-map-right{display:none;height:calc(100vh - 24px);position:sticky;top:12px;border-radius:12px;overflow:hidden;margin-bottom:14px;border:1px solid var(--rule);}
+#mkt-map-d{height:100%;width:100%;}
+#right-civic{}
+/* Market map — mobile/tablet toggle */
+.mkt-view-toggle{display:none;gap:0;border-bottom:1px solid var(--rule);padding:10px 16px;}
+.mvt-btn{flex:1;padding:7px 0;border:1px solid var(--rule);background:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--ink-soft);cursor:pointer;}
+.mvt-btn:first-child{border-radius:8px 0 0 8px;border-right:none;}
+.mvt-btn:last-child{border-radius:0 8px 8px 0;}
+.mvt-btn.on{background:var(--market);color:#fff;border-color:var(--market);}
+#mkt-map-m-wrap{display:none;height:calc(100vh - 110px);}
+#mkt-map-m{height:100%;width:100%;}
+@media(max-width:1040px){
+  .mkt-view-toggle{display:flex;}
+  #mkt-map-right{display:none!important;}
+}
 
 /* MOBILE chrome */
 .mtop{display:none;}
@@ -1343,6 +1360,11 @@ a{text-decoration:none;color:inherit;}
       <div class="mkt-fhead-title">▢ Market</div>
       <div class="mkt-fhead-crumb" id="mkt-crumb"></div>
     </div>
+    <div class="mkt-view-toggle">
+      <button class="mvt-btn on" id="mvt-list" onclick="mktViewToggle('list')">&#8801; List</button>
+      <button class="mvt-btn" id="mvt-map" onclick="mktViewToggle('map')">&#9675; Map</button>
+    </div>
+    <div id="mkt-map-m-wrap"><div id="mkt-map-m"></div></div>
     <div id="mkt-main"><p class="mkt-empty-state">Select a category from the left to explore your neighborhood marketplace.</p></div>
   </div>
 
@@ -1396,6 +1418,8 @@ a{text-decoration:none;color:inherit;}
 
   <%# ── RIGHT RAIL ──────────────────────────────────────────────────────────── %>
   <aside class="col-right">
+    <div id="mkt-map-right"><div id="mkt-map-d"></div></div>
+    <div id="right-civic">
 
     <%# YOUR DOCKET %>
     <div class="rcard">
@@ -1503,6 +1527,7 @@ a{text-decoration:none;color:inherit;}
       <% end %>
     </div>
 
+    </div><%# /right-civic %>
   </aside>
 </div><%# /.shell %>
 
@@ -1969,6 +1994,17 @@ function switchPanel(key, el) {
 
   if (key === 'pathsprograms') renderPathsPrograms();
   if (key === 'religion') renderReligion();
+
+  // Market map: show right-column map on desktop when market is active
+  var isMkt = (key === 'market' || key === 'market-listing');
+  var mapRight = document.getElementById('mkt-map-right');
+  var civic    = document.getElementById('right-civic');
+  if (mapRight) mapRight.style.display = isMkt ? '' : 'none';
+  if (civic)    civic.style.display    = isMkt ? 'none' : '';
+  if (isMkt) {
+    initMktMapD();
+    setTimeout(function(){ if (_mktMapD) _mktMapD.invalidateSize(); }, 150);
+  }
 }
 
 var RELIGION_CARDS = [
@@ -2269,6 +2305,135 @@ var MKT_DOMS = [
   ]}
 ];
 
+// ── Market map ────────────────────────────────────────────────────────────────
+var PHILLY_HOODS = {
+  'fishtown':           [39.9718,-75.1308], 'northern liberties':[39.9652,-75.1432],
+  'center city':        [39.9526,-75.1652], 'old city':          [39.9493,-75.1451],
+  'society hill':       [39.9430,-75.1489], 'south philly':      [39.9275,-75.1630],
+  'south philadelphia': [39.9275,-75.1630], 'west philly':       [39.9554,-75.2068],
+  'west philadelphia':  [39.9554,-75.2068], 'germantown':        [40.0315,-75.1716],
+  'roxborough':         [40.0523,-75.2177], 'manayunk':          [40.0282,-75.2252],
+  'kensington':         [39.9832,-75.1255], 'brewerytown':       [39.9740,-75.1760],
+  'fairmount':          [39.9648,-75.1745], 'bella vista':       [39.9393,-75.1560],
+  'point breeze':       [39.9226,-75.1703], 'passyunk':          [39.9304,-75.1626],
+  'east passyunk':      [39.9304,-75.1626], 'graduate hospital': [39.9393,-75.1748],
+  'university city':    [39.9522,-75.1934], 'spruce hill':       [39.9530,-75.2129],
+  'grays ferry':        [39.9255,-75.1873], 'gray\'s ferry':     [39.9255,-75.1873],
+  'callowhill':         [39.9579,-75.1499], 'washington west':   [39.9457,-75.1657]
+};
+var _mktMapD    = null;
+var _mktMapM    = null;
+var _mktMarkersD = {};
+var _mktMarkersM = {};
+var _mktBounds  = null;
+var _mktCoords  = {}; // lid → [lat,lng] (stable per session)
+
+function _mktTileLayer(map) {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(map);
+}
+
+function initMktMapD() {
+  if (_mktMapD || !document.getElementById('mkt-map-d')) return;
+  _mktMapD = L.map('mkt-map-d', {zoomControl:true, scrollWheelZoom:true})
+              .setView([39.9526,-75.1652], 13);
+  _mktTileLayer(_mktMapD);
+}
+
+function initMktMapM() {
+  if (_mktMapM || !document.getElementById('mkt-map-m')) return;
+  _mktMapM = L.map('mkt-map-m', {zoomControl:true, scrollWheelZoom:false})
+              .setView([39.9526,-75.1652], 13);
+  _mktTileLayer(_mktMapM);
+}
+
+function _coordsForLoc(lid, loc) {
+  if (_mktCoords[lid]) return _mktCoords[lid]; // reuse stable jitter
+  var lower = (loc || '').toLowerCase();
+  var keys  = Object.keys(PHILLY_HOODS);
+  var base  = [39.9526, -75.1652]; // fallback: Center City
+  for (var i = 0; i < keys.length; i++) {
+    if (lower.indexOf(keys[i]) !== -1) { base = PHILLY_HOODS[keys[i]]; break; }
+  }
+  var coords = [base[0] + (Math.random()-0.5)*0.005, base[1] + (Math.random()-0.5)*0.005];
+  _mktCoords[lid] = coords;
+  return coords;
+}
+
+function _mktPinIcon(kind) {
+  var bg = kind === 'prog' ? '#155c2d' : kind === 'nbr' ? '#2a9d5c' : '#1b3a6b';
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:13px;height:13px;border-radius:50%;background:'+bg+';border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.45)"></div>',
+    iconSize: [13,13], iconAnchor:[6,6], popupAnchor:[0,-9]
+  });
+}
+
+function renderMktMapPins(lids) {
+  if (!lids || !lids.length) return;
+  // Clear old markers
+  Object.keys(_mktMarkersD).forEach(function(k){ if (_mktMapD) _mktMapD.removeLayer(_mktMarkersD[k]); });
+  Object.keys(_mktMarkersM).forEach(function(k){ if (_mktMapM) _mktMapM.removeLayer(_mktMarkersM[k]); });
+  _mktMarkersD = {}; _mktMarkersM = {};
+
+  var bounds = [];
+  lids.forEach(function(lid) {
+    var c = _mktRegistry[lid];
+    if (!c) return;
+    var coords = _coordsForLoc(lid, c.location || '');
+    bounds.push(coords);
+    var popup = '<div style="font-size:12px;min-width:150px;line-height:1.5">'
+      + '<strong style="color:#1b3a6b">'+c.name+'</strong><br>'
+      + '<span style="color:#666;font-size:11px">'+(c.location||'')+'</span><br>'
+      + '<a href="#" onclick="event.preventDefault();openMktListing(\''+lid+'\')" style="color:#155c2d;font-weight:700;font-size:11px">Expand for Conversation →</a>'
+      + '</div>';
+    var icon = _mktPinIcon(c.kind || '');
+    if (_mktMapD) { _mktMarkersD[lid] = L.marker(coords,{icon:icon}).bindPopup(popup).addTo(_mktMapD); }
+    if (_mktMapM) { _mktMarkersM[lid] = L.marker(coords,{icon:icon}).bindPopup(popup).addTo(_mktMapM); }
+  });
+
+  if (bounds.length) {
+    _mktBounds = L.latLngBounds(bounds);
+    if (_mktMapD) _mktMapD.fitBounds(_mktBounds, {padding:[24,24], maxZoom:15});
+    if (_mktMapM) _mktMapM.fitBounds(_mktBounds, {padding:[20,20], maxZoom:15});
+  }
+}
+
+function zoomMktPin(lid) {
+  var md = _mktMarkersD[lid];
+  if (md && _mktMapD) { _mktMapD.setView(md.getLatLng(), 16, {animate:true}); md.openPopup(); }
+  var mm = _mktMarkersM[lid];
+  if (mm && _mktMapM) { _mktMapM.setView(mm.getLatLng(), 16, {animate:true}); mm.openPopup(); }
+}
+
+function resetMktMapExtent() {
+  if (_mktBounds) {
+    if (_mktMapD) _mktMapD.fitBounds(_mktBounds, {padding:[24,24], maxZoom:15});
+    if (_mktMapM) _mktMapM.fitBounds(_mktBounds, {padding:[20,20], maxZoom:15});
+  }
+}
+
+function mktViewToggle(mode) {
+  var lb = document.getElementById('mvt-list');
+  var mb = document.getElementById('mvt-map');
+  var main = document.getElementById('mkt-main');
+  var wrap = document.getElementById('mkt-map-m-wrap');
+  if (mode === 'map') {
+    if (lb) lb.classList.remove('on');
+    if (mb) mb.classList.add('on');
+    if (main) main.style.display = 'none';
+    if (wrap) { wrap.style.display = ''; initMktMapM(); setTimeout(function(){ if (_mktMapM) _mktMapM.invalidateSize(); }, 150); }
+    if (_mktBounds && _mktMapM) _mktMapM.fitBounds(_mktBounds, {padding:[20,20], maxZoom:15});
+  } else {
+    if (lb) lb.classList.add('on');
+    if (mb) mb.classList.remove('on');
+    if (main) main.style.display = '';
+    if (wrap) wrap.style.display = 'none';
+  }
+}
+
 var _mktLSeq = 0;
 var _mktRegistry = {};
 var _currentMktListing = null;
@@ -2281,11 +2446,13 @@ function openMktListing(lid) {
   document.getElementById('mkt-listing-title').textContent = c.name;
   document.getElementById('mkt-listing-body').innerHTML = buildMktDetailHtml(c);
   switchPanel('market-listing', null);
+  zoomMktPin(lid);
   loadMktConversation('mkt:' + c.name);
 }
 
 function closeMktListing() {
   switchPanel('market', null);
+  resetMktMapExtent();
   if (_lastMktContext) {
     if (_lastMktContext.type === 'sub') renderMktCards(_lastMktContext.d.label, _lastMktContext.s.label, _lastMktContext.s.cards);
     else renderMktDomain(_lastMktContext.d);
@@ -3179,6 +3346,7 @@ function renderMktCards(title, sub, cards) {
   crumb.style.display = '';
   var heading = '<div class="mkt-cat-header"><div>' + (sub !== 'All subcategories' ? sub : title) + '</div><div class="mkt-cat-sub">' + (sub !== 'All subcategories' ? title : '') + '</div></div>';
   var ad = (sub === 'Auto repair') ? MKT_JIFFY_AD : '';
+  var _prevMktSeq = _mktLSeq;
   var html = cards.map(function(c, i){ return mktCardHtml(c, i); }).join('');
 
   var layers = MKT_LAYERS[sub];
@@ -3212,6 +3380,11 @@ function renderMktCards(title, sub, cards) {
   }
 
   document.getElementById('mkt-main').innerHTML = heading + layerHtml + '<div class="mkt-grid">' + ad + html + '</div>';
+
+  // Collect the lids just registered and pin them on the map
+  var newLids = [];
+  for (var n = _prevMktSeq + 1; n <= _mktLSeq; n++) newLids.push('mli' + n);
+  renderMktMapPins(newLids);
 }
 
 // ── Global search ──────────────────────────────────────────────────────────
@@ -3756,5 +3929,6 @@ document.addEventListener('click', function() {
   document.querySelectorAll('.frm-share-menu').forEach(function(m){ m.style.display='none'; });
 });
 </script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>
