@@ -58,6 +58,11 @@ a{text-decoration:none;color:inherit;}
 .svc-save-btn:disabled{opacity:.5;cursor:default;}
 .svc-saved{font-size:12px;color:var(--market);font-weight:700;}
 .svc-hint{font-size:11px;color:var(--ink-mut);line-height:1.6;}
+/* Temple subcategory panel */
+.tpl-fhead{padding:14px 16px 10px;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:6px;}
+.tpl-fhead-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--temple);}
+.tpl-fhead-crumb{font-size:13px;color:var(--ink-soft);}
+.tpl-empty{padding:40px 24px;font-size:13px;color:var(--ink-mut);text-align:center;}
 
 /* MOBILE chrome */
 .mtop{display:none;}
@@ -676,7 +681,7 @@ a{text-decoration:none;color:inherit;}
         </div>
         <div class="tpl-sub-list">
           <%- dom.temple_subcategories.each do |sub| %>
-            <div class="tpl-sub"><%= sub.name %></div>
+            <div class="tpl-sub" onclick="tplSubClick('<%= sub.slug %>',this)"><%= sub.name %></div>
           <%- end %>
         </div>
       <%- end %>
@@ -1412,6 +1417,15 @@ a{text-decoration:none;color:inherit;}
       <p class="svc-hint">Drag the slider to adjust your coverage radius. Clients and neighbors searching the marketplace will see this zone alongside your listing.</p>
     </div>
   </div><%# /panel-service-area %>
+
+  <%# ── TEMPLE SUBCATEGORY PANEL ───────────────────────────────────────────── %>
+  <div id="panel-temple-sub" style="display:none">
+    <div class="tpl-fhead">
+      <div class="tpl-fhead-title">◯ Temple</div>
+      <div class="tpl-fhead-crumb" id="tpl-crumb"></div>
+    </div>
+    <div id="tpl-sub-main"></div>
+  </div><%# /panel-temple-sub %>
 
   <%# ── OFFICIAL PROFILE PANEL ──────────────────────────────────────────── %>
   <div id="panel-official" style="display:none">
@@ -2167,19 +2181,6 @@ var MKT_DOMS = [
     ]}
   ]},
   {icon:"ti-heart-rate-monitor",label:"Health & body",subs:[
-    {label:"Hygiene",cards:[
-      {name:"Share your routine",type:"Community · hygiene & daily practice",kind:"fora",stars:"Add your voice",
-       desc:"What's working for you? Post your morning or evening routine — products, habits, order of operations. No judgment, just neighbors sharing what they've learned.",
-       tags:["Routines","Products","Tips"]},
-      {name:"Product recommendations",type:"Neighbor-sourced · what actually works",kind:"nbr",stars:"Community notes",
-       desc:"Deodorants, soaps, skincare, dental — your neighbors' honest takes. See what people with similar skin types or budgets actually use."},
-      {name:"Free hygiene supplies — Philadelphia",type:"City & nonprofit distribution",kind:"prog",stars:"Free",
-       desc:"Toothbrushes, soap, menstrual products, and more — distributed through Project HOME, Sunday Breakfast Rescue Mission, and Philly Free Streets. No ID required."},
-      {name:"Oral health on a budget",type:"FORA guide · dental basics",kind:"fora",stars:"Temple brief",
-       desc:"Brushing technique, flossing, fluoride, and how to stretch out visits — practical guidance for keeping your mouth healthy between dentist trips."},
-      {name:"Skin, sweat & environment",type:"FORA guide · body awareness",kind:"fora",stars:"Temple brief",
-       desc:"How Philly's water, humidity, and air quality affect your skin and hygiene routine — and what neighbors have figured out over time."}
-    ]},
     {label:"Medical & dental",cards:[
       {name:"Rittenhouse Family Medicine",type:"Primary care",kind:"biz",stars:"4.6 · 88 reviews"},
       {name:"Community Health Centers",type:"Sliding-scale clinic",kind:"prog",stars:"No-cost visits"},
@@ -4000,6 +4001,42 @@ function submitFrmPerspective() {
     errDiv.textContent = 'Network error — please try again.';
     errDiv.style.display = '';
   });
+}
+
+// ── Temple subcategory content ────────────────────────────────────────────────
+var TPL_SUB_CONTENT = {
+  'tpl-hygiene': {
+    title: 'Hygiene',
+    domain: 'Health & Body',
+    cards: [
+      {name:"Share your routine",type:"Community · daily hygiene practice",kind:"fora",stars:"Add your voice",
+       desc:"What works for you? Morning routine, evening routine — products, order, habits, and what you've figured out over time. Post your approach and see what your neighbors do differently."},
+      {name:"Product recommendations",type:"Neighbor-sourced · what actually works",kind:"nbr",stars:"Community notes",
+       desc:"Deodorants, soaps, skincare, dental care, hair — your neighbors' honest takes on what works for different skin types, budgets, and lifestyles in Philly's climate."},
+      {name:"Free hygiene supplies — Philadelphia",type:"City & nonprofit distribution",kind:"prog",stars:"Free",
+       desc:"Toothbrushes, soap, menstrual products, and more — distributed through Project HOME, Sunday Breakfast Rescue Mission, and Philly Free Streets. No ID required."},
+      {name:"Dental health on a budget",type:"FORA guide · oral health",kind:"fora",stars:"Temple brief",
+       desc:"Brushing technique, flossing, fluoride, and how to stretch time between dentist visits — practical guidance for keeping your mouth healthy without breaking the bank."},
+      {name:"Skin, sweat & Philly's environment",type:"FORA guide · body awareness",kind:"fora",stars:"Temple brief",
+       desc:"How Philly's water hardness, humidity, and air quality affect your skin and hygiene routine — and what neighbors in your zip code have figured out over time."}
+    ]
+  }
+};
+
+function tplSubClick(slug, el) {
+  document.querySelectorAll('.tpl-sub').forEach(function(x){ x.classList.remove('on'); });
+  if (el) el.classList.add('on');
+  var content = TPL_SUB_CONTENT[slug];
+  var crumb = document.getElementById('tpl-crumb');
+  var main  = document.getElementById('tpl-sub-main');
+  if (!main) return;
+  if (crumb) crumb.textContent = content ? (content.domain + ' · ' + content.title) : slug;
+  if (content) {
+    main.innerHTML = content.cards.map(function(c, i){ return mktCardHtml(c, 'tpl'+i); }).join('');
+  } else {
+    main.innerHTML = '<div class="tpl-empty">Content for this guide is in preparation.</div>';
+  }
+  switchPanel('temple-sub', null);
 }
 
 // ── Service area panel ────────────────────────────────────────────────────────
