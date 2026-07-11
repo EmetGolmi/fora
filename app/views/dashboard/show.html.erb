@@ -96,6 +96,26 @@ a{text-decoration:none;color:inherit;}
 .frm-sub:hover{color:var(--ink);background:var(--rule-soft);}
 .frm-sub.on{color:var(--forum);font-weight:700;border-left-color:var(--forum);}
 
+/* Forum legislation panel */
+.frm-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--forum);padding:13px 18px 10px;}
+.frm-fhead-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--forum);}
+.frm-fhead-crumb{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:3px;}
+.frm-grid{display:flex;flex-direction:column;padding:12px 18px;}
+.frm-bill{background:#fff;border:1px solid var(--rule);border-radius:12px;margin-bottom:10px;padding:14px 16px;transition:border-color .15s,box-shadow .15s;}
+.frm-bill:hover{border-color:var(--blue-pl);box-shadow:0 2px 8px rgba(27,58,107,.08);}
+.frm-bill-top{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
+.frm-bill-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;background:var(--blue-pl);color:var(--forum);padding:2px 8px;border-radius:999px;font-weight:700;}
+.frm-bill-status{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-soft);}
+.frm-bill-status.signed,.frm-bill-status.passed{background:#e5f0e8;color:var(--green);border-color:var(--green-p);}
+.frm-bill-status.pending{background:var(--amber-p);color:var(--amber);border-color:#ffe08a;}
+.frm-bill-name{font-weight:700;font-size:14px;color:var(--ink);line-height:1.3;margin-bottom:3px;}
+.frm-bill-type{font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+.frm-bill-desc{font-size:12.5px;color:var(--ink-soft);line-height:1.55;}
+.frm-bill-link{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.frm-bill-link a{color:var(--forum);}
+.frm-bill-link a:hover{text-decoration:underline;}
+.frm-empty-state{color:var(--ink-soft);font-size:13px;padding:56px 24px;text-align:center;line-height:1.7;}
+
 /* Market center panel */
 .mkt-fhead{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:13px 18px 10px;}
 .mkt-fhead-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:20px;color:var(--market);}
@@ -500,14 +520,14 @@ a{text-decoration:none;color:inherit;}
     <div class="frm-nav">
       <a href="#" class="tool" onclick="switchPanel('officials',this);return false;"><i class="ti ti-users"></i> Officials</a>
       <%- @forum_domains.reject { |d| d.slug == 'officials' }.each do |dom| %>
-        <div class="frm-dom-h" onclick="toggleNavDom(this,'frm')">
+        <div class="frm-dom-h" onclick="frmDomClick(this,'<%= dom.slug %>')">
           <i class="ti <%= dom.icon %> frm-dom-icon"></i>
           <span class="frm-dom-label"><%= dom.name %></span>
           <i class="ti ti-chevron-down frm-chev"></i>
         </div>
         <div class="frm-sub-list">
           <%- dom.forum_subcategories.each do |sub| %>
-            <div class="frm-sub"><%= sub.name %></div>
+            <div class="frm-sub" onclick="frmSubClick('<%= sub.slug %>',this)"><%= sub.name %></div>
           <%- end %>
         </div>
       <%- end %>
@@ -1136,6 +1156,15 @@ a{text-decoration:none;color:inherit;}
     </div>
     <div id="pp-main" class="mkt-grid"></div>
   </div><%# /panel-pathsprograms %>
+
+  <%# ── FORUM DOMAIN PANEL ─────────────────────────────────────────────────── %>
+  <div id="panel-forum-domain" style="display:none">
+    <div class="frm-fhead">
+      <div class="frm-fhead-title" id="frm-panel-title">△ Forum</div>
+      <div class="frm-fhead-crumb" id="frm-panel-crumb"></div>
+    </div>
+    <div id="frm-main" class="frm-grid"></div>
+  </div><%# /panel-forum-domain %>
 
   <%# ── MARKET PANEL ─────────────────────────────────────────────────────── %>
   <div id="panel-market" style="display:none">
@@ -2960,7 +2989,7 @@ function openSettingsPanel() {
   switchPanel('settings', null);
 }
 
-// ── Temple / Forum accordion toggle ─────────────────────────────────────────
+// ── Temple accordion toggle (no panel) ──────────────────────────────────────
 function toggleNavDom(h, prefix) {
   var sl = h.nextElementSibling;
   var isOpen = sl.classList.contains('open');
@@ -2971,6 +3000,228 @@ function toggleNavDom(h, prefix) {
     sl.classList.add('open');
     h.classList.add('on','open');
   }
+}
+
+// ── Forum legislation data ───────────────────────────────────────────────────
+var FRM_DOMS = {
+  "frm-your-home": { name:"Your Home", icon:"ti-home",
+    subs: {
+      "housing-legislation": { label:"Housing Legislation", cards:[
+        {name:"21st Century ROAD to Housing Act", num:"H.R.6644", type:"Federal · 119th Congress", status:"passed", statusLabel:"Passed Congress", desc:"Largest housing affordability bill in decades. Incentivizes states to streamline zoning laws, funds infrastructure for new housing development, and establishes pre-approved design pattern books to speed local approvals.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
+        {name:"Housing Affordability Act", num:"S.1527 / H.R.6132", type:"Federal · Senate & House", status:"pending", statusLabel:"In Committee", desc:"Increases FHA multifamily housing loan limits for mortgage insurance and ties limits to a more accurate inflation index.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/1527"},
+      ]},
+      "zoning-land-use": { label:"Zoning & Land Use", cards:[
+        {name:"ROAD to Housing Act — Zoning Incentives", num:"H.R.6644 §§201-220", type:"Federal · Enacted", status:"passed", statusLabel:"Enacted", desc:"Creates federal funding incentives for communities that adopt zoning reforms — including ADU legalization, mixed-use zoning, and by-right development approvals near transit.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
+        {name:"BUILD America 250 Act — Land Use Provisions", num:"H.R.8870", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Five-year surface transportation reauthorization that links federal highway funds to local land use and zoning decisions near transit corridors.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+      ]},
+      "property-tax-bills": { label:"Property Tax Bills", cards:[
+        {name:"FY2026 THUD Appropriations Act", num:"H.R.4552", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"FY2026 transportation and housing spending. Includes CDBG funding that states can direct toward property tax relief programs for low-income homeowners.", url:"https://www.congress.gov/bill/119th-congress/house-bill/4552"},
+      ]},
+      "code-enforcement": { label:"Code Enforcement", cards:[
+        {name:"ROAD to Housing Act — Housing Standards", num:"H.R.6644 Title III", type:"Federal · Enacted", status:"passed", statusLabel:"Enacted", desc:"Establishes federal guidance on minimum habitability standards and code enforcement response timelines as a condition of certain federal housing grant funding.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
+      ]},
+      "affordable-housing": { label:"Affordable Housing Programs", cards:[
+        {name:"21st Century ROAD to Housing Act — Affordable Provisions", num:"H.R.6644 §§301-340", type:"Federal · Enacted", status:"passed", statusLabel:"Enacted", desc:"Expands the Low Income Housing Tax Credit, creates pathways for surplus federal property conversion to affordable housing, and funds affordable housing infrastructure grants.", url:"https://www.congress.gov/bill/119th-congress/house-bill/6644"},
+        {name:"ROAD to Housing Act of 2025", num:"S.2651", type:"Federal · Senate", status:"pending", statusLabel:"Reported to Senate", desc:"40-section bill covering housing supply, affordability vouchers, manufactured housing, and rural housing access.", url:"https://www.congress.gov/crs-product/R48732"},
+      ]},
+    }
+  },
+  "frm-food-drink": { name:"Food & Drink", icon:"ti-salad",
+    subs: {
+      "food-policy-legislation": { label:"Food Policy Legislation", cards:[
+        {name:"Farm, Food, and National Security Act of 2026", num:"H.R.7567", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"2026 Farm Bill. Establishes an Office of Urban Agriculture, expands SNAP access, invests in local food systems, and addresses food security across all 12 farm bill titles.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
+        {name:"Food Security and Farm Protection Act", num:"S.1326", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Senate alternative farm bill addressing food access, specialty crops, and nutrition program funding.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/1326"},
+      ]},
+      "restaurant-licensing": { label:"Restaurant Licensing", cards:[
+        {name:"Farm, Food, and National Security Act — Food Safety Title", num:"H.R.7567 Title XI", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"Updates federal food safety inspection requirements and sets new standards for food service licensing, limiting states from imposing stricter permit burdens on small food businesses.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
+      ]},
+      "farmers-market-permits": { label:"Farmers Market Permits", cards:[
+        {name:"Farm Bill — Local Agriculture Market Program", num:"H.R.7567 §10001", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"Reauthorizes and expands the Local Agriculture Market Program (LAMP), funding farmers markets, food hubs, and direct-to-consumer channels. Simplifies permit pathways for small vendors.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
+      ]},
+      "urban-agriculture-bills": { label:"Urban Agriculture Bills", cards:[
+        {name:"Farm Bill — Office of Urban Agriculture", num:"H.R.7567 §12615", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"Establishes a permanent federal Office of Urban Agriculture and Innovative Production. Funds research, education, and extension for urban farms, rooftop gardens, vertical farms, and community gardens.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
+      ]},
+    }
+  },
+  "frm-health-body": { name:"Health & Body", icon:"ti-heart-rate-monitor",
+    subs: {
+      "healthcare-legislation": { label:"Healthcare Legislation", cards:[
+        {name:"One Big Beautiful Bill Act", num:"H.R.1 / P.L.119-21", type:"Federal · Signed Law", status:"signed", statusLabel:"Signed 7/4/25", desc:"Cuts over $1 trillion from federal health programs. Ends ACA Marketplace enhanced subsidies, removes caps on tax credit repayment for low-income enrollees, and restructures Medicaid eligibility.", url:"https://www.ama-assn.org/health-care-advocacy/federal-advocacy/changes-medicaid-aca-and-other-key-provisions-one-big"},
+        {name:"Health Care Affordability Act of 2025", num:"S.46", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Makes permanent the ACA Marketplace enhanced subsidies from ARPA and the IRA, protecting premium tax credits for low- and middle-income enrollees.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/46"},
+        {name:"Medicare for All Act", num:"H.R.3069 / S.1506", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Establishes a national single-payer health insurance program administered by HHS. Covers all US residents for medical, dental, vision, and long-term care.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3069"},
+      ]},
+      "medicaid-medicare-bills": { label:"Medicaid & Medicare Bills", cards:[
+        {name:"One Big Beautiful Bill — Medicaid Cuts", num:"H.R.1 Title IV", type:"Federal · Signed Law", status:"signed", statusLabel:"Signed 7/4/25", desc:"Ends ACA Medicaid expansion fiscal incentive in 2026. Adds work requirements and new enrollment barriers. An estimated 10 million people projected to lose Medicaid coverage.", url:"https://medicareadvocacy.org/impact-of-the-big-bill-on-medicare/"},
+        {name:"Jobs and Opportunities for Medicaid Act", num:"H.R.1059", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Proposes additional federal Medicaid work requirement standards and timelines for states to implement compliance verification.", url:"https://www.congress.gov/bill/119th-congress/house-bill/1059"},
+        {name:"Medicaid Outreach and Assistance for Communities Act", num:"H.R.8650", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Requires HHS to fund community-based organizations that help people navigate Medicaid enrollment, appeals, and work requirement compliance.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8650"},
+      ]},
+      "public-health-ordinances": { label:"Public Health Ordinances", cards:[
+        {name:"FY2026 Labor-HHS-Education Appropriations", num:"P.L.119-75 Title II", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"HHS discretionary funding for FY2026. Maintains CDC, NIH, and HRSA core programs at or above FY2025 levels, rejecting proposed cuts to public health infrastructure.", url:"https://www.congress.gov/bill/119th-congress/house-bill/4552"},
+      ]},
+      "pharmacy-regulations": { label:"Pharmacy Regulations", cards:[
+        {name:"Health Care Freedom for Patients Act of 2025", num:"S.3386", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Expands HSA-eligible medical expenses, and restricts CHIP coverage for certain noncitizens and gender-transition procedures.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/3386"},
+      ]},
+    }
+  },
+  "frm-getting-around": { name:"Getting Around", icon:"ti-car",
+    subs: {
+      "transportation-legislation": { label:"Transportation Legislation", cards:[
+        {name:"BUILD America 250 Act", num:"H.R.8870", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Five-year $580 billion surface transportation reauthorization. Covers highways, transit, rail, and safety programs. Adds new EV and plug-in hybrid road-use fees to the Highway Trust Fund.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+        {name:"THUD Appropriations Act, 2026", num:"H.R.4552 / P.L.119-75", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"FY2026 DOT funding: $25.1B discretionary, $108.4B total. Covers FAA, FHWA, FTA, and Amtrak.", url:"https://www.congress.gov/bill/119th-congress/house-bill/4552"},
+      ]},
+      "road-bridge-bills": { label:"Road & Bridge Bills", cards:[
+        {name:"BUILD America 250 Act — Bridge Formula Program", num:"H.R.8870 §§1001-1050", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Creates a new federal bridge formula program. Funds priority replacement of structurally deficient bridges and establishes safety standards for autonomous commercial vehicles.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+        {name:"BASICS Act", num:"H.R.7437", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Bipartisan bridge and safety infrastructure act targeting high-priority bridge replacements in underserved communities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7437"},
+      ]},
+      "transit-funding": { label:"Transit Funding", cards:[
+        {name:"BUILD America 250 Act — Transit Provisions", num:"H.R.8870 Title III", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Authorizes only $77 billion for rail and transit — a steep cut from IIJA's $142 billion. Provides $0 in guaranteed Capital Investment Grants, raising concerns from transit advocates.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+        {name:"Surface Transportation Reauthorization: Public Transportation", num:"CRS R48644", type:"Congressional Research Service", status:"pending", statusLabel:"Policy Analysis", desc:"CRS analysis of the transit funding gap in the BUILD America 250 reauthorization, covering FTA formula grants, New Starts, and Bus and Bus Facilities programs.", url:"https://www.congress.gov/crs-product/R48644"},
+      ]},
+      "parking-vision-zero": { label:"Parking & Vision Zero Ordinances", cards:[
+        {name:"BUILD America 250 Act — Highway Safety Standards", num:"H.R.8870 Title II", type:"Federal · House Committee", status:"pending", statusLabel:"In Committee", desc:"Sets new federal highway safety targets and minimum standards for pedestrian safety infrastructure as a condition of federal transportation funds.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8870"},
+      ]},
+    }
+  },
+  "frm-family-care": { name:"Family & Care", icon:"ti-heart",
+    subs: {
+      "family-law-legislation": { label:"Family Law Legislation", cards:[
+        {name:"Child Care for Working Families Act", num:"S.2295 / H.R.4418", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Caps child care costs at 7% of income for lower-income families. Funds wage increases for child care workers. Expands the Child Care and Development Block Grant.", url:"https://www.congress.gov/bill/119th-congress/house-bill/4418"},
+        {name:"Empowering Employer Child and Elder Care Solutions Act", num:"H.R.2270", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Excludes employer-funded child or dependent care benefits from overtime pay calculations, making it easier for employers to offer family care benefits.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2270"},
+      ]},
+      "child-welfare-bills": { label:"Child Welfare Bills", cards:[
+        {name:"Child Care Workforce and Facilities Act of 2025", num:"H.R.581 / S.169", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Grants to states and tribal entities to expand child care access and the child care workforce, prioritizing areas with insufficient available licensed care.", url:"https://www.congress.gov/bill/119th-congress/house-bill/581"},
+        {name:"Child Care for Every Community Act", num:"H.R.5658", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Universal child care model with capped family costs and wage alignment for educators modeled on Head Start pay scales.", url:"https://www.congress.gov/bill/119th-congress/house-bill/5658"},
+      ]},
+      "elder-care-policy": { label:"Elder Care Policy", cards:[
+        {name:"Empowering Employer Child and Elder Care Solutions Act", num:"H.R.2270", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Expands employer tax benefits for elder care. Removes elder care benefits from overtime pay calculations, incentivizing employers to provide more dependent care support.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2270"},
+        {name:"One Big Beautiful Bill — Medicaid & Elder Care Impact", num:"H.R.1 Title IV", type:"Federal · Signed Law", status:"signed", statusLabel:"Signed 7/4/25", desc:"Medicaid is the primary funder of nursing home care. The OBBBA's Medicaid work requirements and enrollment barriers are projected to reduce coverage for elderly low-income residents.", url:"https://medicareadvocacy.org/impact-of-the-big-bill-on-medicare/"},
+      ]},
+      "childcare-subsidy": { label:"Childcare Subsidy Programs", cards:[
+        {name:"Child Care Availability and Affordability Act", num:"S.847", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Bipartisan bill expanding CCDBG subsidy eligibility and increasing child care provider reimbursement rates.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/847"},
+        {name:"Child Care Supply Tax Credit Act of 2025", num:"S.3534", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"New wage-based tax credit for child care educators, with higher rates for rural areas, to increase supply and retain the workforce.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/3534"},
+      ]},
+    }
+  },
+  "frm-style-expression": { name:"Style & Expression", icon:"ti-palette",
+    subs: {
+      "arts-funding-legislation": { label:"Arts Funding Legislation", cards:[
+        {name:"FY2026 NEA & NEH Appropriations", num:"P.L.119-74", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"NEA and NEH each received $207 million for FY2026. Congress rejected the administration's proposal to eliminate both agencies. Funds arts grants, arts education, and humanities research.", url:"https://www.congress.gov/crs-product/R48958"},
+        {name:"ARTIST Act", num:"S.254 / H.R.5694", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Protects visual artists' rights in work-for-hire arrangements. Clarifies that certain creative works cannot be classified as 'work for hire' without explicit written agreement.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/254"},
+      ]},
+      "cultural-heritage-bills": { label:"Cultural Heritage Bills", cards:[
+        {name:"FY2026 IMLS Appropriations", num:"P.L.119-75", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Institute of Museum and Library Services received $291.8 million. Funds museums, archives, oral history programs, and cultural heritage preservation across all 50 states.", url:"https://www.congress.gov/crs-product/R48958"},
+      ]},
+      "copyright-ip-ordinances": { label:"Copyright & IP Ordinances", cards:[
+        {name:"Visual Artists Copyright Reform Act (VACRA)", num:"S.3517", type:"Federal · Senate", status:"pending", statusLabel:"In Committee", desc:"Reforms copyright registration for visual artists. Establishes yearly subscription-based registration for pictorial, graphic, and sculptural works. Creates third-party photo registries.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/3517"},
+        {name:"ARTIST Act", num:"S.254 / H.R.5694", type:"Federal · House & Senate", status:"pending", statusLabel:"In Committee", desc:"Addresses work-for-hire classifications that frequently strip visual and performing artists of IP ownership over work they created.", url:"https://www.congress.gov/bill/119th-congress/senate-bill/254"},
+      ]},
+    }
+  },
+  "frm-learn-grow": { name:"Learn & Grow", icon:"ti-books",
+    subs: {
+      "education-legislation": { label:"Education Legislation", cards:[
+        {name:"FY2026 Labor-HHS-Education Appropriations", num:"P.L.119-75 Title III", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Dept. of Education received $79.0B in discretionary funding (+$217M over FY2025). Rejected proposed elimination of Title I targeted grants, TRIO, GEAR UP, and other equity programs.", url:"https://www.acenet.edu/News-Room/Pages/House-Passes-FY26-LHHS-Minibus.aspx"},
+        {name:"Make Education Great Again Act", num:"H.R.2386", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Restructures federal education policy, consolidating programs and increasing state flexibility over curriculum and standards.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2386"},
+      ]},
+      "school-funding-bills": { label:"School Funding Bills", cards:[
+        {name:"FY2026 Title I & IDEA Increases", num:"P.L.119-75 §§3001-3040", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Congress approved a $20M increase to both Title I (low-income school funding) and IDEA (disability education). Funded HBCUs, HSIs, Tribal Colleges, and MSIs at increased levels.", url:"https://www.nasfaa.org/news-item/36924/Senate_Committee_Advances_FY_2026_Education_Budget_Bill_That_Flat-Funds_Pell_Grant_and_Student_Aid_Programs"},
+      ]},
+      "library-adult-education": { label:"Library & Adult Education", cards:[
+        {name:"FY2026 IMLS — Library Services and Technology Act", num:"P.L.119-75", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"IMLS received $291.8M for FY2026. Supports state library agency grants, adult literacy, digital equity programs, and interlibrary loan infrastructure.", url:"https://www.afterschoolalliance.org/afterschoolsnack/Senate-appropriators-mark-up-FY-2026-education-spending-bill_07-31-2025.cfm"},
+      ]},
+      "workforce-development": { label:"Workforce Development Programs", cards:[
+        {name:"Make America Skilled Again — Workforce Block Grant", num:"FY2026 Budget Proposal", type:"Federal · Admin Proposal", status:"pending", statusLabel:"Budget Proposal", desc:"Administration proposes combining Perkins CTE, WIOA, and related workforce programs into a single $2.8B block grant — a $2.5B (44%) cut from existing program funding.", url:"https://www.afterschoolalliance.org/afterschoolsnack/FY-2026-Budget-Proposal-details-released-Administration_05-31-2025.cfm"},
+        {name:"FY2026 Bipartisan Education Spending Agreement", num:"P.L.119-75", type:"Federal · Enacted", status:"signed", statusLabel:"Enacted Feb 2026", desc:"Bipartisan compromise protects nearly all community college programs including Perkins CTE, Adult Basic Education, and Job Corps for FY2026.", url:"https://perspectives.acct.org/stories/a-status-update-on-the-fiscal-year-2026-funding-process-senate-and-house-fy-2026-agreement"},
+      ]},
+    }
+  },
+  "frm-work-livelihood": { name:"Work & Livelihood", icon:"ti-briefcase",
+    subs: {
+      "labor-legislation": { label:"Labor Legislation", cards:[
+        {name:"Modern Worker Empowerment Act", num:"H.R.1319", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Specifies the federal standard for classifying workers as independent contractors vs. employees under federal labor law — a major issue for gig workers and freelancers.", url:"https://www.congress.gov/bill/119th-congress/house-bill/1319"},
+        {name:"Protecting America's Workers Act", num:"H.R.3036", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Extends OSHA protections to government employees. Increases civil and criminal penalties for safety violations. Requires DOL to investigate all workplace fatalities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3036"},
+      ]},
+      "minimum-wage-bills": { label:"Minimum Wage Bills", cards:[
+        {name:"Living Wage For All Act", num:"H.R.8555", type:"Federal · House", status:"pending", statusLabel:"Introduced June 2026", desc:"Raises federal minimum wage to $25/hr. Large employers phase in by 2032; others by 2039. Eliminates tipped minimum wage ($2.13/hr). Ties future increases to two-thirds of national median wage.", url:"https://www.congress.gov/bill/119th-congress/house-bill/8555"},
+        {name:"Raise the Wage Act of 2025", num:"H.R.2743", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Phased increase of the federal minimum wage. Eliminates the subminimum wage for tipped workers and workers with disabilities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/2743"},
+        {name:"Original LAW Act", num:"H.R.122", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Increases federal minimum wage to $10.59 starting Jan 1 2026, then +$4/yr annually through Jan 1 2030.", url:"https://www.congress.gov/bill/119th-congress/house-bill/122"},
+      ]},
+      "workplace-safety-ordinances": { label:"Workplace Safety Ordinances", cards:[
+        {name:"Protecting America's Workers Act", num:"H.R.3036", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Extends OSHA coverage to federal, state, and local government employees. Increases maximum civil and criminal penalties for violations. Mandates DOL investigation of all workplace fatalities.", url:"https://www.congress.gov/bill/119th-congress/house-bill/3036"},
+      ]},
+      "small-business-policy": { label:"Small Business Policy", cards:[
+        {name:"Farm, Food, and National Security Act — Rural Business Title", num:"H.R.7567 Title VI", type:"Federal · House Passed", status:"passed", statusLabel:"House Passed", desc:"Expands rural business development grants, farm loan programs, and USDA Business & Industry loan guarantees for small rural enterprises.", url:"https://www.congress.gov/bill/119th-congress/house-bill/7567"},
+        {name:"Modern Worker Empowerment Act", num:"H.R.1319", type:"Federal · House", status:"pending", statusLabel:"In Committee", desc:"Independent contractor classification rules have a direct impact on small businesses that rely on freelancers and gig workers.", url:"https://www.congress.gov/bill/119th-congress/house-bill/1319"},
+      ]},
+    }
+  }
+};
+
+// ── Forum panel click handlers ────────────────────────────────────────────────
+function frmDomClick(h, slug) {
+  var sl = h.nextElementSibling;
+  var isOpen = sl.classList.contains('open');
+  var nav = h.parentElement;
+  nav.querySelectorAll('.frm-dom-h').forEach(function(x){ x.classList.remove('on','open'); });
+  nav.querySelectorAll('.frm-sub-list').forEach(function(x){ x.classList.remove('open'); });
+  if (!isOpen) {
+    sl.classList.add('open');
+    h.classList.add('on','open');
+    switchPanel('forum-domain', null);
+    renderFrmDomain(slug);
+  }
+}
+
+function frmSubClick(slug, el) {
+  document.querySelectorAll('.frm-sub').forEach(function(x){ x.classList.remove('on'); });
+  el.classList.add('on');
+  switchPanel('forum-domain', null);
+  renderFrmCards(slug);
+}
+
+function renderFrmDomain(domSlug) {
+  var dom = FRM_DOMS[domSlug];
+  if (!dom) return;
+  document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 ' + dom.name;
+  document.getElementById('frm-panel-crumb').textContent = 'All subcategories';
+  var seen = {}, allCards = [];
+  Object.keys(dom.subs).forEach(function(k) {
+    dom.subs[k].cards.forEach(function(c) {
+      if (!seen[c.name]) { seen[c.name] = true; allCards.push(c); }
+    });
+  });
+  var el = document.getElementById('frm-main');
+  el.innerHTML = allCards.length
+    ? allCards.map(frmBillHtml).join('')
+    : '<div class="frm-empty-state">No legislation data for this domain yet.</div>';
+}
+
+function renderFrmCards(subSlug) {
+  var domSlug, subData;
+  Object.keys(FRM_DOMS).forEach(function(dk) {
+    if (FRM_DOMS[dk].subs[subSlug]) { domSlug = dk; subData = FRM_DOMS[dk].subs[subSlug]; }
+  });
+  if (!subData) return;
+  document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 ' + FRM_DOMS[domSlug].name;
+  document.getElementById('frm-panel-crumb').textContent = subData.label;
+  var el = document.getElementById('frm-main');
+  el.innerHTML = subData.cards.length
+    ? subData.cards.map(frmBillHtml).join('')
+    : '<div class="frm-empty-state">No legislation data for this subcategory yet.</div>';
+}
+
+function frmBillHtml(c) {
+  var sc = (c.status === 'signed' || c.status === 'passed') ? c.status : 'pending';
+  var link = c.url ? '<div class="frm-bill-link"><a href="' + c.url + '" target="_blank" rel="noopener">View on Congress.gov &#8599;</a></div>' : '';
+  return '<div class="frm-bill">' +
+    '<div class="frm-bill-top">' +
+      (c.num ? '<span class="frm-bill-num">' + c.num + '</span>' : '') +
+      '<span class="frm-bill-status ' + sc + '">' + c.statusLabel + '</span>' +
+    '</div>' +
+    '<div class="frm-bill-name">' + c.name + '</div>' +
+    '<div class="frm-bill-type">' + c.type + '</div>' +
+    '<div class="frm-bill-desc">' + c.desc + '</div>' +
+    link + '</div>';
 }
 </script>
 </body>
