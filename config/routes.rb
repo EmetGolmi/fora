@@ -211,6 +211,7 @@ Rails.application.routes.draw do
   patch  '/card-builder/area',          to: 'card_builder#area'
   patch  '/card-builder/temple',        to: 'card_builder#temple_contribution'
   get    '/card-builder/complete',      to: 'card_builder#complete'
+  post   '/card-builder/restart',       to: 'card_builder#restart'
 
   # ── Public provider card ────────────────────────────────────────────────
   # Old URL — 301 redirect to LOCODE-based canonical URL

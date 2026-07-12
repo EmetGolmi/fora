@@ -241,6 +241,14 @@ class CardBuilderController < ApplicationController
     render json: { ok: true, handle: profile.provider_handle }
   end
 
+  # ── POST /card-builder/restart ─────────────────────────────────────────────
+  # Resets wizard state so provider can add a new service. Called from
+  # "Add a service" button in My Services panel. Existing capabilities stay.
+  def restart
+    profile.update!(card_builder_complete: false, card_builder_step: 1)
+    render json: { ok: true }
+  end
+
   # ────────────────────────────────────────────────────────────────────────────
   private
 

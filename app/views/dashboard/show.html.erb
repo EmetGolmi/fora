@@ -45,20 +45,25 @@ a{text-decoration:none;color:inherit;}
   #mkt-map-right{display:none!important;}
 }
 /* Service area panel */
-#svc-map{height:320px;border-radius:10px;overflow:hidden;margin-bottom:14px;border:1px solid var(--rule);}
 .svc-head{padding:18px 20px 12px;border-bottom:1px solid var(--rule-soft);}
 .svc-head-title{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--market);margin-bottom:4px;}
 .svc-head-sub{font-size:12px;color:var(--ink-soft);line-height:1.5;}
-.svc-body{padding:16px 20px;}
-.svc-radius-label{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;}
-.svc-radius-label span{color:var(--market);font-size:15px;}
-#svc-slider{width:100%;accent-color:var(--market);margin-bottom:14px;cursor:pointer;}
-.svc-actions{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.svc-save-btn{padding:8px 22px;background:var(--market);color:#fff;border:none;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:700;cursor:pointer;transition:background .15s;}
-.svc-save-btn:hover{background:var(--green-lt);}
-.svc-save-btn:disabled{opacity:.5;cursor:default;}
-.svc-saved{font-size:12px;color:var(--market);font-weight:700;}
 .svc-hint{font-size:11px;color:var(--ink-mut);line-height:1.6;}
+.ms-add-svc-bar{padding:12px 20px;border-bottom:1px solid var(--rule);}
+.ms-add-svc-btn{width:100%;padding:10px 16px;background:none;border:1.5px dashed var(--market);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--market);cursor:pointer;transition:all .15s;}
+.ms-add-svc-btn:hover{background:var(--market-pl);}
+.ms-svc-list{padding:14px 20px;display:flex;flex-direction:column;gap:10px;}
+.ms-svc-card{background:#fff;border:1.5px solid var(--rule);border-radius:12px;padding:14px 16px;}
+.ms-svc-card-trade{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--blue);margin-bottom:7px;}
+.ms-svc-card-codes{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px;}
+.ms-svc-code{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.05em;padding:3px 9px;border-radius:100px;font-weight:700;}
+.ms-svc-code.naics{background:#e8f0ff;color:#254f92;}
+.ms-svc-code.onet{background:#e5f0e8;color:#155c2d;}
+.ms-svc-code.isco{background:#f5f0e8;color:#7a5c1e;}
+.ms-svc-card-meta{display:flex;align-items:center;justify-content:space-between;}
+.ms-svc-status{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.05em;font-weight:700;color:var(--market);}
+.ms-svc-view-link{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--market);text-decoration:none;padding:4px 10px;border:1px solid var(--market);border-radius:7px;}
+.ms-svc-view-link:hover{background:var(--market-pl);}
 /* ── My Services embedded wizard (ms-prefix) ─────────────────────────────── */
 .ms-stepbar{display:flex;align-items:stretch;margin-bottom:18px;background:#fff;border:1px solid var(--rule);border-radius:9px;overflow:hidden;}
 .ms-sb-step{flex:1;text-align:center;padding:8px 2px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mut);border-right:1px solid var(--rule);transition:all .2s;}
@@ -1815,40 +1820,64 @@ a{text-decoration:none;color:inherit;}
 
     <% else %>
       <%# ── EDITOR MODE (card_builder_complete = true) ──────────────────────── %>
+      <%
+        _occ_data = begin
+          JSON.parse(File.read(Rails.root.join('app/data/occupations.json')))
+        rescue
+          []
+        end
+        _capabilities = @profile.provider_capabilities.active.order(created_at: :asc)
+      %>
       <div class="svc-head">
         <div class="svc-head-title">▢ My Services</div>
-        <% if @profile.card_builder_complete? && @profile.provider_handle.present? %>
+        <% if @profile.provider_handle.present? %>
+          <% card_path = @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle}" : "/p/#{@profile.provider_handle}" %>
+          <% card_display = @profile.locode.present? ? "fora.center/#{@profile.locode}/#{@profile.provider_handle}" : "fora.center/p/#{@profile.provider_handle}" %>
           <div class="svc-head-sub">
-            <% card_path = @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle}" : "/p/#{@profile.provider_handle}" %>
-            <% card_display = @profile.locode.present? ? "fora.center/#{@profile.locode}/#{@profile.provider_handle}" : "fora.center/p/#{@profile.provider_handle}" %>
-            Your card: <a href="<%= card_path %>" target="_blank" style="color:var(--market);font-weight:700"><%= card_display %></a>
-            &ensp;<a href="<%= card_path %>" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;background:var(--green-p);color:var(--market);padding:3px 9px;border-radius:100px">View ↗</a>
+            <a href="<%= card_path %>" target="_blank" style="color:var(--market);font-weight:700"><%= card_display %></a>
           </div>
-        <% else %>
-          <div class="svc-head-sub">Define your service coverage — neighbors searching for help will see this zone on the marketplace map.</div>
         <% end %>
       </div>
-      <% if @profile.provider_mode? %>
-        <div style="display:flex;gap:7px;padding:10px 20px 0">
-          <button id="ms-mode-radius" class="ms-mt-btn ms-mt-on" onclick="msEditorSetMode('radius')">Radius</button>
-          <button id="ms-mode-zone" class="ms-mt-btn" onclick="msEditorSetMode('zone')">Zone</button>
-        </div>
-      <% end %>
-      <div class="svc-body">
-        <div id="svc-map"></div>
-        <div id="ms-editor-radius-ui">
-          <div class="svc-radius-label">Radius: <span id="svc-radius-val"><%= @profile.service_radius_mi || 3.0 %></span> miles</div>
-          <input type="range" id="svc-slider" min="0.5" max="50" step="0.5"
-                 value="<%= @profile.service_radius_mi || 3.0 %>" oninput="svcSliderMove(this.value)">
-        </div>
-        <div id="ms-editor-zone-ui" style="display:none">
-          <p class="svc-hint" style="margin-bottom:10px">Use the polygon tool on the map to draw your service zone. Click to add points; close the shape by clicking the first point.</p>
-        </div>
-        <div class="svc-actions">
-          <button class="svc-save-btn" onclick="msEditorSave()">Save Service Area</button>
-          <span class="svc-saved" id="ms-editor-saved" style="display:none">&#10003; Saved</span>
-        </div>
-        <p class="svc-hint">Clients and neighbors searching the marketplace will see this zone alongside your listing.</p>
+
+      <div class="ms-add-svc-bar">
+        <button class="ms-add-svc-btn" onclick="msAddService()">+ Add a Service</button>
+      </div>
+
+      <div class="ms-svc-list">
+        <% if _capabilities.any? %>
+          <% _capabilities.each do |cap| %>
+            <%
+              occ = _occ_data.find { |o|
+                o["naics_code"] == cap.naics_code &&
+                (@profile.onet_code.blank? || o["onet_code"] == @profile.onet_code)
+              } || _occ_data.find { |o| o["naics_code"] == cap.naics_code }
+              trade_label = occ ? occ["display_label"] : cap.profession.to_s.gsub("-", " ").split.map(&:capitalize).join(" ")
+            %>
+            <div class="ms-svc-card">
+              <div class="ms-svc-card-trade"><%= trade_label %></div>
+              <div class="ms-svc-card-codes">
+                <% if cap.naics_code.present? %>
+                  <span class="ms-svc-code naics">NAICS <%= cap.naics_code %></span>
+                <% end %>
+                <% if @profile.onet_code.present? %>
+                  <span class="ms-svc-code onet">O*NET <%= @profile.onet_code %></span>
+                <% end %>
+                <% if @profile.isco_code.present? %>
+                  <span class="ms-svc-code isco">ISCO <%= @profile.isco_code %></span>
+                <% end %>
+              </div>
+              <div class="ms-svc-card-meta">
+                <span class="ms-svc-status">● Active</span>
+                <% if @profile.provider_handle.present? %>
+                  <% card_path = @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle}" : "/p/#{@profile.provider_handle}" %>
+                  <a href="<%= card_path %>" target="_blank" class="ms-svc-view-link">View card ↗</a>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p style="font-size:13px;color:var(--ink-mut);padding:4px 0">No active services yet.</p>
+        <% end %>
       </div>
     <% end %>
   </div><%# /panel-service-area %>
@@ -5013,11 +5042,6 @@ var _msWizCircle     = null;
 var _msDrawnLayer    = null;
 var _msDrawControl   = null;
 var _msDrawFG        = null;
-var _msEditorDrawControl = null;
-var _msEditorDrawnLayer  = null;
-var _msEditorDrawFG      = null;
-var _msAreaMode      = 'radius';
-var _msEditorMode    = '<%= (@profile.service_area.is_a?(Hash) && @profile.service_area["type"] == "polygon") ? "zone" : "radius" %>';
 var _msQrGenerated   = false;
 var _msHandleTimer   = null;
 var _msWizRadiusMi   = <%= @profile.service_radius_mi || 3.0 %>;
@@ -5414,63 +5438,13 @@ function msDownloadQR() {
   link.click();
 }
 
-// ── Editor mode (card_builder_complete = true) ────────────────────────────────
-function msEditorSetMode(mode) {
-  _msEditorMode = mode;
-  var btnR = document.getElementById('ms-mode-radius');
-  var btnZ = document.getElementById('ms-mode-zone');
-  if (btnR) { btnR.classList.toggle('ms-mt-on', mode === 'radius'); }
-  if (btnZ) { btnZ.classList.toggle('ms-mt-on', mode === 'zone'); }
-  var radUI = document.getElementById('ms-editor-radius-ui');
-  var zonUI = document.getElementById('ms-editor-zone-ui');
-  if (radUI) radUI.style.display = mode === 'radius' ? '' : 'none';
-  if (zonUI) zonUI.style.display = mode === 'zone' ? '' : 'none';
-  if (!_svcMap) initSvcMap();
-  if (mode === 'zone') {
-    if (_svcCircle) { _svcMap.removeLayer(_svcCircle); _svcCircle = null; }
-    if (!_msEditorDrawControl && typeof L.Control.Draw !== 'undefined') {
-      _msEditorDrawFG = new L.FeatureGroup().addTo(_svcMap);
-      _msEditorDrawControl = new L.Control.Draw({
-        draw: { polygon: { shapeOptions: {color:'#155c2d', fillOpacity:0.18} }, circle:false, rectangle:false, marker:false, circlemarker:false, polyline:false },
-        edit: { featureGroup: _msEditorDrawFG }
-      });
-      _svcMap.addControl(_msEditorDrawControl);
-      _svcMap.on(L.Draw.Event.CREATED, function(e) {
-        if (_msEditorDrawnLayer) _msEditorDrawFG.removeLayer(_msEditorDrawnLayer);
-        _msEditorDrawnLayer = e.layer;
-        _msEditorDrawFG.addLayer(_msEditorDrawnLayer);
-      });
-    }
-  } else {
-    if (_msEditorDrawnLayer && _msEditorDrawFG) { _msEditorDrawFG.removeLayer(_msEditorDrawnLayer); _msEditorDrawnLayer = null; }
-    if (_msEditorDrawControl) { _svcMap.removeControl(_msEditorDrawControl); _msEditorDrawControl = null; _msEditorDrawFG = null; }
-    var center = _svcCenter();
-    var r = _svcRadiusMi || 3.0;
-    _svcCircle = L.circle(center, {
-      radius: r * 1609.34, color: '#155c2d', fillColor: '#1f7a3e', fillOpacity: 0.18, weight: 2
-    }).addTo(_svcMap);
-    _svcMap.fitBounds(_svcCircle.getBounds(), {padding:[30,30]});
-  }
-}
-
-function msEditorSave() {
-  var btn   = document.querySelector('.svc-save-btn');
-  var saved = document.getElementById('ms-editor-saved');
-  if (btn) btn.disabled = true;
+// ── Add a service (editor mode) ───────────────────────────────────────────────
+function msAddService() {
   var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
-  var body;
-  if (_msEditorMode === 'zone') {
-    if (!_msEditorDrawnLayer) { if (btn) btn.disabled = false; return; }
-    body = JSON.stringify({ polygon: JSON.stringify(_msEditorDrawnLayer.toGeoJSON()) });
-  } else {
-    body = JSON.stringify({ radius_mi: _svcRadiusMi });
-  }
-  fetch('/mvp/dashboard/service_area', {
-    method: 'PATCH', headers: {'Content-Type':'application/json','X-CSRF-Token':csrf}, body: body
-  }).then(function(r){ return r.json(); }).then(function(data) {
-    if (btn) btn.disabled = false;
-    if (data.ok && saved) { saved.style.display=''; setTimeout(function(){ saved.style.display='none'; }, 2500); }
-  }).catch(function(){ if (btn) btn.disabled = false; });
+  fetch('/card-builder/restart', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf}
+  }).then(function(){ window.location = '/mvp/dashboard?setup=services'; });
 }
 
 // ── MS helpers ────────────────────────────────────────────────────────────────
