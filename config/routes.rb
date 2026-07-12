@@ -200,6 +200,21 @@ Rails.application.routes.draw do
   get "/org/gaesa",     to: "world#gaesa"
   get "/q929",          to: "world#q929"
 
+  # ── Card Builder (Provider onboarding) ────────────────────────────────────
+  get    '/card-builder',               to: 'card_builder#show',               as: :card_builder
+  get    '/card-builder/check-handle',  to: 'card_builder#check_handle'
+  patch  '/card-builder/trade',         to: 'card_builder#trade'
+  patch  '/card-builder/headline',      to: 'card_builder#headline'
+  post   '/card-builder/portfolio',     to: 'card_builder#add_portfolio'
+  patch  '/card-builder/portfolio/:id', to: 'card_builder#update_portfolio'
+  delete '/card-builder/portfolio/:id', to: 'card_builder#remove_portfolio'
+  patch  '/card-builder/area',          to: 'card_builder#area'
+  patch  '/card-builder/temple',        to: 'card_builder#temple_contribution'
+  get    '/card-builder/complete',      to: 'card_builder#complete'
+
+  # ── Public provider card ────────────────────────────────────────────────
+  get '/p/:handle', to: 'profiles#show', as: :provider_profile
+
   # ── IJDB — Islamic Jihad Database ─────────────────────────────────────────
   # National route BEFORE the city-scoped block (fixed path wins over :city param)
   get "/usa/ijdb", to: "ijdb_entries#national", as: :national_ijdb

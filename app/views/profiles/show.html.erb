@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= @profile.market_display_name.presence || @profile.provider_handle %> · FORA</title>
+<meta name="description" content="<%= @profile.provider_headline.to_s %>">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-pl:#dde5f5;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;--gilt-rul:rgba(184,134,11,.25);
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f0f3f8;--white:#fff;--surface:#fbfaf6;--rule:rgba(27,58,107,.1);
+  --green:#155c2d;--green-lt:#1f7a3e;--green-pl:#e5f0e8;
+  --market:#155c2d;--market-pl:#e5f0e8;--market-tint:#f3f9f5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--rule);background:#fff;position:sticky;top:0;z-index:50;}
+.logo{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);letter-spacing:.1em;}
+.o-ring{display:inline-block;width:.62em;height:.62em;border:2.5px solid var(--gilt-lt);border-radius:50%;vertical-align:.02em;margin:0 .04em;}
+.topbar-cta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:8px 16px;background:var(--market);color:#fff;border:none;border-radius:100px;cursor:pointer;}
+
+.page{max-width:640px;margin:0 auto;padding:28px 22px 60px;}
+
+/* Hero */
+.hero{background:var(--surface);border:1.5px solid var(--gilt-rul);border-radius:18px;padding:28px 26px;margin-bottom:18px;}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--market);margin-bottom:10px;}
+.hero-name{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--blue);line-height:1.15;}
+.trade-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;padding:5px 12px;background:var(--market-pl);color:var(--market);border-radius:100px;margin:10px 0 6px;}
+.place-label{font-size:12.5px;color:var(--ink-mut);}
+.headline{font-size:16px;font-weight:700;color:var(--ink);margin-top:14px;line-height:1.4;}
+.summary{font-size:14px;color:var(--ink-soft);margin-top:10px;line-height:1.65;}
+
+/* Radius chip */
+.radius-chip{display:inline-flex;align-items:center;gap:6px;background:var(--market-pl);border:1px solid var(--green-pl);border-radius:100px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.05em;color:var(--market);margin-top:14px;}
+
+/* Sections */
+.section{margin-bottom:16px;}
+.section-h{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mut);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);}
+
+/* Portfolio grid */
+.port-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
+.port-card{background:#fff;border:1px solid var(--rule);border-radius:11px;padding:14px 16px;}
+.port-card-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.port-card-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mut);}
+.port-card-link{display:block;margin-top:8px;font-size:11px;color:var(--market);font-weight:700;}
+.port-card-body{font-size:13px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
+.port-empty{font-size:13px;color:var(--ink-mut);font-style:italic;}
+
+/* Temple contribution */
+.temple-card{background:var(--gilt-pl);border:1.5px solid var(--gilt-rul);border-radius:13px;padding:18px 20px;}
+.temple-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:8px;}
+.temple-title{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.temple-body{font-size:13.5px;color:var(--ink-soft);line-height:1.65;}
+
+/* QR */
+.share-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px;}
+.share-qr{width:80px;height:80px;}
+.share-url{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--market);}
+.share-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;padding:8px 14px;border:1.5px solid var(--market);color:var(--market);background:none;border-radius:8px;cursor:pointer;}
+.share-btn:hover{background:var(--market-pl);}
+
+/* CTA */
+.cta-bar{background:var(--blue);border-radius:14px;padding:20px 22px;text-align:center;margin-top:18px;}
+.cta-h{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;}
+.cta-sub{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:14px;}
+.cta-btn{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;padding:12px 22px;background:var(--gilt);color:#fff;border:none;border-radius:10px;cursor:pointer;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="/">F<span class="o-ring"></span>RA</a>
+  <a class="topbar-cta" href="/join">Join FORA</a>
+</header>
+
+<div class="page">
+
+  <!-- Hero card -->
+  <div class="hero">
+    <div class="hero-eyebrow">▢ FORA Provider</div>
+    <div class="hero-name"><%= @profile.market_display_name.presence || @profile.market_entity_name.presence || @profile.provider_handle %></div>
+
+    <% if @profile.naics_code.present? %>
+      <% trade = {
+        "238320" => "Painter",
+        "238210" => "Electrician",
+        "238220" => "Plumber",
+        "541350" => "Home Inspector",
+        "621399" => "Nurse / Health Aide",
+        "611110" => "Teacher / Tutor",
+        "541110" => "Attorney",
+        "722330" => "Chef / Caterer",
+        "711510" => "Artist / Creative"
+      }[@profile.naics_code] %>
+      <% if trade %>
+        <span class="trade-badge"><%= trade %></span>
+      <% end %>
+    <% end %>
+
+    <div class="place-label">📍 <%= @profile.place_label.presence || "Philadelphia, PA" %></div>
+
+    <% if @profile.provider_headline.present? %>
+      <div class="headline"><%= @profile.provider_headline %></div>
+    <% end %>
+
+    <% if @profile.service_summary.present? %>
+      <div class="summary"><%= @profile.service_summary %></div>
+    <% end %>
+
+    <% if @profile.service_radius_mi.present? %>
+      <div class="radius-chip">
+        ◎ Serves within <%= @profile.service_radius_mi.to_f.round(1) %> mi of <%= @profile.place_label.presence || "their base area" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Portfolio -->
+  <div class="section">
+    <div class="section-h">Portfolio</div>
+    <% if @portfolio.any? %>
+      <div class="port-grid">
+        <% @portfolio.each do |item| %>
+          <div class="port-card">
+            <div class="port-card-title"><%= item.title %></div>
+            <div class="port-card-type"><%= item.item_type %></div>
+            <% if item.source_url.present? %>
+              <a class="port-card-link" href="<%= item.source_url %>" target="_blank" rel="noopener">Open ↗</a>
+            <% end %>
+            <% if item.description.present? %>
+              <div class="port-card-body"><%= item.description %></div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="port-empty">Portfolio coming soon.</p>
+    <% end %>
+  </div>
+
+  <!-- Temple contribution -->
+  <% if @temple_item %>
+    <div class="section">
+      <div class="section-h">Expert Tip</div>
+      <div class="temple-card">
+        <div class="temple-label">◯ Temple · Trade Knowledge</div>
+        <div class="temple-title"><%= @temple_item.title %></div>
+        <div class="temple-body"><%= @temple_item.description %></div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Share -->
+  <div class="section">
+    <div class="section-h">Share this card</div>
+    <div class="share-row">
+      <canvas id="share-qr" class="share-qr"></canvas>
+      <div>
+        <div class="share-url">fora.center/p/<%= @profile.provider_handle %></div>
+        <button class="share-btn" style="margin-top:8px;" onclick="copyLink()">Copy Link</button>
+        <button class="share-btn" style="margin-left:6px;" onclick="dlQR()">Download QR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-bar">
+    <div class="cta-h">Find more providers on FORA</div>
+    <div class="cta-sub">FORA connects neighbors with trusted local professionals.</div>
+    <a class="cta-btn" href="/join">Join the marketplace</a>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+const PROFILE_URL = 'https://fora.center/p/<%= @profile.provider_handle %>';
+
+document.addEventListener('DOMContentLoaded', () => {
+  new QRCode(document.getElementById('share-qr'), {
+    text: PROFILE_URL,
+    width: 80,
+    height: 80,
+    colorDark: '#1b3a6b',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+});
+
+function copyLink() {
+  navigator.clipboard.writeText(PROFILE_URL).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  });
+}
+
+function dlQR() {
+  const canvas = document.querySelector('#share-qr canvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'fora-<%= @profile.provider_handle %>-qr.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+</body>
+</html>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_11_100005) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_11_200001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -82,6 +82,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_11_100005) do
     t.string "address_line1"
     t.string "address_state"
     t.text "bio"
+    t.boolean "card_builder_complete", default: false, null: false
+    t.integer "card_builder_step", default: 0, null: false
     t.text "care_tags", default: [], array: true
     t.datetime "created_at", null: false
     t.string "display_name"
@@ -98,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_11_100005) do
     t.boolean "onboarding_complete", default: false, null: false
     t.integer "onboarding_step", default: 0, null: false
     t.string "place_label"
+    t.string "provider_handle"
     t.string "provider_headline"
     t.boolean "provider_mode", default: false, null: false
     t.boolean "residency_verified", default: false, null: false
@@ -116,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_11_100005) do
     t.integer "temple_scale_tradition"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["provider_handle"], name: "index_civic_profiles_on_provider_handle", unique: true, where: "(provider_handle IS NOT NULL)"
     t.index ["user_id"], name: "index_civic_profiles_on_user_id"
   end
 

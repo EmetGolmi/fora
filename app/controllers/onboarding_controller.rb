@@ -196,10 +196,12 @@ class OnboardingController < ApplicationController
   # ── POST /join/complete ─────────────────────────────────────────────────────
   # Step 5.  Finalises the identity.  Bridges the resolved address into the
   # dashboard session so the user lands on a populated civic home.
+  # Providers are redirected to Card Builder to build their public card.
   def complete
     profile.update!(onboarding_complete: true)
     session[:dashboard_job_id] = profile.resolve_job_id if profile.resolve_job_id.present?
-    render json: { ok: true, redirect: dashboard_path }
+    destination = profile.provider_mode? ? "/card-builder" : dashboard_path
+    render json: { ok: true, redirect: destination }
   end
 
   # ── GET /join/resolve ───────────────────────────────────────────────────────

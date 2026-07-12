@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="<%= form_authenticity_token %>">
+<title>FORA — Card Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#edf1fb;
+  --gilt:#b8860b;--gilt-lt:#d4a832;--gilt-pl:#f8f0dc;--gilt-rul:rgba(184,134,11,.25);
+  --ink:#0e1a2e;--ink-soft:#5a6e8a;--ink-mut:#8a9ab8;
+  --bg:#f0f3f8;--white:#fff;--surface:#fbfaf6;--rule:rgba(27,58,107,.1);
+  --green:#155c2d;--green-lt:#1f7a3e;--green-pl:#e5f0e8;--green-tint:#f3f9f5;
+  --market:#155c2d;--market-pl:#e5f0e8;--market-tint:#f3f9f5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh;}
+.topbar{display:flex;justify-content:center;padding:18px;border-bottom:1px solid var(--rule);background:#fff;position:sticky;top:0;z-index:50;}
+.logo{font-family:'Libre Baskerville',serif;font-size:21px;font-weight:700;color:var(--blue);letter-spacing:.1em;}
+.o-ring{display:inline-block;width:.62em;height:.62em;border:2.5px solid var(--gilt-lt);border-radius:50%;vertical-align:.02em;margin:0 .04em;}
+.wizard{max-width:580px;margin:0 auto;padding:24px 22px 70px;}
+
+/* Step progress bar */
+.stepbar{display:flex;align-items:center;gap:0;margin-bottom:28px;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden;}
+.sb-step{flex:1;text-align:center;padding:10px 4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);border-right:1px solid var(--rule);cursor:default;transition:all .2s;}
+.sb-step:last-child{border-right:none;}
+.sb-step.done{background:var(--green-pl);color:var(--green);}
+.sb-step.active{background:var(--market);color:#fff;font-weight:700;}
+
+.step{display:none;}
+.step.active{display:block;animation:fade .32s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;color:var(--market);}
+.step-h{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;line-height:1.18;color:var(--blue);}
+.step-sub{font-size:14.5px;color:var(--ink-soft);margin-top:10px;line-height:1.6;}
+.step-sub b{color:var(--ink);}
+.field{margin-top:17px;}
+.label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;display:block;}
+.input{width:100%;border:1.5px solid var(--rule);border-radius:11px;padding:12px 14px;font-family:'Nunito',sans-serif;font-size:15px;outline:none;color:var(--ink);background:#fff;}
+.input::placeholder{color:var(--ink-mut);}
+.input:focus{border-color:var(--blue);}
+.textarea{resize:vertical;min-height:90px;}
+.micro{font-size:11px;color:var(--ink-mut);margin-top:7px;line-height:1.5;}
+.micro b{color:var(--ink-soft);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;border:none;border-radius:11px;padding:14px 22px;cursor:pointer;}
+.btn-primary{background:var(--market);color:#fff;}
+.btn-primary:hover{background:var(--green-lt);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.btn-wide{width:100%;}
+.btn-ghost{background:none;border:1px solid var(--rule);color:var(--ink-soft);}
+.btn-ghost:hover{border-color:var(--ink-soft);}
+.nav-row{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:18px;border-top:1px solid var(--rule);}
+.back{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);background:none;border:none;cursor:pointer;}
+.skip{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);background:none;border:1px solid var(--rule);border-radius:100px;padding:9px 15px;cursor:pointer;}
+.cont{margin-left:auto;}
+.note{font-size:11.5px;color:var(--ink-soft);border-radius:10px;padding:10px 12px;margin-top:11px;line-height:1.5;}
+.note.m{background:var(--market-tint);border:1px solid var(--green-pl);}
+.note b{color:var(--ink);}
+.err{font-size:12px;color:#8b1a1a;background:#fce8e8;border:1px solid #e8a0a0;border-radius:9px;padding:10px 13px;margin-top:13px;display:none;line-height:1.5;}
+.err.show{display:block;}
+
+/* Handle preview */
+.handle-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.handle-prefix{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-mut);}
+.handle-slug{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--blue);}
+.handle-status{font-size:11px;font-weight:700;margin-left:auto;}
+.handle-status.avail{color:var(--green);}
+.handle-status.taken{color:#8b1a1a;}
+
+/* NAICS picker */
+.naics-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.naics-chip{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.05em;padding:7px 13px;border:1.5px solid var(--rule);border-radius:100px;cursor:pointer;color:var(--ink-soft);background:#fff;transition:all .15s;}
+.naics-chip:hover{border-color:var(--market);color:var(--market);}
+.naics-chip.on{background:var(--market);color:#fff;border-color:var(--market);}
+
+/* Word count */
+.word-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);text-align:right;margin-top:4px;}
+.word-count.warn{color:#c47f00;}
+.word-count.over{color:#8b1a1a;}
+
+/* Portfolio */
+.port-list{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+.port-item{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+.port-item-title{font-size:13px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.port-item-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+.port-vis-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.05em;padding:5px 10px;border-radius:100px;cursor:pointer;border:1px solid var(--rule);background:#fff;color:var(--ink-soft);}
+.port-vis-btn.pub{border-color:var(--green);color:var(--green);background:var(--green-pl);}
+.port-del-btn{background:none;border:none;cursor:pointer;color:var(--ink-mut);font-size:14px;padding:4px;}
+.port-del-btn:hover{color:#8b1a1a;}
+.port-add-row{display:flex;gap:8px;margin-top:10px;}
+.port-type-toggle{display:flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;}
+.ptt-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;padding:8px 14px;border:none;background:#fff;cursor:pointer;color:var(--ink-soft);}
+.ptt-btn.on{background:var(--market);color:#fff;}
+.port-input-row{display:flex;gap:8px;flex:1;}
+.port-add-input{flex:1;border:1.5px solid var(--rule);border-radius:8px;padding:9px 12px;font-size:13px;font-family:'Nunito',sans-serif;outline:none;color:var(--ink);}
+.port-add-input:focus{border-color:var(--blue);}
+.port-add-btn{padding:9px 16px;background:var(--market);color:#fff;border:none;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;cursor:pointer;}
+.port-before-after-note{font-size:11px;color:var(--gilt);background:var(--gilt-pl);border:1px solid var(--gilt-rul);border-radius:8px;padding:8px 11px;margin-top:8px;display:none;}
+
+/* Leaflet map */
+#cb-map{height:280px;border-radius:10px;overflow:hidden;margin-top:12px;border:1px solid var(--rule);}
+.radius-label{font-size:13px;font-weight:700;color:var(--ink);margin:12px 0 6px;}
+.radius-label span{color:var(--market);font-size:15px;}
+#cb-slider{width:100%;accent-color:var(--market);margin-bottom:14px;cursor:pointer;}
+
+/* Complete */
+.complete-card{background:var(--surface);border:1.5px solid var(--gilt-rul);border-radius:18px;padding:32px 28px;text-align:center;}
+.complete-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gilt);margin-bottom:12px;}
+.complete-h{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.complete-url{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--market);background:var(--green-pl);border:1px solid var(--green-pl);border-radius:8px;padding:10px 16px;display:inline-block;margin:12px 0;}
+.qr-wrap{display:flex;justify-content:center;margin:18px 0;}
+.complete-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+.btn-outline{background:none;border:1.5px solid var(--market);color:var(--market);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;font-weight:700;border-radius:11px;padding:13px 22px;cursor:pointer;width:100%;}
+.btn-outline:hover{background:var(--green-pl);}
+.btn-link{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;display:block;padding:10px;}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">F<span class="o-ring"></span>RA</div>
+</header>
+
+<div class="wizard" data-step="<%= @profile.card_builder_step.clamp(1, 6) %>">
+
+  <!-- Step progress -->
+  <div class="stepbar" id="stepbar">
+    <div class="sb-step" data-s="1">Trade</div>
+    <div class="sb-step" data-s="2">Headline</div>
+    <div class="sb-step" data-s="3">Portfolio</div>
+    <div class="sb-step" data-s="4">Service Area</div>
+    <div class="sb-step" data-s="5">Temple</div>
+    <div class="sb-step" data-s="6">Live!</div>
+  </div>
+
+  <!-- ── STEP 1 — Trade & Identity ────────────────────────────────────────── -->
+  <div class="step" id="s1">
+    <div class="eyebrow">Step 1 of 6 — Trade &amp; Identity</div>
+    <div class="step-h">What's your trade?</div>
+    <div class="step-sub">Your business name becomes your FORA handle — a permanent link to your public card.</div>
+
+    <div class="field">
+      <label class="label" for="biz-name">Business or trade name</label>
+      <input class="input" id="biz-name" type="text" placeholder="e.g. Philly Fresh Paint Co."
+             value="<%= @profile.market_display_name.presence || @profile.market_entity_name.presence || "" %>"
+             oninput="onBizNameInput(this.value)">
+      <div class="handle-row">
+        <span class="handle-prefix">fora.center/p/</span>
+        <span class="handle-slug" id="handle-slug"><%= @profile.provider_handle.presence || "your-handle" %></span>
+        <span class="handle-status" id="handle-status"></span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Trade category</label>
+      <div class="naics-grid" id="naics-grid">
+        <% naics_map = {
+          "238320" => "Painter",
+          "238210" => "Electrician",
+          "238220" => "Plumber",
+          "541350" => "Home Inspector",
+          "621399" => "Nurse / Health Aide",
+          "611110" => "Teacher / Tutor",
+          "541110" => "Attorney",
+          "722330" => "Chef / Caterer",
+          "711510" => "Artist / Creative"
+        } %>
+        <% naics_map.each do |code, label| %>
+          <button class="naics-chip <%= @profile.naics_code == code ? 'on' : '' %>"
+                  data-code="<%= code %>"
+                  onclick="selectNaics(this,'<%= code %>')"><%= label %></button>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="note m">
+      <b>Your neighborhood</b> — <%= @profile.place_label.presence || "location on file" %><br>
+      <span style="font-size:10.5px;color:var(--ink-mut)">This is shown on your public card as your base area.</span>
+    </div>
+
+    <div class="err" id="s1-err"></div>
+    <div class="nav-row">
+      <button class="btn btn-primary cont" id="s1-btn" onclick="submitTrade()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2 — Headline & Summary ──────────────────────────────────────── -->
+  <div class="step" id="s2">
+    <div class="eyebrow">Step 2 of 6 — Headline &amp; Summary</div>
+    <div class="step-h">Tell them what you do</div>
+    <div class="step-sub">Your headline is the first thing homeowners read. Make it specific.</div>
+
+    <div class="field">
+      <label class="label" for="hl-input">Headline <span style="font-weight:400;color:var(--ink-mut)">(15 words max)</span></label>
+      <input class="input" id="hl-input" type="text"
+             placeholder="e.g. Interior and exterior painting with a clean finish, every time."
+             value="<%= @profile.provider_headline.to_s %>"
+             oninput="onHlInput(this.value)">
+      <div class="word-count" id="hl-count">0 / 15</div>
+    </div>
+
+    <div class="note m" style="margin-top:14px;">
+      <b>Consigliere tip:</b> Homeowners want to know what you're <em>good at</em> and what you <em>won't do</em>. Say both — even if it means a shorter list of clients, you'll get the right ones.
+    </div>
+
+    <div class="field">
+      <label class="label" for="ss-input">Summary <span style="font-weight:400;color:var(--ink-mut)">(2–3 sentences)</span></label>
+      <textarea class="input textarea" id="ss-input" placeholder="Describe your work, your style, and who you work best with."><%= @profile.service_summary.to_s %></textarea>
+    </div>
+
+    <div class="err" id="s2-err"></div>
+    <div class="nav-row">
+      <button class="back" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-primary cont" onclick="submitHeadline()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 3 — Portfolio ─────────────────────────────────────────────── -->
+  <div class="step" id="s3">
+    <div class="eyebrow">Step 3 of 6 — Portfolio</div>
+    <div class="step-h">Show your work</div>
+    <div class="step-sub">Add links to photos, write-ups, or notes. Clients want proof — even one item helps.</div>
+
+    <!-- Add item form -->
+    <div class="port-add-row" style="margin-top:16px;">
+      <div class="port-type-toggle">
+        <button class="ptt-btn on" id="ptt-link" onclick="setPortType('link')">Link</button>
+        <button class="ptt-btn" id="ptt-note" onclick="setPortType('note')">Note</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <input class="port-add-input" id="port-title" type="text" placeholder="Title (optional)">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:6px;" id="port-link-row">
+      <input class="port-add-input" id="port-url" type="url" placeholder="https://…" oninput="checkBeforeAfter(this.value)">
+      <button class="port-add-btn" onclick="addPortItem()">Add</button>
+    </div>
+    <div style="margin-top:6px;display:none;" id="port-note-row">
+      <textarea class="port-add-input textarea" id="port-note" style="width:100%" placeholder="Write your note…" rows="3"></textarea>
+      <button class="port-add-btn" style="margin-top:6px;" onclick="addPortItem()">Add</button>
+    </div>
+    <div class="port-before-after-note" id="ba-note">
+      Looks like a before/after — label it that way? <button onclick="labelBeforeAfter()" style="font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--gilt);color:#fff;border:none;border-radius:6px;padding:4px 9px;cursor:pointer;margin-left:6px;">Yes, label it</button>
+    </div>
+
+    <div class="note m" style="margin-top:10px;font-size:10.5px;">
+      <b>File upload</b> — coming soon. We're setting up secure storage. For now, paste a link to Dropbox, Drive, or any photo host.
+    </div>
+
+    <!-- List -->
+    <div class="port-list" id="port-list">
+      <% @portfolio_items.each do |item| %>
+        <div class="port-item" id="pi-<%= item.id %>">
+          <div style="flex:1;min-width:0;">
+            <div class="port-item-title"><%= item.title %></div>
+            <div class="port-item-type"><%= item.item_type %><% if item.source_url.present? %> · <a href="<%= item.source_url %>" target="_blank" style="color:var(--market)">open ↗</a><% end %></div>
+          </div>
+          <button class="port-vis-btn <%= item.visibility_public? ? 'pub' : '' %>"
+                  id="pv-<%= item.id %>"
+                  onclick="toggleVis(<%= item.id %>)"><%= item.visibility_public? ? 'Public' : 'Private' %></button>
+          <button class="port-del-btn" onclick="delPort(<%= item.id %>)">✕</button>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="err" id="s3-err"></div>
+    <div class="nav-row">
+      <button class="back" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-primary cont" onclick="goStep(4)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 4 — Service Area ─────────────────────────────────────────── -->
+  <div class="step" id="s4">
+    <div class="eyebrow">Step 4 of 6 — Service Area</div>
+    <div class="step-h">Where do you work?</div>
+    <div class="step-sub">Set the radius you serve. Clients searching nearby will find you on the map.</div>
+
+    <div id="cb-map"></div>
+    <div class="radius-label">Radius: <span id="cb-radius-val"><%= @profile.service_radius_mi.presence || 3 %></span> miles</div>
+    <input type="range" id="cb-slider" min="0.5" max="50" step="0.5"
+           value="<%= @profile.service_radius_mi.presence || 3 %>"
+           oninput="cbSliderMove(this.value)">
+
+    <div class="err" id="s4-err"></div>
+    <div class="nav-row">
+      <button class="back" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-primary cont" onclick="submitArea()">Save &amp; Continue →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 5 — Temple Contribution ─────────────────────────────────── -->
+  <div class="step" id="s5">
+    <div class="eyebrow">Step 5 of 6 — Temple Contribution</div>
+    <div class="step-h">Share what you know</div>
+    <div class="step-sub">Write a short tip or insight for homeowners — about your trade, what to look for, or common mistakes. Optional, but providers who teach earn a credit against their platform take.</div>
+
+    <div class="field">
+      <label class="label" for="tip-title">Tip title</label>
+      <input class="input" id="tip-title" type="text" placeholder="e.g. How to tell if paint is failing before it peels">
+    </div>
+    <div class="field">
+      <label class="label" for="tip-body">Tip content</label>
+      <textarea class="input textarea" id="tip-body" rows="5" placeholder="Share your insight…"></textarea>
+    </div>
+
+    <div class="note m" style="margin-top:10px;">
+      <b>This is public</b> and will appear on your card under "Expert Tip." It also feeds the Temple knowledge base for your trade.
+    </div>
+
+    <div class="err" id="s5-err"></div>
+    <div class="nav-row">
+      <button class="back" onclick="goStep(4)">← Back</button>
+      <button class="skip" onclick="skipTemple()">Skip for now</button>
+      <button class="btn btn-primary cont" onclick="submitTemple()">Post Tip →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 6 — Complete ──────────────────────────────────────────────── -->
+  <div class="step" id="s6">
+    <div class="complete-card">
+      <div class="complete-eyebrow">▢ Your card is live</div>
+      <div class="complete-h">Welcome to the marketplace</div>
+      <p style="color:var(--ink-soft);font-size:14px;margin-bottom:6px;">Your public profile is now live at:</p>
+      <div class="complete-url" id="live-url">fora.center/p/<%= @profile.provider_handle.to_s %></div>
+
+      <div class="qr-wrap">
+        <canvas id="qr-canvas" width="160" height="160"></canvas>
+      </div>
+
+      <div class="complete-actions">
+        <button class="btn-outline" onclick="downloadQR()">Download QR Code</button>
+        <a class="btn btn-primary btn-wide" href="/p/<%= @profile.provider_handle.to_s %>" target="_blank" style="display:block;text-align:center;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;padding:14px 22px;border-radius:11px;">View Your Card ↗</a>
+        <a class="btn-link" href="/mvp/dashboard">Go to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wizard -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const CSRF = document.querySelector('meta[name="csrf-token"]').content;
+let currentStep = parseInt(document.querySelector('.wizard').dataset.step) || 1;
+let selectedNaics = "<%= @profile.naics_code.to_s %>";
+let currentHandle = "<%= @profile.provider_handle.to_s %>";
+let handleAvail = true;
+let cbMap, cbCircle, cbMarker;
+let portType = 'link';
+let qrGenerated = false;
+
+// Geocoded lat/lng from profile address (server-rendered)
+const profileLat = <%= @profile.respond_to?(:latitude) && @profile.latitude ? @profile.latitude : 39.9526 %>;
+const profileLng = <%= @profile.respond_to?(:longitude) && @profile.longitude ? @profile.longitude : -75.1652 %>;
+
+// ── Init ───────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  updateStepbar();
+  goStep(currentStep, true);
+  initHlCount();
+});
+
+// ── Step navigation ────────────────────────────────────────────────────────
+function goStep(n, init) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s' + n);
+  if (el) el.classList.add('active');
+  currentStep = n;
+  updateStepbar();
+
+  if (n === 4 && !cbMap) initMap();
+  if (n === 6 && !qrGenerated) initQR();
+  if (!init) window.scrollTo(0, 0);
+}
+
+function updateStepbar() {
+  document.querySelectorAll('.sb-step').forEach(el => {
+    const s = parseInt(el.dataset.s);
+    el.classList.remove('active', 'done');
+    if (s === currentStep) el.classList.add('active');
+    else if (s < currentStep) el.classList.add('done');
+  });
+}
+
+// ── Step 1 — Trade ─────────────────────────────────────────────────────────
+let handleTimer;
+function onBizNameInput(val) {
+  const slug = slugify(val);
+  document.getElementById('handle-slug').textContent = slug || 'your-handle';
+  document.getElementById('handle-status').textContent = '';
+  document.getElementById('handle-status').className = 'handle-status';
+  handleAvail = false;
+  clearTimeout(handleTimer);
+  if (!slug) return;
+  handleTimer = setTimeout(() => checkHandle(slug), 400);
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-');
+}
+
+async function checkHandle(handle) {
+  const r = await fetch('/card-builder/check-handle?handle=' + encodeURIComponent(handle));
+  const data = await r.json();
+  currentHandle = data.handle;
+  handleAvail = data.available;
+  const el = document.getElementById('handle-status');
+  el.textContent = data.available ? '✓ Available' : '✗ Taken';
+  el.className = 'handle-status ' + (data.available ? 'avail' : 'taken');
+}
+
+function selectNaics(el, code) {
+  document.querySelectorAll('.naics-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  selectedNaics = code;
+}
+
+async function submitTrade() {
+  const bizName = document.getElementById('biz-name').value.trim();
+  if (!bizName) return showErr('s1-err', 'Please enter your business name.');
+  if (!handleAvail && currentHandle) {
+    // Try checking current handle state one more time
+    await checkHandle(slugify(bizName));
+  }
+  if (!handleAvail) return showErr('s1-err', 'That handle is taken — please try a different name.');
+
+  const btn = document.getElementById('s1-btn');
+  btn.disabled = true;
+  try {
+    const r = await fetch('/card-builder/trade', {
+      method: 'PATCH', headers: jsonHeaders(),
+      body: JSON.stringify({ trade: { business_name: bizName, naics_code: selectedNaics } })
+    });
+    const data = await r.json();
+    if (data.ok) { currentHandle = data.handle; goStep(2); }
+    else showErr('s1-err', (data.errors || ['Error saving']).join(', '));
+  } finally { btn.disabled = false; }
+}
+
+// ── Step 2 — Headline ──────────────────────────────────────────────────────
+function initHlCount() {
+  const hl = document.getElementById('hl-input');
+  if (hl) onHlInput(hl.value);
+}
+
+function onHlInput(val) {
+  const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+  const el = document.getElementById('hl-count');
+  el.textContent = words + ' / 15';
+  el.className = 'word-count' + (words > 15 ? ' over' : words >= 12 ? ' warn' : '');
+}
+
+async function submitHeadline() {
+  const hl = document.getElementById('hl-input').value.trim();
+  const ss = document.getElementById('ss-input').value.trim();
+  const words = hl ? hl.split(/\s+/).length : 0;
+  if (words > 15) return showErr('s2-err', 'Headline must be 15 words or fewer.');
+
+  const r = await fetch('/card-builder/headline', {
+    method: 'PATCH', headers: jsonHeaders(),
+    body: JSON.stringify({ headline: { provider_headline: hl, service_summary: ss } })
+  });
+  const data = await r.json();
+  if (data.ok) goStep(3);
+  else showErr('s2-err', (data.errors || ['Error saving']).join(', '));
+}
+
+// ── Step 3 — Portfolio ─────────────────────────────────────────────────────
+function setPortType(type) {
+  portType = type;
+  document.getElementById('ptt-link').classList.toggle('on', type === 'link');
+  document.getElementById('ptt-note').classList.toggle('on', type === 'note');
+  document.getElementById('port-link-row').style.display = type === 'link' ? 'flex' : 'none';
+  document.getElementById('port-note-row').style.display = type === 'note' ? 'block' : 'none';
+}
+
+function checkBeforeAfter(url) {
+  const note = document.getElementById('ba-note');
+  note.style.display = /before|after/i.test(url) ? 'block' : 'none';
+}
+
+function labelBeforeAfter() {
+  const title = document.getElementById('port-title');
+  if (!title.value) title.value = 'Before & After';
+  document.getElementById('ba-note').style.display = 'none';
+}
+
+async function addPortItem() {
+  const title = document.getElementById('port-title').value.trim();
+  const url   = document.getElementById('port-url').value.trim();
+  const note  = document.getElementById('port-note').value.trim();
+
+  if (portType === 'link' && !url) return showErr('s3-err', 'Please enter a URL.');
+  if (portType === 'note' && !note) return showErr('s3-err', 'Please write your note.');
+
+  const r = await fetch('/card-builder/portfolio', {
+    method: 'POST', headers: jsonHeaders(),
+    body: JSON.stringify({ portfolio: {
+      item_type:   portType,
+      title:       title,
+      source_url:  url,
+      description: note
+    }})
+  });
+  const data = await r.json();
+  if (data.ok) {
+    appendPortItem(data.item);
+    document.getElementById('port-title').value = '';
+    document.getElementById('port-url').value = '';
+    document.getElementById('port-note').value = '';
+    document.getElementById('ba-note').style.display = 'none';
+    hideErr('s3-err');
+  } else {
+    showErr('s3-err', (data.errors || ['Error adding item']).join(', '));
+  }
+}
+
+function appendPortItem(item) {
+  const list = document.getElementById('port-list');
+  const div = document.createElement('div');
+  div.className = 'port-item';
+  div.id = 'pi-' + item.id;
+  div.innerHTML = `
+    <div style="flex:1;min-width:0;">
+      <div class="port-item-title">${escHtml(item.title)}</div>
+      <div class="port-item-type">${item.item_type}${item.source_url ? ' · <a href="'+escHtml(item.source_url)+'" target="_blank" style="color:var(--market)">open ↗</a>' : ''}</div>
+    </div>
+    <button class="port-vis-btn pub" id="pv-${item.id}" onclick="toggleVis(${item.id})">Public</button>
+    <button class="port-del-btn" onclick="delPort(${item.id})">✕</button>
+  `;
+  list.prepend(div);
+}
+
+async function toggleVis(id) {
+  const r = await fetch('/card-builder/portfolio/' + id, {
+    method: 'PATCH', headers: jsonHeaders(), body: '{}'
+  });
+  const data = await r.json();
+  if (data.ok) {
+    const btn = document.getElementById('pv-' + id);
+    const isPub = data.visibility === 'public';
+    btn.textContent = isPub ? 'Public' : 'Private';
+    btn.className = 'port-vis-btn' + (isPub ? ' pub' : '');
+  }
+}
+
+async function delPort(id) {
+  const r = await fetch('/card-builder/portfolio/' + id, {
+    method: 'DELETE', headers: { 'X-CSRF-Token': CSRF, 'Accept': 'application/json' }
+  });
+  const data = await r.json();
+  if (data.ok) { const el = document.getElementById('pi-' + id); if (el) el.remove(); }
+}
+
+// ── Step 4 — Service Area ──────────────────────────────────────────────────
+function initMap() {
+  const lat = profileLat, lng = profileLng;
+  const radius = parseFloat(document.getElementById('cb-slider').value) || 3;
+  const radiusM = radius * 1609.34;
+
+  cbMap = L.map('cb-map').setView([lat, lng], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors', maxZoom: 18
+  }).addTo(cbMap);
+
+  cbMarker = L.circleMarker([lat, lng], {
+    radius: 8, color: '#155c2d', fillColor: '#155c2d', fillOpacity: 1
+  }).addTo(cbMap);
+
+  cbCircle = L.circle([lat, lng], {
+    radius: radiusM, color: '#155c2d', fillColor: '#155c2d', fillOpacity: 0.12, weight: 2
+  }).addTo(cbMap);
+
+  cbMap.fitBounds(cbCircle.getBounds(), { padding: [20, 20] });
+}
+
+function cbSliderMove(val) {
+  document.getElementById('cb-radius-val').textContent = parseFloat(val).toFixed(1);
+  if (cbCircle) {
+    const radiusM = parseFloat(val) * 1609.34;
+    cbCircle.setRadius(radiusM);
+    cbMap.fitBounds(cbCircle.getBounds(), { padding: [20, 20] });
+  }
+}
+
+async function submitArea() {
+  const radius = parseFloat(document.getElementById('cb-slider').value);
+  const r = await fetch('/card-builder/area', {
+    method: 'PATCH', headers: jsonHeaders(),
+    body: JSON.stringify({ radius_mi: radius })
+  });
+  const data = await r.json();
+  if (data.ok) goStep(5);
+  else showErr('s4-err', (data.errors || ['Error saving']).join(', '));
+}
+
+// ── Step 5 — Temple ────────────────────────────────────────────────────────
+async function skipTemple() {
+  const r = await fetch('/card-builder/temple', {
+    method: 'PATCH', headers: jsonHeaders(),
+    body: JSON.stringify({ skip: true })
+  });
+  const data = await r.json();
+  if (data.ok) goStep(6);
+}
+
+async function submitTemple() {
+  const title = document.getElementById('tip-title').value.trim();
+  const body  = document.getElementById('tip-body').value.trim();
+  if (!body) return showErr('s5-err', 'Please write your tip or use "Skip for now."');
+
+  const r = await fetch('/card-builder/temple', {
+    method: 'PATCH', headers: jsonHeaders(),
+    body: JSON.stringify({ temple: { title, description: body } })
+  });
+  const data = await r.json();
+  if (data.ok) goStep(6);
+  else showErr('s5-err', (data.errors || ['Error saving']).join(', '));
+}
+
+// ── Step 6 — Complete ──────────────────────────────────────────────────────
+function initQR() {
+  // Mark complete server-side
+  fetch('/card-builder/complete').catch(() => {});
+
+  const handle = currentHandle || "<%= @profile.provider_handle.to_s %>";
+  const url = 'https://fora.center/p/' + handle;
+  document.getElementById('live-url').textContent = url.replace('https://', '');
+
+  const canvas = document.getElementById('qr-canvas');
+  new QRCode(canvas.parentElement, {
+    text: url,
+    width: 160,
+    height: 160,
+    colorDark: '#1b3a6b',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+  qrGenerated = true;
+}
+
+function downloadQR() {
+  const canvas = document.querySelector('#qr-canvas, .qr-wrap canvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'fora-card-qr.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function jsonHeaders() {
+  return { 'Content-Type': 'application/json', 'X-CSRF-Token': CSRF, 'Accept': 'application/json' };
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hideErr(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('show');
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
