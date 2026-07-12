@@ -113,6 +113,22 @@ a{text-decoration:none;color:inherit;}
 .tpl-psa-sub{font-size:10px;color:var(--ink-soft);}
 .tpl-psa-sponsored{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);letter-spacing:.06em;}
 .tpl-psa-edict{font-size:10px;color:var(--ink-mut);margin-top:10px;font-style:italic;line-height:1.5;}
+/* Temple conversation */
+.tpl-convo{margin-top:14px;border-top:1px solid var(--rule-soft);padding-top:13px;}
+.tpl-convo-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--temple);margin-bottom:9px;font-weight:700;}
+.tpl-convo-input{width:100%;border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-family:'Nunito',sans-serif;font-size:13px;resize:none;color:var(--ink);line-height:1.5;margin-bottom:7px;box-sizing:border-box;}
+.tpl-convo-input:focus{outline:none;border-color:var(--temple);box-shadow:0 0 0 2px rgba(27,58,107,.06);}
+.tpl-convo-foot{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.tpl-convo-submit{padding:7px 18px;background:var(--temple);color:#fff;border:none;border-radius:999px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:'Nunito',sans-serif;transition:opacity .12s;}
+.tpl-convo-submit:hover{opacity:.85;}
+.tpl-convo-submit:disabled{opacity:.5;cursor:default;}
+.tpl-convo-err{font-size:11.5px;color:var(--scarlet);}
+.tpl-convo-empty{font-size:12px;color:var(--ink-mut);padding:4px 0 2px;}
+.tpl-convo-item{border:1px solid var(--rule);border-radius:9px;padding:10px 12px;margin-bottom:7px;background:#fff;}
+.tpl-convo-meta{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.tpl-convo-handle{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--temple);font-weight:700;}
+.tpl-convo-date{font-size:10px;color:var(--ink-mut);}
+.tpl-convo-body{font-size:12.5px;color:var(--ink);line-height:1.55;}
 
 /* MOBILE chrome */
 .mtop{display:none;}
@@ -4226,6 +4242,7 @@ var TPL_KIND_META = {
 function tplCardHtml(c, idx) {
   var bid = 'tplc-' + idx;
   var km = TPL_KIND_META[c.kind] || TPL_KIND_META.guide;
+  var convoKey = 'tpl:' + c.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   var psaHd = '';
   if (c.psa) {
     psaHd = '<div class="tpl-psa-hd">'
@@ -4246,25 +4263,104 @@ function tplCardHtml(c, idx) {
     bodyParts.push(buildTplReminderWidget(c.reminders, idx));
   }
   if (c.psa) bodyParts.push('<div class="tpl-psa-edict">FORA ad policy: sponsors earn placement by contributing to the community.</div>');
-  var hasBody = bodyParts.length > 0;
-  return '<div class="tpl-card" id="' + bid + '">'
+  bodyParts.push(tplConvoHtml(bid));
+  return '<div class="tpl-card" id="' + bid + '" data-convo-key="' + convoKey + '">'
     + psaHd
-    + '<div class="tpl-card-head"' + (hasBody ? ' onclick="toggleTplCard(\'' + bid + '\')"' : '') + '>'
+    + '<div class="tpl-card-head" onclick="toggleTplCard(\'' + bid + '\')">'
       + '<div class="tpl-card-av ' + c.kind + '">' + km.icon + '</div>'
       + '<div class="tpl-card-main">'
         + '<div class="tpl-card-name">' + c.name + '</div>'
         + ((c.desc||c.type) ? '<div class="tpl-card-short">' + (c.desc||c.type) + '</div>' : '')
         + '<span class="tpl-card-badge ' + c.kind + '">' + km.label + '</span>'
       + '</div>'
-      + (hasBody ? '<span class="tpl-card-chev">\u25be</span>' : '')
+      + '<span class="tpl-card-chev">\u25be</span>'
     + '</div>'
-    + (hasBody ? '<div class="tpl-card-body">' + bodyParts.join('') + '</div>' : '')
+    + '<div class="tpl-card-body">' + bodyParts.join('') + '</div>'
     + '</div>';
 }
 
 function toggleTplCard(id) {
   var el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
+  if (!el) return;
+  var opening = !el.classList.contains('open');
+  el.classList.toggle('open');
+  if (opening && !el.dataset.convoLoaded) {
+    el.dataset.convoLoaded = '1';
+    loadTplConversation(id, el.dataset.convoKey);
+  }
+}
+
+function tplConvoHtml(bid) {
+  return '<div class="tpl-convo" id="' + bid + '-convo">'
+    + '<div class="tpl-convo-hd">Contribute to the Conversation</div>'
+    + '<textarea class="tpl-convo-input" id="' + bid + '-input" placeholder="Share your experience or knowledge\u2026" rows="3" onclick="event.stopPropagation()"></textarea>'
+    + '<div class="tpl-convo-foot">'
+      + '<button class="tpl-convo-submit" onclick="event.stopPropagation();submitTplConversation(\'' + bid + '\')">Post</button>'
+      + '<span class="tpl-convo-err" id="' + bid + '-err" style="display:none"></span>'
+    + '</div>'
+    + '<div id="' + bid + '-notes"><div class="tpl-convo-empty">Loading\u2026</div></div>'
+    + '</div>';
+}
+
+function loadTplConversation(bid, key) {
+  if (!key) return;
+  fetch('/mvp/forum/comments?bill_num=' + encodeURIComponent(key), {
+    headers: {'X-Requested-With':'XMLHttpRequest'}
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    var el = document.getElementById(bid + '-notes');
+    if (!el) return;
+    if (!data.length) {
+      el.innerHTML = '<div class="tpl-convo-empty">No notes yet \u2014 be the first.</div>';
+      return;
+    }
+    el.innerHTML = data.map(function(p) {
+      return '<div class="tpl-convo-item">'
+        + '<div class="tpl-convo-meta">'
+          + '<span class="tpl-convo-handle">@' + p.handle + '</span>'
+          + '<span class="tpl-convo-date">' + p.created_at + '</span>'
+        + '</div>'
+        + '<div class="tpl-convo-body">' + p.body.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>'
+        + '</div>';
+    }).join('');
+  }).catch(function() {
+    var el = document.getElementById(bid + '-notes');
+    if (el) el.innerHTML = '<div class="tpl-convo-empty">Could not load notes.</div>';
+  });
+}
+
+function submitTplConversation(bid) {
+  var card = document.getElementById(bid);
+  if (!card) return;
+  var key = card.dataset.convoKey;
+  var body = (document.getElementById(bid + '-input') || {}).value.trim();
+  var errEl = document.getElementById(bid + '-err');
+  if (!body || body.length < 3) {
+    errEl.textContent = 'Please write at least a few words.';
+    errEl.style.display = '';
+    return;
+  }
+  errEl.style.display = 'none';
+  var csrf = (document.querySelector('meta[name="csrf-token"]') || {}).content || '';
+  var btn = card.querySelector('.tpl-convo-submit');
+  if (btn) btn.disabled = true;
+  fetch('/mvp/forum/comments', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'X-Requested-With':'XMLHttpRequest'},
+    body: JSON.stringify({ bill_num: key, body: body, perspective_type: 'general' })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (btn) btn.disabled = false;
+    if (data.ok) {
+      document.getElementById(bid + '-input').value = '';
+      loadTplConversation(bid, key);
+    } else {
+      errEl.textContent = (data.errors || ['Error posting']).join(', ');
+      errEl.style.display = '';
+    }
+  }).catch(function() {
+    if (btn) btn.disabled = false;
+    errEl.textContent = 'Network error \u2014 please try again.';
+    errEl.style.display = '';
+  });
 }
 
 function buildTplReminderWidget(reminders, baseIdx) {
