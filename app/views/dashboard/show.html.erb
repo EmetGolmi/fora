@@ -1837,16 +1837,17 @@ a{text-decoration:none;color:inherit;}
       </div>
 
       <%
-        # Build a unified list of naics codes to render cards for.
-        # Prefer provider_capabilities; fall back to the profile's own naics_code
-        # for providers who completed the wizard before capability creation was wired.
-        _naics_list = if _capabilities.any?
+        # One card per capability. Fall back to profile.naics_code for older accounts
+        # that predate capability-row creation. If still nothing, show one card anyway —
+        # every completed provider deserves to see their listing.
+        _cards = if _capabilities.any?
           _capabilities.map { |c| { naics_code: c.naics_code, profession: c.profession } }
         elsif @profile.naics_code.present?
           [{ naics_code: @profile.naics_code, profession: nil }]
         else
-          []
+          [{ naics_code: nil, profession: nil }]
         end
+
         _display_name = @profile.market_display_name.presence ||
                         @profile.market_entity_name.presence ||
                         @profile.provider_handle.to_s.gsub("-", " ").split.map(&:capitalize).join(" ")
@@ -1855,15 +1856,17 @@ a{text-decoration:none;color:inherit;}
         _card_url     = @profile.locode.present? ? "https://fora.center/#{@profile.locode}/#{@profile.provider_handle}" : "https://fora.center/p/#{@profile.provider_handle}"
       %>
       <div class="ms-svc-list">
-        <% _naics_list.each do |entry| %>
+        <% _cards.each do |entry| %>
           <%
             occ = _occ_data.find { |o|
               o["naics_code"] == entry[:naics_code] &&
               (@profile.onet_code.blank? || o["onet_code"] == @profile.onet_code)
             } || _occ_data.find { |o| o["naics_code"] == entry[:naics_code] }
-            trade_label = occ ? occ["display_label"] :
-                          entry[:profession].to_s.gsub("-", " ").split.map(&:capitalize).join(" ").presence ||
-                          "Provider"
+            trade_label = if occ
+              occ["display_label"]
+            elsif entry[:profession].present?
+              entry[:profession].to_s.gsub("-", " ").split.map(&:capitalize).join(" ")
+            end
           %>
           <div style="border:1.5px solid var(--rule);border-radius:13px;overflow:hidden;background:#fff;">
             <div class="mkt-detail-hero">
@@ -1872,7 +1875,9 @@ a{text-decoration:none;color:inherit;}
                 <div class="mkt-hero-main">
                   <div class="mkt-hero-name"><%= _display_name %></div>
                   <div class="mkt-hero-badges">
-                    <span class="lbdg lbdg-biz"><%= trade_label %></span>
+                    <% if trade_label %>
+                      <span class="lbdg lbdg-biz"><%= trade_label %></span>
+                    <% end %>
                     <span class="lbdg lbdg-cleared">● Active</span>
                   </div>
                   <div class="mkt-hero-meta">
