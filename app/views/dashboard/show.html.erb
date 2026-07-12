@@ -1836,55 +1836,67 @@ a{text-decoration:none;color:inherit;}
         <button class="ms-add-svc-btn" onclick="msAddService()">+ Add a Service</button>
       </div>
 
+      <%
+        # Build a unified list of naics codes to render cards for.
+        # Prefer provider_capabilities; fall back to the profile's own naics_code
+        # for providers who completed the wizard before capability creation was wired.
+        _naics_list = if _capabilities.any?
+          _capabilities.map { |c| { naics_code: c.naics_code, profession: c.profession } }
+        elsif @profile.naics_code.present?
+          [{ naics_code: @profile.naics_code, profession: nil }]
+        else
+          []
+        end
+        _display_name = @profile.market_display_name.presence ||
+                        @profile.market_entity_name.presence ||
+                        @profile.provider_handle.to_s.gsub("-", " ").split.map(&:capitalize).join(" ")
+        _initials     = _display_name.split(/\s+/).first(2).map { |w| w[0]&.upcase }.join
+        _card_path    = @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle}" : "/p/#{@profile.provider_handle}"
+        _card_url     = @profile.locode.present? ? "https://fora.center/#{@profile.locode}/#{@profile.provider_handle}" : "https://fora.center/p/#{@profile.provider_handle}"
+      %>
       <div class="ms-svc-list">
-        <% if _capabilities.any? %>
-          <% _capabilities.each do |cap| %>
-            <%
-              occ = _occ_data.find { |o|
-                o["naics_code"] == cap.naics_code &&
-                (@profile.onet_code.blank? || o["onet_code"] == @profile.onet_code)
-              } || _occ_data.find { |o| o["naics_code"] == cap.naics_code }
-              trade_label = occ ? occ["display_label"] : cap.profession.to_s.gsub("-", " ").split.map(&:capitalize).join(" ")
-              display_name = @profile.market_display_name.presence || @profile.market_entity_name.presence || @profile.provider_handle.to_s.gsub("-", " ").split.map(&:capitalize).join(" ")
-              initials = display_name.split(/\s+/).first(2).map { |w| w[0]&.upcase }.join
-              card_path = @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle}" : "/p/#{@profile.provider_handle}"
-              card_url_full = @profile.locode.present? ? "https://fora.center/#{@profile.locode}/#{@profile.provider_handle}" : "https://fora.center/p/#{@profile.provider_handle}"
-            %>
-            <div style="border:1.5px solid var(--rule);border-radius:13px;overflow:hidden;background:#fff;">
-              <div class="mkt-detail-hero">
-                <div class="mkt-hero-top">
-                  <div class="av-biz mkt-hero-avatar"><%= initials %></div>
-                  <div class="mkt-hero-main">
-                    <div class="mkt-hero-name"><%= display_name %></div>
-                    <div class="mkt-hero-badges">
-                      <span class="lbdg lbdg-biz"><%= trade_label %></span>
-                      <span class="lbdg lbdg-cleared">● Active</span>
-                    </div>
-                    <div class="mkt-hero-meta">
-                      <% if @profile.place_label.present? %>
-                        <span>📍 <%= @profile.place_label %></span>
-                      <% end %>
-                      <% if @profile.service_radius_mi.present? %>
-                        <span>Serves within <%= @profile.service_radius_mi.round(1) %> mi</span>
-                      <% end %>
-                    </div>
+        <% _naics_list.each do |entry| %>
+          <%
+            occ = _occ_data.find { |o|
+              o["naics_code"] == entry[:naics_code] &&
+              (@profile.onet_code.blank? || o["onet_code"] == @profile.onet_code)
+            } || _occ_data.find { |o| o["naics_code"] == entry[:naics_code] }
+            trade_label = occ ? occ["display_label"] :
+                          entry[:profession].to_s.gsub("-", " ").split.map(&:capitalize).join(" ").presence ||
+                          "Provider"
+          %>
+          <div style="border:1.5px solid var(--rule);border-radius:13px;overflow:hidden;background:#fff;">
+            <div class="mkt-detail-hero">
+              <div class="mkt-hero-top">
+                <div class="av-biz mkt-hero-avatar"><%= _initials %></div>
+                <div class="mkt-hero-main">
+                  <div class="mkt-hero-name"><%= _display_name %></div>
+                  <div class="mkt-hero-badges">
+                    <span class="lbdg lbdg-biz"><%= trade_label %></span>
+                    <span class="lbdg lbdg-cleared">● Active</span>
+                  </div>
+                  <div class="mkt-hero-meta">
+                    <% if @profile.place_label.present? %>
+                      <span>📍 <%= @profile.place_label %></span>
+                    <% end %>
+                    <% if @profile.service_radius_mi.present? %>
+                      <span>Serves within <%= @profile.service_radius_mi.round(1) %> mi</span>
+                    <% end %>
                   </div>
                 </div>
               </div>
-              <% if @profile.provider_headline.present? %>
-                <div class="mkt-detail-desc"><%= @profile.provider_headline %></div>
-              <% end %>
-              <div class="mkt-detail-actions">
-                <a href="<%= card_path %>" target="_blank"
-                   class="mkt-da-btn mkt-da-primary"
-                   style="text-decoration:none;display:inline-block">View Card ↗</a>
-                <button class="mkt-da-btn mkt-da-sec"
-                        onclick="msCopyCardLink('<%= j card_url_full %>', this)">Copy Link</button>
-              </div>
             </div>
-          <% end %>
-        <% else %>
-          <p style="font-size:13px;color:var(--ink-mut);padding:4px 0">No active services yet.</p>
+            <% if @profile.provider_headline.present? %>
+              <div class="mkt-detail-desc"><%= @profile.provider_headline %></div>
+            <% end %>
+            <div class="mkt-detail-actions">
+              <a href="<%= _card_path %>" target="_blank"
+                 class="mkt-da-btn mkt-da-primary"
+                 style="text-decoration:none;display:inline-block">View Card ↗</a>
+              <button class="mkt-da-btn mkt-da-sec"
+                      onclick="msCopyCardLink('<%= j _card_url %>', this)">Copy Link</button>
+            </div>
+          </div>
         <% end %>
       </div>
     <% end %>
