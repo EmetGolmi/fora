@@ -22,6 +22,34 @@ class CardBuilderController < ApplicationController
 
   NAICS_TO_PROFESSION = OnboardingController::NAICS_TO_PROFESSION
 
+  CITY_LOCODE = {
+    ["philadelphia", "pa"] => "usphl",
+    ["new york",     "ny"] => "usnyc",
+    ["chicago",      "il"] => "uschi",
+    ["los angeles",  "ca"] => "uslax",
+    ["houston",      "tx"] => "ushou",
+    ["phoenix",      "az"] => "usphx",
+    ["san antonio",  "tx"] => "ussat",
+    ["san diego",    "ca"] => "ussan",
+    ["dallas",       "tx"] => "usdal",
+    ["san jose",     "ca"] => "ussjo",
+    ["austin",       "tx"] => "usaus",
+    ["jacksonville", "fl"] => "usjax",
+    ["columbus",     "oh"] => "uscos",
+    ["charlotte",    "nc"] => "usclt",
+    ["denver",       "co"] => "usden",
+    ["seattle",      "wa"] => "ussea",
+    ["detroit",      "mi"] => "usdet",
+    ["nashville",    "tn"] => "usbna",
+    ["boston",       "ma"] => "usbos",
+    ["baltimore",    "md"] => "usbal",
+    ["atlanta",      "ga"] => "usatl",
+    ["miami",        "fl"] => "usmia",
+    ["minneapolis",  "mn"] => "usmsp",
+    ["portland",     "or"] => "uspdx",
+    ["las vegas",    "nv"] => "uslsv",
+  }.freeze
+
   # ── GET /card-builder ─────────────────────────────────────────────────────
   # Resumes at card_builder_step.  Loads portfolio items for step 3 display.
   def show
@@ -43,9 +71,9 @@ class CardBuilderController < ApplicationController
   end
 
   # ── PATCH /card-builder/trade ──────────────────────────────────────────────
-  # Step 1: Save provider_handle + naics_code.
+  # Step 1: Save provider_handle + naics_code + onet_code + isco_code + locode.
   def trade
-    p = params.require(:trade).permit(:business_name, :naics_code)
+    p = params.require(:trade).permit(:business_name, :naics_code, :onet_code, :isco_code)
 
     handle = slugify(p[:business_name].to_s)
     if handle.blank?
@@ -61,9 +89,14 @@ class CardBuilderController < ApplicationController
                     status: :unprocessable_entity
     end
 
+    locode = compute_locode(profile.address_city, profile.address_state)
+
     profile.update!(
       provider_handle:   handle,
-      naics_code:        p[:naics_code].presence || profile.naics_code,
+      naics_code:        p[:naics_code].presence  || profile.naics_code,
+      onet_code:         p[:onet_code].presence   || profile.onet_code,
+      isco_code:         p[:isco_code].presence   || profile.isco_code,
+      locode:            locode                   || profile.locode,
       card_builder_step: [1, profile.card_builder_step].max
     )
 
@@ -76,7 +109,7 @@ class CardBuilderController < ApplicationController
       end
     end
 
-    render json: { ok: true, step: 2, handle: handle }
+    render json: { ok: true, step: 2, handle: handle, locode: locode }
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
   end
@@ -230,6 +263,11 @@ class CardBuilderController < ApplicationController
        .strip
        .gsub(/\s+/, "-")
        .gsub(/-+/, "-")
+  end
+
+  def compute_locode(city, state)
+    key = [city.to_s.downcase.strip, state.to_s.downcase.strip]
+    CITY_LOCODE[key]
   end
 
   def serialize_item(item)

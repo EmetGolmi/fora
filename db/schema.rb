@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_11_200001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_11_200002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -94,11 +94,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_11_200001) do
     t.string "forum_pseudonym"
     t.text "grow_chips", default: [], array: true
     t.boolean "has_entity"
+    t.string "isco_code"
+    t.string "locode"
     t.string "market_display_name"
     t.string "market_entity_name"
     t.string "naics_code"
     t.boolean "onboarding_complete", default: false, null: false
     t.integer "onboarding_step", default: 0, null: false
+    t.string "onet_code"
     t.string "place_label"
     t.string "provider_handle"
     t.string "provider_headline"

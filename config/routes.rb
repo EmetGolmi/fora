@@ -213,11 +213,18 @@ Rails.application.routes.draw do
   get    '/card-builder/complete',      to: 'card_builder#complete'
 
   # ── Public provider card ────────────────────────────────────────────────
-  get '/p/:handle', to: 'profiles#show', as: :provider_profile
+  # Old URL — 301 redirect to LOCODE-based canonical URL
+  get '/p/:handle', to: 'profiles#redirect_handle', as: :provider_profile_legacy
 
   # ── IJDB — Islamic Jihad Database ─────────────────────────────────────────
   # National route BEFORE the city-scoped block (fixed path wins over :city param)
   get "/usa/ijdb", to: "ijdb_entries#national", as: :national_ijdb
+
+  # ── New canonical provider card URL (:locode/:handle) ─────────────────────
+  # Must be LAST — wildcard pattern could shadow anything above if placed early.
+  # Constraint: 2-letter country code + 3 alphanumeric city code (all lowercase).
+  get '/:locode/:handle', to: 'profiles#show', as: :provider_profile,
+      constraints: { locode: /[a-z]{2}[a-z0-9]{3}/ }
 
   # /usa/:city/ijdb
   # Specific routes BEFORE the parameterized /:id catch-all

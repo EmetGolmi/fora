@@ -87,10 +87,28 @@ a{text-decoration:none;color:inherit;}
 .ms-note{font-size:10.5px;color:var(--ink-soft);border-radius:8px;padding:9px 11px;margin-top:10px;line-height:1.5;}
 .ms-note-m{background:var(--green-vp);border:1px solid var(--green-p);}
 .ms-note b{color:var(--ink);}
-.ms-naics-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.ms-naics-chip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.04em;padding:6px 11px;border:1.5px solid var(--rule);border-radius:100px;cursor:pointer;color:var(--ink-soft);background:#fff;transition:all .15s;}
-.ms-naics-chip:hover{border-color:var(--market);color:var(--market);}
-.ms-naics-chip.on{background:var(--market);color:#fff;border-color:var(--market);}
+.ms-occ-search{width:100%;padding:9px 12px;border:1.5px solid var(--rule);border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none;margin-top:8px;box-sizing:border-box;}
+.ms-occ-search:focus{border-color:var(--market);}
+.ms-occ-filters{display:flex;gap:5px;margin-top:7px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.ms-occ-filters::-webkit-scrollbar{display:none;}
+.ms-occ-pill{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border:1.5px solid var(--rule);border-radius:100px;cursor:pointer;color:var(--ink-soft);background:#fff;white-space:nowrap;transition:all .15s;}
+.ms-occ-pill:hover{border-color:var(--market);color:var(--market);}
+.ms-occ-pill.on{background:var(--market);color:#fff;border-color:var(--market);}
+.ms-occ-list{margin-top:8px;display:flex;flex-direction:column;gap:4px;max-height:220px;overflow-y:auto;}
+.ms-occ-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--rule);border-radius:9px;cursor:pointer;background:#fff;transition:all .15s;}
+.ms-occ-row:hover{border-color:var(--market);background:var(--market-tint);}
+.ms-occ-row.selected{border-color:var(--market);background:var(--market-pl);}
+.ms-occ-name{flex:1;font-size:13px;font-weight:700;color:var(--ink);}
+.ms-occ-codes{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--ink-mut);letter-spacing:.03em;}
+.ms-occ-sel-btn{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border:1.5px solid var(--market);color:var(--market);background:none;border-radius:7px;cursor:pointer;white-space:nowrap;}
+.ms-occ-breakdown{margin-top:10px;border:1.5px solid var(--market);border-radius:11px;padding:12px 14px;background:var(--market-pl);display:none;}
+.ms-occ-breakdown.show{display:block;}
+.ms-occ-bd-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--market);margin-bottom:8px;font-weight:700;}
+.ms-occ-bd-row{display:flex;gap:8px;align-items:baseline;margin-bottom:4px;}
+.ms-occ-bd-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mut);width:52px;flex-shrink:0;}
+.ms-occ-bd-val{font-size:12px;color:var(--ink);font-weight:600;flex:1;}
+.ms-occ-bd-tag{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-mut);margin-left:auto;}
+.ms-occ-note{font-size:10px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px solid var(--gilt-rul);line-height:1.55;}
 .ms-handle-row{display:flex;align-items:center;gap:6px;margin-top:6px;}
 .ms-handle-prefix{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-mut);}
 .ms-handle-slug{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:var(--blue);}
@@ -1604,19 +1622,47 @@ a{text-decoration:none;color:inherit;}
                    value="<%= @profile.market_display_name.presence || @profile.market_entity_name.presence || "" %>"
                    oninput="msOnBizNameInput(this.value)">
             <div class="ms-handle-row">
-              <span class="ms-handle-prefix">fora.center/p/</span>
+              <span class="ms-handle-prefix" id="ms-handle-prefix">fora.center/<%= @profile.locode.presence || "[city]" %>/</span>
               <span class="ms-handle-slug" id="ms-handle-slug"><%= @profile.provider_handle.presence || "your-handle" %></span>
               <span class="ms-handle-status" id="ms-handle-status"></span>
             </div>
           </div>
           <div class="ms-field">
-            <label class="ms-label">Trade category</label>
-            <div class="ms-naics-grid" id="ms-naics-grid">
-              <% [["238320","Painter"],["238210","Electrician"],["238220","Plumber"],["541350","Home Inspector"],["621399","Nurse / Health Aide"],["611110","Teacher / Tutor"],["541110","Attorney"],["722330","Chef / Caterer"],["711510","Artist / Creative"]].each do |code, label| %>
-                <button class="ms-naics-chip <%= @profile.naics_code == code ? 'on' : '' %>"
-                        data-code="<%= code %>"
-                        onclick="msSelectNaics(this,'<%= code %>')"><%= label %></button>
-              <% end %>
+            <label class="ms-label">Trade classification</label>
+            <input class="ms-occ-search" id="ms-occ-search" type="text"
+                   placeholder="Search your trade…"
+                   oninput="msSearchOcc(this.value)">
+            <div class="ms-occ-filters" id="ms-occ-filters">
+              <button class="ms-occ-pill on" data-group="all" onclick="msFilterOcc('all',this)">All</button>
+              <button class="ms-occ-pill" data-group="7" onclick="msFilterOcc('7',this)">7 · Craft</button>
+              <button class="ms-occ-pill" data-group="2" onclick="msFilterOcc('2',this)">2 · Professional</button>
+              <button class="ms-occ-pill" data-group="5" onclick="msFilterOcc('5',this)">5 · Service</button>
+              <button class="ms-occ-pill" data-group="3" onclick="msFilterOcc('3',this)">3 · Technical</button>
+              <button class="ms-occ-pill" data-group="9" onclick="msFilterOcc('9',this)">9 · Elementary</button>
+              <button class="ms-occ-pill" data-group="1" onclick="msFilterOcc('1',this)">1 · Manager</button>
+              <button class="ms-occ-pill" data-group="6" onclick="msFilterOcc('6',this)">6 · Agricultural</button>
+            </div>
+            <div class="ms-occ-list" id="ms-occ-list"></div>
+            <div class="ms-occ-breakdown" id="ms-occ-breakdown">
+              <div class="ms-occ-bd-title" id="ms-occ-bd-title"></div>
+              <div class="ms-occ-bd-row">
+                <span class="ms-occ-bd-label">ISCO-08</span>
+                <span class="ms-occ-bd-val" id="ms-occ-bd-isco"></span>
+                <span class="ms-occ-bd-tag">global standard</span>
+              </div>
+              <div class="ms-occ-bd-row">
+                <span class="ms-occ-bd-label">NAICS</span>
+                <span class="ms-occ-bd-val" id="ms-occ-bd-naics"></span>
+                <span class="ms-occ-bd-tag">US gov contracting</span>
+              </div>
+              <div class="ms-occ-bd-row">
+                <span class="ms-occ-bd-label">O*NET</span>
+                <span class="ms-occ-bd-val" id="ms-occ-bd-onet"></span>
+                <span class="ms-occ-bd-tag">US workforce database</span>
+              </div>
+              <div class="ms-occ-note">
+                NAICS <span id="ms-occ-bd-naics-note"></span> is the code used for SAM.gov registration, SBA certifications, and federal set-aside programs.
+              </div>
             </div>
           </div>
           <div class="ms-note ms-note-m">
@@ -1751,13 +1797,15 @@ a{text-decoration:none;color:inherit;}
             <div class="ms-complete-eyebrow">▢ Your card is live</div>
             <div class="ms-complete-h">Welcome to the marketplace</div>
             <p style="color:var(--ink-soft);font-size:13px;margin-bottom:4px">Your public profile is live at:</p>
-            <div class="ms-complete-url" id="ms-live-url">fora.center/p/<%= @profile.provider_handle.to_s %></div>
+            <div class="ms-complete-url" id="ms-live-url"><%= @profile.locode.present? ? "fora.center/#{@profile.locode}/#{@profile.provider_handle.to_s}" : "fora.center/p/#{@profile.provider_handle.to_s}" %></div>
             <div class="ms-qr-wrap">
               <canvas id="ms-qr-canvas" width="130" height="130"></canvas>
             </div>
             <div style="display:flex;flex-direction:column;gap:7px;margin-top:12px">
               <button class="ms-btn-outline" onclick="msDownloadQR()">Download QR Code</button>
-              <a href="/p/<%= @profile.provider_handle.to_s %>" target="_blank"
+              <a id="ms-view-card-link"
+                 href="<%= @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle.to_s}" : "/p/#{@profile.provider_handle.to_s}" %>"
+                 target="_blank"
                  style="display:block;text-align:center;text-decoration:none;padding:11px 20px;background:var(--market);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;border-radius:9px">View Your Card ↗</a>
             </div>
           </div>
@@ -1771,8 +1819,10 @@ a{text-decoration:none;color:inherit;}
         <div class="svc-head-title">▢ My Services</div>
         <% if @profile.card_builder_complete? && @profile.provider_handle.present? %>
           <div class="svc-head-sub">
-            Your card: <a href="/p/<%= @profile.provider_handle %>" target="_blank" style="color:var(--market);font-weight:700">fora.center/p/<%= @profile.provider_handle %></a>
-            &ensp;<a href="/p/<%= @profile.provider_handle %>" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;background:var(--green-p);color:var(--market);padding:3px 9px;border-radius:100px">Edit ↗</a>
+            <% card_path = @profile.locode.present? ? "/#{@profile.locode}/#{@profile.provider_handle}" : "/p/#{@profile.provider_handle}" %>
+            <% card_display = @profile.locode.present? ? "fora.center/#{@profile.locode}/#{@profile.provider_handle}" : "fora.center/p/#{@profile.provider_handle}" %>
+            Your card: <a href="<%= card_path %>" target="_blank" style="color:var(--market);font-weight:700"><%= card_display %></a>
+            &ensp;<a href="<%= card_path %>" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;background:var(--green-p);color:var(--market);padding:3px 9px;border-radius:100px">View ↗</a>
           </div>
         <% else %>
           <div class="svc-head-sub">Define your service coverage — neighbors searching for help will see this zone on the marketplace map.</div>
@@ -4950,9 +5000,12 @@ document.addEventListener('click', function() {
 });
 
 // ── My Services embedded wizard (ms-prefix) ────────────────────────────────
+var MS_OCCUPATIONS = <%= raw File.read(Rails.root.join('app/data/occupations.json')) %>;
 var _msCurrentStep  = <%= @profile.card_builder_step.to_i.clamp(1, 6) %>;
-var _msSelectedNaics = "<%= j @profile.naics_code.to_s %>";
+var _msSelectedOcc   = null;
+var _msOccFilter     = 'all';
 var _msCurrentHandle = "<%= j @profile.provider_handle.to_s %>";
+var _msLocode        = "<%= j @profile.locode.to_s %>";
 var _msHandleAvail   = <%= @profile.provider_handle.present? ? 'true' : 'false' %>;
 var _msPortType      = 'link';
 var _msWizMap        = null;
@@ -5022,10 +5075,55 @@ function msCheckHandle(handle) {
     });
 }
 
-function msSelectNaics(el, code) {
-  document.querySelectorAll('.ms-naics-chip').forEach(function(c){ c.classList.remove('on'); });
-  el.classList.add('on');
-  _msSelectedNaics = code;
+// ── Occupation picker ─────────────────────────────────────────────────────────
+function msFilterOcc(group, btn) {
+  _msOccFilter = group;
+  document.querySelectorAll('.ms-occ-pill').forEach(function(p){ p.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+  msRenderOccList();
+}
+
+function msSearchOcc(query) {
+  msRenderOccList(query);
+}
+
+function msRenderOccList(query) {
+  query = (query || document.getElementById('ms-occ-search').value || '').toLowerCase().trim();
+  var list = MS_OCCUPATIONS.filter(function(o) {
+    if (_msOccFilter !== 'all' && o.isco_major !== _msOccFilter) return false;
+    if (query) {
+      var haystack = (o.display_label + ' ' + o.tags.join(' ')).toLowerCase();
+      return query.split(/\s+/).every(function(w){ return haystack.indexOf(w) !== -1; });
+    }
+    return true;
+  });
+  var el = document.getElementById('ms-occ-list');
+  if (!el) return;
+  if (list.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--ink-mut);padding:8px 4px">No matches — try a different search.</div>';
+    return;
+  }
+  el.innerHTML = list.map(function(o) {
+    var sel = _msSelectedOcc && _msSelectedOcc.onet_code === o.onet_code && _msSelectedOcc.naics_code === o.naics_code;
+    return '<div class="ms-occ-row' + (sel ? ' selected' : '') + '" onclick="msSelectOcc(' + JSON.stringify(o).replace(/'/g,"&#39;") + ')">' +
+      '<span class="ms-occ-name">' + o.display_label + '</span>' +
+      '<span class="ms-occ-codes">NAICS&nbsp;' + o.naics_code + '&nbsp;·&nbsp;O*NET&nbsp;' + o.onet_code + '</span>' +
+      '<button class="ms-occ-sel-btn">' + (sel ? '✓' : 'Select') + '</button>' +
+      '</div>';
+  }).join('');
+}
+
+function msSelectOcc(occ) {
+  _msSelectedOcc = occ;
+  msRenderOccList();
+  var bd = document.getElementById('ms-occ-breakdown');
+  if (!bd) return;
+  bd.classList.add('show');
+  document.getElementById('ms-occ-bd-title').textContent = '✓ ' + occ.display_label.toUpperCase() + ' — YOUR PROFESSIONAL CLASSIFICATION';
+  document.getElementById('ms-occ-bd-isco').textContent = occ.isco_code + ' · ' + occ.isco_label;
+  document.getElementById('ms-occ-bd-naics').textContent = occ.naics_code + ' · ' + occ.naics_label;
+  document.getElementById('ms-occ-bd-onet').textContent = occ.onet_code + ' · ' + occ.onet_label;
+  document.getElementById('ms-occ-bd-naics-note').textContent = occ.naics_code;
 }
 
 function msSubmitTrade() {
@@ -5040,14 +5138,29 @@ function msSubmitTrade() {
       if (btn) btn.disabled = false;
       return msShowErr('ms-s1-err', 'That handle is taken — try a different name.');
     }
+    var payload = { business_name: bizName };
+    if (_msSelectedOcc) {
+      payload.naics_code = _msSelectedOcc.naics_code;
+      payload.onet_code  = _msSelectedOcc.onet_code;
+      payload.isco_code  = _msSelectedOcc.isco_code;
+    }
     fetch('/card-builder/trade', {
       method: 'PATCH',
       headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
-      body: JSON.stringify({ trade: { business_name: bizName, naics_code: _msSelectedNaics } })
+      body: JSON.stringify({ trade: payload })
     }).then(function(r){ return r.json(); }).then(function(data) {
       if (btn) btn.disabled = false;
-      if (data.ok) { _msCurrentHandle = data.handle; msGoStep(2); }
-      else msShowErr('ms-s1-err', (data.errors || ['Error saving']).join(', '));
+      if (data.ok) {
+        _msCurrentHandle = data.handle;
+        if (data.locode) {
+          _msLocode = data.locode;
+          var pfx = document.getElementById('ms-handle-prefix');
+          if (pfx) pfx.textContent = 'fora.center/' + _msLocode + '/';
+        }
+        msGoStep(2);
+      } else {
+        msShowErr('ms-s1-err', (data.errors || ['Error saving']).join(', '));
+      }
     }).catch(function(){ if (btn) btn.disabled = false; });
   };
 
@@ -5266,12 +5379,20 @@ function msSubmitTemple() {
 }
 
 // ── Step 6 — Complete ─────────────────────────────────────────────────────────
+function msCardUrl(handle) {
+  return _msLocode
+    ? 'https://fora.center/' + _msLocode + '/' + handle
+    : 'https://fora.center/p/' + handle;
+}
+
 function msInitQR() {
   fetch('/card-builder/complete').catch(function(){});
   var handle = _msCurrentHandle || "<%= j @profile.provider_handle.to_s %>";
-  var url = 'https://fora.center/p/' + handle;
+  var url = msCardUrl(handle);
   var el = document.getElementById('ms-live-url');
   if (el) el.textContent = url.replace('https://', '');
+  var viewLink = document.getElementById('ms-view-card-link');
+  if (viewLink) viewLink.href = url.replace('https://fora.center', '');
   var wrap = document.getElementById('ms-qr-canvas');
   if (wrap && typeof QRCode !== 'undefined') {
     new QRCode(wrap.parentElement, {
@@ -5371,6 +5492,17 @@ function msEscHtml(s) {
 <% if @profile.provider_mode? && !@profile.card_builder_complete? %>
 (function(){
   msGoStep(_msCurrentStep, true);
+  // Pre-select occupation if profile already has naics_code from a previous session
+  <% if @profile.naics_code.present? %>
+  (function(){
+    var existing = MS_OCCUPATIONS.find(function(o){
+      return o.naics_code === "<%= j @profile.naics_code %>" &&
+             (<%= @profile.onet_code.present? ? "o.onet_code === '#{j @profile.onet_code}'" : 'true' %>);
+    });
+    if (existing) msSelectOcc(existing);
+  })();
+  <% end %>
+  msRenderOccList();
   var hl = document.getElementById('ms-hl-input');
   if (hl) msOnHlInput(hl.value);
 })();
