@@ -146,17 +146,27 @@ class CardBuilderController < ApplicationController
   end
 
   # ── PATCH /card-builder/area ───────────────────────────────────────────────
-  # Step 4: Save service_radius_mi.
+  # Step 4: Save service area — radius (miles) or polygon (GeoJSON).
   def area
-    radius = params[:radius_mi].to_f
-    radius = [[radius, 0.5].max, 50.0].min
-
-    profile.update!(
-      service_radius_mi: radius,
-      card_builder_step: [4, profile.card_builder_step].max
-    )
-
-    render json: { ok: true, step: 5, radius_mi: radius }
+    if params[:polygon].present?
+      poly = JSON.parse(params[:polygon])
+      profile.update!(
+        service_area:      { type: "polygon", geojson: poly },
+        service_radius_mi: nil,
+        card_builder_step: [4, profile.card_builder_step].max
+      )
+      render json: { ok: true, step: 5, mode: "polygon" }
+    else
+      radius = [[params[:radius_mi].to_f, 0.5].max, 50.0].min
+      profile.update!(
+        service_radius_mi: radius,
+        service_area:      { type: "radius", miles: radius },
+        card_builder_step: [4, profile.card_builder_step].max
+      )
+      render json: { ok: true, step: 5, radius_mi: radius }
+    end
+  rescue JSON::ParserError
+    render json: { errors: ["Invalid polygon data"] }, status: :unprocessable_entity
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
   end

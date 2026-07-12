@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/tabler-icons.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
 <style>
 :root{
   --blue:#1b3a6b;--blue-md:#254f92;--blue-lt:#3a6abf;--blue-pl:#dde5f5;--blue-vp:#eef2fb;
@@ -58,6 +59,74 @@ a{text-decoration:none;color:inherit;}
 .svc-save-btn:disabled{opacity:.5;cursor:default;}
 .svc-saved{font-size:12px;color:var(--market);font-weight:700;}
 .svc-hint{font-size:11px;color:var(--ink-mut);line-height:1.6;}
+/* ── My Services embedded wizard (ms-prefix) ─────────────────────────────── */
+.ms-stepbar{display:flex;align-items:stretch;margin-bottom:18px;background:#fff;border:1px solid var(--rule);border-radius:9px;overflow:hidden;}
+.ms-sb-step{flex:1;text-align:center;padding:8px 2px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mut);border-right:1px solid var(--rule);transition:all .2s;}
+.ms-sb-step:last-child{border-right:none;}
+.ms-sb-step.done{background:var(--green-p);color:var(--green);}
+.ms-sb-step.active{background:var(--market);color:#fff;font-weight:700;}
+.ms-step{display:none;}
+.ms-step.active{display:block;}
+.ms-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;color:var(--market);}
+.ms-step-h{font-family:'Libre Baskerville',serif;font-size:21px;font-weight:700;line-height:1.2;color:var(--blue);}
+.ms-step-sub{font-size:13px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
+.ms-field{margin-top:14px;}
+.ms-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px;display:block;}
+.ms-input{width:100%;border:1.5px solid var(--rule);border-radius:9px;padding:10px 12px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;color:var(--ink);background:#fff;}
+.ms-input:focus{border-color:var(--blue);}
+.ms-textarea{resize:vertical;min-height:78px;}
+.ms-btn{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;border:none;border-radius:9px;padding:11px 20px;cursor:pointer;}
+.ms-btn-primary{background:var(--market);color:#fff;}
+.ms-btn-primary:hover{background:var(--green-lt);}
+.ms-btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.ms-back{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mut);background:none;border:none;cursor:pointer;}
+.ms-skip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);background:none;border:1px solid var(--rule);border-radius:100px;padding:7px 13px;cursor:pointer;}
+.ms-nav-row{display:flex;align-items:center;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--rule);}
+.ms-err{font-size:11.5px;color:#8b1a1a;background:#fce8e8;border:1px solid #e8a0a0;border-radius:8px;padding:9px 12px;margin-top:10px;display:none;line-height:1.5;}
+.ms-err.show{display:block;}
+.ms-note{font-size:10.5px;color:var(--ink-soft);border-radius:8px;padding:9px 11px;margin-top:10px;line-height:1.5;}
+.ms-note-m{background:var(--green-vp);border:1px solid var(--green-p);}
+.ms-note b{color:var(--ink);}
+.ms-naics-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.ms-naics-chip{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.04em;padding:6px 11px;border:1.5px solid var(--rule);border-radius:100px;cursor:pointer;color:var(--ink-soft);background:#fff;transition:all .15s;}
+.ms-naics-chip:hover{border-color:var(--market);color:var(--market);}
+.ms-naics-chip.on{background:var(--market);color:#fff;border-color:var(--market);}
+.ms-handle-row{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.ms-handle-prefix{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-mut);}
+.ms-handle-slug{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:var(--blue);}
+.ms-handle-status{font-size:10px;font-weight:700;margin-left:auto;}
+.ms-handle-avail{color:var(--green);}
+.ms-handle-taken{color:#8b1a1a;}
+.ms-word-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink-mut);text-align:right;margin-top:3px;}
+.ms-word-count.warn{color:#c47f00;}
+.ms-word-count.over{color:#8b1a1a;}
+.ms-port-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.ms-port-item{background:#fff;border:1px solid var(--rule);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:8px;}
+.ms-port-item-title{font-size:12.5px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ms-port-item-type{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-mut);margin-top:2px;}
+.ms-port-vis-btn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.04em;padding:4px 9px;border-radius:100px;cursor:pointer;border:1px solid var(--rule);background:#fff;color:var(--ink-soft);}
+.ms-port-vis-btn.pub{border-color:var(--green);color:var(--green);background:var(--green-p);}
+.ms-port-del-btn{background:none;border:none;cursor:pointer;color:var(--ink-mut);font-size:13px;padding:3px;}
+.ms-port-del-btn:hover{color:#8b1a1a;}
+.ms-port-type-toggle{display:flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden;margin-top:12px;}
+.ms-ptt-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.05em;padding:7px 12px;border:none;background:#fff;cursor:pointer;color:var(--ink-soft);}
+.ms-ptt-btn.on{background:var(--market);color:#fff;}
+.ms-port-add-input{flex:1;border:1.5px solid var(--rule);border-radius:7px;padding:8px 11px;font-size:13px;font-family:'Nunito',sans-serif;outline:none;color:var(--ink);}
+.ms-port-add-input:focus{border-color:var(--blue);}
+.ms-port-add-btn{padding:8px 13px;background:var(--market);color:#fff;border:none;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.05em;cursor:pointer;}
+#ms-svc-map{height:240px;border-radius:10px;overflow:hidden;margin-bottom:10px;border:1px solid var(--rule);}
+.ms-area-toggle{display:flex;gap:6px;margin-bottom:10px;}
+.ms-at-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;padding:7px 14px;border:1.5px solid var(--rule);border-radius:100px;cursor:pointer;background:#fff;color:var(--ink-soft);}
+.ms-at-btn.on{background:var(--market);color:#fff;border-color:var(--market);}
+.ms-mt-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;padding:7px 14px;border:1.5px solid var(--rule);border-radius:100px;cursor:pointer;background:#fff;color:var(--ink-soft);}
+.ms-mt-on{background:var(--market)!important;color:#fff!important;border-color:var(--market)!important;}
+.ms-complete-card{background:var(--gilt-vp);border:1.5px solid rgba(184,134,11,.22);border-radius:13px;padding:22px 20px;text-align:center;}
+.ms-complete-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--gilt);margin-bottom:8px;}
+.ms-complete-h{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.ms-complete-url{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--market);background:var(--green-p);border:1px solid var(--green-p);border-radius:7px;padding:7px 13px;display:inline-block;margin:8px 0;}
+.ms-qr-wrap{display:flex;justify-content:center;margin:12px 0;}
+.ms-btn-outline{background:none;border:1.5px solid var(--market);color:var(--market);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.07em;font-weight:700;border-radius:9px;padding:11px 20px;cursor:pointer;width:100%;margin-bottom:7px;}
+.ms-btn-outline:hover{background:var(--green-p);}
 /* Temple subcategory panel */
 .tpl-fhead{padding:14px 16px 10px;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:6px;}
 .tpl-fhead-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--temple);}
@@ -1508,29 +1577,230 @@ a{text-decoration:none;color:inherit;}
   <%# ── SERVICE AREA PANEL ─────────────────────────────────────────────────── %>
   <div id="panel-service-area" style="display:none">
     <% if @profile.provider_mode? && !@profile.card_builder_complete? %>
-      <div style="background:#f3f9f5;border-bottom:1px solid #c8e0cc;padding:14px 20px;display:flex;align-items:center;gap:14px;">
-        <div style="font-size:22px;line-height:1;">▢</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#155c2d;margin-bottom:2px;">Set up your provider card</div>
-          <div style="font-size:12px;color:#5a6e8a;line-height:1.4;">Build your public profile — headline, portfolio, service area, and a shareable QR code.</div>
+      <%# ── WIZARD MODE ──────────────────────────────────────────────────────── %>
+      <div class="svc-head">
+        <div class="svc-head-title">▢ My Services</div>
+        <div class="svc-head-sub">Set up your public provider card — appear on the marketplace and share a link with clients.</div>
+      </div>
+      <div style="padding:16px 20px 28px">
+        <div class="ms-stepbar" id="ms-stepbar">
+          <div class="ms-sb-step" data-s="1">Trade</div>
+          <div class="ms-sb-step" data-s="2">Headline</div>
+          <div class="ms-sb-step" data-s="3">Portfolio</div>
+          <div class="ms-sb-step" data-s="4">Area</div>
+          <div class="ms-sb-step" data-s="5">Temple</div>
+          <div class="ms-sb-step" data-s="6">Live!</div>
         </div>
-        <a href="/card-builder" style="flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:9px 16px;background:#155c2d;color:#fff;border-radius:10px;text-decoration:none;">Set up new service →</a>
+
+        <%# Step 1: Trade & Identity %>
+        <div class="ms-step" id="ms-s1">
+          <div class="ms-eyebrow">Step 1 of 6 — Trade &amp; Identity</div>
+          <div class="ms-step-h">What's your trade?</div>
+          <div class="ms-step-sub">Your business name becomes your FORA handle — a permanent link to your public card.</div>
+          <div class="ms-field">
+            <label class="ms-label" for="ms-biz-name">Business or trade name</label>
+            <input class="ms-input" id="ms-biz-name" type="text"
+                   placeholder="e.g. Philly Fresh Paint Co."
+                   value="<%= @profile.market_display_name.presence || @profile.market_entity_name.presence || "" %>"
+                   oninput="msOnBizNameInput(this.value)">
+            <div class="ms-handle-row">
+              <span class="ms-handle-prefix">fora.center/p/</span>
+              <span class="ms-handle-slug" id="ms-handle-slug"><%= @profile.provider_handle.presence || "your-handle" %></span>
+              <span class="ms-handle-status" id="ms-handle-status"></span>
+            </div>
+          </div>
+          <div class="ms-field">
+            <label class="ms-label">Trade category</label>
+            <div class="ms-naics-grid" id="ms-naics-grid">
+              <% [["238320","Painter"],["238210","Electrician"],["238220","Plumber"],["541350","Home Inspector"],["621399","Nurse / Health Aide"],["611110","Teacher / Tutor"],["541110","Attorney"],["722330","Chef / Caterer"],["711510","Artist / Creative"]].each do |code, label| %>
+                <button class="ms-naics-chip <%= @profile.naics_code == code ? 'on' : '' %>"
+                        data-code="<%= code %>"
+                        onclick="msSelectNaics(this,'<%= code %>')"><%= label %></button>
+              <% end %>
+            </div>
+          </div>
+          <div class="ms-note ms-note-m">
+            <b>Your neighborhood</b> — <%= @profile.place_label.presence || "location on file" %><br>
+            <span style="font-size:9.5px;color:var(--ink-mut)">This appears on your public card as your base area.</span>
+          </div>
+          <div class="ms-err" id="ms-s1-err"></div>
+          <div class="ms-nav-row">
+            <button class="ms-btn ms-btn-primary" style="margin-left:auto" id="ms-s1-btn" onclick="msSubmitTrade()">Continue →</button>
+          </div>
+        </div>
+
+        <%# Step 2: Headline & Summary %>
+        <div class="ms-step" id="ms-s2">
+          <div class="ms-eyebrow">Step 2 of 6 — Headline &amp; Summary</div>
+          <div class="ms-step-h">Tell them what you do</div>
+          <div class="ms-step-sub">Your headline is the first thing homeowners read. Make it specific.</div>
+          <div class="ms-field">
+            <label class="ms-label" for="ms-hl-input">Headline <span style="font-weight:400;color:var(--ink-mut)">(15 words max)</span></label>
+            <input class="ms-input" id="ms-hl-input" type="text"
+                   placeholder="e.g. Interior and exterior painting with a clean finish, every time."
+                   value="<%= @profile.provider_headline.to_s %>"
+                   oninput="msOnHlInput(this.value)">
+            <div class="ms-word-count" id="ms-hl-count">0 / 15</div>
+          </div>
+          <div class="ms-note ms-note-m" style="margin-top:12px">
+            <b>Consigliere tip:</b> Homeowners want to know what you're <em>good at</em> and what you <em>won't do</em>. Say both.
+          </div>
+          <div class="ms-field">
+            <label class="ms-label" for="ms-ss-input">Summary <span style="font-weight:400;color:var(--ink-mut)">(2–3 sentences)</span></label>
+            <textarea class="ms-input ms-textarea" id="ms-ss-input" placeholder="Describe your work, your style, and who you work best with."><%= @profile.service_summary.to_s %></textarea>
+          </div>
+          <div class="ms-err" id="ms-s2-err"></div>
+          <div class="ms-nav-row">
+            <button class="ms-back" onclick="msGoStep(1)">← Back</button>
+            <button class="ms-btn ms-btn-primary" style="margin-left:auto" onclick="msSubmitHeadline()">Continue →</button>
+          </div>
+        </div>
+
+        <%# Step 3: Portfolio %>
+        <div class="ms-step" id="ms-s3">
+          <div class="ms-eyebrow">Step 3 of 6 — Portfolio</div>
+          <div class="ms-step-h">Show your work</div>
+          <div class="ms-step-sub">Add links to photos or write notes. Even one item builds trust.</div>
+          <div class="ms-port-type-toggle">
+            <button class="ms-ptt-btn on" id="ms-ptt-link" onclick="msSetPortType('link')">Link</button>
+            <button class="ms-ptt-btn" id="ms-ptt-note" onclick="msSetPortType('note')">Note</button>
+          </div>
+          <div style="display:flex;gap:7px;margin-top:8px">
+            <input class="ms-port-add-input" id="ms-port-title" type="text" placeholder="Title (optional)" style="flex:1">
+          </div>
+          <div style="display:flex;gap:7px;margin-top:5px" id="ms-port-link-row">
+            <input class="ms-port-add-input" id="ms-port-url" type="url" placeholder="https://…" style="flex:1">
+            <button class="ms-port-add-btn" onclick="msAddPortItem()">Add</button>
+          </div>
+          <div style="margin-top:5px;display:none" id="ms-port-note-row">
+            <textarea class="ms-port-add-input ms-textarea" id="ms-port-note" style="width:100%" placeholder="Write your note…" rows="3"></textarea>
+            <button class="ms-port-add-btn" style="margin-top:5px" onclick="msAddPortItem()">Add</button>
+          </div>
+          <div class="ms-port-list" id="ms-port-list">
+            <% @profile.library_items.where("? = ANY(tags)", "portfolio").order(created_at: :desc).each do |item| %>
+              <div class="ms-port-item" id="ms-pi-<%= item.id %>">
+                <div style="flex:1;min-width:0">
+                  <div class="ms-port-item-title"><%= item.title %></div>
+                  <div class="ms-port-item-type"><%= item.item_type %><% if item.source_url.present? %> · <a href="<%= item.source_url %>" target="_blank" style="color:var(--market)">open ↗</a><% end %></div>
+                </div>
+                <button class="ms-port-vis-btn <%= item.visibility_public? ? 'pub' : '' %>"
+                        id="ms-pv-<%= item.id %>"
+                        onclick="msToggleVis(<%= item.id %>)"><%= item.visibility_public? ? 'Public' : 'Private' %></button>
+                <button class="ms-port-del-btn" onclick="msDelPort(<%= item.id %>)">✕</button>
+              </div>
+            <% end %>
+          </div>
+          <div class="ms-err" id="ms-s3-err"></div>
+          <div class="ms-nav-row">
+            <button class="ms-back" onclick="msGoStep(2)">← Back</button>
+            <button class="ms-btn ms-btn-primary" style="margin-left:auto" onclick="msGoStep(4)">Continue →</button>
+          </div>
+        </div>
+
+        <%# Step 4: Service Area %>
+        <div class="ms-step" id="ms-s4">
+          <div class="ms-eyebrow">Step 4 of 6 — Service Area</div>
+          <div class="ms-step-h">Where do you work?</div>
+          <div class="ms-step-sub">Set your coverage. Clients searching nearby will find you on the map.</div>
+          <div class="ms-area-toggle">
+            <button id="ms-at-radius" class="ms-at-btn on" onclick="msSetAreaMode('radius')">Radius</button>
+            <button id="ms-at-zone" class="ms-at-btn" onclick="msSetAreaMode('zone')">Zone</button>
+          </div>
+          <div id="ms-svc-map"></div>
+          <div id="ms-radius-ui">
+            <div class="svc-radius-label">Radius: <span id="ms-radius-val"><%= @profile.service_radius_mi.presence || 3 %></span> miles</div>
+            <input type="range" id="ms-slider" min="0.5" max="50" step="0.5"
+                   value="<%= @profile.service_radius_mi.presence || 3 %>"
+                   oninput="msCbSliderMove(this.value)" style="width:100%;accent-color:var(--market);margin-bottom:12px;cursor:pointer">
+          </div>
+          <div id="ms-zone-ui" style="display:none">
+            <p class="svc-hint" style="margin-bottom:10px">Use the polygon tool on the map to draw your service zone. Click to add points; close the shape by clicking the first point.</p>
+          </div>
+          <div class="ms-err" id="ms-s4-err"></div>
+          <div class="ms-nav-row">
+            <button class="ms-back" onclick="msGoStep(3)">← Back</button>
+            <button class="ms-btn ms-btn-primary" style="margin-left:auto" onclick="msSubmitArea()">Save &amp; Continue →</button>
+          </div>
+        </div>
+
+        <%# Step 5: Temple Contribution %>
+        <div class="ms-step" id="ms-s5">
+          <div class="ms-eyebrow">Step 5 of 6 — Temple Contribution</div>
+          <div class="ms-step-h">Share what you know</div>
+          <div class="ms-step-sub">Write a tip for homeowners about your trade. Optional — providers who teach earn a credit against their platform take.</div>
+          <div class="ms-field">
+            <label class="ms-label" for="ms-tip-title">Tip title</label>
+            <input class="ms-input" id="ms-tip-title" type="text" placeholder="e.g. How to tell if paint is failing before it peels">
+          </div>
+          <div class="ms-field">
+            <label class="ms-label" for="ms-tip-body">Tip content</label>
+            <textarea class="ms-input ms-textarea" id="ms-tip-body" rows="4" placeholder="Share your insight…"></textarea>
+          </div>
+          <div class="ms-note ms-note-m"><b>This is public</b> and will appear on your card under "Expert Tip."</div>
+          <div class="ms-err" id="ms-s5-err"></div>
+          <div class="ms-nav-row">
+            <button class="ms-back" onclick="msGoStep(4)">← Back</button>
+            <button class="ms-skip" onclick="msSkipTemple()">Skip</button>
+            <button class="ms-btn ms-btn-primary" onclick="msSubmitTemple()">Post Tip →</button>
+          </div>
+        </div>
+
+        <%# Step 6: Live! %>
+        <div class="ms-step" id="ms-s6">
+          <div class="ms-complete-card">
+            <div class="ms-complete-eyebrow">▢ Your card is live</div>
+            <div class="ms-complete-h">Welcome to the marketplace</div>
+            <p style="color:var(--ink-soft);font-size:13px;margin-bottom:4px">Your public profile is live at:</p>
+            <div class="ms-complete-url" id="ms-live-url">fora.center/p/<%= @profile.provider_handle.to_s %></div>
+            <div class="ms-qr-wrap">
+              <canvas id="ms-qr-canvas" width="130" height="130"></canvas>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-top:12px">
+              <button class="ms-btn-outline" onclick="msDownloadQR()">Download QR Code</button>
+              <a href="/p/<%= @profile.provider_handle.to_s %>" target="_blank"
+                 style="display:block;text-align:center;text-decoration:none;padding:11px 20px;background:var(--market);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;border-radius:9px">View Your Card ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div><%# /wizard-body %>
+
+    <% else %>
+      <%# ── EDITOR MODE (card_builder_complete = true) ──────────────────────── %>
+      <div class="svc-head">
+        <div class="svc-head-title">▢ My Services</div>
+        <% if @profile.card_builder_complete? && @profile.provider_handle.present? %>
+          <div class="svc-head-sub">
+            Your card: <a href="/p/<%= @profile.provider_handle %>" target="_blank" style="color:var(--market);font-weight:700">fora.center/p/<%= @profile.provider_handle %></a>
+            &ensp;<a href="/p/<%= @profile.provider_handle %>" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;background:var(--green-p);color:var(--market);padding:3px 9px;border-radius:100px">Edit ↗</a>
+          </div>
+        <% else %>
+          <div class="svc-head-sub">Define your service coverage — neighbors searching for help will see this zone on the marketplace map.</div>
+        <% end %>
+      </div>
+      <% if @profile.provider_mode? %>
+        <div style="display:flex;gap:7px;padding:10px 20px 0">
+          <button id="ms-mode-radius" class="ms-mt-btn ms-mt-on" onclick="msEditorSetMode('radius')">Radius</button>
+          <button id="ms-mode-zone" class="ms-mt-btn" onclick="msEditorSetMode('zone')">Zone</button>
+        </div>
+      <% end %>
+      <div class="svc-body">
+        <div id="svc-map"></div>
+        <div id="ms-editor-radius-ui">
+          <div class="svc-radius-label">Radius: <span id="svc-radius-val"><%= @profile.service_radius_mi || 3.0 %></span> miles</div>
+          <input type="range" id="svc-slider" min="0.5" max="50" step="0.5"
+                 value="<%= @profile.service_radius_mi || 3.0 %>" oninput="svcSliderMove(this.value)">
+        </div>
+        <div id="ms-editor-zone-ui" style="display:none">
+          <p class="svc-hint" style="margin-bottom:10px">Use the polygon tool on the map to draw your service zone. Click to add points; close the shape by clicking the first point.</p>
+        </div>
+        <div class="svc-actions">
+          <button class="svc-save-btn" onclick="msEditorSave()">Save Service Area</button>
+          <span class="svc-saved" id="ms-editor-saved" style="display:none">&#10003; Saved</span>
+        </div>
+        <p class="svc-hint">Clients and neighbors searching the marketplace will see this zone alongside your listing.</p>
       </div>
     <% end %>
-    <div class="svc-head">
-      <div class="svc-head-title">▢ My Services</div>
-      <div class="svc-head-sub">Define the radius you serve as a mobile provider — neighbors searching for help will see this zone on the marketplace map.</div>
-    </div>
-    <div class="svc-body">
-      <div id="svc-map"></div>
-      <div class="svc-radius-label">Radius: <span id="svc-radius-val">3.0</span> miles</div>
-      <input type="range" id="svc-slider" min="0.5" max="15" step="0.5" value="3.0" oninput="svcSliderMove(this.value)">
-      <div class="svc-actions">
-        <button class="svc-save-btn" onclick="saveSvcArea()">Save Service Area</button>
-        <span class="svc-saved" id="svc-saved" style="display:none">&#10003; Saved</span>
-      </div>
-      <p class="svc-hint">Drag the slider to adjust your coverage radius. Clients and neighbors searching the marketplace will see this zone alongside your listing.</p>
-    </div>
   </div><%# /panel-service-area %>
 
   <%# ── TEMPLE SUBCATEGORY PANEL ───────────────────────────────────────────── %>
@@ -4678,7 +4948,447 @@ function frmCopyLink(url, btn, bid) {
 document.addEventListener('click', function() {
   document.querySelectorAll('.frm-share-menu').forEach(function(m){ m.style.display='none'; });
 });
+
+// ── My Services embedded wizard (ms-prefix) ────────────────────────────────
+var _msCurrentStep  = <%= @profile.card_builder_step.to_i.clamp(1, 6) %>;
+var _msSelectedNaics = "<%= j @profile.naics_code.to_s %>";
+var _msCurrentHandle = "<%= j @profile.provider_handle.to_s %>";
+var _msHandleAvail   = <%= @profile.provider_handle.present? ? 'true' : 'false' %>;
+var _msPortType      = 'link';
+var _msWizMap        = null;
+var _msWizCircle     = null;
+var _msDrawnLayer    = null;
+var _msDrawControl   = null;
+var _msDrawFG        = null;
+var _msEditorDrawControl = null;
+var _msEditorDrawnLayer  = null;
+var _msEditorDrawFG      = null;
+var _msAreaMode      = 'radius';
+var _msEditorMode    = '<%= (@profile.service_area.is_a?(Hash) && @profile.service_area["type"] == "polygon") ? "zone" : "radius" %>';
+var _msQrGenerated   = false;
+var _msHandleTimer   = null;
+var _msWizRadiusMi   = <%= @profile.service_radius_mi || 3.0 %>;
+
+function msGoStep(n, init) {
+  document.querySelectorAll('.ms-step').forEach(function(s){ s.classList.remove('active'); });
+  var el = document.getElementById('ms-s' + n);
+  if (el) el.classList.add('active');
+  _msCurrentStep = n;
+  msSbUpdate();
+  if (n === 4 && !_msWizMap) setTimeout(msinitWizMap, 50);
+  if (n === 6 && !_msQrGenerated) msInitQR();
+  if (!init) {
+    var panel = document.getElementById('panel-service-area');
+    if (panel) panel.scrollTop = 0;
+  }
+}
+
+function msSbUpdate() {
+  document.querySelectorAll('.ms-sb-step').forEach(function(el) {
+    var s = parseInt(el.dataset.s);
+    el.classList.remove('active', 'done');
+    if (s === _msCurrentStep) el.classList.add('active');
+    else if (s < _msCurrentStep) el.classList.add('done');
+  });
+}
+
+// ── Step 1 — Trade ───────────────────────────────────────────────────────────
+function msOnBizNameInput(val) {
+  var slug = msSlugify(val);
+  var slugEl = document.getElementById('ms-handle-slug');
+  var statEl = document.getElementById('ms-handle-status');
+  if (slugEl) slugEl.textContent = slug || 'your-handle';
+  if (statEl) { statEl.textContent = ''; statEl.className = 'ms-handle-status'; }
+  _msHandleAvail = false;
+  clearTimeout(_msHandleTimer);
+  if (!slug) return;
+  _msHandleTimer = setTimeout(function(){ msCheckHandle(slug); }, 400);
+}
+
+function msSlugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-');
+}
+
+function msCheckHandle(handle) {
+  fetch('/card-builder/check-handle?handle=' + encodeURIComponent(handle))
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      _msCurrentHandle = data.handle;
+      _msHandleAvail = data.available;
+      var el = document.getElementById('ms-handle-status');
+      if (!el) return;
+      el.textContent = data.available ? '✓ Available' : '✗ Taken';
+      el.className = 'ms-handle-status ' + (data.available ? 'ms-handle-avail' : 'ms-handle-taken');
+    });
+}
+
+function msSelectNaics(el, code) {
+  document.querySelectorAll('.ms-naics-chip').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  _msSelectedNaics = code;
+}
+
+function msSubmitTrade() {
+  var bizName = document.getElementById('ms-biz-name').value.trim();
+  if (!bizName) return msShowErr('ms-s1-err', 'Please enter your business name.');
+  var btn = document.getElementById('ms-s1-btn');
+  if (btn) btn.disabled = true;
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+
+  var doSubmit = function() {
+    if (!_msHandleAvail) {
+      if (btn) btn.disabled = false;
+      return msShowErr('ms-s1-err', 'That handle is taken — try a different name.');
+    }
+    fetch('/card-builder/trade', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
+      body: JSON.stringify({ trade: { business_name: bizName, naics_code: _msSelectedNaics } })
+    }).then(function(r){ return r.json(); }).then(function(data) {
+      if (btn) btn.disabled = false;
+      if (data.ok) { _msCurrentHandle = data.handle; msGoStep(2); }
+      else msShowErr('ms-s1-err', (data.errors || ['Error saving']).join(', '));
+    }).catch(function(){ if (btn) btn.disabled = false; });
+  };
+
+  var handle = msSlugify(bizName);
+  if (!_msHandleAvail && handle) {
+    fetch('/card-builder/check-handle?handle=' + encodeURIComponent(handle))
+      .then(function(r){ return r.json(); })
+      .then(function(data){ _msCurrentHandle = data.handle; _msHandleAvail = data.available; doSubmit(); })
+      .catch(function(){ if (btn) btn.disabled = false; });
+  } else {
+    doSubmit();
+  }
+}
+
+// ── Step 2 — Headline ─────────────────────────────────────────────────────────
+function msOnHlInput(val) {
+  var words = val.trim() ? val.trim().split(/\s+/).length : 0;
+  var el = document.getElementById('ms-hl-count');
+  if (el) {
+    el.textContent = words + ' / 15';
+    el.className = 'ms-word-count' + (words > 15 ? ' over' : words >= 12 ? ' warn' : '');
+  }
+}
+
+function msSubmitHeadline() {
+  var hl = document.getElementById('ms-hl-input').value.trim();
+  var ss = document.getElementById('ms-ss-input').value.trim();
+  if (hl.split(/\s+/).filter(Boolean).length > 15) return msShowErr('ms-s2-err', 'Headline must be 15 words or fewer.');
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/card-builder/headline', {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
+    body: JSON.stringify({ headline: { provider_headline: hl, service_summary: ss } })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) msGoStep(3);
+    else msShowErr('ms-s2-err', (data.errors || ['Error saving']).join(', '));
+  });
+}
+
+// ── Step 3 — Portfolio ────────────────────────────────────────────────────────
+function msSetPortType(type) {
+  _msPortType = type;
+  document.getElementById('ms-ptt-link').classList.toggle('on', type === 'link');
+  document.getElementById('ms-ptt-note').classList.toggle('on', type === 'note');
+  document.getElementById('ms-port-link-row').style.display = type === 'link' ? 'flex' : 'none';
+  document.getElementById('ms-port-note-row').style.display = type === 'note' ? 'block' : 'none';
+}
+
+function msAddPortItem() {
+  var title = document.getElementById('ms-port-title').value.trim();
+  var url   = document.getElementById('ms-port-url').value.trim();
+  var note  = document.getElementById('ms-port-note').value.trim();
+  if (_msPortType === 'link' && !url) return msShowErr('ms-s3-err', 'Please enter a URL.');
+  if (_msPortType === 'note' && !note) return msShowErr('ms-s3-err', 'Please write your note.');
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/card-builder/portfolio', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
+    body: JSON.stringify({ portfolio: { item_type: _msPortType, title: title, source_url: url, description: note } })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) {
+      msAppendPortItem(data.item);
+      document.getElementById('ms-port-title').value = '';
+      document.getElementById('ms-port-url').value = '';
+      document.getElementById('ms-port-note').value = '';
+      msHideErr('ms-s3-err');
+    } else msShowErr('ms-s3-err', (data.errors || ['Error adding item']).join(', '));
+  });
+}
+
+function msAppendPortItem(item) {
+  var list = document.getElementById('ms-port-list');
+  if (!list) return;
+  var div = document.createElement('div');
+  div.className = 'ms-port-item';
+  div.id = 'ms-pi-' + item.id;
+  div.innerHTML =
+    '<div style="flex:1;min-width:0">' +
+      '<div class="ms-port-item-title">' + msEscHtml(item.title) + '</div>' +
+      '<div class="ms-port-item-type">' + item.item_type +
+        (item.source_url ? ' · <a href="' + msEscHtml(item.source_url) + '" target="_blank" style="color:var(--market)">open ↗</a>' : '') +
+      '</div></div>' +
+    '<button class="ms-port-vis-btn pub" id="ms-pv-' + item.id + '" onclick="msToggleVis(' + item.id + ')">Public</button>' +
+    '<button class="ms-port-del-btn" onclick="msDelPort(' + item.id + ')">✕</button>';
+  list.prepend(div);
+}
+
+function msToggleVis(id) {
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/card-builder/portfolio/' + id, {
+    method: 'PATCH', headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'}, body: '{}'
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) {
+      var btn = document.getElementById('ms-pv-' + id);
+      if (!btn) return;
+      var isPub = data.visibility === 'public';
+      btn.textContent = isPub ? 'Public' : 'Private';
+      btn.className = 'ms-port-vis-btn' + (isPub ? ' pub' : '');
+    }
+  });
+}
+
+function msDelPort(id) {
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/card-builder/portfolio/' + id, {
+    method: 'DELETE', headers: {'X-CSRF-Token':csrf,'Accept':'application/json'}
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) { var el = document.getElementById('ms-pi-' + id); if (el) el.remove(); }
+  });
+}
+
+// ── Step 4 — Service Area (wizard) ────────────────────────────────────────────
+function msinitWizMap() {
+  var el = document.getElementById('ms-svc-map');
+  if (!el || _msWizMap) return;
+  var center = _svcCenter();
+  _msWizMap = L.map('ms-svc-map', {zoomControl:true, scrollWheelZoom:true}).setView(center, 11);
+  _mktTileLayer(_msWizMap);
+  _msWizCircle = L.circle(center, {
+    radius: _msWizRadiusMi * 1609.34,
+    color: '#155c2d', fillColor: '#155c2d', fillOpacity: 0.12, weight: 2
+  }).addTo(_msWizMap);
+  _msWizMap.fitBounds(_msWizCircle.getBounds(), {padding:[20,20]});
+}
+
+function msSetAreaMode(mode) {
+  _msAreaMode = mode;
+  var btnR = document.getElementById('ms-at-radius');
+  var btnZ = document.getElementById('ms-at-zone');
+  if (btnR) btnR.classList.toggle('on', mode === 'radius');
+  if (btnZ) btnZ.classList.toggle('on', mode === 'zone');
+  var radUI = document.getElementById('ms-radius-ui');
+  var zonUI = document.getElementById('ms-zone-ui');
+  if (radUI) radUI.style.display = mode === 'radius' ? '' : 'none';
+  if (zonUI) zonUI.style.display = mode === 'zone' ? '' : 'none';
+  if (!_msWizMap) msinitWizMap();
+  if (mode === 'zone') {
+    if (_msWizCircle) { _msWizMap.removeLayer(_msWizCircle); _msWizCircle = null; }
+    if (!_msDrawControl && typeof L.Control.Draw !== 'undefined') {
+      _msDrawFG = new L.FeatureGroup().addTo(_msWizMap);
+      _msDrawControl = new L.Control.Draw({
+        draw: { polygon: { shapeOptions: {color:'#155c2d', fillOpacity:0.18} }, circle:false, rectangle:false, marker:false, circlemarker:false, polyline:false },
+        edit: { featureGroup: _msDrawFG }
+      });
+      _msWizMap.addControl(_msDrawControl);
+      _msWizMap.on(L.Draw.Event.CREATED, function(e) {
+        if (_msDrawnLayer) _msDrawFG.removeLayer(_msDrawnLayer);
+        _msDrawnLayer = e.layer;
+        _msDrawFG.addLayer(_msDrawnLayer);
+      });
+    }
+  } else {
+    if (_msDrawnLayer && _msDrawFG) { _msDrawFG.removeLayer(_msDrawnLayer); _msDrawnLayer = null; }
+    if (_msDrawControl) { _msWizMap.removeControl(_msDrawControl); _msDrawControl = null; _msDrawFG = null; }
+    var center = _svcCenter();
+    _msWizCircle = L.circle(center, {
+      radius: _msWizRadiusMi * 1609.34,
+      color: '#155c2d', fillColor: '#155c2d', fillOpacity: 0.12, weight: 2
+    }).addTo(_msWizMap);
+    _msWizMap.fitBounds(_msWizCircle.getBounds(), {padding:[20,20]});
+  }
+}
+
+function msCbSliderMove(val) {
+  _msWizRadiusMi = parseFloat(val);
+  var rv = document.getElementById('ms-radius-val');
+  if (rv) rv.textContent = _msWizRadiusMi.toFixed(1);
+  if (_msWizCircle) {
+    _msWizCircle.setRadius(_msWizRadiusMi * 1609.34);
+    if (_msWizMap) _msWizMap.fitBounds(_msWizCircle.getBounds(), {padding:[20,20]});
+  }
+}
+
+function msSubmitArea() {
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  var body;
+  if (_msAreaMode === 'zone') {
+    if (!_msDrawnLayer) return msShowErr('ms-s4-err', 'Please draw your service zone on the map first.');
+    body = JSON.stringify({ polygon: JSON.stringify(_msDrawnLayer.toGeoJSON()) });
+  } else {
+    body = JSON.stringify({ radius_mi: _msWizRadiusMi });
+  }
+  fetch('/card-builder/area', {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
+    body: body
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) msGoStep(5);
+    else msShowErr('ms-s4-err', (data.errors || ['Error saving']).join(', '));
+  });
+}
+
+// ── Step 5 — Temple ───────────────────────────────────────────────────────────
+function msSkipTemple() {
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/card-builder/temple', {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
+    body: JSON.stringify({ skip: true })
+  }).then(function(r){ return r.json(); }).then(function(data) { if (data.ok) msGoStep(6); });
+}
+
+function msSubmitTemple() {
+  var title = document.getElementById('ms-tip-title').value.trim();
+  var body  = document.getElementById('ms-tip-body').value.trim();
+  if (!body) return msShowErr('ms-s5-err', 'Please write your tip or use "Skip."');
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  fetch('/card-builder/temple', {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json','X-CSRF-Token':csrf,'Accept':'application/json'},
+    body: JSON.stringify({ temple: { title: title, description: body } })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.ok) msGoStep(6);
+    else msShowErr('ms-s5-err', (data.errors || ['Error saving']).join(', '));
+  });
+}
+
+// ── Step 6 — Complete ─────────────────────────────────────────────────────────
+function msInitQR() {
+  fetch('/card-builder/complete').catch(function(){});
+  var handle = _msCurrentHandle || "<%= j @profile.provider_handle.to_s %>";
+  var url = 'https://fora.center/p/' + handle;
+  var el = document.getElementById('ms-live-url');
+  if (el) el.textContent = url.replace('https://', '');
+  var wrap = document.getElementById('ms-qr-canvas');
+  if (wrap && typeof QRCode !== 'undefined') {
+    new QRCode(wrap.parentElement, {
+      text: url, width: 130, height: 130,
+      colorDark: '#1b3a6b', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+  _msQrGenerated = true;
+}
+
+function msDownloadQR() {
+  var canvas = document.querySelector('.ms-qr-wrap canvas');
+  if (!canvas) return;
+  var link = document.createElement('a');
+  var handle = _msCurrentHandle || "<%= j @profile.provider_handle.to_s %>";
+  link.download = 'fora-' + handle + '-qr.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ── Editor mode (card_builder_complete = true) ────────────────────────────────
+function msEditorSetMode(mode) {
+  _msEditorMode = mode;
+  var btnR = document.getElementById('ms-mode-radius');
+  var btnZ = document.getElementById('ms-mode-zone');
+  if (btnR) { btnR.classList.toggle('ms-mt-on', mode === 'radius'); }
+  if (btnZ) { btnZ.classList.toggle('ms-mt-on', mode === 'zone'); }
+  var radUI = document.getElementById('ms-editor-radius-ui');
+  var zonUI = document.getElementById('ms-editor-zone-ui');
+  if (radUI) radUI.style.display = mode === 'radius' ? '' : 'none';
+  if (zonUI) zonUI.style.display = mode === 'zone' ? '' : 'none';
+  if (!_svcMap) initSvcMap();
+  if (mode === 'zone') {
+    if (_svcCircle) { _svcMap.removeLayer(_svcCircle); _svcCircle = null; }
+    if (!_msEditorDrawControl && typeof L.Control.Draw !== 'undefined') {
+      _msEditorDrawFG = new L.FeatureGroup().addTo(_svcMap);
+      _msEditorDrawControl = new L.Control.Draw({
+        draw: { polygon: { shapeOptions: {color:'#155c2d', fillOpacity:0.18} }, circle:false, rectangle:false, marker:false, circlemarker:false, polyline:false },
+        edit: { featureGroup: _msEditorDrawFG }
+      });
+      _svcMap.addControl(_msEditorDrawControl);
+      _svcMap.on(L.Draw.Event.CREATED, function(e) {
+        if (_msEditorDrawnLayer) _msEditorDrawFG.removeLayer(_msEditorDrawnLayer);
+        _msEditorDrawnLayer = e.layer;
+        _msEditorDrawFG.addLayer(_msEditorDrawnLayer);
+      });
+    }
+  } else {
+    if (_msEditorDrawnLayer && _msEditorDrawFG) { _msEditorDrawFG.removeLayer(_msEditorDrawnLayer); _msEditorDrawnLayer = null; }
+    if (_msEditorDrawControl) { _svcMap.removeControl(_msEditorDrawControl); _msEditorDrawControl = null; _msEditorDrawFG = null; }
+    var center = _svcCenter();
+    var r = _svcRadiusMi || 3.0;
+    _svcCircle = L.circle(center, {
+      radius: r * 1609.34, color: '#155c2d', fillColor: '#1f7a3e', fillOpacity: 0.18, weight: 2
+    }).addTo(_svcMap);
+    _svcMap.fitBounds(_svcCircle.getBounds(), {padding:[30,30]});
+  }
+}
+
+function msEditorSave() {
+  var btn   = document.querySelector('.svc-save-btn');
+  var saved = document.getElementById('ms-editor-saved');
+  if (btn) btn.disabled = true;
+  var csrf = (document.querySelector('meta[name="csrf-token"]')||{}).content||'';
+  var body;
+  if (_msEditorMode === 'zone') {
+    if (!_msEditorDrawnLayer) { if (btn) btn.disabled = false; return; }
+    body = JSON.stringify({ polygon: JSON.stringify(_msEditorDrawnLayer.toGeoJSON()) });
+  } else {
+    body = JSON.stringify({ radius_mi: _svcRadiusMi });
+  }
+  fetch('/mvp/dashboard/service_area', {
+    method: 'PATCH', headers: {'Content-Type':'application/json','X-CSRF-Token':csrf}, body: body
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (btn) btn.disabled = false;
+    if (data.ok && saved) { saved.style.display=''; setTimeout(function(){ saved.style.display='none'; }, 2500); }
+  }).catch(function(){ if (btn) btn.disabled = false; });
+}
+
+// ── MS helpers ────────────────────────────────────────────────────────────────
+function msShowErr(id, msg) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function msHideErr(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('show');
+}
+function msEscHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Auto-init ─────────────────────────────────────────────────────────────────
+<% if @profile.provider_mode? && !@profile.card_builder_complete? %>
+(function(){
+  msGoStep(_msCurrentStep, true);
+  var hl = document.getElementById('ms-hl-input');
+  if (hl) msOnHlInput(hl.value);
+})();
+<% end %>
+
+// Auto-open My Services panel when redirected from /card-builder
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('setup') === 'services') {
+    openSvcPanel();
+    var url = new URL(window.location.href);
+    url.searchParams.delete('setup');
+    window.history.replaceState({}, '', url.toString());
+  }
+})();
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </body>
 </html>

@@ -144,12 +144,19 @@ class DashboardController < ApplicationController
   end
 
   # ── PATCH /mvp/dashboard/service_area ───────────────────────────────────────
-  # Save the current user's service radius (mobile providers: handymen, etc.)
+  # Save the current user's service area — radius (miles) or polygon (GeoJSON).
   def update_service_area
-    radius = params[:radius_mi].to_f
-    radius = [[radius, 0.5].max, 50.0].min
-    @profile.update!(service_radius_mi: radius)
-    render json: { ok: true, radius_mi: @profile.service_radius_mi }
+    if params[:polygon].present?
+      poly = JSON.parse(params[:polygon])
+      @profile.update!(service_area: { type: "polygon", geojson: poly }, service_radius_mi: nil)
+      render json: { ok: true, mode: "polygon" }
+    else
+      radius = [[params[:radius_mi].to_f, 0.5].max, 50.0].min
+      @profile.update!(service_radius_mi: radius, service_area: { type: "radius", miles: radius })
+      render json: { ok: true, radius_mi: radius }
+    end
+  rescue JSON::ParserError
+    render json: { ok: false, errors: "Invalid polygon data" }, status: :unprocessable_entity
   rescue ActiveRecord::RecordInvalid => e
     render json: { ok: false, errors: e.message }, status: :unprocessable_entity
   end

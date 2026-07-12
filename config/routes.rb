@@ -201,7 +201,7 @@ Rails.application.routes.draw do
   get "/q929",          to: "world#q929"
 
   # ── Card Builder (Provider onboarding) ────────────────────────────────────
-  get    '/card-builder',               to: 'card_builder#show',               as: :card_builder
+  get    '/card-builder',               to: redirect('/mvp/dashboard?setup=services'), as: :card_builder
   get    '/card-builder/check-handle',  to: 'card_builder#check_handle'
   patch  '/card-builder/trade',         to: 'card_builder#trade'
   patch  '/card-builder/headline',      to: 'card_builder#headline'

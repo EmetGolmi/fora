@@ -111,7 +111,11 @@ a{text-decoration:none;color:inherit;}
       <div class="summary"><%= @profile.service_summary %></div>
     <% end %>
 
-    <% if @profile.service_radius_mi.present? %>
+    <% if @profile.service_area.is_a?(Hash) && @profile.service_area["type"] == "polygon" %>
+      <div class="radius-chip">
+        ◎ Custom service zone · <%= @profile.place_label.presence || "their area" %>
+      </div>
+    <% elsif @profile.service_radius_mi.present? %>
       <div class="radius-chip">
         ◎ Serves within <%= @profile.service_radius_mi.to_f.round(1) %> mi of <%= @profile.place_label.presence || "their base area" %>
       </div>
