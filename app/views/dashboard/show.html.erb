@@ -805,7 +805,7 @@ a{text-decoration:none;color:inherit;}
     <div class="pillar-h" style="cursor:pointer" onclick="switchPanel('market',null);return false;"><span class="pg pg-m">▢</span><span class="pn">Market</span></div>
     <div class="mkt-nav" id="mkt-nav"></div>
     <% if @profile.provider_mode? %>
-      <a href="#" class="tool" style="margin-top:4px" onclick="openSvcPanel();return false;"><i class="ti ti-map-pin"></i> My Service Area</a>
+      <a href="#" class="tool" style="margin-top:4px" onclick="openSvcPanel();return false;"><i class="ti ti-map-pin"></i> My Services</a>
     <% end %>
 
     <button class="voice">Add your Voice</button>
@@ -1484,16 +1484,6 @@ a{text-decoration:none;color:inherit;}
 
   <%# ── MARKET PANEL ─────────────────────────────────────────────────────── %>
   <div id="panel-market" style="display:none">
-    <% if @profile.provider_mode? && !@profile.card_builder_complete? %>
-      <div style="background:#f3f9f5;border-bottom:1px solid #c8e0cc;padding:14px 20px;display:flex;align-items:center;gap:14px;">
-        <div style="font-size:22px;line-height:1;">▢</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#155c2d;margin-bottom:2px;">Set up your provider card</div>
-          <div style="font-size:12px;color:#5a6e8a;line-height:1.4;">Build your public profile — headline, portfolio, service area, and a shareable QR code.</div>
-        </div>
-        <a href="/card-builder" style="flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:9px 16px;background:#155c2d;color:#fff;border-radius:10px;text-decoration:none;">Set Up Card →</a>
-      </div>
-    <% end %>
     <div class="mkt-fhead">
       <div class="mkt-fhead-title">▢ Market</div>
       <div class="mkt-fhead-crumb" id="mkt-crumb"></div>
@@ -1517,8 +1507,18 @@ a{text-decoration:none;color:inherit;}
 
   <%# ── SERVICE AREA PANEL ─────────────────────────────────────────────────── %>
   <div id="panel-service-area" style="display:none">
+    <% if @profile.provider_mode? && !@profile.card_builder_complete? %>
+      <div style="background:#f3f9f5;border-bottom:1px solid #c8e0cc;padding:14px 20px;display:flex;align-items:center;gap:14px;">
+        <div style="font-size:22px;line-height:1;">▢</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:#155c2d;margin-bottom:2px;">Set up your provider card</div>
+          <div style="font-size:12px;color:#5a6e8a;line-height:1.4;">Build your public profile — headline, portfolio, service area, and a shareable QR code.</div>
+        </div>
+        <a href="/card-builder" style="flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:9px 16px;background:#155c2d;color:#fff;border-radius:10px;text-decoration:none;">Set up new service →</a>
+      </div>
+    <% end %>
     <div class="svc-head">
-      <div class="svc-head-title">▢ My Service Area</div>
+      <div class="svc-head-title">▢ My Services</div>
       <div class="svc-head-sub">Define the radius you serve as a mobile provider — neighbors searching for help will see this zone on the marketplace map.</div>
     </div>
     <div class="svc-body">
