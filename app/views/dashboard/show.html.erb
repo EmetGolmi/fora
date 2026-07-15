@@ -3259,7 +3259,7 @@ function submitMktConversation() {
 function renderMktDomain(d) {
   var all = [];
   d.subs.forEach(function(s){ s.cards.forEach(function(c){ all.push(c); }); });
-  var unique = all.filter(function(c,i,a){ return a.findIndex(function(x){return x.name===c.name;})===i; }).slice(0,8);
+  var unique = all.filter(function(c,i,a){ return a.findIndex(function(x){return x.name===c.name;})===i; });
   renderMktCards(d.label, 'All subcategories', unique);
 }
 
@@ -4069,7 +4069,8 @@ function renderMktCards(title, sub, cards) {
   crumb.textContent = title + (sub !== 'All subcategories' ? ' \u203a ' + sub : '');
   crumb.style.display = '';
   var heading = '<div class="mkt-cat-header"><div>' + (sub !== 'All subcategories' ? sub : title) + '</div><div class="mkt-cat-sub">' + (sub !== 'All subcategories' ? title : '') + '</div></div>';
-  var ad = (sub === 'Auto repair') ? MKT_JIFFY_AD : (_dbFoodSubs.indexOf(sub) >= 0 ? MKT_DB_OASIS_AD : '');
+  var _isFoodCtx = _dbFoodSubs.indexOf(sub) >= 0 || title === 'Food & drink';
+  var ad = (sub === 'Auto repair') ? MKT_JIFFY_AD : (_isFoodCtx ? MKT_DB_OASIS_AD : '');
   var _prevMktSeq = _mktLSeq;
   var html = cards.map(function(c, i){ return mktCardHtml(c, i); }).join('');
 
@@ -4104,7 +4105,7 @@ function renderMktCards(title, sub, cards) {
   }
 
   document.getElementById('mkt-main').innerHTML = heading + layerHtml + '<div class="mkt-grid">' + ad + html + '</div>';
-  if (_dbFoodSubs.indexOf(sub) >= 0) setTimeout(dbRenderComments, 0);
+  if (_isFoodCtx) setTimeout(dbRenderComments, 0);
 
   // Collect the lids just registered and pin them on the map
   var newLids = [];
