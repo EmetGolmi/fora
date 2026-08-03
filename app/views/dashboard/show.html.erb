@@ -290,7 +290,6 @@ a{text-decoration:none;color:inherit;}
 .frm-sub{padding:4px 8px 4px 28px;font-size:12px;color:var(--ink-soft);cursor:pointer;border-left:2px solid transparent;border-radius:0 6px 6px 0;}
 .frm-sub:hover{color:var(--ink);background:var(--rule-soft);}
 .frm-sub.on{color:var(--forum);font-weight:700;border-left-color:var(--forum);}
-.frm-gov-subs{padding-bottom:2px;display:none;}
 .frm-gov-sub{padding-left:28px !important;}
 #frm-leg-domains>.frm-dom-h{padding-left:14px;}
 #frm-leg-domains .frm-sub-list .frm-sub{padding-left:44px;}
@@ -981,7 +980,7 @@ a{text-decoration:none;color:inherit;}
       <i class="ti ti-settings"></i> Settings
     </a>
 
-    <div class="pillar-h"><span class="pg pg-t">◯</span><span class="pn">Temple</span></div>
+    <div class="pillar-h"><span class="pg pg-t">◯</span><span class="pn">Wisdom</span></div>
     <div class="tpl-nav">
       <%- @temple_domains.each do |dom| %>
         <div class="tpl-dom-h" onclick="toggleNavDom(this,'tpl')">
@@ -997,10 +996,14 @@ a{text-decoration:none;color:inherit;}
       <%- end %>
     </div>
 
-    <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Forum</span></div>
+    <div class="pillar-h"><span class="pg pg-f">△</span><span class="pn">Law</span></div>
     <div class="frm-nav">
-      <a href="#" class="tool" onclick="openOfficials(this);return false;"><i class="ti ti-users"></i> Officials</a>
-      <div class="frm-gov-subs">
+      <div class="frm-dom-h" id="frm-officials-h" onclick="frmOfficialsClick(this)">
+        <i class="ti ti-users frm-dom-icon"></i>
+        <span class="frm-dom-label">Officials</span>
+        <i class="ti ti-chevron-down frm-chev"></i>
+      </div>
+      <div class="frm-sub-list" id="frm-officials-subs">
         <div class="frm-sub frm-gov-sub" onclick="filterOfficials('federal',this)">Federal</div>
         <div class="frm-sub frm-gov-sub" onclick="filterOfficials('state',this)">State</div>
         <div class="frm-sub frm-gov-sub" onclick="filterOfficials('local',this)">Local</div>
@@ -1054,8 +1057,8 @@ a{text-decoration:none;color:inherit;}
   </div>
   <div class="scope-row" id="scope-row" style="display:none">
     <span class="schip on" data-p="all" onclick="setSrchScope(this,'all')">All results</span>
-    <span class="schip" data-p="t" onclick="setSrchScope(this,'t')">&#9675; Temple</span>
-    <span class="schip" data-p="f" onclick="setSrchScope(this,'f')">&#9651; Forum</span>
+    <span class="schip" data-p="t" onclick="setSrchScope(this,'t')">&#9675; Wisdom</span>
+    <span class="schip" data-p="f" onclick="setSrchScope(this,'f')">&#9651; Law</span>
     <span class="schip" data-p="m" onclick="setSrchScope(this,'m')">&#9634; Market</span>
   </div>
   <div id="panel-observe" style="display:none">
@@ -1067,8 +1070,8 @@ a{text-decoration:none;color:inherit;}
       </div>
       <div class="pf">
         <span class="pchip on" data-p="all">All</span>
-        <span class="pchip" data-p="t">◯ Temple</span>
-        <span class="pchip" data-p="f">△ Forum</span>
+        <span class="pchip" data-p="t">◯ Wisdom</span>
+        <span class="pchip" data-p="f">△ Law</span>
         <span class="pchip" data-p="m">▢ Market</span>
       </div>
       <div class="legend">
@@ -1121,7 +1124,7 @@ a{text-decoration:none;color:inherit;}
                   <span class="vchk">✓</span>
                   <span class="pr">· <%= item.office %></span>
                 <% end %>
-                <span class="pbadge bb-f">△ Forum</span>
+                <span class="pbadge bb-f">△ Law</span>
               </div>
 
               <%# Context line %>
@@ -1232,7 +1235,7 @@ a{text-decoration:none;color:inherit;}
                 <span class="pn2"><%= rep.name %></span>
                 <span class="vchk">✓</span>
                 <span class="pr">· <%= rep.office %></span>
-                <span class="pbadge bb-f">△ Forum</span>
+                <span class="pbadge bb-f">△ Law</span>
               </div>
               <div class="fctx"><%= rep_sparked ? "You follow this official" : "Your representative" %></div>
               <div class="arc">
@@ -1321,7 +1324,7 @@ a{text-decoration:none;color:inherit;}
               <div class="pm">
                 <span class="pn2"><%= bill.identifier.presence || "Bill" %></span>
                 <span class="pr">· <%= stage_label(bill) %></span>
-                <span class="pbadge bb-f">△ Forum</span>
+                <span class="pbadge bb-f">△ Law</span>
               </div>
               <div class="fctx"><%= bill_sparked ? "On your docket" : "Your jurisdiction · not yet on your docket" %></div>
               <div class="icard">
@@ -1376,7 +1379,7 @@ a{text-decoration:none;color:inherit;}
               <div class="pm">
                 <span class="pn2"><%= issue.rco_slug.upcase %></span>
                 <span class="pr">· RCO</span>
-                <span class="pbadge bb-f">△ Forum</span>
+                <span class="pbadge bb-f">△ Law</span>
               </div>
               <div class="fctx"><%= issue_sparked ? "On your docket" : "Your neighborhood · not yet on your docket" %></div>
               <div class="icard">
@@ -1606,7 +1609,7 @@ a{text-decoration:none;color:inherit;}
             <div class="pm">
               <span class="pn2"><%= bill.identifier.presence || "Bill" %></span>
               <span class="pr">· <%= stage_label(bill) %></span>
-              <span class="pbadge bb-f">△ Forum</span>
+              <span class="pbadge bb-f">△ Law</span>
             </div>
             <div class="fctx"><%= bill_sparked ? "On your docket" : "Your jurisdiction · not yet on your docket" %></div>
             <div class="icard">
@@ -1657,7 +1660,7 @@ a{text-decoration:none;color:inherit;}
   <%# ── FORUM DOMAIN PANEL ─────────────────────────────────────────────────── %>
   <div id="panel-forum-domain" style="display:none">
     <div class="frm-fhead">
-      <div class="frm-fhead-title" id="frm-panel-title">△ Forum</div>
+      <div class="frm-fhead-title" id="frm-panel-title">△ Law</div>
       <div class="frm-fhead-crumb" id="frm-panel-crumb"></div>
     </div>
     <div class="frm-jur-row">
@@ -1743,7 +1746,7 @@ a{text-decoration:none;color:inherit;}
           <div class="ms-sb-step" data-s="2">Headline</div>
           <div class="ms-sb-step" data-s="3">Portfolio</div>
           <div class="ms-sb-step" data-s="4">Area</div>
-          <div class="ms-sb-step" data-s="5">Temple</div>
+          <div class="ms-sb-step" data-s="5">Wisdom</div>
           <div class="ms-sb-step" data-s="6">Live!</div>
         </div>
 
@@ -1908,7 +1911,7 @@ a{text-decoration:none;color:inherit;}
 
         <%# Step 5: Temple Contribution %>
         <div class="ms-step" id="ms-s5">
-          <div class="ms-eyebrow">Step 5 of 6 — Temple Contribution</div>
+          <div class="ms-eyebrow">Step 5 of 6 — Wisdom Contribution</div>
           <div class="ms-step-h">Share what you know</div>
           <div class="ms-step-sub">Write a tip for homeowners about your trade. Optional — providers who teach earn a credit against their platform take.</div>
           <div class="ms-field">
@@ -2042,7 +2045,7 @@ a{text-decoration:none;color:inherit;}
   <%# ── TEMPLE SUBCATEGORY PANEL ───────────────────────────────────────────── %>
   <div id="panel-temple-sub" style="display:none">
     <div class="tpl-fhead">
-      <div class="tpl-fhead-title">◯ Temple</div>
+      <div class="tpl-fhead-title">◯ Wisdom</div>
       <div class="tpl-fhead-crumb" id="tpl-crumb"></div>
     </div>
     <div id="tpl-sub-main"></div>
@@ -2640,7 +2643,7 @@ function toggleExpand(cue) {
       + '<div class="pm">'
       + '<span class="pn2">' + esc(b.identifier || 'Bill') + '</span>'
       + '<span class="pr">· ' + esc(slbl) + date + '</span>'
-      + '<span class="pbadge bb-f">△ Forum</span>'
+      + '<span class="pbadge bb-f">△ Law</span>'
       + '</div>'
       + '<div class="fctx">' + (b.sparked ? 'On your docket' : 'Your jurisdiction · not yet on your docket') + '</div>'
       + '<div class="icard">'
@@ -2728,7 +2731,7 @@ var RELIGION_CARDS = [
   {name:"Congregation Rodeph Shalom",type:"Synagogue · North Philly",kind:"prog",stars:"Open services"},
   {name:"St. Paul's Episcopal",type:"Church · Bella Vista",kind:"prog",stars:"Open services"},
   {name:"Masjid Al-Jamia",type:"Mosque · West Philly",kind:"prog",stars:"Open services"},
-  {name:"Faith communities in your area",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+  {name:"Faith communities in your area",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
 ];
 
 function renderReligion() {
@@ -2790,13 +2793,13 @@ var MKT_DOMS = [
       {name:"Mike's Handyman",type:"General repair · neighbor",kind:"nbr",stars:"4.6 · 31 reviews",location:"South Philly",svcRadius:3},
       {name:"Fix-It Philly",type:"Home repair co.",kind:"biz",stars:"4.5 · 58 reviews"},
       {name:"PHL Whole Home Repair",type:"City grant program",kind:"prog",stars:"Income-eligible"},
-      {name:"Before you hire — contractor guide",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Before you hire — contractor guide",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Roofing",cards:[
       {name:"Apex Roofing Co.",type:"Licensed contractor",kind:"biz",stars:"4.8 · 94 reviews"},
       {name:"Dave's Roofing & Gutters",type:"Neighbor contractor",kind:"nbr",stars:"4.6 · 31 reviews"},
       {name:"PHL Whole Home Repair",type:"City grant — up to $24k",kind:"prog",stars:"Income-eligible"},
-      {name:"Roofing permits — what's required",type:"FORA guide · L&I code",kind:"fora",stars:"Forum brief"}
+      {name:"Roofing permits — what's required",type:"FORA guide · L&I code",kind:"fora",stars:"Law brief"}
     ]},
     {label:"Plumbing",cards:[
       {name:"South Philly Plumbing",type:"Licensed plumber",kind:"biz",stars:"4.7 · 66 reviews"},
@@ -2810,7 +2813,7 @@ var MKT_DOMS = [
     {label:"Real estate",cards:[
       {name:"Redfin Philadelphia",type:"Brokerage",kind:"biz",stars:"4.6 · 200+ reviews"},
       {name:"Philadelphia Housing Authority",type:"Affordable housing programs",kind:"prog",stars:"Income-eligible"},
-      {name:"Know your homebuyer rights",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Know your homebuyer rights",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Architecture & design",cards:[
       {name:"Studio Karim",type:"Residential architect",kind:"biz",stars:"5.0 · 12 reviews"},
@@ -2818,7 +2821,7 @@ var MKT_DOMS = [
     ]},
     {label:"Pest control",cards:[
       {name:"BugOut Philly",type:"Licensed exterminator",kind:"biz",stars:"4.7 · 81 reviews"},
-      {name:"Tenant pest rights — Philadelphia",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Tenant pest rights — Philadelphia",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Moving",cards:[
       {name:"Two Guys Moving",type:"Local movers",kind:"nbr",stars:"4.5 · 43 reviews",location:"South Philly",svcRadius:8},
@@ -2837,12 +2840,12 @@ var MKT_DOMS = [
     ]},
     {label:"Food access programs",cards:[
       {name:"Philly Food Policy Council",type:"Food access resources",kind:"prog",stars:"Free"},
-      {name:"SNAP — how to apply",type:"FORA guide · eligibility",kind:"fora",stars:"Temple brief"},
+      {name:"SNAP — how to apply",type:"FORA guide · eligibility",kind:"fora",stars:"Wisdom brief"},
       {name:"Share Food Program",type:"Food pantry network",kind:"prog",stars:"Free distribution"}
     ]},
     {label:"Food scrap & sustainability",cards:[
       {name:"Philly Compost",type:"City composting program",kind:"prog",stars:"Free pickup"},
-      {name:"Food scrap drop-off locations",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Food scrap drop-off locations",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]}
   ]},
   {icon:"ti-heart-rate-monitor",label:"Health & body",subs:[
@@ -2854,7 +2857,7 @@ var MKT_DOMS = [
     {label:"Mental health",cards:[
       {name:"Open Path Therapy",type:"Affordable counseling",kind:"prog",stars:"$30–$80/session"},
       {name:"DBHIDS Crisis Line",type:"24/7 behavioral health crisis",kind:"prog",stars:"Free · 24/7"},
-      {name:"Understanding therapy options",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Understanding therapy options",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Fitness & bodywork",cards:[
       {name:"Bella Vista Yoga",type:"Fitness studio",kind:"biz",stars:"4.8 · 54 reviews"},
@@ -2866,9 +2869,9 @@ var MKT_DOMS = [
       {name:"Salon Nour",type:"Full-service salon",kind:"biz",stars:"4.7 · 97 reviews"}
     ]},
     {label:"Religious & spiritual services",cards:[
-      {name:"Spiritual direction — find a director",type:"FORA guide",kind:"fora",stars:"Temple brief"},
-      {name:"Chaplaincy & pastoral care",type:"FORA guide",kind:"fora",stars:"Temple brief"},
-      {name:"Religion & Spirituality",type:"FORA guide · Temple",kind:"fora",stars:"Temple brief"}
+      {name:"Spiritual direction — find a director",type:"FORA guide",kind:"fora",stars:"Wisdom brief"},
+      {name:"Chaplaincy & pastoral care",type:"FORA guide",kind:"fora",stars:"Wisdom brief"},
+      {name:"Religion & Spirituality",type:"FORA guide · Wisdom",kind:"fora",stars:"Wisdom brief"}
     ]}
   ]},
   {icon:"ti-car",label:"Getting around",subs:[
@@ -2934,7 +2937,7 @@ var MKT_DOMS = [
     ]},
     {label:"Transit & rideshare",cards:[
       {name:"SEPTA Key Assist",type:"Reduced fare program",kind:"prog",stars:"Income-eligible"},
-      {name:"SEPTA trip planning",type:"FORA guide · routes & passes",kind:"fora",stars:"Temple brief"}
+      {name:"SEPTA trip planning",type:"FORA guide · routes & passes",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Moving & logistics",cards:[
       {name:"Two Guys Moving",type:"Local movers",kind:"nbr",stars:"4.5 · 43 reviews"},
@@ -2950,13 +2953,13 @@ var MKT_DOMS = [
       {name:"Bright Beginnings Daycare",type:"Licensed center",kind:"biz",stars:"4.9 · 61 reviews"},
       {name:"CCIS Philadelphia",type:"Childcare subsidy program",kind:"prog",stars:"Income-eligible"},
       {name:"Sara (neighbor babysitter)",type:"Weeknights and weekends",kind:"nbr",stars:"5.0 · 12 reviews"},
-      {name:"Childcare options in Philly",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Childcare options in Philly",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Elder care",cards:[
       {name:"COSA Elder Services",type:"In-home elder support",kind:"prog",stars:"Free assessment"},
       {name:"Philadelphia Corporation for Aging",type:"Benefits, meals, transport",kind:"prog",stars:"215-765-9040"},
       {name:"Grace (in-home caregiver)",type:"10 yrs experience",kind:"nbr",stars:"5.0 · 7 reviews"},
-      {name:"Elder care rights in Philadelphia",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Elder care rights in Philadelphia",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Youth & after-school",cards:[
       {name:"Big Brothers Big Sisters",type:"Youth mentorship",kind:"prog",stars:"Free enrollment"},
@@ -2995,24 +2998,24 @@ var MKT_DOMS = [
     {label:"Trades & apprenticeships",cards:[
       {name:"YouthBuild Philadelphia",type:"Trade certification · free",kind:"prog",stars:"Free enrollment"},
       {name:"UA Local 690 — Plumbers",type:"Union apprenticeship",kind:"prog",stars:"Apply online"},
-      {name:"Trade licensing in PA",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Trade licensing in PA",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]}
   ]},
   {icon:"ti-briefcase",label:"Work & livelihood",subs:[
     {label:"Legal aid",cards:[
       {name:"Community Legal Services",type:"Free civil legal aid",kind:"prog",stars:"Walk-in hours"},
       {name:"SeniorLAW Center",type:"Free legal help for 60+",kind:"prog",stars:"Free"},
-      {name:"Know your tenant rights",type:"FORA guide",kind:"fora",stars:"Temple brief"},
+      {name:"Know your tenant rights",type:"FORA guide",kind:"fora",stars:"Wisdom brief"},
       {name:"James Okafor — Paralegal",type:"Document prep",kind:"nbr",stars:"4.8 · 9 reviews"}
     ]},
     {label:"Jobs & workforce",cards:[
       {name:"Philly Works",type:"Workforce development",kind:"prog",stars:"Free placement"},
       {name:"CareerLink Philadelphia",type:"State workforce center",kind:"prog",stars:"Free services"},
-      {name:"Unemployment benefits — how to apply",type:"FORA guide",kind:"fora",stars:"Temple brief"}
+      {name:"Unemployment benefits — how to apply",type:"FORA guide",kind:"fora",stars:"Wisdom brief"}
     ]},
     {label:"Business formation",cards:[
       {name:"Philly SCORE",type:"Free small biz mentoring",kind:"prog",stars:"Free coaching"},
-      {name:"Starting a business in Philadelphia",type:"FORA guide · L&I, taxes",kind:"fora",stars:"Temple brief"},
+      {name:"Starting a business in Philadelphia",type:"FORA guide · L&I, taxes",kind:"fora",stars:"Wisdom brief"},
       {name:"James Okafor — CPA",type:"Small business accounting",kind:"nbr",stars:"4.8 · 19 reviews"}
     ]},
     {label:"Professional services",cards:[
@@ -3551,7 +3554,7 @@ document.addEventListener('click', function(e) {
   var MKT_LAYERS = {
     'Auto repair': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philly Car Clinic \u2014 free community repair days', sub:'Monthly event at Kensington Yards. Volunteer mechanics help with oil changes, brake checks, and diagnosis. Open to all residents. Next date: July 12.', tag:'Community'},
           {title:'What to know before you take your car in', sub:'How to read a repair estimate, what questions to ask, how to verify a shop\u2019s PA license, and when to get a second opinion.', tag:'Guide'},
@@ -3559,7 +3562,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA EV Rebate Program \u2014 up to $2,000 back on electric vehicle purchase', sub:'Pennsylvania DCED program. Income-eligible residents can receive a rebate on purchase or lease of a new EV. Applications open quarterly.', tag:'Program'},
           {title:'H.B. 1423 \u2014 Diesel fuel additive requirements update (PA, 2026)', sub:'Passed committee June 2026. Amends diesel emissions standards for vehicles registered in PA. Would require DEF fluid use in vehicles over 8,500 lbs GVWR as of Jan 2027.', tag:'Bill \u00b7 State'},
@@ -3570,7 +3573,7 @@ document.addEventListener('click', function(e) {
     },
     'Handyman & repair': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Rebuilding Together Philadelphia \u2014 free home repairs for low-income homeowners', sub:'Nonprofit sends licensed volunteers to repair roofs, fix electrical hazards, and address accessibility needs. Priority given to seniors and people with disabilities. Applications open each January.', tag:'Resource'},
           {title:'What to know before hiring a handyman in PA', sub:'Pennsylvania does not require a general handyman license for repairs under $5,000, but contractors doing plumbing, electrical, or HVAC work must hold trade-specific licenses. Always ask for proof of insurance.', tag:'Guide'},
@@ -3578,7 +3581,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Basic Systems Repair Program \u2014 grants up to $24,500', sub:'PHDC program funded through CDBG dollars. Covers HVAC, plumbing, and electrical system failures in owner-occupied homes. Income limit 80% AMI. Applications accepted year-round subject to funding availability.', tag:'Program'},
           {title:'S.B. 742 \u2014 Home Improvement Consumer Protection Act amendments (PA, 2025)', sub:'Strengthens requirements for written contracts on jobs over $500. Requires contractors to disclose HIC registration number on all ads and bids. Passed Senate October 2025.', tag:'Bill \u00b7 State'},
@@ -3589,7 +3592,7 @@ document.addEventListener('click', function(e) {
     },
     'Roofing': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'How to spot storm damage before a contractor does', sub:'After heavy rain or hail, check gutters for granule buildup, look for lifted flashing around chimneys, and photograph any visible cracks. Document everything before calling a roofer.', tag:'Guide'},
           {title:'PA Attorney General \u2014 storm chaser contractor warnings', sub:'After major storms, predatory roofers work door-to-door in Philly neighborhoods. The AG\u2019s office maintains a roofing contractor complaint database and issues seasonal consumer alerts.', tag:'Rights'},
@@ -3597,7 +3600,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia DHCD \u2014 Roof Repair & Weatherization Assistance', sub:'Federally funded weatherization program that includes roof assessment and minor repair. Combines with WAP (Weatherization Assistance Program) funding administered by DCED. Income limit 200% federal poverty level.', tag:'Program'},
           {title:'H.B. 2201 \u2014 Roofing Contractor Registration Act (PA, 2026)', sub:'Introduced February 2026. Would create statewide roofing contractor registration, require $100,000 liability insurance, and establish a consumer protection fund for failed roofing projects.', tag:'Bill \u00b7 State'},
@@ -3608,7 +3611,7 @@ document.addEventListener('click', function(e) {
     },
     'Plumbing': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'How to shut off water in a Philadelphia rowhome', sub:'Most rowhomes have the main shutoff inside the basement near the front wall. Know where it is before a pipe bursts. The street-level curb stop requires a T-bar tool \u2014 Philadelphia Water will shut it from outside in emergencies.', tag:'How-to'},
           {title:'Philadelphia Water Department \u2014 Lead Service Line Replacement Program', sub:'PWD is replacing lead service lines at no cost to homeowners. Check your line material at water.phila.gov/lsl. Replacement typically takes one day; temporary water service is provided.', tag:'Resource'},
@@ -3616,7 +3619,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Water \u2014 Tiered Assistance Program (TAP)', sub:'Income-based discount on water and sewer bills. Eligible households pay 2\u20134% of monthly income rather than metered rate. Apply online or at 1101 Market St. Enrollment open year-round.', tag:'Program'},
           {title:'H.B. 1887 \u2014 Lead Plumbing Disclosure Act (PA, 2025)', sub:'Requires sellers and landlords to disclose known lead service lines or lead solder in plumbing before sale or lease. Signed into law November 2025. Phased enforcement begins January 2026.', tag:'Bill \u00b7 State'},
@@ -3627,7 +3630,7 @@ document.addEventListener('click', function(e) {
     },
     'Electrical': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Signs your Philadelphia rowhome needs a panel upgrade', sub:'Flickering lights, frequently tripping breakers, or a fuse box instead of a circuit breaker panel are red flags. Most rowhomes built before 1970 were wired for 60-amp service \u2014 modern households need 150\u2013200 amp.', tag:'Guide'},
           {title:'PECO electrical safety resources \u2014 free home energy assessments', sub:'PECO offers free in-home energy assessments for eligible customers. Technicians check wiring safety, identify hazards, and recommend efficiency upgrades. Schedule at peco.com or call 1-800-494-4000.', tag:'Resource'},
@@ -3635,7 +3638,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PECO LOOP Program \u2014 Low-Income Usage Reduction Program', sub:'Provides free energy efficiency upgrades including LED lighting, smart thermostats, and weatherization to income-eligible households. Reduces bills by an average of $250/year. Apply at peco.com/loop.', tag:'Program'},
           {title:'Federal Investment Tax Credit \u2014 30% back on home battery & solar installations', sub:'IRA Section 25D credit covers solar panels and battery storage installed on your primary residence. Applies to both purchase and installation costs. Claimed on federal Form 5695.', tag:'Federal'},
@@ -3646,7 +3649,7 @@ document.addEventListener('click', function(e) {
     },
     'Real estate': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia homebuyer resources \u2014 where to start', sub:'The Philadelphia Home Buy Now program connects first-time buyers with HUD-approved counseling agencies. Free sessions cover credit readiness, mortgage options, and neighborhood market conditions. philahome.org.', tag:'Resource'},
           {title:'Understanding the Philadelphia property tax system', sub:'Philly uses the Actual Value Initiative (AVI) to assess properties. Your assessed value should equal market value. If it doesn\u2019t, you have the right to appeal at the BRT. Appeals must be filed by the first Monday of October.', tag:'Guide'},
@@ -3654,7 +3657,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia First Time Homebuyer Forgivable Loan \u2014 up to $10,000', sub:'City program through PHDC provides a 0% interest forgivable loan for down payment and closing costs. Forgiven after 15 years of owner-occupancy. Income limit 80% AMI. Apply through participating lenders.', tag:'Program'},
           {title:'Philadelphia Bill No. 230458 \u2014 Longtime Owner Occupant Program (LOOP) expansion', sub:'2023 ordinance expanded LOOP eligibility to homeowners with incomes up to 150% AMI. Caps real estate tax increases for qualifying long-term owner-occupants who meet residency and income criteria.', tag:'City ordinance'},
@@ -3665,7 +3668,7 @@ document.addEventListener('click', function(e) {
     },
     'Architecture & design': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Architecture Center \u2014 public programs and walking tours', sub:'The Center at 1218 Arch St offers free and low-cost public programs, neighborhood walking tours, and school partnerships exploring Philly\u2019s built environment. Open to all residents.', tag:'Community'},
           {title:'When do you need an architect vs. a designer in Philadelphia?', sub:'Philadelphia L&I requires architect-stamped drawings for structural changes, additions over 500 sq ft, and change-of-use permits. Interior renovations without structural work can often use a designer or design-build contractor.', tag:'Guide'},
@@ -3673,7 +3676,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Historic Preservation Tax Credit \u2014 25% state credit', sub:'PA Historic Preservation Tax Credit (HPTC) provides 25% of qualified rehabilitation costs for certified historic structures. Federal Historic Tax Credit stacks at 20%. Administered by PHMC.', tag:'Program'},
           {title:'Philadelphia Zoning Code \u2014 2023 accessory dwelling unit amendments', sub:'Bill No. 220665 amended the Zoning Code to permit ADUs by-right in R-1 through R-10 districts on lots over 1,600 sq ft. Design standards set maximum height and required setbacks for accessory structures.', tag:'City ordinance'},
@@ -3684,7 +3687,7 @@ document.addEventListener('click', function(e) {
     },
     'Pest control': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Rat Patrol \u2014 free inspections and block-level coordination', sub:'The city\u2019s rat abatement program offers free property inspections, bait station installation, and community cleanup coordination. Request service at phila.gov/rat-patrol or call 311.', tag:'Resource'},
           {title:'What Philadelphia renters can do when landlords ignore pest problems', sub:'Under Philadelphia Housing Code Section 9-3901, landlords are responsible for pest-free conditions. Tenants can report to L&I, who will inspect and issue violations. Document everything in writing first.', tag:'Rights'},
@@ -3692,7 +3695,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Vector Control \u2014 free bed bug encasements for low-income households', sub:'City Department of Public Health Vector Control unit distributes mattress and box spring encasements and provides bed bug education to income-qualified residents. Call 215-685-9000 to schedule.', tag:'Program'},
           {title:'Philadelphia Bill No. 210112 \u2014 Pest Management Disclosure for rental units', sub:'Ordinance requires landlords to disclose any known pest infestation history at initial lease signing. Failure to disclose is grounds for lease termination without penalty under Philadelphia tenant law.', tag:'City ordinance'},
@@ -3703,7 +3706,7 @@ document.addEventListener('click', function(e) {
     },
     'Moving': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia moving day tips \u2014 permits, parking, and rowhome logistics', sub:'The City requires a moving truck parking permit from the Streets Department for any large vehicle parked in a no-parking zone during a move. Apply online at least 5 days in advance at phila.gov/permits.', tag:'How-to'},
           {title:'How to vet a moving company in Pennsylvania', sub:'PA movers must register with PUC and hold a PUC certificate. Verify at puc.pa.gov. Out-of-state movers need FMCSA registration. Never pay more than 10% over a binding estimate without an amended agreement.', tag:'Guide'},
@@ -3711,7 +3714,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA PUC \u2014 Household Goods Carrier registration requirements', sub:'Pennsylvania movers must hold a PUC Certificate of Public Convenience. PUC publishes a consumer guide on mover rights including maximum liability and required inventory forms. File complaints at puc.pa.gov.', tag:'Program'},
           {title:'Philadelphia Moving Truck Permit \u2014 Streets Department', sub:'City ordinance requires permits for moving trucks in restricted zones. Permits cost $20/day per block. Double-parking without a permit is subject to a $76 fine plus tow. Online application at phila.gov/streets.', tag:'City ordinance'},
@@ -3722,7 +3725,7 @@ document.addEventListener('click', function(e) {
     },
     'Restaurants': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia restaurant inspection scores \u2014 how to read them', sub:'The Philadelphia Department of Public Health posts inspection results at phila.gov/foodprotection. Scores are not a simple letter grade; look at the violation categories (critical vs. non-critical) for a full picture.', tag:'Guide'},
           {title:'Philly restaurant weeks and community dining events', sub:'Philadelphia Restaurant Week runs twice yearly (January and September) with fixed-price menus at hundreds of restaurants. The Black Restaurant Week (typically March) spotlights Black-owned dining across the region.', tag:'Community'},
@@ -3730,7 +3733,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Outdoor Dining Program \u2014 sidewalk caf\u00e9 permits', sub:'L&I issues Sidewalk Caf\u00e9 Permits for outdoor seating in the public right-of-way. Annual fee based on square footage. Permanent parklet permits available through Streets Department. Applications at phila.gov/li.', tag:'City program'},
           {title:'Philadelphia Bill No. 220557 \u2014 third-party delivery fee cap', sub:'Ordinance caps food delivery platform commissions at 15% during declared emergencies and established a permanent 20% cap on all third-party platform fees for Philadelphia restaurants. Effective 2023.', tag:'City ordinance'},
@@ -3741,7 +3744,7 @@ document.addEventListener('click', function(e) {
     },
     'Local producers': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia farmers market directory \u2014 seasonal and year-round', sub:'The Philly Foodworks and PCCY maintain a citywide farmers market map. Year-round markets include Reading Terminal Market and Clark Park (Germantown). Seasonal markets operate in nearly every neighborhood from May\u2013November.', tag:'Resource'},
           {title:'How to find certified local producers in the Philadelphia region', sub:'The PA Preferred program certifies products grown or produced in Pennsylvania. Look for the PA Preferred logo at markets. The Southeastern PA Food System maps producers within 150 miles of Philly.', tag:'Guide'},
@@ -3749,7 +3752,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'SNAP at farmers markets \u2014 Double Up Food Bucks program', sub:'The Fair Food Network\u2019s Double Up Food Bucks doubles SNAP dollars spent at participating Philadelphia farmers markets, up to $20/day. Over 30 Philly-area markets participate. Details at doubleupfoodbucks.org.', tag:'Program'},
           {title:'PA Farm Bill \u2014 Beginning Farmer Tax Credit (Act 14 of 2024)', sub:'PA Act 14 provides income tax credits to established farmers who sell or lease land or equipment to beginning farmers. Helps new producers get access to farmland in the Philadelphia agricultural belt.', tag:'Bill \u00b7 State'},
@@ -3760,7 +3763,7 @@ document.addEventListener('click', function(e) {
     },
     'Food access programs': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia food pantry finder \u2014 no paperwork required', sub:'Philabundance\u2019s pantry finder at philabundance.org/find-food shows locations, hours, and eligibility requirements. Many pantries are client-choice and require no proof of income. Call 215-339-0900 for same-day needs.', tag:'Resource'},
           {title:'How to apply for SNAP benefits in Pennsylvania', sub:'Apply online at compass.state.pa.us, by phone at 1-800-692-7462, or in person at your local CAO. Most households are approved within 30 days; expedited 7-day processing available for households with under $150 in income.', tag:'How-to'},
@@ -3768,7 +3771,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'WIC \u2014 Women, Infants & Children \u2014 PA program details', sub:'PA WIC provides supplemental foods, nutrition education, and referrals for pregnant and postpartum women and children under 5. Philly has 12 WIC sites. Income limit 185% federal poverty level. Apply at pawic.com.', tag:'Program'},
           {title:'Philadelphia City Council Resolution 230723 \u2014 food insecurity emergency declaration', sub:'2023 resolution directed the Office of Homeless Services and DBHIDS to coordinate emergency food distribution through neighborhood anchor institutions. Established the Neighborhood Food Access Fund.', tag:'City program'},
@@ -3779,7 +3782,7 @@ document.addEventListener('click', function(e) {
     },
     'Food scrap & sustainability': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia composting drop-off sites \u2014 where and what\u2019s accepted', sub:'The Philly Compost Initiative operates drop-off sites at several farmers markets and community gardens. Accepts fruit and vegetable scraps, coffee grounds, and eggshells. Meat and dairy not accepted. Find sites at phila.gov/compost.', tag:'Resource'},
           {title:'How to start a block-level composting program in your neighborhood', sub:'The Sanitation Convenience Centers accept green waste year-round. Block associations can apply to the Streets Department for a communal composting bin through the Community Composting Program. Minimal paperwork required.', tag:'How-to'},
@@ -3787,7 +3790,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Zero Waste Plan 2035 \u2014 food scrap diversion targets', sub:'The City\u2019s official sustainability plan commits to 90% diversion of organics from landfill by 2035. Includes mandatory food scrap separation for commercial food establishments generating over 1 ton/week by 2027.', tag:'City program'},
           {title:'Philadelphia Bill No. 230145 \u2014 food waste reporting for large generators', sub:'Requires grocery stores, food distributors, and large restaurants to report annual food waste diversion tonnage to the Streets Department. First reports due January 2025. Enforcement begins 2026.', tag:'City ordinance'},
@@ -3798,7 +3801,7 @@ document.addEventListener('click', function(e) {
     },
     'Medical & dental': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Health Centers \u2014 sliding-scale primary care for all residents', sub:'The City operates 9 neighborhood health centers providing primary care, dental, and behavioral health services on a sliding-scale fee based on income. No insurance required. Find your nearest center at phila.gov/healthcenters.', tag:'Resource'},
           {title:'How to find a dentist who accepts Medicaid in Philadelphia', sub:'Pennsylvania\u2019s Medicaid dental benefit (Medical Assistance) covers preventive, restorative, and emergency care for adults and children. Search participating providers at findahealthcenter.hrsa.gov or call 1-800-348-4040.', tag:'Guide'},
@@ -3806,7 +3809,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Pennsylvania Medicaid (Medical Assistance) \u2014 how to enroll', sub:'PA Medical Assistance covers low-income adults, children, pregnant women, and people with disabilities. Apply at compass.state.pa.us or through a CAO. CHIP covers uninsured children in families up to 317% FPL.', tag:'Program'},
           {title:'Philadelphia Healthy Philadelphia Initiative \u2014 school-based health centers', sub:'City program funds health centers in 30+ Philadelphia public schools providing primary care, dental, and mental health services to students regardless of insurance status. Operated by CHOP, Temple, and Jefferson.', tag:'City program'},
@@ -3817,7 +3820,7 @@ document.addEventListener('click', function(e) {
     },
     'Mental health': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia crisis resources \u2014 what to call and when', sub:'Call 988 (Suicide & Crisis Lifeline) for mental health crises. Philadelphia Crisis Line: 215-685-6440 (24/7). Behavioral Health Crisis Mobile Team dispatches to your location as an alternative to police response. Text HELLO to 741741.', tag:'Resource'},
           {title:'How to find a therapist who takes your insurance in Philadelphia', sub:'Psychology Today\u2019s therapist finder and Open Path Collective list Philadelphia therapists by insurance and sliding-scale fee. Community Behavioral Health (CBH) is the Medicaid behavioral health manager for Philadelphia \u2014 call 888-545-2600.', tag:'Guide'},
@@ -3825,7 +3828,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA Act 106 of 1989 \u2014 mental health parity in insurance', sub:'Requires PA-regulated insurers to cover mental health and substance use disorder treatment on equal terms with medical benefits. File complaints for parity violations with the PA Insurance Department at 1-877-881-6388.', tag:'Bill \u00b7 State'},
           {title:'Philadelphia DBHIDS \u2014 Community Behavioral Health sliding-scale access', sub:'Philadelphia residents enrolled in Medicaid receive behavioral health services through CBH at no cost. Services include therapy, psychiatry, crisis intervention, and peer support. Referral not required for most services.', tag:'Program'},
@@ -3836,7 +3839,7 @@ document.addEventListener('click', function(e) {
     },
     'Fitness & bodywork': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Parks & Recreation \u2014 free and low-cost fitness programs', sub:'PPR operates fitness centers at recreation centers across all neighborhoods. Annual membership is $40 for adults. Free fitness classes, swim lessons, and sports leagues run year-round. Find your rec center at phila.gov/rec.', tag:'Resource'},
           {title:'Community yoga and movement events in Philadelphia', sub:'Philly Free Yoga and neighborhood rec centers host free outdoor yoga in Clark Park, Rittenhouse Square, and Mander Recreation Center from May through September. No registration required.', tag:'Community'},
@@ -3844,7 +3847,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Recreation Financial Assistance Program \u2014 reduced-fee memberships', sub:'Income-eligible residents can receive reduced or waived fees for PPR programs including fitness centers, swim classes, and camp programs. Apply at any recreation center with proof of income.', tag:'City program'},
           {title:'PA Massage Therapy Practice Act \u2014 2024 continuing education updates', sub:'Act 39 of 2024 updated CEU requirements for PA licensed massage therapists to include 3 hours of ethics training per two-year cycle. New applications now require background clearances.', tag:'Bill \u00b7 State'},
@@ -3855,7 +3858,7 @@ document.addEventListener('click', function(e) {
     },
     'Personal care': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia cosmetology licensing \u2014 what practitioners must have', sub:'All cosmetologists, barbers, estheticians, and nail technicians in PA must be licensed through the State Board of Cosmetology. Verify any salon or individual provider at license.pa.gov before services.', tag:'Guide'},
           {title:'Community barbershop and beauty events in Philadelphia', sub:'Several Philadelphia barbershops and salons host free or reduced-cost community cut days, often tied to back-to-school season. The Barbershop Books program at local shops also provides literacy resources for children.', tag:'Community'},
@@ -3863,7 +3866,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA Cosmetology Law \u2014 Sanitation Code updates (2024)', sub:'PA Board of Cosmetology issued updated sanitation guidelines effective January 2024. Requires single-use items for each client, documented disinfection logs, and annual sanitation training for all licensed operators.', tag:'Bill \u00b7 State'},
           {title:'Philadelphia Workforce Development \u2014 free cosmetology training programs', sub:'Philadelphia Works funds subsidized cosmetology and barbering training programs at several city institutions including community colleges and licensed private schools. Income-eligible residents can receive full tuition support.', tag:'City program'},
@@ -3874,7 +3877,7 @@ document.addEventListener('click', function(e) {
     },
     'Transit & rideshare': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'SEPTA Key card \u2014 how to get one and load it in Philadelphia', sub:'SEPTA Key cards replace tokens and paper transfers. Purchase at any SEPTA station, Wawa, or ACME. The Convenience card works without registration; the Registered card protects your balance. Load at septakey.org or at kiosks.', tag:'How-to'},
           {title:'Low-income transit programs in Philadelphia', sub:'SEPTA\u2019s Reduced Fare Program offers 50% discounts for seniors over 65, people with disabilities, and Medicare card holders. The Key Assist program provides subsidized Key cards to income-eligible riders. Apply at transit.phila.gov.', tag:'Resource'},
@@ -3882,7 +3885,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'SEPTA Key Assist \u2014 subsidized transit for low-income Philadelphians', sub:'City-funded program in partnership with SEPTA provides subsidized monthly TransPasses to income-eligible Philadelphia residents. Administered through Community Legal Services and participating social service agencies.', tag:'Program'},
           {title:'Philadelphia Bill No. 220856 \u2014 Congestion pricing study authorization', sub:'City Council resolution directed the Office of Transportation to study congestion-based pricing for Center City and commissioned a report on equity impacts for low-income commuters and transit-dependent households.', tag:'City ordinance'},
@@ -3893,7 +3896,7 @@ document.addEventListener('click', function(e) {
     },
     'Moving & logistics': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia moving logistics \u2014 navigating narrow streets and parking', sub:'Many Philly streets are too narrow for large moving trucks. Scope the route in advance and note any low bridges or one-way streets. The Streets Department\u2019s online map shows street width restrictions and loading zone locations.', tag:'Guide'},
           {title:'Freight and delivery resources for small Philadelphia businesses', sub:'The Philadelphia Commerce Department\u2019s Delivery Innovation Task Force has published guidance on last-mile delivery for small businesses including approved loading zone use and cargo bike delivery options in Center City.', tag:'Resource'},
@@ -3901,7 +3904,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Streets Department \u2014 Loading Zone and Delivery Management Program', sub:'Commercial delivery operators can apply for designated loading zone permits in high-density commercial corridors. Program launched as part of the City\u2019s Curbside Management Plan. Fee schedule at phila.gov/streets.', tag:'City program'},
           {title:'PA PUC \u2014 freight broker and household goods mover regulations', sub:'PA requires all for-hire motor carriers operating within the state to hold a PUC Certificate of Public Convenience. Brokers arranging moves must register separately. Consumer complaint process at puc.pa.gov.', tag:'Program'},
@@ -3912,7 +3915,7 @@ document.addEventListener('click', function(e) {
     },
     'Vehicle services': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia street sweeping schedule \u2014 and how to avoid tickets', sub:'The Streets Department posts sweeping schedules at phila.gov/streets. Alternate-side parking rules are enforced by PPA. Sign up for text alerts through the PPA app to avoid $51 cleaning violation tickets.', tag:'How-to'},
           {title:'PA vehicle inspection requirements \u2014 what you need to know', sub:'Pennsylvania requires annual safety inspections and biennial emissions inspections for most vehicles. Stickers expire at the end of the month shown. Driving with an expired sticker is a $25 fine plus court costs.', tag:'Guide'},
@@ -3920,7 +3923,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA Vehicle Code \u2014 inspection station licensing and consumer rights', sub:'PennDOT licenses all PA vehicle inspection stations. If a station fails your vehicle, you have the right to a reinspection at a different station. File complaints about inspection fraud at 1-800-932-4600.', tag:'Rights'},
           {title:'Philadelphia Parking Authority \u2014 residential permit parking program', sub:'RPP allows residents in designated zones to park without time limits. Annual permit costs $35. Applications processed online at philapark.org. Zone maps updated annually based on community petitions.', tag:'City program'},
@@ -3931,7 +3934,7 @@ document.addEventListener('click', function(e) {
     },
     'Childcare': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia childcare subsidy \u2014 who qualifies and how to apply', sub:'The Child Care Works subsidy program pays childcare costs for income-eligible Philadelphia families. Income limit is 180% FPL. Apply through OCDEL at compass.state.pa.us. Waitlists exist; apply early.', tag:'Resource'},
           {title:'How to evaluate a licensed childcare provider in Philadelphia', sub:'All licensed childcare centers and family daycare homes in PA are rated through Keystone STARS (1\u20134 stars). Inspection records and complaint history are public at findchildcare.pa.gov. Always verify the provider\u2019s license.', tag:'Guide'},
@@ -3939,7 +3942,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Child Care Works \u2014 PA subsidy program for income-eligible families', sub:'State-funded subsidy covers full or partial childcare costs at licensed providers. Philadelphia administers through the Office of Children and Families. Families pay a sliding-scale copay based on income. Apply at compass.state.pa.us.', tag:'Program'},
           {title:'Philadelphia Universal Pre-K \u2014 PHLpreK expansion', sub:'PHLpreK provides free, high-quality pre-K to Philadelphia 3- and 4-year-olds whose families earn up to 300% FPL. Funded through the Philadelphia Beverage Tax. Over 3,000 seats across 200+ provider sites. Apply at phila.gov/phlprek.', tag:'City program'},
@@ -3950,7 +3953,7 @@ document.addEventListener('click', function(e) {
     },
     'Elder care': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Corporation for Aging \u2014 services for residents 60 and older', sub:'PCA is the Area Agency on Aging for Philadelphia. Services include in-home care, Meals on Wheels, caregiver support, benefits counseling, and protective services. Call the helpline at 215-765-9040 (M\u2013F 8am\u20136pm).', tag:'Resource'},
           {title:'How to spot elder financial abuse in Philadelphia', sub:'Financial abuse is the most common form of elder abuse in PA. Signs include unusual bank transactions, unpaid bills, or sudden changes to legal documents. Report to PCA\u2019s Protective Services at 215-765-9040 or APS at 1-800-490-8505.', tag:'Guide'},
@@ -3958,7 +3961,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA PENNCARE \u2014 home and community-based waiver programs for older adults', sub:'The PA Department of Human Services administers OBRA and COMMCARE waivers providing in-home services (personal care, adult day, home modifications) to Medicaid-eligible seniors as an alternative to nursing home placement.', tag:'Program'},
           {title:'Philadelphia Property Tax Freeze for seniors \u2014 Senior Citizen Tax Freeze', sub:'Philadelphia homeowners 65+ with incomes under $33,500 can freeze their property tax at current assessment. Freezes do not accumulate; the current bill stays flat indefinitely while enrolled. Apply at phila.gov/otr.', tag:'City program'},
@@ -3969,7 +3972,7 @@ document.addEventListener('click', function(e) {
     },
     'Youth & after-school': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Out-of-School Time \u2014 finding after-school programs near you', sub:'The City\u2019s OST program funds after-school and summer enrichment at over 200 sites across Philadelphia. Programs are free or low-cost for income-eligible families. Search at phila.gov/ost or call 215-685-1830.', tag:'Resource'},
           {title:'Summer camp and recreation options for Philadelphia youth', sub:'Philadelphia Parks & Recreation runs summer camps at 25+ recreation centers across the city. Fee assistance is available. The Fairmount Park Conservancy\u2019s camp scholarship fund helps cover costs for families in need.', tag:'Community'},
@@ -3977,7 +3980,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia 21st Century Community Learning Centers grants', sub:'Federally funded after-school and summer program grants administered through PDE. Philadelphia schools and nonprofits apply for 3-year grants to run evidence-based OST programs. Priority for high-poverty schools.', tag:'Federal'},
           {title:'Philadelphia Youth Commission \u2014 Youth Grants Program', sub:'City grants up to $5,000 for youth-led projects and organizations serving Philadelphia young people ages 14\u201324. Applications open annually in winter. Details at phila.gov/youth.', tag:'City program'},
@@ -3988,7 +3991,7 @@ document.addEventListener('click', function(e) {
     },
     'Pets': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'ACCT Philly \u2014 adoption, low-cost vet care, and surrender resources', sub:'ACCT Philly (Animal Care & Control Team) is the City\u2019s open-admission shelter. Offers adoptions, low-cost spay/neuter, community cat programs, and pet food pantry. Located at 111 W. Hunting Park Ave. acctphilly.org.', tag:'Resource'},
           {title:'Low-cost veterinary care in Philadelphia \u2014 where to find it', sub:'The Pennsylvania SPCA and ACCT offer low-cost vaccine clinics and wellness services. Red Paw Emergency Relief Team provides emergency vet care for pets of people facing housing instability. Many vet schools offer discounted care.', tag:'Resource'},
@@ -3996,7 +3999,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Dog License \u2014 annual registration requirement', sub:'Philadelphia dog owners must license their dog annually through ACCT Philly. Fee is $10 for spayed/neutered dogs, $35 unaltered. Revenue supports animal control operations. Unlicensed dogs subject to $300 fine.', tag:'City program'},
           {title:'PA Dog Law \u2014 Bureau of Dog Law Enforcement regulations', sub:'The PA Department of Agriculture enforces the Dog Law (3 Pa.C.S. \u00a7 459) governing kennel licensing, dangerous dog hearings, and cruelty investigations. File complaints about dangerous or mistreated dogs at 1-800-698-6423.', tag:'Bill \u00b7 State'},
@@ -4007,7 +4010,7 @@ document.addEventListener('click', function(e) {
     },
     'Clothing & tailoring': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia thrift and consignment shops by neighborhood', sub:'Philly has a strong secondhand clothing culture. Top spots include Community Thrift (South Philly), Retrospect (Manayunk), and Philly AIDS Thrift (Bella Vista). Proceeds from several shops support local nonprofits.', tag:'Community'},
           {title:'Finding a tailor for alterations and custom work in Philadelphia', sub:'Look for tailors certified through the Tailors Guild or with verifiable portfolio work. Ask about turnaround time, whether they do hand-stitching vs. machine only, and whether they have experience with your garment\u2019s fabric.', tag:'Guide'},
@@ -4015,7 +4018,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Fashion Incubator \u2014 design business support', sub:'Operated through the Philadelphia Museum of Art, the Fashion Incubator provides subsidized studio space, mentorship, and business development resources to emerging Philadelphia-based fashion designers. Applications open annually.', tag:'Program'},
           {title:'PA Textile Recycling Program \u2014 collection sites and accepted materials', sub:'PA DEP funds textile recycling through municipal solid waste grants. Philadelphia Streets Department operates drop-off locations for used clothing and textiles at sanitation convenience centers. Diverts over 4,000 tons annually.', tag:'Program'},
@@ -4026,7 +4029,7 @@ document.addEventListener('click', function(e) {
     },
     'Arts & culture': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia free museum days and cultural access programs', sub:'The Philadelphia Museum of Art, Franklin Institute, Please Touch Museum, and Academy of Natural Sciences all offer free or reduced admission days. The EBT Museum Access program provides $3 admission for SNAP recipients at participating institutions.', tag:'Resource'},
           {title:'Philadelphia Mural Arts Program \u2014 tours, community projects, and artist opportunities', sub:'Mural Arts Philadelphia offers free neighborhood mural tours, youth art programs, and open calls for professional artists. The Guild program provides mural production jobs for Philadelphians in recovery or re-entry. muralarts.org.', tag:'Community'},
@@ -4034,7 +4037,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Cultural Fund \u2014 city grants for arts organizations', sub:'The Philadelphia Cultural Fund distributes $2.5M+ annually to Philadelphia-based arts and culture organizations through competitive grant rounds. Eligible organizations must be 501(c)(3) and have at least two years of programming history.', tag:'Program'},
           {title:'PA Council on the Arts \u2014 individual artist and organization grants', sub:'PCA offers grants to PA artists and organizations including the Artistic Excellence Program and Arts Organization grants. Philadelphia applicants eligible for all statewide categories. Applications at arts.pa.gov.', tag:'Program'},
@@ -4045,7 +4048,7 @@ document.addEventListener('click', function(e) {
     },
     'Tutoring & coaching': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Free tutoring resources at Philadelphia Free Library branches', sub:'The Free Library of Philadelphia offers free homework help, one-on-one tutoring referrals, and digital literacy support at all branch locations. The Culinary Literacy Center (Parkway Central) offers adult basic education with cooking.', tag:'Resource'},
           {title:'How to evaluate a tutor for your child in Philadelphia', sub:'Look for tutors with subject-specific credentials, references, and a clear assessment process. Ask about their approach to identifying learning gaps vs. simply re-teaching content. Many offer a free first session.', tag:'Guide'},
@@ -4053,7 +4056,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia ESOP \u2014 Extended School Offerings Program', sub:'SDP-funded program provides free tutoring and enrichment for struggling Philadelphia public school students. Extended School Year (summer school) services available for students with IEPs and those below grade level.', tag:'City program'},
           {title:'PA Education Improvement Tax Credit \u2014 EITC scholarship funding', sub:'PA EITC allows businesses to earn 75\u201390% tax credits for donations to approved scholarship organizations. Scholarship organizations distribute funds to income-eligible students for tutoring and private school tuition. Apply at dced.pa.gov.', tag:'Program'},
@@ -4064,7 +4067,7 @@ document.addEventListener('click', function(e) {
     },
     'Classes & skills': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia Free Library \u2014 free classes, workshops, and certifications', sub:'The Free Library offers free computer classes, GED preparation, ESL instruction, digital literacy workshops, and job readiness programs at branches citywide. No library card required for most programs.', tag:'Resource'},
           {title:'Community colleges and continuing education options in Philadelphia', sub:'Community College of Philadelphia offers non-credit workforce training, professional development, and personal enrichment courses. Many courses qualify for WIOA funding for income-eligible adults. Register at ccp.edu.', tag:'Guide'},
@@ -4072,7 +4075,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'WIOA Adult Education \u2014 free training for Philadelphia workers', sub:'Workforce Innovation and Opportunity Act funding covers tuition-free job training, skills certifications, and OJT for income-eligible Philadelphia adults at approved providers. Apply through Philadelphia Works at philaworks.com.', tag:'Program'},
           {title:'PA Apprenticeship and Training Office \u2014 registered apprenticeship programs', sub:'PA L&I registers apprenticeship programs in over 50 trades and occupations. Apprentices earn while they learn. Employers receive $2,000\u20133,000 state incentive for each registered apprentice hired. List at dli.pa.gov.', tag:'Program'},
@@ -4083,7 +4086,7 @@ document.addEventListener('click', function(e) {
     },
     'Trades & apprenticeships': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'How to enter the building trades in Philadelphia', sub:'Philadelphia\u2019s joint apprenticeship training committees (JATCs) are the primary path into the unionized trades. Programs in electrical, plumbing, ironwork, and carpentry are highly competitive. Most require a high school diploma and math assessment.', tag:'Guide'},
           {title:'Pre-apprenticeship programs for Philadelphia residents', sub:'Build Commonwealth and Utility Workers of the World pre-apprenticeship programs prepare Philadelphia residents \u2014 especially women and people of color \u2014 for entry into union apprenticeships. Programs are free and include stipends.', tag:'Resource'},
@@ -4091,7 +4094,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA Apprenticeship Tax Credit \u2014 up to $3,000 per apprentice hired', sub:'PA employers who hire registered apprentices receive a $2,000 credit in year one and $1,000 in year two, per apprentice. Credit applied against PA Corporate Net Income Tax. Apply through PA L&I Office of Apprenticeships.', tag:'Program'},
           {title:'Philadelphia Executive Order 06-11 \u2014 local hiring on city contracts', sub:'Requires prime contractors on city-funded construction projects over $500,000 to make good-faith efforts to hire Philadelphia residents and MBE/WBE firms. L&I monitors compliance and can withhold payment for violations.', tag:'City ordinance'},
@@ -4102,7 +4105,7 @@ document.addEventListener('click', function(e) {
     },
     'Legal aid': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Free legal help in Philadelphia \u2014 who to call first', sub:'Community Legal Services (CLS) provides free civil legal aid to low-income Philadelphians in housing, benefits, consumer, and family law. Call 215-981-3700. Philadelphia Volunteers for the Indigent Program (VIP) connects clients with pro bono attorneys.', tag:'Resource'},
           {title:'Know your rights as a Philadelphia renter', sub:'Philadelphia tenants have among the strongest protections in Pennsylvania: right to a livable unit (implied warranty of habitability), right to the Tenant\u2019s Bill of Rights notice at lease signing, and protection from retaliatory eviction. Know your rights at clsphila.org.', tag:'Rights'},
@@ -4110,7 +4113,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Bill No. 190027 \u2014 Right to Counsel in eviction proceedings', sub:'Philadelphia ordinance guarantees free legal representation to low-income tenants (below 200% FPL) facing eviction in Municipal Court. Implemented in phases 2019\u20132023. Administered through the Philadelphia Eviction Prevention Project.', tag:'City ordinance'},
           {title:'PA Legal Aid Network \u2014 statewide free civil legal services', sub:'PLAN coordinates 14 regional legal aid programs covering all 67 PA counties. Income limit generally 125% FPL. Services cover housing, public benefits, consumer protection, family law, and immigration. Find your office at palegalaid.net.', tag:'Program'},
@@ -4121,7 +4124,7 @@ document.addEventListener('click', function(e) {
     },
     'Jobs & workforce': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Philadelphia PA CareerLink \u2014 free job search and training resources', sub:'PA CareerLink Philadelphia operates four locations offering job search assistance, r\u00e9sum\u00e9 help, skills assessments, and referrals to funded training programs. Locations in West Philly, North Philly, NE Philly, and Center City. No appointment needed.', tag:'Resource'},
           {title:'How to navigate the Philadelphia job market \u2014 key employers by sector', sub:'Philadelphia\u2019s largest employers include Jefferson Health, CHOP, Penn, Temple University, and the City itself. Major growth sectors are healthcare, logistics, and life sciences. Industry sector partnerships at PhilaWorks connect workers with employers.', tag:'Guide'},
@@ -4129,7 +4132,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Works \u2014 WIOA-funded workforce training and placement', sub:'Philadelphia\u2019s local workforce development board administers WIOA funds for adult, dislocated worker, and youth programs. Training vouchers (ITAs) up to $10,000 available for approved programs. Apply at PA CareerLink locations.', tag:'Program'},
           {title:'Philadelphia Fair Workweek Ordinance \u2014 Bill No. 170867', sub:'Requires retail, food service, and hospitality employers with 250+ employees to post schedules 14 days in advance, pay predictability pay for last-minute changes, and offer existing employees additional hours before new hires.', tag:'City ordinance'},
@@ -4140,7 +4143,7 @@ document.addEventListener('click', function(e) {
     },
     'Business formation': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'How to register a business in Philadelphia \u2014 step by step', sub:'Philadelphia businesses must: (1) register with PA DOS at dos.pa.gov, (2) obtain a Philadelphia Business Privilege License from Revenue, (3) register for City taxes, and (4) obtain any required L&I permits. phila.gov/business has a guided checklist.', tag:'How-to'},
           {title:'Philadelphia small business support organizations', sub:'PIDC, SCORE Philadelphia, the African American Chamber of Commerce of PA/NJ/DE, and the Chamber of Commerce for Greater Philadelphia all offer free advising, networking, and resources for new and growing businesses.', tag:'Resource'},
@@ -4148,7 +4151,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'Philadelphia Department of Commerce \u2014 Business Formation Navigator', sub:'Free service connecting new business owners with licensing guidance, sector-specific compliance requirements, and referrals to MWBE certification. Book a free appointment at phila.gov/commerce or call 215-683-2100.', tag:'Program'},
           {title:'MWBE certification in Philadelphia and PA \u2014 how it works', sub:'City MWBE certification opens access to set-aside contracts and technical assistance programs. PA MWBE certification through BDISBO provides access to state contracting opportunities. Both certifications are separate applications.', tag:'Program'},
@@ -4159,7 +4162,7 @@ document.addEventListener('click', function(e) {
     },
     'Professional services': {
       temple: {
-        label: 'Temple \u2014 community resources & what to know',
+        label: 'Wisdom \u2014 community resources & what to know',
         items: [
           {title:'Free professional consultations in Philadelphia \u2014 where to find them', sub:'SCORE Philadelphia offers free mentoring from retired executives in accounting, marketing, legal, and HR. The SBA Philadelphia District Office connects small businesses with free consulting through the Small Business Development Center at Temple.', tag:'Resource'},
           {title:'Verifying professional licenses in Pennsylvania', sub:'All PA licensed professionals \u2014 accountants, engineers, architects, real estate agents, and more \u2014 can be verified at license.pa.gov. Always verify before engaging any professional service provider, especially for financial or legal matters.', tag:'Guide'},
@@ -4167,7 +4170,7 @@ document.addEventListener('click', function(e) {
         ]
       },
       forum: {
-        label: 'Forum \u2014 legislation, programs & incentives',
+        label: 'Law \u2014 legislation, programs & incentives',
         items: [
           {title:'PA CPA Law \u2014 licensure and consumer protection', sub:'The PA CPA Law (63 P.S. \u00a7 9.1 et seq.) requires all CPAs practicing in PA to hold a current license from the State Board of Accountancy. Unlicensed practice is a misdemeanor. File complaints at BPOA (license.pa.gov).', tag:'Bill \u00b7 State'},
           {title:'Philadelphia Net Profits Tax \u2014 what self-employed professionals pay', sub:'Philadelphia self-employed professionals pay the Net Profits Tax at 3.44% (residents) or 3.44% (non-residents on Philly-sourced income) as of 2025. Quarterly estimated payments required if annual liability exceeds $2,000. Details at phila.gov/revenue.', tag:'Guide'},
@@ -4297,7 +4300,7 @@ function renderSrchResults(q) {
   var groups = {t:[],f:[],m:[]};
   res.forEach(function(r){ if(groups[r.p]) groups[r.p].push(r); });
   var html = '<div style="padding:10px 16px 4px;font-size:11.5px;color:var(--ink-mut)">' + res.length + ' result' + (res.length===1?'':'s') + ' for <strong style="color:var(--ink)">&ldquo;' + q + '&rdquo;</strong></div>';
-  [['t','\u25cb','Temple'],['f','\u25b3','Forum'],['m','\u25a2','Market']].forEach(function(pg){
+  [['t','\u25cb','Wisdom'],['f','\u25b3','Law'],['m','\u25a2','Market']].forEach(function(pg){
     var p=pg[0],glyph=pg[1],label=pg[2];
     if(!groups[p].length) return;
     html += '<div class="results-label">' + glyph + ' ' + label + ' \u2014 ' + groups[p].length + ' result' + (groups[p].length===1?'':'s') + '</div>';
@@ -4984,13 +4987,17 @@ var FRM_DOMS = {
 var _lastFrmContext = null;
 var _frmJurFilter = 'all';
 
-function openOfficials(el) {
-  var subs = document.querySelector('.frm-gov-subs');
-  var isOpen = subs && subs.style.display !== 'none';
-  switchPanel('officials', el);
-  if (subs) subs.style.display = isOpen ? 'none' : '';
-  document.querySelectorAll('.frm-gov-sub').forEach(function(x){ x.classList.remove('on'); });
-  document.querySelectorAll('#panel-officials .post.f').forEach(function(c){ c.style.display = ''; });
+function frmOfficialsClick(h) {
+  var subs = document.getElementById('frm-officials-subs');
+  var isOpen = subs.classList.contains('open');
+  subs.classList.toggle('open');
+  h.classList.toggle('on');
+  h.classList.toggle('open');
+  if (!isOpen) {
+    document.querySelectorAll('.frm-gov-sub').forEach(function(x){ x.classList.remove('on'); });
+    document.querySelectorAll('#panel-officials .post.f').forEach(function(c){ c.style.display = ''; });
+    switchPanel('officials', null);
+  }
 }
 
 function filterOfficials(level, el) {
@@ -5015,7 +5022,7 @@ function frmLegislationClick(h) {
 }
 
 function renderFrmAll() {
-  document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 All Legislation';
+  document.getElementById('frm-panel-title').textContent = '\u25b3 Law \u00b7 All Legislation';
   document.getElementById('frm-panel-crumb').textContent = 'All categories';
   var seen = {}, allCards = [];
   Object.keys(FRM_DOMS).forEach(function(dk) {
@@ -5078,7 +5085,7 @@ function frmSubClick(slug, el) {
 function renderFrmDomain(domSlug) {
   var dom = FRM_DOMS[domSlug];
   if (!dom) return;
-  document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 ' + dom.name;
+  document.getElementById('frm-panel-title').textContent = '\u25b3 Law \u00b7 ' + dom.name;
   document.getElementById('frm-panel-crumb').textContent = 'All subcategories';
   var seen = {}, allCards = [];
   Object.keys(dom.subs).forEach(function(k) {
@@ -5100,7 +5107,7 @@ function renderFrmCards(subSlug) {
     if (FRM_DOMS[dk].subs[subSlug]) { domSlug = dk; subData = FRM_DOMS[dk].subs[subSlug]; }
   });
   if (!subData) return;
-  document.getElementById('frm-panel-title').textContent = '\u25b3 Forum \u00b7 ' + FRM_DOMS[domSlug].name;
+  document.getElementById('frm-panel-title').textContent = '\u25b3 Law \u00b7 ' + FRM_DOMS[domSlug].name;
   document.getElementById('frm-panel-crumb').textContent = subData.label;
   var cards = subData.cards;
   if (_frmJurFilter !== 'all') cards = cards.filter(function(c){ return billJur(c) === _frmJurFilter; });
@@ -5649,16 +5656,16 @@ var TPL_SUB_CONTENT = {
     title: 'Being a Patient',
     domain: 'Health & Body',
     cards: [
-      {name:"Your rights as a patient",type:"FORA guide · patient rights",kind:"fora",stars:"Temple brief",
+      {name:"Your rights as a patient",type:"FORA guide · patient rights",kind:"fora",stars:"Wisdom brief",
        desc:"You have the right to informed consent — no procedure without a clear explanation of risks and alternatives. You can refuse any treatment, including life-saving care. Under HIPAA, your medical records belong to you and you can request them at any time. In Pennsylvania you're also entitled to an interpreter, a copy of your bill itemized by service, and to know who is treating you and their credentials.",
        tags:["Informed consent","HIPAA","Refusal rights","PA-specific"]},
-      {name:"Choosing the right doctor",type:"FORA guide · finding care",kind:"fora",stars:"Temple brief",
+      {name:"Choosing the right doctor",type:"FORA guide · finding care",kind:"fora",stars:"Wisdom brief",
        desc:"Check board certification at certificationmatters.org before anything else — it's free and takes 30 seconds. Confirm they're in-network with your insurance. Read reviews for patterns, not outliers: look for comments about how they handle bad news and whether they listen. Call the office before your first visit and notice how long you wait on hold — it predicts the practice. Your first visit can be an interview: it's normal to leave and not go back.",
        tags:["Board certification","In-network","Reading reviews","First visit"]},
-      {name:"The power of a second opinion",type:"FORA guide · advocacy",kind:"fora",stars:"Temple brief",
+      {name:"The power of a second opinion",type:"FORA guide · advocacy",kind:"fora",stars:"Wisdom brief",
        desc:"For any cancer diagnosis, major surgery, or rare condition — always get a second opinion. Most doctors expect it and a good one will encourage it. Request your records, imaging, and pathology slides directly (you own them). Studies show second opinions change the diagnosis or recommended treatment in 20–30% of complex cases. Your insurance typically covers second opinion visits. The stakes are too high not to ask.",
        tags:["When to get one","How to ask","Records request","What changes"]},
-      {name:"Getting the most out of your visit",type:"FORA guide · preparation",kind:"fora",stars:"Temple brief",
+      {name:"Getting the most out of your visit",type:"FORA guide · preparation",kind:"fora",stars:"Wisdom brief",
        desc:"Write your top three concerns before you arrive — doctors have 15 minutes and you'll forget under pressure. Bring a complete medication list including supplements. Don't downplay symptoms to seem easy; you're not helping anyone. Before you leave, ask: What is my diagnosis or what are we ruling out? What do I do next? When should I call? If possible, bring someone to listen — a second set of ears catches 40% more. Ask for a visit summary or after-visit notes in your patient portal.",
        tags:["Preparation","Questions to ask","Medication list","Follow-up"]}
     ]
@@ -5673,9 +5680,9 @@ var TPL_SUB_CONTENT = {
        desc:"Deodorants, soaps, skincare, dental care, hair — your neighbors' honest takes on what works for different skin types, budgets, and lifestyles in Philly's climate."},
       {name:"Free hygiene supplies — Philadelphia",type:"City & nonprofit distribution",kind:"prog",stars:"Free",
        desc:"Toothbrushes, soap, menstrual products, and more — distributed through Project HOME, Sunday Breakfast Rescue Mission, and Philly Free Streets. No ID required."},
-      {name:"Dental health on a budget",type:"FORA guide · oral health",kind:"fora",stars:"Temple brief",
+      {name:"Dental health on a budget",type:"FORA guide · oral health",kind:"fora",stars:"Wisdom brief",
        desc:"Brushing technique, flossing, fluoride, and how to stretch time between dentist visits — practical guidance for keeping your mouth healthy without breaking the bank."},
-      {name:"Skin, sweat & Philly's environment",type:"FORA guide · body awareness",kind:"fora",stars:"Temple brief",
+      {name:"Skin, sweat & Philly's environment",type:"FORA guide · body awareness",kind:"fora",stars:"Wisdom brief",
        desc:"How Philly's water hardness, humidity, and air quality affect your skin and hygiene routine — and what neighbors in your zip code have figured out over time."}
     ]
   }
