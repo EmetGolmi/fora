@@ -198,6 +198,21 @@ a{text-decoration:none;color:inherit;}
 .tpl-rem-btn{padding:4px 10px;border-radius:20px;border:1px solid var(--temple);background:#fff;color:var(--temple);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;white-space:nowrap;flex-shrink:0;}
 .tpl-rem-btn:hover{background:var(--temple);color:#fff;}
 .tpl-rem-set{padding:4px 10px;border-radius:20px;background:#e5f4ea;color:#2a6e3f;font-size:10px;font-family:'JetBrains Mono',monospace;flex-shrink:0;}
+/* Video-QA widget */
+.tpl-video-qa{margin-top:12px;background:#f7f9fc;border:1px solid var(--rule);border-radius:10px;padding:13px 14px;}
+.tpl-video-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--temple);margin-bottom:10px;font-weight:700;}
+.tpl-video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:12px;}
+.tpl-video-item{border-radius:8px;overflow:hidden;border:1px solid var(--rule);background:#fff;}
+.tpl-video-item iframe{width:100%;aspect-ratio:16/9;display:block;border:none;}
+.tpl-video-meta{padding:7px 9px;}
+.tpl-video-name{font-size:11px;font-weight:700;color:var(--ink);}
+.tpl-video-handle{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-mut);}
+.tpl-video-empty{font-size:12px;color:var(--ink-mut);font-style:italic;padding:6px 0 10px;}
+.tpl-video-submit{display:flex;gap:8px;align-items:stretch;margin-top:4px;}
+.tpl-video-input{flex:1;padding:8px 12px;border:1.5px solid var(--rule);border-radius:8px;font-size:12px;font-family:'Nunito',sans-serif;color:var(--ink);outline:none;}
+.tpl-video-input:focus{border-color:var(--temple);}
+.tpl-video-btn{padding:8px 14px;background:var(--temple);color:#fff;border:none;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;cursor:pointer;white-space:nowrap;}
+.tpl-video-btn:hover{opacity:.85;}
 /* PSA sponsor header */
 .tpl-psa-hd{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fdf9ee;border-bottom:1px solid #f0e6c0;}
 .tpl-psa-logo{width:34px;height:34px;border-radius:7px;background:var(--gilt);color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;text-align:center;line-height:1.2;font-family:'JetBrains Mono',monospace;flex-shrink:0;}
@@ -5353,7 +5368,8 @@ var TPL_KIND_META = {
   resource: {label:'Resource',      icon:'\uD83D\uDD17'},
   tool:     {label:'Interactive',   icon:'\uD83D\uDEE0'},
   nbr:      {label:'Neighbor',      icon:'\uD83D\uDC64'},
-  prog:     {label:'Program',       icon:'\uD83C\uDFDB'}
+  prog:     {label:'Program',       icon:'\uD83C\uDFDB'},
+  mentor:   {label:'Mentor',        icon:'\u2605'}
 };
 
 function tplCardHtml(c, idx) {
@@ -5378,6 +5394,9 @@ function tplCardHtml(c, idx) {
   }
   if (c.widget === 'reminder' && c.reminders && c.reminders.length) {
     bodyParts.push(buildTplReminderWidget(c.reminders, idx));
+  }
+  if (c.widget === 'video-qa') {
+    bodyParts.push(buildTplVideoWidget(c, idx));
   }
   if (c.psa) bodyParts.push('<div class="tpl-psa-edict">FORA ad policy: sponsors earn placement by contributing to the community.</div>');
   bodyParts.push(tplConvoHtml(bid));
@@ -5496,6 +5515,51 @@ function buildTplReminderWidget(reminders, baseIdx) {
 function setTplReminder(btnId) {
   var btn = document.getElementById(btnId);
   if (btn) { btn.className = 'tpl-rem-set'; btn.textContent = '\u2713 Set'; }
+}
+
+function buildTplVideoWidget(c, idx) {
+  var wid = 'tvid-' + idx;
+  var stored = JSON.parse(localStorage.getItem('fora_videos_' + idx) || '[]');
+  var gridHtml = stored.length
+    ? '<div class="tpl-video-grid">' + stored.map(function(v){
+        var embedUrl = v.url
+          .replace('youtu.be/', 'www.youtube.com/embed/')
+          .replace('watch?v=', 'embed/')
+          .replace('vimeo.com/', 'player.vimeo.com/video/');
+        return '<div class="tpl-video-item">'
+          + '<iframe src="' + embedUrl + '" allowfullscreen loading="lazy"></iframe>'
+          + '<div class="tpl-video-meta"><div class="tpl-video-name">' + v.name + '</div>'
+          + '<div class="tpl-video-handle">@' + v.handle + '</div></div>'
+          + '</div>';
+      }).join('') + '</div>'
+    : '<div class="tpl-video-empty" id="' + wid + '-empty">No videos yet \u2014 be the first to share your wisdom.</div>';
+  return '<div class="tpl-video-qa" id="' + wid + '">'
+    + '<div class="tpl-video-hd">Share Your Wisdom</div>'
+    + gridHtml
+    + '<div class="tpl-video-submit">'
+      + '<input class="tpl-video-input" id="' + wid + '-url" type="url" placeholder="' + (c.videoPlaceholder || 'Paste a YouTube or Vimeo link') + '" onclick="event.stopPropagation()">'
+      + '<button class="tpl-video-btn" onclick="event.stopPropagation();submitTplVideo(\'' + wid + '\',\'' + idx + '\')">Submit</button>'
+    + '</div>'
+    + '</div>';
+}
+
+function submitTplVideo(wid, idx) {
+  var input = document.getElementById(wid + '-url');
+  if (!input) return;
+  var url = (input.value || '').trim();
+  if (!url || !/youtube|youtu\.be|vimeo/i.test(url)) {
+    alert('Please paste a valid YouTube or Vimeo link.');
+    return;
+  }
+  var handle = '<%= j(@profile.try(:forum_handle) || @profile.try(:id).to_s) %>';
+  var name   = '<%= j(@profile.try(:display_name) || "Contributor") %>';
+  var key = 'fora_videos_' + idx;
+  var stored = JSON.parse(localStorage.getItem(key) || '[]');
+  stored.unshift({url: url, handle: handle, name: name});
+  localStorage.setItem(key, JSON.stringify(stored));
+  input.value = '';
+  var el = document.getElementById(wid);
+  if (el) el.outerHTML = buildTplVideoWidget({videoPlaceholder: el.querySelector('.tpl-video-input') && el.querySelector('.tpl-video-input').placeholder}, idx);
 }
 
 // ── Temple subcategory content ─────────────────────────────────────────────────
@@ -5668,6 +5732,23 @@ var TPL_SUB_CONTENT = {
       {name:"Getting the most out of your visit",type:"FORA guide · preparation",kind:"fora",stars:"Wisdom brief",
        desc:"Write your top three concerns before you arrive — doctors have 15 minutes and you'll forget under pressure. Bring a complete medication list including supplements. Don't downplay symptoms to seem easy; you're not helping anyone. Before you leave, ask: What is my diagnosis or what are we ruling out? What do I do next? When should I call? If possible, bring someone to listen — a second set of ears catches 40% more. Ask for a visit summary or after-visit notes in your patient portal.",
        tags:["Preparation","Questions to ask","Medication list","Follow-up"]}
+    ]
+  },
+  'financial-literacy': {
+    title: 'Financial Literacy', domain: 'Learn & Grow',
+    cards: [
+      {name: "Your situation \u2014 you\u2019re not alone",
+       kind: "nbr",
+       desc: "Discuss financial options with neighbors in similar situations. There is safety in numbers.",
+       expand: "Money problems feel isolating \u2014 but they rarely are. Whether you\u2019re recovering from debt, living paycheck to paycheck, building a first emergency fund, or navigating a sudden change in income \u2014 others here have been in the same place or are in it right now.<br><br>This is a space for honest conversation about financial options, tradeoffs, and what\u2019s actually worked. Share your situation (as much or as little as you\u2019re comfortable with), ask questions, and find out what your neighbors know. The combined knowledge of a community is more powerful than any single financial advisor. <strong>There is safety in numbers.</strong>"
+      },
+      {name: "Jesus saves, but Moses invests",
+       kind: "mentor",
+       desc: "Retired Jewish professionals and wealth-builders share insight, answer questions, and pass it on.",
+       expand: "A gathering of retired Jews who built or inherited financial success \u2014 through business, markets, real estate, or decades advising others \u2014 and are ready to share what they learned. Not advice for hire. Wisdom for the community.<br><br>If you\u2019re retired and have something to pass on, submit a short video below. If you have a question, post it in the conversation \u2014 contributors check in.",
+       widget: "video-qa",
+       videoPlaceholder: "Paste a YouTube or Vimeo link to share your wisdom"
+      }
     ]
   },
   'tpl-hygiene': {
