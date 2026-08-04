@@ -1267,14 +1267,25 @@ document.querySelectorAll('.toggle-btn[data-version]').forEach(function(btn) {
   });
 });
 
-// Language toggle
+// Language toggle — ES shows Spanish beneath each English entry (bilingual);
+// EN returns to English-only.
 document.querySelectorAll('.toggle-btn[data-language]').forEach(function(btn) {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.toggle-btn[data-language]').forEach(function(b){ b.classList.remove('active'); });
     this.classList.add('active');
     var lang = this.getAttribute('data-language');
-    document.querySelectorAll('[data-lang-en],[data-lang-es]').forEach(function(el){ el.style.display = 'none'; });
-    document.querySelectorAll('[data-lang-' + lang + ']').forEach(function(el){ el.style.display = 'block'; });
+    if (lang === 'es') {
+      // Show everything — English stays, Spanish appears beneath
+      document.querySelectorAll('[data-lang-en],[data-lang-es]').forEach(function(el){
+        el.style.display = el.tagName === 'SPAN' ? 'inline' : 'block';
+      });
+    } else {
+      // English only
+      document.querySelectorAll('[data-lang-en]').forEach(function(el){
+        el.style.display = el.tagName === 'SPAN' ? 'inline' : 'block';
+      });
+      document.querySelectorAll('[data-lang-es]').forEach(function(el){ el.style.display = 'none'; });
+    }
   });
 });
 
