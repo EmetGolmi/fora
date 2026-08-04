@@ -192,6 +192,7 @@ Rails.application.routes.draw do
   end
 
   # ── World / Jurisdiction & NGE Pages ──────────────────────────────────────
+  get "/911",           to: "world#nine_eleven"
   get "/iran",          to: "world#iran"
   get "/org/hamas",     to: "world#hamas"
   get "/org/houthis",   to: "world#houthis"

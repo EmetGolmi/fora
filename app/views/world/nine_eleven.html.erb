@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORA · 9/11 Interfaith Prayer and Remembrance</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1b3a6b;
+  --blue-md: #254f92;
+  --blue-lt: #3a6abf;
+  --blue-pl: #dde5f5;
+  --gilt: #b8860b;
+  --gilt-lt: #d4a832;
+  --gilt-pl: #f8f0dc;
+  --ink: #0e1a2e;
+  --ink-soft: #5a6e8a;
+  --ink-mut: #8a9ab8;
+  --bg: #f2f4f8;
+  --white: #ffffff;
+  --newsprint: #f5f3ee;
+  --rule: rgba(27, 58, 107, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--newsprint);
+  color: var(--ink);
+  padding: 40px 20px;
+}
+
+.container { max-width: 760px; margin: 0 auto; }
+
+/* ── FORA NAV BAR ──────────────────────────────────────────────── */
+.fora-bar {
+  max-width: 760px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fora-wordmark {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.fora-back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  text-decoration: none;
+}
+.fora-back:hover { color: var(--blue); }
+
+/* ── CARD HEADER ─────────────────────────────────────────────── */
+.card-header {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-md) 100%);
+  border-radius: 8px 8px 0 0;
+  padding: 40px;
+  color: white;
+  text-align: center;
+  border-bottom: 4px solid var(--gilt);
+}
+
+.card-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.card-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+}
+
+/* ── SECTIONS ────────────────────────────────────────────────── */
+.section {
+  background: var(--white);
+  padding: 32px;
+  border-left: 4px solid var(--gilt);
+  margin-top: -1px;
+}
+
+.section:last-child { border-radius: 0 0 8px 8px; }
+
+.section-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.chronology {
+  background: var(--blue-pl);
+  border-left: 3px solid var(--blue);
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.8;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.chrono-time {
+  font-weight: 600;
+  color: var(--blue);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ── AUDIO & VIDEO PLAYERS ───────────────────────────────────── */
+.media-player {
+  background: var(--newsprint);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.media-label {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+audio { width: 100%; margin-bottom: 8px; }
+
+.audio-context {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* ── VIDEO CAROUSEL ──────────────────────────────────────────── */
+.carousel { position: relative; overflow: hidden; margin: 16px 0; }
+
+.carousel-label {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+
+.carousel-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-behavior: smooth;
+}
+
+.carousel-container::-webkit-scrollbar { height: 6px; }
+.carousel-container::-webkit-scrollbar-track { background: var(--rule); border-radius: 3px; }
+.carousel-container::-webkit-scrollbar-thumb { background: var(--gilt); border-radius: 3px; }
+
+.video-card {
+  flex-shrink: 0;
+  width: 200px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  background: var(--newsprint);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.video-card:hover { transform: scale(1.02); }
+
+.video-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gilt);
+  font-size: 32px;
+}
+
+.video-title { padding: 8px; font-size: 12px; font-weight: 600; color: var(--ink); }
+
+/* ── TEXT CONTENT ────────────────────────────────────────────── */
+.text-block { margin: 16px 0; line-height: 1.8; font-size: 14px; color: var(--ink); }
+.italic-text { font-style: italic; color: var(--ink-soft); }
+.centered-text { text-align: center; font-style: italic; margin: 20px 0; color: var(--ink-soft); }
+
+.responsive-text {
+  margin: 12px 0;
+  padding-left: 20px;
+  border-left: 3px solid var(--gilt);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.response-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-bottom: 4px;
+  letter-spacing: 0.1em;
+  display: block;
+}
+
+.responsive-text[data-speaker="reader"] {
+  border-left: 3px solid var(--blue);
+  background: var(--blue-pl);
+  padding: 12px 16px;
+  margin: 12px 0;
+  border-radius: 3px;
+}
+
+.responsive-text[data-speaker="reader"] .response-label { color: var(--blue); }
+
+.responsive-text[data-speaker="all"] {
+  border-left: none;
+  background: transparent;
+  padding: 12px 0;
+  margin: 12px 0;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.responsive-text[data-speaker="all"] .response-label { color: var(--gilt); font-weight: 700; }
+
+.scripture {
+  background: var(--gilt-pl);
+  border-left: 4px solid var(--gilt);
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 4px;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.scripture-ref {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-top: 8px;
+}
+
+/* ── TORAH VERSE SECTION ─────────────────────────────────────── */
+.torah-section {
+  background: var(--gilt-pl);
+  border-left: 4px solid var(--gilt);
+  padding: 20px;
+  margin: 16px 0;
+  border-radius: 4px;
+}
+
+.torah-hebrew {
+  font-size: 18px;
+  line-height: 1.8;
+  direction: rtl;
+  margin-bottom: 12px;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.torah-transliteration {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.torah-english { font-size: 14px; font-style: italic; color: var(--ink); line-height: 1.8; }
+
+.torah-ref {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(184, 134, 11, 0.3);
+}
+
+/* ── LEARN MORE LINK ─────────────────────────────────────────── */
+.learn-more-link {
+  color: var(--blue);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+}
+.learn-more-link:hover { color: var(--gilt); }
+
+/* ── COLOGNE LINK ────────────────────────────────────────────── */
+.cologne-link {
+  color: var(--blue);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+}
+.cologne-link:hover { color: var(--gilt); }
+
+/* ── SETTINGS TOGGLE ─────────────────────────────────────────── */
+.setting-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.toggle-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.toggle-buttons { display: flex; gap: 4px; }
+
+.toggle-btn {
+  padding: 6px 10px;
+  border: 1px solid var(--rule);
+  background: white;
+  color: var(--ink-soft);
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.toggle-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+.toggle-btn:hover:not(.active) { border-color: var(--gilt); color: var(--gilt); }
+
+/* ── MODAL ───────────────────────────────────────────────────── */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.2s;
+}
+
+.modal.active { display: flex; align-items: center; justify-content: center; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-content {
+  background: var(--white);
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { color: var(--blue); }
+
+.modal-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+
+.modal-section { margin-bottom: 20px; }
+
+.modal-section-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+.modal-text { font-size: 14px; line-height: 1.7; color: var(--ink-soft); margin-bottom: 12px; }
+
+.frequency-note {
+  background: var(--blue-pl);
+  border-left: 3px solid var(--blue);
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.page-footer {
+  max-width: 760px;
+  margin: 28px auto 0;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .card-title { font-size: 28px; }
+  .container { max-width: 100%; }
+  .section, .card-header { padding: 20px; }
+  .video-card { width: 160px; }
+  .setting-toggle { top: 10px; right: 10px; padding: 10px; }
+  .toggle-btn { padding: 5px 8px; font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SETTINGS TOGGLE -->
+<div class="setting-toggle">
+  <label class="toggle-label">Scripture</label>
+  <div class="toggle-buttons">
+    <button class="toggle-btn active" data-version="kjv">KJV</button>
+    <button class="toggle-btn" data-version="niv">NIV</button>
+    <button class="toggle-btn" data-version="esv">ESV</button>
+  </div>
+  <label class="toggle-label" style="margin-top:12px;">Language</label>
+  <div class="toggle-buttons">
+    <button class="toggle-btn active" data-language="en">EN</button>
+    <button class="toggle-btn" data-language="es">ES</button>
+  </div>
+</div>
+
+<!-- SHOFAR MODAL -->
+<div id="soundModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeSoundModal()">&times;</button>
+    <div class="modal-title">Awaken the Soul: The Science of the Shofar</div>
+    <div class="modal-section">
+      <div class="modal-section-title">The Acoustic Journey</div>
+      <div class="modal-text">The shofar blast is not merely sound — it is a deliberate acoustic intervention designed to penetrate consciousness and trigger profound internal transformation.</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Frequency &amp; Neural Activation</div>
+      <div class="frequency-note">
+        <strong>The shofar's primary blast (tekiah) resonates at frequencies between 440–800 Hz.</strong> These frequencies engage both the auditory cortex and the limbic system — the emotional and memory centers of the brain. The tonal complexity activates bilateral hemispheric engagement, creating a synchronized state primed for introspection.
+      </div>
+      <div class="modal-text">Modern acoustic research shows that frequencies in this range stimulate the vagus nerve, activating the parasympathetic nervous system (rest-and-digest mode) while simultaneously heightening alertness. This paradoxical state — calm yet attentive — is precisely the condition required for genuine spiritual awareness.</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Sound Therapy Principles</div>
+      <div class="modal-text"><strong>Brainwave Entrainment:</strong> Repetitive acoustic stimuli at specific frequencies encourage the brain to synchronize. The broken blasts of the shofar (shevarim and teruah) create rhythmic patterns that guide the mind toward theta and alpha brainwave states — associated with meditation, insight, and emotional processing.</div>
+      <div class="modal-text"><strong>Vagal Tone &amp; Resilience:</strong> Sound therapy strengthens vagal tone — the capacity of the vagus nerve to regulate heart rate, breath, and stress response. A stronger vagal tone correlates with psychological resilience, emotional regulation, and the ability to respond thoughtfully to crisis.</div>
+      <div class="modal-text"><strong>Somatic Memory Clearing:</strong> Deep, unexpected acoustic stimuli can interrupt habitual neural patterns and surface suppressed memories and emotions. This is why the shofar often provokes tears, silence, or profound stillness — the sound is literally rewiring conscious awareness.</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Ancient Wisdom, Modern Science</div>
+      <div class="modal-text">The Jewish tradition teaches that the shofar call serves teshuvah — "return" — a complete turning toward truth. Neuroscience confirms that acoustic stimuli of this particular frequency profile create optimal conditions for cognitive and emotional reorientation.</div>
+      <div class="modal-text">When the shofar sounds, you are not merely hearing a noise. Your body is being invited into a state of profound attentiveness. Your nervous system is being recalibrated. Your capacity for presence is being awakened.</div>
+    </div>
+    <div class="modal-section" style="border-top:1px solid var(--rule);padding-top:16px;margin-top:20px;">
+      <div class="modal-text" style="font-size:12px;color:var(--ink-mut);font-style:italic;">This synthesis draws on research from neuroscience, acoustic therapy (Beaulieu, 2010), polyvagal theory (Porges, 2011), and Jewish contemplative traditions spanning millennia.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COLOGNE MODAL -->
+<div id="cologneModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeCologneModal()">&times;</button>
+    <div class="modal-title">Cologne · A Testament to Survival</div>
+    <div class="modal-section">
+      <div class="modal-section-title">Köln, Germany</div>
+      <div class="modal-text">Cologne (Köln in German) is a medieval city on the Rhine River in western Germany, known for its soaring Gothic cathedral and vibrant culture. For centuries, it was home to a thriving Jewish community.</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">During the Holocaust</div>
+      <div class="modal-text">As Nazi persecution escalated, Jews in Cologne were forced into hiding. Many found refuge in cellars, attics, and concealed rooms throughout the city — places where they could survive, but not truly live.</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">The Inscription</div>
+      <div class="modal-text">On the wall of one such cellar — a hiding place where Jewish families cowered in darkness during the height of the terror — someone wrote a prayer. It was not written in anger or despair, but in faith:</div>
+      <div class="scripture" style="margin-top:12px;">
+        <em>"I believe in the sun even when it is not shining.<br>
+        I believe in love even when not feeling it.<br>
+        I believe in God even when He is silent."</em>
+      </div>
+      <div class="modal-text" style="margin-top:12px;">This inscription became one of the most profound testaments to human resilience ever recorded. It survives as proof that even in the depths of humanity's darkest hour, faith endured.</div>
+    </div>
+    <div class="modal-section" style="border-top:1px solid var(--rule);padding-top:16px;margin-top:20px;">
+      <div class="modal-text" style="font-size:12px;color:var(--ink-mut);font-style:italic;">This prayer reminds us that belief is not dependent on feeling. Truth does not depend on comfort. Freedom must be defended not in good times, but especially in the darkest of times.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORA BAR -->
+<div class="fora-bar">
+  <a class="fora-wordmark" href="/mvp/dashboard">FORA</a>
+  <a class="fora-back" href="/mvp/dashboard">← Dashboard</a>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="card-header">
+    <div class="card-date">September 11 · Annual Observance</div>
+    <div class="card-title" data-lang-en>9/11 Interfaith Prayer and Remembrance</div>
+    <div class="card-title" data-lang-es style="display:none;">Oración y Recuerdo Interreligioso del 9/11</div>
+    <div class="card-subtitle" data-lang-en>An annual observance of prayer, remembrance, and civic covenant</div>
+    <div class="card-subtitle" data-lang-es style="display:none;">Una observancia anual de oración, recuerdo y pacto cívico</div>
+  </div>
+
+  <!-- ── I. CHRONOLOGY OF TERROR ──────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">The Record</div>
+    <div class="section-title">September 11: Chronology of Terror</div>
+
+    <div class="chronology">
+      <span class="chrono-time">8:45 a.m.</span>
+      A hijacked passenger jet, American Airlines Flight 11 out of Boston, Massachusetts, crashes into the north tower of the World Trade Center, tearing a gaping hole in the building and setting it afire.
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">9:03 a.m.</span>
+      A second hijacked airliner, United Airlines Flight 175 from Boston, crashes into the south tower of the World Trade Center and explodes. Both buildings are burning.
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">9:30 a.m.</span>
+      President Bush, speaking in Sarasota, Florida, says the country has suffered an "apparent terrorist attack."
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">9:43 a.m.</span>
+      American Airlines Flight 77 crashes into the Pentagon, sending up a huge plume of smoke. Evacuation begins immediately.
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">10:05 a.m.</span>
+      The south tower of the World Trade Center collapses, plummeting into the streets below. A massive cloud of dust and debris forms and slowly drifts away from the building.
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">10:10 a.m.</span>
+      A portion of the Pentagon collapses.
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">10:10 a.m.</span>
+      United Airlines Flight 93, also hijacked, crashes in Somerset County, Pennsylvania, southeast of Pittsburgh.
+    </div>
+
+    <div class="chronology">
+      <span class="chrono-time">10:28 a.m.</span>
+      The World Trade Center's north tower collapses from the top down as if it were being peeled apart, releasing a tremendous cloud of debris and smoke.
+    </div>
+
+    <div class="section-desc" style="margin-top:20px;padding-top:20px;border-top:1px solid var(--rule);">
+      <strong>Toll:</strong> 2,977 people killed. 19 hijackers. Four aircraft. Victims from 90 nations.
+      Six months later, the death toll from illness and injury related to Ground Zero rescue and recovery work continued to climb.
+      <br><br>
+      <strong>Source:</strong> CNN/U.S.
+    </div>
+  </div>
+
+  <!-- ── II. PRELUDE — SHOFAR ──────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Prelude</div>
+    <div class="section-title">Sounding of the Shofar (Ram's Horn)</div>
+
+    <div class="section-desc">
+      The Shofar is blown to <span class="learn-more-link" onclick="openSoundModal()">awaken the soul</span> and call people to witness. In the Hebrew scriptures, the Shofar marked moments of transformation and judgment. Jesus himself heard this ancient instrument in the Temple. It is blown on Rosh Hashanah, the Jewish New Year, as a call to repentance and renewal.
+    </div>
+
+    <div class="media-player">
+      <div class="media-label">🎺 Shofar Sounding</div>
+      <audio controls style="width:100%;">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/8/87/Shofar_sound.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="audio-context">
+        Listen to the ancient call. The Shofar summons us from silence to witness, from isolation to community, and from distraction to sacred presence.
+        <span class="learn-more-link" onclick="openSoundModal()">Learn more</span> about the acoustics of awakening.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── III. PROCLAIM LIBERTY ─────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow" data-lang-en>American Echo</div>
+    <div class="section-eyebrow" data-lang-es style="display:none;">Eco Estadounidense</div>
+    <div class="section-title">Proclaim Liberty</div>
+
+    <div class="torah-section">
+      <div class="torah-hebrew">וְקָרָאתֶם דְּרוֹר בָּאָרֶץ לְכָל יוֹשְׁבֶיהָ</div>
+      <div class="torah-transliteration"><em>V'karatam d'ror ba'aretz l'khol yosveha</em></div>
+      <div class="torah-english" data-lang-en>"Proclaim liberty throughout all the land unto all the inhabitants thereof"</div>
+      <div class="torah-english" data-lang-es style="display:none;">"Proclama libertad por toda la tierra a todos sus habitantes"</div>
+      <div class="torah-ref">Leviticus 25:10 · Inscribed on the Liberty Bell, Philadelphia</div>
+    </div>
+
+    <div class="section-desc" data-lang-en>
+      These words from the Torah were inscribed upon the Liberty Bell — the voice of freedom itself. As the shofar awoke ancient Israel, so did the Liberty Bell awaken America. Throughout our nation's history, the bell has been struck to announce freedom, summon citizens to civic action, and mark moments of liberation.
+    </div>
+    <div class="section-desc" data-lang-es style="display:none;">
+      Estas palabras de la Torá fueron inscritas en la Campana de la Libertad — la voz de la libertad misma. Así como el shofar despertó a Israel antiguo, la Campana de la Libertad despertó a América.
+    </div>
+
+    <div class="section-desc" style="font-weight:600;margin-bottom:8px;">
+      <span data-lang-en>June 6, 1944 · D-Day</span>
+      <span data-lang-es style="display:none;">6 de junio de 1944 · Día D</span>
+    </div>
+
+    <div class="section-desc" data-lang-en>
+      On the morning of the Allied invasion of Normandy, Philadelphia Mayor Bernard Samuel struck the Liberty Bell <strong>seven times</strong> — once for each letter in the word "LIBERTY" — during a nationwide radio broadcast. Each strike symbolized freedom's advance. That day, Europe began its return to liberty.
+    </div>
+    <div class="section-desc" data-lang-es style="display:none;">
+      En la mañana de la invasión aliada de Normandía, el alcalde de Filadelfia Bernard Samuel tocó la Campana de la Libertad <strong>siete veces</strong> — una por cada letra de la palabra "LIBERTAD."
+    </div>
+
+    <div class="section-desc" style="margin-top:20px;padding-top:20px;border-top:1px solid var(--rule);">
+      <strong data-lang-en>Historical Purposes for Striking the Bell</strong>
+      <strong data-lang-es style="display:none;">Propósitos Históricos del Toque de Campana</strong>
+      <br><br>
+      <strong>Civic Announcements:</strong> The bell summoned lawmakers to the Pennsylvania Assembly and called residents together for public meetings and town forums. It was the voice of collective decision-making.
+      <br><br>
+      <strong>Public Warnings:</strong> The bell signaled emergencies — local fires, approaching danger, invasion threats during the Revolutionary War era. It was the alarm that unified a community in crisis.
+      <br><br>
+      <strong>Commemorations:</strong> The bell tolled for the deaths of great leaders (George Washington, Benjamin Franklin) and marked the anniversaries of liberation. It was the voice of collective grief and remembrance.
+    </div>
+  </div>
+
+  <!-- ── IV. MY COUNTRY 'TIS OF THEE ──────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Processional Hymn</div>
+    <div class="section-title">My Country 'Tis of Thee</div>
+
+    <div class="text-block italic-text">
+      My country, 'tis of thee, sweet land of liberty,<br>
+      Of thee I sing; Land where my fathers died,<br>
+      Land of the pilgrims' pride,<br>
+      From every mountainside, Let freedom ring!
+      <br><br>
+      My native country, thee, land of the noble free,<br>
+      Thy name I love; I love thy rocks and rills,<br>
+      Thy woods and templed hills;<br>
+      My heart with rapture thrills, Like that above.
+      <br><br>
+      Our fathers' God, to Thee, Author of liberty,<br>
+      To Thee we sing; Long may our land be bright<br>
+      With freedom's holy light;<br>
+      Protect us by Thy might, Great God, our King!
+    </div>
+
+    <div class="carousel">
+      <div class="carousel-label">Featured Performances</div>
+      <div class="carousel-container">
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Jazz Ensemble</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Gospel Choir</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Classical String</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Youth Voices</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-desc" style="margin-top:20px;">
+      Written in 1831 by Samuel Francis Smith, this hymn set to the tune of "God Save the King" became an anthem of American liberty. Scroll to hear different traditions honor it.
+    </div>
+  </div>
+
+  <!-- ── V. A WITNESS SPEAKS ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow" data-lang-en>A Witness Speaks</div>
+    <div class="section-eyebrow" data-lang-es style="display:none;">Un Testigo Habla</div>
+    <div class="section-title" data-lang-en>My Fellow Americans</div>
+    <div class="section-title" data-lang-es style="display:none;">Mis Compatriotas</div>
+
+    <div class="text-block" data-lang-en>
+      Thank you for joining me in remembering one of the most significant days in American history, September 11, 2001. My hope is that this sparks dialogue between you and your neighbors.
+    </div>
+    <div class="text-block" data-lang-es style="display:none;">
+      Gracias por acompañarme en el recuerdo de uno de los días más significativos de la historia estadounidense, el 11 de septiembre de 2001.
+    </div>
+
+    <div class="text-block" data-lang-en>
+      I remember being in class when the announcement came over the PA and interrupted my English teacher. Nearly the entire school continued having class for most of the day. I spent much of it with my art teacher in the planetarium along with a collection of staff, students, and faculty watching the news from a TV cart.
+    </div>
+    <div class="text-block" data-lang-es style="display:none;">
+      Recuerdo estar en clase cuando el anuncio se interrumpió por el sistema de altavoces e interrumpió a mi profesor de inglés.
+    </div>
+
+    <div class="text-block" data-lang-en>
+      I remember knowing it was significant — not just teenage instinct looking for a get-out-of-class moment, but something incredibly important. I wasn't very confident growing up, and I wouldn't say there was a leader in my school who was there for all of us. We left scared and confused, and no day since has fully given us clarity.
+    </div>
+    <div class="text-block" data-lang-es style="display:none;">
+      Recuerdo saber que era significativo — algo increíblemente importante. Nos fuimos de la escuela asustados y confundidos, y ningún día desde entonces realmente nos ha dado claridad.
+    </div>
+
+    <div class="text-block" style="font-weight:600;margin-top:20px;padding-top:20px;border-top:1px solid var(--rule);">
+      <span data-lang-en>Let's talk about it.</span>
+      <span data-lang-es style="display:none;">Hablemos sobre ello.</span>
+    </div>
+  </div>
+
+  <!-- ── VI. LIGHTING OF THE CANDLES ──────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Memorial</div>
+    <div class="section-title">Lighting of the Candles</div>
+
+    <div class="section-desc">
+      In both Catholic and Jewish traditions, the lighting of candles sanctifies memory. In Catholicism, votive candles carry prayers of intercession. In Judaism, the Yahrzheit candle burns for 24 hours to honor the departed and keep their memory alive.
+    </div>
+
+    <div class="section-desc">
+      We light these candles in memory of the 2,977 souls lost on September 11, 2001, and all those who have died in service of freedom. Their lives matter. We do not forget.
+    </div>
+
+    <div class="scripture">
+      <strong>Yahrzheit Prayer (Judaism)</strong><br><br>
+      "Exalted and hallowed be God's great name,<br>
+      Throughout the world which He has created according to His will.<br>
+      May He establish His kingdom in your lifetime and in your days,<br>
+      And in the lifetime of the whole household of Israel, speedily and soon.<br>
+      And say: Amen."
+    </div>
+
+    <div class="scripture" style="margin-top:12px;">
+      <strong>Prayer for the Dead (Catholic)</strong><br><br>
+      "Eternal rest grant unto them, O Lord,<br>
+      and let perpetual light shine upon them.<br>
+      May they rest in peace.<br>
+      May their souls and the souls of all the faithful departed,<br>
+      through the mercy of God, rest in peace. Amen."
+    </div>
+  </div>
+
+  <!-- ── VII. PLEDGE OF ALLEGIANCE ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow" data-lang-en>Civic Covenant</div>
+    <div class="section-eyebrow" data-lang-es style="display:none;">Pacto Cívico</div>
+    <div class="section-title" data-lang-en>Pledge of Allegiance</div>
+    <div class="section-title" data-lang-es style="display:none;">Promesa de Lealtad</div>
+
+    <div class="text-block centered-text">
+      <span data-lang-en>(Please stand)</span>
+      <span data-lang-es style="display:none;">(Por favor, levántarse)</span>
+    </div>
+
+    <div class="text-block" data-lang-en>
+      <strong>I pledge allegiance to the flag of the United States of America, and to the republic for which it stands, one nation under God, indivisible, with liberty and justice for all.</strong>
+    </div>
+    <div class="text-block" data-lang-es style="display:none;">
+      <strong>Prometo lealtad a la bandera de los Estados Unidos de América, y a la república por la cual se sostiene, una nación bajo Dios, indivisible, con libertad y justicia para todos.</strong>
+    </div>
+
+    <div class="section-desc" data-lang-en style="margin-top:20px;">
+      <strong>On the Pledge:</strong> Hand over heart. Facing the flag if one is visible. The pledge affirms the foundational commitments: unity across difference, indivisible strength, and the promise that liberty and justice extend to all.
+    </div>
+  </div>
+
+  <!-- ── VIII. PSALM 23 ────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Scripture</div>
+    <div class="section-title">Psalm 23</div>
+
+    <div class="text-block" data-kjv style="display:block;">
+      <span class="response-label">All (KJV)</span>
+      "The Lord is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake. Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me."
+    </div>
+
+    <div class="text-block" data-niv style="display:none;">
+      <span class="response-label">All (NIV)</span>
+      "The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul. He guides me along the right paths for his name's sake. Even though I walk through the darkest valley, I will fear no evil, for you are with me; your rod and your staff, they comfort me."
+    </div>
+
+    <div class="text-block" data-esv style="display:none;">
+      <span class="response-label">All (ESV)</span>
+      "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul. He leads me in paths of righteousness for his name's sake. Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me; your rod and your staff, they comfort me."
+    </div>
+
+    <div class="section-desc" style="margin-top:16px;">
+      Recited by Jews, Christians, and Muslims as a meditation on God's protection and provision. In moments of terror and loss, this ancient prayer reminds us that we do not walk alone.
+    </div>
+  </div>
+
+  <!-- ── IX. THIS IS MY SONG ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Meditation</div>
+    <div class="section-title">This Is My Song</div>
+    <div class="section-desc" style="font-style:italic;color:var(--ink-mut);">Finlandia · Music by Jean Sibelius · Please sit</div>
+
+    <div class="text-block">
+      This is my song, O God of all the nations,<br>
+      A song of peace for lands afar and mine.<br>
+      This is my home, the country where my heart is;<br>
+      Here are my hopes, my dreams, my holy shrine;<br>
+      But other hearts in other lands are beating<br>
+      With hopes and dreams as true and high as mine.
+      <br><br>
+      My country's skies are bluer than the ocean,<br>
+      And sunlight beams on cloverleaf and pine;<br>
+      But other lands have sunlight too, and clover,<br>
+      And skies are everywhere as blue as mine.
+      <br><br>
+      O hear my song, thou God of all the nations,<br>
+      A song of peace for their land and for mine.
+    </div>
+
+    <div class="media-player">
+      <div class="media-label">🎵 This Is My Song (Finlandia)</div>
+      <audio controls style="width:100%;">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Finlandia_%28Sibelius%29.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </div>
+
+  <!-- ── X. GOD BLESS AMERICA ──────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Recessional Hymn</div>
+    <div class="section-title">God Bless America</div>
+
+    <div class="text-block italic-text">
+      God bless America, Land that I love,<br>
+      Stand beside her, and guide her<br>
+      Through the night with the light from above.<br>
+      From the mountains, to the prairies,<br>
+      To the ocean, white with foam,<br>
+      God bless America, my home sweet home.<br>
+      God bless America, my home sweet home.
+    </div>
+
+    <div class="section-desc" style="margin-top:16px;">
+      Written by Irving Berlin — a Jewish immigrant from Russia who arrived at Ellis Island at age five — and first performed publicly on Armistice Day, November 11, 1938, as Nazi Germany grew in power. Berlin donated all royalties to the Boy Scouts and Girl Scouts of America.
+    </div>
+
+    <div class="carousel">
+      <div class="carousel-label">Featured Performances</div>
+      <div class="carousel-container">
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Kate Smith · 1938</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Military Honor Guard</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">Community Voices</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">▶</div>
+          <div class="video-title">9/11 Memorial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── XI. A PROTEST...A PRAYER ──────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Lament</div>
+    <div class="section-title">A Protest … A Prayer</div>
+    <div class="section-desc" style="font-style:italic;color:var(--ink-mut);margin-bottom:16px;">Please stand</div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      Dear God, so much innocent bloodshed!<br>
+      We are supposed to be created in Your image,<br>
+      But O how we have distorted it.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      When we recall the beastly acts of people,<br>
+      We are ashamed to be human.<br>
+      When we read of the nobility of their victims,<br>
+      We are proud to be Americans.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      Teach us, O God, to honor our martyrs,<br>
+      By being vigilant in defense of our people everywhere,<br>
+      And by fighting cruelty, persecution, and hate.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      But must cruelty always be?<br>
+      Must viciousness ever be the signature of humanity?<br>
+      No! No! We refuse to accept that!<br>
+      We refuse to give hatred the last word.<br>
+      Because we have known the power of love.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      We refuse to believe that cruelty will prevail,<br>
+      Because we have felt the strength of kindness.<br>
+      We refuse to award the ultimate victory to evil,<br>
+      Because we believe in You.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      So help us, O God, to draw strength from our faith,<br>
+      And help us, our Father, to live by our faith.<br><br>
+      Where there is hatred, may we bring love.<br>
+      Where there is pain, may we bring healing.<br>
+      Where there is darkness, may we bring light.<br>
+      Where there is despair, may we bring hope.<br>
+      Where there is discord, may we bring harmony.<br>
+      Where there is strife, may we bring peace.<br>
+      Make this a better world and begin with us.
+    </div>
+  </div>
+
+  <!-- ── XII. I BELIEVE ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Affirmation</div>
+    <div class="section-title">I Believe</div>
+    <div class="section-desc" style="font-style:italic;color:var(--ink-mut);margin-bottom:16px;">Please sit</div>
+
+    <div class="text-block">
+      I believe in the sun even when it is not shining.<br>
+      I believe in love even when not feeling it.<br>
+      I believe in God even when He is silent.
+    </div>
+
+    <div class="section-desc" style="margin-top:20px;font-size:12px;">
+      <em>Inscription found on the wall of a cellar in <span class="cologne-link" onclick="openCologneModal()">Cologne</span>, where Jews hid from the Nazis.</em>
+    </div>
+  </div>
+
+  <!-- ── XIII. BECAUSE WE BELIEVE ──────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Covenant</div>
+    <div class="section-title">Because We Believe</div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      Because we believe in You, O God,<br>
+      We hope for the day when Your majesty will prevail,<br>
+      When all false gods will be removed,<br>
+      And all idolatry will be abolished.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      When the world will be made a kingdom of God,<br>
+      When all men will invoke Your name,<br>
+      And the wicked will return to You.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      May every human being be convinced<br>
+      That to You every knee must bend,<br>
+      Every tongue must vow loyalty.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      Before You may all bow in reverence,<br>
+      Proclaiming Your glory, accepting Your sovereignty.<br>
+      May Your reign come soon and last forever;<br>
+      For sovereignty is Yours alone, now and evermore.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      So is it written in Your Bible:<br>
+      "The Lord shall reign for ever and ever."<br><br>
+      The prophet too, proclaimed this promise:<br>
+      "The Lord shall be King over all the earth;<br>
+      That day the Lord shall be One and His name One."
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      God is our King when our eyes are open,<br>
+      When we see His love and deeds through time.<br>
+      God can become the King of each of us today,<br>
+      If we will to build the kingdom which will surely come —<br>
+      When all men will be united under the oneness of God.
+    </div>
+  </div>
+
+  <!-- ── XIV. MOURNER'S KADDISH ─────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Memorial Prayer</div>
+    <div class="section-title">The Mourner's Kaddish</div>
+    <div class="section-desc" style="font-style:italic;color:var(--ink-mut);margin-bottom:16px;">Please stand</div>
+
+    <div class="torah-section">
+      <div class="torah-hebrew">
+        יִתְגַּדַּל וְיִתְקַדַּשׁ שְׁמֵהּ רַבָּא
+      </div>
+      <div class="torah-transliteration">
+        <em>Yitgadal v'yitkadash sh'mei raba</em>
+      </div>
+      <div class="torah-english">Magnified and sanctified be God's great Name</div>
+    </div>
+
+    <div class="text-block">
+      Magnified and sanctified be God's great Name in this world that He has created according to His will. May His Kingdom be established in your lifetime and in your days, and in the lifetime of the whole household of Israel, speedily and soon — and let us say: <strong>Amen</strong>.
+    </div>
+
+    <div class="text-block">
+      May His great Name be praised forever and unto all time. Praised, extolled, honored and exalted, revered and hallowed be the Holy Name — Praised be He — though He transcends all the blessings, hymns, praises and exaltations that we may ever offer in this world, and let us say: <strong>Amen</strong>.
+    </div>
+
+    <div class="text-block">
+      May abundant peace descend from heaven upon us and upon all America. And let us say: <strong>Amen</strong>.
+    </div>
+
+    <div class="text-block">
+      May He who established peace in His heavens above bring peace to us, and to all the world. And let us say: <strong>Amen</strong>.
+    </div>
+  </div>
+
+  <!-- ── XV. AND I TELL YOU ──────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Scripture Reflection</div>
+    <div class="section-title">And I Tell You</div>
+    <div class="section-desc" style="font-style:italic;color:var(--ink-mut);margin-bottom:16px;">Please sit</div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      And I tell you the good in man will win<br>
+      Over all his wickedness, over all the wrongs he has done.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      He will look at the pages of written history and be amazed,<br>
+      And then he will laugh and sing.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      God has planted in me goodness, compassion, as a father loves his children,
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      So I write with pain, weep and sing, sing and weep,<br>
+      For the blood knows the heart of the world is not made of stone.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      The wonderful light of God's face is for all eternity stamped on it firm and deep.
+    </div>
+
+    <div class="responsive-text" data-speaker="all">
+      <span class="response-label">All</span>
+      And the heart feels that there is a day and an hour, and a mountain called Zion.<br>
+      And then all the sufferings will gather there and will all become song.
+    </div>
+
+    <div class="responsive-text" data-speaker="reader">
+      <span class="response-label">Reader</span>
+      Ringing out into every corner of the earth, from end to end,<br>
+      And the nations will hear it, and like caravans in the desert will all to that mountain throng.
+    </div>
+
+    <div class="section-desc" style="margin-top:20px;text-align:right;font-style:italic;">— Hugh A. Nisenson</div>
+  </div>
+
+  <!-- ── XVI. HINEI MA TOV ───────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-eyebrow">Blessing</div>
+    <div class="section-title">Hinei Ma Tov</div>
+    <div class="section-desc" style="font-style:italic;color:var(--ink-mut);margin-bottom:16px;">A Song of Ascents · Of David · Psalm 133 · Please stand</div>
+
+    <div class="text-block" style="text-align:center;font-style:italic;margin-bottom:16px;font-size:22px;direction:rtl;">
+      הִנֵּה מַה־טּוֹב וּמַה־נָּעִים שֶׁבֶת אַחִים גַּם־יָחַד
+    </div>
+
+    <div class="text-block" style="text-align:center;">
+      <em>Hiney ma tov uma na'im, shevet ahim gam yahad.</em><br>
+      How good and pleasant for brethren to dwell in harmony!
+    </div>
+
+    <div class="carousel" style="margin-top:24px;">
+      <div class="carousel-label">Featured Performances</div>
+      <div class="carousel-container">
+        <div class="video-card">
+          <div class="video-thumbnail">♪</div>
+          <div class="video-title">Ashkenazi Choral</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">♪</div>
+          <div class="video-title">Sephardic Version</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">♪</div>
+          <div class="video-title">Contemporary</div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumbnail">♪</div>
+          <div class="video-title">Folk Arrangement</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-desc" style="margin-top:20px;">
+      This ancient psalm celebrates the beauty of unity and brotherhood. Across cultures and generations, communities have sung these words to affirm their covenant with one another. September 11 showed us how precious that unity is — and how fiercely it must be guarded.
+    </div>
+  </div>
+
+  <!-- ── XVII. ISAIAH 2:2–5 ─────────────────────────────────────── -->
+  <div class="section" style="border-radius:0 0 8px 8px;">
+    <div class="section-eyebrow">Benediction</div>
+    <div class="section-title">Isaiah 2:2–5</div>
+
+    <div class="scripture" data-kjv style="display:block;">
+      <strong style="display:block;margin-bottom:8px;color:var(--ink);">King James Version</strong>
+      "And it shall come to pass in the last days, that the mountain of the Lord's house shall be established in the top of the mountains, and shall be exalted above the hills; and all nations shall flow unto it.
+      <br><br>
+      "And many people shall go and say, Come ye, and let us go up to the mountain of the Lord, to the house of the God of Jacob; and he will teach us of his ways, and we will walk in his paths: for out of Zion shall go forth the law, and the word of the Lord from Jerusalem.
+      <br><br>
+      "And he shall judge among the nations, and shall rebuke many people: and they shall beat their swords into plowshares, and their spears into pruninghooks: nation shall not lift up sword against nation, neither shall they learn war any more.
+      <br><br>
+      "O house of Jacob, come ye, and let us walk in the light of the Lord."
+      <div class="scripture-ref">Isaiah 2:2–5 KJV</div>
+    </div>
+
+    <div class="scripture" data-niv style="display:none;">
+      <strong style="display:block;margin-bottom:8px;color:var(--ink);">New International Version</strong>
+      "In the last days the mountain of the Lord's temple will be established as the highest of the mountains; it will be exalted above the hills, and all nations will stream to it.
+      <br><br>
+      "Many peoples will come and say, 'Come, let us go up to the mountain of the Lord, to the house of the God of Jacob. He will teach us his ways, so that we may walk in his paths.' The law will go out from Zion, the word of the Lord from Jerusalem.
+      <br><br>
+      "He will judge between the nations and will settle disputes for many peoples. They will beat their swords into plowshares and their spears into pruning hooks. Nation will not take up sword against nation, nor will they train for war anymore.
+      <br><br>
+      "Come, descendants of Jacob, let us walk in the light of the Lord."
+      <div class="scripture-ref">Isaiah 2:2–5 NIV</div>
+    </div>
+
+    <div class="scripture" data-esv style="display:none;">
+      <strong style="display:block;margin-bottom:8px;color:var(--ink);">English Standard Version</strong>
+      "It shall come to pass in the latter days that the mountain of the house of the Lord shall be established as the highest of the mountains, and shall be lifted up above the hills; and all the nations shall flow to it.
+      <br><br>
+      "And many peoples shall come, and say: 'Come, let us go up to the mountain of the Lord, to the house of the God of Jacob, that he may teach us his ways and that we may walk in his paths.' For out of Zion shall go forth the law, and the word of the Lord from Jerusalem.
+      <br><br>
+      "He shall judge between the nations, and shall decide disputes for many peoples; and they shall beat their swords into plowshares, and their spears into pruning hooks; nation shall not lift up sword against nation, neither shall they learn war anymore.
+      <br><br>
+      "O house of Jacob, come, let us walk in the light of the Lord."
+      <div class="scripture-ref">Isaiah 2:2–5 ESV</div>
+    </div>
+
+    <div class="text-block centered-text" style="margin-top:24px;">
+      <em>We do not forget. We do not surrender. We go forward — together.</em>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="page-footer">
+  FORA · Wisdom ◯ · Law △ · Market ▢ · fora.center/911
+</div>
+
+<script>
+function openSoundModal() {
+  document.getElementById('soundModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeSoundModal() {
+  document.getElementById('soundModal').classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+function openCologneModal() {
+  document.getElementById('cologneModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeCologneModal() {
+  document.getElementById('cologneModal').classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+window.onclick = function(e) {
+  if (e.target === document.getElementById('soundModal'))  closeSoundModal();
+  if (e.target === document.getElementById('cologneModal')) closeCologneModal();
+};
+
+// Scripture translation toggle
+document.querySelectorAll('.toggle-btn[data-version]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.toggle-btn[data-version]').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    var v = this.getAttribute('data-version');
+    document.querySelectorAll('[data-kjv],[data-niv],[data-esv]').forEach(function(el){ el.style.display = 'none'; });
+    document.querySelectorAll('[data-' + v + ']').forEach(function(el){ el.style.display = 'block'; });
+  });
+});
+
+// Language toggle
+document.querySelectorAll('.toggle-btn[data-language]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.toggle-btn[data-language]').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    var lang = this.getAttribute('data-language');
+    document.querySelectorAll('[data-lang-en],[data-lang-es]').forEach(function(el){ el.style.display = 'none'; });
+    document.querySelectorAll('[data-lang-' + lang + ']').forEach(function(el){ el.style.display = 'block'; });
+  });
+});
+
+// Initialise — show KJV and English
+document.querySelectorAll('[data-niv],[data-esv],[data-lang-es]').forEach(function(el){ el.style.display = 'none'; });
+</script>
+</body>
+</html>

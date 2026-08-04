@@ -1,6 +1,9 @@
 class WorldController < ApplicationController
   layout false
 
+  def nine_eleven
+  end
+
   def iran
   end
 
